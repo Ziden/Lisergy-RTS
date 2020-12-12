@@ -1,5 +1,6 @@
-﻿using LegendsServer.Core;
-using System;
+﻿using Game;
+using GameDataTest;
+using LisergyServer.Core;
 
 namespace LegendsServer
 {
@@ -7,14 +8,15 @@ namespace LegendsServer
     {
         static void Main(string[] args)
         {
-            var server = new SocketServer();
-            server.Start();
+            var cfg = new GameConfiguration()
+            {
+                WorldMaxPlayers = 2
+            };
+            var gameSpecs = TestSpecs.Generate();
+            var game = new StrategyGame(cfg, gameSpecs);
+            game.GenerateMap();
 
-            Console.WriteLine("Server running");
-
-            var ticks = new ServerTicks();
-            ticks.StartTicks();
-
+            SocketServer.ServerLoop(game);
         }
     }
 }

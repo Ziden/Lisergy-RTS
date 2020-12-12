@@ -1,0 +1,20 @@
+namespace Game.Schemas;
+
+struct Vec2{
+  x:ushort;
+  y:ushort;
+}
+
+table Tile {
+   flags: byte;
+   pos: Vec2;
+}
+
+table Chunk {
+   tiles:[Tile];
+   flags: byte;
+   pos: Vec2;
+}
+
+
+root_type Chunk;
