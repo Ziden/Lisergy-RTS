@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameData\GameData.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="NetSerializer">
+      <HintPath>..\NetSerializer.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroFormatter">
+      <HintPath>..\ZeroFormatter.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroFormatter.Interfaces">
+      <HintPath>..\ZeroFormatter.Interfaces.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
