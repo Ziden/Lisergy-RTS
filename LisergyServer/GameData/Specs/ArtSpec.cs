@@ -4,9 +4,16 @@ using System.Text;
 
 namespace GameData.Specs
 {
+    public enum ArtType
+    {
+        SPRITE,
+        PREFAB
+    }
+
     [Serializable]
     public class ArtSpec
     {
-        public string SpriteName;
+        public string Name;
+        public ArtType Type;
     }
 }

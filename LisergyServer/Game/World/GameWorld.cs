@@ -57,7 +57,7 @@ namespace Game
             ChunkMap = new ChunkMap(SizeX / GameWorld.CHUNK_SIZE, SizeY / GameWorld.CHUNK_SIZE);
         }
 
-        public virtual void AddPlayer(PlayerEntity player)
+        public virtual void AddPlayer(PlayerEntity player, Tile t = null)
         {
             var newbieChunk = ChunkMap.GetUnnocupiedNewbieChunk();
             if (newbieChunk == null)
@@ -65,10 +65,13 @@ namespace Game
                 throw new Exception("No more room for newbie players in this world");
             }
             Players.Add(player);
-            var castleTile = Worldgen.FindTileWithId(newbieChunk.Tiles, 0);
+            if(t == null)
+            {
+                t = Worldgen.FindTileWithId(newbieChunk.Tiles, 0);
+            }
             byte castleID = StrategyGame.Specs.InitialBuilding;
-            Log.Debug("Placed new player in {castleTile}");
-            player.Build(castleID, castleTile);
+            Log.Debug($"Placed new player in {t}");
+            player.Build(castleID, t);
             return;
         }
 
@@ -79,7 +82,7 @@ namespace Game
                     yield return tile;
         }
 
-        public virtual Chunk GetChunk(int tileX, int tileY)
+        public virtual Chunk GetTileChunk(int tileX, int tileY)
         {
             int chunkX = tileX >> CHUNK_SIZE_BITSHIFT;
             var chunkY = tileY >> CHUNK_SIZE_BITSHIFT;
@@ -90,7 +93,7 @@ namespace Game
         {
             var internalTileX = tileX % CHUNK_SIZE;
             var internalTileY = tileY % CHUNK_SIZE;
-            return GetChunk(tileX, tileY).GetTile(internalTileX, internalTileY);
+            return GetTileChunk(tileX, tileY).GetTile(internalTileX, internalTileY);
         }
     }
 }

@@ -22,8 +22,36 @@ namespace Assets.Code.World
             {
                 Log.Debug($"Updating {this} tileid to {value}");
                 var tileSpec = StrategyGame.Specs.GetTileSpec(value);
-                TextureManager.SetTexture(_plane, tileSpec.Art.SpriteName);
+                foreach(var art in tileSpec.Arts)
+                {
+                    if(art.Type==GameData.Specs.ArtType.SPRITE)
+                        TextureManager.SetTexture(_plane, art.Name);
+                    else if (art.Type == GameData.Specs.ArtType.PREFAB)
+                    {
+                        var prefab = Resources.Load("prefabs/tiles/"+ art.Name);
+                        var obj = MainBehaviour.Instantiate(prefab) as GameObject;
+                        obj.transform.SetParent(_rootNode.transform);
+                        obj.transform.position = new Vector3(X, 0, Y);
+                    }
+                }
                 base.TileId = value;
+            }
+        }
+
+        public override Building Building
+        {
+            get
+            {
+                return base.Building;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    var clientBuilding = value as ClientBuilding;
+                    clientBuilding.Object.transform.position = new Vector3(X, 0, Y);
+                }
+                base.Building = value;
             }
         }
 
@@ -39,7 +67,6 @@ namespace Assets.Code.World
             _plane.transform.localScale = new Vector3(0.1f, 1, 0.1f);
             _plane.transform.position = new Vector3(0, 0, 0);
             _rootNode.transform.position = new Vector3(X, 0, Y);
-            TextureManager.SetTexture(_plane, "planks_oak");
         }
     }
 }

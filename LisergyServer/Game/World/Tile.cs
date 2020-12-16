@@ -63,6 +63,7 @@ namespace Game
                     Owner.Buildings.Add(value);
                     this.Chunk.Buildings.Add(value);
                     _buildingID = value.BuildingID;
+                    Log.Debug($"Expanding +{buildingSpec.LOS} LOS on {this} for {Owner}");
                     foreach (var tile in GetAOE(buildingSpec.LOS))
                         tile.SetSeenBy(value);
                 }
@@ -144,7 +145,7 @@ namespace Game
 
         public override string ToString()
         {
-            return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID}>";
+            return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID} B={BuildingID}>";
         }
 
     }

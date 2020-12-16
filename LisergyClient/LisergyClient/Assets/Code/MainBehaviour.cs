@@ -14,6 +14,11 @@ public class MainBehaviour : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
+    public static GameObject CreatePrefab(Object prefab)
+    {
+        return Instantiate(prefab) as GameObject;
+    }
+
     private void ConfigureUnity()
     {
         Application.runInBackground = true;

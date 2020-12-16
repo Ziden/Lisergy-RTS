@@ -20,7 +20,7 @@ namespace Assets.Code.Art
                 mesh.material = mat;
                 return;
             }
-            mat = new Material(Shader.Find("Diffuse")); ;
+            mat = new Material(Shader.Find("Standard")); ;
             mat.mainTexture = GetBlockTexture(name);
             mesh.material = mat;
             _materials[name] = mat;

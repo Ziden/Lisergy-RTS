@@ -32,16 +32,20 @@ namespace Assets.Code.World
 
             tile.TileId = ev.Tile.TileId;
             tile.ResourceID = ev.Tile.ResourceID;
+
+            Log.Debug("---- WOOOOO " + ev.Tile.BuildingID);
             if (ev.Tile.BuildingID != tile.BuildingID)
             {
-                if(ev.Tile.BuildingID == 0)
+                Log.Debug("-----> BUILDING DIFERENTE ");
+                if (ev.Tile.BuildingID == 0)
                 {
                     tile.Building = null;
-                } else
-                {   
-                    Log.Debug("Building " + ev.Tile.BuildingID);
+                }
+                else
+                {
+                    Log.Debug("!!!!! Building " + ev.Tile.BuildingID);
                     var owner = _world.GetClientPlayer(ev.Tile.UserID);
-                    tile.Building = new Building(ev.Tile.BuildingID, owner);
+                    tile.Building = new ClientBuilding(ev.Tile.BuildingID, owner);
                 }
             }
         }

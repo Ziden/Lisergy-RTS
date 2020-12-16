@@ -1,5 +1,6 @@
 ﻿using Game.Events;
 using Game.Events.ServerEvents;
+using System.Linq;
 
 namespace Game
 {
@@ -43,6 +44,10 @@ namespace Game
                 player = ev.ClientPlayer;
                 _world.AddPlayer(player);
                 Log.Debug($"New player {player.UserID} joined the world");
+
+                foreach (var tile in _world.AllTiles())
+                    if(!tile.IsVisibleTo(player))
+                        tile.SetSeenBy(player.Buildings.First());
             }
         }
     }

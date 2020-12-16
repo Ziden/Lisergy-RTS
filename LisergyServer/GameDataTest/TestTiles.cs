@@ -11,37 +11,34 @@ namespace GameDataTest
         public static readonly TileSpec GRASS = new TileSpec()
         {
             ID=0,
-            Art = new ArtSpec()
-            {
-                SpriteName = "wool_colored_green"
-            }
+            Arts = new List<ArtSpec>(new ArtSpec[] {
+                  new ArtSpec() { Name = "Plains", Type=ArtType.PREFAB }
+            })
         };
 
         public static readonly TileSpec MOUNTAIN = new TileSpec()
         {
             ID = 1,
-            Art = new ArtSpec()
-            {
-                SpriteName = "wool_colored_red"
-            }
+            Arts = new List<ArtSpec>(new ArtSpec[] {
+                 new ArtSpec() { Name = "Mountain", Type=ArtType.PREFAB }
+            })
         };
 
         public static readonly TileSpec WATER = new TileSpec()
         {
             ID = 2,
-            Art = new ArtSpec()
-            {
-                SpriteName = "wool_colored_blue"
-            }
+            Arts = new List<ArtSpec>(new ArtSpec[] {
+                new ArtSpec() { Name = "wool_colored_blue", Type=ArtType.SPRITE }
+            })
         };
 
         public static readonly TileSpec FOREST = new TileSpec()
         {
             ID = 3,
-            Art = new ArtSpec()
-            {
-                SpriteName = "log_oak"
-            }
+            Arts = new List<ArtSpec>(new ArtSpec[] {
+
+                new ArtSpec() { Name = "Forest", Type=ArtType.PREFAB }
+            })
         };
 
         public static void Generate(GameSpec spec)

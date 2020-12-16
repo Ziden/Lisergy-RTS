@@ -39,7 +39,6 @@ namespace ServerTests
 
     public class TestGame : StrategyGame
     {
-
         private static bool _registered = false;
         public TestGame() : base(GetTestConfiguration(), GetTestSpecs(), new GameWorld())
         {

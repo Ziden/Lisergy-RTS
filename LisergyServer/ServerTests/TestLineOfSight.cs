@@ -65,5 +65,13 @@ namespace Tests
             var range = initialBuildingSpec.LOS * 2 + 1;
             Assert.That(events.Count == range * range);
         }
+
+        [Test]
+        public void TestNewLosMiddleMap()
+        {
+            var initialBuildingSpec = StrategyGame.Specs.GetBuildingSpec(StrategyGame.Specs.InitialBuilding);
+            var player = Game.GetTestPlayer();
+            Game.ReceivedEvents.Clear();
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Game;
+using Game.Events.ServerEvents;
+using UnityEngine;
 
 
 public class CameraBehaviour : MonoBehaviour
@@ -8,23 +10,11 @@ public class CameraBehaviour : MonoBehaviour
     public float rotSpeed = 10f;
     public float zoomSpeed = 50f;
     public float borderWidth = 10f;
-    public bool edgeScrolling = true;
+    public bool edgeScrolling = false;
     public Camera cam;
-    private float zoomMin = 11.0f;
-    private float zoomMax = 49.0f;
+    private float zoomMin = -100;
+    private float zoomMax = 200;
     private float mouseX, mouseY;
-
-
-    void Start()
-
-    {
-
-        // On start, get a reference to the Main Camera
-
-        cam = Camera.main;
-
-    }
-
 
     void Update()
 
@@ -38,6 +28,10 @@ public class CameraBehaviour : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+       
+    }
 
     void Movement()
 
@@ -86,7 +80,7 @@ public class CameraBehaviour : MonoBehaviour
 
         // Move the camera (camera_target) Backward relative to current rotation if "S" is pressed or if the mouse moves within the borderWidth distance from the bottom edge of the screen
 
-        if (Input.GetKey("s") || edgeScrolling == true && Input.mousePosition.y <= borderWidth)
+        if (Input.GetKey("s") || (edgeScrolling == true && Input.mousePosition.y <= borderWidth))
 
         {
 
@@ -97,7 +91,7 @@ public class CameraBehaviour : MonoBehaviour
 
         // Move the camera (camera_target) Right relative to current rotation if "D" is pressed or if the mouse moves within the borderWidth distance from the right edge of the screen
 
-        if (Input.GetKey("d") || edgeScrolling == true && Input.mousePosition.x >= Screen.width - borderWidth)
+        if (Input.GetKey("d") || (edgeScrolling == true && Input.mousePosition.x >= Screen.width - borderWidth))
 
         {
 
@@ -108,7 +102,7 @@ public class CameraBehaviour : MonoBehaviour
 
         // Move the camera (camera_target) Left relative to current rotation if "A" is pressed or if the mouse moves within the borderWidth distance from the left edge of the screen
 
-        if (Input.GetKey("a") || edgeScrolling == true && Input.mousePosition.x <= borderWidth)
+        if (Input.GetKey("a") || (edgeScrolling == true && Input.mousePosition.x <= borderWidth))
 
         {
 

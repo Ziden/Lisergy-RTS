@@ -1,4 +1,5 @@
 ﻿using Assets.Code;
+using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
 using LisergyServer.Core;
@@ -34,9 +35,12 @@ public class Networking : IDisposable
                 _toSend.RemoveAt(0);
                 client.Send(ev);
             }
-
-            while (client.GetNextMessage(out msg))
+            var reads = 10;
+            for(var x = 0; x < reads;x++)
             {
+                if (!client.GetNextMessage(out msg))
+                    break;
+
                 switch (msg.eventType)
                 {
                     case Telepathy.EventType.Connected:
@@ -52,6 +56,7 @@ public class Networking : IDisposable
             }
         } else
         {
+            Log.Debug("Reconnecting");
             client.Connect("localhost", 1337);
         }
     }

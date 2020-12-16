@@ -1,5 +1,6 @@
 ﻿using GameData.Specs;
 using System;
+using System.Collections.Generic;
 
 namespace GameData
 {
@@ -7,6 +8,6 @@ namespace GameData
     public class TileSpec
     {
         public int ID;
-        public ArtSpec Art;
+        public List<ArtSpec> Arts;
     }
 }

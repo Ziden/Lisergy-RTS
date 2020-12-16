@@ -1,6 +1,5 @@
 ﻿
 using Game;
-using Game.Events;
 
 namespace Assets.Code
 {
