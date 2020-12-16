@@ -47,6 +47,16 @@ namespace Game.World
             return 32 - leadingZeros;
         }
 
+        public static int ToChunkCoordinate(this int num)
+        {
+            return num >> GameWorld.CHUNK_SIZE_BITSHIFT;
+        }
+
+        public static int ToTileCoordinate(this int num)
+        {
+            return num << GameWorld.CHUNK_SIZE_BITSHIFT;
+        }
+
         public static void AddFlag<T>(this ref byte value, T flag) 
         {
             value.AddFlag((byte)(object)flag);

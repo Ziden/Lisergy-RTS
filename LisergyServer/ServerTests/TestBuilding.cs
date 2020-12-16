@@ -20,7 +20,7 @@ namespace Tests
         {
             var player = Game.GetTestPlayer();
  
-            var initialBuildingSpec = StrategyGame.Specs.InitialBuilding;
+            var initialBuildingSpec = StrategyGame.Specs.GetBuildingSpec(StrategyGame.Specs.InitialBuilding);
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile;
 
@@ -38,7 +38,7 @@ namespace Tests
             var tile = Game.RandomNotBuiltTile();
             var buildingSpec = TestGame.RandomBuildingSpec();
 
-            tile.Building = new Building(buildingSpec.Id, player, tile);
+            tile.Building = new Building(buildingSpec.Id, player);
 
             Assert.IsTrue(player.Buildings.Count == 2);
             Assert.IsTrue(player.Buildings.Any(b => b.BuildingID == buildingSpec.Id));

@@ -13,7 +13,7 @@ namespace LegendsServer
                 WorldMaxPlayers = 2
             };
             var gameSpecs = TestSpecs.Generate();
-            var game = new StrategyGame(cfg, gameSpecs);
+            var game = new StrategyGame(cfg, gameSpecs, new GameWorld());
             game.GenerateMap();
 
             SocketServer.ServerLoop(game);

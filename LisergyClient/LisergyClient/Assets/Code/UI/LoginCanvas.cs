@@ -28,7 +28,7 @@ public class LoginCanvas
         {
             MainBehaviour.Player = new ClientPlayer()
             {
-                ID = ev.PlayerID
+                UserID = ev.PlayerID
             };
             Log.Info($"Auth suceeded, player logged in");
             MainBehaviour.Player.Send(new JoinWorldEvent());

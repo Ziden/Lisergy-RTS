@@ -10,6 +10,7 @@ namespace Game.Events
         JOIN = 1,
         SEE_CHUNK = 2,
         AUTH_RESULT = 3,
-        TILE_VISIBLE = 4
+        TILE_VISIBLE = 4,
+        SPEC_RESPONSE = 5
     }
 }

@@ -7,10 +7,9 @@ namespace Game
     {
         public byte BuildingID { get; private set; }
         
-        public Building(byte id, PlayerEntity owner, Tile t): base(owner)
+        public Building(byte id, PlayerEntity owner): base(owner)
         {
             this.BuildingID = id;
-            this.Tile = t;
         }
 
         public BuildingSpec GetSpec()

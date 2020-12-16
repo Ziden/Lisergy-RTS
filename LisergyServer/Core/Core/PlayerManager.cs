@@ -46,6 +46,7 @@ namespace LisergyServer.Core
         {
             Log.Debug($"Authenticating account {ev.Login}");
             Account acc;
+
             if (!AccountsByLogin.TryGetValue(ev.Login, out acc))
             {
                 acc = new Account();
@@ -62,6 +63,14 @@ namespace LisergyServer.Core
                     PlayerID = acc.Player.UserID,
                     Success = true
                 });
+                if (ev.SpecVersion < StrategyGame.Specs.Version)
+                {
+                    acc.Player.Send(new GameSpecResponse()
+                    {
+                        Spec = StrategyGame.Specs,
+                        Cfg = StrategyGame.Config
+                    });
+                }
                 return acc.Player;
             }
             else
@@ -79,6 +88,14 @@ namespace LisergyServer.Core
                 acc.Player.ConnectionID = ev.ConnectionID;
                 Players[ev.ConnectionID] = acc.Player;
                 Log.Info($"Account {ev.Login} connected");
+                if (ev.SpecVersion < StrategyGame.Specs.Version)
+                {
+                    acc.Player.Send(new GameSpecResponse()
+                    {
+                        Spec = StrategyGame.Specs,
+                        Cfg = StrategyGame.Config
+                    });
+                }
                 acc.Player.Send(new AuthResultEvent()
                 {
                     PlayerID = acc.Player.UserID,

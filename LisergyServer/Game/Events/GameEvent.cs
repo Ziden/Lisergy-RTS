@@ -8,5 +8,10 @@ namespace Game.Events
     {
         public abstract EventID GetID();
 
+        [NonSerialized]
+        public int ConnectionID;
+
+        [NonSerialized]
+        public PlayerEntity ClientPlayer;
     }
 }

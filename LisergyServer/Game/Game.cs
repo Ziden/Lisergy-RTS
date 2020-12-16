@@ -11,18 +11,20 @@ namespace Game
     {
         public GameWorld World { get; private set; }
         public static GameSpec Specs { get; private set; }
+        public static GameConfiguration Config { get; private set; }
 
-        public StrategyGame(GameConfiguration cfg, GameSpec specs)
+        public StrategyGame(GameConfiguration cfg, GameSpec specs, GameWorld world)
         {
-            World = new GameWorld(cfg.WorldMaxPlayers);
+            World = world;
             Specs = specs;
+            Config = cfg;
         }
 
         public void GenerateMap()
         {
             var worldGen = new Worldgen(World);
             worldGen.Populators.Add(new NewbieChunkPopulator());
-            worldGen.Generate();
+            worldGen.Generate(Config.WorldMaxPlayers);
             MapDebug.PrintAscii(World);
         }
     }

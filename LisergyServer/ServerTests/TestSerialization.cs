@@ -1,17 +1,13 @@
 using Game;
 using Game.Events;
-using LisergyServer.Core;
 using NUnit.Framework;
 using ServerTests;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Tests
 {
     public class TestSerialization
     {
-
         [Serializable]
         public class TestTileEvent : GameEvent
         {
@@ -46,14 +42,15 @@ namespace Tests
             var game = new TestGame();
             var player = game.GetTestPlayer();
             var tile = game.World.GetTile(1, 1);
+            tile.ResourceID = 123;
             Serialization.LoadSerializers(typeof(TestTileEvent));
 
             var serialized = Serialization.FromEvent<TestTileEvent>(new TestTileEvent(tile));
             var unserialized = Serialization.ToEvent<TestTileEvent>(serialized);
 
+            Assert.AreEqual(tile.TileId, unserialized.Tile.TileId);
             Assert.AreEqual(tile.BuildingID, unserialized.Tile.BuildingID);
-            Assert.AreEqual(tile.ResourceData, unserialized.Tile.ResourceData);
-            Assert.AreEqual(tile.TerrainData, unserialized.Tile.TerrainData);
+            Assert.AreEqual(tile.ResourceID, unserialized.Tile.ResourceID);
             Assert.AreEqual(tile.UserID, unserialized.Tile.UserID);
             Assert.AreEqual(tile.X, unserialized.Tile.X);
             Assert.AreEqual(tile.Y, unserialized.Tile.Y);
@@ -68,14 +65,14 @@ namespace Tests
             Serialization.LoadSerializers(typeof(TestTileEvent));
             var buildingSpec = TestGame.RandomBuildingSpec();
 
-            tile.Building = new Building(buildingSpec.Id, player, tile);
+            tile.Building = new Building(buildingSpec.Id, player);
            
             var serialized = Serialization.FromEvent<TestTileEvent>(new TestTileEvent(tile));
             var unserialized = Serialization.ToEvent<TestTileEvent>(serialized);
 
             Assert.AreEqual(tile.BuildingID, unserialized.Tile.BuildingID);
-            Assert.AreEqual(tile.ResourceData, unserialized.Tile.ResourceData);
-            Assert.AreEqual(tile.TerrainData, unserialized.Tile.TerrainData);
+
+            Assert.AreEqual(tile.ResourceID, unserialized.Tile.ResourceID);
             Assert.AreEqual(tile.UserID, unserialized.Tile.UserID);
             Assert.AreEqual(tile.X, unserialized.Tile.X);
             Assert.AreEqual(tile.Y, unserialized.Tile.Y);

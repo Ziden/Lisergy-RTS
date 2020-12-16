@@ -9,6 +9,8 @@ namespace Game.Events.ServerEvents
     {
         public override EventID GetID() => EventID.AUTH_RESULT;
 
+        public GameConfiguration Configuration;
+
         public bool Success;
         public string PlayerID;
     }

@@ -1,4 +1,5 @@
-﻿using NetSerializer;
+﻿using GameData;
+using NetSerializer;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,14 +15,12 @@ namespace Game.Events
         {
             var models = GetEventTypes().ToList();
             models.Add(typeof(Tile));
-            if(extras != null)
+            models.Add(typeof(GameSpec));
+            models.Add(typeof(GameConfiguration));
+            if (extras != null)
             {
                 models.AddRange(extras);
             }
-            //models.Add(typeof(Chunk));
-            //models.Add(typeof(WorldEntity));
-            //models.Add(typeof(Building));
-            //models.Add(typeof(PlayerEntity));
             Serializer = new Serializer(models);
         }
 

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace Game
 {
-    public enum ChunkFlag
+    [Flags]
+    public enum ChunkFlag : byte
     {
         NEWBIE_CHUNK = 0b00000001,
         OCCUPIED = 0b00000010
@@ -15,11 +16,13 @@ namespace Game
         private byte _flags;
         private Tile[,] _tiles;
 
-        public ushort X { get; private set; }
-        public ushort Y { get; private set; }
-        public GameWorld World { get; private set; }
-        public byte Flags { get => _flags; set => _flags = value; }
-        public Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
+        public virtual ushort X { get; private set; }
+        public virtual ushort Y { get; private set; }
+        public virtual GameWorld World { get; private set; }
+        public virtual byte Flags { get => _flags; set => _flags = value; }
+        public virtual Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
+
+        public HashSet<Building> Buildings = new HashSet<Building>();
 
         public Chunk(GameWorld w, int x, int y, Tile[,] tiles)
         {
@@ -34,16 +37,10 @@ namespace Game
             return Tiles[x, y];
         }
 
-        public bool HasFlag(ChunkFlag flag)
-        {
-            return (Flags & (byte)flag) == 1;
-        }
-
         public override String ToString()
         {
             return $"<Chunk x={X} y={Y}>";
         }
-
 
         public IEnumerable<Tile> AllTiles()
         {

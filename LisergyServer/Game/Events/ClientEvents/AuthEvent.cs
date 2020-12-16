@@ -9,5 +9,6 @@ namespace Game.Events
         public override EventID GetID() => EventID.AUTH;
         public string Login { get; set; }
         public string Password;
+        public int SpecVersion;
     }
 }

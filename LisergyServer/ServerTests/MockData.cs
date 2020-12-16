@@ -39,13 +39,27 @@ namespace ServerTests
 
     public class TestGame : StrategyGame
     {
-        public TestGame() : base(GetTestConfiguration(), GetTestSpecs())
+
+        private static bool _registered = false;
+        public TestGame() : base(GetTestConfiguration(), GetTestSpecs(), new GameWorld())
         {
+            if(!_registered)
+            {
+                EventSink.OnTileVisible += ev =>ReceivedEvents.Add(ev);
+                EventSink.OnPlayerAuth += ev => ReceivedEvents.Add(ev);
+                EventSink.OnSpecResponse += ev => ReceivedEvents.Add(ev);
+                EventSink.OnJoinWorld += ev => ReceivedEvents.Add(ev);
+                _registered = true;
+            }
+           
             GenerateMap();
             var player = new TestServerPlayer();
             player.UserID = TestServerPlayer.TEST_ID;
             this.World.AddPlayer(player);
+           
         }
+
+        public List<GameEvent> ReceivedEvents = new List<GameEvent>();
 
         public PlayerEntity GetTestPlayer()
         {
@@ -67,7 +81,7 @@ namespace ServerTests
         public Tile RandomNotBuiltTile()
         {
             foreach (var tile in World.AllTiles())
-                if (!tile.Flags.HasFlag(TileMetaFlags.HAS_BUILDING))
+                if (tile.Building==null)
                     return tile;
             return null;
         }

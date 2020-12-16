@@ -1,4 +1,5 @@
 ﻿using Assets.Code;
+using Assets.Code.World;
 using Game.Events;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class MainBehaviour : MonoBehaviour
 {
     public static Networking Networking;
     public static ClientPlayer Player;
+    private static GameListener GameListener;
 
     void Start()
     {
@@ -26,12 +28,15 @@ public class MainBehaviour : MonoBehaviour
     private void Awake()
     {
         ConfigureUnity();
+        Serialization.LoadSerializers();
         Networking = new Networking();
+        GameListener = new GameListener();
     }
 
     void Update()
     {
         Networking.Update();
+        Awaiter.Update();
     }
 
     private void OnApplicationQuit()

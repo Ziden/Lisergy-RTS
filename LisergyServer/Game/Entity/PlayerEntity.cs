@@ -10,6 +10,7 @@ namespace Game
         public string UserID;
 
         public HashSet<Building> Buildings = new HashSet<Building>();
+        public HashSet<Tile> VisibleTiles = new HashSet<Tile>();
 
         public PlayerEntity()
         {
@@ -23,7 +24,7 @@ namespace Game
 
         public void Build(byte id, Tile t)
         {
-            var building = new Building(id, this, t);
+            var building = new Building(id, this);
             t.Building = building;
             Log.Debug($"Player {UserID} built {id}");
         }

@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.World;
 using System.Collections.Generic;
 
 namespace Game
@@ -25,7 +26,7 @@ namespace Game
             var startingChunks = ByFlags[ChunkFlag.NEWBIE_CHUNK];
             foreach (var chunk in startingChunks)
             {
-                if (!chunk.HasFlag(ChunkFlag.OCCUPIED))
+                if (!chunk.Flags.HasFlag(ChunkFlag.OCCUPIED))
                 {
                     return chunk;
                 }

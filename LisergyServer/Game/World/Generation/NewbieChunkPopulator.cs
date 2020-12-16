@@ -12,43 +12,22 @@ namespace Game.Generator
 
         public override void Populate(GameWorld w, Chunk c)
         {
-            if (!ShouldPopulate(c))
-            {
-                Log.Debug($"Skipping {c.ToString()}");
-                return;
-            }
-
             Log.Debug($"Populating {c.ToString()}");
             w.ChunkMap.SetFlag(c.X, c.Y, ChunkFlag.NEWBIE_CHUNK);
 
-            var bushes = GameWorld.CHUNK_SIZE;
-            AddRandomTerrain(w, c, bushes, TerrainData.BUSHES);
+            for (var i = 0; i < GameWorld.CHUNK_SIZE; i++) {
+                c.GetTile(0, i).TileId = 1;
+                c.GetTile(i, 0).TileId = 2;
+            }
 
-            var forests = GameWorld.CHUNK_SIZE;
-            AddRandomTerrain(w, c, forests, TerrainData.FOREST);
-
-            var mountains = GameWorld.CHUNK_SIZE / 2;
-            AddRandomTerrain(w, c, mountains, TerrainData.MOUNTAIN, TerrainData.FOREST);
-
-            var hills = GameWorld.CHUNK_SIZE;
-            AddRandomTerrain(w, c, hills, TerrainData.HILL, TerrainData.MOUNTAIN);
-
-            var water = GameWorld.CHUNK_SIZE / 4;
-            AddRandomTerrain(w, c, water, TerrainData.WATER, TerrainData.MOUNTAIN, TerrainData.FOREST);
-        }
-
-        public void AddRandomTerrain(GameWorld w, Chunk c, int amt, params TerrainData[] not)
-        {
-            var desiredTerrain = not[0]; 
-            for (var i = 0; i < amt; i++)
+            if (ShouldPopulate(c))
             {
-                var tile = Worldgen.FindTileWithout(c.Tiles, not);
-                if (tile != null)
+                for (var i = 0; i < GameWorld.CHUNK_SIZE; i++)
                 {
-                    var terrainData = tile.TerrainData;
-                    terrainData.AddFlag(desiredTerrain);
-                    tile.TerrainData = terrainData;
+                    c.GetTile(i,i).TileId = 3;
                 }
+                   
+                return;
             }
         }
 
