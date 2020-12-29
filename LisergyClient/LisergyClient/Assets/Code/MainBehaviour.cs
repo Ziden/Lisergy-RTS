@@ -1,5 +1,4 @@
 ﻿using Assets.Code;
-using Assets.Code.World;
 using Game.Events;
 using UnityEngine;
 
@@ -7,7 +6,8 @@ public class MainBehaviour : MonoBehaviour
 {
     public static Networking Networking;
     public static ClientPlayer Player;
-    private static GameListener GameListener;
+    public static ClientStrategyGame StrategyGame;
+    private static ServerListener GameListener;
 
     void Start()
     {
@@ -17,6 +17,11 @@ public class MainBehaviour : MonoBehaviour
     public static GameObject CreatePrefab(Object prefab)
     {
         return Instantiate(prefab) as GameObject;
+    }
+
+    public static void DestroyObject(GameObject obj)
+    {
+        Destroy(obj);
     }
 
     private void ConfigureUnity()
@@ -32,20 +37,22 @@ public class MainBehaviour : MonoBehaviour
 
     private void Awake()
     {
+        EventSink.SERVER = false; 
         ConfigureUnity();
         Serialization.LoadSerializers();
         Networking = new Networking();
-        GameListener = new GameListener();
+        GameListener = new ServerListener();
     }
 
     void Update()
     {
-        Networking.Update();
+        Networking?.Update();
         Awaiter.Update();
+        StrategyGame?.Update();
     }
 
     private void OnApplicationQuit()
     {
-        Networking.Dispose();
+        Networking?.Dispose();
     }
 }

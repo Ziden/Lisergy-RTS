@@ -1,5 +1,6 @@
 ﻿using Game;
 using GameDataTest;
+using LisergyServer;
 using LisergyServer.Core;
 
 namespace LegendsServer
@@ -10,13 +11,14 @@ namespace LegendsServer
         {
             var cfg = new GameConfiguration()
             {
-                WorldMaxPlayers = 2
+                WorldMaxPlayers = 10
             };
             var gameSpecs = TestSpecs.Generate();
-            var game = new StrategyGame(cfg, gameSpecs, new GameWorld());
-            game.GenerateMap();
-
-            SocketServer.ServerLoop(game);
+            var world = new GameWorld();
+            var game = new StrategyGame(cfg, gameSpecs, world);
+            game.LoadMap();
+            new ServerWorldListener(world);
+            SocketServer.RunGame(game);
         }
     }
 }

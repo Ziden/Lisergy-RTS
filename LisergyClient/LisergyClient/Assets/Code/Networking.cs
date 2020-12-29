@@ -1,7 +1,5 @@
-﻿using Assets.Code;
-using Game;
+﻿using Game;
 using Game.Events;
-using Game.Events.ServerEvents;
 using LisergyServer.Core;
 using System;
 using System.Collections.Generic;
@@ -41,6 +39,7 @@ public class Networking : IDisposable
                 if (!client.GetNextMessage(out msg))
                     break;
 
+               
                 switch (msg.eventType)
                 {
                     case Telepathy.EventType.Connected:

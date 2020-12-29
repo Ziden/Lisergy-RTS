@@ -21,20 +21,11 @@ namespace Game
 
         private int _sizeX;
         private int _sizeY;
-        private WorldListener _listener;
 
         public WorldPlayers Players { get; set; }
         public ChunkMap ChunkMap { get; set; }
 
-        public GameWorld()
-        {
-            _listener = GetListener();
-        }
-
-        public virtual WorldListener GetListener()
-        {
-            return new WorldListener(this);
-        }
+        public Dictionary<string, Unit> Units = new Dictionary<string, Unit>();
 
         public ushort Seed { get; set; }
         public int SizeX { get => _sizeX; set => _sizeX = value; }
@@ -57,7 +48,7 @@ namespace Game
             ChunkMap = new ChunkMap(SizeX / GameWorld.CHUNK_SIZE, SizeY / GameWorld.CHUNK_SIZE);
         }
 
-        public virtual void AddPlayer(PlayerEntity player, Tile t = null)
+        public virtual void PlaceNewPlayer(PlayerEntity player, Tile t = null)
         {
             var newbieChunk = ChunkMap.GetUnnocupiedNewbieChunk();
             if (newbieChunk == null)
@@ -70,8 +61,12 @@ namespace Game
                 t = Worldgen.FindTileWithId(newbieChunk.Tiles, 0);
             }
             byte castleID = StrategyGame.Specs.InitialBuilding;
-            Log.Debug($"Placed new player in {t}");
             player.Build(castleID, t);
+
+            ushort initialUnit = StrategyGame.Specs.InitialUnit;
+            player.RecruitUnit(initialUnit);
+
+            Log.Debug($"Placed new player in {t}");
             return;
         }
 

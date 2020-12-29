@@ -1,18 +1,36 @@
-﻿using Assets.Code.Art;
-using Game;
-using Game.World;
+﻿using Game;
 using UnityEngine;
 
 namespace Assets.Code.World
 {
     public class ClientTile : Tile
     {
-        private GameObject _rootNode;
-        private GameObject _plane;
+        public GameObject GameObj { get => _gameObj; private set => _gameObj = value; }
 
-        public ClientTile(ClientChunk c, int x, int y) : base(c, x, y)
+        private GameObject _gameObj;
+
+        public bool Decorated;
+
+        public ClientTile(ClientChunk c, int x, int y) : base(c, x, y) { }
+
+        public void UpdateVisibility()
         {
-            Draw();
+            if (GameObj == null)
+                return;
+
+            var isVisible = IsVisibleTo(MainBehaviour.Player);
+            if (GameObj.activeSelf == isVisible)
+                return;
+
+            StackLog.Debug($"Changing activaction of {this} to {isVisible}");
+            //GameObj.SetActive(isVisible); // mandando unit parece q caga isso
+        }
+
+        public override void SetSeenBy(WorldEntity entity)
+        {
+            base.SetSeenBy(entity);
+            StackLog.Debug($"{entity} sees {this} client {MainBehaviour.Player.UserID}");
+            UpdateVisibility();
         }
 
         public override byte TileId
@@ -20,18 +38,21 @@ namespace Assets.Code.World
             get { return base.TileId; }
             set
             {
-                Log.Debug($"Updating {this} tileid to {value}");
+                StackLog.Debug($"Updating {this} tileid to {value}");
                 var tileSpec = StrategyGame.Specs.GetTileSpec(value);
-                foreach(var art in tileSpec.Arts)
+                foreach (var art in tileSpec.Arts)
                 {
-                    if(art.Type==GameData.Specs.ArtType.SPRITE)
-                        TextureManager.SetTexture(_plane, art.Name);
-                    else if (art.Type == GameData.Specs.ArtType.PREFAB)
+                    if (GameObj == null)
                     {
-                        var prefab = Resources.Load("prefabs/tiles/"+ art.Name);
-                        var obj = MainBehaviour.Instantiate(prefab) as GameObject;
-                        obj.transform.SetParent(_rootNode.transform);
-                        obj.transform.position = new Vector3(X, 0, Y);
+                        var prefab = Resources.Load("prefabs/tiles/" + art.Name);
+                        var parent = ((ClientChunk)this.Chunk).ChunkObject.transform;
+                        GameObj = MainBehaviour.Instantiate(prefab, parent) as GameObject;
+                        GameObj.name = $"Tile_{X}-{Y}";
+                        GameObj.transform.position = new Vector3(X, 0, Y);
+                        var tileBhv = GameObj.GetComponent<TileRandomizerBehaviour>();
+                        base.TileId = value;
+                        tileBhv.CreateTileDecoration(this);
+                        return;
                     }
                 }
                 base.TileId = value;
@@ -40,10 +61,7 @@ namespace Assets.Code.World
 
         public override Building Building
         {
-            get
-            {
-                return base.Building;
-            }
+            get { return base.Building; }
             set
             {
                 if (value != null)
@@ -51,22 +69,11 @@ namespace Assets.Code.World
                     var clientBuilding = value as ClientBuilding;
                     clientBuilding.Object.transform.position = new Vector3(X, 0, Y);
                 }
-                base.Building = value;
+                using (new StackLog($"[Building] New {value} on {this}"))
+                {
+                    base.Building = value;
+                }
             }
-        }
-
-        public void Draw()
-        {
-            var chunk = (ClientChunk)this.Chunk;
-            _rootNode = new GameObject($"Tile-{X}-{Y}");
-
-            _rootNode.transform.SetParent(chunk.ChunkObject.transform);
-
-            _plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            _plane.transform.SetParent(_rootNode.transform);
-            _plane.transform.localScale = new Vector3(0.1f, 1, 0.1f);
-            _plane.transform.position = new Vector3(0, 0, 0);
-            _rootNode.transform.position = new Vector3(X, 0, Y);
         }
     }
 }

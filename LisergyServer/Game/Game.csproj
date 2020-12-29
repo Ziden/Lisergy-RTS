@@ -21,4 +21,8 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Battle\" />
+  </ItemGroup>
+
 </Project>

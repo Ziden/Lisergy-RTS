@@ -20,12 +20,12 @@ namespace Game
             Config = cfg;
         }
 
-        public void GenerateMap()
+        public void LoadMap()
         {
             var worldGen = new Worldgen(World);
             worldGen.Populators.Add(new NewbieChunkPopulator());
             worldGen.Generate(Config.WorldMaxPlayers);
-            MapDebug.PrintAscii(World);
+            //MapDebug.PrintAscii(World);
         }
     }
 }

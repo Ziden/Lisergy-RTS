@@ -39,23 +39,28 @@ namespace ServerTests
 
     public class TestGame : StrategyGame
     {
-        private static bool _registered = false;
+        private bool _registered = false;
         public TestGame() : base(GetTestConfiguration(), GetTestSpecs(), new GameWorld())
         {
             if(!_registered)
             {
-                EventSink.OnTileVisible += ev =>ReceivedEvents.Add(ev);
-                EventSink.OnPlayerAuth += ev => ReceivedEvents.Add(ev);
-                EventSink.OnSpecResponse += ev => ReceivedEvents.Add(ev);
-                EventSink.OnJoinWorld += ev => ReceivedEvents.Add(ev);
+                EventSink.OnTileVisible += ev => ReceiveEvent(ev);
+                EventSink.OnPlayerAuth += ev => ReceiveEvent(ev);
+                EventSink.OnSpecResponse += ev => ReceiveEvent(ev);
+                EventSink.OnJoinWorld += ev => ReceiveEvent(ev);
+                EventSink.OnUnitVisible += ev => ReceiveEvent(ev);
                 _registered = true;
             }
            
-            GenerateMap();
+            LoadMap();
             var player = new TestServerPlayer();
             player.UserID = TestServerPlayer.TEST_ID;
-            this.World.AddPlayer(player);
-           
+            this.World.PlaceNewPlayer(player, this.World.GetTile(10,10));
+        }
+
+        public void ReceiveEvent(GameEvent ev)
+        {
+            ReceivedEvents.Add(ev); 
         }
 
         public List<GameEvent> ReceivedEvents = new List<GameEvent>();

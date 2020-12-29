@@ -32,6 +32,43 @@ namespace Game.World
 
     public static class WorldUtils
     {
+        public static void RemoveString(this string[] array, string obj)
+        {
+            for (var i = 0; i < array.Length; i++)
+            {
+                if (array[i] == obj)
+                {
+                    array[i] = null;
+                    return;
+                }
+            }
+        }
+
+        public static int FilledSlots(this string[] array)
+        {
+            var amt = 0;
+            for (var i = 0; i < array.Length; i++)
+            {
+                if (array[i] != null)
+                {
+                    amt++;
+                }
+            }
+            return amt;
+        }
+
+        public static void AddString(this string [] array, string obj)
+        {
+            for(var i  = 0; i < array.Length; i ++)
+            {
+                if(array[i]==null)
+                {
+                    array[i] = obj;
+                    return;
+                }
+            }
+        }
+
         // Gets the amount of bits required to allocate a given number
         // This will be used to get the amount 
         public static int BitsRequired(this int num)

@@ -1,8 +1,10 @@
 using Game;
 using Game.Events;
+using Game.Events.ServerEvents;
 using NUnit.Framework;
 using ServerTests;
 using System;
+using System.Linq;
 
 namespace Tests
 {
@@ -54,6 +56,25 @@ namespace Tests
             Assert.AreEqual(tile.UserID, unserialized.Tile.UserID);
             Assert.AreEqual(tile.X, unserialized.Tile.X);
             Assert.AreEqual(tile.Y, unserialized.Tile.Y);
+        }
+
+        [Test]
+        public void TestUnitViewEventSerialization()
+        {
+            var game = new TestGame();
+            Serialization.LoadSerializers(typeof(UnitVisibleEvent));
+
+            var player = game.GetTestPlayer();
+            var unit = player.Units.First();
+            var building = player.Buildings.First();
+            var tile = unit.Tile;
+
+            var visibleEvent = game.ReceivedEvents.Where(e => e is UnitVisibleEvent).FirstOrDefault() as UnitVisibleEvent;
+
+            var serialized = Serialization.FromEvent<UnitVisibleEvent>(visibleEvent);
+            var unserialized = Serialization.ToEvent<UnitVisibleEvent>(serialized);
+
+            Assert.AreEqual(visibleEvent.Unit.Id, unserialized.Unit.Id);
         }
 
         [Test]

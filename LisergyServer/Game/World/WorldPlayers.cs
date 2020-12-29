@@ -17,6 +17,9 @@ namespace Game
 
         public void Add(PlayerEntity p)
         {
+            if (_players.ContainsKey(p.UserID))
+                return;
+
             if(_players.Count >= MaxPlayers)
             {
                 throw new Exception("Max player limit reached");

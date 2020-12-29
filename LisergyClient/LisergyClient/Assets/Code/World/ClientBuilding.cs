@@ -10,7 +10,7 @@ namespace Assets.Code.World
         public ClientBuilding(byte id, ClientPlayer owner): base(id, owner)
         {
             var prefab = Resources.Load("prefabs/buildings/"+id);
-            Log.Debug("-----> Instantiating BUILDING " + (prefab!=null));
+            StackLog.Debug("Instantiating BUILDING");
             Object = MainBehaviour.Instantiate(prefab) as GameObject;
         }
     }

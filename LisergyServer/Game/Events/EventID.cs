@@ -11,6 +11,7 @@ namespace Game.Events
         SEE_CHUNK = 2,
         AUTH_RESULT = 3,
         TILE_VISIBLE = 4,
-        SPEC_RESPONSE = 5
+        SPEC_RESPONSE = 5,
+        UNIT_VISIBLE = 6
     }
 }

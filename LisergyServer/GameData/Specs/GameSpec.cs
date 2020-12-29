@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameData.Specs;
+using System;
 using System.Collections.Generic;
 
 namespace GameData
@@ -9,8 +10,11 @@ namespace GameData
         public int Version = 1;
 
         public byte InitialBuilding;
+        public ushort InitialUnit;
+
         public Dictionary<byte, BuildingSpec> Buildings = new Dictionary<byte, BuildingSpec>();
-        public Dictionary<int, TileSpec> Tiles = new Dictionary<int, TileSpec>();
+        public Dictionary<ushort, TileSpec> Tiles = new Dictionary<ushort, TileSpec>();
+        public Dictionary<ushort, UnitSpec> Units = new Dictionary<ushort, UnitSpec>();
 
         public BuildingSpec GetBuildingSpec(byte id)
         {
@@ -20,7 +24,7 @@ namespace GameData
             return spec;
         }
 
-        public TileSpec GetTileSpec(int id)
+        public TileSpec GetTileSpec(ushort id)
         {
             TileSpec spec;
             if (!Tiles.TryGetValue(id, out spec))

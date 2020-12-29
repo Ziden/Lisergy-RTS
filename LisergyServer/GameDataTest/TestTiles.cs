@@ -28,7 +28,7 @@ namespace GameDataTest
         {
             ID = 2,
             Arts = new List<ArtSpec>(new ArtSpec[] {
-                new ArtSpec() { Name = "wool_colored_blue", Type=ArtType.SPRITE }
+                   new ArtSpec() { Name = "Water", Type=ArtType.PREFAB }
             })
         };
 
@@ -36,7 +36,6 @@ namespace GameDataTest
         {
             ID = 3,
             Arts = new List<ArtSpec>(new ArtSpec[] {
-
                 new ArtSpec() { Name = "Forest", Type=ArtType.PREFAB }
             })
         };

@@ -22,6 +22,9 @@ namespace Game
         public virtual byte Flags { get => _flags; set => _flags = value; }
         public virtual Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
 
+        [NonSerialized]
+        public Dictionary<string, Unit> Units = new Dictionary<string, Unit>();
+
         public HashSet<Building> Buildings = new HashSet<Building>();
 
         public Chunk(GameWorld w, int x, int y, Tile[,] tiles)

@@ -35,7 +35,9 @@ namespace GameDataTest
                 ModelID = 2,
             };
             spec.InitialBuilding = spec.Buildings[1].Id;
+
             TestTiles.Generate(spec);
+            TestUnits.Generate(spec);
             return spec;
         }
     }

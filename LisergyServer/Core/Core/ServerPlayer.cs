@@ -19,6 +19,8 @@ namespace LisergyServer.Core
 
         public override void Send<EventType>(EventType ev)
         {
+            Log.Debug($"Sending {ev.GetType().Name} to {this}");
+            ev.FromNetwork = true;
             this._server.Send(this.ConnectionID, Serialization.FromEvent<EventType>(ev));
         }
 

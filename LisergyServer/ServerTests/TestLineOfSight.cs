@@ -17,6 +17,21 @@ namespace Tests
         }
 
         [Test]
+        public void TestLOSEvents()
+        {
+            var initialBuildingSpec = StrategyGame.Specs.GetBuildingSpec(StrategyGame.Specs.InitialBuilding);
+            var player = Game.GetTestPlayer();
+            var events = Game.ReceivedEvents
+                .Where(e => e is TileVisibleEvent)
+                .Select(e => (TileVisibleEvent)e)
+                .Where(e => e.Viewer.Owner == player)
+                .ToList();
+
+            var range = initialBuildingSpec.LOS * 2 + 1;
+            Assert.That(events.Count == range * range);
+        }
+
+        [Test]
         public void TestInitialLOS()
         {
             var player = Game.GetTestPlayer();
@@ -24,7 +39,7 @@ namespace Tests
             var initialBuildingSpec = StrategyGame.Specs.GetBuildingSpec(StrategyGame.Specs.InitialBuilding);
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile;
-            var areaTiles = tile.GetAOE(initialBuildingSpec.LOS);
+            var areaTiles = tile.GetAOE(initialBuildingSpec.LOS).ToList();
 
             Assert.AreEqual(player.VisibleTiles.Count, areaTiles.Count());
 
@@ -34,7 +49,7 @@ namespace Tests
                 Assert.True(seenTile.Viewing.Contains(building));
                 Assert.True(player.VisibleTiles.Contains(seenTile));
             }
-        }
+        }   
 
         [Test]
         public void TestTileAOE()
@@ -46,24 +61,6 @@ namespace Tests
             var los = tile.GetAOE(aoe).ToList();
 
             Assert.That(los.Count() == range * range);
-        }
-
-        [Test]
-        public void TestLOSEvents()
-        {
-            var initialBuildingSpec = StrategyGame.Specs.GetBuildingSpec(StrategyGame.Specs.InitialBuilding);
-            var player = Game.GetTestPlayer();
-            var events = Game.ReceivedEvents
-                .Where(e => e is TileVisibleEvent)
-                .Select(e => (TileVisibleEvent)e)
-                .Where(e => e.Viewer.Owner == player)
-                .ToList();
-
-            var hash = events.Select(e => e.Tile.ToString()).ToHashSet();
-            var pos = events.Select(e => e.Tile.ToString()).ToList();
-
-            var range = initialBuildingSpec.LOS * 2 + 1;
-            Assert.That(events.Count == range * range);
         }
 
         [Test]
