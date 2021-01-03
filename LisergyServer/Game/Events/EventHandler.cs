@@ -8,7 +8,7 @@ namespace Game.Events
     public delegate void AuthResultHandler(AuthResultEvent e);
     public delegate void TileVisibleHandler (TileVisibleEvent e);
     public delegate void SpecResponseHandler(GameSpecResponse e);
-    public delegate void UnitVisibleHandler(UnitVisibleEvent e);
+    public delegate void PartyVisibleHandler(PartyVisibleEvent e);
 
     public class EventSink
     {
@@ -18,17 +18,17 @@ namespace Game.Events
         public static event AuthResultHandler OnPlayerAuth;
         public static event TileVisibleHandler OnTileVisible;
         public static event SpecResponseHandler OnSpecResponse;
-        public static event UnitVisibleHandler OnUnitVisible;
+        public static event PartyVisibleHandler OnPartyVisible;
 
         private static bool CanSend(GameEvent ev)
         {
             return ev.FromNetwork || (ev is ClientEvent && !SERVER || (ev is ServerEvent && SERVER));
         }
 
-        public static void UnitVisible(UnitVisibleEvent ev)
+        public static void PartyVisible(PartyVisibleEvent ev)
         {
-            if (OnUnitVisible != null && CanSend(ev))
-                OnUnitVisible(ev);
+            if (OnPartyVisible != null && CanSend(ev))
+                OnPartyVisible(ev);
         }
 
         public static void SpecResponse(GameSpecResponse ev)

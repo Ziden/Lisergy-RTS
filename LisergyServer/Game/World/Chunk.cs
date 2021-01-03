@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.Entity;
+using System;
 using System.Collections.Generic;
 
 namespace Game
@@ -21,9 +22,6 @@ namespace Game
         public virtual GameWorld World { get; private set; }
         public virtual byte Flags { get => _flags; set => _flags = value; }
         public virtual Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
-
-        [NonSerialized]
-        public Dictionary<string, Unit> Units = new Dictionary<string, Unit>();
 
         public HashSet<Building> Buildings = new HashSet<Building>();
 

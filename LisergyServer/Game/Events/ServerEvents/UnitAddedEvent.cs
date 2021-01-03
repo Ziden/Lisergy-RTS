@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Game.Entity;
+using System;
 using System.Collections.Generic;
 
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class UnitVisibleEvent : ServerEvent
+    public class PartyVisibleEvent : ServerEvent
     {
-        public Unit Unit;
+        public Party Party;
 
         [NonSerialized]
         public WorldEntity Viewer;
      
-        public override EventID GetID() => EventID.UNIT_VISIBLE;
+        public override EventID GetID() => EventID.PARTY_VISIBLE;
     }
 }

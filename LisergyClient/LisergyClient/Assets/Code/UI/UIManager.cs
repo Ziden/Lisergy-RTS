@@ -6,12 +6,21 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     private static LoginCanvas _loginCanvas;
+    private static GameUICanvas _gameUI;
     private static UIManager _instance;
 
     public LoginCanvas LoginCanvas {
         get
         {
             return _loginCanvas;
+        }
+    }
+
+    public GameUICanvas GameUI
+    {
+        get
+        {
+            return _gameUI;
         }
     }
 
@@ -24,5 +33,7 @@ public class UIManager : MonoBehaviour
     {
         _instance = this;
         _loginCanvas = new LoginCanvas();
+        _gameUI = new GameUICanvas();
+   
     }
 }

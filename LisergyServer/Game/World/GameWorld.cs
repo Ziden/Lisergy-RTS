@@ -25,8 +25,6 @@ namespace Game
         public WorldPlayers Players { get; set; }
         public ChunkMap ChunkMap { get; set; }
 
-        public Dictionary<string, Unit> Units = new Dictionary<string, Unit>();
-
         public ushort Seed { get; set; }
         public int SizeX { get => _sizeX; set => _sizeX = value; }
         public int SizeY { get => _sizeY; set => _sizeY = value; }
@@ -64,8 +62,11 @@ namespace Game
             player.Build(castleID, t);
 
             ushort initialUnit = StrategyGame.Specs.InitialUnit;
-            player.RecruitUnit(initialUnit);
+            var unit = player.RecruitUnit(initialUnit);
 
+            var party = player.Parties[0];
+            player.PlaceUnitInParty(unit, party);
+            player.DeployParty(party, t.GetNeighbor(Direction.EAST));
             Log.Debug($"Placed new player in {t}");
             return;
         }

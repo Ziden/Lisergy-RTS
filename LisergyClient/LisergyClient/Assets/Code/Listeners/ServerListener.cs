@@ -1,8 +1,8 @@
 ﻿using Assets.Code.World;
 using Game;
+using Game.Entity;
 using Game.Events;
 using Game.Events.ServerEvents;
-using Game.World;
 
 namespace Assets.Code
 {
@@ -18,26 +18,19 @@ namespace Assets.Code
         public void RegisterGameHandlers()
         {
             EventSink.OnTileVisible += ReceiveTile;
-            EventSink.OnUnitVisible += UnitVisible;
+            EventSink.OnPartyVisible += PartyVisible;
         }
 
-        public void UnitVisible(UnitVisibleEvent ev)
+        public void PartyVisible(PartyVisibleEvent ev)
         {
-            using (new StackLog($"[Unit] Viewing {ev.Unit.SpecID} from {ev.Unit.OwnerID}"))
+            using (new StackLog($"[Party] Viewing {ev.Party.PartyID} from {ev.Party.OwnerID}"))
             {
-                Unit u;
-                if (!_world.Units.TryGetValue(ev.Unit.Id, out u))
-                {
-                    var tile = _world.GetTile(ev.Unit.X, ev.Unit.Y);
-                    var clientUnit = new ClientUnit(ev.Unit);
-                    var owner = clientUnit.Owner;
-                 
-                    tile.TeleportUnit(clientUnit);
-                    StackLog.Debug("New Unit Created");
-                } else
-                {
-                    StackLog.Debug("Unit Already Existed");
-                }
+                var owner = _world.GetOrCreateClientPlayer(ev.Party.OwnerID);
+                var tile = _world.GetTile(ev.Party.X, ev.Party.Y);
+                var pt = new ClientParty(ev.Party);
+                owner.Parties[ev.Party.PartyID] = pt;
+                tile.TeleportParty(pt);
+                pt.Render();
             }
         }
 
@@ -55,6 +48,13 @@ namespace Assets.Code
                     {
                         var owner = _world.GetOrCreateClientPlayer(ev.Tile.UserID);
                         tile.Building = new ClientBuilding(ev.Tile.BuildingID, owner);
+
+                        // Whenever we receive our main building focus camera on it
+                        if(ev.Tile.BuildingID == StrategyGame.Specs.InitialBuilding)
+                        {
+                            CameraBehaviour.FocusOnTile(tile);
+                        }
+
                     }
                 }
                 else
@@ -69,7 +69,7 @@ namespace Assets.Code
         {
             using (new StackLog($"[Specs] V {ev.Spec.Version} Received {MainBehaviour.Player}"))
             {
-                if(_world==null)
+                if (_world == null)
                 {
                     _world = new ClientWorld();
                     _world.CreateWorld(ev.Cfg.WorldMaxPlayers);

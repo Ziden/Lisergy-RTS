@@ -1,4 +1,5 @@
-﻿using Game;
+﻿using Assets.Code.World;
+using Game;
 using Game.Events.ServerEvents;
 using UnityEngine;
 
@@ -6,7 +7,13 @@ using UnityEngine;
 public class CameraBehaviour : MonoBehaviour
 {
 
-    public float panSpeed = 20f;
+    public static CameraBehaviour Get()
+    {
+        return _instance;
+    }
+
+    private static CameraBehaviour _instance;
+    public float panSpeed = 5f;
     public float rotSpeed = 10f;
     public float zoomSpeed = 50f;
     public float borderWidth = 10f;
@@ -16,21 +23,25 @@ public class CameraBehaviour : MonoBehaviour
     private float zoomMax = 200;
     private float mouseX, mouseY;
 
+    private ClientTile Focus = null;
+    private Vector3 FocusVector = Vector3.zero;
+
+    public static void FocusOnTile(ClientTile t)
+    {
+        Get().transform.position = new Vector3(t.X - 2, 5, t.Y - 2);
+    }
+
     void Update()
 
     {
-
         Movement();
-
-        Rotation();
-
-        Zoom();
-
+        //Rotation();
+        //Zoom();
     }
 
     private void Start()
     {
-       
+        _instance = this;
     }
 
     void Movement()

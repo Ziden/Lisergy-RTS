@@ -33,28 +33,33 @@ namespace Assets.Code.World
             UpdateVisibility();
         }
 
+        public void RenderTile(byte tileID)
+        {
+            var tileSpec = StrategyGame.Specs.GetTileSpec(tileID);
+            foreach (var art in tileSpec.Arts)
+            {
+                if (GameObj == null)
+                {
+                    var prefab = Resources.Load("prefabs/tiles/" + art.Name);
+                    var parent = ((ClientChunk)this.Chunk).ChunkObject.transform;
+                    GameObj = MainBehaviour.Instantiate(prefab, parent) as GameObject;
+                    GameObj.name = $"Tile_{X}-{Y}";
+                    GameObj.transform.position = new Vector3(X, 0, Y);
+                    var tileBhv = GameObj.GetComponent<TileRandomizerBehaviour>();
+                    base.TileId = tileID;
+                    tileBhv.CreateTileDecoration(this);
+                    return;
+                }
+            }
+        }
+
         public override byte TileId
         {
             get { return base.TileId; }
             set
             {
                 StackLog.Debug($"Updating {this} tileid to {value}");
-                var tileSpec = StrategyGame.Specs.GetTileSpec(value);
-                foreach (var art in tileSpec.Arts)
-                {
-                    if (GameObj == null)
-                    {
-                        var prefab = Resources.Load("prefabs/tiles/" + art.Name);
-                        var parent = ((ClientChunk)this.Chunk).ChunkObject.transform;
-                        GameObj = MainBehaviour.Instantiate(prefab, parent) as GameObject;
-                        GameObj.name = $"Tile_{X}-{Y}";
-                        GameObj.transform.position = new Vector3(X, 0, Y);
-                        var tileBhv = GameObj.GetComponent<TileRandomizerBehaviour>();
-                        base.TileId = value;
-                        tileBhv.CreateTileDecoration(this);
-                        return;
-                    }
-                }
+                RenderTile(value);
                 base.TileId = value;
             }
         }

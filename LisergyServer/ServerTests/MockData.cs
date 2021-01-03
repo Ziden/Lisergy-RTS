@@ -48,7 +48,7 @@ namespace ServerTests
                 EventSink.OnPlayerAuth += ev => ReceiveEvent(ev);
                 EventSink.OnSpecResponse += ev => ReceiveEvent(ev);
                 EventSink.OnJoinWorld += ev => ReceiveEvent(ev);
-                EventSink.OnUnitVisible += ev => ReceiveEvent(ev);
+                EventSink.OnPartyVisible += ev => ReceiveEvent(ev);
                 _registered = true;
             }
            

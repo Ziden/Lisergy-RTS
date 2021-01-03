@@ -1,4 +1,5 @@
-﻿using Game.Events;
+﻿using Game.Entity;
+using Game.Events;
 using Game.World;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,15 @@ namespace Game
         public HashSet<Unit> Units = new HashSet<Unit>();
         public HashSet<Building> Buildings = new HashSet<Building>();
         public HashSet<Tile> VisibleTiles = new HashSet<Tile>();
+        public Party[] Parties;
 
         public PlayerEntity()
         {
             this.UserID = Guid.NewGuid().ToString();
+            Parties = new Party[4]
+            {
+                new Party(this, 0),new Party(this, 1),new Party(this, 2),new Party(this, 3),
+            };
         }
 
         public PlayerEntity(string id)
@@ -29,14 +35,27 @@ namespace Game
             return Buildings.First(b => b.BuildingID == StrategyGame.Specs.InitialBuilding);
         }
 
-        public void RecruitUnit(ushort unitSpecId)
+        public Unit RecruitUnit(ushort unitSpecId)
         {
             var unit = new Unit(unitSpecId, this);
             this.Units.Add(unit);
+            Log.Debug($"{UserID} recruited {unitSpecId}");
+            return unit;
+        }
 
-            var center = GetCenter().Tile.GetNeighbor(Direction.EAST);
-            center.TeleportUnit(unit);
-            Log.Debug($"{UserID} recruited {unitSpecId} at {center}");
+        public void DeployParty(Party p, Tile t)
+        {
+            t.TeleportParty(p);
+        }
+
+        public void PlaceUnitInParty(Unit u, Party newParty)
+        {
+            if (u.Party != null)
+                u.Party.RemoveUnit(u);
+            u.Party = newParty;
+            var idx = Array.IndexOf(newParty.Units, null);
+            newParty.Units[idx] = u;
+            Log.Debug($"{UserID} moved unit {u.SpecID} to party {newParty.PartyID}");
         }
 
         public void Build(byte id, Tile t)

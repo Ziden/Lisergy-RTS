@@ -1,4 +1,5 @@
-﻿using Game.Events;
+﻿using Game.Entity;
+using Game.Events;
 using Game.Events.ServerEvents;
 using Game.World;
 using System;
@@ -28,7 +29,7 @@ namespace Game
         private Chunk _chunk;
 
         [NonSerialized]
-        private List<Unit> _units = new List<Unit>();
+        private List<Party> _units = new List<Party>();
 
         [NonSerialized]
         protected HashSet<PlayerEntity> _visibleTo = new HashSet<PlayerEntity>();
@@ -50,31 +51,29 @@ namespace Game
         public virtual Chunk Chunk { get { return _chunk; } }
         public virtual byte TileId { get => _tileId; set => _tileId = value; }
         public virtual byte ResourceID { get => _resourceID; set => _resourceID = value; }
-        public virtual List<Unit> Units { get { return _units; } }
+        public virtual List<Party> Units { get { return _units; } }
 
-        public virtual void TeleportUnit(Unit u)
+        public virtual void TeleportParty(Party party)
         {
-            var los = StrategyGame.Specs.Units[u.SpecID].LOS;
-            var previousTile = u.Tile;
+            var los = party.GetLineOfSight();
+            var previousTile = party.Tile;
             if (previousTile != null)
             {
-                previousTile._units.Remove(u);
-                previousTile.Chunk.Units.Remove(u.Id);
+                previousTile._units.Remove(party);
                 foreach (var tile in previousTile.GetAOE(los))
-                    tile.SetUnseenBy(u);
+                    tile.SetUnseenBy(party);
             }
-            _units.Add(u);
-            u.Tile = this;
-            Chunk.Units[u.Id] = u;
-            Chunk.World.Units[u.Id] = u;
+            _units.Add(party);
+            party.Tile = this;
+
             foreach (var tile in GetAOE(los))
-                tile.SetSeenBy(u);
+                tile.SetSeenBy(party);
             foreach(var viewer in _viewing)
             {
-                EventSink.UnitVisible(new UnitVisibleEvent()
+                EventSink.PartyVisible(new PartyVisibleEvent()
                 {
                     Viewer = viewer,
-                    Unit = u
+                    Party = party
                 });
             }
         }
@@ -138,10 +137,10 @@ namespace Game
                     Tile = this,
                     Viewer = entity
                 });
-                Units.ForEach(u => EventSink.UnitVisible(new UnitVisibleEvent()
+                Units.ForEach(u => EventSink.PartyVisible(new PartyVisibleEvent()
                 {
                     Viewer = entity,
-                    Unit = u
+                    Party = u
                 }));
             }
         }

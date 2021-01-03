@@ -34,12 +34,12 @@ namespace LisergyServer.Core
                 ev.FromNetwork = true;
                 EventSink.SpecResponse(ev);
             }
-            else if (eventId == EventID.UNIT_VISIBLE)
+            else if (eventId == EventID.PARTY_VISIBLE)
             {
-                var ev = Serialization.ToEvent<UnitVisibleEvent>(message);
+                var ev = Serialization.ToEvent<PartyVisibleEvent>(message);
                 ev.ClientPlayer = owner;
                 ev.FromNetwork = true;
-                EventSink.UnitVisible(ev);
+                EventSink.PartyVisible(ev);
             }
 
 

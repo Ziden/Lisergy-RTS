@@ -12,25 +12,20 @@ namespace Assets.Code.World
 
         public ClientUnit(Unit u) : base(u.SpecID, null, u.Id)
         {
-            this.Owner = FindOwner(u);
+            this.Owner = MainBehaviour.StrategyGame.GetWorld().GetOrCreateClientPlayer(u.OwnerID);
             StackLog.Debug($"Created new unit instance {this}");
         }
 
-        public override Tile Tile
+        public void Render(int X, int Y)
         {
-            get => base.Tile; set
+            if (_unitObj == null)
             {
-                base.Tile = value;
-                StackLog.Debug($"Updating unit {this} tile to {value} {X}-{Y}");
-                if (_unitObj == null)
-                {
-                    var art = StrategyGame.Specs.Units[this.SpecID].Art;
-                    var prefab = Resources.Load("prefabs/units/" + art.Name);
-                    _unitObj = MainBehaviour.Instantiate(prefab, UnitsContainerNode.transform) as GameObject;
-                    _unitObj.transform.position = new Vector3(X, 0, Y);
-                    _unitObj.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-                    _unitObj.name = $"Unit Spec {this.SpecID} from {this.OwnerID}";
-                }
+                var art = StrategyGame.Specs.Units[this.SpecID].Art;
+                var prefab = Resources.Load("prefabs/units/" + art.Name);
+                _unitObj = MainBehaviour.Instantiate(prefab, UnitsContainerNode.transform) as GameObject;
+                _unitObj.transform.position = new Vector3(X, 0, Y);
+                _unitObj.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                _unitObj.name = $"Unit Spec {this.SpecID} from {this.OwnerID}";
             }
         }
 
@@ -44,9 +39,6 @@ namespace Assets.Code.World
             }
         }
 
-        public PlayerEntity FindOwner(Unit u)
-        {
-            return MainBehaviour.StrategyGame.GetWorld().GetOrCreateClientPlayer(u.OwnerID);
-        }
+
     }
 }

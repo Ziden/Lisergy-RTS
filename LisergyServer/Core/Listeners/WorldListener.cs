@@ -14,14 +14,14 @@ namespace LisergyServer
             _world = w; 
             EventSink.OnJoinWorld += JoinWorld;
             EventSink.OnTileVisible += TileVisible;
-            EventSink.OnUnitVisible += UnitVisible;
+            EventSink.OnPartyVisible += PartyVisible;
             Log.Debug("World Event Listener Registered");
         }
 
-        public void UnitVisible(UnitVisibleEvent ev)
+        public void PartyVisible(PartyVisibleEvent ev)
         {
             ev.Viewer.Owner.Send(ev);
-            Log.Debug($"{ev.Viewer.Owner} sees {ev.Unit}");
+            Log.Debug($"{ev.Viewer.Owner} sees {ev.Party}");
         }
 
         public void TileVisible(TileVisibleEvent ev)
@@ -44,7 +44,7 @@ namespace LisergyServer
                     foreach(var unit in tile.Units)
                     {
                         Log.Debug($"Sending unit {tile}");
-                        player.Send(new UnitVisibleEvent() { Unit = unit });
+                        player.Send(new PartyVisibleEvent() { Party = unit });
                     }
                 }
             }
