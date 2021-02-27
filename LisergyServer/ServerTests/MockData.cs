@@ -40,7 +40,7 @@ namespace ServerTests
     public class TestGame : StrategyGame
     {
         private bool _registered = false;
-        public TestGame() : base(GetTestConfiguration(), GetTestSpecs(), new GameWorld())
+        public TestGame(GameWorld world=null) : base(GetTestConfiguration(), GetTestSpecs(), world == null ? new GameWorld() : world)
         {
             if(!_registered)
             {
@@ -51,8 +51,8 @@ namespace ServerTests
                 EventSink.OnPartyVisible += ev => ReceiveEvent(ev);
                 _registered = true;
             }
-           
-            LoadMap();
+            this.World.CreateWorld(4);
+            this.World.ChunkMap.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             var player = new TestServerPlayer();
             player.UserID = TestServerPlayer.TEST_ID;
             this.World.PlaceNewPlayer(player, this.World.GetTile(10,10));
@@ -80,6 +80,11 @@ namespace ServerTests
         public static BuildingSpec RandomBuildingSpec()
         {
             return StrategyGame.Specs.Buildings.Values.RandomElement();
+        }
+
+        public override void GenerateMap()
+        {
+            base.GenerateMap();
         }
 
         public Tile RandomNotBuiltTile()

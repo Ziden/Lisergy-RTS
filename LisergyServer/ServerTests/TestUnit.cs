@@ -24,7 +24,7 @@ namespace Tests
 
             Assert.AreEqual(1, player.Units.Count);
             Assert.AreEqual(TestGame.Specs.InitialUnit, unit.SpecID);
-            Assert.That(unit.Tile.Units.Contains(unit));
+            Assert.That(unit.Party.Tile.Parties.Contains(unit.Party));
         }
 
         [Test]
@@ -33,12 +33,12 @@ namespace Tests
             var player = Game.GetTestPlayer();
             var unit = player.Units.First();
             var building = player.Buildings.First();
-            var tile = unit.Tile;
+            var tile = unit.Party.Tile;
 
             var visibleEvent = Game.ReceivedEvents.Where(e => e is PartyVisibleEvent).FirstOrDefault() as PartyVisibleEvent;
 
             Assert.That(visibleEvent != null);
-            Assert.AreEqual(unit.Id, visibleEvent.Party.Id);
+            Assert.AreEqual(unit.Party.Id, visibleEvent.Party.Id);
             Assert.AreEqual(building, visibleEvent.Viewer);
         }
     }

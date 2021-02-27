@@ -22,9 +22,6 @@ namespace Tests
                 .Select(e => (TileVisibleEvent)e)
                 .Where(e => e.Viewer.Owner == player)
                 .ToList();
-
-            var asd = 123;
-
         }
     }
 }

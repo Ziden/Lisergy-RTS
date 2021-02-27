@@ -1,9 +1,5 @@
-﻿using Game.Debug;
-using Game.Generator;
+﻿using Game.Generator;
 using GameData;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Game
 {
@@ -20,12 +16,16 @@ namespace Game
             Config = cfg;
         }
 
-        public void LoadMap()
+        public void Tick()
+        {
+
+        }
+
+        public virtual void GenerateMap()
         {
             var worldGen = new Worldgen(World);
             worldGen.Populators.Add(new NewbieChunkPopulator());
             worldGen.Generate(Config.WorldMaxPlayers);
-            //MapDebug.PrintAscii(World);
         }
     }
 }

@@ -30,7 +30,5 @@ namespace Game
                 _owner = value;
             }
         }
-
-     
     }
 }

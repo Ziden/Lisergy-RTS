@@ -1,4 +1,5 @@
-﻿using GameData;
+﻿using Game.Entity;
+using GameData;
 using GameData.buffs;
 using GameData.Specs;
 using System.Collections.Generic;
@@ -19,14 +20,19 @@ namespace GameDataTest
                 UnitSpecID = 0,
                 Name = "Mage",
                 LOS = 3,
-                Stats = new Dictionary<Stats, int>()
+                Stats = new UnitStats(new Dictionary<Stat, ushort>()
                 {
-                    { Stats.AGI, 5 },
-                    { Stats.DEX, 5 },
-                    { Stats.INT, 5 },
-                    { Stats.STR, 5 },
-                    { Stats.VIT, 5 }
-                }
+                    { Stat.AGI, 2 },
+                    { Stat.DEX, 2 },
+                    { Stat.DEF, 1 },
+                    { Stat.MDEF, 5 },
+                    { Stat.ATK, 1 },
+                    { Stat.MATK, 5 },
+                    { Stat.HP, 10 },
+                    { Stat.MHP, 20 },
+                    { Stat.MP, 5 },
+                    { Stat.MMP, 5 },
+                })
             };
         }
     }

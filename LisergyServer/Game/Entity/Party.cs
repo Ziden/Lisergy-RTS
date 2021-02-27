@@ -7,7 +7,7 @@ namespace Game.Entity
     [Serializable]
     public class Party : WorldEntity
     {
-        private byte _partySlotId;
+        private byte _partyIndex;
         private Unit[] _units = new Unit[4] { null, null, null, null };
 
         public byte GetLineOfSight()
@@ -15,26 +15,35 @@ namespace Game.Entity
             return _units.Where(u => u != null).Select(u => StrategyGame.Specs.Units[u.SpecID].LOS).Max();
         }
 
-        public Party(PlayerEntity owner, byte partyID): base(owner)
+        public IEnumerable<Unit> GetUnits()
         {
-            _partySlotId = partyID;
+            return _units.Where(u => u != null);
         }
 
-        public void AddUnit(Unit u)
+        public virtual void SetUnit(Unit u, int index)
+        {
+            _units[index] = u;
+        }
+
+        public Party(PlayerEntity owner, byte partyIndex): base(owner)
+        {
+            _partyIndex = partyIndex;
+        }
+
+        public virtual void AddUnit(Unit u)
         {
             if(u.Party != null && u.Party != this)
                 u.Party.RemoveUnit(u);
             var freeIndex = Array.IndexOf(_units, null);
-            _units[freeIndex] = u;
+            SetUnit(u, freeIndex);
         }
 
-        public void RemoveUnit(Unit u)
+        public virtual void RemoveUnit(Unit u)
         {
             var index = Array.IndexOf(_units, u);
             _units[index] = null;
         }
 
-        public byte PartyID { get => _partySlotId; }
-        public Unit [] Units { get => _units; }
+        public byte PartyIndex { get => _partyIndex; }
     }
 }

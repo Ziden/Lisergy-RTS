@@ -2,6 +2,7 @@
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.World;
+using GameData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace Game
         private Chunk _chunk;
 
         [NonSerialized]
-        private List<Party> _units = new List<Party>();
+        private List<Party> _parties = new List<Party>();
 
         [NonSerialized]
         protected HashSet<PlayerEntity> _visibleTo = new HashSet<PlayerEntity>();
@@ -43,6 +44,11 @@ namespace Game
         [NonSerialized]
         private PlayerEntity _owner;
 
+        public TileSpec GetSpec()
+        {
+            return StrategyGame.Specs.Tiles[this.TileId];
+        }
+
         public virtual string UserID { get => _userId; }
         public virtual byte BuildingID { get => _buildingID; }
         public virtual ushort Y { get => _y; }
@@ -51,7 +57,7 @@ namespace Game
         public virtual Chunk Chunk { get { return _chunk; } }
         public virtual byte TileId { get => _tileId; set => _tileId = value; }
         public virtual byte ResourceID { get => _resourceID; set => _resourceID = value; }
-        public virtual List<Party> Units { get { return _units; } }
+        public virtual List<Party> Parties { get { return _parties; } }
 
         public virtual void TeleportParty(Party party)
         {
@@ -59,11 +65,11 @@ namespace Game
             var previousTile = party.Tile;
             if (previousTile != null)
             {
-                previousTile._units.Remove(party);
+                previousTile._parties.Remove(party);
                 foreach (var tile in previousTile.GetAOE(los))
                     tile.SetUnseenBy(party);
             }
-            _units.Add(party);
+            _parties.Add(party);
             party.Tile = this;
 
             foreach (var tile in GetAOE(los))
@@ -137,7 +143,7 @@ namespace Game
                     Tile = this,
                     Viewer = entity
                 });
-                Units.ForEach(u => EventSink.PartyVisible(new PartyVisibleEvent()
+                Parties.ForEach(u => EventSink.PartyVisible(new PartyVisibleEvent()
                 {
                     Viewer = entity,
                     Party = u
@@ -149,10 +155,10 @@ namespace Game
         {
             switch (d)
             {
-                case Direction.EAST: return _chunk.World.GetTile(X + 1, Y);
-                case Direction.WEST: return _chunk.World.GetTile(X - 1, Y);
-                case Direction.SOUTH: return _chunk.World.GetTile(X - 1, Y);
-                case Direction.NORTH: return _chunk.World.GetTile(X + 1, Y);
+                case Direction.EAST: return _chunk.ChunkMap.GetTile(X + 1, Y);
+                case Direction.WEST: return _chunk.ChunkMap.GetTile(X - 1, Y);
+                case Direction.SOUTH: return _chunk.ChunkMap.GetTile(X - 1, Y);
+                case Direction.NORTH: return _chunk.ChunkMap.GetTile(X + 1, Y);
             }
             return null;
         }
@@ -178,8 +184,8 @@ namespace Game
             {
                 for (var yy = Y - radius; yy <= Y + radius; yy++)
                 {
-                    if (Chunk.World.ValidCoords(xx, yy))
-                        yield return Chunk.World.GetTile(xx, yy);
+                    if (Chunk.ChunkMap.ValidCoords(xx, yy))
+                        yield return Chunk.ChunkMap.GetTile(xx, yy);
                 }
             }
         }
@@ -188,6 +194,13 @@ namespace Game
         {
             return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID} B={BuildingID}>";
         }
+
+        public bool Passable
+        {
+            get => MovementFactor > 0;
+        }
+
+        public float MovementFactor { get => GetSpec().MovementFactor; }
 
     }
 }

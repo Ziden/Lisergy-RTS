@@ -7,6 +7,8 @@ namespace Game
 {
     public class GameWorld
     {
+        private string _id;
+
         // Amount of tiles the chunk length
         public static readonly int CHUNK_SIZE = 8;
 
@@ -19,23 +21,17 @@ namespace Game
         // how many chunks are "player reserved chunks" per player
         public static readonly int PLAYERS_CHUNKS = 2;
 
-        private int _sizeX;
-        private int _sizeY;
-
         public WorldPlayers Players { get; set; }
         public ChunkMap ChunkMap { get; set; }
 
         public ushort Seed { get; set; }
-        public int SizeX { get => _sizeX; set => _sizeX = value; }
-        public int SizeY { get => _sizeY; set => _sizeY = value; }
+        public int SizeX { get; private set; }
+        public int SizeY { get; private set; }
 
-        public bool ValidCoords(int x, int y)
-        {
-            return x >= 0 && x < SizeX && y >= 0 && y < SizeY;
-        }
-
+        // TODO: Move to own generate world module
         public virtual void CreateWorld(int playerCount)
         {
+            _id = Guid.NewGuid().ToString();
             var amtOfChunks = playerCount * GameWorld.PLAYERS_CHUNKS;
             var amtOfTiles = amtOfChunks * GameWorld.TILES_IN_CHUNK;
             var arraySize = (int)Math.Ceiling(Math.Sqrt(amtOfTiles));
@@ -43,7 +39,37 @@ namespace Game
             SizeX = arraySize + extraNeeded;
             SizeY = arraySize + extraNeeded;
             Players = new WorldPlayers(playerCount);
-            ChunkMap = new ChunkMap(SizeX / GameWorld.CHUNK_SIZE, SizeY / GameWorld.CHUNK_SIZE);
+            CreateChunkMap();
+        }
+
+        public virtual void CreateChunkMap()
+        {
+            ChunkMap = new ChunkMap(this);
+            GenerateTiles();
+        }
+
+        public virtual void GenerateTiles()
+        {
+            var maxChunkX = this.SizeX >> GameWorld.CHUNK_SIZE_BITSHIFT;
+            var maxChunkY = this.SizeY >> GameWorld.CHUNK_SIZE_BITSHIFT;
+            for (var chunkX = 0; chunkX < maxChunkX; chunkX++)
+            {
+                for (var chunkY = 0; chunkY < maxChunkY; chunkY++)
+                {
+                    var tiles = new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
+                    var chunk = new Chunk(ChunkMap, chunkX, chunkY, tiles);
+                    for (var x = 0; x < GameWorld.CHUNK_SIZE; x++)
+                    {
+                        for (var y = 0; y < GameWorld.CHUNK_SIZE; y++)
+                        {
+                            var tileX = chunkX * GameWorld.CHUNK_SIZE + x;
+                            var tileY = chunkY * GameWorld.CHUNK_SIZE + y;
+                            tiles[x, y] = new Tile(chunk, tileX, tileY);
+                        }
+                    }
+                    this.ChunkMap.Add(chunk);
+                }
+            }
         }
 
         public virtual void PlaceNewPlayer(PlayerEntity player, Tile t = null)
@@ -78,18 +104,14 @@ namespace Game
                     yield return tile;
         }
 
-        public virtual Chunk GetTileChunk(int tileX, int tileY)
+        public Chunk GetTileChunk(int tileX, int tileY)
         {
-            int chunkX = tileX >> CHUNK_SIZE_BITSHIFT;
-            var chunkY = tileY >> CHUNK_SIZE_BITSHIFT;
-            return ChunkMap.GetChunk(chunkX, chunkY);
+            return ChunkMap.GetTileChunk(tileX, tileY);
         }
 
-        public virtual Tile GetTile(int tileX, int tileY)
+        public Tile GetTile(int tileX, int tileY)
         {
-            var internalTileX = tileX % CHUNK_SIZE;
-            var internalTileY = tileY % CHUNK_SIZE;
-            return GetTileChunk(tileX, tileY).GetTile(internalTileX, internalTileY);
+            return ChunkMap.GetTile(tileX, tileY);
         }
     }
 }

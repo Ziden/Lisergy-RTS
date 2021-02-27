@@ -9,7 +9,9 @@ namespace Game
         protected ushort _x;
         protected ushort _y;
 
-        public WorldEntity(PlayerEntity owner): base(owner){ }
+        public WorldEntity(PlayerEntity owner): base(owner){
+            _id = Guid.NewGuid().ToString();
+        }
 
         public virtual string Id { get => _id; set => _id = value; }
         public virtual int X { get => _x; }

@@ -67,7 +67,7 @@ namespace Tests
             var player = game.GetTestPlayer();
             var unit = player.Units.First();
             var building = player.Buildings.First();
-            var tile = unit.Tile;
+            var tile = unit.Party.Tile;
 
             var visibleEvent = game.ReceivedEvents.Where(e => e is PartyVisibleEvent).FirstOrDefault() as PartyVisibleEvent;
 

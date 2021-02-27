@@ -16,7 +16,7 @@ namespace LegendsServer
             var gameSpecs = TestSpecs.Generate();
             var world = new GameWorld();
             var game = new StrategyGame(cfg, gameSpecs, world);
-            game.LoadMap();
+            game.GenerateMap();
             new ServerWorldListener(world);
             SocketServer.RunGame(game);
         }

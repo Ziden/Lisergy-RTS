@@ -48,7 +48,7 @@ namespace Game.Generator
                 for (var chunkY = 0; chunkY < maxChunkY; chunkY++)
                 {
                     var tiles = new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
-                    var chunk = new Chunk(world, chunkX, chunkY, tiles);
+                    var chunk = new Chunk(world.ChunkMap, chunkX, chunkY, tiles);
 
                     for (var x = 0; x < GameWorld.CHUNK_SIZE; x++)
                     {

@@ -41,7 +41,7 @@ namespace LisergyServer
                 {
                     Log.Debug($"Sending tile {tile}");
                     player.Send(new TileVisibleEvent() { Tile = tile });
-                    foreach(var unit in tile.Units)
+                    foreach(var unit in tile.Parties)
                     {
                         Log.Debug($"Sending unit {tile}");
                         player.Send(new PartyVisibleEvent() { Party = unit });

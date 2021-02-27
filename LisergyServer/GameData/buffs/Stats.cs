@@ -1,11 +1,16 @@
 ﻿namespace GameData.buffs
 {
-    public enum Stats
+    public enum Stat
     {
-        STR,
-        DEX,
-        INT,
+        // Vitals
+        MHP, HP, MMP, MP,
+            
+        // Stats
+        ATK,
+        DEF,
+        MATK,
+        MDEF,
         AGI,
-        VIT,
+        DEX
     }
 }

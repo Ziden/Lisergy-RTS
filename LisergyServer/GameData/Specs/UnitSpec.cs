@@ -1,4 +1,5 @@
-﻿using GameData.buffs;
+﻿using Game.Entity;
+using GameData.buffs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +14,6 @@ namespace GameData.Specs
         public byte LOS;
         public ArtSpec Art;
 
-        public Dictionary<Stats, int> Stats = new Dictionary<Stats, int>();
+        public UnitStats Stats;
     }
 }

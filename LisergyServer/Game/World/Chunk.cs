@@ -1,5 +1,4 @@
-﻿using Game.Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Game
@@ -19,18 +18,18 @@ namespace Game
 
         public virtual ushort X { get; private set; }
         public virtual ushort Y { get; private set; }
-        public virtual GameWorld World { get; private set; }
+        public virtual ChunkMap ChunkMap { get; private set; }
         public virtual byte Flags { get => _flags; set => _flags = value; }
         public virtual Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
 
         public HashSet<Building> Buildings = new HashSet<Building>();
 
-        public Chunk(GameWorld w, int x, int y, Tile[,] tiles)
+        public Chunk(ChunkMap w, int x, int y, Tile[,] tiles)
         {
             this.X = (ushort)x;
             this.Y = (ushort)y;
             Tiles = tiles;
-            this.World = w;
+            this.ChunkMap = w;
         }
 
         public Tile GetTile(int x, int y)

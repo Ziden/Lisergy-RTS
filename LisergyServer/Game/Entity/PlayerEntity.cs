@@ -53,9 +53,8 @@ namespace Game
             if (u.Party != null)
                 u.Party.RemoveUnit(u);
             u.Party = newParty;
-            var idx = Array.IndexOf(newParty.Units, null);
-            newParty.Units[idx] = u;
-            Log.Debug($"{UserID} moved unit {u.SpecID} to party {newParty.PartyID}");
+            newParty.AddUnit(u);
+            Log.Debug($"{UserID} moved unit {u.SpecID} to party {newParty.PartyIndex}");
         }
 
         public void Build(byte id, Tile t)
