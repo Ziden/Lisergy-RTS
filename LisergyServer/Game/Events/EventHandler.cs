@@ -10,7 +10,7 @@ namespace Game.Events
     public delegate void SpecResponseHandler(GameSpecResponse e);
     public delegate void PartyVisibleHandler(PartyVisibleEvent e);
 
-    public class EventSink
+    public class NetworkEvents
     {
         public static bool SERVER = true;
 

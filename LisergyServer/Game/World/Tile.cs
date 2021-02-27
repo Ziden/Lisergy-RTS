@@ -1,7 +1,6 @@
 ﻿using Game.Entity;
 using Game.Events;
 using Game.Events.ServerEvents;
-using Game.World;
 using GameData;
 using System;
 using System.Collections.Generic;
@@ -40,15 +39,12 @@ namespace Game
 
         [NonSerialized]
         private Building _building;
-       
+
         [NonSerialized]
         private PlayerEntity _owner;
 
-        public TileSpec GetSpec()
-        {
-            return StrategyGame.Specs.Tiles[this.TileId];
-        }
-
+        public virtual TileSpec Spec  { get => StrategyGame.Specs.Tiles[this.TileId]; }
+        public virtual GameWorld World { get => Chunk.ChunkMap.World; }
         public virtual string UserID { get => _userId; }
         public virtual byte BuildingID { get => _buildingID; }
         public virtual ushort Y { get => _y; }
@@ -74,9 +70,10 @@ namespace Game
 
             foreach (var tile in GetAOE(los))
                 tile.SetSeenBy(party);
-            foreach(var viewer in _viewing)
+            foreach (var viewer in _viewing)
             {
-                EventSink.PartyVisible(new PartyVisibleEvent()
+                // TODO: Remove network call from Tile (maybe expose event ?)
+                NetworkEvents.PartyVisible(new PartyVisibleEvent()
                 {
                     Viewer = viewer,
                     Party = party
@@ -132,35 +129,24 @@ namespace Game
             }
         }
 
+        #region FOG of war
         public virtual void SetSeenBy(WorldEntity entity)
         {
             _viewing.Add(entity);
             if (_visibleTo.Add(entity.Owner))
             {
                 entity.Owner.VisibleTiles.Add(this);
-                EventSink.TileVisible(new TileVisibleEvent()
+                NetworkEvents.TileVisible(new TileVisibleEvent()
                 {
                     Tile = this,
                     Viewer = entity
                 });
-                Parties.ForEach(u => EventSink.PartyVisible(new PartyVisibleEvent()
+                Parties.ForEach(u => NetworkEvents.PartyVisible(new PartyVisibleEvent()
                 {
                     Viewer = entity,
                     Party = u
                 }));
             }
-        }
-
-        public virtual Tile GetNeighbor(Direction d)
-        {
-            switch (d)
-            {
-                case Direction.EAST: return _chunk.ChunkMap.GetTile(X + 1, Y);
-                case Direction.WEST: return _chunk.ChunkMap.GetTile(X - 1, Y);
-                case Direction.SOUTH: return _chunk.ChunkMap.GetTile(X - 1, Y);
-                case Direction.NORTH: return _chunk.ChunkMap.GetTile(X + 1, Y);
-            }
-            return null;
         }
 
         public virtual void SetUnseenBy(WorldEntity entity)
@@ -172,6 +158,7 @@ namespace Game
                 _visibleTo.Remove(entity.Owner);
             }
         }
+        
 
         public virtual bool IsVisibleTo(PlayerEntity player)
         {
@@ -181,26 +168,23 @@ namespace Game
         public IEnumerable<Tile> GetAOE(ushort radius)
         {
             for (var xx = X - radius; xx <= X + radius; xx++)
-            {
                 for (var yy = Y - radius; yy <= Y + radius; yy++)
-                {
                     if (Chunk.ChunkMap.ValidCoords(xx, yy))
                         yield return Chunk.ChunkMap.GetTile(xx, yy);
-                }
-            }
-        }
 
-        public override string ToString()
-        {
-            return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID} B={BuildingID}>";
         }
+        #endregion
 
         public bool Passable
         {
             get => MovementFactor > 0;
         }
 
-        public float MovementFactor { get => GetSpec().MovementFactor; }
+        public float MovementFactor { get => Spec.MovementFactor; }
 
+        public override string ToString()
+        {
+            return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID} B={BuildingID}>";
+        }
     }
 }

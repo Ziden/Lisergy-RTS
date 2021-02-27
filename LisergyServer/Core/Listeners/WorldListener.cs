@@ -12,9 +12,9 @@ namespace LisergyServer
         public ServerWorldListener(GameWorld w)
         {
             _world = w; 
-            EventSink.OnJoinWorld += JoinWorld;
-            EventSink.OnTileVisible += TileVisible;
-            EventSink.OnPartyVisible += PartyVisible;
+            NetworkEvents.OnJoinWorld += JoinWorld;
+            NetworkEvents.OnTileVisible += TileVisible;
+            NetworkEvents.OnPartyVisible += PartyVisible;
             Log.Debug("World Event Listener Registered");
         }
 

@@ -124,6 +124,20 @@ namespace Game.World
             return (value & flag) != 0;
         }
 
-      
+
+        public static Tile GetNeighbor(this Tile tile, Direction d)
+        {
+            switch (d)
+            {
+                case Direction.EAST: return tile.Chunk.ChunkMap.GetTile(tile.X + 1, tile.Y);
+                case Direction.WEST: return tile.Chunk.ChunkMap.GetTile(tile.X - 1, tile.Y);
+                case Direction.SOUTH: return tile.Chunk.ChunkMap.GetTile(tile.X - 1, tile.Y);
+                case Direction.NORTH: return tile.Chunk.ChunkMap.GetTile(tile.X + 1, tile.Y);
+            }
+            return null;
+        }
+
     }
+
+
 }

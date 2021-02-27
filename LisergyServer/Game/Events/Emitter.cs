@@ -18,28 +18,28 @@ namespace LisergyServer.Core
                 var ev = Serialization.ToEvent<AuthResultEvent>(message);
                 ev.ClientPlayer = owner;
                 ev.FromNetwork = true;
-                EventSink.AuthResult(ev);
+                NetworkEvents.AuthResult(ev);
             }
             else if (eventId == EventID.TILE_VISIBLE)
             {
                 var ev = Serialization.ToEvent<TileVisibleEvent>(message);
                 ev.ClientPlayer = owner;
                 ev.FromNetwork = true;
-                EventSink.TileVisible(ev);
+                NetworkEvents.TileVisible(ev);
             }
             else if (eventId == EventID.SPEC_RESPONSE)
             {
                 var ev = Serialization.ToEvent<GameSpecResponse>(message);
                 ev.ClientPlayer = owner;
                 ev.FromNetwork = true;
-                EventSink.SpecResponse(ev);
+                NetworkEvents.SpecResponse(ev);
             }
             else if (eventId == EventID.PARTY_VISIBLE)
             {
                 var ev = Serialization.ToEvent<PartyVisibleEvent>(message);
                 ev.ClientPlayer = owner;
                 ev.FromNetwork = true;
-                EventSink.PartyVisible(ev);
+                NetworkEvents.PartyVisible(ev);
             }
 
 
@@ -49,7 +49,7 @@ namespace LisergyServer.Core
                 var ev = Serialization.ToEvent<JoinWorldEvent>(message);
                 ev.ClientPlayer = owner;
                 ev.FromNetwork = true;
-                EventSink.JoinWorld(ev);
+                NetworkEvents.JoinWorld(ev);
             }
            
         } 

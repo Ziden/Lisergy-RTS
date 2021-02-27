@@ -45,5 +45,10 @@ namespace Game.Entity
         }
 
         public byte PartyIndex { get => _partyIndex; }
+
+        public override string ToString()
+        {
+            return $"<Party Id={PartyIndex} Owner={OwnerID}>";
+        }
     }
 }

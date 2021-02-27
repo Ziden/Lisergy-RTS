@@ -44,11 +44,11 @@ namespace ServerTests
         {
             if(!_registered)
             {
-                EventSink.OnTileVisible += ev => ReceiveEvent(ev);
-                EventSink.OnPlayerAuth += ev => ReceiveEvent(ev);
-                EventSink.OnSpecResponse += ev => ReceiveEvent(ev);
-                EventSink.OnJoinWorld += ev => ReceiveEvent(ev);
-                EventSink.OnPartyVisible += ev => ReceiveEvent(ev);
+                NetworkEvents.OnTileVisible += ev => ReceiveEvent(ev);
+                NetworkEvents.OnPlayerAuth += ev => ReceiveEvent(ev);
+                NetworkEvents.OnSpecResponse += ev => ReceiveEvent(ev);
+                NetworkEvents.OnJoinWorld += ev => ReceiveEvent(ev);
+                NetworkEvents.OnPartyVisible += ev => ReceiveEvent(ev);
                 _registered = true;
             }
             this.World.CreateWorld(4);

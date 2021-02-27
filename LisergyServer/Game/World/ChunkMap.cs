@@ -12,6 +12,7 @@ namespace Game
         private GameWorld _world;
 
         public Dictionary<ChunkFlag, List<Chunk>> ByFlags = new Dictionary<ChunkFlag, List<Chunk>>();
+        public GameWorld World { get => _world; }
 
         public int QtdChunksX { get => _chunkMap.GetLength(0); }
         public int QtdChunksY { get => _chunkMap.GetLength(1); }
