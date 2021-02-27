@@ -1,4 +1,5 @@
 using Game;
+using Game.World;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
@@ -14,6 +15,28 @@ namespace Tests
         public void Setup()
         {
             Game = new TestGame();
+        }
+
+        [Test]
+        public void TestNeighboars()
+        {
+            var tile = Game.World.GetTile(1, 1);
+
+            Assert.AreEqual(Game.World.GetTile(1, 1 + 1), tile.GetNeighbor(Direction.NORTH));
+            Assert.AreEqual(Game.World.GetTile(1, 1 - 1), tile.GetNeighbor(Direction.SOUTH));
+            Assert.AreEqual(Game.World.GetTile(1 - 1, 1), tile.GetNeighbor(Direction.WEST));
+            Assert.AreEqual(Game.World.GetTile(1 + 1, 1), tile.GetNeighbor(Direction.EAST));
+        }
+
+        [Test]
+        public void TestDirections()
+        {
+            var tile = Game.World.GetTile(1, 1);
+
+            Assert.AreEqual(tile.GetDirection(Game.World.GetTile(1, 1 + 1)), Direction.NORTH);
+            Assert.AreEqual(tile.GetDirection(Game.World.GetTile(1, 1 - 1)), Direction.SOUTH);
+            Assert.AreEqual(tile.GetDirection(Game.World.GetTile(1 + 1, 1)), Direction.EAST);
+            Assert.AreEqual(tile.GetDirection(Game.World.GetTile(1 - 1, 1)), Direction.WEST);
         }
 
         [Test]
