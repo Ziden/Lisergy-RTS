@@ -31,11 +31,11 @@ public class TileRandomizerBehaviour : MonoBehaviour
 
         var comp = tile.GameObj.GetComponent<TileRandomizerBehaviour>();
 
-        var w = tile.Chunk.World;
-        var north = tile.Chunk.World.GetTile(tile.X, tile.Y - 1);
-        var south = tile.Chunk.World.GetTile(tile.X, tile.Y + 1);
-        var east = tile.Chunk.World.GetTile(tile.X + 1, tile.Y);
-        var west = tile.Chunk.World.GetTile(tile.X - 1, tile.Y);
+        var map = tile.Chunk.ChunkMap;
+        var north = map.GetTile(tile.X, tile.Y - 1);
+        var south = map.GetTile(tile.X, tile.Y + 1);
+        var east = map.GetTile(tile.X + 1, tile.Y);
+        var west = map.GetTile(tile.X - 1, tile.Y);
 
         if (comp.RemoveWhenConnectNorth.Count > 0 && (north != null && north.TileId == tile.TileId))
         {

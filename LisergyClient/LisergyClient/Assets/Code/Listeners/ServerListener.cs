@@ -8,30 +8,31 @@ namespace Assets.Code
 {
     public class ServerListener
     {
-        private ClientWorld _world;
+        private ClientStrategyGame _game;
 
         public ServerListener()
         {
-            EventSink.OnSpecResponse += ReceiveSpecs;
+            NetworkEvents.OnSpecResponse += ReceiveSpecs;
         }
 
         public void RegisterGameHandlers()
         {
-            EventSink.OnTileVisible += ReceiveTile;
-            EventSink.OnPartyVisible += PartyVisible;
+            NetworkEvents.OnTileVisible += ReceiveTile;
+            NetworkEvents.OnPartyVisible += PartyVisible;
         }
 
         public void PartyVisible(PartyVisibleEvent ev)
         {
-            using (new StackLog($"[Party] Viewing {ev.Party.PartyID} from {ev.Party.OwnerID}"))
+            using (new StackLog($"[Party] Viewing {ev.Party.PartyIndex} from {ev.Party.OwnerID}"))
             {
-                var owner = _world.GetOrCreateClientPlayer(ev.Party.OwnerID);
-                var tile = _world.GetTile(ev.Party.X, ev.Party.Y);
-                var pt = new ClientParty(ev.Party);
-                owner.Parties[ev.Party.PartyID] = pt;
+                var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Party.OwnerID);
+                var tile = _game.GetWorld().GetTile(ev.Party.X, ev.Party.Y);
+                var pt = new ClientParty(owner, ev.Party);
+                owner.Parties[ev.Party.PartyIndex] = pt;
                 tile.TeleportParty(pt);
                 pt.Render();
             }
+            UIManager.PartyUI.RenderAllParties();
         }
 
         public void ReceiveTile(TileVisibleEvent ev)
@@ -39,22 +40,21 @@ namespace Assets.Code
             using (new StackLog("[TILE] Viewing " + ev.Tile))
             {
                 var newTile = ev.Tile;
-                var tile = (ClientTile)_world.GetTile(newTile.X, newTile.Y);
+                var tile = (ClientTile)_game.GetWorld().GetTile(newTile.X, newTile.Y);
                 if (ev.Tile.BuildingID != tile.BuildingID)
                 {
                     if (ev.Tile.BuildingID == 0)
                         tile.Building = null;
                     else
                     {
-                        var owner = _world.GetOrCreateClientPlayer(ev.Tile.UserID);
-                        tile.Building = new ClientBuilding(ev.Tile.BuildingID, owner);
+                        var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Tile.UserID);
+                        tile.Building = new ClientBuilding(ev.Tile.BuildingID, owner, tile);
 
                         // Whenever we receive our main building focus camera on it
                         if(ev.Tile.BuildingID == StrategyGame.Specs.InitialBuilding)
                         {
                             CameraBehaviour.FocusOnTile(tile);
                         }
-
                     }
                 }
                 else
@@ -69,11 +69,11 @@ namespace Assets.Code
         {
             using (new StackLog($"[Specs] V {ev.Spec.Version} Received {MainBehaviour.Player}"))
             {
-                if (_world == null)
+                if (_game == null)
                 {
-                    _world = new ClientWorld();
-                    _world.CreateWorld(ev.Cfg.WorldMaxPlayers);
-                    MainBehaviour.StrategyGame = new ClientStrategyGame(ev.Cfg, ev.Spec, _world);
+                    var world = new ClientWorld();
+                    world.CreateWorld(ev.Cfg.WorldMaxPlayers);
+                    _game = new ClientStrategyGame(ev.Cfg, ev.Spec, world);
                     RegisterGameHandlers();
                 }
             }

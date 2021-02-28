@@ -19,19 +19,19 @@ public class LoginCanvas
         Password = GameObject.transform.GetRequiredChildComponent<InputField>("Password");
         LoginButton = GameObject.transform.GetRequiredChildComponent<Button>("LoginButton");
         LoginButton.onClick.AddListener(Authenticate);
-        EventSink.OnPlayerAuth += OnPlayerAuth;
+        NetworkEvents.OnPlayerAuth += OnPlayerAuth;
     }
 
     public void OnPlayerAuth(AuthResultEvent ev)
     {
         if(ev.Success)
         {
-            MainBehaviour.Player = new ClientPlayer()
+            var player = new ClientPlayer()
             {
                 UserID = ev.PlayerID
             };
-            Log.Info($"Auth suceeded, player logged in");
-            MainBehaviour.Player.Send(new JoinWorldEvent());
+            player.Send(new JoinWorldEvent());
+            ClientEvents.PlayerLogin(player);
             GameObject.SetActive(false);
         } else
         {

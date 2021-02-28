@@ -5,7 +5,6 @@ using System.Text;
 
 namespace Game.World
 {
-    // Chunkmap cache to be used in pathfinding etc
     public class CachedChunkMap
     {
         public Tile[,] array;

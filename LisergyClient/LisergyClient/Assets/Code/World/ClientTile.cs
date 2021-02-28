@@ -11,6 +11,8 @@ namespace Assets.Code.World
 
         public bool Decorated;
 
+        public ClientWorld ClientWorld { get => (ClientWorld)this.World; }
+
         public ClientTile(ClientChunk c, int x, int y) : base(c, x, y) { }
 
         public void UpdateVisibility()

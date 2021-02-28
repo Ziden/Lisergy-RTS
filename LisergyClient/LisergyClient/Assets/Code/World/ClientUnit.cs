@@ -5,40 +5,45 @@ namespace Assets.Code.World
 {
     public class ClientUnit : Unit
     {
-        public bool HaveInfo = false;
+        private static GameObject _UNITS_NODE;
 
-        private static GameObject _unitsNode;
-        private GameObject _unitObj;
+        public GameObject GameObject;
+        public Sprite3D Sprites;
 
-        public ClientUnit(Unit u) : base(u.SpecID, null, u.Id)
+        public ClientParty ClientParty { get => (ClientParty)this.Party; }
+
+        public ClientUnit(PlayerEntity owner, Unit u) : base(u.SpecID, owner, u.Id)
         {
-            this.Owner = MainBehaviour.StrategyGame.GetWorld().GetOrCreateClientPlayer(u.OwnerID);
             StackLog.Debug($"Created new unit instance {this}");
+        }
+
+        private static GameObject UnitsContainerNode
+        {
+            get
+            {
+                if (_UNITS_NODE == null)
+                    _UNITS_NODE = new GameObject("Units Container");
+                return _UNITS_NODE;
+            }
         }
 
         public void Render(int X, int Y)
         {
-            if (_unitObj == null)
+            if (GameObject == null)
             {
+                // TODO: Cache prefabs & Thumbnails so no duplicates
                 var art = StrategyGame.Specs.Units[this.SpecID].Art;
-                var prefab = Resources.Load("prefabs/units/" + art.Name);
-                _unitObj = MainBehaviour.Instantiate(prefab, UnitsContainerNode.transform) as GameObject;
-                _unitObj.transform.position = new Vector3(X, 0, Y);
-                _unitObj.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-                _unitObj.name = $"Unit Spec {this.SpecID} from {this.OwnerID}";
+                Sprite[] sprites = Resources.LoadAll<Sprite>("sprites/" + art.Name);
+                GameObject = new GameObject($"Unit Spec {this.SpecID} from {this.OwnerID}");
+                // TODO: Parent not working
+                GameObject.transform.SetParent(UnitsContainerNode.transform);
+                var spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = sprites[0];
+                GameObject.transform.position = new Vector3(X, 0.1f, Y);
+                Sprites = GameObject.AddComponent<Sprite3D>();
+                Sprites.Sprites = sprites;
+              
             }
         }
-
-        public GameObject UnitsContainerNode
-        {
-            get
-            {
-                if (_unitsNode == null)
-                    _unitsNode = new GameObject("Units Container");
-                return _unitsNode;
-            }
-        }
-
-
     }
 }

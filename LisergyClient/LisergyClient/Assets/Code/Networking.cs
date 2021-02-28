@@ -23,6 +23,8 @@ public class Networking : IDisposable
         _toSend.Add(Serialization.FromEvent<T>(ev));
     }
 
+    int READS_PER_TICK = 10;
+
     public void Update()
     {
         if (client.Connected)
@@ -33,8 +35,8 @@ public class Networking : IDisposable
                 _toSend.RemoveAt(0);
                 client.Send(ev);
             }
-            var reads = 10;
-            for(var x = 0; x < reads;x++)
+         
+            for(var x = 0; x < READS_PER_TICK; x++)
             {
                 if (!client.GetNextMessage(out msg))
                     break;

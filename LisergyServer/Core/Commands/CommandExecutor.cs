@@ -29,7 +29,11 @@ namespace LisergyServer.Commands
             if(_console.TryReadConsoleText(out _consoleText))
             {
                 if (_consoleText[0] != CMD_CHAR)
+                {
+                    _cmdSender.SendMessage("Command not found. Try .help");
                     return;
+                }
+                   
                 _args = _consoleText.Split(" ");
                 if (_commands.TryGetValue(_args[0].Substring(1, _args[0].Length-1), out _cmd))
                 {

@@ -1,17 +1,23 @@
 ﻿using System;
 
-namespace Game.Pathfinder
+namespace Game.World
 {
     [Serializable]
     public class Position
     {
-        public int X;
-        public int Y;
+        public ushort X;
+        public ushort Y;
 
-        public Position(int x, int y)
+        public Position(ushort x, ushort y)
         {
             this.X = x;
             this.Y = y;
+        }
+
+        public Position(int x, int y)
+        {
+            this.X = (ushort)x;
+            this.Y = (ushort)y;
         }
 
         public new string ToString()
@@ -28,7 +34,5 @@ namespace Game.Pathfinder
         {
             return (p1?.X != p2?.X || p1?.Y != p2?.Y);
         }
-
     }
-
 }

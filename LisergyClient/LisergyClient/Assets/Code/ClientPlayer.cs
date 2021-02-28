@@ -1,10 +1,13 @@
 ﻿
+using Assets.Code.World;
 using Game;
+using Game.Entity;
 
 namespace Assets.Code
 {
     public class ClientPlayer : PlayerEntity
     {
+
         public ClientPlayer() : base()
         {
             StackLog.Debug("Created new player");

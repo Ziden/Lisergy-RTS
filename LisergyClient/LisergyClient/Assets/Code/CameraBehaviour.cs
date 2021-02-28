@@ -1,12 +1,12 @@
-﻿using Assets.Code.World;
+﻿using Assets.Code;
+using Assets.Code.World;
 using Game;
-using Game.Events.ServerEvents;
+using System.Collections;
 using UnityEngine;
 
 
 public class CameraBehaviour : MonoBehaviour
 {
-
     public static CameraBehaviour Get()
     {
         return _instance;
@@ -23,20 +23,36 @@ public class CameraBehaviour : MonoBehaviour
     private float zoomMax = 200;
     private float mouseX, mouseY;
 
+    private static int _focusSpeed = 30;
     private ClientTile Focus = null;
-    private Vector3 FocusVector = Vector3.zero;
+    private static bool lerping = false;
 
     public static void FocusOnTile(ClientTile t)
     {
-        Get().transform.position = new Vector3(t.X - 2, 5, t.Y - 2);
+        Log.Debug($"Focusing on tile {t}");
+
+        var camera = Get();
+        var coroutine = camera.LerpFromTo(camera.transform.position, new Vector3(t.X - 2, 5, t.Y - 2), 0.2f);
+        camera.StartCoroutine(coroutine);
+    }
+
+    IEnumerator LerpFromTo(Vector3 pos1, Vector3 pos2, float duration)
+    {
+        lerping = true;
+        for (float t = 0f; t < duration; t += Time.deltaTime)
+        {
+            transform.position = Vector3.Lerp(pos1, pos2, t / duration);
+            yield return 0;
+        }
+        lerping = false;
+        transform.position = pos2;
     }
 
     void Update()
 
     {
-        Movement();
-        //Rotation();
-        //Zoom();
+        if(!lerping)
+            Movement();
     }
 
     private void Start()
@@ -123,9 +139,12 @@ public class CameraBehaviour : MonoBehaviour
 
 
         // Setting the camera target's position to the modified pos variable
-
-        transform.position = pos;
-
+        var old = transform.position;
+        if(old != pos)
+        {
+            transform.position = pos;
+            ClientEvents.CameraMove(transform.position, pos);
+        }
     }
 
 

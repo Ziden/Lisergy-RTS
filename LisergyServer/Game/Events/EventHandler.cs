@@ -3,12 +3,12 @@ using Game.Events.ServerEvents;
 
 namespace Game.Events
 {
-
     public delegate void JoinEventHandler(JoinWorldEvent e);
     public delegate void AuthResultHandler(AuthResultEvent e);
     public delegate void TileVisibleHandler (TileVisibleEvent e);
     public delegate void SpecResponseHandler(GameSpecResponse e);
     public delegate void PartyVisibleHandler(PartyVisibleEvent e);
+    public delegate void PartyRequestMoveHandler(MoveRequestEvent e);
 
     public class NetworkEvents
     {
@@ -19,6 +19,7 @@ namespace Game.Events
         public static event TileVisibleHandler OnTileVisible;
         public static event SpecResponseHandler OnSpecResponse;
         public static event PartyVisibleHandler OnPartyVisible;
+        public static event PartyRequestMoveHandler OnPartyRequestMove;
 
         private static bool CanSend(GameEvent ev)
         {
@@ -53,6 +54,12 @@ namespace Game.Events
         {
             if (OnJoinWorld != null && CanSend(ev))
                 OnJoinWorld(ev);
+        }
+
+        public static void RequestPartyMove(MoveRequestEvent ev)
+        {
+            if (OnPartyRequestMove != null && CanSend(ev))
+                OnPartyRequestMove(ev);
         }
     }
 }

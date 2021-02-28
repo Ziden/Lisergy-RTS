@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Text;
-using System.Threading;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Game.World;
 
 namespace Game.Pathfinder
 {
+    [Serializable]
     public struct PathFinderNode
     {
+        public int X;
+        public int Y;
         public int F;
         public int G;
         public int H;  // f = gone + heuristic
-        public int X;
-        public int Y;
         public int PX; // Parent
         public int PY;
 

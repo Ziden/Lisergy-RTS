@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,16 @@ namespace Assets.Code
                     queue.Enqueue(t);
             }
             return null;
+        }
+
+        public static IEnumerator LerpFromTo(this Transform transform, Vector3 pos1, Vector3 pos2, float duration)
+        {
+            for (float t = 0f; t < duration; t += Time.deltaTime)
+            {
+                transform.localPosition = Vector3.Lerp(pos1, pos2, t / duration);
+                yield return 0;
+            }
+            transform.localPosition = pos2;
         }
     }
 }

@@ -12,10 +12,23 @@ namespace LisergyServer
         public ServerWorldListener(GameWorld w)
         {
             _world = w; 
+
+            // CLIENT
             NetworkEvents.OnJoinWorld += JoinWorld;
+            NetworkEvents.OnPartyRequestMove += PartyRequestMove;
+
+            // SERVER
             NetworkEvents.OnTileVisible += TileVisible;
             NetworkEvents.OnPartyVisible += PartyVisible;
+
             Log.Debug("World Event Listener Registered");
+        }
+
+        public void PartyRequestMove(MoveRequestEvent ev)
+        {
+            var player = ev.ClientPlayer;
+            var party = player.Parties[ev.PartyIndex];
+            var path = ev.Path;
         }
 
         public void PartyVisible(PartyVisibleEvent ev)

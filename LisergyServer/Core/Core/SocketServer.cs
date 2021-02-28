@@ -42,6 +42,7 @@ namespace LisergyServer.Core
                 {
                     _commandExecutor.HandleConsoleCommands();
                     ReadSocketMessages(game);
+                    game.Scheduler.Tick(); // TODO: Maybe tick less frequently
                 } catch(Exception e)
                 {
                     Console.WriteLine(e);
