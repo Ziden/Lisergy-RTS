@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.World;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,6 +10,9 @@ namespace Game.Entity
     {
         private byte _partyIndex;
         private Unit[] _units = new Unit[4] { null, null, null, null };
+
+        [NonSerialized]
+        private CourseTask _course;
 
         public byte GetLineOfSight()
         {
@@ -45,6 +49,9 @@ namespace Game.Entity
         }
 
         public byte PartyIndex { get => _partyIndex; }
+
+        public TimeSpan MoveDelay { get => TimeSpan.FromSeconds(1); }
+        public CourseTask Course { get => _course; set => _course = value; }
 
         public override string ToString()
         {

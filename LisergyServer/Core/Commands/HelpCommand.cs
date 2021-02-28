@@ -1,5 +1,4 @@
-﻿
-namespace LisergyServer.Commands
+﻿namespace LisergyServer.Commands
 {
     public class HelpCommand : Command
     {
@@ -10,6 +9,8 @@ namespace LisergyServer.Commands
         public override void Execute(CommandSender sender, CommandArgs args)
         {
             sender.SendMessage("---------- HELP ---------");
+            sender.SendMessage(".tasks - show scheduler task counts");
+            sender.SendMessage(".tile - tile manipulation");
         }
     }
 }

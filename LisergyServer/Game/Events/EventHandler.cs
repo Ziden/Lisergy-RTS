@@ -5,21 +5,35 @@ namespace Game.Events
 {
     public delegate void JoinEventHandler(JoinWorldEvent e);
     public delegate void AuthResultHandler(AuthResultEvent e);
-    public delegate void TileVisibleHandler (TileVisibleEvent e);
+    public delegate void TileVisibleHandler(TileVisibleEvent e);
     public delegate void SpecResponseHandler(GameSpecResponse e);
     public delegate void PartyVisibleHandler(PartyVisibleEvent e);
     public delegate void PartyRequestMoveHandler(MoveRequestEvent e);
 
     public class NetworkEvents
     {
+        private static NetworkEvents _i;
+
+        public NetworkEvents()
+        {
+            _i = this;
+        }
+
         public static bool SERVER = true;
 
-        public static event JoinEventHandler OnJoinWorld;
-        public static event AuthResultHandler OnPlayerAuth;
-        public static event TileVisibleHandler OnTileVisible;
-        public static event SpecResponseHandler OnSpecResponse;
-        public static event PartyVisibleHandler OnPartyVisible;
-        public static event PartyRequestMoveHandler OnPartyRequestMove;
+        public static event JoinEventHandler OnJoinWorld { add { _i._OnJoinWorld += value; } remove { _i._OnJoinWorld -= value; } }
+        public static event AuthResultHandler OnPlayerAuth { add { _i._OnPlayerAuth += value; } remove { _i._OnPlayerAuth -= value; } }
+        public static event TileVisibleHandler OnTileVisible { add { _i._OnTileVisible += value; } remove { _i._OnTileVisible -= value; } }
+        public static event SpecResponseHandler OnSpecResponse { add { _i._OnSpecResponse += value; } remove { _i._OnSpecResponse -= value; } }
+        public static event PartyVisibleHandler OnPartyVisible { add { _i._OnPartyVisible += value; } remove { _i._OnPartyVisible -= value; } }
+        public static event PartyRequestMoveHandler OnPartyRequestMove { add { _i._OnPartyRequestMove += value; } remove { _i._OnPartyRequestMove -= value; } }
+
+        private event JoinEventHandler _OnJoinWorld;
+        private event AuthResultHandler _OnPlayerAuth;
+        private event TileVisibleHandler _OnTileVisible;
+        private event SpecResponseHandler _OnSpecResponse;
+        private event PartyVisibleHandler _OnPartyVisible;
+        private event PartyRequestMoveHandler _OnPartyRequestMove;
 
         private static bool CanSend(GameEvent ev)
         {
@@ -28,38 +42,38 @@ namespace Game.Events
 
         public static void PartyVisible(PartyVisibleEvent ev)
         {
-            if (OnPartyVisible != null && CanSend(ev))
-                OnPartyVisible(ev);
+            if (_i._OnPartyVisible != null && CanSend(ev))
+                _i._OnPartyVisible(ev);
         }
 
         public static void SpecResponse(GameSpecResponse ev)
         {
-            if (OnSpecResponse != null && CanSend(ev))
-                OnSpecResponse(ev);
+            if (_i._OnSpecResponse != null && CanSend(ev))
+                _i._OnSpecResponse(ev);
         }
 
         public static void TileVisible(TileVisibleEvent ev)
         {
-            if (OnTileVisible != null && CanSend(ev))
-                OnTileVisible(ev);
+            if (_i._OnTileVisible != null && CanSend(ev))
+                _i._OnTileVisible(ev);
         }
 
         public static void AuthResult(AuthResultEvent ev)
         {
-            if (OnPlayerAuth != null && CanSend(ev))
-                OnPlayerAuth(ev);
+            if (_i._OnPlayerAuth != null && CanSend(ev))
+                _i._OnPlayerAuth(ev);
         }
 
         public static void JoinWorld(JoinWorldEvent ev)
         {
-            if (OnJoinWorld != null && CanSend(ev))
-                OnJoinWorld(ev);
+            if (_i._OnJoinWorld != null && CanSend(ev))
+                _i._OnJoinWorld(ev);
         }
 
         public static void RequestPartyMove(MoveRequestEvent ev)
         {
-            if (OnPartyRequestMove != null && CanSend(ev))
-                OnPartyRequestMove(ev);
+            if (_i._OnPartyRequestMove != null && CanSend(ev))
+                _i._OnPartyRequestMove(ev);
         }
     }
 }

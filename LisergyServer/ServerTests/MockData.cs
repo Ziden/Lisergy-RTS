@@ -44,6 +44,7 @@ namespace ServerTests
         {
             if(!_registered)
             {
+                new NetworkEvents();
                 NetworkEvents.OnTileVisible += ev => ReceiveEvent(ev);
                 NetworkEvents.OnPlayerAuth += ev => ReceiveEvent(ev);
                 NetworkEvents.OnSpecResponse += ev => ReceiveEvent(ev);
@@ -51,11 +52,13 @@ namespace ServerTests
                 NetworkEvents.OnPartyVisible += ev => ReceiveEvent(ev);
                 _registered = true;
             }
+     
             this.World.CreateWorld(4);
             this.World.ChunkMap.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             var player = new TestServerPlayer();
             player.UserID = TestServerPlayer.TEST_ID;
             this.World.PlaceNewPlayer(player, this.World.GetTile(10,10));
+            this.RegisterEventListeners();
         }
 
         public void ReceiveEvent(GameEvent ev)

@@ -13,6 +13,6 @@ namespace Game.Events
         public int ConnectionID;
 
         [NonSerialized]
-        public PlayerEntity ClientPlayer;
+        public PlayerEntity Sender;
     }
 }

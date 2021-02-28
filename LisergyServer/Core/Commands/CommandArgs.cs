@@ -14,9 +14,9 @@ namespace LisergyServer.Commands
             _args = args.ToArray();
         }
 
-        public int Size()
+        public int Size
         {
-            return _args.Length;
+            get => _args.Length;
         }
 
         public int GetInt(int index)

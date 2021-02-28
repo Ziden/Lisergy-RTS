@@ -1,34 +1,36 @@
 ﻿using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
-using System.Linq;
 
-namespace LisergyServer
+namespace Game.Listeners
 {
-    public class ServerWorldListener
+    public class WorldListener : EventListener
     {
         private GameWorld _world;
 
-        public ServerWorldListener(GameWorld w)
+        public WorldListener(GameWorld w)
         {
             _world = w; 
+            Log.Debug("World Event Listener Registered");
+        }
 
+        public override void Register()
+        {
             // CLIENT
             NetworkEvents.OnJoinWorld += JoinWorld;
-            NetworkEvents.OnPartyRequestMove += PartyRequestMove;
 
             // SERVER
             NetworkEvents.OnTileVisible += TileVisible;
             NetworkEvents.OnPartyVisible += PartyVisible;
 
-            Log.Debug("World Event Listener Registered");
         }
 
-        public void PartyRequestMove(MoveRequestEvent ev)
+        public override void Unregister()
         {
-            var player = ev.ClientPlayer;
-            var party = player.Parties[ev.PartyIndex];
-            var path = ev.Path;
+            NetworkEvents.OnJoinWorld -= JoinWorld;
+            NetworkEvents.OnTileVisible -= TileVisible;
+            NetworkEvents.OnPartyVisible -= PartyVisible;
+
         }
 
         public void PartyVisible(PartyVisibleEvent ev)
@@ -46,7 +48,7 @@ namespace LisergyServer
         public void JoinWorld(JoinWorldEvent ev)
         {
             PlayerEntity player = null;
-            if (_world.Players.GetPlayer(ev.ClientPlayer.UserID, out player))
+            if (_world.Players.GetPlayer(ev.Sender.UserID, out player))
             {
                 Log.Debug($"Existing player {player.UserID} joined");
                 Log.Debug($"Sending {player.VisibleTiles.Count} visible tiles");
@@ -63,17 +65,11 @@ namespace LisergyServer
             }
             else
             {
-                player = ev.ClientPlayer;
+                player = ev.Sender;
                 _world.PlaceNewPlayer(player);
                 Log.Debug($"New player {player.UserID} joined the world");
-
-                /*
-                foreach (var tile in _world.AllTiles())
-                    if(!tile.IsVisibleTo(player))
-                        tile.SetSeenBy(player.Buildings.First());
-                */
-
             }
         }
+
     }
 }

@@ -32,5 +32,12 @@ namespace Game
         {
             return _players.TryGetValue(id, out player);
         }
+
+        public PlayerEntity GetPlayer(string id)
+        {
+            PlayerEntity player = null;
+            _players.TryGetValue(id, out player);
+            return player;
+        }
     }
 }

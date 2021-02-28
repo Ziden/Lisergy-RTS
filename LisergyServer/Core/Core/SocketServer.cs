@@ -1,5 +1,6 @@
 ﻿using Game;
 using Game.Events;
+using Game.Scheduler;
 using LisergyServer.Commands;
 using System;
 using Telepathy;
@@ -26,7 +27,12 @@ namespace LisergyServer.Core
         {
            
             _commandExecutor = new CommandExecutor();
+
+            // TODO: Read from assembly
             _commandExecutor.RegisterCommand(new HelpCommand());
+            _commandExecutor.RegisterCommand(new TileCommand());
+            _commandExecutor.RegisterCommand(new TaskCommand());
+
             Serialization.LoadSerializers();
             _socketServer = new Server();
             _accountManager = new AccountManager(_socketServer);
@@ -42,7 +48,7 @@ namespace LisergyServer.Core
                 {
                     _commandExecutor.HandleConsoleCommands();
                     ReadSocketMessages(game);
-                    game.Scheduler.Tick(); // TODO: Maybe tick less frequently
+                    GameScheduler.Tick(DateTime.UtcNow);
                 } catch(Exception e)
                 {
                     Console.WriteLine(e);

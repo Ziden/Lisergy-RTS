@@ -1,87 +1,130 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("ServerTests")]
 namespace Game.Scheduler
 {
-    public class GameScheduler
+    public static class GameScheduler
     {
+        private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
         private static DateTime _schedulerTime;
-        private Dictionary<Guid, GameTask> _tasks = new Dictionary<Guid, GameTask>();
-        private Dictionary<long, SortedSet<GameTask>> _minuteQueues = new Dictionary<long, SortedSet<GameTask>>();
-        private SortedSet<GameTask> _currentMinuteSet;
-        private long _currentMinute = -1;
-        private GameTask _nextTask;
+        private static Dictionary<Guid, GameTask> _tasks = new Dictionary<Guid, GameTask>();
+        private static Dictionary<long, SortedSet<GameTask>> _minuteQueues = new Dictionary<long, SortedSet<GameTask>>();
+        private static SortedSet<GameTask> _currentMinuteSet;
+        private static long _currentMinute = -1;
+        private static GameTask _nextTask;
 
         public static DateTime Now { get => _schedulerTime; }
-        public static TimeSpan NowTimespan { get => Now.TimeOfDay; }
-        public GameTask NextTask { get => _nextTask; }
+        internal static TimeSpan NowTimespan { get => Now - Epoch; }
+        internal static GameTask NextTask { get => _nextTask; }
+        public static int PendingTasks { get => _tasks.Values.Count(); }
+        public static int AmountQueues { get => _minuteQueues.Values.Count(); }
 
-        public void SetLogicalTime(DateTime time)
+        internal static void Clear()
+        {
+            _schedulerTime = DateTime.MinValue;
+            _tasks = new Dictionary<Guid, GameTask>();
+            _minuteQueues = new Dictionary<long, SortedSet<GameTask>>();
+            _currentMinuteSet = null;
+            _currentMinute = -1;
+            _nextTask = null;
+        }
+
+        internal static void SetLogicalTime(DateTime time)
         {
             _schedulerTime = time;
         }
 
-        public void Tick()
+        internal static void Cancel(GameTask task)
         {
+
+        }
+
+        internal static void RunTask(GameTask task)
+        {
+            task.Execute();
+            _currentMinuteSet.Remove(task);
+            _tasks.Remove(task.ID);
+
+        }
+
+        public static void Tick(DateTime time)
+        {
+            SetLogicalTime(time);
+            var now = Now;
             var nowMinute = (long)NowTimespan.TotalMinutes;
-            UpdateCurrentMinuteCache(nowMinute);
-            if (_currentMinuteSet != null)
-            {
-                if (_nextTask == null)
-                {
-                    _nextTask = _currentMinuteSet.FirstOrDefault();
-                }
-                var wtf1 = _nextTask.Finish;
-                var now = GameScheduler.Now;
-                var waat = wtf1 <= now;
-                while(_nextTask != null && _nextTask.IsDue())
-                {
-                    _nextTask.Execute();
-                    _currentMinuteSet.Remove(_nextTask);
-                    _nextTask = _currentMinuteSet.FirstOrDefault();
-                }
-            }
+            if (_nextTask == null)
+                _nextTask = CurrentMinuteQueue(nowMinute)?.FirstOrDefault();
+            RunTasks();
         }
 
-        private void UpdateCurrentMinuteCache(long currentMinute)
+        internal static void RunTasks()
         {
-            if (currentMinute != _currentMinute)
+            while (_nextTask != null && _nextTask.IsDue())
             {
-                // Running previous minute remaining tasks
-                _minuteQueues.TryGetValue(_currentMinute, out _currentMinuteSet);
-                if (_currentMinuteSet != null)
-                    foreach (var task in _currentMinuteSet)
-                        task.Execute();
-
-                _currentMinute = (long)currentMinute;
-                _minuteQueues.TryGetValue(_currentMinute, out _currentMinuteSet);
+                RunTask(_nextTask);
+                _nextTask = _currentMinuteSet.FirstOrDefault();
             }
         }
 
-        public SortedSet<GameTask> GetMinuteQueue(long minute)
+        internal static SortedSet<GameTask> GetMinuteQueue(long minute)
         {
             SortedSet<GameTask> set = null;
             if (!_minuteQueues.TryGetValue(minute, out set))
-            {
-                if(NowTimespan.TotalMinutes <= minute) // if its a future queue, we create it
-                {
-                    set = new SortedSet<GameTask>();
-                    _minuteQueues[minute] = set;
-                } else
-                {
-                    throw new Exception("Trying to read a queue from the past");
-                }
-            }
+                set = CreateQueue(minute);
             return set;
         }
 
-        public void Add(GameTask task)
+        internal static SortedSet<GameTask> CreateQueue(long minute)
+        {
+            if (NowTimespan.TotalMinutes > minute)
+                throw new Exception("Trying to read a queue from the past");
+
+            var set = new SortedSet<GameTask>();
+            _minuteQueues[minute] = set;
+            return set;
+        }
+
+        private static void RunPastTasks(long newCurrentMinute)
+        {
+            for(var pastMinute = _currentMinute; pastMinute < newCurrentMinute; pastMinute++)
+            {
+                if(_minuteQueues.TryGetValue(pastMinute, out _currentMinuteSet))
+                {
+                    while(_currentMinuteSet != null && _currentMinuteSet.Count > 0)
+                    {
+                        var next = _currentMinuteSet.First();
+                        if (next == null)
+                            break;
+                        RunTask(next);
+                    }
+                    _currentMinuteSet.Clear();
+                    _currentMinuteSet = null;
+                }      
+            }    
+        }
+
+        private static SortedSet<GameTask> CurrentMinuteQueue(long newCurrentMinute)
+        {
+            if (newCurrentMinute != _currentMinute)
+            {
+                RunPastTasks(newCurrentMinute);
+                _currentMinute = (long)newCurrentMinute;
+                _minuteQueues.TryGetValue(_currentMinute, out _currentMinuteSet);
+            }
+            return _currentMinuteSet;
+        }
+
+        internal static void Add(GameTask task)
         {
             _tasks[task.ID] = task;
-            var minute = (long)task.Finish.TimeOfDay.TotalMinutes;
+            var minute = (long)(task.Finish - Epoch).TotalMinutes;
             var queue = GetMinuteQueue(minute);
             queue.Add(task);
+            Log.Debug($"Registered new task {task.ID}");
         }
     }
 }

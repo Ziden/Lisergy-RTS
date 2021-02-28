@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.World;
 using GameDataTest;
 using LisergyServer;
 using LisergyServer.Core;
@@ -17,7 +18,7 @@ namespace LegendsServer
             var world = new GameWorld();
             var game = new StrategyGame(cfg, gameSpecs, world);
             game.GenerateMap();
-            new ServerWorldListener(world);
+            game.RegisterEventListeners();
             SocketServer.RunGame(game);
         }
     }
