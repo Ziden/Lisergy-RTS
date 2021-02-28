@@ -20,7 +20,6 @@ namespace Tests
             var events = game.ReceivedEvents
                 .Where(e => e is TileVisibleEvent)
                 .Select(e => (TileVisibleEvent)e)
-                .Where(e => e.Viewer.Owner == player)
                 .ToList();
         }
     }

@@ -6,6 +6,11 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class TileVisibleEvent : ServerEvent
     {
+        public TileVisibleEvent(Tile tile)
+        {
+            this.Tile = tile;
+        }
+
         public Tile Tile;
 
         [NonSerialized]

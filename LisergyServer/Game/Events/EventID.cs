@@ -13,6 +13,7 @@ namespace Game.Events
         TILE_VISIBLE = 4,
         SPEC_RESPONSE = 5,
         PARTY_VISIBLE = 6,
-        PARTY_MOVE = 7
+        PARTY_REQUEST_MOVE = 7,
+        PARTY_MOVE = 8
     }
 }

@@ -23,6 +23,7 @@ namespace Game.World
 
             NextTile.TeleportParty(this.Party);
             Path.RemoveAt(0);
+            Repeat = Path.Count > 0;   
         }
 
         private Tile NextTile { get => Path.Count == 0 ? null : Path[0]; }

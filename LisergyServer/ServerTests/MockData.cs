@@ -18,7 +18,9 @@ namespace ServerTests
     {
         public static string TEST_ID = "test_player_id";
 
-        public List<GameEvent> SentEvents = new List<GameEvent>();
+        public delegate void ReceiveEventHandler(GameEvent ev);
+        public event ReceiveEventHandler OnReceiveEvent;
+
         public bool IsOnline { get; set; }
 
         public TestServerPlayer() : base(null, null)
@@ -28,7 +30,8 @@ namespace ServerTests
 
         public override void Send<EventType>(EventType ev)
         {
-            SentEvents.Add(ev);
+            ev.Sender = this;
+            OnReceiveEvent?.Invoke(ev);
         }
 
         public override bool Online()
@@ -42,9 +45,9 @@ namespace ServerTests
         private bool _registered = false;
         public TestGame(GameWorld world=null) : base(GetTestConfiguration(), GetTestSpecs(), world == null ? new GameWorld() : world)
         {
-            if(!_registered)
+            this.RegisterEventListeners();
+            if (!_registered)
             {
-                new NetworkEvents();
                 NetworkEvents.OnTileVisible += ev => ReceiveEvent(ev);
                 NetworkEvents.OnPlayerAuth += ev => ReceiveEvent(ev);
                 NetworkEvents.OnSpecResponse += ev => ReceiveEvent(ev);
@@ -52,13 +55,14 @@ namespace ServerTests
                 NetworkEvents.OnPartyVisible += ev => ReceiveEvent(ev);
                 _registered = true;
             }
-     
+            
             this.World.CreateWorld(4);
             this.World.ChunkMap.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             var player = new TestServerPlayer();
+            player.OnReceiveEvent += ev => ReceiveEvent(ev);
             player.UserID = TestServerPlayer.TEST_ID;
             this.World.PlaceNewPlayer(player, this.World.GetTile(10,10));
-            this.RegisterEventListeners();
+           
         }
 
         public void ReceiveEvent(GameEvent ev)

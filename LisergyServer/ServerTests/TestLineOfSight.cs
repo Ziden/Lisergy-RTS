@@ -24,7 +24,6 @@ namespace Tests
             var events = Game.ReceivedEvents
                 .Where(e => e is TileVisibleEvent)
                 .Select(e => (TileVisibleEvent)e)
-                .Where(e => e.Viewer.Owner == player)
                 .ToList();
 
             var range = initialBuildingSpec.LOS * 2 + 1;

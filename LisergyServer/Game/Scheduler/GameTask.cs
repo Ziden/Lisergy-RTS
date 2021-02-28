@@ -7,17 +7,16 @@ namespace Game.Scheduler
         public GameTask(TimeSpan delay)
         {
             ID = Guid.NewGuid();
-            Start = GameScheduler.Now;
             Delay = delay;
-            Finish = Start + delay;
+            Start = GameScheduler.Now;
             GameScheduler.Add(this);
         }
 
         public Guid ID;
-        public bool Repeat;
-        public DateTime Start { get; private set; }
+        public DateTime Start { get; set; }
         public TimeSpan Delay { get; private set; }
-        public DateTime Finish { get; private set; }
+        public DateTime Finish { get => Start + Delay; }
+        public bool Repeat;
 
         public bool IsDue() => Finish <= GameScheduler.Now;
 

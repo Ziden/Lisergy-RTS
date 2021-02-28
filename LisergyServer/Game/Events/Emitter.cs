@@ -51,7 +51,7 @@ namespace LisergyServer.Core
                 ev.FromNetwork = true;
                 NetworkEvents.JoinWorld(ev);
             }
-            else if (eventId == EventID.PARTY_MOVE)
+            else if (eventId == EventID.PARTY_REQUEST_MOVE)
             {
                 var ev = Serialization.ToEvent<MoveRequestEvent>(message);
                 ev.Sender = owner;

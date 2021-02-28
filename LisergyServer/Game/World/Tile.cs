@@ -43,7 +43,7 @@ namespace Game
         [NonSerialized]
         private PlayerEntity _owner;
 
-        public virtual TileSpec Spec  { get => StrategyGame.Specs.Tiles[this.TileId]; }
+        public virtual TileSpec Spec { get => StrategyGame.Specs.Tiles[this.TileId]; }
         public virtual GameWorld World { get => Chunk.ChunkMap.World; }
         public virtual string UserID { get => _userId; }
         public virtual byte BuildingID { get => _buildingID; }
@@ -59,8 +59,11 @@ namespace Game
         {
             var los = party.GetLineOfSight();
             var previousTile = party.Tile;
+            HashSet<WorldEntity> oldViewers = null;
+
             if (previousTile != null)
             {
+                oldViewers = previousTile.Viewing;
                 previousTile._parties.Remove(party);
                 foreach (var tile in previousTile.GetAOE(los))
                     tile.SetUnseenBy(party);
@@ -70,14 +73,16 @@ namespace Game
 
             foreach (var tile in GetAOE(los))
                 tile.SetSeenBy(party);
+
+            var newViewers = new HashSet<WorldEntity>(_viewing);
+            if (oldViewers != null)
+                newViewers.ExceptWith(oldViewers);
+
             foreach (var viewer in _viewing)
             {
-                // TODO: Remove network call from Tile (maybe expose event ?)
-                NetworkEvents.PartyVisible(new PartyVisibleEvent()
-                {
-                    Viewer = viewer,
-                    Party = party
-                });
+                if (newViewers.Remove(viewer))
+                    viewer.Owner.Send(new PartyVisibleEvent(party, viewer));
+                viewer.Owner.Send(new PartyMoveEvent(party, this));
             }
         }
 
@@ -118,13 +123,9 @@ namespace Game
             get => _owner; set
             {
                 if (value != null)
-                {
                     _userId = value.UserID;
-                }
                 else
-                {
                     _userId = null;
-                }
                 _owner = value;
             }
         }
@@ -136,16 +137,10 @@ namespace Game
             if (_visibleTo.Add(entity.Owner))
             {
                 entity.Owner.VisibleTiles.Add(this);
-                NetworkEvents.TileVisible(new TileVisibleEvent()
-                {
-                    Tile = this,
-                    Viewer = entity
-                });
-                Parties.ForEach(u => NetworkEvents.PartyVisible(new PartyVisibleEvent()
-                {
-                    Viewer = entity,
-                    Party = u
-                }));
+                entity.Owner.Send(new TileVisibleEvent(this));
+                Parties.ForEach(party =>
+                    entity.Owner.Send(new PartyVisibleEvent(party, entity))
+                );
             }
         }
 
@@ -158,7 +153,7 @@ namespace Game
                 _visibleTo.Remove(entity.Owner);
             }
         }
-        
+
 
         public virtual bool IsVisibleTo(PlayerEntity player)
         {

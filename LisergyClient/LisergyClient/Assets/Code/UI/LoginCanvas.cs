@@ -30,7 +30,7 @@ public class LoginCanvas
             {
                 UserID = ev.PlayerID
             };
-            player.Send(new JoinWorldEvent());
+            MainBehaviour.Networking.Send(new JoinWorldEvent());
             ClientEvents.PlayerLogin(player);
             GameObject.SetActive(false);
         } else

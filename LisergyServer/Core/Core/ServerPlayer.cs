@@ -17,7 +17,7 @@ namespace LisergyServer.Core
             this._server = server;
         }
 
-        public override void Send<EventType>(EventType ev)
+        public override void Send<EventType>(EventType ev) 
         {
             Log.Debug($"Sending {ev.GetType().Name} to {this}");
             ev.FromNetwork = true;

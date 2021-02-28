@@ -7,6 +7,12 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class PartyVisibleEvent : ServerEvent
     {
+        public PartyVisibleEvent(Party party, WorldEntity viewer)
+        {
+            this.Party = party;
+            this.Viewer = viewer;
+        }
+
         public Party Party;
 
         [NonSerialized]

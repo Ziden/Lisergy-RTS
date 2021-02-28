@@ -45,10 +45,15 @@ namespace Game.Scheduler
 
         internal static void RunTask(GameTask task)
         {
-            task.Execute();
+           
             _currentMinuteSet.Remove(task);
             _tasks.Remove(task.ID);
-
+            task.Execute();
+            if (task.Repeat)
+            {
+                task.Start = Now;
+                Add(task);
+            }
         }
 
         public static void Tick(DateTime time)

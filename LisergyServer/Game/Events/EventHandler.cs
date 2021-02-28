@@ -9,6 +9,7 @@ namespace Game.Events
     public delegate void SpecResponseHandler(GameSpecResponse e);
     public delegate void PartyVisibleHandler(PartyVisibleEvent e);
     public delegate void PartyRequestMoveHandler(MoveRequestEvent e);
+    public delegate void PartyMoveEventHandler(PartyMoveEvent e);
 
     public class NetworkEvents
     {
@@ -26,6 +27,7 @@ namespace Game.Events
         public static event TileVisibleHandler OnTileVisible { add { _i._OnTileVisible += value; } remove { _i._OnTileVisible -= value; } }
         public static event SpecResponseHandler OnSpecResponse { add { _i._OnSpecResponse += value; } remove { _i._OnSpecResponse -= value; } }
         public static event PartyVisibleHandler OnPartyVisible { add { _i._OnPartyVisible += value; } remove { _i._OnPartyVisible -= value; } }
+        public static event PartyMoveEventHandler OnPartyMove { add { _i._OnPartyMove += value; } remove { _i._OnPartyMove -= value; } }
         public static event PartyRequestMoveHandler OnPartyRequestMove { add { _i._OnPartyRequestMove += value; } remove { _i._OnPartyRequestMove -= value; } }
 
         private event JoinEventHandler _OnJoinWorld;
@@ -34,6 +36,7 @@ namespace Game.Events
         private event SpecResponseHandler _OnSpecResponse;
         private event PartyVisibleHandler _OnPartyVisible;
         private event PartyRequestMoveHandler _OnPartyRequestMove;
+        private event PartyMoveEventHandler _OnPartyMove;
 
         private static bool CanSend(GameEvent ev)
         {
@@ -74,6 +77,12 @@ namespace Game.Events
         {
             if (_i._OnPartyRequestMove != null && CanSend(ev))
                 _i._OnPartyRequestMove(ev);
+        }
+
+        public static void PartyMove(PartyMoveEvent ev)
+        {
+            if (_i._OnPartyMove != null && CanSend(ev))
+                _i._OnPartyMove(ev);
         }
     }
 }
