@@ -9,6 +9,12 @@ namespace LisergyServer.Commands
         {
             return "task";
         }
+
+        public override string Description()
+        {
+            return "Show task scheduler info";
+        }
+
         public override void Execute(CommandSender sender, CommandArgs args)
         {
             sender.SendMessage($"Number of queues: {GameScheduler.AmountQueues}");

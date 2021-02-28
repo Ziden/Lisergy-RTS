@@ -17,5 +17,10 @@ namespace LisergyServer.Commands
         {
             return "tile";
         }
+
+        public override string Description()
+        {
+            return "Manipulates tiles";
+        }
     }
 }

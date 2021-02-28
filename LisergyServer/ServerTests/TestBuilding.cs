@@ -25,7 +25,7 @@ namespace Tests
             var tile = building.Tile;
 
             Assert.IsTrue(player.Buildings.Count == 1);
-            Assert.IsTrue(player.Buildings.Any(b => b.BuildingID == initialBuildingSpec.Id));
+            Assert.IsTrue(player.Buildings.Any(b => b.SpecID == initialBuildingSpec.Id));
             Assert.IsTrue(tile.Building == player.Buildings.First());
             Assert.IsTrue(tile.BuildingID == initialBuildingSpec.Id);
         }
@@ -38,10 +38,10 @@ namespace Tests
             var tile = Game.RandomNotBuiltTile();
             var buildingSpec = TestGame.RandomBuildingSpec();
 
-            tile.Building = new Building(buildingSpec.Id, player);
+            player.Build(buildingSpec.Id, tile);
 
             Assert.IsTrue(player.Buildings.Count == 2);
-            Assert.IsTrue(player.Buildings.Any(b => b.BuildingID == buildingSpec.Id));
+            Assert.IsTrue(player.Buildings.Any(b => b.SpecID == buildingSpec.Id));
             Assert.IsTrue(tile.Building == player.Buildings.Last());
             Assert.IsTrue(tile.BuildingID == buildingSpec.Id);
             Assert.That(tile.Viewing.Contains(tile.Building));

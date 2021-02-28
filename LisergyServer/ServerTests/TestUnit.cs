@@ -35,7 +35,7 @@ namespace Tests
             var building = player.Buildings.First();
             var tile = unit.Party.Tile;
 
-            var visibleEvent = Game.ReceivedEvents.Where(e => e is PartyVisibleEvent).FirstOrDefault() as PartyVisibleEvent;
+            var visibleEvent = Game.ReceivedEvents.Where(e => e is EntityVisibleEvent).FirstOrDefault() as EntityVisibleEvent;
 
             Assert.That(visibleEvent != null);
             Assert.AreEqual(unit.Party.Id, visibleEvent.Party.Id);

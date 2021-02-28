@@ -12,10 +12,15 @@ namespace LisergyServer.Commands
         private static ConsoleReader _console;
         public static readonly char CMD_CHAR = '.';
 
-        public Dictionary<string, Command> _commands = new Dictionary<string, Command>();
+        private Dictionary<string, Command> _commands = new Dictionary<string, Command>();
         private Command _cmd = null;
         private string _consoleText = null;
         private string [] _args = null;
+
+        public List<Command> GetCommands()
+        {
+            return _commands.Values.ToList();
+        }
 
         public CommandExecutor()
         {

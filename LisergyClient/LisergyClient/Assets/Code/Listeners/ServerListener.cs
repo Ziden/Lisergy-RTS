@@ -18,21 +18,25 @@ namespace Assets.Code
         public void RegisterGameHandlers()
         {
             NetworkEvents.OnTileVisible += ReceiveTile;
-            NetworkEvents.OnPartyVisible += PartyVisible;
+            NetworkEvents.OnEntityVisible += EntityVisible;
         }
 
-        public void PartyVisible(PartyVisibleEvent ev)
+        public void EntityVisible(EntityVisibleEvent ev)
         {
-            using (new StackLog($"[Party] Viewing {ev.Party.PartyIndex} from {ev.Party.OwnerID}"))
+            if(ev.Party is Party)
             {
-                var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Party.OwnerID);
-                var tile = _game.GetWorld().GetTile(ev.Party.X, ev.Party.Y);
-                var pt = new ClientParty(owner, ev.Party);
-                owner.Parties[ev.Party.PartyIndex] = pt;
-                tile.TeleportParty(pt);
-                pt.Render();
+                var party = (Party)ev.Party;
+                using (new StackLog($"[Party] Viewing {party.PartyIndex} from {ev.Party.OwnerID}"))
+                {
+                    var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Party.OwnerID);
+                    var tile = _game.GetWorld().GetTile(ev.Party.X, ev.Party.Y);
+                    var pt = new ClientParty(owner, party);
+                    owner.Parties[party.PartyIndex] = pt;
+                    pt.Tile = tile;
+                    pt.Render();
+                }
+                UIManager.PartyUI.RenderAllParties();
             }
-            UIManager.PartyUI.RenderAllParties();
         }
 
         public void ReceiveTile(TileVisibleEvent ev)

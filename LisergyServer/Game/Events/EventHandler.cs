@@ -7,9 +7,9 @@ namespace Game.Events
     public delegate void AuthResultHandler(AuthResultEvent e);
     public delegate void TileVisibleHandler(TileVisibleEvent e);
     public delegate void SpecResponseHandler(GameSpecResponse e);
-    public delegate void PartyVisibleHandler(PartyVisibleEvent e);
-    public delegate void PartyRequestMoveHandler(MoveRequestEvent e);
-    public delegate void PartyMoveEventHandler(PartyMoveEvent e);
+    public delegate void EntityVisibleHandler(EntityVisibleEvent e);
+    public delegate void EntityRequestMovementHandler(MoveRequestEvent e);
+    public delegate void EntityMoveHandler(EntityMoveEvent e);
 
     public class NetworkEvents
     {
@@ -26,24 +26,24 @@ namespace Game.Events
         public static event AuthResultHandler OnPlayerAuth { add { _i._OnPlayerAuth += value; } remove { _i._OnPlayerAuth -= value; } }
         public static event TileVisibleHandler OnTileVisible { add { _i._OnTileVisible += value; } remove { _i._OnTileVisible -= value; } }
         public static event SpecResponseHandler OnSpecResponse { add { _i._OnSpecResponse += value; } remove { _i._OnSpecResponse -= value; } }
-        public static event PartyVisibleHandler OnPartyVisible { add { _i._OnPartyVisible += value; } remove { _i._OnPartyVisible -= value; } }
-        public static event PartyMoveEventHandler OnPartyMove { add { _i._OnPartyMove += value; } remove { _i._OnPartyMove -= value; } }
-        public static event PartyRequestMoveHandler OnPartyRequestMove { add { _i._OnPartyRequestMove += value; } remove { _i._OnPartyRequestMove -= value; } }
+        public static event EntityVisibleHandler OnEntityVisible { add { _i._OnPartyVisible += value; } remove { _i._OnPartyVisible -= value; } }
+        public static event EntityMoveHandler OnEntityMove { add { _i._OnEntityMove += value; } remove { _i._OnEntityMove -= value; } }
+        public static event EntityRequestMovementHandler OnEntityRequestMove { add { _i._OnEntityRequestMove += value; } remove { _i._OnEntityRequestMove -= value; } }
 
         private event JoinEventHandler _OnJoinWorld;
         private event AuthResultHandler _OnPlayerAuth;
         private event TileVisibleHandler _OnTileVisible;
         private event SpecResponseHandler _OnSpecResponse;
-        private event PartyVisibleHandler _OnPartyVisible;
-        private event PartyRequestMoveHandler _OnPartyRequestMove;
-        private event PartyMoveEventHandler _OnPartyMove;
+        private event EntityVisibleHandler _OnPartyVisible;
+        private event EntityRequestMovementHandler _OnEntityRequestMove;
+        private event EntityMoveHandler _OnEntityMove;
 
         private static bool CanSend(GameEvent ev)
         {
             return ev.FromNetwork || (ev is ClientEvent && !SERVER || (ev is ServerEvent && SERVER));
         }
 
-        public static void PartyVisible(PartyVisibleEvent ev)
+        public static void PartyVisible(EntityVisibleEvent ev)
         {
             if (_i._OnPartyVisible != null && CanSend(ev))
                 _i._OnPartyVisible(ev);
@@ -73,16 +73,16 @@ namespace Game.Events
                 _i._OnJoinWorld(ev);
         }
 
-        public static void RequestPartyMove(MoveRequestEvent ev)
+        public static void RequestEntityMove(MoveRequestEvent ev)
         {
-            if (_i._OnPartyRequestMove != null && CanSend(ev))
-                _i._OnPartyRequestMove(ev);
+            if (_i._OnEntityRequestMove != null && CanSend(ev))
+                _i._OnEntityRequestMove(ev);
         }
 
-        public static void PartyMove(PartyMoveEvent ev)
+        public static void EntityMove(EntityMoveEvent ev)
         {
-            if (_i._OnPartyMove != null && CanSend(ev))
-                _i._OnPartyMove(ev);
+            if (_i._OnEntityMove != null && CanSend(ev))
+                _i._OnEntityMove(ev);
         }
     }
 }

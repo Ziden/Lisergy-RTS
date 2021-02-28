@@ -6,21 +6,21 @@ using System.Text;
 namespace Game.Events
 {
     [Serializable]
-    public class PartyMoveEvent : ServerEvent
+    public class EntityMoveEvent : ServerEvent
     {
         public override EventID GetID() => EventID.PARTY_MOVE;
 
-        public PartyMoveEvent(Party party, Tile tile)
+        public EntityMoveEvent(MovableWorldEntity entity, Tile tile)
         {
-            this.OwnerID = party.OwnerID;
-            this.PartyIndex = party.PartyIndex;
-            this.Delay = party.MoveDelay;
+            this.OwnerID = entity.OwnerID;
+            this.ID = entity.Id;
+            this.Delay = entity.GetMoveDelay();
             this.X = tile.X;
             this.Y = tile.Y;
         }
 
         public string OwnerID;
-        public int PartyIndex;
+        public string ID;
         public TimeSpan Delay;
         public int X;
         public int Y;

@@ -62,17 +62,17 @@ namespace Tests
         public void TestUnitViewEventSerialization()
         {
             var game = new TestGame();
-            Serialization.LoadSerializers(typeof(PartyVisibleEvent));
+            Serialization.LoadSerializers(typeof(EntityVisibleEvent));
 
             var player = game.GetTestPlayer();
             var unit = player.Units.First();
             var building = player.Buildings.First();
             var tile = unit.Party.Tile;
 
-            var visibleEvent = game.ReceivedEvents.Where(e => e is PartyVisibleEvent).FirstOrDefault() as PartyVisibleEvent;
+            var visibleEvent = game.ReceivedEvents.Where(e => e is EntityVisibleEvent).FirstOrDefault() as EntityVisibleEvent;
 
-            var serialized = Serialization.FromEvent<PartyVisibleEvent>(visibleEvent);
-            var unserialized = Serialization.ToEvent<PartyVisibleEvent>(serialized);
+            var serialized = Serialization.FromEvent<EntityVisibleEvent>(visibleEvent);
+            var unserialized = Serialization.ToEvent<EntityVisibleEvent>(serialized);
 
             Assert.AreEqual(visibleEvent.Party.Id, unserialized.Party.Id);
         }

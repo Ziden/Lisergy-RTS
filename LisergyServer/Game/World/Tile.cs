@@ -53,68 +53,25 @@ namespace Game
         public virtual Chunk Chunk { get { return _chunk; } }
         public virtual byte TileId { get => _tileId; set => _tileId = value; }
         public virtual byte ResourceID { get => _resourceID; set => _resourceID = value; }
-        public virtual List<Party> Parties { get { return _parties; } }
-
-        public virtual void TeleportParty(Party party)
-        {
-            var los = party.GetLineOfSight();
-            var previousTile = party.Tile;
-            HashSet<WorldEntity> oldViewers = null;
-
-            if (previousTile != null)
-            {
-                oldViewers = previousTile.Viewing;
-                previousTile._parties.Remove(party);
-                foreach (var tile in previousTile.GetAOE(los))
-                    tile.SetUnseenBy(party);
-            }
-            _parties.Add(party);
-            party.Tile = this;
-
-            foreach (var tile in GetAOE(los))
-                tile.SetSeenBy(party);
-
-            var newViewers = new HashSet<WorldEntity>(_viewing);
-            if (oldViewers != null)
-                newViewers.ExceptWith(oldViewers);
-
-            foreach (var viewer in _viewing)
-            {
-                if (newViewers.Remove(viewer))
-                    viewer.Owner.Send(new PartyVisibleEvent(party, viewer));
-                viewer.Owner.Send(new PartyMoveEvent(party, this));
-            }
-        }
+        public virtual List<Party> Parties { get { return _parties; }}
 
         public virtual Building Building
         {
             get => _building; set
             {
+                _building = value;
                 if (value != null)
                 {
                     value.Tile = this;
-                    var buildingSpec = value.GetSpec();
                     Owner = value.Owner;
-                    Owner.Buildings.Add(value);
-                    this.Chunk.Buildings.Add(value);
-                    _buildingID = value.BuildingID;
-                    Log.Debug($"Expanding +{buildingSpec.LOS} LOS on {this} for {Owner}");
-                    foreach (var tile in GetAOE(buildingSpec.LOS))
-                        tile.SetSeenBy(value);
+                    _buildingID = value.SpecID;
+                   
                 }
                 else
                 {
-                    if (_building != null)
-                    {
-                        var spec = _building.GetSpec();
-                        foreach (var tile in GetAOE(spec.LOS))
-                            tile.SetUnseenBy(_building);
-                        this.Chunk.Buildings.Remove(_building);
-                    }
                     _buildingID = 0;
                     Owner = null;
                 }
-                _building = value;
             }
         }
 
@@ -131,7 +88,7 @@ namespace Game
         }
 
         #region FOG of war
-        public virtual void SetSeenBy(WorldEntity entity)
+        public virtual void SetSeenBy(ExploringEntity entity)
         {
             _viewing.Add(entity);
             if (_visibleTo.Add(entity.Owner))
@@ -139,12 +96,12 @@ namespace Game
                 entity.Owner.VisibleTiles.Add(this);
                 entity.Owner.Send(new TileVisibleEvent(this));
                 Parties.ForEach(party =>
-                    entity.Owner.Send(new PartyVisibleEvent(party, entity))
+                    entity.Owner.Send(new EntityVisibleEvent(party, entity))
                 );
             }
         }
 
-        public virtual void SetUnseenBy(WorldEntity entity)
+        public virtual void SetUnseenBy(ExploringEntity entity)
         {
             _viewing.Remove(entity);
             if (!_viewing.Any(e => e.Owner == entity.Owner))

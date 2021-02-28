@@ -52,7 +52,7 @@ namespace ServerTests
                 NetworkEvents.OnPlayerAuth += ev => ReceiveEvent(ev);
                 NetworkEvents.OnSpecResponse += ev => ReceiveEvent(ev);
                 NetworkEvents.OnJoinWorld += ev => ReceiveEvent(ev);
-                NetworkEvents.OnPartyVisible += ev => ReceiveEvent(ev);
+                NetworkEvents.OnEntityVisible += ev => ReceiveEvent(ev);
                 _registered = true;
             }
             

@@ -10,7 +10,7 @@ namespace Game.World
         public Party Party;
         List<Tile> Path;
 
-        public CourseTask(Party party, List<Tile> path): base(party.MoveDelay)
+        public CourseTask(Party party, List<Tile> path): base(party.GetMoveDelay())
         {
             this.Party = party;
             this.Path = path;
@@ -20,8 +20,7 @@ namespace Game.World
         {
             if (Party.Course != this)
                 throw new Exception($"Party {Party} Had Course {Party.Course} but course {this} was trying to move the party");
-
-            NextTile.TeleportParty(this.Party);
+            this.Party.Tile = NextTile;
             Path.RemoveAt(0);
             Repeat = Path.Count > 0;   
         }

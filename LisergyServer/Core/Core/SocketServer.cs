@@ -29,7 +29,7 @@ namespace LisergyServer.Core
             _commandExecutor = new CommandExecutor();
 
             // TODO: Read from assembly
-            _commandExecutor.RegisterCommand(new HelpCommand());
+            _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
             _commandExecutor.RegisterCommand(new TileCommand());
             _commandExecutor.RegisterCommand(new TaskCommand());
 

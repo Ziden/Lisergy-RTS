@@ -36,7 +36,7 @@ namespace LisergyServer.Core
             }
             else if (eventId == EventID.PARTY_VISIBLE)
             {
-                var ev = Serialization.ToEvent<PartyVisibleEvent>(message);
+                var ev = Serialization.ToEvent<EntityVisibleEvent>(message);
                 ev.Sender = owner;
                 ev.FromNetwork = true;
                 NetworkEvents.PartyVisible(ev);
@@ -56,7 +56,7 @@ namespace LisergyServer.Core
                 var ev = Serialization.ToEvent<MoveRequestEvent>(message);
                 ev.Sender = owner;
                 ev.FromNetwork = true;
-                NetworkEvents.RequestPartyMove(ev);
+                NetworkEvents.RequestEntityMove(ev);
             }
         } 
     }

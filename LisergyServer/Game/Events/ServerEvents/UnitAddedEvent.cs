@@ -5,15 +5,15 @@ using System.Collections.Generic;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class PartyVisibleEvent : ServerEvent
+    public class EntityVisibleEvent : ServerEvent
     {
-        public PartyVisibleEvent(Party party, WorldEntity viewer)
+        public EntityVisibleEvent(WorldEntity party, WorldEntity viewer)
         {
             this.Party = party;
             this.Viewer = viewer;
         }
 
-        public Party Party;
+        public WorldEntity Party;
 
         [NonSerialized]
         public WorldEntity Viewer;

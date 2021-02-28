@@ -21,7 +21,7 @@ namespace Game.Listeners
 
             // SERVER
             NetworkEvents.OnTileVisible += TileVisible;
-            NetworkEvents.OnPartyVisible += PartyVisible;
+            NetworkEvents.OnEntityVisible += PartyVisible;
 
         }
 
@@ -29,11 +29,11 @@ namespace Game.Listeners
         {
             NetworkEvents.OnJoinWorld -= JoinWorld;
             NetworkEvents.OnTileVisible -= TileVisible;
-            NetworkEvents.OnPartyVisible -= PartyVisible;
+            NetworkEvents.OnEntityVisible -= PartyVisible;
 
         }
 
-        public void PartyVisible(PartyVisibleEvent ev)
+        public void PartyVisible(EntityVisibleEvent ev)
         {
             ev.Viewer.Owner.Send(ev);
             Log.Debug($"{ev.Viewer.Owner} sees {ev.Party}");
@@ -59,7 +59,7 @@ namespace Game.Listeners
                     foreach(var party in tile.Parties)
                     {
                         Log.Debug($"Sending unit {tile}");
-                        player.Send(new PartyVisibleEvent(party, null));
+                        player.Send(new EntityVisibleEvent(party, null));
                     }
                 }
             }

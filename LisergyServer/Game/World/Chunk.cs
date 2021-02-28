@@ -21,9 +21,6 @@ namespace Game
         public virtual ChunkMap ChunkMap { get; private set; }
         public virtual byte Flags { get => _flags; set => _flags = value; }
         public virtual Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
-
-        public HashSet<Building> Buildings = new HashSet<Building>();
-
         public Chunk(ChunkMap w, int x, int y, Tile[,] tiles)
         {
             this.X = (ushort)x;

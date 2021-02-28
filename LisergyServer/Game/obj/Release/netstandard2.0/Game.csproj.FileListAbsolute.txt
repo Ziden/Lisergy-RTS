@@ -1,0 +1,15 @@
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\bin\Release\netstandard2.0\Game.deps.json
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\bin\Release\netstandard2.0\Game.dll
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\bin\Release\netstandard2.0\Game.pdb
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\bin\Release\netstandard2.0\GameData.dll
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\bin\Release\netstandard2.0\NetSerializer.dll
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\bin\Release\netstandard2.0\ZeroFormatter.dll
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\bin\Release\netstandard2.0\ZeroFormatter.Interfaces.dll
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\bin\Release\netstandard2.0\GameData.pdb
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\obj\Release\netstandard2.0\Game.csprojAssemblyReference.cache
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\obj\Release\netstandard2.0\Game.csproj.CoreCompileInputs.cache
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\obj\Release\netstandard2.0\Game.AssemblyInfoInputs.cache
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\obj\Release\netstandard2.0\Game.AssemblyInfo.cs
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\obj\Release\netstandard2.0\Game.csproj.CopyComplete
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\obj\Release\netstandard2.0\Game.dll
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\Game\obj\Release\netstandard2.0\Game.pdb

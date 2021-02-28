@@ -32,7 +32,7 @@ namespace Game
 
         public Building GetCenter()
         {
-            return Buildings.First(b => b.BuildingID == StrategyGame.Specs.InitialBuilding);
+            return Buildings.First(b => b.SpecID == StrategyGame.Specs.InitialBuilding);
         }
 
         public Unit RecruitUnit(ushort unitSpecId)
@@ -45,7 +45,7 @@ namespace Game
 
         public void DeployParty(Party p, Tile t)
         {
-            t.TeleportParty(p);
+            p.Tile = t;
         }
 
         public void PlaceUnitInParty(Unit u, Party newParty)

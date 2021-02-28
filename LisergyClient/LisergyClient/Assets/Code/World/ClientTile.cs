@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.Entity;
 using UnityEngine;
 
 namespace Assets.Code.World
@@ -28,7 +29,7 @@ namespace Assets.Code.World
             //GameObj.SetActive(isVisible); // mandando unit parece q caga isso
         }
 
-        public override void SetSeenBy(WorldEntity entity)
+        public override void SetSeenBy(ExploringEntity entity)
         {
             base.SetSeenBy(entity);
             StackLog.Debug($"{entity} sees {this} client {MainBehaviour.Player.UserID}");
