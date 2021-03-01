@@ -51,9 +51,9 @@ namespace Tests
             var unserialized = Serialization.ToEvent<TestTileEvent>(serialized);
 
             Assert.AreEqual(tile.TileId, unserialized.Tile.TileId);
-            Assert.AreEqual(tile.BuildingID, unserialized.Tile.BuildingID);
+            Assert.AreEqual(tile.Building.SpecID, unserialized.Tile.Building.SpecID);
             Assert.AreEqual(tile.ResourceID, unserialized.Tile.ResourceID);
-            Assert.AreEqual(tile.UserID, unserialized.Tile.UserID);
+            Assert.AreEqual(tile.Building.OwnerID, unserialized.Tile.OwnerID);
             Assert.AreEqual(tile.X, unserialized.Tile.X);
             Assert.AreEqual(tile.Y, unserialized.Tile.Y);
         }
@@ -91,10 +91,10 @@ namespace Tests
             var serialized = Serialization.FromEvent<TestTileEvent>(new TestTileEvent(tile));
             var unserialized = Serialization.ToEvent<TestTileEvent>(serialized);
 
-            Assert.AreEqual(tile.BuildingID, unserialized.Tile.BuildingID);
+            Assert.AreEqual(tile.Building.SpecID, unserialized.Tile.Building.SpecID);
 
             Assert.AreEqual(tile.ResourceID, unserialized.Tile.ResourceID);
-            Assert.AreEqual(tile.UserID, unserialized.Tile.UserID);
+            Assert.AreEqual(tile.OwnerID, unserialized.Tile.OwnerID);
             Assert.AreEqual(tile.X, unserialized.Tile.X);
             Assert.AreEqual(tile.Y, unserialized.Tile.Y);
         }

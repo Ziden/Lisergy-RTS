@@ -1,5 +1,4 @@
-﻿using Game.Events;
-using Game.Events.ServerEvents;
+﻿using Game.Events.ServerEvents;
 using System;
 using System.Collections.Generic;
 
@@ -34,7 +33,6 @@ namespace Game.Entity
                     tile.SetSeenBy(this);
 
                 base.Tile = value;
-
                 SendVisibilityPackets(value, previousTile);
             }
         }

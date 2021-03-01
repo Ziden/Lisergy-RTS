@@ -1,5 +1,4 @@
 ﻿using Game.Entity;
-using Game.Events;
 using Game.Events.ServerEvents;
 using GameData;
 using System;
@@ -13,8 +12,6 @@ namespace Game
     {
         private byte _resourceID;
         private byte _tileId;
-        private byte _buildingID;
-        private string _userId;
         private ushort _y;
         private ushort _x;
 
@@ -40,13 +37,9 @@ namespace Game
         [NonSerialized]
         private Building _building;
 
-        [NonSerialized]
-        private PlayerEntity _owner;
-
         public virtual TileSpec Spec { get => StrategyGame.Specs.Tiles[this.TileId]; }
         public virtual GameWorld World { get => Chunk.ChunkMap.World; }
-        public virtual string UserID { get => _userId; }
-        public virtual byte BuildingID { get => _buildingID; }
+        public virtual string OwnerID { get => _building?.OwnerID; }
         public virtual ushort Y { get => _y; }
         public virtual ushort X { get => _x; }
         public virtual HashSet<WorldEntity> Viewing { get { return _viewing; } }
@@ -57,33 +50,14 @@ namespace Game
 
         public virtual Building Building
         {
-            get => _building; set
+            get => _building;
+            set
             {
+                if(value == null && _building != null)
+                    _building.Tile = null;
                 _building = value;
                 if (value != null)
-                {
                     value.Tile = this;
-                    Owner = value.Owner;
-                    _buildingID = value.SpecID;
-                   
-                }
-                else
-                {
-                    _buildingID = 0;
-                    Owner = null;
-                }
-            }
-        }
-
-        public virtual PlayerEntity Owner
-        {
-            get => _owner; set
-            {
-                if (value != null)
-                    _userId = value.UserID;
-                else
-                    _userId = null;
-                _owner = value;
             }
         }
 
@@ -98,6 +72,8 @@ namespace Game
                 Parties.ForEach(party =>
                     entity.Owner.Send(new EntityVisibleEvent(party, entity))
                 );
+                if (Building != null)
+                    entity.Owner.Send(new EntityVisibleEvent(Building, entity));
             }
         }
 
@@ -136,7 +112,7 @@ namespace Game
 
         public override string ToString()
         {
-            return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID} B={BuildingID}>";
+            return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID} B={Building}>";
         }
     }
 }

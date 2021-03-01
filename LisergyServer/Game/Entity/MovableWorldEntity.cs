@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Game.Entity
 {
+    [Serializable]
     public abstract class MovableWorldEntity : ExploringEntity
     {
         public MovableWorldEntity(PlayerEntity owner) : base(owner) { }

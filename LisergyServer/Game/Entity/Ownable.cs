@@ -12,7 +12,7 @@ namespace Game
             this.Owner = owner;
         }
 
-        protected string _ownerId;
+        private string _ownerId;
 
         [NonSerialized]
         private PlayerEntity _owner;

@@ -16,20 +16,18 @@ namespace Game.Entity
         [NonSerialized]
         private CourseTask _course;
 
-        public byte GetLineOfSight()
+        public byte PartyIndex { get => _partyIndex; }
+        public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(1);
+        public CourseTask Course { get => _course; set => _course = value; }
+
+        public Party(PlayerEntity owner, byte partyIndex) : base(owner)
         {
-            return _units.Where(u => u != null).Select(u => StrategyGame.Specs.Units[u.SpecID].LOS).Max();
+            _partyIndex = partyIndex;
         }
 
-        public override Tile Tile {
-            get { return base.Tile; }
-            set {
-                if (base.Tile != null)
-                    base.Tile.Parties.Remove(this);
-                
-                base.Tile = value;
-                base.Tile.Parties.Add(this);
-            }
+        private byte GetLineOfSight()
+        {
+            return _units.Where(u => u != null).Select(u => StrategyGame.Specs.Units[u.SpecID].LOS).Max();
         }
 
         public IEnumerable<Unit> GetUnits()
@@ -40,11 +38,6 @@ namespace Game.Entity
         public virtual void SetUnit(Unit u, int index)
         {
             _units[index] = u;
-        }
-
-        public Party(PlayerEntity owner, byte partyIndex): base(owner)
-        {
-            _partyIndex = partyIndex;
         }
 
         public virtual void AddUnit(Unit u)
@@ -63,11 +56,18 @@ namespace Game.Entity
             this.LineOfSight = GetLineOfSight();
         }
 
-        public byte PartyIndex { get => _partyIndex; }
+        public override Tile Tile
+        {
+            get { return base.Tile; }
+            set
+            {
+                if (base.Tile != null)
+                    base.Tile.Parties.Remove(this);
 
-        public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(1); 
-
-        public CourseTask Course { get => _course; set => _course = value; }
+                base.Tile = value;
+                base.Tile.Parties.Add(this);
+            }
+        }
 
         public override string ToString()
         {

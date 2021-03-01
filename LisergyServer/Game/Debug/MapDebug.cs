@@ -16,7 +16,7 @@ namespace Game.Debug
                     var tile = w.GetTile(x, y);
                     if (tile == null)
                         Console.Write("N");
-                    else if (tile.BuildingID != 0)
+                    else if (tile.Building?.SpecID != 0)
                         Console.Write("^");
                     else if (tile.TileId == 0)
                         Console.Write("|");
