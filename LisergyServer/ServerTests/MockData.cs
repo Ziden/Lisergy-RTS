@@ -61,8 +61,7 @@ namespace ServerTests
             var player = new TestServerPlayer();
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
             player.UserID = TestServerPlayer.TEST_ID;
-            this.World.PlaceNewPlayer(player, this.World.GetTile(10,10));
-           
+            this.World.PlaceNewPlayer(player, this.World.GetTile(10, 10));
         }
 
         public void ReceiveEvent(GameEvent ev)

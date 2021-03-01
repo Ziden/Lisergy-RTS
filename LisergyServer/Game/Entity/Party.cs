@@ -25,7 +25,7 @@ namespace Game.Entity
             _partyIndex = partyIndex;
         }
 
-        private byte GetLineOfSight()
+        public override byte GetLineOfSight()
         {
             return _units.Where(u => u != null).Select(u => StrategyGame.Specs.Units[u.SpecID].LOS).Max();
         }
@@ -46,14 +46,12 @@ namespace Game.Entity
                 u.Party.RemoveUnit(u);
             var freeIndex = Array.IndexOf(_units, null);
             SetUnit(u, freeIndex);
-            this.LineOfSight = GetLineOfSight();
         }
 
         public virtual void RemoveUnit(Unit u)
         {
             var index = Array.IndexOf(_units, u);
             _units[index] = null;
-            this.LineOfSight = GetLineOfSight();
         }
 
         public override Tile Tile

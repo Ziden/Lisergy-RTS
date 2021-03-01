@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.Events.ServerEvents;
+using System;
 
 namespace Game
 {
@@ -8,6 +9,9 @@ namespace Game
         protected string _id;
         protected ushort _x;
         protected ushort _y;
+
+        [NonSerialized]
+        protected Tile _tile;
 
         public WorldEntity(PlayerEntity owner) : base(owner)
         {
@@ -22,14 +26,21 @@ namespace Game
         {
             get => _tile; set
             {
+                if (_tile == null && value != null)
+                {
+                    foreach (var viewer in value.Viewing)
+                    {
+                        Log.Info($"New entity placed {this}, sending visibility");
+                        viewer.Owner.Send(new EntityVisibleEvent(this));
+                    }
+                }    
                 _tile = value;
                 _x = _tile.X;
                 _y = _tile.Y;
-                Log.Debug("Updated unit tile");
+                Log.Debug($"Entity {this} tile updated to {value}");
             }
         }
 
-        [NonSerialized]
-        protected Tile _tile;
+
     }
 }

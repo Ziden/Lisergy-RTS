@@ -13,6 +13,7 @@ namespace Assets.Code.World
             _y = (ushort)partyFromNetwork.Y;
             foreach (var unit in partyFromNetwork.GetUnits())
                     this.AddUnit(new ClientUnit(owner, unit));
+            Render();
             StackLog.Debug($"Created new party instance {this}");
         }
 

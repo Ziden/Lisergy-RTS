@@ -7,17 +7,18 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class EntityVisibleEvent : ServerEvent
     {
-        public EntityVisibleEvent(WorldEntity party, WorldEntity viewer)
+        public EntityVisibleEvent(WorldEntity entity)
         {
-            this.Party = party;
-            this.Viewer = viewer;
+            this.Entity = entity;
         }
 
-        public WorldEntity Party;
-
-        [NonSerialized]
-        public WorldEntity Viewer;
+        public WorldEntity Entity;
      
         public override EventID GetID() => EventID.PARTY_VISIBLE;
+
+        public override string ToString()
+        {
+            return $"<EntityVisible {Entity}>";
+        }
     }
 }

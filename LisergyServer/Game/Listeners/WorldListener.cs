@@ -16,33 +16,12 @@ namespace Game.Listeners
 
         public override void Register()
         {
-            // CLIENT
             NetworkEvents.OnJoinWorld += JoinWorld;
-
-            // SERVER
-            NetworkEvents.OnTileVisible += TileVisible;
-            NetworkEvents.OnEntityVisible += PartyVisible;
-
         }
 
         public override void Unregister()
         {
             NetworkEvents.OnJoinWorld -= JoinWorld;
-            NetworkEvents.OnTileVisible -= TileVisible;
-            NetworkEvents.OnEntityVisible -= PartyVisible;
-
-        }
-
-        public void PartyVisible(EntityVisibleEvent ev)
-        {
-            ev.Viewer.Owner.Send(ev);
-            Log.Debug($"{ev.Viewer.Owner} sees {ev.Party}");
-        }
-
-        public void TileVisible(TileVisibleEvent ev)
-        {
-            ev.Viewer.Owner.Send(ev);
-            Log.Debug($"{ev.Viewer.Owner} sees {ev.Tile}");
         }
 
         public void JoinWorld(JoinWorldEvent ev)
@@ -55,12 +34,7 @@ namespace Game.Listeners
                 foreach (var tile in player.VisibleTiles)
                 {
                     Log.Debug($"Sending tile {tile}");
-                    player.Send(new TileVisibleEvent(tile));
-                    foreach(var party in tile.Parties)
-                    {
-                        Log.Debug($"Sending unit {tile}");
-                        player.Send(new EntityVisibleEvent(party, null));
-                    }
+                    tile.SendTileInformation(player);
                 }
             }
             else

@@ -51,9 +51,7 @@ namespace Tests
             var unserialized = Serialization.ToEvent<TestTileEvent>(serialized);
 
             Assert.AreEqual(tile.TileId, unserialized.Tile.TileId);
-            Assert.AreEqual(tile.Building.SpecID, unserialized.Tile.Building.SpecID);
             Assert.AreEqual(tile.ResourceID, unserialized.Tile.ResourceID);
-            Assert.AreEqual(tile.Building.OwnerID, unserialized.Tile.OwnerID);
             Assert.AreEqual(tile.X, unserialized.Tile.X);
             Assert.AreEqual(tile.Y, unserialized.Tile.Y);
         }
@@ -74,29 +72,7 @@ namespace Tests
             var serialized = Serialization.FromEvent<EntityVisibleEvent>(visibleEvent);
             var unserialized = Serialization.ToEvent<EntityVisibleEvent>(serialized);
 
-            Assert.AreEqual(visibleEvent.Party.Id, unserialized.Party.Id);
-        }
-
-        [Test]
-        public void TestTileWIthData()
-        {
-            var game = new TestGame();
-            var player = game.GetTestPlayer();
-            var tile = game.RandomNotBuiltTile();
-            Serialization.LoadSerializers(typeof(TestTileEvent));
-            var buildingSpec = TestGame.RandomBuildingSpec();
-
-            tile.Building = new Building(buildingSpec.Id, player);
-           
-            var serialized = Serialization.FromEvent<TestTileEvent>(new TestTileEvent(tile));
-            var unserialized = Serialization.ToEvent<TestTileEvent>(serialized);
-
-            Assert.AreEqual(tile.Building.SpecID, unserialized.Tile.Building.SpecID);
-
-            Assert.AreEqual(tile.ResourceID, unserialized.Tile.ResourceID);
-            Assert.AreEqual(tile.OwnerID, unserialized.Tile.OwnerID);
-            Assert.AreEqual(tile.X, unserialized.Tile.X);
-            Assert.AreEqual(tile.Y, unserialized.Tile.Y);
+            Assert.AreEqual(visibleEvent.Entity.Id, unserialized.Entity.Id);
         }
     }
 }

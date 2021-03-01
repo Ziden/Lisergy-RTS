@@ -23,20 +23,14 @@ namespace Assets.Code
 
         public void EntityVisible(EntityVisibleEvent ev)
         {
-            if(ev.Party is Party)
+            using (new StackLog($"[Entity] Viewing {ev.Entity} from {ev.Entity.OwnerID}"))
             {
-                var party = (Party)ev.Party;
-                using (new StackLog($"[Party] Viewing {party.PartyIndex} from {ev.Party.OwnerID}"))
-                {
-                    var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Party.OwnerID);
-                    var tile = _game.GetWorld().GetTile(ev.Party.X, ev.Party.Y);
-                    var pt = new ClientParty(owner, party);
-                    owner.Parties[party.PartyIndex] = pt;
-                    pt.Tile = tile;
-                    pt.Render();
-                }
-                UIManager.PartyUI.RenderAllParties();
+                var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Entity.OwnerID);
+                var tile = (ClientTile)_game.GetWorld().GetTile(ev.Entity.X, ev.Entity.Y);
+                var clientEntity = EntityFactory.InstantiateClientEntity(ev.Entity, owner, tile);
+                clientEntity.Tile = tile;
             }
+            UIManager.PartyUI.RenderAllParties();
         }
 
         public void ReceiveTile(TileVisibleEvent ev)
@@ -45,24 +39,6 @@ namespace Assets.Code
             {
                 var newTile = ev.Tile;
                 var tile = (ClientTile)_game.GetWorld().GetTile(newTile.X, newTile.Y);
-                if (ev.Tile.BuildingID != tile.BuildingID)
-                {
-                    if (ev.Tile.BuildingID == 0)
-                        tile.Building = null;
-                    else
-                    {
-                        var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Tile.UserID);
-                        tile.Building = new ClientBuilding(ev.Tile.BuildingID, owner, tile);
-
-                        // Whenever we receive our main building focus camera on it
-                        if(ev.Tile.BuildingID == StrategyGame.Specs.InitialBuilding)
-                        {
-                            CameraBehaviour.FocusOnTile(tile);
-                        }
-                    }
-                }
-                else
-                    StackLog.Debug($"Same building id {tile.BuildingID}");
                 tile.TileId = ev.Tile.TileId;
                 tile.ResourceID = ev.Tile.ResourceID;
                 tile.UpdateVisibility();

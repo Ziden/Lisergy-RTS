@@ -4,14 +4,19 @@ using System;
 
 namespace Game
 {
+    [Serializable]
     public class Building : ExploringEntity
     {
         public byte SpecID { get; private set; }
-        
+
+        public override byte GetLineOfSight()
+        {
+            return GetSpec().LOS;
+        }
+
         public Building(byte id, PlayerEntity owner): base(owner)
         {
             this.SpecID = id;
-            this.LineOfSight = GetSpec().LOS;
         }
 
         public override Tile Tile
@@ -25,14 +30,6 @@ namespace Game
             }
         }
 
-        protected override void SendVisibilityPackets(Tile from, Tile to)
-        {
-            /*
-             * Buildings have their visibility sent as a byte inside tile reffering to the spec 
-             * and a string reffering to the owner.
-             */
-        }
-
         public BuildingSpec GetSpec()
         {
             return StrategyGame.Specs.Buildings[SpecID];
@@ -40,7 +37,7 @@ namespace Game
 
         public override string ToString()
         {
-            return $"<Building tile={Tile} id={SpecID} Owner={Owner}>";
+            return $"<Building x={_x} y={_y} id={SpecID} Owner={Owner}>";
         }
     }
 }

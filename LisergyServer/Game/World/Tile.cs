@@ -68,13 +68,18 @@ namespace Game
             if (_visibleTo.Add(entity.Owner))
             {
                 entity.Owner.VisibleTiles.Add(this);
-                entity.Owner.Send(new TileVisibleEvent(this));
-                Parties.ForEach(party =>
-                    entity.Owner.Send(new EntityVisibleEvent(party, entity))
-                );
-                if (Building != null)
-                    entity.Owner.Send(new EntityVisibleEvent(Building, entity));
+                SendTileInformation(entity.Owner);
             }
+        }
+
+        public void SendTileInformation(PlayerEntity player)
+        {
+            player.Send(new TileVisibleEvent(this));
+            Parties.ForEach(party =>
+                player.Send(new EntityVisibleEvent(party))
+            );
+            if (Building != null)
+                player.Send(new EntityVisibleEvent(Building));
         }
 
         public virtual void SetUnseenBy(ExploringEntity entity)
@@ -112,7 +117,7 @@ namespace Game
 
         public override string ToString()
         {
-            return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID} B={Building}>";
+            return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID} Building={Building?.SpecID}>";
         }
     }
 }

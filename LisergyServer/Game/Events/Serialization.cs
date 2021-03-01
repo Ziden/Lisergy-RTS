@@ -15,6 +15,8 @@ namespace Game.Events
         public static void LoadSerializers(params Type[] extras)
         {
             var models = GetEventTypes().ToList();
+            models.Add(typeof(Building));
+            models.Add(typeof(ExploringEntity));
             models.Add(typeof(WorldEntity));
             models.Add(typeof(Party));
             models.Add(typeof(Tile));

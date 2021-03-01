@@ -13,5 +13,10 @@ namespace Assets.Code.World
             StackLog.Debug("Instantiating BUILDING");
             Object = MainBehaviour.Instantiate(prefab, ((ClientChunk)tile.Chunk).ChunkObject.transform) as GameObject;
         }
+
+        public bool IsMine()
+        {
+            return Owner == MainBehaviour.Player;
+        }
     }
 }

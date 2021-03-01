@@ -9,17 +9,14 @@ namespace Game.Entity
     {
         public ExploringEntity(PlayerEntity owner) : base(owner) { }
 
-        [NonSerialized]
-        private ushort _lineOfSight;
-
-        public virtual ushort LineOfSight { get => _lineOfSight; set => _lineOfSight = value; }
+        public abstract byte GetLineOfSight();
 
         public override Tile Tile
         {
             get { return base.Tile; }
             set
             {
-                var los = _lineOfSight;
+                var los = GetLineOfSight();
                 var previousTile = base.Tile;
                 HashSet<WorldEntity> oldViewers = null;
                 if (previousTile != null)
@@ -28,6 +25,8 @@ namespace Game.Entity
                     foreach (var tile in previousTile.GetAOE(los))
                         tile.SetUnseenBy(this);
                 }
+
+                Log.Debug($"Entity {this} exploring {los}x{los} on {value}");
 
                 foreach (var tile in value.GetAOE(los))
                     tile.SetSeenBy(this);
@@ -49,7 +48,7 @@ namespace Game.Entity
 
             foreach (var viewer in newTile.Viewing)
                 if (newViewers.Remove(viewer))
-                    viewer.Owner.Send(new EntityVisibleEvent(this, viewer));
+                    viewer.Owner.Send(new EntityVisibleEvent(this));
         }
     }
 }
