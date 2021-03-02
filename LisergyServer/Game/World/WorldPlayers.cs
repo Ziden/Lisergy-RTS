@@ -25,8 +25,9 @@ namespace Game
                 throw new Exception("Max player limit reached");
             }
             _players[p.UserID] = p;
-
         }
+
+        public int PlayerCount { get => _players.Count; }
 
         public bool GetPlayer(string id, out PlayerEntity player)
         {

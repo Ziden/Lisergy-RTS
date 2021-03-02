@@ -38,7 +38,7 @@ namespace Game.Generator
             {
                 return false;
             }
-            var rnd = Worldgen.rnd.Next(tries);
+            var rnd = WorldUtils.Random.Next(tries);
             if (rnd == 0)
             {
                 wait = tries;

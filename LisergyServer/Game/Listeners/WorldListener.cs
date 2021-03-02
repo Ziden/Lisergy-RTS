@@ -34,7 +34,7 @@ namespace Game.Listeners
                 foreach (var tile in player.VisibleTiles)
                 {
                     Log.Debug($"Sending tile {tile}");
-                    tile.SendTileInformation(player);
+                    tile.SendTileInformation(player, null);
                 }
             }
             else

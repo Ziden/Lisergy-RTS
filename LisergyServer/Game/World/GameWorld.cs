@@ -82,7 +82,7 @@ namespace Game
             Players.Add(player);
             if(t == null)
             {
-                t = Worldgen.FindTileWithId(newbieChunk.Tiles, 0);
+                t = newbieChunk.FindTileWithId(0);
             }
             byte castleID = StrategyGame.Specs.InitialBuilding;
             player.Build(castleID, t);

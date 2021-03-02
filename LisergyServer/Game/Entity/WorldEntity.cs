@@ -31,7 +31,7 @@ namespace Game
                     foreach (var viewer in value.Viewing)
                     {
                         Log.Info($"New entity placed {this}, sending visibility");
-                        viewer.Owner.Send(new EntityVisibleEvent(this));
+                        //viewer.Owner.Send(new EntityVisibleEvent(this));
                     }
                 }    
                 _tile = value;

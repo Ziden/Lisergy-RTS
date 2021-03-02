@@ -6,7 +6,6 @@ namespace Game.Generator
 {
     public class Worldgen
     {
-        public static Random rnd;
         public GameWorld world;
 
         public List<ChunkPopulator> Populators = new List<ChunkPopulator>();
@@ -26,10 +25,9 @@ namespace Game.Generator
                 _seed = new Random().Next(0, ushort.MaxValue);
             else
                 _seed = seed;
-            rnd = new Random(_seed);
+            WorldUtils.SetRandomSeed(_seed);
             world.Seed = (ushort)_seed;
             Log.Info("Generated Seed " + _seed);
-    
             Log.Debug($"Generating world {world.SizeX}x{world.SizeY} for {world.Players.MaxPlayers} players"); 
             PopulateChunks();
         }
@@ -63,22 +61,6 @@ namespace Game.Generator
                 }
             }
         }
-
-        public static Tile FindTileWithId(Tile[,] tiles, byte tileID)
-        {
-            var tries = 10;
-            while (tries > 0)
-            {
-                var rndX = Worldgen.rnd.Next(0, tiles.GetLength(0));
-                var rndY = Worldgen.rnd.Next(0, tiles.GetLength(1));
-                Tile tile = tiles[rndX, rndY];
-                if (tile.TileId == tileID)
-                    return tile;
-                tries--;
-            }
-            return null;
-        }
-
 
         public virtual void PopulateChunks()
         {

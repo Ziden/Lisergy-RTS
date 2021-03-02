@@ -1,6 +1,7 @@
 ﻿using Game.Events.ServerEvents;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game.Entity
 {
@@ -27,16 +28,16 @@ namespace Game.Entity
                 }
 
                 Log.Debug($"Entity {this} exploring {los}x{los} on {value}");
-
                 foreach (var tile in value.GetAOE(los))
                     tile.SetSeenBy(this);
 
                 base.Tile = value;
-                SendVisibilityPackets(value, previousTile);
+                if(value != previousTile)
+                    SendVisibilityPackets(this, value, previousTile);
             }
         }
 
-        protected virtual void SendVisibilityPackets(Tile newTile, Tile previousTile)
+        protected virtual void SendVisibilityPackets(ExploringEntity newExplorer, Tile newTile, Tile previousTile)
         {
             HashSet<WorldEntity> oldViewers = null;
             if (previousTile != null)
@@ -46,8 +47,9 @@ namespace Game.Entity
             if (oldViewers != null)
                 newViewers.ExceptWith(oldViewers);
 
+            HashSet<PlayerEntity> playerViewers = new HashSet<PlayerEntity>(newViewers.Select(v => v.Owner));
             foreach (var viewer in newTile.Viewing)
-                if (newViewers.Remove(viewer))
+                if (playerViewers.Remove(viewer.Owner))
                     viewer.Owner.Send(new EntityVisibleEvent(this));
         }
     }

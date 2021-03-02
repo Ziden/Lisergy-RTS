@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Game.World
 {
-
     public static class EnumerableHelper<E>
     {
-        private static Random r;
-
         static EnumerableHelper()
         {
-            r = new Random();
+            WorldUtils._random = new Random();
         }
 
         public static T RandomElement<T>(IEnumerable<T> input)
         {
-            return input.ElementAt(r.Next(input.Count()));
+            return input.ElementAt(WorldUtils._random.Next(input.Count()));
         }
-
     }
 
     public static class EnumerableExtensions
@@ -32,6 +27,15 @@ namespace Game.World
 
     public static class WorldUtils
     {
+        internal static Random _random = new Random();
+
+        public static Random Random { get => _random; }
+
+        public static void SetRandomSeed(int seed)
+        {
+            _random = new Random(seed);
+        }
+
         public static void RemoveString(this string[] array, string obj)
         {
             for (var i = 0; i < array.Length; i++)
@@ -135,6 +139,22 @@ namespace Game.World
               else if (tile.X == otherTile.X && tile.Y == otherTile.Y + 1)
                 return Direction.SOUTH;
             return Direction.NONE;
+        }
+
+        public static Tile FindTileWithId(this Chunk chunk, byte tileID)
+        {
+            var tiles = chunk.Tiles;
+            var tries = 10;
+            while (tries > 0)
+            {
+                var rndX = WorldUtils._random.Next(0, tiles.GetLength(0));
+                var rndY = WorldUtils._random.Next(0, tiles.GetLength(1));
+                Tile tile = tiles[rndX, rndY];
+                if (tile.TileId == tileID)
+                    return tile;
+                tries--;
+            }
+            return null;
         }
 
         public static Tile GetNeighbor(this Tile tile, Direction d)

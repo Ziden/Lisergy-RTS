@@ -76,7 +76,6 @@ namespace Tests
         [Test]
         public void TestMoveEvents()
         {
-
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
@@ -85,7 +84,6 @@ namespace Tests
             GameScheduler.Tick(GameScheduler.Now + _party.Course.Delay);
 
             //var moveEvents = _game.ReceivedEvents.Where(e => e is PartyVisibleEvent).FirstOrDefault() as PartyVisibleEvent;
-
         }
 
         [Test]

@@ -7,40 +7,47 @@ using Telepathy;
 
 namespace LisergyServer.Core
 {
-    public static class SocketServer
+    public class SocketServer
     {
-        private static bool _running = false;
+        private bool _running = false;
 
-        private static readonly Server _socketServer;
-        private static Message _msg;
-        private static string _command;
-        private static StrategyGame _game;
-        private static AccountManager _accountManager;
-        private static CommandExecutor _commandExecutor;
+        private readonly Server _socketServer;
+        private Message _msg;
+        private string _command;
+        private StrategyGame _game;
+        private AccountManager _accountManager;
+        private CommandExecutor _commandExecutor;
 
-        public static bool IsRunning()
+        public bool IsRunning()
         {
             return _running;
         }
 
-        static SocketServer()
+        public SocketServer()
         {
-           
+            RegisterCommands();
+            Serialization.LoadSerializers();
+            _socketServer = new Server();
+            _accountManager = new AccountManager(_socketServer);
+        }
+
+        public void StartTCP()
+        {
+            _socketServer.Start(1337);
+            _running = true;
+        }
+
+        public void RegisterCommands()
+        {
             _commandExecutor = new CommandExecutor();
 
             // TODO: Read from assembly
             _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
             _commandExecutor.RegisterCommand(new TileCommand());
             _commandExecutor.RegisterCommand(new TaskCommand());
-
-            Serialization.LoadSerializers();
-            _socketServer = new Server();
-            _accountManager = new AccountManager(_socketServer);
-            _socketServer.Start(1337);
-            _running = true;
         }
 
-        public static void RunGame(StrategyGame game)
+        public void RunGame(StrategyGame game)
         {
             while (_running)
             {
@@ -57,7 +64,7 @@ namespace LisergyServer.Core
             }
         }
 
-        private static void ReadSocketMessages(StrategyGame game)
+        private void ReadSocketMessages(StrategyGame game)
         {
             while (_socketServer.GetNextMessage(out _msg))
             {

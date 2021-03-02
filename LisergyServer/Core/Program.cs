@@ -19,7 +19,9 @@ namespace LegendsServer
             var game = new StrategyGame(cfg, gameSpecs, world);
             game.GenerateMap();
             game.RegisterEventListeners();
-            SocketServer.RunGame(game);
+            var server = new SocketServer();
+            server.StartTCP();
+            server.RunGame(game);
         }
     }
 }

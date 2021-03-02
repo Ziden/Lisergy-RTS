@@ -1,16 +1,11 @@
 ﻿using Game;
 using Game.Events;
 using Game.World;
-using Game.Generator;
 using GameData;
 using GameDataTest;
-using LisergyServer.Auth;
 using LisergyServer.Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Telepathy;
 
 namespace ServerTests
 {
@@ -20,6 +15,7 @@ namespace ServerTests
 
         public delegate void ReceiveEventHandler(GameEvent ev);
         public event ReceiveEventHandler OnReceiveEvent;
+        public List<GameEvent> ReceivedEvents = new List<GameEvent>();
 
         public bool IsOnline { get; set; }
 
@@ -32,18 +28,33 @@ namespace ServerTests
         {
             ev.Sender = this;
             OnReceiveEvent?.Invoke(ev);
+            ReceivedEvents.Add(ev);
+        }
+
+        public void SendEventToServer(ClientEvent ev) {
+            EventEmitter.CallEventFromBytes(this, Serialization.FromEvent(ev));
+        }
+
+        public List<T> ReceivedEventsOfType<T>() where T : ServerEvent
+        {
+            return ReceivedEvents.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => e as T).ToList();
         }
 
         public override bool Online()
         {
             return this.IsOnline;
         }
+
+        public override string ToString()
+        {
+            return $"<TestPlayer id={UserID.ToString()}>";
+        }
     }
 
     public class TestGame : StrategyGame
     {
         private bool _registered = false;
-        public TestGame(GameWorld world=null) : base(GetTestConfiguration(), GetTestSpecs(), world == null ? new GameWorld() : world)
+        public TestGame(GameWorld world=null, bool createPlayer=true) : base(GetTestConfiguration(), GetTestSpecs(), world == null ? new GameWorld() : world)
         {
             this.RegisterEventListeners();
             if (!_registered)
@@ -55,9 +66,20 @@ namespace ServerTests
                 NetworkEvents.OnEntityVisible += ev => ReceiveEvent(ev);
                 _registered = true;
             }
-            
+            Serialization.LoadSerializers();
             this.World.CreateWorld(4);
             this.World.ChunkMap.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
+            if(createPlayer)
+                CreatePlayer();
+        }
+
+        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientEvent
+        {
+            EventEmitter.CallEventFromBytes(sender, Serialization.FromEvent<T>(ev));
+        }
+
+        public void CreatePlayer()
+        {
             var player = new TestServerPlayer();
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
             player.UserID = TestServerPlayer.TEST_ID;

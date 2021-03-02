@@ -60,7 +60,6 @@ namespace Tests
         public void TestUnitViewEventSerialization()
         {
             var game = new TestGame();
-            Serialization.LoadSerializers(typeof(EntityVisibleEvent));
 
             var player = game.GetTestPlayer();
             var unit = player.Units.First();

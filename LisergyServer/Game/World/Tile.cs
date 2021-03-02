@@ -68,17 +68,18 @@ namespace Game
             if (_visibleTo.Add(entity.Owner))
             {
                 entity.Owner.VisibleTiles.Add(this);
-                SendTileInformation(entity.Owner);
+                SendTileInformation(entity.Owner, entity);
             }
         }
 
-        public void SendTileInformation(PlayerEntity player)
+        public void SendTileInformation(PlayerEntity player, ExploringEntity viewer)
         {
             player.Send(new TileVisibleEvent(this));
-            Parties.ForEach(party =>
-                player.Send(new EntityVisibleEvent(party))
-            );
-            if (Building != null)
+            foreach(var party in Parties)
+                if (party != viewer)
+                    player.Send(new EntityVisibleEvent(party));
+
+            if (Building != null && viewer != Building)
                 player.Send(new EntityVisibleEvent(Building));
         }
 
