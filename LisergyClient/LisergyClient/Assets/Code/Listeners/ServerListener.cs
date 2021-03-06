@@ -34,7 +34,7 @@ namespace Assets.Code
                 var newTile = (ClientTile)_game.GetWorld().GetTile(ev.X, ev.Y);
                 entity.Tile = newTile;
             }
-           
+
         }
 
         public void EntityVisible(EntityVisibleEvent ev)

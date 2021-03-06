@@ -11,6 +11,13 @@ namespace Assets.Code
             StackLog.Debug("Created new player");
         }
 
+        public WorldEntity GetKnownEntity(string id)
+        {
+            WorldEntity e;
+            KnownOwnedEntities.TryGetValue(id, out e);
+            return e;
+        }
+
         public Dictionary<string, WorldEntity> KnownOwnedEntities { get {
                 Dictionary<string, WorldEntity> entities = new Dictionary<string, WorldEntity>();
                 foreach (var building in Buildings)

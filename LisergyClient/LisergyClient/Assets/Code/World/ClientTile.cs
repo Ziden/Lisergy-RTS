@@ -3,7 +3,7 @@ using Game.Entity;
 using UnityEngine;
 
 namespace Assets.Code.World
-{ 
+{
     public class ClientTile : Tile
     {
         public GameObject GameObj { get => _gameObj; private set => _gameObj = value; }
@@ -28,21 +28,29 @@ namespace Assets.Code.World
             GameObj.SetActive(visible); // mandando unit parece q caga isso
         }
 
-        
-
         public override void SetSeenBy(ExploringEntity entity)
         {
             base.SetSeenBy(entity);
             StackLog.Debug($"{entity} sees {this}");
-            if(entity.Owner == MainBehaviour.Player)
+            if (entity.Owner == MainBehaviour.Player)
                 SetVisible(true);
         }
 
         public override void SetUnseenBy(ExploringEntity unexplorer)
         {
             base.SetUnseenBy(unexplorer);
-            if (unexplorer.Owner == MainBehaviour.Player && !this.IsVisibleTo(MainBehaviour.Player))
+
+            if (unexplorer.Owner != MainBehaviour.Player)
+                return;
+
+            if (!this.IsVisibleTo(MainBehaviour.Player))
+            {
                 SetVisible(false);
+                foreach (var party in this.Parties)
+                    ((ClientParty)party).GameObject.SetActive(false);
+                if (this.Building != null)
+                    ((ClientBuilding)this.Building).GameObject.SetActive(false);
+            }
         }
 
         public void RenderTile(byte tileID)
@@ -84,7 +92,7 @@ namespace Assets.Code.World
                 if (value != null)
                 {
                     var clientBuilding = value as ClientBuilding;
-                    clientBuilding.Object.transform.position = new Vector3(X, 0, Y);
+                    clientBuilding.GameObject.transform.position = new Vector3(X, 0, Y);
                 }
                 using (new StackLog($"[Building] New {value} on {this}"))
                 {
