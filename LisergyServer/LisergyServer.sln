@@ -7,15 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LisergyServer", "Core\Liser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game", "Game\Game.csproj", "{1C33B0EC-B723-4230-A084-FD876AABD11B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LisgergyClient", "..\LisergyClient\LisergyClient\LisgergyClient.csproj", "{A973F31A-F2BD-BA13-A54C-0B0945C858F1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameData", "GameData\GameData.csproj", "{5B793397-7989-4CAE-A572-5AC909B8F91F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerTests", "ServerTests\ServerTests.csproj", "{4584F2EF-E15F-479C-BEC9-3DEDDC525658}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LisergyPanel", "LisergyPanel\LisergyPanel.csproj", "{DC5ED48F-EFA5-41D5-BA97-74D41B0992E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LisergyPanel", "LisergyPanel\LisergyPanel.csproj", "{DC5ED48F-EFA5-41D5-BA97-74D41B0992E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDataTest", "GameDataTest\GameDataTest.csproj", "{C243FA12-2F86-4682-8FB9-BFE65D0C3337}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameDataTest", "GameDataTest\GameDataTest.csproj", "{C243FA12-2F86-4682-8FB9-BFE65D0C3337}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +29,6 @@ Global
 		{1C33B0EC-B723-4230-A084-FD876AABD11B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C33B0EC-B723-4230-A084-FD876AABD11B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C33B0EC-B723-4230-A084-FD876AABD11B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A973F31A-F2BD-BA13-A54C-0B0945C858F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A973F31A-F2BD-BA13-A54C-0B0945C858F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A973F31A-F2BD-BA13-A54C-0B0945C858F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A973F31A-F2BD-BA13-A54C-0B0945C858F1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B793397-7989-4CAE-A572-5AC909B8F91F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5B793397-7989-4CAE-A572-5AC909B8F91F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B793397-7989-4CAE-A572-5AC909B8F91F}.Release|Any CPU.ActiveCfg = Release|Any CPU
