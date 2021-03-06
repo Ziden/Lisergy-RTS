@@ -57,7 +57,7 @@ namespace Assets.Code
                 var tile = (ClientTile)_game.GetWorld().GetTile(newTile.X, newTile.Y);
                 tile.TileId = ev.Tile.TileId;
                 tile.ResourceID = ev.Tile.ResourceID;
-                tile.UpdateVisibility();
+                tile.SetVisible(true);
             }
         }
 

@@ -25,6 +25,7 @@ namespace Assets.Code.World
             StackLog.Debug($"Created new party instance {this}");
         }
 
+
         public override Tile Tile {
             get => base.Tile;
             set {

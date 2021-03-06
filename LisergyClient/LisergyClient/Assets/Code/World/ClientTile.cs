@@ -16,24 +16,33 @@ namespace Assets.Code.World
 
         public ClientTile(ClientChunk c, int x, int y) : base(c, x, y) { }
 
-        public void UpdateVisibility()
+        public void SetVisible(bool visible)
         {
             if (GameObj == null)
                 return;
 
-            var isVisible = IsVisibleTo(MainBehaviour.Player);
-            if (GameObj.activeSelf == isVisible)
+            if (GameObj.activeSelf == visible)
                 return;
 
-            StackLog.Debug($"Changing activaction of {this} to {isVisible}");
-            //GameObj.SetActive(isVisible); // mandando unit parece q caga isso
+            StackLog.Debug($"Changing activaction of {this} to {visible}");
+            GameObj.SetActive(visible); // mandando unit parece q caga isso
         }
+
+        
 
         public override void SetSeenBy(ExploringEntity entity)
         {
             base.SetSeenBy(entity);
-            StackLog.Debug($"{entity} sees {this} client {MainBehaviour.Player.UserID}");
-            UpdateVisibility();
+            StackLog.Debug($"{entity} sees {this}");
+            if(entity.Owner == MainBehaviour.Player)
+                SetVisible(true);
+        }
+
+        public override void SetUnseenBy(ExploringEntity unexplorer)
+        {
+            base.SetUnseenBy(unexplorer);
+            if (unexplorer.Owner == MainBehaviour.Player && !this.IsVisibleTo(MainBehaviour.Player))
+                SetVisible(false);
         }
 
         public void RenderTile(byte tileID)
