@@ -28,7 +28,7 @@ namespace Game
             {
                 if (_tile == null && value != null)
                 {
-                    foreach (var viewer in value.Viewing)
+                    foreach (var viewer in value.EntitiesViewing)
                     {
                         Log.Info($"New entity placed {this}, sending visibility");
                         //viewer.Owner.Send(new EntityVisibleEvent(this));

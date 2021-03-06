@@ -44,7 +44,7 @@ namespace Tests
             Assert.IsTrue(player.Buildings.Any(b => b.SpecID == buildingSpec.Id));
             Assert.IsTrue(tile.Building == player.Buildings.Last());
             Assert.IsTrue(tile.Building.SpecID == buildingSpec.Id);
-            Assert.That(tile.Viewing.Contains(tile.Building));
+            Assert.That(tile.EntitiesViewing.Contains(tile.Building));
 
         }
     }

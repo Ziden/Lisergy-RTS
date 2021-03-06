@@ -1,4 +1,5 @@
 ﻿using Game.Events.ServerEvents;
+using Game.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Game.Entity
                 HashSet<WorldEntity> oldViewers = null;
                 if (previousTile != null)
                 {
-                    oldViewers = previousTile.Viewing;
+                    oldViewers = previousTile.EntitiesViewing;
                     foreach (var tile in previousTile.GetAOE(los))
                         tile.SetUnseenBy(this);
                 }
@@ -41,14 +42,14 @@ namespace Game.Entity
         {
             HashSet<WorldEntity> oldViewers = null;
             if (previousTile != null)
-                oldViewers = previousTile.Viewing;
+                oldViewers = previousTile.EntitiesViewing;
 
-            var newViewers = new HashSet<WorldEntity>(newTile.Viewing);
+            var newViewers = new HashSet<WorldEntity>(newTile.EntitiesViewing);
             if (oldViewers != null)
                 newViewers.ExceptWith(oldViewers);
 
             HashSet<PlayerEntity> playerViewers = new HashSet<PlayerEntity>(newViewers.Select(v => v.Owner));
-            foreach (var viewer in newTile.Viewing)
+            foreach (var viewer in newTile.EntitiesViewing)
                 if (playerViewers.Remove(viewer.Owner))
                     viewer.Owner.Send(new EntityVisibleEvent(this));
         }

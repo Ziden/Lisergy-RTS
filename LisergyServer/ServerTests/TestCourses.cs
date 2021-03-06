@@ -1,6 +1,7 @@
 using Game;
 using Game.Entity;
 using Game.Events;
+using Game.Events.ServerEvents;
 using Game.Scheduler;
 using Game.World;
 using NUnit.Framework;
@@ -14,7 +15,7 @@ namespace Tests
     {
         private TestGame _game;
         private List<Position> _path;
-        private PlayerEntity _player;
+        private TestServerPlayer _player;
         private Party _party;
 
         [SetUp]
@@ -80,10 +81,17 @@ namespace Tests
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
 
+            var moveEventsb = _player.ReceivedEventsOfType<EntityMoveEvent>();
+
             SendMoveRequest();
             GameScheduler.Tick(GameScheduler.Now + _party.Course.Delay);
 
-            //var moveEvents = _game.ReceivedEvents.Where(e => e is PartyVisibleEvent).FirstOrDefault() as PartyVisibleEvent;
+            var moveEvents = _player.ReceivedEventsOfType<EntityMoveEvent>();
+            var tileDiscovery = _player.ReceivedEventsOfType<TileVisibleEvent>();
+            // should have received movement events
+            Assert.AreEqual(1, moveEvents.Count);
+            // should have explored some tiles
+            Assert.GreaterOrEqual(tileDiscovery.Count, 1);
         }
 
         [Test]
@@ -115,6 +123,9 @@ namespace Tests
             date += _party.Course.Delay;
             GameScheduler.Tick(date);
             Assert.AreEqual(next3, _party.Tile);
+
+            var moveEvents = _player.ReceivedEventsOfType<EntityMoveEvent>();
+            Assert.AreEqual(3, moveEvents.Count);
         }
     }
 }

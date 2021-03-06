@@ -6,28 +6,30 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("ServerTests")]
 namespace Game.Scheduler
 {
-    public static class GameScheduler
+    // A more complex and optimal version of the scheduler. Needs polishment.
+    public static class FastScheduler
     {
         private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         private static DateTime _schedulerTime;
-        private static Dictionary<Guid, GameTask> _tasks = new Dictionary<Guid, GameTask>();
-        private static Dictionary<long, SortedSet<GameTask>> _minuteQueues = new Dictionary<long, SortedSet<GameTask>>();
-        private static SortedSet<GameTask> _currentMinuteSet;
+        private static Dictionary<Guid, FastGameTask> _tasks = new Dictionary<Guid, FastGameTask>();
+        private static Dictionary<long, SortedSet<FastGameTask>> _minuteQueues = new Dictionary<long, SortedSet<FastGameTask>>();
+        private static SortedSet<FastGameTask> _currentMinuteSet;
         private static long _currentMinute = -1;
-        private static GameTask _nextTask;
+        private static FastGameTask _nextTask;
 
         public static DateTime Now { get => _schedulerTime; }
         internal static TimeSpan NowTimespan { get => Now - Epoch; }
-        internal static GameTask NextTask { get => _nextTask; }
+        internal static FastGameTask NextTask { get => _nextTask; }
         public static int PendingTasks { get => _tasks.Values.Count(); }
         public static int AmountQueues { get => _minuteQueues.Values.Count(); }
+        public static long CurrentMinute { get => (long)Math.Floor(NowTimespan.TotalMinutes); }
 
         internal static void Clear()
         {
             _schedulerTime = DateTime.MinValue;
-            _tasks = new Dictionary<Guid, GameTask>();
-            _minuteQueues = new Dictionary<long, SortedSet<GameTask>>();
+            _tasks = new Dictionary<Guid, FastGameTask>();
+            _minuteQueues = new Dictionary<long, SortedSet<FastGameTask>>();
             _currentMinuteSet = null;
             _currentMinute = -1;
             _nextTask = null;
@@ -38,14 +40,14 @@ namespace Game.Scheduler
             _schedulerTime = time;
         }
 
-        internal static void Cancel(GameTask task)
+        internal static void Cancel(FastGameTask task)
         {
 
         }
 
-        internal static void RunTask(GameTask task)
+        internal static void RunTask(FastGameTask task)
         {
-           
+            Log.Debug($"Running task {task}");
             _currentMinuteSet.Remove(task);
             _tasks.Remove(task.ID);
             task.Execute();
@@ -60,9 +62,12 @@ namespace Game.Scheduler
         {
             SetLogicalTime(time);
             var now = Now;
-            var nowMinute = (long)NowTimespan.TotalMinutes;
             if (_nextTask == null)
-                _nextTask = CurrentMinuteQueue(nowMinute)?.FirstOrDefault();
+            {
+                _nextTask = GetUpdatedCurrentMinuteQueue(CurrentMinute)?.FirstOrDefault();
+                if(_nextTask != null)
+                    Log.Debug($"[{time}] Set new next task: {_nextTask}");
+            }
             RunTasks();
         }
 
@@ -75,20 +80,20 @@ namespace Game.Scheduler
             }
         }
 
-        internal static SortedSet<GameTask> GetMinuteQueue(long minute)
+        internal static SortedSet<FastGameTask> GetMinuteQueue(long minute)
         {
-            SortedSet<GameTask> set = null;
+            SortedSet<FastGameTask> set = null;
             if (!_minuteQueues.TryGetValue(minute, out set))
                 set = CreateQueue(minute);
             return set;
         }
 
-        internal static SortedSet<GameTask> CreateQueue(long minute)
+        internal static SortedSet<FastGameTask> CreateQueue(long minute)
         {
-            if (NowTimespan.TotalMinutes > minute)
-                throw new Exception("Trying to read a queue from the past");
+            if (CurrentMinute > minute)
+                throw new Exception($"Trying to read a queue {minute} from the past (current minute: {CurrentMinute})");
 
-            var set = new SortedSet<GameTask>();
+            var set = new SortedSet<FastGameTask>();
             _minuteQueues[minute] = set;
             return set;
         }
@@ -112,24 +117,28 @@ namespace Game.Scheduler
             }    
         }
 
-        private static SortedSet<GameTask> CurrentMinuteQueue(long newCurrentMinute)
+        private static SortedSet<FastGameTask> GetUpdatedCurrentMinuteQueue(long newCurrentMinute)
         {
             if (newCurrentMinute != _currentMinute)
             {
+                Log.Debug($"Minute {_currentMinute} is now {newCurrentMinute}");
                 RunPastTasks(newCurrentMinute);
-                _currentMinute = (long)newCurrentMinute;
-                _minuteQueues.TryGetValue(_currentMinute, out _currentMinuteSet);
+                _currentMinute = newCurrentMinute;
+                if(!_minuteQueues.TryGetValue(_currentMinute, out _currentMinuteSet))
+                {
+                   //_currentMinuteSet = CreateQueue(_currentMinute);
+                }
             }
             return _currentMinuteSet;
         }
 
-        internal static void Add(GameTask task)
+        internal static void Add(FastGameTask task)
         {
             _tasks[task.ID] = task;
-            var minute = (long)(task.Finish - Epoch).TotalMinutes;
-            var queue = GetMinuteQueue(minute);
+            var minuteToFinish = (long)Math.Floor((task.Finish - Epoch).TotalMinutes);
+            var queue = GetMinuteQueue(minuteToFinish);
             queue.Add(task);
-            Log.Debug($"Registered new task {task.ID}");
+            Log.Debug($"{Now} Registered new task {task} to finish in minute {minuteToFinish} - current {CurrentMinute}");
         }
     }
 }

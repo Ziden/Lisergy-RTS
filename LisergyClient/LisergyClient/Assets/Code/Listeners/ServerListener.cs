@@ -15,10 +15,23 @@ namespace Assets.Code
             NetworkEvents.OnSpecResponse += ReceiveSpecs;
         }
 
-        public void RegisterGameHandlers()
+        public void RegisterGameListeners()
         {
             NetworkEvents.OnTileVisible += ReceiveTile;
             NetworkEvents.OnEntityVisible += EntityVisible;
+            NetworkEvents.OnEntityMove += EntityMove;
+        }
+
+        public void EntityMove(EntityMoveEvent ev)
+        {
+            var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
+            var knownEntities = owner.KnownOwnedEntities;
+            WorldEntity entity;
+            if (!knownEntities.TryGetValue(ev.ID, out entity))
+                throw new System.Exception($"Server sent move event for entity {ev.ID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
+            var newTile = (ClientTile)_game.GetWorld().GetTile(ev.X, ev.Y);
+            entity.Tile = newTile;
+            Log.Debug($"Entity {entity} moved to {newTile}");
         }
 
         public void EntityVisible(EntityVisibleEvent ev)
@@ -54,7 +67,7 @@ namespace Assets.Code
                     var world = new ClientWorld();
                     world.CreateWorld(ev.Cfg.WorldMaxPlayers);
                     _game = new ClientStrategyGame(ev.Cfg, ev.Spec, world);
-                    RegisterGameHandlers();
+                    RegisterGameListeners();
                 }
             }
         }

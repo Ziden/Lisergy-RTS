@@ -1,6 +1,7 @@
 ﻿using Assets.Code.World;
 using Game;
 using Game.Entity;
+using Game.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,10 +84,7 @@ namespace Assets.Code.UI
             BuildActions(EntityAction.MOVE, EntityAction.GUARD);
         }
 
-        private void GuardButton()
-        {
-
-        }
+        private void GuardButton() {}
 
         private void MoveButton()
         {
@@ -97,6 +95,11 @@ namespace Assets.Code.UI
             var path = map.FindPath(party.Tile, selectedTile);
             var tilePath = path.Select(node => (ClientTile)map.GetTile(node.X, node.Y)).ToList();
             _pathRenderer.RenderPath(tilePath);
+            MainBehaviour.Networking.Send(new MoveRequestEvent()
+            {
+                PartyIndex = party.PartyIndex,
+                Path = path.Select(p => new Game.World.Position(p.X, p.Y)).ToList()
+            });
         }
 
     }

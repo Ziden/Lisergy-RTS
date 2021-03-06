@@ -29,10 +29,10 @@ namespace Game
         private List<Party> _parties = new List<Party>();
 
         [NonSerialized]
-        protected HashSet<PlayerEntity> _visibleTo = new HashSet<PlayerEntity>();
+        protected HashSet<PlayerEntity> _playersViewing = new HashSet<PlayerEntity>();
 
         [NonSerialized]
-        protected HashSet<WorldEntity> _viewing = new HashSet<WorldEntity>();
+        protected HashSet<WorldEntity> _entitiesViewing = new HashSet<WorldEntity>();
 
         [NonSerialized]
         private Building _building;
@@ -42,11 +42,12 @@ namespace Game
         public virtual string OwnerID { get => _building?.OwnerID; }
         public virtual ushort Y { get => _y; }
         public virtual ushort X { get => _x; }
-        public virtual HashSet<WorldEntity> Viewing { get { return _viewing; } }
+        public virtual HashSet<WorldEntity> EntitiesViewing { get { return _entitiesViewing; } }
         public virtual Chunk Chunk { get { return _chunk; } }
         public virtual byte TileId { get => _tileId; set => _tileId = value; }
         public virtual byte ResourceID { get => _resourceID; set => _resourceID = value; }
         public virtual List<Party> Parties { get { return _parties; }}
+        public virtual HashSet<PlayerEntity> PlayersViewing { get => _playersViewing; }
 
         public virtual Building Building
         {
@@ -61,21 +62,31 @@ namespace Game
             }
         }
 
-        #region FOG of war
-        public virtual void SetSeenBy(ExploringEntity entity)
+        public virtual void SetSeenBy(ExploringEntity explorer)
         {
-            _viewing.Add(entity);
-            if (_visibleTo.Add(entity.Owner))
+            _entitiesViewing.Add(explorer);
+            if (_playersViewing.Add(explorer.Owner))
             {
-                entity.Owner.VisibleTiles.Add(this);
-                SendTileInformation(entity.Owner, entity);
+                explorer.Owner.OnceExplored.Add(this);
+                explorer.Owner.VisibleTiles.Add(this);
+                SendTileInformation(explorer.Owner, explorer);
+            }
+        }
+
+        public virtual void SetUnseenBy(ExploringEntity unexplorer)
+        {
+            _entitiesViewing.Remove(unexplorer);
+            if (!_entitiesViewing.Any(e => e.Owner == unexplorer.Owner))
+            {
+                unexplorer.Owner.VisibleTiles.Remove(this);
+                _playersViewing.Remove(unexplorer.Owner);
             }
         }
 
         public void SendTileInformation(PlayerEntity player, ExploringEntity viewer)
         {
             player.Send(new TileVisibleEvent(this));
-            foreach(var party in Parties)
+            foreach (var party in Parties)
                 if (party != viewer)
                     player.Send(new EntityVisibleEvent(party));
 
@@ -83,31 +94,10 @@ namespace Game
                 player.Send(new EntityVisibleEvent(Building));
         }
 
-        public virtual void SetUnseenBy(ExploringEntity entity)
-        {
-            _viewing.Remove(entity);
-            if (!_viewing.Any(e => e.Owner == entity.Owner))
-            {
-                entity.Owner.VisibleTiles.Remove(this);
-                _visibleTo.Remove(entity.Owner);
-            }
-        }
-
-
         public virtual bool IsVisibleTo(PlayerEntity player)
         {
-            return _visibleTo.Contains(player);
+            return _playersViewing.Contains(player);
         }
-
-        public IEnumerable<Tile> GetAOE(ushort radius)
-        {
-            for (var xx = X - radius; xx <= X + radius; xx++)
-                for (var yy = Y - radius; yy <= Y + radius; yy++)
-                    if (Chunk.ChunkMap.ValidCoords(xx, yy))
-                        yield return Chunk.ChunkMap.GetTile(xx, yy);
-
-        }
-        #endregion
 
         public bool Passable
         {

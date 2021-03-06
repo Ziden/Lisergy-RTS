@@ -169,7 +169,12 @@ namespace Game.World
             return null;
         }
 
+        public static IEnumerable<Tile> GetAOE(this Tile tile, ushort radius)
+        {
+            for (var xx = tile.X - radius; xx <= tile.X + radius; xx++)
+                for (var yy = tile.Y - radius; yy <= tile.Y + radius; yy++)
+                    if (tile.Chunk.ChunkMap.ValidCoords(xx, yy))
+                        yield return tile.Chunk.ChunkMap.GetTile(xx, yy);
+        }
     }
-
-
 }

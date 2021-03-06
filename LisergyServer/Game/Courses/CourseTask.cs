@@ -25,11 +25,11 @@ namespace Game.World
             Repeat = Path.Count > 0;   
         }
 
-        private Tile NextTile { get => Path.Count == 0 ? null : Path[0]; }
+        private Tile NextTile { get => Path == null || Path.Count == 0 ? null : Path[0]; }
 
         public override string ToString()
         {
-            return $"<Course {ID.ToString()} End={Finish} Party={Party} Next={NextTile}>";
+            return $"<Course {ID.ToString()} Start=<{Start}> End={Finish} Party={Party} Next={NextTile}>";
         }
     }
 }

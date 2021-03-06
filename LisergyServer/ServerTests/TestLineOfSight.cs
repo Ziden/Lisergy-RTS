@@ -3,6 +3,7 @@ using Game.Events.ServerEvents;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
+using Game.World;
 
 namespace Tests
 {
@@ -45,7 +46,7 @@ namespace Tests
             foreach (var seenTile in areaTiles)
             {
                 Assert.True(seenTile.IsVisibleTo(player));
-                Assert.True(seenTile.Viewing.Contains(building));
+                Assert.True(seenTile.EntitiesViewing.Contains(building));
                 Assert.True(player.VisibleTiles.Contains(seenTile));
             }
         }   

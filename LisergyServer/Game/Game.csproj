@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Scheduler\FastGameTask.cs" />
+    <Compile Remove="Scheduler\FastScheduler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GameData\GameData.csproj" />
   </ItemGroup>
 

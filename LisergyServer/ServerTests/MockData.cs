@@ -93,11 +93,11 @@ namespace ServerTests
 
         public List<GameEvent> ReceivedEvents = new List<GameEvent>();
 
-        public PlayerEntity GetTestPlayer()
+        public TestServerPlayer GetTestPlayer()
         {
             PlayerEntity pl;
             this.World.Players.GetPlayer(TestServerPlayer.TEST_ID, out pl);
-            return pl;
+            return (TestServerPlayer)pl;
         }
 
         private static GameSpec GetTestSpecs()

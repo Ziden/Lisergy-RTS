@@ -14,6 +14,8 @@ namespace Game
         public HashSet<Unit> Units = new HashSet<Unit>();
         public HashSet<Building> Buildings = new HashSet<Building>();
         public HashSet<Tile> VisibleTiles = new HashSet<Tile>();
+        public HashSet<Tile> OnceExplored = new HashSet<Tile>();
+
         public Party[] Parties;
 
         public PlayerEntity()
@@ -37,7 +39,7 @@ namespace Game
 
         public Unit RecruitUnit(ushort unitSpecId)
         {
-            var unit = new Unit(unitSpecId, this);
+            var unit = new Unit(unitSpecId);
             this.Units.Add(unit);
             Log.Debug($"{UserID} recruited {unitSpecId}");
             return unit;

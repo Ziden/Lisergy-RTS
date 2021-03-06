@@ -9,6 +9,7 @@ namespace Assets.Code.World
 
         public ClientParty(PlayerEntity owner, Party partyFromNetwork) : base(owner, partyFromNetwork.PartyIndex)
         {
+            _id = partyFromNetwork.Id;
             _x = (ushort)partyFromNetwork.X;
             _y = (ushort)partyFromNetwork.Y;
             foreach (var unit in partyFromNetwork.GetUnits())

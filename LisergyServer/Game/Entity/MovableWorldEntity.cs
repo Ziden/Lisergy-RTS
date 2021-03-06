@@ -17,8 +17,9 @@ namespace Game.Entity
             get { return base.Tile; }
             set
             {
-                foreach (var viewer in value.Viewing)
-                    viewer.Owner.Send(new EntityMoveEvent(this, value));
+                if (base.Tile != value && base.Tile != null && value != null)
+                    foreach (var viewer in value.PlayersViewing)
+                        viewer.Send(new EntityMoveEvent(this, value));
                 base.Tile = value;
             }
         }

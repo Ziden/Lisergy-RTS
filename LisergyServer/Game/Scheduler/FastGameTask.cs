@@ -2,16 +2,16 @@
 
 namespace Game.Scheduler
 {
-    public abstract class GameTask : IComparable<GameTask>
+    public abstract class FastGameTask : IComparable<FastGameTask>
     {
         private DateTime _start;
 
-        public GameTask(TimeSpan delay)
+        public FastGameTask(TimeSpan delay)
         {
             ID = Guid.NewGuid();
             Delay = delay;
-            Start = GameScheduler.Now;
-            GameScheduler.Add(this);
+            Start = FastScheduler.Now;
+            FastScheduler.Add(this);
         }
 
         public Guid ID { get; private set; }
@@ -27,11 +27,11 @@ namespace Game.Scheduler
 
         public bool Repeat;
 
-        public bool IsDue() => Finish <= GameScheduler.Now;
+        public bool IsDue() => Finish <= FastScheduler.Now;
 
         public abstract void Execute();
 
-        public int CompareTo(GameTask other)
+        public int CompareTo(FastGameTask other)
         {
             if (other.ID == this.ID)
                 return 0;

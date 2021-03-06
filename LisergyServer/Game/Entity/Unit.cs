@@ -1,12 +1,11 @@
 ﻿using Game.Entity;
 using GameData.Specs;
 using System;
-using System.Collections.Generic;
 
 namespace Game
 {
     [Serializable]
-    public class Unit : Ownable
+    public class Unit
     {
         private byte _partyID;
 
@@ -16,19 +15,14 @@ namespace Game
         public string Id { get; private set; }
         public ushort SpecID { get; private set; }
         public UnitStats Stats { get; private set; }
-        public UnitSpec UnitSpec { get => StrategyGame.Specs.Units[this.SpecID]; }
+        public UnitSpec Spec { get => StrategyGame.Specs.Units[this.SpecID]; }
 
-        public Unit(ushort unitSpecID, PlayerEntity owner, string id = null): base(owner)
+        public Unit(ushort unitSpecID)
         {
-            this.Owner = owner;
             this.SpecID = unitSpecID;
-            if (id == null)
-                this.Id = Guid.NewGuid().ToString();
-            else
-                this.Id = id;
-
+            this.Id = Guid.NewGuid().ToString();
             this.Stats = new UnitStats();
-            this.Stats.SetStats(this.UnitSpec.Stats);
+            this.Stats.SetStats(this.Spec.Stats);
         }
 
         public Party Party
@@ -37,15 +31,13 @@ namespace Game
             set {
                 party = value;
                 if(value != null)
-                {
                     _partyID = value.PartyIndex;
-                } 
             }
         }
 
         public override string ToString()
         {
-            return $"<Unit spec={SpecID} owner={Owner}/>";
+            return $"<Unit spec={SpecID}/>";
         }
     }
 }

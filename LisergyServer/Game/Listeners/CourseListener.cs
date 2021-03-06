@@ -28,7 +28,7 @@ namespace Game.Listeners
         public void RequestMovement(MoveRequestEvent ev)
         {
             var party = ev.Sender.Parties[ev.PartyIndex];
-            Log.Debug($"Received course request {ev.Sender}");
+            Log.Debug($"{ev.Sender} requesting party {ev.PartyIndex} to move {ev.Path.Count} tiles");
             var course = StartCourse(party, ev.Path);
         }
 
@@ -44,6 +44,7 @@ namespace Game.Listeners
                     Log.Error($"Impassable tile {tile} in course path: {owner} moving party {party}");
                     return null;
                 }
+                Log.Debug("ADD " + tile);
                 path.Add(tile);
             }
             party.Course = new CourseTask(party, path);
