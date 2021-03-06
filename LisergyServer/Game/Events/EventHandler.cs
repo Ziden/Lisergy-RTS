@@ -26,7 +26,7 @@ namespace Game.Events
         public static event AuthResultHandler OnPlayerAuth { add { _i._OnPlayerAuth += value; } remove { _i._OnPlayerAuth -= value; } }
         public static event TileVisibleHandler OnTileVisible { add { _i._OnTileVisible += value; } remove { _i._OnTileVisible -= value; } }
         public static event SpecResponseHandler OnSpecResponse { add { _i._OnSpecResponse += value; } remove { _i._OnSpecResponse -= value; } }
-        public static event EntityVisibleHandler OnEntityVisible { add { _i._OnPartyVisible += value; } remove { _i._OnPartyVisible -= value; } }
+        public static event EntityVisibleHandler OnEntityVisible { add { _i._OnEntityVisible += value; } remove { _i._OnEntityVisible -= value; } }
         public static event EntityMoveHandler OnEntityMove { add { _i._OnEntityMove += value; } remove { _i._OnEntityMove -= value; } }
         public static event EntityRequestMovementHandler OnEntityRequestMove { add { _i._OnEntityRequestMove += value; } remove { _i._OnEntityRequestMove -= value; } }
 
@@ -34,7 +34,7 @@ namespace Game.Events
         private event AuthResultHandler _OnPlayerAuth;
         private event TileVisibleHandler _OnTileVisible;
         private event SpecResponseHandler _OnSpecResponse;
-        private event EntityVisibleHandler _OnPartyVisible;
+        private event EntityVisibleHandler _OnEntityVisible;
         private event EntityRequestMovementHandler _OnEntityRequestMove;
         private event EntityMoveHandler _OnEntityMove;
 
@@ -43,10 +43,10 @@ namespace Game.Events
             return ev.FromNetwork || (ev is ClientEvent && !SERVER || (ev is ServerEvent && SERVER));
         }
 
-        public static void PartyVisible(EntityVisibleEvent ev)
+        public static void EntityVisible(EntityVisibleEvent ev)
         {
-            if (_i._OnPartyVisible != null && CanSend(ev))
-                _i._OnPartyVisible(ev);
+            if (_i._OnEntityVisible != null && CanSend(ev))
+                _i._OnEntityVisible(ev);
         }
 
         public static void SpecResponse(GameSpecResponse ev)

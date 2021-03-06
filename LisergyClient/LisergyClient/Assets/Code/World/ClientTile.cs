@@ -3,7 +3,7 @@ using Game.Entity;
 using UnityEngine;
 
 namespace Assets.Code.World
-{
+{ 
     public class ClientTile : Tile
     {
         public GameObject GameObj { get => _gameObj; private set => _gameObj = value; }

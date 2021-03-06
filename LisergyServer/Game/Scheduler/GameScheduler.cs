@@ -20,7 +20,6 @@ namespace Game.Scheduler
         internal static GameTask NextTask { get => _nextTask; }
         public static int PendingTasks { get => _tasks.Values.Count(); }
         public static int AmountQueues { get => _queue.Count; }
-
         internal static SortedSet<GameTask> Queue { get => _queue; }
 
         internal static void Clear()
@@ -38,7 +37,9 @@ namespace Game.Scheduler
 
         internal static void Cancel(GameTask task)
         {
-
+            _tasks.Remove(task.ID);
+            _queue.Remove(task);
+            task.HasFinished = true;
         }
 
         internal static void RunTask(GameTask task)
@@ -52,6 +53,8 @@ namespace Game.Scheduler
                 task.Start = Now;
                 Add(task);
             }
+            else
+                task.HasFinished = true;
             _nextTask = _queue.FirstOrDefault();
         }
 

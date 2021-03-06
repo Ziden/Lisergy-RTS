@@ -20,7 +20,7 @@ namespace LegendsServer
             game.GenerateMap();
             game.RegisterEventListeners();
             var server = new SocketServer();
-            server.StartTCP();
+            server.Start();
             server.RunGame(game);
         }
     }

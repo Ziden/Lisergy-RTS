@@ -5,6 +5,7 @@ namespace Game.Scheduler
     public abstract class GameTask : IComparable<GameTask>
     {
         private DateTime _start;
+        private DateTime _executionTime;
 
         public GameTask(TimeSpan delay)
         {
@@ -14,6 +15,7 @@ namespace Game.Scheduler
             GameScheduler.Add(this);
         }
 
+        internal bool HasFinished;
         public Guid ID { get; private set; }
         public TimeSpan Delay { get; private set; }
         public DateTime Finish { get; private set; }
@@ -25,11 +27,17 @@ namespace Game.Scheduler
             }
         }
 
+      
         public bool Repeat;
 
         public bool IsDue() => Finish <= GameScheduler.Now;
 
         public abstract void Execute();
+
+        public void Cancel()
+        {
+            GameScheduler.Cancel(this);
+        }
 
         public int CompareTo(GameTask other)
         {

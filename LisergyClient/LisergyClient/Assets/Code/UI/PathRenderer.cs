@@ -7,29 +7,84 @@ using UnityEngine;
 
 namespace Assets.Code.UI
 {
+    public class ClientPath {
+        internal Dictionary<ClientTile, List<GameObject>> _pathLines = new Dictionary<ClientTile, List<GameObject>>();
+
+        internal void Add(ClientTile tile, params GameObject [] pathLines)
+        {
+            if (!_pathLines.ContainsKey(tile))
+                _pathLines[tile] = new List<GameObject>();
+            _pathLines[tile].AddRange(pathLines);
+        }
+
+        internal List<GameObject> Pop(ClientTile tile)
+        {
+            if(_pathLines.ContainsKey(tile))
+            {
+                var p = _pathLines[tile];
+                _pathLines.Remove(tile);
+                return p;
+            }
+            return null;
+        }
+
+        internal bool Empty() => _pathLines.Count == 0;
+    }
+
     public class PathRenderer
     {
-        private List<GameObject> _pathLines = new List<GameObject>();
+        private Dictionary<ClientParty, ClientPath> _partyPaths = new Dictionary<ClientParty, ClientPath>();
+        private List<GameObject> _pathlinesPool = new List<GameObject>();
 
-        private GameObject GetOrCreatePathLine()
+        public PathRenderer()
         {
-            var pooled = _pathLines.FirstOrDefault(path => !path.activeInHierarchy);
+            ClientEvents.OnPartyFinishedMove += OnFinishedMove;
+            ClientEvents.OnStartMovementRequest += StartReqMove;
+        }
+
+        public void StartReqMove(ClientParty party, List<ClientTile> path)
+        {
+            this.RenderPath(party, path);
+        }
+
+        public void OnFinishedMove(ClientParty p, ClientTile oldTile, ClientTile newTile)
+        {
+            if(_partyPaths.ContainsKey(p))
+            {
+                var partyPath = _partyPaths[p];
+                var pathsOnTile = partyPath.Pop(newTile);
+                if(pathsOnTile != null)
+                    foreach(var path in pathsOnTile)
+                        path.SetActive(false);
+
+                if (partyPath.Empty())
+                    _partyPaths.Remove(p);
+            }
+        }
+
+        private GameObject GetOrCreatePathLine(ClientTile tile, ClientPath clientPath)
+        {
+            var pooled = _pathlinesPool.FirstOrDefault(path => !path.activeInHierarchy);
             if (pooled == null)
             {
                 Log.Debug("Created new path line");
                 pooled = MainBehaviour.Instantiate(Resources.Load("prefabs/HalfPath")) as GameObject;
-                _pathLines.Add(pooled);
+                _pathlinesPool.Add(pooled);
             } else
             {
                 pooled.SetActive(true);
                 pooled.transform.rotation = Quaternion.identity;
             }
+            clientPath.Add(tile, pooled);
             return pooled;
         }
 
-        public void RenderPath(List<ClientTile> tilePath)
+        public ClientPath RenderPath(ClientParty party, List<ClientTile> tilePath)
         {
-            _pathLines.ForEach(path => path.SetActive(false));
+            tilePath.RemoveAt(0); // remove where the party is
+            var clientPath = new ClientPath();
+            _partyPaths[party] = clientPath;
+            _pathlinesPool.ForEach(path => path.SetActive(false));
             for (var x = 0; x < tilePath.Count; x++)
             {
                 var nodeTile = tilePath[x];
@@ -42,56 +97,55 @@ namespace Assets.Code.UI
                     var direction = nodeTile.GetDirection(next);
                     if(direction == Direction.SOUTH)
                     {
-                        var line = GetOrCreatePathLine();
+                        var line = GetOrCreatePathLine(nodeTile, clientPath);
                         line.transform.position = new Vector3(tilePos.x, tilePos.y + 0.1f, tilePos.z - 0.25f);
                     }
                     else if (direction == Direction.NORTH)
                     {
-                        var line = GetOrCreatePathLine();
+                        var line = GetOrCreatePathLine(nodeTile, clientPath);
                         line.transform.position = new Vector3(tilePos.x, tilePos.y + 0.1f, tilePos.z + 0.25f);
                     }
                     else if (direction == Direction.EAST)
                     {
-                        var line = GetOrCreatePathLine();
+                        var line = GetOrCreatePathLine(nodeTile, clientPath);
                         line.transform.Rotate(new Vector3(0, 90, 0), Space.Self);
                         line.transform.position = new Vector3(tilePos.x + 0.25f, tilePos.y + 0.1f, tilePos.z);
                     }
                     else if (direction == Direction.WEST)
                     {
-                        var line = GetOrCreatePathLine();
+                        var line = GetOrCreatePathLine(nodeTile, clientPath);
                         line.transform.Rotate(new Vector3(0, 90, 0), Space.Self);
                         line.transform.position = new Vector3(tilePos.x - 0.25f, tilePos.y + 0.1f, tilePos.z);
                     }
                 }
                 if (hasPrevious)
                 {
-                    
                     var previous = tilePath[x - 1];
                     var direction = nodeTile.GetDirection(previous);
                     if (direction == Direction.NORTH)
                     {
-                        var line = GetOrCreatePathLine();
+                        var line = GetOrCreatePathLine(nodeTile, clientPath);
                         line.transform.position = new Vector3(tilePos.x, tilePos.y + 0.1f, tilePos.z + 0.25f);
                     } else if (direction == Direction.SOUTH)
                     {
-                        var line = GetOrCreatePathLine();
+                        var line = GetOrCreatePathLine(nodeTile, clientPath);
                         line.transform.position = new Vector3(tilePos.x, tilePos.y + 0.1f, tilePos.z - 0.25f);
                     }
                     else if (direction == Direction.EAST)
                     {
-                        var line = GetOrCreatePathLine();
+                        var line = GetOrCreatePathLine(nodeTile, clientPath);
                         line.transform.Rotate(new Vector3(0, 90, 0), Space.Self);
                         line.transform.position = new Vector3(tilePos.x + 0.25f, tilePos.y + 0.1f, tilePos.z);
                     }
                     else if (direction == Direction.WEST)
                     {
-                        var line = GetOrCreatePathLine();
+                        var line = GetOrCreatePathLine(nodeTile, clientPath);
                         line.transform.Rotate(new Vector3(0, 90, 0), Space.Self);
                         line.transform.position = new Vector3(tilePos.x - 0.25f, tilePos.y + 0.1f, tilePos.z);
                     }
-                    
                 }
             }
+            return clientPath;
         }
     }
 }

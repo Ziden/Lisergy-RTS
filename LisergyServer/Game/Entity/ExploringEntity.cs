@@ -34,11 +34,11 @@ namespace Game.Entity
 
                 base.Tile = value;
                 if(value != previousTile)
-                    SendVisibilityPackets(this, value, previousTile);
+                    SendEntityVisibilityPackets(this, value, previousTile);
             }
         }
 
-        protected virtual void SendVisibilityPackets(ExploringEntity newExplorer, Tile newTile, Tile previousTile)
+        protected virtual void SendEntityVisibilityPackets(ExploringEntity newExplorer, Tile newTile, Tile previousTile)
         {
             HashSet<WorldEntity> oldViewers = null;
             if (previousTile != null)

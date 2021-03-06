@@ -8,10 +8,11 @@ using NUnit.Framework;
 using ServerTests;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tests
 {
-    public class TestCourses
+    public class TestMovement
     {
         private TestGame _game;
         private List<Position> _path;
@@ -92,6 +93,27 @@ namespace Tests
             Assert.AreEqual(1, moveEvents.Count);
             // should have explored some tiles
             Assert.GreaterOrEqual(tileDiscovery.Count, 1);
+        }
+
+        [Test]
+        public void TestChangingCourse()
+        {
+            var tile = _party.Tile;
+            var next = tile.GetNeighbor(Direction.SOUTH);
+            _path.Add(new Position(next.X, next.Y));
+
+            SendMoveRequest();
+            var course1 = GameScheduler.Queue.First();
+
+            _path.Add(new Position(next.X+1, next.Y));
+            SendMoveRequest();
+            var course2 = GameScheduler.Queue.First();
+
+            Assert.AreNotEqual(course1, course2);
+            Assert.IsFalse(GameScheduler.Queue.Contains(course1));
+            Assert.IsTrue(GameScheduler.Queue.Contains(course2));
+            Assert.IsTrue(course1.HasFinished);
+            Assert.IsFalse(course2.HasFinished);
         }
 
         [Test]

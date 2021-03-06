@@ -18,15 +18,24 @@ namespace Assets.Code
             ClientEvents.OnClickTile += ClickTile;
             ClientEvents.OnCameraMove += CameraMove;
             ClientEvents.OnSelectParty += SelectParty;
+            ClientEvents.OnStartMovementRequest += StartMoveReq;
 
             _tileCursor = CreateCursor();
             _partyCursor = CreateCursor();
+        }
+
+        public void StartMoveReq(ClientParty party, List<ClientTile> path)
+        {
+            if (IsActive(_tileCursor))
+                Inactivate(_tileCursor);
+            _selectedTile = null;
         }
 
         private void SelectParty(ClientParty party)
         {
             Activate(_partyCursor);
             MoveToTile(_partyCursor, party.Tile);
+            _partyCursor.transform.SetParent(party.GameObject.transform);
         }
 
         private void CameraMove(Vector3 old, Vector3 newPos)

@@ -39,7 +39,14 @@ namespace LisergyServer.Core
                 var ev = Serialization.ToEvent<EntityVisibleEvent>(message);
                 ev.Sender = owner;
                 ev.FromNetwork = true;
-                NetworkEvents.PartyVisible(ev);
+                NetworkEvents.EntityVisible(ev);
+            }
+            else if (eventId == EventID.PARTY_MOVE)
+            {
+                var ev = Serialization.ToEvent<EntityMoveEvent>(message);
+                ev.Sender = owner;
+                ev.FromNetwork = true;
+                NetworkEvents.EntityMove(ev);
             }
 
 

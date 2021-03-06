@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Core\LisergyServer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Smoke\" />
+  </ItemGroup>
+
 </Project>

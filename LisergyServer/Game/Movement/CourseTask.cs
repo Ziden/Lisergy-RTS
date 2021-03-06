@@ -19,7 +19,10 @@ namespace Game.World
         public override void Execute()
         {
             if (Party.Course != this)
-                throw new Exception($"Party {Party} Had Course {Party.Course} but course {this} was trying to move the party");
+            {
+                Log.Error($"Party {Party} Had Course {Party.Course} but course {this} was trying to move the party");
+                return;
+            }
             this.Party.Tile = NextTile;
             Path.RemoveAt(0);
             Repeat = Path.Count > 0;   

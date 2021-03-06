@@ -18,7 +18,15 @@ namespace Game.Entity
 
         public byte PartyIndex { get => _partyIndex; }
         public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(1);
-        public CourseTask Course { get => _course; set => _course = value; }
+        public CourseTask Course {
+            get => _course;
+            set
+            {
+                if (_course != null && !_course.HasFinished)
+                    _course.Cancel();
+                _course = value;
+            }
+        }
 
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)
         {
@@ -69,7 +77,7 @@ namespace Game.Entity
 
         public override string ToString()
         {
-            return $"<Party Id={PartyIndex} Owner={OwnerID}>";
+            return $"<Party Id={Id} Index={PartyIndex} Owner={OwnerID}>";
         }
     }
 }

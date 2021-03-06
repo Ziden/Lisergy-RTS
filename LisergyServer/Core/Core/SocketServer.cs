@@ -31,10 +31,16 @@ namespace LisergyServer.Core
             _accountManager = new AccountManager(_socketServer);
         }
 
-        public void StartTCP()
+        public void Start()
         {
             _socketServer.Start(1337);
             _running = true;
+        }
+
+        public void Stop()
+        {
+            _socketServer.Stop();
+            _running = false;
         }
 
         public void RegisterCommands()

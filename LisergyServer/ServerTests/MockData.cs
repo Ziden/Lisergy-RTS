@@ -78,12 +78,13 @@ namespace ServerTests
             EventEmitter.CallEventFromBytes(sender, Serialization.FromEvent<T>(ev));
         }
 
-        public void CreatePlayer()
+        public TestServerPlayer CreatePlayer(int x=10, int y=10)
         {
             var player = new TestServerPlayer();
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
             player.UserID = TestServerPlayer.TEST_ID;
-            this.World.PlaceNewPlayer(player, this.World.GetTile(10, 10));
+            this.World.PlaceNewPlayer(player, this.World.GetTile(x, y));
+            return player;
         }
 
         public void ReceiveEvent(GameEvent ev)

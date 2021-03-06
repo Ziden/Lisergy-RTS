@@ -14,12 +14,13 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            Game = new TestGame();
+            Game = new TestGame(createPlayer:false);
         }
 
         [Test]
         public void TestLOSEvents()
         {
+            Game.CreatePlayer();
             var initialBuildingSpec = StrategyGame.Specs.GetBuildingSpec(StrategyGame.Specs.InitialBuilding);
             var player = Game.GetTestPlayer();
             var events = Game.ReceivedEvents
@@ -34,6 +35,7 @@ namespace Tests
         [Test]
         public void TestInitialLOS()
         {
+            Game.CreatePlayer();
             var player = Game.GetTestPlayer();
  
             var initialBuildingSpec = StrategyGame.Specs.GetBuildingSpec(StrategyGame.Specs.InitialBuilding);
@@ -64,11 +66,51 @@ namespace Tests
         }
 
         [Test]
-        public void TestNewLosMiddleMap()
+        public void TestNotSendingEventsWhenNotReallyMoving()
         {
-            var initialBuildingSpec = StrategyGame.Specs.GetBuildingSpec(StrategyGame.Specs.InitialBuilding);
+            Game.CreatePlayer();
             var player = Game.GetTestPlayer();
-            Game.ReceivedEvents.Clear();
+            player.ReceivedEvents.Clear();
+
+            var party = player.Parties.First();
+
+            party.Tile = party.Tile;
+
+            Assert.AreEqual(0, player.ReceivedEvents.Count);
+        }
+
+        [Test]
+        public void TestSendingEventsWhenExploring()
+        {
+            Game.CreatePlayer(0, 0); // placing new user in the corner
+            var player = Game.GetTestPlayer();
+            player.ReceivedEvents.Clear();
+            var party = player.Parties.First();
+
+            party.Tile = party.Tile.GetNeighbor(Direction.EAST);
+
+            /*          
+                                o o o o E
+                                o o o o E   
+                                o o o o E    <- Explores this new row
+            P Moving right ->   P o o o E 
+              
+            */ 
+            Assert.AreEqual(party.GetLineOfSight() + 1, player.ReceivedEventsOfType<TileVisibleEvent>().Count);
+        }
+
+        [Test]
+        public void TestNotSendingVisibleEventsWhenAlreadyExplored()
+        {
+            Game.CreatePlayer(0, 0);
+            var player = Game.GetTestPlayer();
+            var party = player.Parties.First();
+            party.Tile = party.Tile.GetNeighbor(Direction.EAST);
+            player.ReceivedEvents.Clear();
+
+            party.Tile = party.Tile.GetNeighbor(Direction.WEST);
+
+            Assert.AreEqual(0, player.ReceivedEventsOfType<TileVisibleEvent>().Count);
         }
     }
 }
