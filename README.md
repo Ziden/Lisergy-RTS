@@ -17,3 +17,7 @@ dotnet run --project Core
 Requirements: Unity
 
 Just open the project, select the single scene that exists and run it.
+
+## Basic GDD
+
+https://docs.google.com/document/d/1FoiBIhvpWwPVy5s_gLwaugZjPG2pnMK_K3bV8i--oiw/edit?usp=sharing
