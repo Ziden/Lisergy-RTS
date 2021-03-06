@@ -1,9 +1,0 @@
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\GameData\bin\Release\netstandard2.0\GameData.deps.json
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\GameData\bin\Release\netstandard2.0\GameData.dll
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\GameData\bin\Release\netstandard2.0\GameData.pdb
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\GameData\obj\Release\netstandard2.0\GameData.csprojAssemblyReference.cache
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\GameData\obj\Release\netstandard2.0\GameData.csproj.CoreCompileInputs.cache
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\GameData\obj\Release\netstandard2.0\GameData.AssemblyInfoInputs.cache
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\GameData\obj\Release\netstandard2.0\GameData.AssemblyInfo.cs
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\GameData\obj\Release\netstandard2.0\GameData.dll
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\GameData\obj\Release\netstandard2.0\GameData.pdb
