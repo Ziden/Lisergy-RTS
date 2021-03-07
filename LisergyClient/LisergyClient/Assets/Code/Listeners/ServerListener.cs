@@ -25,7 +25,9 @@ namespace Assets.Code
 
         public void Message(MessagePopupEvent ev)
         {
-
+            // TODO: Message factory
+            if (ev.Type == PopupType.INVALID_COURSE)
+                UIManager.Notifications.ShowNotification("Path has obstacles");
         }
 
         public void EntityMove(EntityMoveEvent ev)

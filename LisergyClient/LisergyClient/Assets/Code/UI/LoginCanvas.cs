@@ -33,6 +33,7 @@ public class LoginCanvas
             MainBehaviour.Networking.Send(new JoinWorldEvent());
             ClientEvents.PlayerLogin(player);
             GameObject.SetActive(false);
+            UIManager.Notifications.ShowNotification("Welcome to Lisergy");
         } else
         {
             Log.Error($"Auth failed");

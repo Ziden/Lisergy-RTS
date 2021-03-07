@@ -13,11 +13,13 @@ public class GameNotifications : MonoBehaviour
         var notif = Instantiate(NotificationPrefab, this.transform).GetComponent<Notification>();
         notif.Text.text = msg;
         Active.Add(notif);
+        StartCoroutine(DisposeNotification(notif));
         return notif;
     }
 
-    public void DisposeNotification(Notification notif)
+    public IEnumerator DisposeNotification(Notification notif)
     {
+        yield return new WaitForSeconds(3);
         Active.Remove(notif);
         Destroy(notif.gameObject);
     }
