@@ -56,7 +56,7 @@ namespace Game
                 u.Party.RemoveUnit(u);
             u.Party = newParty;
             newParty.AddUnit(u);
-            Log.Debug($"{UserID} moved unit {u.SpecID} to party {newParty.PartyIndex}");
+            Log.Debug($"{UserID} moved unit {u.SpecId} to party {newParty.PartyIndex}");
         }
 
         public void Build(byte id, Tile t)

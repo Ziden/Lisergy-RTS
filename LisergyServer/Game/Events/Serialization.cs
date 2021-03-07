@@ -15,6 +15,7 @@ namespace Game.Events
         public static void LoadSerializers(params Type[] extras)
         {
             var models = GetEventTypes().ToList();
+         
             models.Add(typeof(Building));
             models.Add(typeof(ExploringEntity));
             models.Add(typeof(WorldEntity));
@@ -22,6 +23,7 @@ namespace Game.Events
             models.Add(typeof(Tile));
             models.Add(typeof(GameSpec));
             models.Add(typeof(GameConfiguration));
+            models.Add(typeof(GameEvent));
             if (extras != null)
             {
                 models.AddRange(extras);

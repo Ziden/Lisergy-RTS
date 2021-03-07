@@ -7,19 +7,19 @@ namespace Game
     [Serializable]
     public class Unit
     {
-        private byte _partyID;
+        private byte _partyId;
 
         [NonSerialized]
-        private Party party;
+        private Party _party;
 
         public string Id { get; private set; }
-        public ushort SpecID { get; private set; }
+        public ushort SpecId { get; private set; }
         public UnitStats Stats { get; private set; }
-        public UnitSpec Spec { get => StrategyGame.Specs.Units[this.SpecID]; }
+        public UnitSpec Spec { get => StrategyGame.Specs.Units[this.SpecId]; }
 
-        public Unit(ushort unitSpecID)
+        public Unit(ushort unitSpecId)
         {
-            this.SpecID = unitSpecID;
+            this.SpecId = unitSpecId;
             this.Id = Guid.NewGuid().ToString();
             this.Stats = new UnitStats();
             this.Stats.SetStats(this.Spec.Stats);
@@ -27,17 +27,17 @@ namespace Game
 
         public Party Party
         {
-            get => party;
+            get => _party;
             set {
-                party = value;
+                _party = value;
                 if(value != null)
-                    _partyID = value.PartyIndex;
+                    _partyId = value.PartyIndex;
             }
         }
 
         public override string ToString()
         {
-            return $"<Unit spec={SpecID}/>";
+            return $"<Unit spec={SpecId}/>";
         }
     }
 }

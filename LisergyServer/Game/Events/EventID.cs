@@ -14,6 +14,7 @@ namespace Game.Events
         SPEC_RESPONSE = 5,
         PARTY_VISIBLE = 6,
         PARTY_REQUEST_MOVE = 7,
-        PARTY_MOVE = 8
+        PARTY_MOVE = 8,
+        MESSAGE = 9
     }
 }

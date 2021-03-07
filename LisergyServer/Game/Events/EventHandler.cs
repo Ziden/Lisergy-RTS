@@ -10,6 +10,7 @@ namespace Game.Events
     public delegate void EntityVisibleHandler(EntityVisibleEvent e);
     public delegate void EntityRequestMovementHandler(MoveRequestEvent e);
     public delegate void EntityMoveHandler(EntityMoveEvent e);
+    public delegate void MessagePopupHandler(MessagePopupEvent e);
 
     public class NetworkEvents
     {
@@ -29,6 +30,7 @@ namespace Game.Events
         public static event EntityVisibleHandler OnEntityVisible { add { _i._OnEntityVisible += value; } remove { _i._OnEntityVisible -= value; } }
         public static event EntityMoveHandler OnEntityMove { add { _i._OnEntityMove += value; } remove { _i._OnEntityMove -= value; } }
         public static event EntityRequestMovementHandler OnEntityRequestMove { add { _i._OnEntityRequestMove += value; } remove { _i._OnEntityRequestMove -= value; } }
+        public static event MessagePopupHandler OnMessagePopup { add { _i._OnMessagePopup += value; } remove { _i._OnMessagePopup -= value; } }
 
         private event JoinEventHandler _OnJoinWorld;
         private event AuthResultHandler _OnPlayerAuth;
@@ -37,6 +39,7 @@ namespace Game.Events
         private event EntityVisibleHandler _OnEntityVisible;
         private event EntityRequestMovementHandler _OnEntityRequestMove;
         private event EntityMoveHandler _OnEntityMove;
+        private event MessagePopupHandler _OnMessagePopup;
 
         private static bool CanSend(GameEvent ev)
         {
@@ -83,6 +86,12 @@ namespace Game.Events
         {
             if (_i._OnEntityMove != null && CanSend(ev))
                 _i._OnEntityMove(ev);
+        }
+
+        public static void MessagePopup(MessagePopupEvent ev)
+        {
+            if (_i._OnMessagePopup != null && CanSend(ev))
+                _i._OnMessagePopup(ev);
         }
     }
 }

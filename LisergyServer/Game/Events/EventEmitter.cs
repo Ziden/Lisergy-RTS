@@ -48,6 +48,13 @@ namespace LisergyServer.Core
                 ev.FromNetwork = true;
                 NetworkEvents.EntityMove(ev);
             }
+            else if (eventId == EventID.MESSAGE)
+            {
+                var ev = Serialization.ToEvent<MessagePopupEvent>(message);
+                ev.Sender = owner;
+                ev.FromNetwork = true;
+                NetworkEvents.MessagePopup(ev);
+            }
 
 
             // CLIENT EVENTS (coming from client to server)

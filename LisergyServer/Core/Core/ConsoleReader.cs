@@ -8,14 +8,13 @@ namespace LisergyServer.Core
 {
     public class ConsoleReader
     {
-        private Stream _consoleStream;
-        private StreamReader _reader;
+        private readonly StreamReader _reader;
         private Task<string> _readTask;
 
         public ConsoleReader()
         {
-            _consoleStream = Console.OpenStandardInput();
-            _reader = new StreamReader(_consoleStream);
+            var consoleStream = Console.OpenStandardInput();
+            _reader = new StreamReader(consoleStream);
             _readTask = _reader.ReadLineAsync();
         }
 

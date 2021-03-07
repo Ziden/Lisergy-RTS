@@ -35,7 +35,7 @@ namespace Game.Entity
 
         public override byte GetLineOfSight()
         {
-            return _units.Where(u => u != null).Select(u => StrategyGame.Specs.Units[u.SpecID].LOS).Max();
+            return _units.Where(u => u != null).Select(u => StrategyGame.Specs.Units[u.SpecId].LOS).Max();
         }
 
         public IEnumerable<Unit> GetUnits()

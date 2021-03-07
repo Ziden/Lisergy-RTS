@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Entity;
 using Game.Events;
+using Game.Events.ServerEvents;
 using Game.World;
 using System.Collections.Generic;
 
@@ -30,6 +31,8 @@ namespace Game.Listeners
             var party = ev.Sender.Parties[ev.PartyIndex];
             Log.Debug($"{ev.Sender} requesting party {ev.PartyIndex} to move {ev.Path.Count} tiles");
             var course = StartCourse(party, ev.Path);
+            if(course == null)
+                ev.Sender.Send(new MessagePopupEvent(PopupType.INVALID_COURSE));
         }
 
         public CourseTask StartCourse(Party party, List<Position> sentPath)

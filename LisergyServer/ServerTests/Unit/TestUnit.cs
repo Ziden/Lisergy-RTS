@@ -23,7 +23,7 @@ namespace Tests
             var unit = player.Units.First();
 
             Assert.AreEqual(1, player.Units.Count);
-            Assert.AreEqual(TestGame.Specs.InitialUnit, unit.SpecID);
+            Assert.AreEqual(TestGame.Specs.InitialUnit, unit.SpecId);
             Assert.That(unit.Party.Tile.Parties.Contains(unit.Party));
         }
 
