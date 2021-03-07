@@ -33,7 +33,13 @@ namespace Assets.Code.World
             base.SetSeenBy(entity);
             StackLog.Debug($"{entity} sees {this}");
             if (entity.Owner == MainBehaviour.Player)
+            {
                 SetVisible(true);
+                foreach (var party in this.Parties)
+                    ((ClientParty)party).GameObject.SetActive(true);
+                if (this.Building != null)
+                    ((ClientBuilding)this.Building).GameObject.SetActive(true);
+            }
         }
 
         public override void SetUnseenBy(ExploringEntity unexplorer)

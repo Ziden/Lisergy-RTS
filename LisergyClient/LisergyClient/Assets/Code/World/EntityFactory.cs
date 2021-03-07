@@ -23,7 +23,7 @@ namespace Assets.Code.World
             } else if (entity is Building)
             {
                 var building = (Building)entity;
-                var clientBuilding = knownEntity == null ? new ClientBuilding(building.SpecID, owner, tile) : (ClientBuilding)knownEntity;
+                var clientBuilding = knownEntity==null ?new ClientBuilding(building.SpecID, owner, tile) : (ClientBuilding)knownEntity;
                 tile.Building = clientBuilding;
                 if (building.SpecID == StrategyGame.Specs.InitialBuilding && clientBuilding.IsMine())
                     CameraBehaviour.FocusOnTile(tile);

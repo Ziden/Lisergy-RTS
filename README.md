@@ -12,6 +12,8 @@ dotnet build
 dotnet run --project Core
 ```
 
+Or just open the solution in visual studio and click "RUN"
+
 ## To run the client:
 
 Requirements: Unity

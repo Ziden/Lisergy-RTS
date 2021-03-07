@@ -10,7 +10,7 @@ namespace Assets.Code.World
 
         public ClientParty ClientParty { get => (ClientParty)this.Party; }
 
-        public ClientUnit(PlayerEntity owner, Unit u) : base(u.SpecID)
+        public ClientUnit(PlayerEntity owner, Unit u) : base(u.SpecId)
         {
             StackLog.Debug($"Created new unit instance {this}");
         }
@@ -21,9 +21,9 @@ namespace Assets.Code.World
             {
                 StackLog.Debug($"Rendering unit {this}");
                 // TODO: Cache prefabs & Thumbnails so no duplicates
-                var art = StrategyGame.Specs.Units[this.SpecID].Art;
+                var art = StrategyGame.Specs.Units[this.SpecId].Art;
                 Sprite[] sprites = Resources.LoadAll<Sprite>("sprites/" + art.Name);
-                GameObject = new GameObject($"Unit Spec {this.SpecID}");
+                GameObject = new GameObject($"Unit Spec {this.SpecId}");
                 var spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = sprites[0];
                 Sprites = GameObject.AddComponent<Sprite3D>();

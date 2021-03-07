@@ -20,6 +20,12 @@ namespace Assets.Code
             NetworkEvents.OnTileVisible += ReceiveTile;
             NetworkEvents.OnEntityVisible += EntityVisible;
             NetworkEvents.OnEntityMove += EntityMove;
+            NetworkEvents.OnMessagePopup += Message;
+        }
+
+        public void Message(MessagePopupEvent ev)
+        {
+
         }
 
         public void EntityMove(EntityMoveEvent ev)
@@ -34,7 +40,6 @@ namespace Assets.Code
                 var newTile = (ClientTile)_game.GetWorld().GetTile(ev.X, ev.Y);
                 entity.Tile = newTile;
             }
-
         }
 
         public void EntityVisible(EntityVisibleEvent ev)
