@@ -12,6 +12,8 @@ namespace Assets.Code.World
 
         public ClientUnit(PlayerEntity owner, Unit u) : base(u.SpecId)
         {
+            this.Id = u.Id;
+            this.Stats.SetStats(u.Stats);
             StackLog.Debug($"Created new unit instance {this}");
         }
 

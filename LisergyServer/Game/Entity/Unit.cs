@@ -12,7 +12,7 @@ namespace Game
         [NonSerialized]
         private Party _party;
 
-        public string Id { get; private set; }
+        public string Id { get; protected set; }
         public ushort SpecId { get; private set; }
         public UnitStats Stats { get; private set; }
         public UnitSpec Spec { get => StrategyGame.Specs.Units[this.SpecId]; }
@@ -22,7 +22,6 @@ namespace Game
             this.SpecId = unitSpecId;
             this.Id = Guid.NewGuid().ToString();
             this.Stats = new UnitStats();
-            this.Stats.SetStats(this.Spec.Stats);
         }
 
         public Party Party

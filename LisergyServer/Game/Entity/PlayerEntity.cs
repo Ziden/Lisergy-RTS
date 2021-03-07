@@ -40,6 +40,7 @@ namespace Game
         public Unit RecruitUnit(ushort unitSpecId)
         {
             var unit = new Unit(unitSpecId);
+            unit.Stats.SetStats(unit.Spec.Stats);
             this.Units.Add(unit);
             Log.Debug($"{UserID} recruited {unitSpecId}");
             return unit;
