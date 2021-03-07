@@ -2,6 +2,8 @@
 using Assets.Code.UI;
 using Assets.Code.World;
 using Game;
+using Game.Events;
+using Game.Events.ServerEvents;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -12,8 +14,6 @@ public class PartyUI
     private GameObject _rootObject;
     private GameObject _cursor;
 
-    private ActionsUI _actions;
-
     private Button[] _partyButtons;
     private int _activeParty = -1;
 
@@ -21,10 +21,11 @@ public class PartyUI
     public bool HasSelectedParty { get => _activeParty != -1; }
     public GameObject GameObj { get => _rootObject; }
 
-    public PartyUI()
+    public PartyUI(GameObject root)
     {
         Log.Debug("Initializing party UI");
-        _rootObject = GameObject.Find("PartyUI");
+        _rootObject = root;
+        _rootObject.SetActive(true);
         if (_rootObject == null)
             throw new Exception("Could not find PartyUI");
        
@@ -36,17 +37,23 @@ public class PartyUI
             _rootObject.transform.FindDeepChild("Squad4").GetComponent<Button>(),
         };
 
-        _actions = new ActionsUI(_rootObject.transform.FindDeepChild("ActionMenu").gameObject);
-        _cursor = _rootObject.transform.FindDeepChild("Cursor").gameObject;
+        _cursor = GameObject.Find("Cursor").gameObject;
 
         _partyButtons[0].onClick.AddListener(() => ButtonClick(0));
         _partyButtons[1].onClick.AddListener(() => ButtonClick(1));
         _partyButtons[2].onClick.AddListener(() => ButtonClick(2));
         _partyButtons[3].onClick.AddListener(() => ButtonClick(3));
-        _actions.Hide();
         _cursor.SetActive(false);
+        _rootObject.SetActive(false);
         ClientEvents.OnCameraMove += OnCameraMove;
         ClientEvents.OnClickTile += OnClickTile;
+        NetworkEvents.OnPlayerAuth += OnPlayerAuth;
+    }
+
+    public void OnPlayerAuth(AuthResultEvent ev)
+    {
+        if (ev.Success)
+            _rootObject.SetActive(true);
     }
 
     private void HideParty()
@@ -71,7 +78,6 @@ public class PartyUI
 
     private void OnCameraMove(Vector3 oldPos, Vector3 newPos)
     {
-        _actions.Hide();
         HideParty();
     }
 

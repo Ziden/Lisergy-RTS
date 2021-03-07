@@ -24,6 +24,7 @@ namespace Assets.Code.UI
             RegisterButton("MoveButton", EntityAction.MOVE, MoveButton);
             RegisterButton("GuardButton", EntityAction.GUARD, GuardButton);
             ClientEvents.OnClickTile += OnClickTile;
+            ClientEvents.OnCameraMove += OnCameraMove;
         }
 
         private void RegisterButton(string name, EntityAction action, UnityAction call)
@@ -32,6 +33,11 @@ namespace Assets.Code.UI
             button.onClick.AddListener(call);
             _actions[action] = button;
             button.gameObject.SetActive(false);
+        }
+
+        private void OnCameraMove(Vector3 oldPos, Vector3 newPos)
+        {
+            Hide();
         }
 
         private void BuildActions(params EntityAction [] actions)
