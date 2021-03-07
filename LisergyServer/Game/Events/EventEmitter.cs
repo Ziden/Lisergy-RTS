@@ -17,42 +17,36 @@ namespace LisergyServer.Core
             {
                 var ev = Serialization.ToEvent<AuthResultEvent>(message);
                 ev.Sender = owner;
-                ev.FromNetwork = true;
                 NetworkEvents.AuthResult(ev);
             }
             else if (eventId == EventID.TILE_VISIBLE)
             {
                 var ev = Serialization.ToEvent<TileVisibleEvent>(message);
                 ev.Sender = owner;
-                ev.FromNetwork = true;
                 NetworkEvents.TileVisible(ev);
             }
             else if (eventId == EventID.SPEC_RESPONSE)
             {
                 var ev = Serialization.ToEvent<GameSpecResponse>(message);
                 ev.Sender = owner;
-                ev.FromNetwork = true;
                 NetworkEvents.SpecResponse(ev);
             }
             else if (eventId == EventID.PARTY_VISIBLE)
             {
                 var ev = Serialization.ToEvent<EntityVisibleEvent>(message);
                 ev.Sender = owner;
-                ev.FromNetwork = true;
                 NetworkEvents.EntityVisible(ev);
             }
             else if (eventId == EventID.PARTY_MOVE)
             {
                 var ev = Serialization.ToEvent<EntityMoveEvent>(message);
                 ev.Sender = owner;
-                ev.FromNetwork = true;
                 NetworkEvents.EntityMove(ev);
             }
             else if (eventId == EventID.MESSAGE)
             {
                 var ev = Serialization.ToEvent<MessagePopupEvent>(message);
                 ev.Sender = owner;
-                ev.FromNetwork = true;
                 NetworkEvents.MessagePopup(ev);
             }
 
@@ -62,14 +56,12 @@ namespace LisergyServer.Core
             {
                 var ev = Serialization.ToEvent<JoinWorldEvent>(message);
                 ev.Sender = owner;
-                ev.FromNetwork = true;
                 NetworkEvents.JoinWorld(ev);
             }
             else if (eventId == EventID.PARTY_REQUEST_MOVE)
             {
                 var ev = Serialization.ToEvent<MoveRequestEvent>(message);
                 ev.Sender = owner;
-                ev.FromNetwork = true;
                 NetworkEvents.RequestEntityMove(ev);
             }
         } 

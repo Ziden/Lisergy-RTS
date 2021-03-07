@@ -15,13 +15,7 @@ namespace Game.Events
     public class NetworkEvents
     {
         private static NetworkEvents _i;
-
-        public NetworkEvents()
-        {
-            _i = this;
-        }
-
-        public static bool SERVER = true;
+        public NetworkEvents() {  _i = this; }
 
         public static event JoinEventHandler OnJoinWorld { add { _i._OnJoinWorld += value; } remove { _i._OnJoinWorld -= value; } }
         public static event AuthResultHandler OnPlayerAuth { add { _i._OnPlayerAuth += value; } remove { _i._OnPlayerAuth -= value; } }
@@ -41,57 +35,13 @@ namespace Game.Events
         private event EntityMoveHandler _OnEntityMove;
         private event MessagePopupHandler _OnMessagePopup;
 
-        private static bool CanSend(GameEvent ev)
-        {
-            return ev.FromNetwork || (ev is ClientEvent && !SERVER || (ev is ServerEvent && SERVER));
-        }
-
-        public static void EntityVisible(EntityVisibleEvent ev)
-        {
-            if (_i._OnEntityVisible != null && CanSend(ev))
-                _i._OnEntityVisible(ev);
-        }
-
-        public static void SpecResponse(GameSpecResponse ev)
-        {
-            if (_i._OnSpecResponse != null && CanSend(ev))
-                _i._OnSpecResponse(ev);
-        }
-
-        public static void TileVisible(TileVisibleEvent ev)
-        {
-            if (_i._OnTileVisible != null && CanSend(ev))
-                _i._OnTileVisible(ev);
-        }
-
-        public static void AuthResult(AuthResultEvent ev)
-        {
-            if (_i._OnPlayerAuth != null && CanSend(ev))
-                _i._OnPlayerAuth(ev);
-        }
-
-        public static void JoinWorld(JoinWorldEvent ev)
-        {
-            if (_i._OnJoinWorld != null && CanSend(ev))
-                _i._OnJoinWorld(ev);
-        }
-
-        public static void RequestEntityMove(MoveRequestEvent ev)
-        {
-            if (_i._OnEntityRequestMove != null && CanSend(ev))
-                _i._OnEntityRequestMove(ev);
-        }
-
-        public static void EntityMove(EntityMoveEvent ev)
-        {
-            if (_i._OnEntityMove != null && CanSend(ev))
-                _i._OnEntityMove(ev);
-        }
-
-        public static void MessagePopup(MessagePopupEvent ev)
-        {
-            if (_i._OnMessagePopup != null && CanSend(ev))
-                _i._OnMessagePopup(ev);
-        }
+        public static void EntityVisible(EntityVisibleEvent ev) => _i._OnEntityVisible?.Invoke(ev);
+        public static void SpecResponse(GameSpecResponse ev) => _i._OnSpecResponse?.Invoke(ev);
+        public static void TileVisible(TileVisibleEvent ev) => _i._OnTileVisible?.Invoke(ev);
+        public static void AuthResult(AuthResultEvent ev) => _i._OnPlayerAuth?.Invoke(ev);
+        public static void JoinWorld(JoinWorldEvent ev) => _i._OnJoinWorld?.Invoke(ev);
+        public static void RequestEntityMove(MoveRequestEvent ev) => _i._OnEntityRequestMove?.Invoke(ev);
+        public static void EntityMove(EntityMoveEvent ev) => _i._OnEntityMove?.Invoke(ev);
+        public static void MessagePopup(MessagePopupEvent ev) => _i._OnMessagePopup?.Invoke(ev);
     }
 }

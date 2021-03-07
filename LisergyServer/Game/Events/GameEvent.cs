@@ -7,7 +7,6 @@ namespace Game.Events
     public abstract class GameEvent
     {
         public abstract EventID GetID();
-        public bool FromNetwork; // TODO- REMOVE
 
         [NonSerialized]
         public int ConnectionID;
