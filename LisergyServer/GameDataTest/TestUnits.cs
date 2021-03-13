@@ -22,8 +22,8 @@ namespace GameDataTest
                 LOS = 3,
                 Stats = new UnitStats(new Dictionary<Stat, ushort>()
                 {
-                    { Stat.AGI, 2 },
-                    { Stat.DEX, 2 },
+                    { Stat.SPEED, 10 },
+                    { Stat.ACCURACY, 10 },
                     { Stat.DEF, 1 },
                     { Stat.MDEF, 5 },
                     { Stat.ATK, 1 },

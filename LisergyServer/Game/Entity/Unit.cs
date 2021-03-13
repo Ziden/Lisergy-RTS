@@ -12,6 +12,7 @@ namespace Game
         [NonSerialized]
         private Party _party;
 
+        public string  Name { get; set; }
         public string Id { get; protected set; }
         public ushort SpecId { get; private set; }
         public UnitStats Stats { get; private set; }
@@ -19,6 +20,7 @@ namespace Game
 
         public Unit(ushort unitSpecId)
         {
+            this.Name = "Unamed";
             this.SpecId = unitSpecId;
             this.Id = Guid.NewGuid().ToString();
             this.Stats = new UnitStats();
@@ -36,7 +38,7 @@ namespace Game
 
         public override string ToString()
         {
-            return $"<Unit spec={SpecId}/>";
+            return $"<Unit name={Name} spec={SpecId}/>";
         }
     }
 }

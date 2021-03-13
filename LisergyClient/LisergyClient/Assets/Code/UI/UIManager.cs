@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject _unitPanel;
-    public GameObject _lowerPanel;
-    public GameObject _actions;
-
+    public GameObject unitPanel;
+    public GameObject lowerPanel;
+    public GameObject actions;
+    public GameObject login;
 
     private static LoginCanvas _loginCanvas;
     private static PartyUI _partyUI;
@@ -16,7 +16,6 @@ public class UIManager : MonoBehaviour
     private static GameNotifications _notifications;
     private static TileUI _tileUI;
     private static ActionsUI _actionsUI;
-
 
     public static GameNotifications Notifications { get => _notifications; }
     public static LoginCanvas LoginCanvas { get => _loginCanvas; }
@@ -28,11 +27,12 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         Log.Debug("Initializing UI");
-        _loginCanvas = new LoginCanvas();
-        _partyUI = new PartyUI(_lowerPanel);
+        _loginCanvas = new LoginCanvas(login);
+        _loginCanvas.GameObject.SetActive(true);
+        _partyUI = new PartyUI(lowerPanel);
         _tileUI = new TileUI();
-        _actionsUI = new ActionsUI(_actions);
-        _unitUI = _unitPanel.GetComponent<UnitPanel>();
+        _actionsUI = new ActionsUI(actions);
+        _unitUI = unitPanel.GetComponent<UnitPanel>();
         _notifications = this.gameObject.GetComponentInChildren<GameNotifications>();
         UnitPanel.gameObject.SetActive(false);
         PartyUI.GameObj.SetActive(false);

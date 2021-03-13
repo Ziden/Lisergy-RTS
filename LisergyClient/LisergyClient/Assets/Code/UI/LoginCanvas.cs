@@ -12,9 +12,9 @@ public class LoginCanvas
     public InputField Password;
     public Button LoginButton;
 
-    public LoginCanvas()
+    public LoginCanvas(GameObject loginCanvas)
     {
-        GameObject = GameObject.Find("LoginCanvas");
+        GameObject = loginCanvas;
         Login = GameObject.transform.GetRequiredChildComponent<InputField>("Login");
         Password = GameObject.transform.GetRequiredChildComponent<InputField>("Password");
         LoginButton = GameObject.transform.GetRequiredChildComponent<Button>("LoginButton");

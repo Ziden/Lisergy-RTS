@@ -54,8 +54,8 @@ namespace Game.Entity
         public ushort Def { get => _stats[Stat.DEF]; set => _stats[Stat.DEF] = value; }
         public ushort Matk { get => _stats[Stat.MATK]; set => _stats[Stat.MATK] = value; }
         public ushort Mdef { get => _stats[Stat.MDEF]; set => _stats[Stat.MDEF] = value; }
-        public ushort Speed { get => _stats[Stat.AGI]; set => _stats[Stat.AGI] = value; }
-        public ushort Accuracy { get => _stats[Stat.DEX]; set => _stats[Stat.DEX] = value; }
+        public ushort Speed { get => _stats[Stat.SPEED]; set => _stats[Stat.SPEED] = value; }
+        public ushort Accuracy { get => _stats[Stat.ACCURACY]; set => _stats[Stat.ACCURACY] = value; }
 
         // Vitals
         public ushort HP { get => _stats[Stat.HP]; set => _stats[Stat.HP] = value; }

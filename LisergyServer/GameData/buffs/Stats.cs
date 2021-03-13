@@ -10,7 +10,7 @@
         DEF,
         MATK,
         MDEF,
-        AGI,
-        DEX
+        SPEED,
+        ACCURACY
     }
 }
