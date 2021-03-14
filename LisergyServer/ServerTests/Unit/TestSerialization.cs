@@ -1,4 +1,5 @@
 using Game;
+using Game.Battle;
 using Game.Events;
 using Game.Events.ServerEvents;
 using NUnit.Framework;
@@ -20,6 +21,16 @@ namespace Tests
 
             public override EventID GetID() => EventID.AUTH;
             public Tile Tile;
+        }
+
+        [Serializable]
+        public class RefEvent : GameEvent
+        {
+            public override EventID GetID() => EventID.AUTH;
+
+            public BattleTeam T1;
+            public BattleTeam T2;
+       
         }
 
         [Test]

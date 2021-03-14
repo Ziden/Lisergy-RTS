@@ -1,5 +1,6 @@
 using Game;
 using Game.Battle;
+using Game.Events;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
@@ -85,8 +86,8 @@ namespace Tests
             var battle = new TestBattle(new BattleTeam(FastUnit), new BattleTeam(WeakUnit));
             var result = battle.Run();
 
-            var fastAttacks = result.Rounds.Where(r => r.Actions.Any(a => a.Attacker.Unit == FastUnit)).ToList();
-            var weakAttacks = result.Rounds.Where(r => r.Actions.Any(a => a.Attacker.Unit == WeakUnit)).ToList();
+            var fastAttacks = result.Turns.Where(r => r.Actions.Any(a => a.Attacker.Unit == FastUnit)).ToList();
+            var weakAttacks = result.Turns.Where(r => r.Actions.Any(a => a.Attacker.Unit == WeakUnit)).ToList();
 
             Assert.That(fastAttacks.Count() > weakAttacks.Count());
         }
@@ -103,8 +104,8 @@ namespace Tests
             var battle = new TestBattle(new BattleTeam(FastUnit), new BattleTeam(SlowUnit));
             var result = battle.Run();
 
-            var fastAttacks = result.Rounds.Where(r => r.Actions.Any(a => a.Attacker.Unit == FastUnit)).ToList();
-            var slowAttacks = result.Rounds.Where(r => r.Actions.Any(a => a.Attacker.Unit == SlowUnit)).ToList();
+            var fastAttacks = result.Turns.Where(r => r.Actions.Any(a => a.Attacker.Unit == FastUnit)).ToList();
+            var slowAttacks = result.Turns.Where(r => r.Actions.Any(a => a.Attacker.Unit == SlowUnit)).ToList();
 
             Assert.AreEqual(50, fastAttacks.Count());
             Assert.That(slowAttacks.Count() < 40);
@@ -117,6 +118,21 @@ namespace Tests
             var result = battle.Run();
 
             Assert.AreEqual(result.Winner, result.Attacker);
+        }
+
+        [Test]
+        public void TestSerialization()
+        {
+            Serialization.LoadSerializers();
+            var battle = new Battle(new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
+            var result = battle.Run();
+
+            var ev = new BattleResultCompleteEvent(result);
+
+            var bytes = Serialization.FromEvent(ev);
+            ev = Serialization.ToEvent<BattleResultCompleteEvent>(bytes);
+
+            Assert.AreEqual(ev.Attacker.Units.First().Unit.Id, result.Attacker.Units.First().Unit.Id);
         }
     }
 }

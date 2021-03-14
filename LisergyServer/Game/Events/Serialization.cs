@@ -1,4 +1,6 @@
-﻿using Game.Entity;
+﻿using Game.Battle;
+using Game.Battle.Log;
+using Game.Entity;
 using GameData;
 using NetSerializer;
 using System;
@@ -15,12 +17,20 @@ namespace Game.Events
         public static void LoadSerializers(params Type[] extras)
         {
             var models = GetEventTypes().ToList();
-         
+
+            // Battle
+            models.Add(typeof(AttackLog));
+            models.Add(typeof(BattleUnit));
+            models.Add(typeof(BattleTeam));
+
+            // World
             models.Add(typeof(Building));
             models.Add(typeof(ExploringEntity));
             models.Add(typeof(WorldEntity));
             models.Add(typeof(Party));
             models.Add(typeof(Tile));
+
+            // Game
             models.Add(typeof(GameSpec));
             models.Add(typeof(GameConfiguration));
             models.Add(typeof(GameEvent));

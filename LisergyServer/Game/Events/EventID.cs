@@ -15,6 +15,15 @@ namespace Game.Events
         PARTY_VISIBLE = 6,
         PARTY_REQUEST_MOVE = 7,
         PARTY_MOVE = 8,
-        MESSAGE = 9
+        MESSAGE = 9,
+        SERVICE_DISCOVERY = 10,
+
+        // Battles
+        BATTLE_START_COMPLETE = 11,
+        BATTLE_START_SUMMARY = 12,
+        BATTLE_RESULT_COMPLETE = 13,
+        BATTLE_RESULT_SUMMARY = 14
+
+        
     }
 }

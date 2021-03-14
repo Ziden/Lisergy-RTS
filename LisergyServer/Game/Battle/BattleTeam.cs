@@ -2,18 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Game.Battle
 {
+    [Serializable]
     public class BattleTeam
     {
-        public List<BattleUnit> Units = new List<BattleUnit>();
+        public BattleUnit[] Units;
 
         public BattleTeam(params Unit[] units)
         {
-            foreach (var unit in units)
-                Units.Add(new BattleUnit(this, unit));
+            Units = new BattleUnit[units.Count()];
+
+            for (var x = 0; x < units.Count(); x++)
+                Units[x] = new BattleUnit(this, units[x]);
         }
 
         public bool AllDead { get => !Units.Any(u => !u.Dead); }

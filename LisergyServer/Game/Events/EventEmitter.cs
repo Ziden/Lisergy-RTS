@@ -49,7 +49,18 @@ namespace LisergyServer.Core
                 ev.Sender = owner;
                 NetworkEvents.MessagePopup(ev);
             }
-
+            else if (eventId == EventID.BATTLE_RESULT_COMPLETE)
+            {
+                var ev = Serialization.ToEvent<BattleResultCompleteEvent>(message);
+                ev.Sender = owner;
+                NetworkEvents.BattleResultComplete(ev);
+            }
+            else if (eventId == EventID.BATTLE_START_COMPLETE)
+            {
+                var ev = Serialization.ToEvent<BattleStartCompleteEvent>(message);
+                ev.Sender = owner;
+                NetworkEvents.BattleStartComplete(ev);
+            }
 
             // CLIENT EVENTS (coming from client to server)
             else if(eventId == EventID.JOIN)

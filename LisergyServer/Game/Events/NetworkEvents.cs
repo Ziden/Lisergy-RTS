@@ -11,9 +11,12 @@ namespace Game.Events
     public delegate void EntityRequestMovementHandler(MoveRequestEvent e);
     public delegate void EntityMoveHandler(EntityMoveEvent e);
     public delegate void MessagePopupHandler(MessagePopupEvent e);
+    public delegate void BattleResultCompleteHandler(BattleResultCompleteEvent e);
+    public delegate void BattleStartCompleteHandler(BattleStartCompleteEvent e);
 
     public class NetworkEvents
     {
+        // TODO: Remove all static crap
         private static NetworkEvents _i;
         public NetworkEvents() {  _i = this; }
 
@@ -25,6 +28,8 @@ namespace Game.Events
         public static event EntityMoveHandler OnEntityMove { add { _i._OnEntityMove += value; } remove { _i._OnEntityMove -= value; } }
         public static event EntityRequestMovementHandler OnEntityRequestMove { add { _i._OnEntityRequestMove += value; } remove { _i._OnEntityRequestMove -= value; } }
         public static event MessagePopupHandler OnMessagePopup { add { _i._OnMessagePopup += value; } remove { _i._OnMessagePopup -= value; } }
+        public static event BattleResultCompleteHandler OnBattleResult { add { _i._OnBattleResult += value; } remove { _i._OnBattleResult -= value; } }
+        public static event BattleStartCompleteHandler OnBattleStart { add { _i._OnBattleStart += value; } remove { _i._OnBattleStart -= value; } }
 
         private event JoinEventHandler _OnJoinWorld;
         private event AuthResultHandler _OnPlayerAuth;
@@ -34,6 +39,8 @@ namespace Game.Events
         private event EntityRequestMovementHandler _OnEntityRequestMove;
         private event EntityMoveHandler _OnEntityMove;
         private event MessagePopupHandler _OnMessagePopup;
+        private event BattleResultCompleteHandler _OnBattleResult;
+        private event BattleStartCompleteHandler _OnBattleStart;
 
         public static void EntityVisible(EntityVisibleEvent ev) => _i._OnEntityVisible?.Invoke(ev);
         public static void SpecResponse(GameSpecResponse ev) => _i._OnSpecResponse?.Invoke(ev);
@@ -43,5 +50,7 @@ namespace Game.Events
         public static void RequestEntityMove(MoveRequestEvent ev) => _i._OnEntityRequestMove?.Invoke(ev);
         public static void EntityMove(EntityMoveEvent ev) => _i._OnEntityMove?.Invoke(ev);
         public static void MessagePopup(MessagePopupEvent ev) => _i._OnMessagePopup?.Invoke(ev);
+        public static void BattleResultComplete(BattleResultCompleteEvent ev) => _i._OnBattleResult?.Invoke(ev);
+        public static void BattleStartComplete(BattleStartCompleteEvent ev) => _i._OnBattleStart?.Invoke(ev);
     }
 }

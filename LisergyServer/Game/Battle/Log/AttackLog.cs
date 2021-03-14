@@ -4,10 +4,16 @@ using System.Text;
 
 namespace Game.Battle.Log
 {
+    [Serializable]
     public class AttackLog : ActionLog
     {
-        public BattleUnit Defender;
+        private string _defenderID;
         public ushort Damage;
+
+        [NonSerialized]
+        private BattleUnit _defender;
+
+        public BattleUnit Defender { get => _defender; set  { _defender = value; _defenderID = value.Unit.Id; }  }
 
         public AttackLog(BattleUnit atk, BattleUnit def, int damage): base(atk)
         {

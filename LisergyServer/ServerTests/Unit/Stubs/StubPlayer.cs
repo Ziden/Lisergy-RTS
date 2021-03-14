@@ -1,9 +1,7 @@
 ﻿using Game.Events;
 using LisergyServer.Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ServerTests
 {
@@ -17,7 +15,7 @@ namespace ServerTests
 
         public bool IsOnline { get; set; }
 
-        public TestServerPlayer() : base(null, null)
+        public TestServerPlayer() : base(null)
         {
 
         }

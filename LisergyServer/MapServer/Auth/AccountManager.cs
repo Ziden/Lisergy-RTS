@@ -37,12 +37,12 @@ namespace LisergyServer.Core
             Players.TryGetValue(connectionId, out pl);
             if (pl != null)
             {
-                Log.Debug($"Player {pl.Account.Login} disconnected");
+                Log.Debug($"Player {pl} disconnected");
             }
             Players.Remove(connectionId);
         }
 
-        public ServerPlayer Authenticate(StrategyGame game, AuthEvent ev)
+        public ServerPlayer Authenticate(AuthEvent ev)
         {
             Log.Debug($"Authenticating account {ev.Login}");
             Account acc;
@@ -55,7 +55,7 @@ namespace LisergyServer.Core
                 acc.Password = ev.Password;
                 AddAccount(acc);
                 Log.Info($"Registered new account {acc.Login}");
-                acc.Player = new ServerPlayer(acc, server);
+                acc.Player = new ServerPlayer(server);
                 acc.Player.ConnectionID = ev.ConnectionID;
                 Players[ev.ConnectionID] = acc.Player;
                 acc.Player.Send(new AuthResultEvent()

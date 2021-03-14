@@ -3,13 +3,19 @@ using System;
 
 namespace Game.Battle
 {
+    [Serializable]
     public class BattleUnit : IComparable<BattleUnit>
     {
-        public Unit Unit { get; private set; }
+        private Unit _unit;
+
+        [NonSerialized]
+        private BattleTeam _team;
+
+        public Unit Unit { get => _unit; set => _unit = value; }
 
         public UnitStats Stats { get => Unit.Stats; }
 
-        public BattleTeam Team { get; private set; }
+        public BattleTeam Team { get => _team; set => _team = value; }
 
         public int ActionTime { get; private set; }
 

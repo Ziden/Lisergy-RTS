@@ -57,7 +57,6 @@ namespace Game
 
         public void Add(Chunk c)
         {
-            Log.Debug($"Adding chunk {c.X} {c.Y}");
             _chunkMap[c.X, c.Y] = c;
         }
 

@@ -1,8 +1,16 @@
-﻿namespace Game.Battle
+﻿using System;
+
+namespace Game.Battle
 {
+    [Serializable]
     public class ActionLog
     {
-        public BattleUnit Attacker;
+        private string _unitID;
+
+        [NonSerialized]
+        private BattleUnit _attacker;
+
+        public BattleUnit Attacker { get => _attacker; set { _attacker = value; _unitID = value.Unit.Id; } }
 
         public ActionLog(BattleUnit atk)
         {

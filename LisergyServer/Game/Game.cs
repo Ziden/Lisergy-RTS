@@ -26,8 +26,10 @@ namespace Game
         public void RegisterEventListeners()
         {
             var networkEvents = new NetworkEvents();
+            
             _listeners.Add(new WorldListener(World));
             _listeners.Add(new CourseListener(World));
+           
         }
 
         public void ClearEventListeners()

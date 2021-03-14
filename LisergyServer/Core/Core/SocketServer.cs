@@ -1,39 +1,40 @@
 ﻿using Game;
 using Game.Events;
-using Game.Scheduler;
 using LisergyServer.Commands;
 using System;
 using Telepathy;
 
 namespace LisergyServer.Core
 {
-    public class SocketServer
+    public abstract class SocketServer
     {
         private bool _running = false;
 
-        private readonly Server _socketServer;
+        protected readonly Server _socketServer;
         private Message _msg;
-        private string _command;
-        private StrategyGame _game;
-        private AccountManager _accountManager;
         private CommandExecutor _commandExecutor;
-
-        public bool IsRunning()
-        {
-            return _running;
-        }
+        protected StrategyGame _game;
 
         public SocketServer()
         {
-            RegisterCommands();
+            _commandExecutor = new CommandExecutor();
+            _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
+            RegisterCommands(_commandExecutor);
             Serialization.LoadSerializers();
             _socketServer = new Server();
-            _accountManager = new AccountManager(_socketServer);
+            _game = SetupGame();
         }
 
-        public void Start()
+        public abstract void RegisterCommands(CommandExecutor executor);
+        protected abstract ServerPlayer Auth(EventID eventId, int connectionID, byte[] message);
+        public abstract void Tick();
+        public abstract void Disconnect(int connectionID);
+        public abstract ServerType GetServerType();
+        public abstract StrategyGame SetupGame();
+
+        public void Initialize(int port)
         {
-            _socketServer.Start(1337);
+            _socketServer.Start(port);
             _running = true;
         }
 
@@ -43,25 +44,15 @@ namespace LisergyServer.Core
             _running = false;
         }
 
-        public void RegisterCommands()
-        {
-            _commandExecutor = new CommandExecutor();
-
-            // TODO: Read from assembly
-            _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
-            _commandExecutor.RegisterCommand(new TileCommand());
-            _commandExecutor.RegisterCommand(new TaskCommand());
-        }
-
-        public void RunGame(StrategyGame game)
+        public void RunServer()
         {
             while (_running)
             {
                 try
                 {
                     _commandExecutor.HandleConsoleCommands();
-                    ReadSocketMessages(game);
-                    GameScheduler.Tick(DateTime.UtcNow);
+                    Tick();
+                    ReadSocketMessages();
                 } catch(Exception e)
                 {
                     Console.WriteLine(e);
@@ -70,7 +61,7 @@ namespace LisergyServer.Core
             }
         }
 
-        private void ReadSocketMessages(StrategyGame game)
+        private void ReadSocketMessages()
         {
             while (_socketServer.GetNextMessage(out _msg))
             {
@@ -82,34 +73,13 @@ namespace LisergyServer.Core
                     case EventType.Data:
                         var message = _msg.data;
                         var eventId = (EventID)message[0];
-                        
                         Game.Log.Debug($"Received {eventId.ToString()} event");
-
-                        ServerPlayer caller;
-                        // normal events, we get the authenticated player or null
-                        if(eventId != EventID.AUTH)
-                        {
-                            caller = _accountManager.GetPlayer(_msg.connectionId);
-
-                        // for auth events we handle auth event manually
-                        } else
-                        {
-                            var ev = Serialization.ToEvent<AuthEvent>(message);
-                            ev.ConnectionID = _msg.connectionId;
-                            caller = _accountManager.Authenticate(game, ev);
-                        }
-
-                        // To proccess any events we need a caller. In case it does not exists it means
-                        // we cannot proccess this unauthorized event.
-                        if (caller == null)
-                        {
-                            Game.Log.Error($"Connection {_msg.connectionId} failed auth to send event {eventId.ToString()}");
-                            continue;
-                        }
-                        EventEmitter.CallEventFromBytes(caller, message);
+                        var caller = Auth(eventId, _msg.connectionId, _msg.data);
+                        if(caller != null)
+                            EventEmitter.CallEventFromBytes(caller, message);
                         break;
                     case EventType.Disconnected:
-                        _accountManager.Disconnect(_msg.connectionId);
+                        Disconnect(_msg.connectionId);
                         break;
                 }
             }

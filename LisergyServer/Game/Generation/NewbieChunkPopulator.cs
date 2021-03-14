@@ -12,7 +12,6 @@ namespace Game.Generator
 
         public override void Populate(GameWorld w, Chunk c)
         {
-            Log.Debug($"Populating {c.ToString()}");
             w.ChunkMap.SetFlag(c.X, c.Y, ChunkFlag.NEWBIE_CHUNK);
 
             for (var i = 0; i < GameWorld.CHUNK_SIZE; i++) {

@@ -1,19 +1,16 @@
 ﻿using Game;
 using Game.Events;
-using LisergyServer.Auth;
 using Telepathy;
 
 namespace LisergyServer.Core
 {
     public class ServerPlayer : PlayerEntity
     {
-        private Server _server { get; set; }
-        public Account Account { get; private set; }
+        protected Server _server { get; set; }
         public int ConnectionID { get; set; }
 
-        public ServerPlayer(Account acc, Server server)
+        public ServerPlayer(Server server)
         {
-            this.Account = acc;
             this._server = server;
         }
 

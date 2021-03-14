@@ -13,20 +13,6 @@ namespace Game.Events.ServerEvents
 
         public Tile Tile;
 
-        [NonSerialized]
-        private WorldEntity _viewer;
-
-        public WorldEntity Viewer
-        {
-            get
-            {
-                return _viewer;
-            }
-            set {
-                _viewer = value;
-            }
-        }
-
         public override EventID GetID() => EventID.TILE_VISIBLE;
 
         public override string ToString()
