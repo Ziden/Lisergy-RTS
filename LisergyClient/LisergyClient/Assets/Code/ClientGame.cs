@@ -10,7 +10,7 @@ namespace Assets.Code
 {
     public class ClientStrategyGame : StrategyGame
     {
-        public ClientStrategyGame(GameConfiguration cfg, GameSpec specs, GameWorld world) : base(cfg, specs, world) {
+        public ClientStrategyGame(GameSpec specs, GameWorld world) : base(specs, world) {
            
         }
 

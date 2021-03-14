@@ -74,9 +74,8 @@ namespace Assets.Code
             {
                 if (_game == null)
                 {
-                    var world = new ClientWorld();
-                    world.CreateWorld(ev.Cfg.WorldMaxPlayers);
-                    _game = new ClientStrategyGame(ev.Cfg, ev.Spec, world);
+                    var world = new ClientWorld(ev);
+                    _game = new ClientStrategyGame(ev.Spec, world);
                     RegisterGameListeners();
                 }
             }

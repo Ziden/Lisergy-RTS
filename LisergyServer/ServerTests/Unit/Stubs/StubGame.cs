@@ -14,7 +14,7 @@ namespace ServerTests
     public class TestGame : StrategyGame
     {
         private bool _registered = false;
-        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestConfiguration(), GetTestSpecs(), world == null ? new GameWorld() : world)
+        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), world == null ? new GameWorld(4, 40, 40) : world)
         {
             this.RegisterEventListeners();
             if (!_registered)
@@ -27,7 +27,6 @@ namespace ServerTests
                 _registered = true;
             }
             Serialization.LoadSerializers();
-            this.World.CreateWorld(4);
             this.World.ChunkMap.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             if (createPlayer)
                 CreatePlayer();
@@ -71,10 +70,6 @@ namespace ServerTests
             return StrategyGame.Specs.Buildings.Values.RandomElement();
         }
 
-        public override void GenerateMap()
-        {
-            base.GenerateMap();
-        }
 
         public Tile RandomNotBuiltTile()
         {
@@ -82,12 +77,6 @@ namespace ServerTests
                 if (tile.Building == null)
                     return tile;
             return null;
-        }
-
-        private static GameConfiguration GetTestConfiguration()
-        {
-            var cfg = new GameConfiguration();
-            return cfg;
         }
     }
 

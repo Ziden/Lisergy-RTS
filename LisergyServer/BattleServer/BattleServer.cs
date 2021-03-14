@@ -22,13 +22,8 @@ namespace BattleServer
 
         public override StrategyGame SetupGame()
         {
-            var cfg = new GameConfiguration()
-            {
-                WorldMaxPlayers = 10
-            };
             var gameSpecs = TestSpecs.Generate();
-            var world = new GameWorld();
-            return new StrategyGame(cfg, gameSpecs, world);
+            return new StrategyGame(gameSpecs, null);
         }
 
         protected override ServerPlayer Auth(EventID eventId, int connectionID, byte[] message)

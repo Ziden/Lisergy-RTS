@@ -11,16 +11,16 @@ namespace Game
     public class StrategyGame
     {
         public static GameSpec Specs { get; private set; }
-        public static GameConfiguration Config { get; private set; }
 
         public GameWorld World { get; private set; }
         public List<EventListener> _listeners = new List<EventListener>();
 
-        public StrategyGame(GameConfiguration cfg, GameSpec specs, GameWorld world)
+        public GameSpec GameSpec => Specs;
+
+        public StrategyGame(GameSpec specs, GameWorld world)
         {
             World = world;
             Specs = specs;
-            Config = cfg;
         }
 
         public void RegisterEventListeners()
@@ -41,9 +41,7 @@ namespace Game
 
         public virtual void GenerateMap()
         {
-            var worldGen = new Worldgen(World);
-            worldGen.Populators.Add(new NewbieChunkPopulator());
-            worldGen.Generate(Config.WorldMaxPlayers);
+            
         }
     }
 }

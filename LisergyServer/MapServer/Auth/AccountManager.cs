@@ -10,13 +10,15 @@ namespace LisergyServer.Core
 {
     public class AccountManager
     {
-        private Server server { get; set; }
+        private Server _server { get; set; }
+        private StrategyGame _game { get; set; }
         private Dictionary<int, ServerPlayer> Players = new Dictionary<int, ServerPlayer>();
         private Dictionary<string, Account> AccountsByLogin = new Dictionary<string, Account>();
 
-        public AccountManager(Server server)
+        public AccountManager(StrategyGame game, Server server)
         {
-            this.server = server;
+            this._server = server;
+            this._game = game;
         }
 
         private void AddAccount(Account acc)
@@ -55,7 +57,7 @@ namespace LisergyServer.Core
                 acc.Password = ev.Password;
                 AddAccount(acc);
                 Log.Info($"Registered new account {acc.Login}");
-                acc.Player = new ServerPlayer(server);
+                acc.Player = new ServerPlayer(_server);
                 acc.Player.ConnectionID = ev.ConnectionID;
                 Players[ev.ConnectionID] = acc.Player;
                 acc.Player.Send(new AuthResultEvent()
@@ -65,11 +67,8 @@ namespace LisergyServer.Core
                 });
                 if (ev.SpecVersion < StrategyGame.Specs.Version)
                 {
-                    acc.Player.Send(new GameSpecResponse()
-                    {
-                        Spec = StrategyGame.Specs,
-                        Cfg = StrategyGame.Config
-                    });
+                    acc.Player.Send(new GameSpecResponse(_game));
+             
                 }
                 return acc.Player;
             }
@@ -90,11 +89,7 @@ namespace LisergyServer.Core
                 Log.Info($"Account {ev.Login} connected");
                 if (ev.SpecVersion < StrategyGame.Specs.Version)
                 {
-                    acc.Player.Send(new GameSpecResponse()
-                    {
-                        Spec = StrategyGame.Specs,
-                        Cfg = StrategyGame.Config
-                    });
+                    acc.Player.Send(new GameSpecResponse(_game));
                 }
                 acc.Player.Send(new AuthResultEvent()
                 {

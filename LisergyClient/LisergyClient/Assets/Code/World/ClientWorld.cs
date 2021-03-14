@@ -1,5 +1,6 @@
 ﻿using Game;
 using Game.Entity;
+using Game.Events.ServerEvents;
 using Game.World;
 using System.Collections.Generic;
 
@@ -7,6 +8,10 @@ namespace Assets.Code.World
 {
     public class ClientWorld : GameWorld
     {
+        public ClientWorld(GameSpecResponse gameSpecs): base(int.MaxValue, gameSpecs.WorldX, gameSpecs.WorldY)
+        {
+        }
+
         public Dictionary<string, Party> Parties = new Dictionary<string, Party>();
 
         public ClientPlayer GetOrCreateClientPlayer(string uid)

@@ -1,5 +1,6 @@
 ﻿using Game;
 using Game.Events;
+using Game.Generator;
 using Game.Scheduler;
 using GameDataTest;
 using LisergyServer.Commands;
@@ -10,12 +11,11 @@ namespace MapServer
 {
     public class MapService : SocketServer
     {
-        private AccountManager _accountManager;
+        private static readonly int MAX_PLAYERS = 100;
+        private static int WORLD_SEED = 12345;
 
-        public MapService()
-        {
-            _accountManager = new AccountManager(_socketServer);
-        }
+        // TODO: Move to account server
+        private AccountManager _accountManager;
 
         public override ServerType GetServerType() => ServerType.MAP;
 
@@ -58,15 +58,12 @@ namespace MapServer
 
         public override StrategyGame SetupGame()
         {
-            var cfg = new GameConfiguration()
-            {
-                WorldMaxPlayers = 10
-            };
             var gameSpecs = TestSpecs.Generate();
-            var world = new GameWorld();
-            var game = new StrategyGame(cfg, gameSpecs, world);
-            game.GenerateMap();
+            // TODO: Load/savemap
+            var world = Worldgen.CreateWorld(MAX_PLAYERS, WORLD_SEED, new NewbieChunkPopulator());
+            var game = new StrategyGame(gameSpecs, world);
             game.RegisterEventListeners();
+            _accountManager = new AccountManager(game, _socketServer);
             return game;
         }
     }

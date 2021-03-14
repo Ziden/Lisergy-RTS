@@ -32,7 +32,6 @@ namespace Game.Events
 
             // Game
             models.Add(typeof(GameSpec));
-            models.Add(typeof(GameConfiguration));
             models.Add(typeof(GameEvent));
             if (extras != null)
             {

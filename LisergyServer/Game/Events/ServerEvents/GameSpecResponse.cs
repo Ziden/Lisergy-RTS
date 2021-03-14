@@ -9,6 +9,14 @@ namespace Game.Events.ServerEvents
         public override EventID GetID() => EventID.SPEC_RESPONSE;
 
         public GameSpec Spec;
-        public GameConfiguration Cfg;
+        public int WorldX;
+        public int WorldY;
+
+        public GameSpecResponse(StrategyGame game)
+        {
+            this.Spec = game.GameSpec;
+            this.WorldX = game.World.SizeX;
+            this.WorldY = game.World.SizeY;
+        }
     }
 }

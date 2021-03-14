@@ -28,22 +28,17 @@ namespace Game
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }
 
-        // TODO: Move to own generate world module
-        public virtual void CreateWorld(int playerCount)
+        public GameWorld(int maxPlayers, int sizeX, int sizeY)
         {
-            _id = Guid.NewGuid().ToString();
-            var amtOfChunks = playerCount * GameWorld.PLAYERS_CHUNKS;
-            var amtOfTiles = amtOfChunks * GameWorld.TILES_IN_CHUNK;
-            var arraySize = (int)Math.Ceiling(Math.Sqrt(amtOfTiles));
-            var extraNeeded = GameWorld.CHUNK_SIZE - arraySize % GameWorld.CHUNK_SIZE;
-            SizeX = arraySize + extraNeeded;
-            SizeY = arraySize + extraNeeded;
-            Players = new WorldPlayers(playerCount);
+            SizeX = sizeX;
+            SizeY = sizeY;
+            Players = new WorldPlayers(maxPlayers);
             CreateChunkMap();
         }
 
         public virtual void CreateChunkMap()
         {
+            _id = Guid.NewGuid().ToString();
             ChunkMap = new ChunkMap(this);
             GenerateTiles();
         }

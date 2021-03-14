@@ -14,7 +14,7 @@ namespace Tests
         [SetUp]
         public void SetupTests()
         {
-            GameWorld world = new GameWorld();
+            GameWorld world = new GameWorld(10, 50, 50);
           
             Game = new TestGame(world);
         }
