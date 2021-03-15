@@ -19,6 +19,8 @@ namespace MapServer
 
         public override ServerType GetServerType() => ServerType.MAP;
 
+        public MapService(int port) : base(port) { }
+
         public override void RegisterCommands(CommandExecutor executor)
         {
             executor.RegisterCommand(new TileCommand());

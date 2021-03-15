@@ -2,6 +2,8 @@
 using Game.Events;
 using LisergyServer.Commands;
 using System;
+using System.Net;
+using System.Net.Sockets;
 using Telepathy;
 
 namespace LisergyServer.Core
@@ -14,9 +16,11 @@ namespace LisergyServer.Core
         private Message _msg;
         private CommandExecutor _commandExecutor;
         protected StrategyGame _game;
+        private int _port;
 
-        public SocketServer()
+        public SocketServer(int port)
         {
+            _port = port;
             _commandExecutor = new CommandExecutor();
             _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
             RegisterCommands(_commandExecutor);
@@ -32,12 +36,6 @@ namespace LisergyServer.Core
         public abstract ServerType GetServerType();
         public abstract StrategyGame SetupGame();
 
-        public void Initialize(int port)
-        {
-            _socketServer.Start(port);
-            _running = true;
-        }
-
         public void Stop()
         {
             _socketServer.Stop();
@@ -46,6 +44,8 @@ namespace LisergyServer.Core
 
         public void RunServer()
         {
+            _socketServer.Start(_port);
+            _running = true;
             while (_running)
             {
                 try
@@ -53,7 +53,8 @@ namespace LisergyServer.Core
                     _commandExecutor.HandleConsoleCommands();
                     Tick();
                     ReadSocketMessages();
-                } catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     Console.WriteLine(e);
                     Console.WriteLine("Press any key to die");
@@ -75,7 +76,7 @@ namespace LisergyServer.Core
                         var eventId = (EventID)message[0];
                         Game.Log.Debug($"Received {eventId.ToString()} event");
                         var caller = Auth(eventId, _msg.connectionId, _msg.data);
-                        if(caller != null)
+                        if (caller != null)
                             EventEmitter.CallEventFromBytes(caller, message);
                         break;
                     case EventType.Disconnected:

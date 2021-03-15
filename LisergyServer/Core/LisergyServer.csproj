@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.4" />
+    <PackageReference Include="NServiceBus" Version="7.4.4" />
     <PackageReference Include="Telepathy" Version="1.0.341" />
   </ItemGroup>
 

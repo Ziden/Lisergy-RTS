@@ -14,7 +14,7 @@ namespace BattleServer
         private BattleListener _listener;
         private NetworkEvents _events;
 
-        public BattleServer()
+        public BattleServer(int port): base(port)
         {
             _events = new NetworkEvents();
             _listener = new BattleListener();

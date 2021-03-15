@@ -25,8 +25,7 @@ namespace BattleServer
             Console.WriteLine("=     BATTLE SERVER         =");
             Console.WriteLine("=============================");
 
-            var battleServer = new BattleServer();
-            battleServer.Initialize(PORT);
+            var battleServer = new BattleServer(PORT);
             battleServer.RunServer();
         }
     }

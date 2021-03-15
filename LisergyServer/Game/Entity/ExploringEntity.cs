@@ -49,9 +49,10 @@ namespace Game.Entity
                 newViewers.ExceptWith(oldViewers);
 
             HashSet<PlayerEntity> playerViewers = new HashSet<PlayerEntity>(newViewers.Select(v => v.Owner));
+            var ev = new EntityVisibleEvent(this);
             foreach (var viewer in newTile.EntitiesViewing)
                 if (playerViewers.Remove(viewer.Owner))
-                    viewer.Owner.Send(new EntityVisibleEvent(this));
+                    viewer.Owner.Send(ev);
         }
     }
 }

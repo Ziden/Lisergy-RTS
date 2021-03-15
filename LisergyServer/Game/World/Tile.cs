@@ -41,7 +41,7 @@ namespace Game
         public virtual GameWorld World { get => Chunk.ChunkMap.World; }
         public virtual string OwnerID { get => _building?.OwnerID; }
         public virtual ushort Y { get => _y; }
-        public virtual ushort X { get => _x; }
+        public virtual ushort X { get => _x; } 
         public virtual HashSet<WorldEntity> EntitiesViewing { get { return _entitiesViewing; } }
         public virtual Chunk Chunk { get { return _chunk; } }
         public virtual byte TileId { get => _tileId; set => _tileId = value; }
