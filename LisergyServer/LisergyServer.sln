@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleServer", "BattleServe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapServer", "MapServer\MapServer.csproj", "{AB9A7243-AF62-4AD6-983E-4D51A392B423}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBroker", "MessageBroker\MessageBroker.csproj", "{1B94D037-EAA5-498C-83C1-E3E59EFE338F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LisergyMQ", "MessageBroker\LisergyMQ.csproj", "{1B94D037-EAA5-498C-83C1-E3E59EFE338F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

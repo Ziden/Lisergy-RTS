@@ -1,5 +1,6 @@
 ﻿using BattleServer.Core;
 using Game.Events;
+using LisergyMessageQueue;
 using System;
 
 namespace BattleServer
@@ -10,7 +11,8 @@ namespace BattleServer
 
         static void Main(string[] args)
         {
-            Initialize();    
+            Initialize();
+          
         }
 
         public static string Path()
@@ -26,6 +28,7 @@ namespace BattleServer
             Console.WriteLine("=============================");
 
             var battleServer = new BattleServer(PORT);
+            LisergyMQ.StartListening(MessageQueues.PENDING_BATTLES);
             battleServer.RunServer();
         }
     }

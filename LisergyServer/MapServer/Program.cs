@@ -1,7 +1,10 @@
 ﻿using Game;
+using Game.Events;
 using GameDataTest;
+using LisergyMessageQueue;
 using LisergyServer.Core;
 using System;
+using System.Threading;
 
 namespace MapServer
 {
@@ -25,8 +28,9 @@ namespace MapServer
             Console.WriteLine("=============================");
             Console.WriteLine("=        MAP SERVER         =");
             Console.WriteLine("=============================");
-
+            Thread.Sleep(1000);
             var server = new MapService(PORT);
+           
             server.RunServer();
         }
     }

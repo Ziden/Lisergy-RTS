@@ -3,6 +3,7 @@ using Game.Events;
 using Game.Generator;
 using Game.Scheduler;
 using GameDataTest;
+using LisergyMessageQueue;
 using LisergyServer.Commands;
 using LisergyServer.Core;
 using System;
@@ -19,7 +20,8 @@ namespace MapServer
 
         public override ServerType GetServerType() => ServerType.MAP;
 
-        public MapService(int port) : base(port) { }
+        public MapService(int port) : base(port) {
+        }
 
         public override void RegisterCommands(CommandExecutor executor)
         {

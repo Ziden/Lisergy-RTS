@@ -4,12 +4,22 @@
 
 ## To run the server:
 
-Requirements: .net core 2+
+Requirements: .net core 2.1, docker
+
+#### Running RabbitMQ
 
 ```
-cd LisergyServer
+docker run -d --hostname my-rabbit --name ecomm-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+```
+
+#### Running the Server
+```
+cd LisergyServer/
 dotnet build
-dotnet run --project Core
+cd MapServer/
+dotnet run 
+cd ../BattleServer
+dotnet run
 ```
 
 Or just open the solution in visual studio and click "RUN"

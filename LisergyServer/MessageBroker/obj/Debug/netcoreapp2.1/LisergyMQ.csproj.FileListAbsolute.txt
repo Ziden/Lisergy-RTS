@@ -1,0 +1,15 @@
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\obj\Debug\netcoreapp2.1\LisergyMQ.csprojAssemblyReference.cache
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\obj\Debug\netcoreapp2.1\LisergyMQ.AssemblyInfoInputs.cache
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\obj\Debug\netcoreapp2.1\LisergyMQ.AssemblyInfo.cs
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\obj\Debug\netcoreapp2.1\LisergyMQ.csproj.CoreCompileInputs.cache
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\bin\Debug\netcoreapp2.1\LisergyMQ.deps.json
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\bin\Debug\netcoreapp2.1\LisergyMQ.dll
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\bin\Debug\netcoreapp2.1\LisergyMQ.pdb
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\bin\Debug\netcoreapp2.1\Game.dll
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\bin\Debug\netcoreapp2.1\GameData.dll
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\bin\Debug\netcoreapp2.1\NetSerializer.dll
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\bin\Debug\netcoreapp2.1\Game.pdb
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\bin\Debug\netcoreapp2.1\GameData.pdb
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\obj\Debug\netcoreapp2.1\LisergyMQ.csproj.CopyComplete
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\obj\Debug\netcoreapp2.1\LisergyMQ.dll
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\obj\Debug\netcoreapp2.1\LisergyMQ.pdb
