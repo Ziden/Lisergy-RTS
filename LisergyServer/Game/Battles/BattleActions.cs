@@ -1,9 +1,9 @@
-﻿using Game.Battle.Log;
+﻿using Game.Battles.Log;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Game.Battle
+namespace Game.Battles
 {
     public static class BattleActions
     {

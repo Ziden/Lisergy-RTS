@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.Battle
+namespace Game.Battles
 {
     public class Battle
     {

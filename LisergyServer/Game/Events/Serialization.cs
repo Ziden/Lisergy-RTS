@@ -1,5 +1,5 @@
-﻿using Game.Battle;
-using Game.Battle.Log;
+﻿using Game.Battles;
+using Game.Battles.Log;
 using Game.Entity;
 using GameData;
 using NetSerializer;

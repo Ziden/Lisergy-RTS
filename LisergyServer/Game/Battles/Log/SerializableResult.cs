@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Game.Battle.Log
+namespace Game.Battles.Log
 {
     [Serializable]
     public class SerializableResult

@@ -1,4 +1,4 @@
-﻿namespace Game.Battle
+﻿namespace Game.Battles
 {
     public class BattleProcessor
     {

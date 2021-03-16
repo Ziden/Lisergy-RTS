@@ -1,16 +1,16 @@
-﻿using Game.Battle;
+﻿using Game.Battles;
 using Game.Events;
 using Game.Listeners;
 using System;
 
 namespace BattleServer
 {
-    public class BattleListener : EventListener
+    public class BattleServerListener : EventListener
     {
         public override void Register()
         {
             NetworkEvents.OnBattleStart += OnBattleStart;
-            Console.WriteLine("Registered Battle Listener");
+            Console.WriteLine("[BattleServer] Registered Battle start Listener");
         }
 
         public override void Unregister()
@@ -21,12 +21,7 @@ namespace BattleServer
         public void OnBattleStart(BattleStartCompleteEvent ev)
         {
             Console.WriteLine($"Received {ev.Attacker} vs {ev.Defender}");
-            var battle = new Battle(ev.Attacker, ev.Defender);
-            var result = battle.Run();
-            var resultEvent = new BattleResultCompleteEvent(result);
-            resultEvent.BattleID = ev.BattleID;
-            Console.WriteLine($"{result.Winner} won in {result.Turns.Count} turns.");
-            ev.Sender.Send(resultEvent);
+            ev.Sender.Send(BattleListener.HandleBattle(ev));
         }
     }
 }

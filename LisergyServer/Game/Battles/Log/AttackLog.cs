@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Game.Battle.Log
+namespace Game.Battles.Log
 {
     [Serializable]
     public class AttackLog : ActionLog

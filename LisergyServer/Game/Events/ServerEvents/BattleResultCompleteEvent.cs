@@ -1,5 +1,5 @@
-﻿using Game.Battle;
-using Game.Battle.Log;
+﻿using Game.Battles;
+using Game.Battles.Log;
 using System;
 
 namespace Game.Events
@@ -7,6 +7,7 @@ namespace Game.Events
     [Serializable]
     public class BattleResultCompleteEvent : ServerEvent
     {
+        public bool AttackerWins;
         public string BattleID;
         public BattleTeam Attacker;
         public BattleTeam Defender;
@@ -17,6 +18,7 @@ namespace Game.Events
             Attacker = result.Attacker;
             Defender = result.Defender;
             Turns = new BattleTurnEvent[result.Turns.Count];
+            AttackerWins = Attacker == result.Winner;
             for (var x = 0; x < Turns.Length; x++)
                 Turns[x] = new BattleTurnEvent(result.Turns[x]);
         }

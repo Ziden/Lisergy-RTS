@@ -13,6 +13,7 @@ namespace MapServer
     public class MapService : SocketServer
     {
         private static readonly int MAX_PLAYERS = 100;
+     
         private static int WORLD_SEED = 12345;
 
         // TODO: Move to account server

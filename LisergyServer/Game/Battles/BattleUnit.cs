@@ -1,7 +1,7 @@
 ﻿using Game.Entity;
 using System;
 
-namespace Game.Battle
+namespace Game.Battles
 {
     [Serializable]
     public class BattleUnit : IComparable<BattleUnit>

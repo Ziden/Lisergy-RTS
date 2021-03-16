@@ -28,7 +28,7 @@ namespace MapServer
             Console.WriteLine("=============================");
             Console.WriteLine("=        MAP SERVER         =");
             Console.WriteLine("=============================");
-            Thread.Sleep(1000);
+
             var server = new MapService(PORT);
            
             server.RunServer();

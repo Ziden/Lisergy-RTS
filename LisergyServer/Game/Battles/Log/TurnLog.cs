@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.Battle.Log
+namespace Game.Battles.Log
 {
     public class TurnLog
     {

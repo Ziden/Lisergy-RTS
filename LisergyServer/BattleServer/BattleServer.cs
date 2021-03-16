@@ -11,13 +11,13 @@ namespace BattleServer
 {
     public class BattleServer : SocketServer
     {
-        private BattleListener _listener;
+        private BattleServerListener _listener;
         private NetworkEvents _events;
 
         public BattleServer(int port): base(port)
         {
             _events = new NetworkEvents();
-            _listener = new BattleListener();
+            _listener = new BattleServerListener();
         }
 
         public override StrategyGame SetupGame()

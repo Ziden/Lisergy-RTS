@@ -5,4 +5,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BattleServer\BattleServer.csproj" />
+    <ProjectReference Include="..\MapServer\MapServer.csproj" />
+  </ItemGroup>
+
 </Project>

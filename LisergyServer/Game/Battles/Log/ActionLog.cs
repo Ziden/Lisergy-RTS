@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Game.Battle
+namespace Game.Battles
 {
     [Serializable]
     public class ActionLog

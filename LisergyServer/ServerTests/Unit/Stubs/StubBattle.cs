@@ -1,4 +1,4 @@
-﻿using Game.Battle;
+﻿using Game.Battles;
 using System;
 using System.Collections.Generic;
 using System.Linq;

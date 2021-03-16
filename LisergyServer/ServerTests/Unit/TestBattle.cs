@@ -1,5 +1,5 @@
 using Game;
-using Game.Battle;
+using Game.Battles;
 using Game.Events;
 using NUnit.Framework;
 using ServerTests;

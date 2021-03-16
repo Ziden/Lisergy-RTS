@@ -1,8 +1,8 @@
-﻿using Game.Battle.Log;
+﻿using Game.Battles.Log;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.Battle
+namespace Game.Battles
 {
     public class BattleResult
     {
