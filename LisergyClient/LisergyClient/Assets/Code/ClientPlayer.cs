@@ -1,5 +1,6 @@
 ﻿
 using Game;
+using Game.Entity;
 using System.Collections.Generic;
 
 namespace Assets.Code
@@ -14,20 +15,16 @@ namespace Assets.Code
         public WorldEntity GetKnownEntity(string id)
         {
             WorldEntity e;
-            KnownOwnedEntities.TryGetValue(id, out e);
+            KnowsAbout.TryGetValue(id, out e);
             return e;
         }
 
-        public Dictionary<string, WorldEntity> KnownOwnedEntities { get {
-                Dictionary<string, WorldEntity> entities = new Dictionary<string, WorldEntity>();
-                foreach (var building in Buildings)
-                    entities[building.Id] = building;
-                foreach (var party in Parties)
-                    if(party != null)
-                        entities[party.Id] = party;
-                return entities;
-            }
+        public void KnowAbout(WorldEntity e)
+        {
+            KnowsAbout[e.Id] = e;
         }
+
+        public Dictionary<string, WorldEntity> KnowsAbout = new Dictionary<string, WorldEntity>();
 
         public override bool Online()
         {

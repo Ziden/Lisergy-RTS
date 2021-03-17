@@ -24,7 +24,7 @@ namespace Game
             get { return base.Tile; }
             set
             {
-                if (value.Building != this)
+                if (value.StaticEntity != this)
                     throw new Exception("Use tile.Building = value to set a building into a tile");
                 base.Tile = value;
             }

@@ -29,6 +29,7 @@ namespace Game.Events
             models.Add(typeof(WorldEntity));
             models.Add(typeof(Party));
             models.Add(typeof(Tile));
+            models.Add(typeof(Dungeon));
 
             // Game
             models.Add(typeof(GameSpec));

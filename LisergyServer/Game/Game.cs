@@ -30,7 +30,6 @@ namespace Game
             _listeners.Add(new WorldListener(World));
             _listeners.Add(new CourseListener(World));
             _listeners.Add(new BattleListener(World));
-           
         }
 
         public void ClearEventListeners()

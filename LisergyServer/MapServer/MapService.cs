@@ -65,7 +65,10 @@ namespace MapServer
         {
             var gameSpecs = TestSpecs.Generate();
             // TODO: Load/savemap
-            var world = Worldgen.CreateWorld(MAX_PLAYERS, WORLD_SEED, new NewbieChunkPopulator());
+            var world = Worldgen.CreateWorld(MAX_PLAYERS, WORLD_SEED, 
+                new NewbieChunkPopulator()
+               ,new DungeonsPopulator()
+            );
             var game = new StrategyGame(gameSpecs, world);
             game.RegisterEventListeners();
             _accountManager = new AccountManager(game, _socketServer);

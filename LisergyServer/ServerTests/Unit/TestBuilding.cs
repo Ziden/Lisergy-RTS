@@ -26,8 +26,8 @@ namespace Tests
 
             Assert.IsTrue(player.Buildings.Count == 1);
             Assert.IsTrue(player.Buildings.Any(b => b.SpecID == initialBuildingSpec.Id));
-            Assert.IsTrue(tile.Building == player.Buildings.First());
-            Assert.IsTrue(tile.Building.SpecID == initialBuildingSpec.Id);
+            Assert.IsTrue(tile.StaticEntity == player.Buildings.First());
+            Assert.IsTrue(((Building)tile.StaticEntity).SpecID == initialBuildingSpec.Id);
         }
 
         [Test]
@@ -42,9 +42,9 @@ namespace Tests
 
             Assert.IsTrue(player.Buildings.Count == 2);
             Assert.IsTrue(player.Buildings.Any(b => b.SpecID == buildingSpec.Id));
-            Assert.IsTrue(tile.Building == player.Buildings.Last());
-            Assert.IsTrue(tile.Building.SpecID == buildingSpec.Id);
-            Assert.That(tile.EntitiesViewing.Contains(tile.Building));
+            Assert.IsTrue(tile.StaticEntity == player.Buildings.Last());
+            Assert.IsTrue(((Building)tile.StaticEntity).SpecID == buildingSpec.Id);
+            Assert.That(tile.EntitiesViewing.Contains(tile.StaticEntity));
 
         }
     }

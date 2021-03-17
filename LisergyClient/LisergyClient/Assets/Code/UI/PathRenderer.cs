@@ -88,7 +88,7 @@ namespace Assets.Code.UI
             for (var x = 0; x < tilePath.Count; x++)
             {
                 var nodeTile = tilePath[x];
-                var tilePos = nodeTile.GameObj.transform.position;
+                var tilePos = nodeTile.GetGameObject().transform.position;
                 var hasNext = x < tilePath.Count - 1;
                 var hasPrevious = x > 0;
                 if (hasNext)

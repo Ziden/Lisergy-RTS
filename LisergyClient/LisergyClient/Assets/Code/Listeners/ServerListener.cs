@@ -35,12 +35,11 @@ namespace Assets.Code
             using (new StackLog($"[Entity] Moving {ev.ID}  from {ev.OwnerID} to {ev.X} {ev.Y}"))
             {
                 var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
-                var knownEntities = owner.KnownOwnedEntities;
-                WorldEntity entity;
-                if (!knownEntities.TryGetValue(ev.ID, out entity))
+                var knownEntity = owner.GetKnownEntity(ev.ID);
+                if (knownEntity==null)
                     throw new System.Exception($"Server sent move event for entity {ev.ID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
                 var newTile = (ClientTile)_game.GetWorld().GetTile(ev.X, ev.Y);
-                entity.Tile = newTile;
+                knownEntity.Tile = newTile;
             }
         }
 

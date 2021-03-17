@@ -3,15 +3,17 @@ using UnityEngine;
 
 namespace Assets.Code.World
 {
-    public class ClientBuilding : Building
+    public class ClientBuilding : Building, IGameObject
     {
-        public GameObject GameObject;
+        private GameObject _gameObject;
+
+        public GameObject GetGameObject() => _gameObject;
 
         public ClientBuilding(byte id, ClientPlayer owner, ClientTile tile): base(id, owner)
         {
             var prefab = Resources.Load("prefabs/buildings/"+id);
             StackLog.Debug("Instantiating BUILDING");
-            GameObject = MainBehaviour.Instantiate(prefab, ((ClientChunk)tile.Chunk).ChunkObject.transform) as GameObject;
+            _gameObject = MainBehaviour.Instantiate(prefab, ((ClientChunk)tile.Chunk).GetGameObject().transform) as GameObject;
         }
 
         public bool IsMine()

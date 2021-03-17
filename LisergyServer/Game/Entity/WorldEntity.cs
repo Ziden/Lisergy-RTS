@@ -1,4 +1,5 @@
-﻿using Game.Events.ServerEvents;
+﻿using Game.Entity;
+using Game.Events.ServerEvents;
 using System;
 
 namespace Game
@@ -6,6 +7,8 @@ namespace Game
     [Serializable]
     public class WorldEntity : Ownable
     {
+        protected static Gaia Gaia { get; private set; } = new Gaia();
+
         protected string _id;
         protected ushort _x;
         protected ushort _y;
@@ -37,7 +40,7 @@ namespace Game
                 _tile = value;
                 _x = _tile.X;
                 _y = _tile.Y;
-                Log.Debug($"Entity {this} tile updated to {value}");
+                Log.Debug($"{this} placed in {value}");
             }
         }
 

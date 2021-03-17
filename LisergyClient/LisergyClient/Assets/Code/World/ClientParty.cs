@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace Assets.Code.World
 {
-    public class ClientParty : Party
+    public class ClientParty : Party, IGameObject
     {
         private static GameObject _container;
 
-        public GameObject GameObject { get; private set; }
+        private GameObject _gameObject;
         public ClientTile ClientTile { get => (ClientTile)this.Tile; }
 
         public ClientParty(PlayerEntity owner, Party partyFromNetwork) : base(owner, partyFromNetwork.PartyIndex)
         {
-            GameObject = new GameObject($"{owner.UserID}-{Id}-{partyFromNetwork.PartyIndex}");
-            GameObject.transform.SetParent(Container.transform);
+            _gameObject = new GameObject($"{owner.UserID}-{Id}-{partyFromNetwork.PartyIndex}");
+            _gameObject.transform.SetParent(Container.transform);
           
             _id = partyFromNetwork.Id;
             _x = (ushort)partyFromNetwork.X;
@@ -25,6 +25,7 @@ namespace Assets.Code.World
             StackLog.Debug($"Created new party instance {this}");
         }
 
+        public GameObject GetGameObject() => _gameObject;
 
         public override Tile Tile {
             get => base.Tile;
@@ -34,7 +35,7 @@ namespace Assets.Code.World
                 if(value != null)
                 {
                     StackLog.Debug($"Moving {this} gameobject to {value}");
-                    GameObject.transform.position = new Vector3(value.X, 0.1f, value.Y);
+                    _gameObject.transform.position = new Vector3(value.X, 0.1f, value.Y);
                 }
                 ClientEvents.PartyFinishedMove(this, (ClientTile)old, (ClientTile)base.Tile);
             }
@@ -63,7 +64,7 @@ namespace Assets.Code.World
             foreach(var unit in GetUnits())
             {
                 var unitObject = ((ClientUnit)unit).Render();
-                unitObject.transform.SetParent(GameObject.transform);
+                unitObject.transform.SetParent(_gameObject.transform);
             }  
         }
 

@@ -64,7 +64,7 @@ namespace Game
         {
             var building = new Building(id, this);
             this.Buildings.Add(building);
-            t.Building = building;
+            t.StaticEntity = building;
             Log.Debug($"Player {UserID} built {id}");
         }
 

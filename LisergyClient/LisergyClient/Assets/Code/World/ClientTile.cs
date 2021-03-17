@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace Assets.Code.World
 {
-    public class ClientTile : Tile
+    public class ClientTile : Tile, IGameObject
     {
-        public GameObject GameObj { get => _gameObj; private set => _gameObj = value; }
-
         private GameObject _gameObj;
 
         public bool Decorated;
@@ -18,14 +16,14 @@ namespace Assets.Code.World
 
         public void SetVisible(bool visible)
         {
-            if (GameObj == null)
+            if (_gameObj == null)
                 return;
 
-            if (GameObj.activeSelf == visible)
+            if (_gameObj.activeSelf == visible)
                 return;
 
             StackLog.Debug($"Changing activaction of {this} to {visible}");
-            GameObj.SetActive(visible); // mandando unit parece q caga isso
+            _gameObj.SetActive(visible); // mandando unit parece q caga isso
         }
 
         public override void SetSeenBy(ExploringEntity entity)
@@ -36,9 +34,9 @@ namespace Assets.Code.World
             {
                 SetVisible(true);
                 foreach (var party in this.Parties)
-                    ((ClientParty)party).GameObject.SetActive(true);
-                if (this.Building != null)
-                    ((ClientBuilding)this.Building).GameObject.SetActive(true);
+                    ((ClientParty)party).GetGameObject().SetActive(true);
+                if (this.StaticEntity is IGameObject)
+                    ((IGameObject)this.StaticEntity).GetGameObject().SetActive(true);
             }
         }
 
@@ -53,9 +51,9 @@ namespace Assets.Code.World
             {
                 SetVisible(false);
                 foreach (var party in this.Parties)
-                    ((ClientParty)party).GameObject.SetActive(false);
-                if (this.Building != null)
-                    ((ClientBuilding)this.Building).GameObject.SetActive(false);
+                    ((ClientParty)party).GetGameObject().SetActive(false);
+                if (this.StaticEntity is IGameObject)
+                    ((IGameObject)this.StaticEntity).GetGameObject().SetActive(false);
             }
         }
 
@@ -64,20 +62,22 @@ namespace Assets.Code.World
             var tileSpec = StrategyGame.Specs.GetTileSpec(tileID);
             foreach (var art in tileSpec.Arts)
             {
-                if (GameObj == null)
+                if (_gameObj == null)
                 {
                     var prefab = Resources.Load("prefabs/tiles/" + art.Name);
-                    var parent = ((ClientChunk)this.Chunk).ChunkObject.transform;
-                    GameObj = MainBehaviour.Instantiate(prefab, parent) as GameObject;
-                    GameObj.name = $"Tile_{X}-{Y}";
-                    GameObj.transform.position = new Vector3(X, 0, Y);
-                    var tileBhv = GameObj.GetComponent<TileRandomizerBehaviour>();
+                    var parent = ((ClientChunk)this.Chunk).GetGameObject().transform;
+                    _gameObj = MainBehaviour.Instantiate(prefab, parent) as GameObject;
+                    _gameObj.name = $"Tile_{X}-{Y}";
+                    _gameObj.transform.position = new Vector3(X, 0, Y);
+                    var tileBhv = _gameObj.GetComponent<TileRandomizerBehaviour>();
                     base.TileId = tileID;
                     tileBhv.CreateTileDecoration(this);
                     return;
                 }
             }
         }
+
+        public GameObject GetGameObject() => _gameObj;
 
         public override byte TileId
         {
@@ -90,19 +90,19 @@ namespace Assets.Code.World
             }
         }
 
-        public override Building Building
+        public override WorldEntity StaticEntity 
         {
-            get { return base.Building; }
+            get { return base.StaticEntity; }
             set
             {
-                if (value != null)
+                if (value != null && value is IGameObject)
                 {
-                    var clientBuilding = value as ClientBuilding;
-                    clientBuilding.GameObject.transform.position = new Vector3(X, 0, Y);
+                    var gameObject = ((IGameObject)value).GetGameObject();
+                    gameObject.transform.position = new Vector3(X, 0, Y);
                 }
-                using (new StackLog($"[Building] New {value} on {this}"))
+                using (new StackLog($"[Static Entity] New {value} on {this}"))
                 {
-                    base.Building = value;
+                    base.StaticEntity = value;
                 }
             }
         }

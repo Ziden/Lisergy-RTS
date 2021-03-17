@@ -84,7 +84,7 @@ namespace Assets.Code.UI
                 return;
             }
 
-            var pos = Camera.main.WorldToScreenPoint(tile.GameObj.transform.position);
+            var pos = Camera.main.WorldToScreenPoint(tile.GetGameObject().transform.position);
             _gameObject.transform.position = pos;
             _gameObject.SetActive(true);
             BuildActions(EntityAction.MOVE, EntityAction.GUARD);

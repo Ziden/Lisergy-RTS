@@ -35,11 +35,11 @@ namespace Game
         protected HashSet<WorldEntity> _entitiesViewing = new HashSet<WorldEntity>();
 
         [NonSerialized]
-        private Building _building;
+        private WorldEntity _staticEntity;
 
         public virtual TileSpec Spec { get => StrategyGame.Specs.Tiles[this.TileId]; }
         public virtual GameWorld World { get => Chunk.ChunkMap.World; }
-        public virtual string OwnerID { get => _building?.OwnerID; }
+        public virtual string OwnerID { get => _staticEntity?.OwnerID; }
         public virtual ushort Y { get => _y; }
         public virtual ushort X { get => _x; } 
         public virtual HashSet<WorldEntity> EntitiesViewing { get { return _entitiesViewing; } }
@@ -49,14 +49,14 @@ namespace Game
         public virtual List<Party> Parties { get { return _parties; }}
         public virtual HashSet<PlayerEntity> PlayersViewing { get => _playersViewing; }
 
-        public virtual Building Building
+        public virtual WorldEntity StaticEntity
         {
-            get => _building;
+            get => _staticEntity;
             set
             {
-                if(value == null && _building != null)
-                    _building.Tile = null;
-                _building = value;
+                if(value == null && _staticEntity != null)
+                    _staticEntity.Tile = null;
+                _staticEntity = value;
                 if (value != null)
                     value.Tile = this;
             }
@@ -90,8 +90,8 @@ namespace Game
                 if (party != viewer)
                     player.Send(new EntityVisibleEvent(party));
 
-            if (Building != null && viewer != Building)
-                player.Send(new EntityVisibleEvent(Building));
+            if (StaticEntity != null && viewer != StaticEntity)
+                player.Send(new EntityVisibleEvent(StaticEntity));
         }
 
         public virtual bool IsVisibleTo(PlayerEntity player)
@@ -108,7 +108,7 @@ namespace Game
 
         public override string ToString()
         {
-            return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID} Building={Building?.SpecID}>";
+            return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID} Building={StaticEntity?.ToString()}>";
         }
     }
 }

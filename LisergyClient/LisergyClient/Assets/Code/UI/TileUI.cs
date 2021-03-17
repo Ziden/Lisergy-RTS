@@ -35,7 +35,7 @@ namespace Assets.Code
         {
             Activate(_partyCursor);
             MoveToTile(_partyCursor, party.Tile);
-            _partyCursor.transform.SetParent(party.GameObject.transform);
+            _partyCursor.transform.SetParent(party.GetGameObject().transform);
         }
 
         private void CameraMove(Vector3 old, Vector3 newPos)

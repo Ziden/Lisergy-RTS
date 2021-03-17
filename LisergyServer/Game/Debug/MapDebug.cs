@@ -9,6 +9,7 @@ namespace Game.Debug
     {
         public static void PrintAscii(GameWorld w)
         {
+            /*
             for (var x = 0; x < w.SizeX; x++)
             {
                 for (var y = 0; y < w.SizeY; y++)
@@ -31,6 +32,7 @@ namespace Game.Debug
                 }
                 Console.Write("\n");
             }
+            */
         }
     }
 }
