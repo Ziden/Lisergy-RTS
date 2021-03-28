@@ -32,52 +32,40 @@ namespace Assets.Code
 
         public void EntityMove(EntityMoveEvent ev)
         {
-            using (new StackLog($"[Entity] Moving {ev.ID}  from {ev.OwnerID} to {ev.X} {ev.Y}"))
-            {
-                var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
-                var knownEntity = owner.GetKnownEntity(ev.ID);
-                if (knownEntity==null)
-                    throw new System.Exception($"Server sent move event for entity {ev.ID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
-                var newTile = (ClientTile)_game.GetWorld().GetTile(ev.X, ev.Y);
-                knownEntity.Tile = newTile;
-            }
+            var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
+            var knownEntity = owner.GetKnownEntity(ev.ID);
+            if (knownEntity == null)
+                throw new System.Exception($"Server sent move event for entity {ev.ID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
+            var newTile = (ClientTile)_game.GetWorld().GetTile(ev.X, ev.Y);
+            knownEntity.Tile = newTile;
+
         }
 
         public void EntityVisible(EntityVisibleEvent ev)
         {
-            using (new StackLog($"[Entity] Viewing {ev.Entity} from {ev.Entity.OwnerID}"))
-            {
-                var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Entity.OwnerID);
-                var tile = (ClientTile)_game.GetWorld().GetTile(ev.Entity.X, ev.Entity.Y);
-                var clientEntity = EntityFactory.InstantiateClientEntity(ev.Entity, owner, tile);
-                clientEntity.Tile = tile;
-            }
+            var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Entity.OwnerID);
+            var tile = (ClientTile)_game.GetWorld().GetTile(ev.Entity.X, ev.Entity.Y);
+            var clientEntity = EntityFactory.InstantiateClientEntity(ev.Entity, owner, tile);
+            clientEntity.Tile = tile;
             UIManager.PartyUI.RenderAllParties();
         }
 
         public void ReceiveTile(TileVisibleEvent ev)
         {
-            using (new StackLog("[TILE] Viewing " + ev.Tile))
-            {
-                var newTile = ev.Tile;
-                var tile = (ClientTile)_game.GetWorld().GetTile(newTile.X, newTile.Y);
-                tile.TileId = ev.Tile.TileId;
-                tile.ResourceID = ev.Tile.ResourceID;
-                tile.SetVisible(true);
-            }
+            var newTile = ev.Tile;
+            var tile = (ClientTile)_game.GetWorld().GetTile(newTile.X, newTile.Y);
+            tile.TileId = ev.Tile.TileId;
+            tile.ResourceID = ev.Tile.ResourceID;
+            tile.SetVisible(true);
         }
 
         public void ReceiveSpecs(GameSpecResponse ev)
         {
-            using (new StackLog($"[Specs] V {ev.Spec.Version} Received {MainBehaviour.Player}"))
-            {
-                if (_game == null)
-                {
-                    var world = new ClientWorld(ev);
-                    _game = new ClientStrategyGame(ev.Spec, world);
-                    RegisterGameListeners();
-                }
-            }
+            if (_game != null)
+                throw new System.Exception("Received to register specs twice");
+            var world = new ClientWorld(ev);
+            _game = new ClientStrategyGame(ev.Spec, world);
+            RegisterGameListeners();
         }
     }
 }

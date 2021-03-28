@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 8badb1c006d2b274bbe0ab0af9e95522
+guid: 0af9b621e753fdb43bb7674b7863a5d4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1414210354977102215
-    second: icons2_0
-  - first:
-      213: -3936552828498759850
-    second: icons2_1
-  - first:
-      213: 5643383430650661137
-    second: icons2_2
+      213: 3891796401534313901
+    second: monsters_0
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -40,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: -1
     aniso: -1
     mipBias: -100
     wrapU: 1
@@ -70,9 +64,9 @@ TextureImporter:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
-    resizeAlgorithm: 1
+    resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -82,9 +76,9 @@ TextureImporter:
   - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
-    resizeAlgorithm: 1
+    resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -95,55 +89,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: icons2_0
+      name: monsters_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 730
-        width: 22
-        height: 22
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 98054fbe261a1f44cab6ef26ccac3fe7
-      internalID: 1414210354977102215
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: icons2_1
-      rect:
-        serializedVersion: 2
-        x: 22
-        y: 730
-        width: 22
-        height: 22
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b9466f80079b6904cb84bc9119a1a1bc
-      internalID: -3936552828498759850
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: icons2_2
-      rect:
-        serializedVersion: 2
-        x: 44
-        y: 730
-        width: 22
-        height: 22
+        y: 0
+        width: 558
+        height: 317
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -151,8 +103,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 54ab3a3010ad6a84db9a91282846860d
-      internalID: 5643383430650661137
+      spriteID: d8f61bdb64233044f9e2c14bd2cd3a90
+      internalID: 3891796401534313901
       vertices: []
       indices: 
       edges: []
@@ -160,7 +112,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 22ba0b9a7ca4c9d499ad065b46c5e9f0
     internalID: 0
     vertices: []
     indices: 

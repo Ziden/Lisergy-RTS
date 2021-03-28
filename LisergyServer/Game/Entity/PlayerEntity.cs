@@ -46,11 +46,6 @@ namespace Game
             return unit;
         }
 
-        public void DeployParty(Party p, Tile t)
-        {
-            p.Tile = t;
-        }
-
         public void PlaceUnitInParty(Unit u, Party newParty)
         {
             if (u.Party != null)

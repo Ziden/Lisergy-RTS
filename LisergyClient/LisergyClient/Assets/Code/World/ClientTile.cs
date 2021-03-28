@@ -23,7 +23,7 @@ namespace Assets.Code.World
                 return;
 
             StackLog.Debug($"Changing activaction of {this} to {visible}");
-            _gameObj.SetActive(visible); // mandando unit parece q caga isso
+            _gameObj.SetActive(visible);
         }
 
         public override void SetSeenBy(ExploringEntity entity)

@@ -15,6 +15,7 @@ namespace GameData
         public Dictionary<byte, BuildingSpec> Buildings = new Dictionary<byte, BuildingSpec>();
         public Dictionary<ushort, TileSpec> Tiles = new Dictionary<ushort, TileSpec>();
         public Dictionary<ushort, UnitSpec> Units = new Dictionary<ushort, UnitSpec>();
+        public Dictionary<ushort, ItemSpec> Items = new Dictionary<ushort, ItemSpec>();
 
         public BuildingSpec GetBuildingSpec(byte id)
         {

@@ -4,8 +4,5 @@ using System.Text;
 
 namespace Game.Entity
 {
-    public enum EntityAction
-    {
-        MOVE, GUARD
-    }
+
 }

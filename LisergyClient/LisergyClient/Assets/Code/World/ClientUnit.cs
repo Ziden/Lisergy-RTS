@@ -24,7 +24,7 @@ namespace Assets.Code.World
             if (_gameObject == null)
             {
                 StackLog.Debug($"Rendering unit {this}");
-                // TODO: Cache prefabs & Thumbnails so no duplicates
+                // TODO: Cache prefabs & Thumbnails per spec id so no duplicates
                 var art = StrategyGame.Specs.Units[this.SpecId].Art;
                 Sprite[] sprites = Resources.LoadAll<Sprite>("sprites/" + art.Name);
                 _gameObject = new GameObject($"Unit Spec {this.SpecId}");

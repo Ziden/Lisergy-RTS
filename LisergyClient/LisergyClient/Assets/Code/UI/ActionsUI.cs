@@ -11,6 +11,11 @@ using UnityEngine.UI;
 
 namespace Assets.Code.UI
 {
+    public enum EntityAction
+    {
+        MOVE, GUARD, ATTACK
+    }
+
     public class ActionsUI
     {
         private PathRenderer _pathRenderer;
@@ -23,6 +28,7 @@ namespace Assets.Code.UI
             this._gameObject = obj;
             RegisterButton("MoveButton", EntityAction.MOVE, MoveButton);
             RegisterButton("GuardButton", EntityAction.GUARD, GuardButton);
+            RegisterButton("AttackButton", EntityAction.ATTACK, AttackButton);
             ClientEvents.OnClickTile += OnClickTile;
             ClientEvents.OnCameraMove += OnCameraMove;
         }
@@ -42,6 +48,9 @@ namespace Assets.Code.UI
 
         private void BuildActions(params EntityAction [] actions)
         {
+            foreach (var button in _actions.Values)
+                button.gameObject.SetActive(false);
+
             var ct = actions.Count();
             if(ct > 4)
                 throw new Exception("Max 4 actions for now");
@@ -78,17 +87,24 @@ namespace Assets.Code.UI
 
         public void Show(ClientParty party, ClientTile tile)
         {
-            if (party.Tile == tile)
+            if (party.Tile == tile || tile == null)
             {
                 Hide();
                 return;
             }
-
             var pos = Camera.main.WorldToScreenPoint(tile.GetGameObject().transform.position);
             _gameObject.transform.position = pos;
             _gameObject.SetActive(true);
-            BuildActions(EntityAction.MOVE, EntityAction.GUARD);
+            var actions = new List<EntityAction>();
+            if (tile.StaticEntity is ClientDungeon)
+                actions.Add(EntityAction.ATTACK);
+            else
+                actions.Add(EntityAction.MOVE);
+            actions.Add(EntityAction.GUARD);
+            BuildActions(actions.ToArray());
         }
+
+        private void AttackButton() { }
 
         private void GuardButton() {}
 

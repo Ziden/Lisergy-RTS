@@ -1,21 +1,22 @@
 ﻿using Game.Battles;
+using Game.Inventories;
 using System;
 
 namespace Game.Entity
 {
-
     [Serializable]
     public class Dungeon : WorldEntity
     {
-        public BattleTeam[] Battles { get => _battles; }
+        protected BattleTeam[] _battles;
+        private Item[] _rewards;
 
-        protected BattleTeam [] _battles;
+        public BattleTeam[] Battles { get => _battles; }
+        public Item[] Rewards { get => _rewards; set => _rewards = value; }
 
         public Dungeon(): base(Gaia)
         {
 
         }
-     
 
         public void SetBattles(params BattleTeam [] battles)
         {

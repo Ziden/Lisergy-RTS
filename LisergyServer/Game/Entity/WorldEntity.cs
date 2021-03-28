@@ -43,7 +43,5 @@ namespace Game
                 Log.Debug($"{this} placed in {value}");
             }
         }
-
-
     }
 }

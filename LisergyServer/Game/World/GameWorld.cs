@@ -87,7 +87,7 @@ namespace Game
 
             var party = player.Parties[0];
             player.PlaceUnitInParty(unit, party);
-            player.DeployParty(party, t.GetNeighbor(Direction.EAST));
+            party.Tile =  t.GetNeighbor(Direction.EAST);
             Log.Debug($"Placed new player in {t}");
             return;
         }

@@ -109,28 +109,24 @@ public class PartyUI
             CameraBehaviour.FocusOnTile((ClientTile)party.Tile);
     }
 
-    private void RenderParty(ClientParty party)
+    public static Image RenderParty(ClientParty party, Transform parent)
     {
         var partyIndex = party.PartyIndex;
         var units = party.GetUnits().ToList();
-        var button = _partyButtons[partyIndex];
-
-        foreach (Transform child in button.transform)
-            GameObject.Destroy(child.gameObject);
-
         var leader = (ClientUnit)units[0];
         var imageObj = new GameObject("portrait", typeof(Image));
         var image = imageObj.GetComponent<Image>();
         image.sprite = leader.Sprites.Face;
         image.rectTransform.sizeDelta = new Vector2(50f, 70f);
-        imageObj.transform.SetParent(button.transform);
+        imageObj.transform.SetParent(parent);
         imageObj.transform.localPosition = new Vector3(0, 0, 0);
+        return image;
     }
 
     public void RenderAllParties()
     {
         foreach (var party in MainBehaviour.Player.Parties)
             if (party is ClientParty)
-                RenderParty((ClientParty)party);
+                RenderParty((ClientParty)party, _partyButtons[party.PartyIndex].transform);
     }
 }

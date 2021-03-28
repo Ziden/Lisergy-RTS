@@ -1,6 +1,7 @@
 ﻿using Game.Events;
 using Game.Events.ServerEvents;
 using Game.World;
+using Game.Inventories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,9 @@ namespace Game.Entity
     {
         private byte _partyIndex;
         private Unit[] _units = new Unit[4] { null, null, null, null };
-         
+
+        private Inventory _cargo = new Inventory();
+
         [NonSerialized]
         private CourseTask _course;
 

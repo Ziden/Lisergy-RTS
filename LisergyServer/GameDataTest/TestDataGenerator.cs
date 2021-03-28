@@ -38,6 +38,7 @@ namespace GameDataTest
 
             TestTiles.Generate(spec);
             TestUnits.Generate(spec);
+            TestItems.Generate(spec);
             return spec;
         }
     }
