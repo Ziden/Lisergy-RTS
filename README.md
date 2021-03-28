@@ -6,6 +6,18 @@
 
 Requirements: .net core 2.1, docker
 
+## Running Server in Standalone Mode
+
+Running Server:
+```
+cd StandaloneServer/
+dotnet build
+dotnet run
+```
+Or start the Standalone Server project.
+
+## Running Server in Clustered Mode
+
 #### Running RabbitMQ
 
 ```
