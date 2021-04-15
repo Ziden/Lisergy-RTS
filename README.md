@@ -1,4 +1,4 @@
-# Codename Lisergy - A WIP, for fun, Civilization style MMO with turn based auto-battles and configurable battle IA's.
+# Codename Lisergy - A WIP, for fun, Civilization style MMO with turn based auto-battles and configurable battle IA's. in .net core & unity3d
 
 [![LisergyPipeline](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml)
 
