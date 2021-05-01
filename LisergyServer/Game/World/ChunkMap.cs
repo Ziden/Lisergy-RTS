@@ -9,23 +9,20 @@ namespace Game
     {
         private Chunk[,] _chunkMap;
         private CachedChunkMap _cache;
-        private GameWorld _world;
 
         public Dictionary<ChunkFlag, List<Chunk>> ByFlags = new Dictionary<ChunkFlag, List<Chunk>>();
-        public GameWorld World { get => _world; }
 
         public int QtdChunksX { get => _chunkMap.GetLength(0); }
         public int QtdChunksY { get => _chunkMap.GetLength(1); }
         public int QtdTilesX { get => QtdChunksX * GameWorld.CHUNK_SIZE; }
         public int QtdTilesY { get => QtdChunksY * GameWorld.CHUNK_SIZE; }
 
-        public ChunkMap(GameWorld world)
+        public ChunkMap(int tilesAmtX, int tilesAmtY)
         {
-            var sizeX = world.SizeX / GameWorld.CHUNK_SIZE;
-            var sizeY = world.SizeY / GameWorld.CHUNK_SIZE;
+            var sizeX = tilesAmtX / GameWorld.CHUNK_SIZE;
+            var sizeY = tilesAmtY / GameWorld.CHUNK_SIZE;
             _chunkMap = new Chunk[sizeX, sizeY];
             _cache = new CachedChunkMap(this);
-            _world = world;
             Log.Debug($"Initialized chunk map {sizeX}x{sizeY}");
         }
 
@@ -95,5 +92,33 @@ namespace Game
             return _cache.GetTile(tileX, tileY);
         }
 
+        public virtual void GenerateTiles(int sizeX, int sizeY)
+        {
+            var maxChunkX = sizeX >> GameWorld.CHUNK_SIZE_BITSHIFT;
+            var maxChunkY = sizeY >> GameWorld.CHUNK_SIZE_BITSHIFT;
+            for (var chunkX = 0; chunkX < maxChunkX; chunkX++)
+            {
+                for (var chunkY = 0; chunkY < maxChunkY; chunkY++)
+                {
+                    var tiles = new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
+                    var chunk = new Chunk(this, chunkX, chunkY, tiles);
+                    for (var x = 0; x < GameWorld.CHUNK_SIZE; x++)
+                    {
+                        for (var y = 0; y < GameWorld.CHUNK_SIZE; y++)
+                        {
+                            var tileX = chunkX * GameWorld.CHUNK_SIZE + x;
+                            var tileY = chunkY * GameWorld.CHUNK_SIZE + y;
+                            tiles[x, y] = GenerateTile(chunk, tileX, tileY);
+                        }
+                    }
+                    this.Add(chunk);
+                }
+            }
+        }
+
+        public virtual Tile GenerateTile(Chunk c, int tileX, int tileY)
+        {
+            return new Tile(c, tileX, tileY);
+        }
     }
 }

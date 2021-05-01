@@ -1,5 +1,5 @@
 ﻿using Game.Battles;
-using Game.Battles.Log;
+using Game.Battles.Actions;
 using System;
 
 namespace Game.Events

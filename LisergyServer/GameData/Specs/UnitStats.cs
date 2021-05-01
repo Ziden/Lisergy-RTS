@@ -42,11 +42,13 @@ namespace Game.Entity
             Mdef = 1;
             Speed = 10;
             Accuracy = 10;
+            Weight = 60;
 
             MaxHP = 5;
             HP = 5;
             Mp = 2;
             MaxMP = 2;
+            Move = 5;
         }
 
         // Stats
@@ -56,6 +58,8 @@ namespace Game.Entity
         public ushort Mdef { get => _stats[Stat.MDEF]; set => _stats[Stat.MDEF] = value; }
         public ushort Speed { get => _stats[Stat.SPEED]; set => _stats[Stat.SPEED] = value; }
         public ushort Accuracy { get => _stats[Stat.ACCURACY]; set => _stats[Stat.ACCURACY] = value; }
+        public ushort Weight { get => _stats[Stat.WEIGHT]; set => _stats[Stat.WEIGHT] = value; }
+        public ushort Move { get => _stats[Stat.MOVE]; set => _stats[Stat.MOVE] = value; }
 
         // Vitals
         public ushort HP { get => _stats[Stat.HP]; set => _stats[Stat.HP] = value; }

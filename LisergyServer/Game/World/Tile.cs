@@ -26,7 +26,7 @@ namespace Game
         private Chunk _chunk;
 
         [NonSerialized]
-        private List<Party> _parties = new List<Party>();
+        private List<MovableWorldEntity> _parties = new List<MovableWorldEntity>();
 
         [NonSerialized]
         protected HashSet<PlayerEntity> _playersViewing = new HashSet<PlayerEntity>();
@@ -38,7 +38,6 @@ namespace Game
         private WorldEntity _staticEntity;
 
         public virtual TileSpec Spec { get => StrategyGame.Specs.Tiles[this.TileId]; }
-        public virtual GameWorld World { get => Chunk.ChunkMap.World; }
         public virtual string OwnerID { get => _staticEntity?.OwnerID; }
         public virtual ushort Y { get => _y; }
         public virtual ushort X { get => _x; } 
@@ -46,8 +45,9 @@ namespace Game
         public virtual Chunk Chunk { get { return _chunk; } }
         public virtual byte TileId { get => _tileId; set => _tileId = value; }
         public virtual byte ResourceID { get => _resourceID; set => _resourceID = value; }
-        public virtual List<Party> Parties { get { return _parties; }}
+        public virtual List<MovableWorldEntity> MovingEntities { get { return _parties; }}
         public virtual HashSet<PlayerEntity> PlayersViewing { get => _playersViewing; }
+        public float MovementFactor { get => Spec.MovementFactor; }
 
         public virtual WorldEntity StaticEntity
         {
@@ -61,7 +61,7 @@ namespace Game
                     value.Tile = this;
             }
         }
-
+        
         public virtual void SetSeenBy(ExploringEntity explorer)
         {
             _entitiesViewing.Add(explorer);
@@ -86,9 +86,9 @@ namespace Game
         public void SendTileInformation(PlayerEntity player, ExploringEntity viewer)
         {
             player.Send(new TileVisibleEvent(this));
-            foreach (var party in Parties)
-                if (party != viewer)
-                    player.Send(new EntityVisibleEvent(party));
+            foreach (var movingEntity in MovingEntities)
+                if (movingEntity != viewer)
+                    player.Send(new EntityVisibleEvent(movingEntity));
 
             if (StaticEntity != null && viewer != StaticEntity)
                 player.Send(new EntityVisibleEvent(StaticEntity));
@@ -103,8 +103,6 @@ namespace Game
         {
             get => MovementFactor > 0;
         }
-
-        public float MovementFactor { get => Spec.MovementFactor; }
 
         public override string ToString()
         {

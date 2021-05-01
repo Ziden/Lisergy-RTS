@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": ""
+    "signature": "3755020232b4bd1d53a36f2de28ddef080d90227"
   },
   "compilationOptions": {},
   "targets": {
@@ -84,7 +84,14 @@
           }
         }
       },
-      "System.Security.Cryptography.Cng/4.7.0": {},
+      "System.Security.Cryptography.Cng/4.7.0": {
+        "runtimeTargets": {
+          "runtime/win/lib/_._": {
+            "rid": "win",
+            "assetType": "runtime"
+          }
+        }
+      },
       "System.Security.Cryptography.Pkcs/4.7.0": {
         "dependencies": {
           "System.Security.Cryptography.Cng": "4.7.0"
@@ -180,7 +187,8 @@
       },
       "Game/1.0.0": {
         "dependencies": {
-          "GameData": "1.0.0"
+          "GameData": "1.0.0",
+          "NetSerializer": "4.1.0.0"
         },
         "runtime": {
           "Game.dll": {}
@@ -229,7 +237,7 @@
           "MapServer.dll": {}
         }
       },
-      "NetSerializer/4.1.0.0": {
+      "NetSerializer.Reference/4.1.0.0": {
         "runtime": {
           "NetSerializer.dll": {
             "assemblyVersion": "4.1.0.0",
@@ -392,7 +400,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "NetSerializer/4.1.0.0": {
+    "NetSerializer.Reference/4.1.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

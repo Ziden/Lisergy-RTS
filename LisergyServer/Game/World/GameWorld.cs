@@ -39,32 +39,13 @@ namespace Game
         public virtual void CreateChunkMap()
         {
             _id = Guid.NewGuid().ToString();
-            ChunkMap = new ChunkMap(this);
+            ChunkMap = new ChunkMap(SizeX, SizeY);
             GenerateTiles();
         }
 
         public virtual void GenerateTiles()
         {
-            var maxChunkX = this.SizeX >> GameWorld.CHUNK_SIZE_BITSHIFT;
-            var maxChunkY = this.SizeY >> GameWorld.CHUNK_SIZE_BITSHIFT;
-            for (var chunkX = 0; chunkX < maxChunkX; chunkX++)
-            {
-                for (var chunkY = 0; chunkY < maxChunkY; chunkY++)
-                {
-                    var tiles = new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
-                    var chunk = new Chunk(ChunkMap, chunkX, chunkY, tiles);
-                    for (var x = 0; x < GameWorld.CHUNK_SIZE; x++)
-                    {
-                        for (var y = 0; y < GameWorld.CHUNK_SIZE; y++)
-                        {
-                            var tileX = chunkX * GameWorld.CHUNK_SIZE + x;
-                            var tileY = chunkY * GameWorld.CHUNK_SIZE + y;
-                            tiles[x, y] = new Tile(chunk, tileX, tileY);
-                        }
-                    }
-                    this.ChunkMap.Add(chunk);
-                }
-            }
+            this.ChunkMap.GenerateTiles(this.SizeX, this.SizeY);
         }
 
         public virtual void PlaceNewPlayer(PlayerEntity player, Tile t = null)

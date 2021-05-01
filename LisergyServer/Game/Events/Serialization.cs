@@ -1,5 +1,5 @@
 ﻿using Game.Battles;
-using Game.Battles.Log;
+using Game.Battles.Actions;
 using Game.Entity;
 using GameData;
 using NetSerializer;
@@ -19,7 +19,7 @@ namespace Game.Events
             var models = GetEventTypes().ToList();
 
             // Battle
-            models.Add(typeof(AttackLog));
+            models.Add(typeof(AttackAction));
             models.Add(typeof(BattleUnit));
             models.Add(typeof(BattleTeam));
 

@@ -24,7 +24,7 @@ namespace Tests
 
             Assert.AreEqual(1, player.Units.Count);
             Assert.AreEqual(TestGame.Specs.InitialUnit, unit.SpecId);
-            Assert.That(unit.Party.Tile.Parties.Contains(unit.Party));
+            Assert.That(unit.Party.Tile.MovingEntities.Contains(unit.Party));
         }
 
         [Test]

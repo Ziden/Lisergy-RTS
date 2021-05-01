@@ -30,6 +30,7 @@ public class DungeonUI : MonoBehaviour
 
     public void Display(ClientDungeon dungeon)
     {
+        /*
         Log.Info($"Displaying {dungeon}");
         gameObject.SetActive(true);
         for (var x = 0 ; x < 4; x++)
@@ -40,6 +41,7 @@ public class DungeonUI : MonoBehaviour
             var battleUnit = ViewingBattle.Units[x];
             UnitPanel[x].ShowUnit(new ClientUnit(dungeon.Owner, battleUnit.Unit));
         }
+        */
     }
 
     public void OnClickTile(ClientTile tile)

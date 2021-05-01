@@ -848,7 +848,6 @@
       },
       "frameworks": {
         "netcoreapp2.1": {
-          "targetAlias": "netcoreapp2.1",
           "projectReferences": {
             "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\Game\\Game.csproj": {
               "projectPath": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\Game\\Game.csproj"
@@ -864,7 +863,6 @@
     },
     "frameworks": {
       "netcoreapp2.1": {
-        "targetAlias": "netcoreapp2.1",
         "dependencies": {
           "Microsoft.NETCore.App": {
             "suppressParent": "All",
@@ -878,16 +876,10 @@
           }
         },
         "imports": [
-          "net461",
-          "net462",
-          "net47",
-          "net471",
-          "net472",
-          "net48"
+          "net461"
         ],
         "assetTargetFallback": true,
-        "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+        "warn": true
       }
     }
   }

@@ -1,7 +1,5 @@
 ﻿using Game.Events;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Game.Entity
 {
@@ -17,10 +15,15 @@ namespace Game.Entity
             get { return base.Tile; }
             set
             {
+                if (base.Tile != null)
+                    base.Tile.MovingEntities.Remove(this);
+
                 if (base.Tile != value && base.Tile != null && value != null)
                     foreach (var viewer in value.PlayersViewing)
                         viewer.Send(new EntityMoveEvent(this, value));
+
                 base.Tile = value;
+                base.Tile.MovingEntities.Add(this);
             }
         }
     }

@@ -1,9 +1,3 @@
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\bin\Debug\netcoreapp2.1\BattleServer.deps.json
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\bin\Debug\netcoreapp2.1\BattleServer.runtimeconfig.json
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\bin\Debug\netcoreapp2.1\BattleServer.runtimeconfig.dev.json
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\bin\Debug\netcoreapp2.1\MapServer.deps.json
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\bin\Debug\netcoreapp2.1\MapServer.runtimeconfig.json
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\bin\Debug\netcoreapp2.1\MapServer.runtimeconfig.dev.json
 C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\bin\Debug\netcoreapp2.1\StandaloneServer.deps.json
 C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\bin\Debug\netcoreapp2.1\StandaloneServer.runtimeconfig.json
 C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\bin\Debug\netcoreapp2.1\StandaloneServer.runtimeconfig.dev.json
@@ -31,4 +25,3 @@ C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\obj\Debug\net
 C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\obj\Debug\netcoreapp2.1\StandaloneServer.csproj.CopyComplete
 C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\obj\Debug\netcoreapp2.1\StandaloneServer.dll
 C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\obj\Debug\netcoreapp2.1\StandaloneServer.pdb
-C:\Users\gabri\source\repos\Lisergy\LisergyServer\StandaloneServer\obj\Debug\netcoreapp2.1\StandaloneServer.genruntimeconfig.cache

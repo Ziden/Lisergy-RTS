@@ -1,5 +1,5 @@
 ﻿using Game.Battles;
-using Game.Battles.Log;
+using Game.Battles.Actions;
 using System;
 
 namespace Game.Events
@@ -13,7 +13,7 @@ namespace Game.Events
         public BattleTeam Defender;
         public BattleTurnEvent[] Turns;
 
-        public BattleResultCompleteEvent(BattleResult result)
+        public BattleResultCompleteEvent(TurnBattleResult result)
         {
             Attacker = result.Attacker;
             Defender = result.Defender;
@@ -29,11 +29,11 @@ namespace Game.Events
     [Serializable]
     public class BattleTurnEvent
     {
-        public ActionLog[] Actions;
+        public BattleAction[] Actions;
 
         public BattleTurnEvent(TurnLog turnLog)
         {
-            Actions = new ActionLog[turnLog.Actions.Count];
+            Actions = new BattleAction[turnLog.Actions.Count];
             for (var x = 0; x < turnLog.Actions.Count; x++)
                 Actions[x] = turnLog.Actions[x];
         }

@@ -64,9 +64,9 @@ public class PartyUI
     private void OnClickTile(ClientTile tile)
     {
         Log.Debug($"PartyUI displaying actions for {tile} with active party {_activeParty}");
-        if (tile != null && tile.Parties.Count > 0)
+        if (tile != null && tile.MovingEntities.Count > 0)
         {
-            var party = (ClientParty)tile.Parties.First();
+            var party = (ClientParty)tile.MovingEntities.First();
             ShowParty(party);
             if (party.IsMine())
                 SelectParty(party);

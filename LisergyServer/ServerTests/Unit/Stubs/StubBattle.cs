@@ -6,11 +6,11 @@ using System.Text;
 
 namespace ServerTests
 {
-    public class TestBattle : Battle
+    public class TestBattle : TurnBattle
     {
         public TestBattle(BattleTeam t1, BattleTeam t2) : base(t1, t2) { }
 
-        public ActionLog RunSingleTurn()
+        public BattleAction RunSingleTurn()
         {
             this.DoRound();
             return Log.LastAction;
@@ -18,6 +18,6 @@ namespace ServerTests
 
         public BattleUnit NextUnitToAct => _actionQueue.First();
 
-        public BattleResult Log => _log;
+        public TurnBattleResult Log => _log;
     }
 }

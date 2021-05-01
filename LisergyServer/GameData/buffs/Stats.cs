@@ -11,6 +11,8 @@
         MATK,
         MDEF,
         SPEED,
-        ACCURACY
+        ACCURACY,
+        MOVE,
+        WEIGHT,
     }
 }

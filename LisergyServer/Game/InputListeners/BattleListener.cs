@@ -31,7 +31,7 @@ namespace Game.Listeners
 
         public static BattleResultCompleteEvent HandleBattle(BattleStartCompleteEvent ev)
         {
-            var battle = new Battle(ev.Attacker, ev.Defender);
+            var battle = new TurnBattle(ev.Attacker, ev.Defender);
             var result = battle.Run();
             var resultEvent = new BattleResultCompleteEvent(result);
             resultEvent.BattleID = ev.BattleID;

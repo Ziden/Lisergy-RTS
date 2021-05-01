@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": ""
+    "signature": "a4c6555fefaabaa9a2b2f9f72fc11405087ee80b"
   },
   "compilationOptions": {},
   "targets": {
@@ -38,7 +38,8 @@
       },
       "Game/1.0.0": {
         "dependencies": {
-          "GameData": "1.0.0"
+          "GameData": "1.0.0",
+          "NetSerializer": "4.1.0.0"
         },
         "runtime": {
           "Game.dll": {}
@@ -49,7 +50,7 @@
           "GameData.dll": {}
         }
       },
-      "NetSerializer/4.1.0.0": {
+      "NetSerializer.Reference/4.1.0.0": {
         "runtime": {
           "NetSerializer.dll": {
             "assemblyVersion": "4.1.0.0",
@@ -96,7 +97,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "NetSerializer/4.1.0.0": {
+    "NetSerializer.Reference/4.1.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

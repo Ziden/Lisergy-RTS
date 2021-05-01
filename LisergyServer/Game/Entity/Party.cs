@@ -65,19 +65,6 @@ namespace Game.Entity
             _units[index] = null;
         }
 
-        public override Tile Tile
-        {
-            get { return base.Tile; }
-            set
-            {
-                if (base.Tile != null)
-                    base.Tile.Parties.Remove(this);
-
-                base.Tile = value;
-                base.Tile.Parties.Add(this);
-            }
-        }
-
         public override string ToString()
         {
             return $"<Party Id={Id} Index={PartyIndex} Owner={OwnerID}>";

@@ -10,8 +10,6 @@ namespace Assets.Code.World
 
         public bool Decorated;
 
-        public ClientWorld ClientWorld { get => (ClientWorld)this.World; }
-
         public ClientTile(ClientChunk c, int x, int y) : base(c, x, y) { }
 
         public void SetVisible(bool visible)
@@ -33,7 +31,7 @@ namespace Assets.Code.World
             if (entity.Owner == MainBehaviour.Player)
             {
                 SetVisible(true);
-                foreach (var party in this.Parties)
+                foreach (var party in this.MovingEntities)
                     ((ClientParty)party).GetGameObject().SetActive(true);
                 if (this.StaticEntity is IGameObject)
                     ((IGameObject)this.StaticEntity).GetGameObject().SetActive(true);
@@ -50,7 +48,7 @@ namespace Assets.Code.World
             if (!this.IsVisibleTo(MainBehaviour.Player))
             {
                 SetVisible(false);
-                foreach (var party in this.Parties)
+                foreach (var party in this.MovingEntities)
                     ((ClientParty)party).GetGameObject().SetActive(false);
                 if (this.StaticEntity is IGameObject)
                     ((IGameObject)this.StaticEntity).GetGameObject().SetActive(false);
