@@ -1,16 +1,17 @@
 ﻿using Game;
 using Game.Entity;
+using Game.TacticsBattle;
 using UnityEngine;
 
 namespace Assets.Code.World
 {
-    public class ClientTile : Tile, IGameObject
+    public class ClientTile : TacticsTile, IGameObject
     {
         private GameObject _gameObj;
 
         public bool Decorated;
 
-        public ClientTile(ClientChunk c, int x, int y) : base(c, x, y) { }
+        public ClientTile(Chunk c, int x, int y) : base(c, x, y) { }
 
         public void SetVisible(bool visible)
         {
@@ -55,21 +56,36 @@ namespace Assets.Code.World
             }
         }
 
-        public void RenderTile(byte tileID)
+        public virtual void Decorate()
+        {
+            var tileBhv = _gameObj.GetComponent<TileRandomizerBehaviour>();
+            tileBhv.CreateTileDecoration(this);
+        }
+
+        public virtual string GetPrefabFolder()
+        {
+            return "tiles";
+        }
+
+        public virtual void RenderTile(byte tileID)
         {
             var tileSpec = StrategyGame.Specs.GetTileSpec(tileID);
             foreach (var art in tileSpec.Arts)
             {
                 if (_gameObj == null)
                 {
-                    var prefab = Resources.Load("prefabs/tiles/" + art.Name);
+                    var prefab = PrefabCache.GetArt(GetPrefabFolder(), art);
+                    if(prefab == null)
+                    {
+                        Log.Error("Prefab Not Found " + GetPrefabFolder() + art.Name);
+                        continue;
+                    }
                     var parent = ((ClientChunk)this.Chunk).GetGameObject().transform;
                     _gameObj = MainBehaviour.Instantiate(prefab, parent) as GameObject;
                     _gameObj.name = $"Tile_{X}-{Y}";
                     _gameObj.transform.position = new Vector3(X, 0, Y);
-                    var tileBhv = _gameObj.GetComponent<TileRandomizerBehaviour>();
+                    Decorate();
                     base.TileId = tileID;
-                    tileBhv.CreateTileDecoration(this);
                     return;
                 }
             }

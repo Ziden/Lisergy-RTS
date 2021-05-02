@@ -1,12 +1,15 @@
 ﻿using Assets.Code;
+using Assets.Code.Listeners;
 using Game.Events;
 using UnityEngine;
 
 public class MainBehaviour : MonoBehaviour
 {
+    public bool MapEditor = false;
+
     public static Networking Networking { get; private set; }
     public static ClientPlayer Player { get; private set; }
-    private static ServerListener GameListener { get; set; }
+    private static IListener GameListener { get; set; }
 
     void Start()
     {
@@ -46,7 +49,10 @@ public class MainBehaviour : MonoBehaviour
         ConfigureUnity();
         Serialization.LoadSerializers();
         Networking = new Networking();
-        GameListener = new ServerListener();
+        if (MapEditor)
+            GameListener = new MapEditorListener();
+        else
+            GameListener = new ServerListener();
     }
 
     void Update()
@@ -54,6 +60,7 @@ public class MainBehaviour : MonoBehaviour
         Networking?.Update();
         Awaiter.Update();
         GameInput.Update();
+        GameListener?.Update();
     }
 
     private void OnApplicationQuit()

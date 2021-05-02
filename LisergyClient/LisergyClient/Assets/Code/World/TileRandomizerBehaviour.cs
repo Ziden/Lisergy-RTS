@@ -28,7 +28,6 @@ public class TileRandomizerBehaviour : MonoBehaviour
 
     private static void DecorateBoundaries(ClientTile tile)
     {
-
         var comp = tile.GetGameObject().GetComponent<TileRandomizerBehaviour>();
 
         var map = tile.Chunk.ChunkMap;

@@ -1,12 +1,11 @@
-﻿using Assets.Code.World;
-using Game;
-using Game.Entity;
+﻿using Assets.Code.Listeners;
+using Assets.Code.World;
 using Game.Events;
 using Game.Events.ServerEvents;
 
 namespace Assets.Code
 {
-    public class ServerListener
+    public class ServerListener : IListener
     {
         private ClientStrategyGame _game;
 
@@ -38,7 +37,6 @@ namespace Assets.Code
                 throw new System.Exception($"Server sent move event for entity {ev.ID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
             var newTile = (ClientTile)_game.GetWorld().GetTile(ev.X, ev.Y);
             knownEntity.Tile = newTile;
-
         }
 
         public void EntityVisible(EntityVisibleEvent ev)
@@ -66,6 +64,11 @@ namespace Assets.Code
             var world = new ClientWorld(ev);
             _game = new ClientStrategyGame(ev.Spec, world);
             RegisterGameListeners();
+        }
+
+        public void Update()
+        {
+            
         }
     }
 }

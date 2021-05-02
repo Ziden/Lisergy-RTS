@@ -100,20 +100,25 @@ namespace Game
             {
                 for (var chunkY = 0; chunkY < maxChunkY; chunkY++)
                 {
-                    var tiles = new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
-                    var chunk = new Chunk(this, chunkX, chunkY, tiles);
+                    var chunk = GenerateChunk(chunkX, chunkY);
                     for (var x = 0; x < GameWorld.CHUNK_SIZE; x++)
                     {
                         for (var y = 0; y < GameWorld.CHUNK_SIZE; y++)
                         {
                             var tileX = chunkX * GameWorld.CHUNK_SIZE + x;
                             var tileY = chunkY * GameWorld.CHUNK_SIZE + y;
-                            tiles[x, y] = GenerateTile(chunk, tileX, tileY);
+                            chunk.Tiles[x, y] = GenerateTile(chunk, tileX, tileY);
                         }
                     }
                     this.Add(chunk);
                 }
             }
+        }
+
+        public virtual Chunk GenerateChunk(int chunkX, int chunkY)
+        {
+            var tiles = new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
+            return new Chunk(this, chunkX, chunkY, tiles);
         }
 
         public virtual Tile GenerateTile(Chunk c, int tileX, int tileY)

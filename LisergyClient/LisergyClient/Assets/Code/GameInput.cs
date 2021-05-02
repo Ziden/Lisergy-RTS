@@ -9,7 +9,7 @@ namespace Assets.Code
     {
         private static Ray ray;
         private static RaycastHit hit;
- 
+
         public static ClientTile GetTileMouseIs()
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -17,9 +17,12 @@ namespace Assets.Code
             {
                 if (hit.collider == null)
                     return null;
+               
                 var tileComponent = hit.collider.GetComponentInParent<TileRandomizerBehaviour>();
+                Log.Debug(hit.collider.name +" null ? "+ (tileComponent==null));
                 if (tileComponent == null)
                     return null;
+                Log.Debug($"Clicked tile {(ClientTile)tileComponent.Tile}");
                 return (ClientTile)tileComponent.Tile;
             }
             return null;

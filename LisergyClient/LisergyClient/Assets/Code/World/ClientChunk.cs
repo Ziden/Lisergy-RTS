@@ -12,7 +12,7 @@ namespace Assets.Code.World
 
         public GameObject GetGameObject() => _gameObject;
 
-        public ClientChunk(ClientChunkMap chunkMap, int x, int y): base(chunkMap, x, y, new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE])
+        public ClientChunk(ChunkMap chunkMap, int x, int y): base(chunkMap, x, y, new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE])
         {
             if (_chunksNode == null)
                 _chunksNode = new GameObject("Chunks");

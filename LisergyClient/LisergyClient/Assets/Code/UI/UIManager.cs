@@ -32,19 +32,32 @@ public class UIManager : MonoBehaviour
         Log.Debug("Initializing UI");
         _loginCanvas = new LoginCanvas(login);
         _loginCanvas.GameObject.SetActive(true);
-        _partyUI = new PartyUI(lowerPanel);
+        if(lowerPanel != null)
+        {
+            _partyUI = new PartyUI(lowerPanel);
+            PartyUI.GameObj.SetActive(false);
+        }
+          
         _tileUI = new TileUI();
-        _actionsUI = new ActionsUI(actions);
-        _unitUI = unitPanel.GetComponent<UnitPanel>();
+        if(actions != null)
+            _actionsUI = new ActionsUI(actions);
+
+        if(unitPanel != null)
+        {
+            _unitUI = unitPanel.GetComponent<UnitPanel>();
+            UnitPanel.gameObject.SetActive(false);
+        }
+         
         _notifications = this.gameObject.GetComponentInChildren<GameNotifications>();
-        _dungeons = dungeon.GetComponent<DungeonUI>();
-        UnitPanel.gameObject.SetActive(false);
-        PartyUI.GameObj.SetActive(false);
+
+        if (dungeon != null)
+            _dungeons = dungeon.GetComponent<DungeonUI>();
+      
         ClientEvents.OnPlayerLogin += OnLogin;
     }
 
     public void OnLogin(PlayerEntity player)
     {
-        PartyUI.GameObj.SetActive(true);
+        PartyUI?.GameObj.SetActive(true);
     }
 }
