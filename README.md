@@ -1,22 +1,10 @@
-# Codename Lisergy - A WIP, for fun, Civilization style MMO with turn based auto-battles and configurable battle IA's. in .net core & unity3d
+# Codename Lisergy - A Civilization style MMO with turn based auto-battles and configurable battle IA's.
 
 [![LisergyPipeline](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml)
 
 ## To run the server:
 
 Requirements: .net core 2.1, docker
-
-## Running Server in Standalone Mode
-
-Running Server:
-```
-cd StandaloneServer/
-dotnet build
-dotnet run
-```
-Or start the Standalone Server project.
-
-## Running Server in Clustered Mode
 
 #### Running RabbitMQ
 
