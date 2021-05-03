@@ -1,10 +1,7 @@
-﻿using BattleServer;
-using Game;
+﻿using Game;
 using Game.Events;
-using Game.Listeners;
 using LisergyServer.Core;
 using MapServer;
-using System;
 
 namespace StandaloneServer
 {
@@ -21,10 +18,6 @@ namespace StandaloneServer
         static void Main(string[] args)
         {
             var mapServer = new MapService(1337);
-
-            // Making a "local" battle server
-            // NetworkEvents.OnBattleStart += (ev) => EventEmitter.CallEventFromBytes(_player, Serialization.FromEvent(BattleFinishListener.HandleBattle(ev)));
-
             mapServer.RunServer();
         }
     }
