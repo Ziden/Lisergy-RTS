@@ -17,7 +17,7 @@ public class UnitPanel : MonoBehaviour
     public Text HP;
     public Text MP;
 
-    public Image Face;
+    public Transform Face;
 
     void Start()
     {
@@ -30,10 +30,13 @@ public class UnitPanel : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    public void ShowUnit(ClientUnit unit)
+    public void ShowUnit(Unit unit)
     {
         this.gameObject.SetActive(true);
-        Face.sprite = unit.Sprites.Face;
+
+        PartyUI.RenderPortrait(unit, Face);
+        //PartyUI.RenderParty()
+        //Face.sprite = LazyLoad.GetSpecificSpriteArt(unit.Spec.FaceArt);
 
         Atk.text = unit.Stats.Atk.ToString();
         Def.text = unit.Stats.Def.ToString();

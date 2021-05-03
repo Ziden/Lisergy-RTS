@@ -24,16 +24,17 @@ namespace Assets.Code.World
             if (_gameObject == null)
             {
                 StackLog.Debug($"Rendering unit {this}");
-                // TODO: Cache prefabs & Thumbnails per spec id so no duplicates
-                var art = StrategyGame.Specs.Units[this.SpecId].Art;
-                Sprite[] sprites = Resources.LoadAll<Sprite>("sprites/" + art.Name);
+                Sprite[] sprites = LazyLoad.GetSprite(this.SpecId);
                 _gameObject = new GameObject($"Unit Spec {this.SpecId}");
                 var spriteRenderer = _gameObject.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = sprites[0];
                 Sprites = _gameObject.AddComponent<Sprite3D>();
                 Sprites.Sprites = sprites;
+                _gameObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
             }
             return _gameObject;
         }
+
+    
     }
 }

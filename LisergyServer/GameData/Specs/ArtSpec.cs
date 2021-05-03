@@ -6,13 +6,15 @@ namespace GameData.Specs
 {
     public enum ArtType
     {
-        SPRITE,
+        SPECIFIC_SPRITE,
+        SPRITE_SHEET,
         PREFAB
     }
 
     [Serializable]
     public class ArtSpec
     {
+        public int Index;
         public string Name;
         public ArtType Type;
     }

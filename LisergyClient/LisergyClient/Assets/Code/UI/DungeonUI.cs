@@ -3,14 +3,15 @@ using Assets.Code.World;
 using Game;
 using Game.Battles;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DungeonUI : MonoBehaviour
 {
     public UnitPanel[] UnitPanel;
-    public GameObject PartyFace;
+    public Transform PartyFace;
     public GameObject Roadmap;
     public GameObject BattleIcon;
-    public GameObject CloseButton;
+    public Button CloseButton;
     public GameObject StartButton;
 
     private int _viewingBattle = 0;
@@ -20,7 +21,15 @@ public class DungeonUI : MonoBehaviour
 
     public DungeonUI()
     {
+      
         //ClientEvents.OnClickTile += OnClickTile;
+    }
+
+    public void Start()
+    {
+        CloseButton.onClick.AddListener(() => {
+            this.Hide();
+        });
     }
 
     public void Hide()
@@ -30,7 +39,7 @@ public class DungeonUI : MonoBehaviour
 
     public void Display(ClientDungeon dungeon)
     {
-        /*
+        _dungeon = dungeon;
         Log.Info($"Displaying {dungeon}");
         gameObject.SetActive(true);
         for (var x = 0 ; x < 4; x++)
@@ -39,15 +48,17 @@ public class DungeonUI : MonoBehaviour
             UnitPanel[x].gameObject.SetActive(unitActive);
             if (!unitActive) continue;
             var battleUnit = ViewingBattle.Units[x];
-            UnitPanel[x].ShowUnit(new ClientUnit(dungeon.Owner, battleUnit.Unit));
+            UnitPanel[x].ShowUnit(battleUnit.GetUnitReference());
         }
-        */
+        PartyUI.RenderParty(UIManager.PartyUI.SelectedParty, PartyFace);
     }
 
     public void OnClickTile(ClientTile tile)
     {
+        /*
         var dungeon = tile.StaticEntity as ClientDungeon;
         if (dungeon == null) return;
         UIManager.DungeonsUI.Display(dungeon);
+        */
     }
 }

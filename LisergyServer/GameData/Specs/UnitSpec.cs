@@ -13,6 +13,7 @@ namespace GameData.Specs
         public ushort UnitSpecID;
         public byte LOS;
         public ArtSpec Art;
+        public ArtSpec FaceArt;
 
         public UnitStats Stats;
     }

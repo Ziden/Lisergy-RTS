@@ -1,196 +1,88 @@
 fileFormatVersion: 2
-guid: a4c0bf5ff2805d747a14f808b555b12e
+guid: 01ed5254522b96d47be740b9d2189a49
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3422849895820167655
-    second: wizard_0
+      213: 6246832655069406539
+    second: soldier_0
   - first:
-      213: -5232962937916053866
-    second: wizard_1
+      213: 6017404338080566625
+    second: soldier_1
   - first:
-      213: -3129494490717828150
-    second: wizard_2
+      213: -2451782394016434471
+    second: soldier_2
   - first:
-      213: 3558114288250971579
-    second: wizard_3
+      213: 4082732244838283841
+    second: soldier_3
   - first:
-      213: -845671412585875310
-    second: wizard_4
+      213: -2269519568428476932
+    second: soldier_4
   - first:
-      213: 3196434482627152122
-    second: wizard_5
+      213: -6676640116428088755
+    second: soldier_5
   - first:
-      213: -9033810998414751648
-    second: wizard_6
+      213: -2411736328533753459
+    second: soldier_6
   - first:
-      213: -5323118506111613818
-    second: wizard_7
+      213: 3240119343033235501
+    second: soldier_7
   - first:
-      213: 3447278909189480453
-    second: wizard_8
+      213: -8621434504218542063
+    second: soldier_8
   - first:
-      213: 6422215965498910030
-    second: wizard_9
+      213: -9162669571817907879
+    second: soldier_9
   - first:
-      213: -4557307861747338638
-    second: wizard_10
+      213: -2812487356058246685
+    second: soldier_10
   - first:
-      213: 4236522864806079260
-    second: wizard_11
+      213: -5556171334924629526
+    second: soldier_11
   - first:
-      213: -3458396131369198533
-    second: wizard_12
+      213: 4953204187100822599
+    second: soldier_12
   - first:
-      213: -7897631283531959190
-    second: wizard_13
+      213: -513539032879699618
+    second: soldier_13
   - first:
-      213: -8177925272955249311
-    second: wizard_14
+      213: 1771352277035078625
+    second: soldier_14
   - first:
-      213: -115505791638739589
-    second: wizard_15
+      213: 3590799235606587986
+    second: soldier_15
   - first:
-      213: -4074753729707433326
-    second: wizard_16
+      213: 7255611395052441394
+    second: soldier_16
   - first:
-      213: 7473738251842310938
-    second: wizard_17
+      213: 3792477768736351100
+    second: soldier_17
   - first:
-      213: 6534174279403202997
-    second: wizard_18
+      213: -4390054864653243203
+    second: soldier_18
   - first:
-      213: -1251971177499600006
-    second: wizard_19
+      213: -8510936015215796615
+    second: soldier_19
   - first:
-      213: 2345775029577331828
-    second: wizard_20
+      213: -8859894384158107154
+    second: soldier_20
   - first:
-      213: -6012465934139683775
-    second: wizard_21
+      213: 9213711182202176668
+    second: soldier_21
   - first:
-      213: -6117962757745870293
-    second: wizard_22
+      213: 3176968111692867163
+    second: soldier_22
   - first:
-      213: 5245984888401528492
-    second: wizard_23
+      213: -5619252862782752129
+    second: soldier_23
   - first:
-      213: 2581440251639553253
-    second: wizard_24
+      213: -974091596250384365
+    second: soldier_24
   - first:
-      213: 1492278704935735812
-    second: wizard_25
+      213: -3403128201435246990
+    second: soldier_25
   - first:
-      213: 6415136839935572491
-    second: wizard_26
-  - first:
-      213: 2971653748508199937
-    second: mage_0
-  - first:
-      213: -1182937539813507409
-    second: mage_1
-  - first:
-      213: 7310728498343965544
-    second: mage_2
-  - first:
-      213: -7672788158911853900
-    second: mage_3
-  - first:
-      213: 8619904004745130942
-    second: mage_4
-  - first:
-      213: -6014854275350682528
-    second: mage_5
-  - first:
-      213: 5179906125871286598
-    second: mage_6
-  - first:
-      213: -1308827184595644429
-    second: mage_7
-  - first:
-      213: 2640012314773392344
-    second: mage_8
-  - first:
-      213: -2056482287553655689
-    second: mage_9
-  - first:
-      213: -8995485352130813372
-    second: mage_10
-  - first:
-      213: 8886161708615391911
-    second: mage_11
-  - first:
-      213: -2392962986800102977
-    second: mage_12
-  - first:
-      213: 537988590183208327
-    second: mage_13
-  - first:
-      213: 2913310984789112361
-    second: mage_14
-  - first:
-      213: 5583017019949265044
-    second: mage_15
-  - first:
-      213: -8251936894537551026
-    second: mage_16
-  - first:
-      213: 2551167551238079723
-    second: mage_17
-  - first:
-      213: -7087717387246710143
-    second: mage_18
-  - first:
-      213: 4862037640250152518
-    second: mage_19
-  - first:
-      213: 4961334136761280368
-    second: mage_20
-  - first:
-      213: -7578517801142246702
-    second: mage_21
-  - first:
-      213: 398752402411312038
-    second: mage_22
-  - first:
-      213: -2105713358603744209
-    second: mage_23
-  - first:
-      213: -8612690192557267371
-    second: mage_24
-  - first:
-      213: 255474050720417126
-    second: mage_25
-  - first:
-      213: -8111685322561077079
-    second: mage_26
-  - first:
-      213: -5363173591836565674
-    second: mage_27
-  - first:
-      213: -4951233525492383473
-    second: mage_28
-  - first:
-      213: -2443624678481609139
-    second: mage_29
-  - first:
-      213: -29831368931069849
-    second: mage_30
-  - first:
-      213: 599244500584524701
-    second: mage_31
-  - first:
-      213: -7694601441221461885
-    second: mage_32
-  - first:
-      213: -749657751323580872
-    second: mage_33
-  - first:
-      213: 3975937139307092610
-    second: mage_34
-  - first:
-      213: -3486025168730836368
-    second: mage_35
+      213: 8372446143975922859
+    second: soldier_26
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -225,12 +117,12 @@ TextureImporter:
     mipBias: -100
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: -1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 8
+  spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -250,9 +142,9 @@ TextureImporter:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
-    resizeAlgorithm: 1
+    resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -262,9 +154,9 @@ TextureImporter:
   - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
-    resizeAlgorithm: 1
+    resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -275,7 +167,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: mage_0
+      name: soldier_0
       rect:
         serializedVersion: 2
         x: 0
@@ -289,14 +181,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c480ad5b3a0c8ee4d8e2de3c249c2359
-      internalID: 2971653748508199937
+      spriteID: 3650648f43f38b04586f3b870d60e87c
+      internalID: 6246832655069406539
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_1
+      name: soldier_1
       rect:
         serializedVersion: 2
         x: 40
@@ -310,14 +202,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 063b79c11ce9f404489355498d6b1f57
-      internalID: -1182937539813507409
+      spriteID: 09e53b5c77d3f3d479c4899c1177dee5
+      internalID: 6017404338080566625
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_2
+      name: soldier_2
       rect:
         serializedVersion: 2
         x: 80
@@ -331,14 +223,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 202c39c9971a3074aa69dcea2c108e36
-      internalID: 7310728498343965544
+      spriteID: 5f5a3c964c413734e88d4c0e13157213
+      internalID: -2451782394016434471
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_3
+      name: soldier_3
       rect:
         serializedVersion: 2
         x: 120
@@ -352,14 +244,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9d3e85204a16f724e82c15448e615626
-      internalID: -7672788158911853900
+      spriteID: f41b17a12af82574a93618900f0dcc4a
+      internalID: 4082732244838283841
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_4
+      name: soldier_4
       rect:
         serializedVersion: 2
         x: 160
@@ -373,14 +265,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d07bd03c9fc5a004bbadd9230cd7dc16
-      internalID: 8619904004745130942
+      spriteID: f90c10ceb0498ff4dbdda37975df089f
+      internalID: -2269519568428476932
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_5
+      name: soldier_5
       rect:
         serializedVersion: 2
         x: 200
@@ -394,14 +286,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7f8e6fc9aa5c1144093bde0d9e547ecb
-      internalID: -6014854275350682528
+      spriteID: 9a40dd5837ee78f40999d79e7c14d4dc
+      internalID: -6676640116428088755
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_6
+      name: soldier_6
       rect:
         serializedVersion: 2
         x: 240
@@ -415,14 +307,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a0293f8e8b0d2564bbb72e1082ea48a4
-      internalID: 5179906125871286598
+      spriteID: 6fd1b7a37791be34cbbb9b590ee24aa1
+      internalID: -2411736328533753459
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_7
+      name: soldier_7
       rect:
         serializedVersion: 2
         x: 0
@@ -436,14 +328,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2c5f85921b2cbd84ca103850d6595c22
-      internalID: -1308827184595644429
+      spriteID: f4f1636c396189141a35843e0e365068
+      internalID: 3240119343033235501
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_8
+      name: soldier_8
       rect:
         serializedVersion: 2
         x: 40
@@ -457,14 +349,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2942cdba1f778074e92ac23d8811dcd5
-      internalID: 2640012314773392344
+      spriteID: 16f1e969c2c47234c9f02ab23fc68c52
+      internalID: -8621434504218542063
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_9
+      name: soldier_9
       rect:
         serializedVersion: 2
         x: 80
@@ -478,14 +370,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bf1c67047eaab6a468bb8a9339e8e70a
-      internalID: -2056482287553655689
+      spriteID: d9739c1f989117143b59bac3bafc4411
+      internalID: -9162669571817907879
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_10
+      name: soldier_10
       rect:
         serializedVersion: 2
         x: 120
@@ -499,14 +391,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 90ffdd40bfd301c45befa48b558654c3
-      internalID: -8995485352130813372
+      spriteID: f8522fd263cd5c9429c94fc6a5bd9448
+      internalID: -2812487356058246685
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_11
+      name: soldier_11
       rect:
         serializedVersion: 2
         x: 160
@@ -520,14 +412,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dcb8b33d6f5f20546b03cb7702cc3265
-      internalID: 8886161708615391911
+      spriteID: b5482596807719b41b3f0ccc46f86558
+      internalID: -5556171334924629526
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_12
+      name: soldier_12
       rect:
         serializedVersion: 2
         x: 200
@@ -541,14 +433,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bc6431b7018609645bdd2a78fe7af142
-      internalID: -2392962986800102977
+      spriteID: 698433f61bf19bb428513f897ef9e057
+      internalID: 4953204187100822599
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mage_13
+      name: soldier_13
       rect:
         serializedVersion: 2
         x: 240
@@ -562,8 +454,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6491b626a2a466a4ea9bc4181bf88876
-      internalID: 537988590183208327
+      spriteID: 17c1d44274594254d9aa9261b50fe58a
+      internalID: -513539032879699618
       vertices: []
       indices: 
       edges: []
@@ -571,7 +463,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: b0c2621f39ebd184e81fb4b0851e9c4a
     internalID: 0
     vertices: []
     indices: 

@@ -34,11 +34,11 @@ namespace Game.Entity
 
                 base.Tile = value;
                 if(value != previousTile)
-                    SendEntityVisibilityPackets(this, value, previousTile);
+                    SendEntityVisibilityPackets(value, previousTile);
             }
         }
 
-        protected virtual void SendEntityVisibilityPackets(ExploringEntity newExplorer, Tile newTile, Tile previousTile)
+        protected virtual void SendEntityVisibilityPackets(Tile newTile, Tile previousTile)
         {
             HashSet<WorldEntity> oldViewers = null;
             if (previousTile != null)
@@ -52,7 +52,7 @@ namespace Game.Entity
             var ev = new EntityVisibleEvent(this);
             foreach (var viewer in newTile.EntitiesViewing)
                 if (playerViewers.Remove(viewer.Owner))
-                    viewer.Owner.Send(ev);
+                    viewer.Owner.Send(ev);   
         }
     }
 }

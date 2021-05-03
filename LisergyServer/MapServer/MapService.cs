@@ -64,12 +64,12 @@ namespace MapServer
         public override StrategyGame SetupGame()
         {
             var gameSpecs = TestSpecs.Generate();
-            // TODO: Load/savemap
-            var world = Worldgen.CreateWorld(MAX_PLAYERS, WORLD_SEED, 
-                new NewbieChunkPopulator()
-               ,new DungeonsPopulator()
+            var game = new StrategyGame(gameSpecs, null);
+            GameWorld world = Worldgen.CreateWorld(MAX_PLAYERS, WORLD_SEED,
+               new NewbieChunkPopulator()
+              , new DungeonsPopulator()
             );
-            var game = new StrategyGame(gameSpecs, world);
+            game.World = world;
             game.RegisterEventListeners();
             _accountManager = new AccountManager(game, _socketServer);
             return game;

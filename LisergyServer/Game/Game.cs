@@ -12,7 +12,7 @@ namespace Game
     {
         public static GameSpec Specs { get; private set; }
 
-        public GameWorld World { get; private set; }
+        public GameWorld World { get; set; }
         public List<EventListener> _listeners = new List<EventListener>();
 
         public GameSpec GameSpec => Specs;

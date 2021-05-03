@@ -9,6 +9,8 @@ namespace Game.Battles
     {
         public static int RT_PER_TILE_MOVED = 2;
 
+        public Unit _unitReference;
+
         public bool Moved = false;
         public bool Actioned = false;
         public bool UsedSkill = false;
@@ -16,27 +18,24 @@ namespace Game.Battles
         [NonSerialized]
         private BattleTeam _team;
 
-        [NonSerialized]
-        private UnitStats _stats;
-
-        private string _unitID;
-        private string _unitName;
-
-        public UnitStats Stats { get => _stats; }
+        public UnitStats Stats { get => _unitReference.Stats; }
 
         public BattleTeam Team { get => _team; set => _team = value; }
+
+        public Unit GetUnitReference()
+        {
+            return _unitReference;
+        }
 
         public int RT { get; set; }
 
         public bool Dead { get => Stats.HP == 0; }
-        public string UnitID { get => _unitID; }
+        public string UnitID { get => _unitReference.Id; }
 
         public BattleUnit(PlayerEntity owner, BattleTeam team, Unit unit): base(owner)
         {
             this.Team = team;
-            _stats = unit.Stats;
-            _unitName = unit.Name;
-            _unitID = unit.Id;
+            _unitReference = unit;
             this.RT = GetMaxRT();
         }
 
@@ -59,7 +58,7 @@ namespace Game.Battles
 
         public override string ToString()
         {
-            return $"<BattleUnit ID={_unitID} Name={_unitName} RT={RT}>";
+            return $"<BattleUnit ID={_unitReference.Id} Name={_unitReference.Name} RT={RT}>";
         }
 
         public override TimeSpan GetMoveDelay()

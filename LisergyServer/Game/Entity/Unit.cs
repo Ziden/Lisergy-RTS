@@ -24,6 +24,12 @@ namespace Game
             this.SpecId = unitSpecId;
             this.Id = Guid.NewGuid().ToString();
             this.Stats = new UnitStats();
+
+        }
+
+        public void SetSpecStats()
+        {
+            this.Stats.SetStats(Spec.Stats);
         }
 
         public Party Party

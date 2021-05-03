@@ -3,11 +3,11 @@
 
 public class Sprite3D : MonoBehaviour
 {
+    public static readonly int FACE = 7;
 
     public Camera m_Camera;
     public bool amActive = false;
     public Sprite[] Sprites;
-    public Sprite Face => Sprites[7]; 
 
     void Awake()
     {

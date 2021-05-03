@@ -2,7 +2,6 @@
 using Game.Entity;
 using Game.Inventories;
 using Game.World;
-using System;
 
 namespace Game.Generator
 {
@@ -13,7 +12,9 @@ namespace Game.Generator
             var place = c.FindTileWithId(0);
             if (place != null) {
                 var dungeon = new Dungeon();
-                dungeon.SetBattles(new BattleTeam(new Unit(1))); // orc
+                var enemy = new Unit(0);
+                enemy.SetSpecStats();
+                dungeon.SetBattles(new BattleTeam(enemy));
                 dungeon.Rewards = new Item[] { new Item(1, 10) }; // gold 
                 place.StaticEntity = dungeon;
             }

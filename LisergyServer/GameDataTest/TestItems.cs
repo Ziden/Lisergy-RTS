@@ -11,7 +11,7 @@ namespace GameDataTest
             Id = 0, 
             Type = ItemType.RESOURCE,
             Name = "Gold",
-            Art = new ArtSpec() { Name = "item_13", Type = ArtType.SPRITE }
+            Art = new ArtSpec() { Name = "item_13", Type = ArtType.SPRITE_SHEET }
         };
 
         public static void Generate(GameSpec spec)

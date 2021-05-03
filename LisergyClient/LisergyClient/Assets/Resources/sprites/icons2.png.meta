@@ -11,6 +11,72 @@ TextureImporter:
   - first:
       213: 5643383430650661137
     second: icons2_2
+  - first:
+      213: -5918607266264158921
+    second: icons2_3
+  - first:
+      213: -6339936454727567110
+    second: icons2_4
+  - first:
+      213: -8649539959412507517
+    second: icons2_5
+  - first:
+      213: 7853132098695014882
+    second: icons2_6
+  - first:
+      213: 2403013646871138461
+    second: icons2_7
+  - first:
+      213: 5823903394605040648
+    second: icons2_8
+  - first:
+      213: 1111181800589602928
+    second: icons2_9
+  - first:
+      213: -6095210948313388165
+    second: icons2_10
+  - first:
+      213: 5982515304810841294
+    second: icons2_11
+  - first:
+      213: 8994441119158541709
+    second: icons2_12
+  - first:
+      213: 4013808056793085296
+    second: icons2_13
+  - first:
+      213: 6294325308223458123
+    second: icons2_14
+  - first:
+      213: 2305809634727747459
+    second: icons2_15
+  - first:
+      213: -2658811187889368998
+    second: icons2_16
+  - first:
+      213: 2115397115457930403
+    second: icons2_17
+  - first:
+      213: -7759662300800027438
+    second: icons2_18
+  - first:
+      213: 3922348398623753224
+    second: icons2_19
+  - first:
+      213: 2720091347530278425
+    second: icons2_20
+  - first:
+      213: -306045793356368144
+    second: icons2_21
+  - first:
+      213: 1998737080893336728
+    second: icons2_22
+  - first:
+      213: 6536712227987033442
+    second: icons2_23
+  - first:
+      213: -9054162118975761192
+    second: icons2_24
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -40,7 +106,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 2
     aniso: -1
     mipBias: -100
     wrapU: 1
@@ -99,17 +165,17 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 730
-        width: 22
-        height: 22
+        y: 2920
+        width: 88
+        height: 88
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 98054fbe261a1f44cab6ef26ccac3fe7
+      spriteID: c6bfadca3e9bde046a82137d0099b9ae
       internalID: 1414210354977102215
       vertices: []
       indices: 
@@ -119,18 +185,18 @@ TextureImporter:
       name: icons2_1
       rect:
         serializedVersion: 2
-        x: 22
-        y: 730
-        width: 22
-        height: 22
+        x: 88
+        y: 2920
+        width: 88
+        height: 88
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b9466f80079b6904cb84bc9119a1a1bc
+      spriteID: aaf90099be1bb1d4ab6e1487fb2f95a0
       internalID: -3936552828498759850
       vertices: []
       indices: 
@@ -140,10 +206,10 @@ TextureImporter:
       name: icons2_2
       rect:
         serializedVersion: 2
-        x: 44
-        y: 730
-        width: 22
-        height: 22
+        x: 176
+        y: 2920
+        width: 88
+        height: 88
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -151,8 +217,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 54ab3a3010ad6a84db9a91282846860d
+      spriteID: 43018fcab09a5a64eaf1c73e89da390b
       internalID: 5643383430650661137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icons2_3
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 2920
+        width: 88
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5600f23cd543dc64682c5ad03046fa37
+      internalID: -5918607266264158921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icons2_4
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 2920
+        width: 88
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fa95a2ba6be94d42bd3a3bd558ebd10
+      internalID: -6339936454727567110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icons2_5
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 2920
+        width: 88
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b25c73fe32e77cc468512e70647aaf80
+      internalID: -8649539959412507517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icons2_6
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 2920
+        width: 88
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f07ec1a198821940bae436c28cc049f
+      internalID: 7853132098695014882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icons2_7
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 2832
+        width: 88
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e642765be134754d9272bef058769b8
+      internalID: 2403013646871138461
       vertices: []
       indices: 
       edges: []

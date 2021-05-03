@@ -82,6 +82,7 @@ namespace Tests
         [Test]
         public void TestSendingEventsWhenExploring()
         {
+            StrategyGame.Specs.InitialUnit = 2; // Mage with 3+ LOS
             Game.CreatePlayer(0, 0); // placing new user in the corner
             var player = Game.GetTestPlayer();
             player.ReceivedEvents.Clear();

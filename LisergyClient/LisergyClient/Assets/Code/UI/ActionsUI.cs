@@ -13,7 +13,7 @@ namespace Assets.Code.UI
 {
     public enum EntityAction
     {
-        MOVE, GUARD, ATTACK
+        MOVE, GUARD, ATTACK, CHECK
     }
 
     public class ActionsUI
@@ -28,6 +28,7 @@ namespace Assets.Code.UI
             this._gameObject = obj;
             RegisterButton("MoveButton", EntityAction.MOVE, MoveButton);
             RegisterButton("GuardButton", EntityAction.GUARD, GuardButton);
+            RegisterButton("CheckButton", EntityAction.CHECK, CheckButton);
             RegisterButton("AttackButton", EntityAction.ATTACK, AttackButton);
             ClientEvents.OnClickTile += OnClickTile;
             ClientEvents.OnCameraMove += OnCameraMove;
@@ -97,11 +98,23 @@ namespace Assets.Code.UI
             _gameObject.SetActive(true);
             var actions = new List<EntityAction>();
             if (tile.StaticEntity is ClientDungeon)
+            {
+                actions.Add(EntityAction.CHECK);
                 actions.Add(EntityAction.ATTACK);
+            }
             else
                 actions.Add(EntityAction.MOVE);
             actions.Add(EntityAction.GUARD);
             BuildActions(actions.ToArray());
+        }
+
+        private void CheckButton()
+        {
+            var tile = UIManager.TileUI.SelectedTile;
+            if(tile.StaticEntity is ClientDungeon)
+            {
+                UIManager.DungeonsUI.Display((ClientDungeon)tile.StaticEntity);
+            }
         }
 
         private void AttackButton() { }

@@ -115,9 +115,18 @@ public class PartyUI
         var units = party.GetUnits().ToList();
         var leader = (ClientUnit)units[0];
         var imageObj = new GameObject("portrait", typeof(Image));
+        var image = RenderPortrait(leader, parent);
+        return image;
+    }
+
+    public static Image RenderPortrait(Unit unit, Transform parent)
+    {
+        foreach (Transform t in parent)
+            MainBehaviour.Destroy(t.gameObject);
+        var imageObj = new GameObject("portrait", typeof(Image));
         var image = imageObj.GetComponent<Image>();
-        image.sprite = leader.Sprites.Face;
-        image.rectTransform.sizeDelta = new Vector2(50f, 70f);
+        image.sprite = LazyLoad.GetSpecificSpriteArt(unit.Spec.FaceArt);
+        image.rectTransform.sizeDelta = new Vector2(58f, 84f);
         imageObj.transform.SetParent(parent);
         imageObj.transform.localPosition = new Vector3(0, 0, 0);
         return image;
