@@ -13,11 +13,11 @@ namespace Game.Battles
         protected SortedSet<BattleUnit> _actionQueue = new SortedSet<BattleUnit>();
         protected TurnBattleResult _log = new TurnBattleResult();
 
-        public string ID { get; private set; }
+        public Guid ID { get; private set; }
 
-        public TurnBattle(BattleTeam attacker, BattleTeam defender)
+        public TurnBattle(Guid id, BattleTeam attacker, BattleTeam defender)
         {
-            ID = Guid.NewGuid().ToString();
+            this.ID = id;
             this._attacker = _log.Attacker = attacker;
             this._defender = _log.Defender = defender;
 

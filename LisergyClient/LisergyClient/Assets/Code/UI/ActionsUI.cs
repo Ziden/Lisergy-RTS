@@ -117,7 +117,21 @@ namespace Assets.Code.UI
             }
         }
 
-        private void AttackButton() { }
+        private void AttackButton() {
+            ClientParty party = UIManager.PartyUI.SelectedParty;
+            ClientTile selectedTile = UIManager.TileUI.SelectedTile;
+            Log.Debug($"Moving {party} to {selectedTile}");
+            var map = selectedTile.Chunk.ChunkMap;
+            var path = map.FindPath(party.Tile, selectedTile);
+            var tilePath = path.Select(node => (ClientTile)map.GetTile(node.X, node.Y)).ToList();
+            ClientEvents.StartMovementRequest(party, tilePath);
+            MainBehaviour.Networking.Send(new MoveRequestEvent()
+            {
+                PartyIndex = party.PartyIndex,
+                Path = path.Select(p => new Game.World.Position(p.X, p.Y)).ToList()
+            });
+            Hide();
+        }
 
         private void GuardButton() {}
 
@@ -134,6 +148,7 @@ namespace Assets.Code.UI
             {
                 PartyIndex = party.PartyIndex,
                 Path = path.Select(p => new Game.World.Position(p.X, p.Y)).ToList()
+               
             });
             Hide();
         }

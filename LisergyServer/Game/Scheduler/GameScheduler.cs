@@ -22,6 +22,14 @@ namespace Game.Scheduler
         public static int AmountQueues { get => _queue.Count; }
         internal static SortedSet<GameTask> Queue { get => _queue; }
 
+        internal static void ForceComplete(GameTask task)
+        {
+            while (task.Repeat)
+                task.Execute();
+            _queue.Remove(task);
+            _tasks.Remove(task.ID);
+        }
+
         internal static void Clear()
         {
             _schedulerTime = DateTime.MinValue;

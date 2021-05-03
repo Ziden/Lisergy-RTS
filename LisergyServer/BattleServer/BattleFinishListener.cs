@@ -4,11 +4,11 @@ using Game.Events;
 
 namespace Game.Listeners
 {
-    public class BattleListener : EventListener
+    public class BattleFinishListener : EventListener
     {
         private GameWorld _world;
 
-        public BattleListener(GameWorld world)
+        public BattleFinishListener(GameWorld world)
         {
             this._world = world;
         }
@@ -29,13 +29,16 @@ namespace Game.Listeners
             // copy values to real units
         }
 
-        public static BattleResultCompleteEvent HandleBattle(BattleStartCompleteEvent ev)
+        public static BattleResultCompleteEvent HandleBattle(BattleStartEvent ev)
         {
-            var battle = new TurnBattle(ev.Attacker, ev.Defender);
+            /*
+            var battle = new TurnBattle(Guidev.BattleID, ev.Attacker, ev.Defender);
             var result = battle.Run();
             var resultEvent = new BattleResultCompleteEvent(result);
             resultEvent.BattleID = ev.BattleID;
             return resultEvent;
+            */
+            return null; 
         }
 
     }

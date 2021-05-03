@@ -1,4 +1,5 @@
 ﻿using Game.Events;
+using Game.Movement;
 using System;
 
 namespace Game.Entity
@@ -9,6 +10,20 @@ namespace Game.Entity
         public MovableWorldEntity(PlayerEntity owner) : base(owner) { }
 
         public abstract TimeSpan GetMoveDelay();
+
+        [NonSerialized]
+        private MovementTask _course;
+
+        public MovementTask Course
+        {
+            get => _course;
+            set
+            {
+                if (_course != null && !_course.HasFinished)
+                    _course.Cancel();
+                _course = value;
+            }
+        }
 
         public override Tile Tile
         {

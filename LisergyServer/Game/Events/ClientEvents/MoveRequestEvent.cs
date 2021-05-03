@@ -1,4 +1,5 @@
-﻿using Game.World;
+﻿using Game.Movement;
+using Game.World;
 using System;
 using System.Collections.Generic;
 using ZeroFormatter;
@@ -10,6 +11,7 @@ namespace Game.Events
     {
         public override EventID GetID() => EventID.PARTY_REQUEST_MOVE;
 
+        public MovementIntent Intent;
         public byte PartyIndex;
         public List<Position> Path;
     }

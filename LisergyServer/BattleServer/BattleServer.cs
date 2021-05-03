@@ -9,42 +9,51 @@ using System;
 
 namespace BattleServer
 {
-    public class BattleServer : SocketServer
-    {
-        private BattleServerListener _listener;
-        private NetworkEvents _events;
+    /*
+public class BattleServer : SocketServer
+{
+   public BattleServer(int port) : base(port)
+   {
 
-        public BattleServer(int port): base(port)
-        {
-            _events = new NetworkEvents();
-            _listener = new BattleServerListener();
-        }
+   }
 
-        public override StrategyGame SetupGame()
-        {
-            var gameSpecs = TestSpecs.Generate();
-            return new StrategyGame(gameSpecs, null);
-        }
 
-        protected override ServerPlayer Auth(EventID eventId, int connectionID, byte[] message)
-        {
-            Console.WriteLine("New remote server connected");
-            return new RemoteServerEntity(connectionID, _socketServer);
-        }
+   private BattleStartListener _listener;
+   private NetworkEvents _events;
 
-        public override void Tick()
-        {
+   public BattleServer(int port): base(port)
+   {
+       _events = new NetworkEvents();
+       _listener = new BattleStartListener();
+   }
 
-        }
+   public override StrategyGame SetupGame()
+   {
+       var gameSpecs = TestSpecs.Generate();
+       return new StrategyGame(gameSpecs, null);
+   }
 
-        public override void Disconnect(int connectionID)
-        {
-        }
+   protected override ServerPlayer Auth(EventID eventId, int connectionID, byte[] message)
+   {
+       Console.WriteLine("New remote server connected");
+       return new RemoteServerEntity(connectionID, _socketServer);
+   }
 
-        public override void RegisterCommands(CommandExecutor executor)
-        {
-        }
+   public override void Tick()
+   {
 
-        public override ServerType GetServerType() => ServerType.BATTLE;
-    }
+   }
+
+   public override void Disconnect(int connectionID)
+   {
+   }
+
+   public override void RegisterCommands(CommandExecutor executor)
+   {
+   }
+
+   public override ServerType GetServerType() => ServerType.BATTLE;
+
+}
+   */
 }

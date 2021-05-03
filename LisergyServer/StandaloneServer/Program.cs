@@ -23,7 +23,7 @@ namespace StandaloneServer
             var mapServer = new MapService(1337);
 
             // Making a "local" battle server
-            NetworkEvents.OnBattleStart += (ev) => EventEmitter.CallEventFromBytes(_player, Serialization.FromEvent(BattleListener.HandleBattle(ev)));
+            // NetworkEvents.OnBattleStart += (ev) => EventEmitter.CallEventFromBytes(_player, Serialization.FromEvent(BattleFinishListener.HandleBattle(ev)));
 
             mapServer.RunServer();
         }

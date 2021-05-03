@@ -1,4 +1,5 @@
-﻿using Game.Events;
+﻿using BattleServer;
+using Game.Events;
 using Game.Generator;
 using Game.Listeners;
 using Game.Scheduler;
@@ -26,10 +27,9 @@ namespace Game
         public void RegisterEventListeners()
         {
             var networkEvents = new NetworkEvents();
-            
             _listeners.Add(new WorldListener(World));
             _listeners.Add(new CourseListener(World));
-            _listeners.Add(new BattleListener(World));
+            _listeners.Add(new StandaloneBattleListener(World));
         }
 
         public void ClearEventListeners()

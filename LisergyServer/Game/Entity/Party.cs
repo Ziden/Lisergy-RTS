@@ -5,6 +5,8 @@ using Game.Inventories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Game.Movement;
+using Game.Battles;
 
 namespace Game.Entity
 {
@@ -16,25 +18,44 @@ namespace Game.Entity
 
         private Inventory _cargo = new Inventory();
 
-        [NonSerialized]
-        private CourseTask _course;
-
         public byte PartyIndex { get => _partyIndex; }
         public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(1);
-        public CourseTask Course {
-            get => _course;
-            set
-            {
-                if (_course != null && !_course.HasFinished)
-                    _course.Cancel();
-                _course = value;
-            }
-        }
+
+        [NonSerialized]
+        private string _battleID;
 
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)
         {
             _partyIndex = partyIndex;
         }
+
+        public override Tile Tile
+        {
+            get => base.Tile;
+            set
+            {
+                if(value != null && value.StaticEntity is Dungeon)
+                {
+                    if(this.Course != null && this.Course.Intent == MovementIntent.Offensive && this.Course.IsLastMovement())
+                    {
+                        var playerTeam = new BattleTeam(this.Owner, this._units);
+                        
+                        var enemyTeam = ((Dungeon)value.StaticEntity).Battles.First();
+                         _battleID = Guid.NewGuid().ToString();
+                        Log.Info($"{this} did an offensive move triggering a battle with {enemyTeam}");
+                        NetworkEvents.SendBattleStart(new BattleStartEvent()
+                        {
+                            Attacker = playerTeam,
+                            Defender = enemyTeam,
+                            BattleID = _battleID
+                        });
+                    }
+                }
+                base.Tile = value;
+            }
+        }
+
+        public string BattleID { get => _battleID; set => _battleID = value; }
 
         public override byte GetLineOfSight()
         {

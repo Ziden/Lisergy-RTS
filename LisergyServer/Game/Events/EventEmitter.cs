@@ -17,49 +17,49 @@ namespace LisergyServer.Core
             {
                 var ev = Serialization.ToEvent<AuthResultEvent>(message);
                 ev.Sender = owner;
-                NetworkEvents.AuthResult(ev);
+                NetworkEvents.SendAuthResult(ev);
             }
             else if (eventId == EventID.TILE_VISIBLE)
             {
                 var ev = Serialization.ToEvent<TileVisibleEvent>(message);
                 ev.Sender = owner;
-                NetworkEvents.TileVisible(ev);
+                NetworkEvents.SendTileVisible(ev);
             }
             else if (eventId == EventID.SPEC_RESPONSE)
             {
                 var ev = Serialization.ToEvent<GameSpecResponse>(message);
                 ev.Sender = owner;
-                NetworkEvents.SpecResponse(ev);
+                NetworkEvents.SendSpecResponse(ev);
             }
             else if (eventId == EventID.PARTY_VISIBLE)
             {
                 var ev = Serialization.ToEvent<EntityVisibleEvent>(message);
                 ev.Sender = owner;
-                NetworkEvents.EntityVisible(ev);
+                NetworkEvents.SendEntityVisible(ev);
             }
             else if (eventId == EventID.PARTY_MOVE)
             {
                 var ev = Serialization.ToEvent<EntityMoveEvent>(message);
                 ev.Sender = owner;
-                NetworkEvents.EntityMove(ev);
+                NetworkEvents.SendEntityMove(ev);
             }
             else if (eventId == EventID.MESSAGE)
             {
                 var ev = Serialization.ToEvent<MessagePopupEvent>(message);
                 ev.Sender = owner;
-                NetworkEvents.MessagePopup(ev);
+                NetworkEvents.SendMessagePopup(ev);
             }
             else if (eventId == EventID.BATTLE_RESULT_COMPLETE)
             {
                 var ev = Serialization.ToEvent<BattleResultCompleteEvent>(message);
                 ev.Sender = owner;
-                NetworkEvents.BattleResultComplete(ev);
+                NetworkEvents.SendBattleResultComplete(ev);
             }
             else if (eventId == EventID.BATTLE_START_COMPLETE)
             {
-                var ev = Serialization.ToEvent<BattleStartCompleteEvent>(message);
+                var ev = Serialization.ToEvent<BattleStartEvent>(message);
                 ev.Sender = owner;
-                NetworkEvents.BattleStartComplete(ev);
+                NetworkEvents.SendBattleStart(ev);
             }
 
             // CLIENT EVENTS (coming from client to server)
@@ -67,13 +67,13 @@ namespace LisergyServer.Core
             {
                 var ev = Serialization.ToEvent<JoinWorldEvent>(message);
                 ev.Sender = owner;
-                NetworkEvents.JoinWorld(ev);
+                NetworkEvents.SendJoinWorld(ev);
             }
             else if (eventId == EventID.PARTY_REQUEST_MOVE)
             {
                 var ev = Serialization.ToEvent<MoveRequestEvent>(message);
                 ev.Sender = owner;
-                NetworkEvents.RequestEntityMove(ev);
+                NetworkEvents.SendRequestEntityMove(ev);
             }
         } 
     }

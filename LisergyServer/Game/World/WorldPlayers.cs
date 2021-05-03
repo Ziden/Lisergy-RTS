@@ -31,6 +31,11 @@ namespace Game
 
         public bool GetPlayer(string id, out PlayerEntity player)
         {
+            if (id == null)
+            {
+                player = null;
+                return false;
+            }
             return _players.TryGetValue(id, out player);
         }
 

@@ -27,9 +27,11 @@ namespace BattleServer
             Console.WriteLine("=     BATTLE SERVER         =");
             Console.WriteLine("=============================");
 
+            /*
             var battleServer = new BattleServer(PORT);
             LisergyMQ.StartListening(MessageQueues.PENDING_BATTLES);
             battleServer.RunServer();
+            */
         }
     }
 }

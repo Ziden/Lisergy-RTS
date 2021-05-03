@@ -12,7 +12,7 @@ namespace Game.Events
     public delegate void EntityMoveHandler(EntityMoveEvent e);
     public delegate void MessagePopupHandler(MessagePopupEvent e);
     public delegate void BattleResultCompleteHandler(BattleResultCompleteEvent e);
-    public delegate void BattleStartCompleteHandler(BattleStartCompleteEvent e);
+    public delegate void BattleStartCompleteHandler(BattleStartEvent e);
 
     public class NetworkEvents
     {
@@ -42,15 +42,15 @@ namespace Game.Events
         private event BattleResultCompleteHandler _OnBattleResult;
         private event BattleStartCompleteHandler _OnBattleStart;
 
-        public static void EntityVisible(EntityVisibleEvent ev) => _i._OnEntityVisible?.Invoke(ev);
-        public static void SpecResponse(GameSpecResponse ev) => _i._OnSpecResponse?.Invoke(ev);
-        public static void TileVisible(TileVisibleEvent ev) => _i._OnTileVisible?.Invoke(ev);
-        public static void AuthResult(AuthResultEvent ev) => _i._OnPlayerAuth?.Invoke(ev);
-        public static void JoinWorld(JoinWorldEvent ev) => _i._OnJoinWorld?.Invoke(ev);
-        public static void RequestEntityMove(MoveRequestEvent ev) => _i._OnEntityRequestMove?.Invoke(ev);
-        public static void EntityMove(EntityMoveEvent ev) => _i._OnEntityMove?.Invoke(ev);
-        public static void MessagePopup(MessagePopupEvent ev) => _i._OnMessagePopup?.Invoke(ev);
-        public static void BattleResultComplete(BattleResultCompleteEvent ev) => _i._OnBattleResult?.Invoke(ev);
-        public static void BattleStartComplete(BattleStartCompleteEvent ev) => _i._OnBattleStart?.Invoke(ev);
+        public static void SendEntityVisible(EntityVisibleEvent ev) => _i._OnEntityVisible?.Invoke(ev);
+        public static void SendSpecResponse(GameSpecResponse ev) => _i._OnSpecResponse?.Invoke(ev);
+        public static void SendTileVisible(TileVisibleEvent ev) => _i._OnTileVisible?.Invoke(ev);
+        public static void SendAuthResult(AuthResultEvent ev) => _i._OnPlayerAuth?.Invoke(ev);
+        public static void SendJoinWorld(JoinWorldEvent ev) => _i._OnJoinWorld?.Invoke(ev);
+        public static void SendRequestEntityMove(MoveRequestEvent ev) => _i._OnEntityRequestMove?.Invoke(ev);
+        public static void SendEntityMove(EntityMoveEvent ev) => _i._OnEntityMove?.Invoke(ev);
+        public static void SendMessagePopup(MessagePopupEvent ev) => _i._OnMessagePopup?.Invoke(ev);
+        public static void SendBattleResultComplete(BattleResultCompleteEvent ev) => _i._OnBattleResult?.Invoke(ev);
+        public static void SendBattleStart(BattleStartEvent ev) => _i._OnBattleStart?.Invoke(ev);
     }
 }

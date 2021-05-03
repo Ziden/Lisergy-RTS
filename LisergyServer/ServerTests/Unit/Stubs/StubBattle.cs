@@ -8,7 +8,7 @@ namespace ServerTests
 {
     public class TestBattle : TurnBattle
     {
-        public TestBattle(BattleTeam t1, BattleTeam t2) : base(t1, t2) { }
+        public TestBattle(BattleTeam t1, BattleTeam t2) : base(Guid.NewGuid(), t1, t2) { }
 
         public BattleAction RunSingleTurn()
         {

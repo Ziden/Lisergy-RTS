@@ -2,6 +2,7 @@
 using Game.Entity;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Movement;
 using Game.World;
 using System.Collections.Generic;
 
@@ -30,12 +31,12 @@ namespace Game.Listeners
         {
             var party = ev.Sender.Parties[ev.PartyIndex];
             Log.Debug($"{ev.Sender} requesting party {ev.PartyIndex} to move {ev.Path.Count} tiles");
-            var course = StartCourse(party, ev.Path);
+            var course = StartCourse(party, ev.Path, ev.Intent);
             if(course == null)
                 ev.Sender.Send(new MessagePopupEvent(PopupType.INVALID_COURSE));
         }
 
-        public CourseTask StartCourse(Party party, List<Position> sentPath)
+        public MovementTask StartCourse(Party party, List<Position> sentPath, MovementIntent intent)
         {
             List<Tile> path = new List<Tile>();
             var owner = party.Owner;
@@ -50,10 +51,8 @@ namespace Game.Listeners
                 Log.Debug("ADD " + tile);
                 path.Add(tile);
             }
-            party.Course = new CourseTask(party, path);
+            party.Course = new MovementTask(party, path, intent);
             return party.Course;
         }
-
-       
     }
 }

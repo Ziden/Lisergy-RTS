@@ -18,6 +18,11 @@ namespace Game.Entity
 
         }
 
+        public Dungeon(params BattleTeam [] fights): base(Gaia)
+        {
+            this._battles = fights;
+        }
+
         public void SetBattles(params BattleTeam [] battles)
         {
             this._battles = battles;

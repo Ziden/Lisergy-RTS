@@ -8,6 +8,7 @@ namespace Game.Battles
     public class BattleTeam
     {
         public BattleUnit[] Units;
+        public string OwnerID;
 
         public BattleTeam(params Unit[] units)
         {
@@ -21,9 +22,12 @@ namespace Game.Battles
 
         private void Init(PlayerEntity owner, params Unit[] units)
         {
-            Units = new BattleUnit[units.Count()];
-            for (var x = 0; x < units.Count(); x++)
-                Units[x] = new BattleUnit(owner, this, units[x]);
+            var filtered = units.Where(u => u != null).ToList();
+            Units = new BattleUnit[filtered.Count()];
+            for (var x = 0; x < filtered.Count(); x++)
+                Units[x] = new BattleUnit(owner, this, filtered[x]);
+            if (owner != null)
+                OwnerID = owner.UserID;
         }
 
         public bool AllDead { get => !Units.Any(u => !u.Dead); }

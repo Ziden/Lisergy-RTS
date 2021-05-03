@@ -4,6 +4,7 @@ using Game.BattleTactics;
 using Game.Events;
 using NUnit.Framework;
 using ServerTests;
+using System;
 using System.Linq;
 
 namespace Tests
@@ -115,7 +116,7 @@ namespace Tests
         [Test]
         public void TestWinner()
         {
-            var battle = new TurnBattle(new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
+            var battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
             var result = battle.Run();
 
             Assert.AreEqual(result.Winner, result.Attacker);
@@ -125,7 +126,7 @@ namespace Tests
         public void TestSerialization()
         {
             Serialization.LoadSerializers();
-            var battle = new TurnBattle(new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
+            var battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
             var result = battle.Run();
 
             var ev = new BattleResultCompleteEvent(result);

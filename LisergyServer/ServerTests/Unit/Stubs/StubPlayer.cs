@@ -1,4 +1,8 @@
-﻿using Game.Events;
+﻿using Game;
+using Game.Entity;
+using Game.Events;
+using Game.Movement;
+using Game.World;
 using LisergyServer.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +31,15 @@ namespace ServerTests
             ReceivedEvents.Add(ev);
         }
 
-        public void SendEventToServer(ClientEvent ev)
+        public void SendMoveRequest(Party p, Tile t, MovementIntent intent)
+        {
+            var path = t.Chunk.ChunkMap.FindPath(p.Tile, t).Select(pa => new Position(pa.X, pa.Y)).ToList();
+            var ev = new MoveRequestEvent() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };
+            ev.Sender = this;
+            SendEventToServer(ev);
+        }
+
+        public void SendEventToServer<Ev>(Ev ev) where Ev: ClientEvent
         {
             EventEmitter.CallEventFromBytes(this, Serialization.FromEvent(ev));
         }

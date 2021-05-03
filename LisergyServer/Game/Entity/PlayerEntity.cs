@@ -18,6 +18,8 @@ namespace Game
 
         public Party[] Parties;
 
+        public List<BattleResultCompleteEvent> Battles = new List<BattleResultCompleteEvent>();
+
         public PlayerEntity()
         {
             this.UserID = Guid.NewGuid().ToString();
