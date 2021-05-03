@@ -117,7 +117,8 @@ namespace Assets.Code.UI
             }
         }
 
-        private void AttackButton() {
+        private void AttackButton()
+        {
             ClientParty party = UIManager.PartyUI.SelectedParty;
             ClientTile selectedTile = UIManager.TileUI.SelectedTile;
             Log.Debug($"Moving {party} to {selectedTile}");

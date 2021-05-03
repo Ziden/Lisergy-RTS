@@ -47,20 +47,25 @@ namespace Assets.Code.UI
             this.RenderPath(party, path);
         }
 
-        public void OnFinishedMove(ClientParty p, ClientTile oldTile, ClientTile newTile)
+        public void OnFinishedMove(ClientParty party, ClientTile oldTile, ClientTile newTile)
         {
-            if(_partyPaths.ContainsKey(p))
+            if(_partyPaths.ContainsKey(party))
             {
-                var partyPath = _partyPaths[p];
+                var partyPath = _partyPaths[party];
                 var pathsOnTile = partyPath.Pop(newTile);
+                var pathsOnOldTile = partyPath.Pop(oldTile);
                 if(pathsOnTile != null)
                     foreach(var path in pathsOnTile)
                         path.SetActive(false);
+                if (pathsOnOldTile != null)
+                    foreach (var path in pathsOnOldTile)
+                        path.SetActive(false);
 
                 if (partyPath.Empty())
-                    _partyPaths.Remove(p);
+                    _partyPaths.Remove(party);
             }
         }
+
 
         private GameObject GetOrCreatePathLine(ClientTile tile, ClientPath clientPath)
         {
@@ -81,7 +86,7 @@ namespace Assets.Code.UI
 
         public ClientPath RenderPath(ClientParty party, List<ClientTile> tilePath)
         {
-            tilePath.RemoveAt(0); // remove where the party is
+            //tilePath.RemoveAt(0); // remove where the party is
             var clientPath = new ClientPath();
             _partyPaths[party] = clientPath;
             _pathlinesPool.ForEach(path => path.SetActive(false));
