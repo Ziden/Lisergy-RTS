@@ -1,3 +1,4 @@
+using BattleServer;
 using Game;
 using Game.Battles;
 using Game.Entity;
@@ -75,7 +76,9 @@ namespace Tests
             course.Execute();
 
             Assert.AreEqual(dungeonTile, _player.Parties.First().Tile);
-            Assert.AreEqual(1, _player.Battles.Count());
+
+            // 1 battle pending processing
+            Assert.AreEqual(1, _game.GetListener<BattleListener>().BattleCount());
         }
     }
 }

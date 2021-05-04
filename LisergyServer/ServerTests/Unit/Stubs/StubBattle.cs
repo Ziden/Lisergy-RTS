@@ -10,12 +10,6 @@ namespace ServerTests
     {
         public TestBattle(BattleTeam t1, BattleTeam t2) : base(Guid.NewGuid(), t1, t2) { }
 
-        public BattleAction RunSingleTurn()
-        {
-            this.DoRound();
-            return Log.LastAction;
-        }
-
         public BattleUnit NextUnitToAct => _actionQueue.First();
 
         public TurnBattleResult Log => _log;

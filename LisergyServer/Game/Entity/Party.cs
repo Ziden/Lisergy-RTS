@@ -24,9 +24,28 @@ namespace Game.Entity
         [NonSerialized]
         private string _battleID;
 
+        public bool IsBattling => _battleID != null;
+
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)
         {
             _partyIndex = partyIndex;
+        }
+
+        public void StartBattle(BattleTeam enemy)
+        {
+            var playerTeam = new BattleTeam(this.Owner, this._units);
+            _battleID = Guid.NewGuid().ToString();
+            var ev = new BattleStartEvent()
+            {
+                Attacker = playerTeam,
+                Defender = enemy,
+                BattleID = _battleID
+            };
+            // TODO, send for enemy owner too ( PvP )
+            // send to attacker client
+            this.Owner.Send(ev);
+            // send to server 
+            ServerEventSink.SendBattleStart(ev);
         }
 
         public override Tile Tile
@@ -38,17 +57,9 @@ namespace Game.Entity
                 {
                     if(this.Course != null && this.Course.Intent == MovementIntent.Offensive && this.Course.IsLastMovement())
                     {
-                        var playerTeam = new BattleTeam(this.Owner, this._units);
-                        
                         var enemyTeam = ((Dungeon)value.StaticEntity).Battles.First();
-                         _battleID = Guid.NewGuid().ToString();
                         Log.Info($"{this} did an offensive move triggering a battle with {enemyTeam}");
-                        NetworkEvents.SendBattleStart(new BattleStartEvent()
-                        {
-                            Attacker = playerTeam,
-                            Defender = enemyTeam,
-                            BattleID = _battleID
-                        });
+                        StartBattle(enemyTeam);
                     }
                 }
                 base.Tile = value;

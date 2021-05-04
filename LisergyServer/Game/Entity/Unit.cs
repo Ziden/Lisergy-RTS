@@ -7,7 +7,7 @@ namespace Game
     [Serializable]
     public class Unit
     {
-        private byte _partyId;
+        private byte _partyId = byte.MaxValue;
 
         [NonSerialized]
         private Party _party;
@@ -24,7 +24,6 @@ namespace Game
             this.SpecId = unitSpecId;
             this.Id = Guid.NewGuid().ToString();
             this.Stats = new UnitStats();
-
         }
 
         public void SetSpecStats()
@@ -37,10 +36,14 @@ namespace Game
             get => _party;
             set {
                 _party = value;
-                if(value != null)
+                if (value != null)
                     _partyId = value.PartyIndex;
+                else
+                    _partyId = byte.MaxValue;
             }
         }
+
+        public byte PartyId { get => _partyId; }
 
         public override string ToString()
         {

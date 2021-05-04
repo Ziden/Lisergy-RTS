@@ -16,12 +16,12 @@ namespace Game.Listeners
 
         public override void Register()
         {
-            NetworkEvents.OnJoinWorld += JoinWorld;
+            ServerEventSink.OnJoinWorld += JoinWorld;
         }
 
         public override void Unregister()
         {
-            NetworkEvents.OnJoinWorld -= JoinWorld;
+            ServerEventSink.OnJoinWorld -= JoinWorld;
         }
 
         public void JoinWorld(JoinWorldEvent ev)

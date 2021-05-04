@@ -1,4 +1,6 @@
 ﻿
+using Game.Battles.Actions;
+using Game.BattleTactics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,63 +9,50 @@ namespace Game.Battles
 {
     public class TurnBattle
     {
-        protected BattleTeam _attacker;
-        protected BattleTeam _defender;
-
-        protected SortedSet<BattleUnit> _actionQueue = new SortedSet<BattleUnit>();
-        protected TurnBattleResult _log = new TurnBattleResult();
+        internal SortedSet<BattleUnit> _actionQueue = new SortedSet<BattleUnit>();
+        internal TurnBattleResult _log = new TurnBattleResult();
 
         public Guid ID { get; private set; }
+        public BattleTeam Attacker { get; private set; }
+        public BattleTeam Defender { get; private set; }
+        public AutoRun AutoRun { get; set; }
+
+        public BattleUnit CurrentActingUnit => _actionQueue.First();
 
         public TurnBattle(Guid id, BattleTeam attacker, BattleTeam defender)
         {
             this.ID = id;
-            this._attacker = _log.Attacker = attacker;
-            this._defender = _log.Defender = defender;
+            Attacker = _log.Attacker = attacker;
+            Defender = _log.Defender = defender;
+            AutoRun = new AutoRun(this);
 
             _actionQueue.UnionWith(attacker.Units);
             _actionQueue.UnionWith(defender.Units);
         }
 
-        public TurnBattleResult Run()
-        {
-            while(_log.Winner == null && DoRound()) {
-                _log.Winner = HasWinner();
-            }
-            return _log;
-        }
-
-        protected virtual bool DoRound()
+        public void ReceiveAction(BattleAction action)
         {
             _log.NextTurn();
-            var actingUnit = _actionQueue.First();
-            TakeAction(actingUnit);
-            if (!_actionQueue.Remove(actingUnit))
-                throw new Exception("Error removing unit");
-            actingUnit.RT += actingUnit.GetMaxRT();
-            _actionQueue.Add(actingUnit);
-            return true;
+            if (CurrentActingUnit != action.Unit)
+            {
+                action.Result = new ActionResult();
+                action.Result.Succeeded = false;
+                return;
+            }
+
+            if(action is AttackAction)
+            {
+                var attack = (AttackAction)action;
+                action.Result = attack.Unit.Attack(attack.Defender);
+                action.Result.Succeeded = true;   
+            }
+            _log.AddAction(action);
         }
 
-        protected virtual BattleTeam HasWinner()
+        public virtual BattleTeam GetOpposingTeam(BattleUnit unit)
         {
-            if (_attacker.AllDead) return _defender;
-            else if (_defender.AllDead) return _attacker;
-            return null;
+            if (unit.Team == Attacker) return Defender;
+            return Attacker;
         }
-
-        protected virtual void TakeAction(BattleUnit unit)
-        {
-            var enemyTeam = GetOpposingTeam(unit);
-            var enemy = enemyTeam.Random();
-            _log.AddAction(unit.Attack(enemy));
-        }
-
-        protected virtual BattleTeam GetOpposingTeam(BattleUnit unit)
-        {
-            if (unit.Team == _attacker) return _defender;
-            return _attacker;
-        }
-
     }
 }

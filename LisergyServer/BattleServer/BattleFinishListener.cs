@@ -15,7 +15,7 @@ namespace Game.Listeners
 
         public override void Register()
         {
-            NetworkEvents.OnBattleResult += BattleFinished;
+            ServerEventSink.OnBattleResult += BattleFinished;
             Log.Debug("Battle Result Listener Registered");
         }
 
@@ -24,12 +24,12 @@ namespace Game.Listeners
             
         }
 
-        public void BattleFinished(BattleResultCompleteEvent ev)
+        public void BattleFinished(BattleResultEvent ev)
         {
             // copy values to real units
         }
 
-        public static BattleResultCompleteEvent HandleBattle(BattleStartEvent ev)
+        public static BattleResultEvent HandleBattle(BattleStartEvent ev)
         {
             /*
             var battle = new TurnBattle(Guidev.BattleID, ev.Attacker, ev.Defender);

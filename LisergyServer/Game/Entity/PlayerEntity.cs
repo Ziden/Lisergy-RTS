@@ -18,7 +18,7 @@ namespace Game
 
         public Party[] Parties;
 
-        public List<BattleResultCompleteEvent> Battles = new List<BattleResultCompleteEvent>();
+        public List<BattleResultEvent> Battles = new List<BattleResultEvent>();
 
         public PlayerEntity()
         {

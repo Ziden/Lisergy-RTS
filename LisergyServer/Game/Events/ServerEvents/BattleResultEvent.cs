@@ -1,24 +1,25 @@
-﻿using Game.Battles;
+﻿using Game.Battle;
+using Game.Battles;
 using Game.Battles.Actions;
 using System;
 
 namespace Game.Events
 {
     [Serializable]
-    public class BattleResultCompleteEvent : ServerEvent
+    public class BattleResultEvent : ServerEvent
     {
-        public bool AttackerWins;
-        public string BattleID;
-        public BattleTeam Attacker;
-        public BattleTeam Defender;
+        public BattleJournalHeader BattleHeader;
+
         public BattleTurnEvent[] Turns;
 
-        public BattleResultCompleteEvent(TurnBattleResult result)
+        public BattleResultEvent(TurnBattleResult result)
         {
-            Attacker = result.Attacker;
-            Defender = result.Defender;
+            BattleHeader = new BattleJournalHeader();
+            BattleHeader.Date = DateTime.UtcNow;
+            BattleHeader.Attacker = result.Attacker;
+            BattleHeader.Defender = result.Defender;
             Turns = new BattleTurnEvent[result.Turns.Count];
-            AttackerWins = Attacker == result.Winner;
+            BattleHeader.AttackerWins = BattleHeader.Attacker == result.Winner;
             for (var x = 0; x < Turns.Length; x++)
                 Turns[x] = new BattleTurnEvent(result.Turns[x]);
         }

@@ -19,11 +19,11 @@ namespace ServerTests
             this.RegisterEventListeners();
             if (!_registered)
             {
-                NetworkEvents.OnTileVisible += ev => ReceiveEvent(ev);
-                NetworkEvents.OnPlayerAuth += ev => ReceiveEvent(ev);
-                NetworkEvents.OnSpecResponse += ev => ReceiveEvent(ev);
-                NetworkEvents.OnJoinWorld += ev => ReceiveEvent(ev);
-                NetworkEvents.OnEntityVisible += ev => ReceiveEvent(ev);
+                ServerEventSink.OnTileVisible += ev => ReceiveEvent(ev);
+                ServerEventSink.OnPlayerAuth += ev => ReceiveEvent(ev);
+                ServerEventSink.OnSpecResponse += ev => ReceiveEvent(ev);
+                ServerEventSink.OnJoinWorld += ev => ReceiveEvent(ev);
+                ServerEventSink.OnEntityVisible += ev => ReceiveEvent(ev);
                 _registered = true;
             }
             Serialization.LoadSerializers();

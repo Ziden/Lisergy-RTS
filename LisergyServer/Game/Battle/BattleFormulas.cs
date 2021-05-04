@@ -6,17 +6,14 @@ using System.Text;
 
 namespace Game.Battles
 {
-    public static class BattleActions
+    public static class BattleFormulas
     {
-        public static AttackAction Attack(this BattleUnit attacker, BattleUnit defender)
+        public static AttackActionResult Attack(this BattleUnit attacker, BattleUnit defender)
         {
             var damage = attacker.Stats.Atk - (defender.Stats.Def / 2);
             var hp = defender.Stats.HP - damage;
             defender.Stats.HP = (short)Math.Max(0, hp);
-            var result = new AttackActionResult() { Damage = damage };
-            var action = new AttackAction(attacker, defender);
-            action.Result = result;
-            return action;
+            return new AttackActionResult() { Damage = damage };
         }
     }
 }

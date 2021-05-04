@@ -11,14 +11,14 @@ namespace Game.Events
     public delegate void EntityRequestMovementHandler(MoveRequestEvent e);
     public delegate void EntityMoveHandler(EntityMoveEvent e);
     public delegate void MessagePopupHandler(MessagePopupEvent e);
-    public delegate void BattleResultCompleteHandler(BattleResultCompleteEvent e);
+    public delegate void BattleResultCompleteHandler(BattleResultEvent e);
     public delegate void BattleStartCompleteHandler(BattleStartEvent e);
 
-    public class NetworkEvents
+    public class ServerEventSink
     {
         // TODO: Remove all static crap
-        private static NetworkEvents _i;
-        public NetworkEvents() {  _i = this; }
+        private static ServerEventSink _i;
+        public ServerEventSink() {  _i = this; }
 
         public static event JoinEventHandler OnJoinWorld { add { _i._OnJoinWorld += value; } remove { _i._OnJoinWorld -= value; } }
         public static event AuthResultHandler OnPlayerAuth { add { _i._OnPlayerAuth += value; } remove { _i._OnPlayerAuth -= value; } }
@@ -50,7 +50,7 @@ namespace Game.Events
         public static void SendRequestEntityMove(MoveRequestEvent ev) => _i._OnEntityRequestMove?.Invoke(ev);
         public static void SendEntityMove(EntityMoveEvent ev) => _i._OnEntityMove?.Invoke(ev);
         public static void SendMessagePopup(MessagePopupEvent ev) => _i._OnMessagePopup?.Invoke(ev);
-        public static void SendBattleResultComplete(BattleResultCompleteEvent ev) => _i._OnBattleResult?.Invoke(ev);
+        public static void SendBattleResultComplete(BattleResultEvent ev) => _i._OnBattleResult?.Invoke(ev);
         public static void SendBattleStart(BattleStartEvent ev) => _i._OnBattleStart?.Invoke(ev);
     }
 }

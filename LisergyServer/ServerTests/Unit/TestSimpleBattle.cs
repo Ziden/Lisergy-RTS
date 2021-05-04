@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Tests
 {
-    public class TestBattles
+    public class TestAutobattles
     {
         private Unit StrongUnit;
         private Unit WeakUnit;
@@ -47,10 +47,10 @@ namespace Tests
             var currentHP = weaks.Stats.HP;
             var damage = strong.Stats.Atk - (weaks.Stats.Def / 2);
 
-            var action = strong.Attack(weaks);
+            var result = strong.Attack(weaks);
 
             Assert.AreEqual(weaks.Stats.HP, currentHP - damage);
-            Assert.AreEqual(((AttackActionResult)action.Result).Damage, damage);
+            Assert.AreEqual(result.Damage, damage);
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace Tests
 
             Assert.AreEqual(first.RT, first.GetMaxRT());
 
-            battle.RunSingleTurn();
+            battle.AutoRun.PlayOneTurn();
 
             var second = battle.NextUnitToAct;
 
@@ -77,7 +77,8 @@ namespace Tests
 
             Assert.AreEqual(battle.NextUnitToAct.UnitID, FastUnit.Id);
 
-            var lastAction = battle.RunSingleTurn();
+            var lastAction = battle.AutoRun.PlayOneTurn();
+
             Assert.AreEqual(lastAction.Unit.UnitID, FastUnit.Id);
             Assert.AreEqual(lastAction.Unit.RT, lastAction.Unit.GetMaxRT() * 2);
         }
@@ -86,7 +87,7 @@ namespace Tests
         public void TestUnitDelay()
         {
             var battle = new TestBattle(new BattleTeam(FastUnit), new BattleTeam(WeakUnit));
-            var result = battle.Run();
+            var result = battle.AutoRun.RunAllRounds();
 
             var fastAttacks = result.Turns.Where(r => r.Actions.Any(a => a.Unit.UnitID == FastUnit.Id)).ToList();
             var weakAttacks = result.Turns.Where(r => r.Actions.Any(a => a.Unit.UnitID == WeakUnit.Id)).ToList();
@@ -104,7 +105,7 @@ namespace Tests
             SlowUnit.Stats.HP = 50;
 
             var battle = new TestBattle(new BattleTeam(FastUnit), new BattleTeam(SlowUnit));
-            var result = battle.Run();
+            var result = battle.AutoRun.RunAllRounds();
 
             var fastAttacks = result.Turns.Where(r => r.Actions.Any(a => a.Unit.UnitID == FastUnit.Id)).ToList();
             var slowAttacks = result.Turns.Where(r => r.Actions.Any(a => a.Unit.UnitID == SlowUnit.Id)).ToList();
@@ -117,7 +118,7 @@ namespace Tests
         public void TestWinner()
         {
             var battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
-            var result = battle.Run();
+            var result = battle.AutoRun.RunAllRounds();
 
             Assert.AreEqual(result.Winner, result.Attacker);
         }
@@ -127,14 +128,14 @@ namespace Tests
         {
             Serialization.LoadSerializers();
             var battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
-            var result = battle.Run();
+            var result = battle.AutoRun.RunAllRounds();
 
-            var ev = new BattleResultCompleteEvent(result);
+            var ev = new BattleResultEvent(result);
 
             var bytes = Serialization.FromEvent(ev);
-            ev = Serialization.ToEvent<BattleResultCompleteEvent>(bytes);
+            ev = Serialization.ToEvent<BattleResultEvent>(bytes);
 
-            Assert.AreEqual(ev.Attacker.Units.First().UnitID, result.Attacker.Units.First().UnitID);
+            Assert.AreEqual(ev.BattleHeader.Attacker.Units.First().UnitID, result.Attacker.Units.First().UnitID);
         }
     }
 }

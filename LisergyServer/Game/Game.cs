@@ -1,4 +1,5 @@
 ﻿using BattleServer;
+using Game.Battle;
 using Game.Events;
 using Game.Generator;
 using Game.Listeners;
@@ -6,6 +7,7 @@ using Game.Scheduler;
 using GameData;
 using LisergyServer;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game
 {
@@ -15,7 +17,6 @@ namespace Game
 
         public GameWorld World { get; set; }
         public List<EventListener> _listeners = new List<EventListener>();
-
         public GameSpec GameSpec => Specs;
 
         public StrategyGame(GameSpec specs, GameWorld world)
@@ -26,10 +27,15 @@ namespace Game
 
         public void RegisterEventListeners()
         {
-            var networkEvents = new NetworkEvents();
+            var networkEvents = new ServerEventSink();
             _listeners.Add(new WorldListener(World));
             _listeners.Add(new CourseListener(World));
-            _listeners.Add(new StandaloneBattleListener(World));
+            _listeners.Add(new BattleListener(World));
+        }
+
+        internal ListenerType GetListener<ListenerType>() where ListenerType: EventListener
+        {
+            return (ListenerType)_listeners.FirstOrDefault(l => l.GetType() == typeof(ListenerType));
         }
 
         public void ClearEventListeners()

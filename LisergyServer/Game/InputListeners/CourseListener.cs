@@ -19,12 +19,12 @@ namespace Game.Listeners
 
         public override void Register()
         {
-            NetworkEvents.OnEntityRequestMove += RequestMovement;
+            ServerEventSink.OnEntityRequestMove += RequestMovement;
         }
 
         public override void Unregister()
         {
-            NetworkEvents.OnEntityRequestMove -= RequestMovement;
+            ServerEventSink.OnEntityRequestMove -= RequestMovement;
         }
 
         public void RequestMovement(MoveRequestEvent ev)
