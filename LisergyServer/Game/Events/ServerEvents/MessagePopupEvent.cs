@@ -4,7 +4,7 @@ namespace Game.Events.ServerEvents
 {
     public enum PopupType
     {
-        INVALID_COURSE = 1
+        BAD_INPUT = 1,
     }
 
     [Serializable]

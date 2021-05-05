@@ -42,7 +42,7 @@ public class MainBehaviour : MonoBehaviour
 
     private void Awake()
     {
-        new NetworkEvents();
+        new ServerEventSink();
         ConfigureUnity();
         Serialization.LoadSerializers();
         Networking = new Networking();

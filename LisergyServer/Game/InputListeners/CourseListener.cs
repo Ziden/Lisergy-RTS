@@ -33,7 +33,7 @@ namespace Game.Listeners
             Log.Debug($"{ev.Sender} requesting party {ev.PartyIndex} to move {ev.Path.Count} tiles");
             var course = StartCourse(party, ev.Path, ev.Intent);
             if(course == null)
-                ev.Sender.Send(new MessagePopupEvent(PopupType.INVALID_COURSE));
+                ev.Sender.Send(new MessagePopupEvent(PopupType.BAD_INPUT));
         }
 
         public MovementTask StartCourse(Party party, List<Position> sentPath, MovementIntent intent)

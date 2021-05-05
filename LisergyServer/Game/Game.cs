@@ -9,6 +9,15 @@ using LisergyServer;
 using System.Collections.Generic;
 using System.Linq;
 
+/*
+    - Battle Actions Input by Client
+
+
+
+*/ 
+
+
+
 namespace Game
 {
     public class StrategyGame

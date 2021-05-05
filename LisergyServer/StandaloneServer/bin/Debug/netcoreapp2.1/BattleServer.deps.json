@@ -6,13 +6,14 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.1": {
-      "StandaloneServer/1.0.0": {
+      "BattleServer/1.0.0": {
         "dependencies": {
-          "BattleServer": "1.0.0",
-          "MapServer": "1.0.0"
+          "LisergyMQ": "1.0.0",
+          "LisergyServer": "1.0.0",
+          "Telepathy": "1.0.341"
         },
         "runtime": {
-          "StandaloneServer.dll": {}
+          "BattleServer.dll": {}
         }
       },
       "Microsoft.NETCore.Platforms/3.1.0": {},
@@ -168,16 +169,6 @@
           }
         }
       },
-      "BattleServer/1.0.0": {
-        "dependencies": {
-          "LisergyMQ": "1.0.0",
-          "LisergyServer": "1.0.0",
-          "Telepathy": "1.0.341"
-        },
-        "runtime": {
-          "BattleServer.dll": {}
-        }
-      },
       "Game/1.0.0": {
         "dependencies": {
           "GameData": "1.0.0"
@@ -220,15 +211,6 @@
           "LisergyServer.dll": {}
         }
       },
-      "MapServer/1.0.0": {
-        "dependencies": {
-          "LisergyMQ": "1.0.0",
-          "LisergyServer": "1.0.0"
-        },
-        "runtime": {
-          "MapServer.dll": {}
-        }
-      },
       "NetSerializer/4.1.0.0": {
         "runtime": {
           "NetSerializer.dll": {
@@ -240,7 +222,7 @@
     }
   },
   "libraries": {
-    "StandaloneServer/1.0.0": {
+    "BattleServer/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -357,11 +339,6 @@
       "path": "telepathy/1.0.341",
       "hashPath": "telepathy.1.0.341.nupkg.sha512"
     },
-    "BattleServer/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
     "Game/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -383,11 +360,6 @@
       "sha512": ""
     },
     "LisergyServer/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "MapServer/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

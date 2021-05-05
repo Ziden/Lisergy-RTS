@@ -12,21 +12,21 @@ namespace Assets.Code
 
         public ServerListener()
         {
-            NetworkEvents.OnSpecResponse += ReceiveSpecs;
+            ServerEventSink.OnSpecResponse += ReceiveSpecs;
         }
 
         public void RegisterGameListeners()
         {
-            NetworkEvents.OnTileVisible += ReceiveTile;
-            NetworkEvents.OnEntityVisible += EntityVisible;
-            NetworkEvents.OnEntityMove += EntityMove;
-            NetworkEvents.OnMessagePopup += Message;
+            ServerEventSink.OnTileVisible += ReceiveTile;
+            ServerEventSink.OnEntityVisible += EntityVisible;
+            ServerEventSink.OnEntityMove += EntityMove;
+            ServerEventSink.OnMessagePopup += Message;
         }
 
         public void Message(MessagePopupEvent ev)
         {
             // TODO: Message factory
-            if (ev.Type == PopupType.INVALID_COURSE)
+            if (ev.Type == PopupType.BAD_INPUT)
                 UIManager.Notifications.ShowNotification("Path has obstacles");
         }
 

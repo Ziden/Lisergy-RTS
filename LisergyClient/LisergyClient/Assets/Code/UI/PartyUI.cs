@@ -47,7 +47,7 @@ public class PartyUI
         _rootObject.SetActive(false);
         ClientEvents.OnCameraMove += OnCameraMove;
         ClientEvents.OnClickTile += OnClickTile;
-        NetworkEvents.OnPlayerAuth += OnPlayerAuth;
+        ServerEventSink.OnPlayerAuth += OnPlayerAuth;
     }
 
     public void OnPlayerAuth(AuthResultEvent ev)

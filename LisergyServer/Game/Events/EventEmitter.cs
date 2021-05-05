@@ -1,5 +1,6 @@
 ﻿using Game;
 using Game.Events;
+using Game.Events.ClientEvents;
 using Game.Events.ServerEvents;
 
 namespace LisergyServer.Core
@@ -74,6 +75,12 @@ namespace LisergyServer.Core
                 var ev = Serialization.ToEvent<MoveRequestEvent>(message);
                 ev.Sender = owner;
                 ServerEventSink.SendRequestEntityMove(ev);
+            }
+            else if (eventId == EventID.BATTLE_ACTION)
+            {
+                var ev = Serialization.ToEvent<BattleActionEvent>(message);
+                ev.Sender = owner;
+                ServerEventSink.SendBattleAction(ev);
             }
         } 
     }
