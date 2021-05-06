@@ -16,7 +16,7 @@ namespace Game.Battles
             this._battle = battle;
         }
 
-        TurnBattleResult Log => _battle._log;
+        TurnBattleResult Log => _battle.Result;
         SortedSet<BattleUnit> UnitQueue => _battle._actionQueue;
 
         public TurnBattleResult RunAllRounds()

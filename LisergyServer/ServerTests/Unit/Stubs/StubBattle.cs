@@ -12,6 +12,6 @@ namespace ServerTests
 
         public BattleUnit NextUnitToAct => _actionQueue.First();
 
-        public TurnBattleResult Log => _log;
+        public TurnBattleResult Log => Result;
     }
 }

@@ -12,9 +12,10 @@ namespace Game.Events
 
         public BattleTurnEvent[] Turns;
 
-        public BattleResultEvent(TurnBattleResult result)
+        public BattleResultEvent(string battleID, TurnBattleResult result)
         {
             BattleHeader = new BattleJournalHeader();
+            BattleHeader.BattleID = battleID;
             BattleHeader.Date = DateTime.UtcNow;
             BattleHeader.Attacker = result.Attacker;
             BattleHeader.Defender = result.Defender;

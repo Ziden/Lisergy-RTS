@@ -10,7 +10,7 @@ namespace Game.Battles
     public class TurnBattle
     {
         internal SortedSet<BattleUnit> _actionQueue = new SortedSet<BattleUnit>();
-        internal TurnBattleResult _log = new TurnBattleResult();
+        internal TurnBattleResult Result = new TurnBattleResult();
 
         public Guid ID { get; private set; }
         public BattleTeam Attacker { get; private set; }
@@ -22,8 +22,8 @@ namespace Game.Battles
         public TurnBattle(Guid id, BattleTeam attacker, BattleTeam defender)
         {
             this.ID = id;
-            Attacker = _log.Attacker = attacker;
-            Defender = _log.Defender = defender;
+            Attacker = Result.Attacker = attacker;
+            Defender = Result.Defender = defender;
             AutoRun = new AutoRun(this);
 
             _actionQueue.UnionWith(attacker.Units);
@@ -32,7 +32,7 @@ namespace Game.Battles
 
         public void ReceiveAction(BattleAction action)
         {
-            _log.NextTurn();
+            Result.NextTurn();
             if (CurrentActingUnit != action.Unit)
             {
                 action.Result = new ActionResult();
@@ -46,7 +46,7 @@ namespace Game.Battles
                 action.Result = attack.Unit.Attack(attack.Defender);
                 action.Result.Succeeded = true;   
             }
-            _log.AddAction(action);
+            Result.AddAction(action);
         }
 
         public virtual BattleTeam GetOpposingTeam(BattleUnit unit)

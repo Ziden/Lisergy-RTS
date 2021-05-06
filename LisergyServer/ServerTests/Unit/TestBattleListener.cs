@@ -69,12 +69,12 @@ namespace Tests
             var atk = new AttackAction(actingUnit, battle.GetOpposingTeam(actingUnit).RandomUnit());
             Listener.OnBattleAction(new BattleActionEvent(id, atk));
 
-            Assert.That(battle._log.Turns.Count == 1);
+            Assert.That(battle.Result.Turns.Count == 1);
 
             atk = new AttackAction(actingUnit, battle.GetOpposingTeam(actingUnit).RandomUnit());
             Listener.OnBattleAction(new BattleActionEvent(id, atk));
 
-            Assert.That(battle._log.Turns.Count == 2);
+            Assert.That(battle.Result.Turns.Count == 2);
         }
 
         [Test]
@@ -89,16 +89,11 @@ namespace Tests
             });
 
             var battle = Listener.GetBattle(id);
-            var actingUnit = battle.CurrentActingUnit;
-            var atk = new AttackAction(actingUnit, battle.GetOpposingTeam(actingUnit).RandomUnit());
-            Listener.OnBattleResult(new BattleResultEvent(battle._log));
+            Assert.AreEqual(Listener.BattleCount(), 1);
 
-            Assert.That(battle._log.Turns.Count == 1);
+            Listener.OnBattleResult(new BattleResultEvent(id, battle.Result));
 
-            atk = new AttackAction(actingUnit, battle.GetOpposingTeam(actingUnit).RandomUnit());
-            Listener.OnBattleAction(new BattleActionEvent(id, atk));
-
-            Assert.That(battle._log.Turns.Count == 2);
+            Assert.AreEqual(Listener.BattleCount(), 0);
         }
     }
 }
