@@ -1,4 +1,4 @@
-# Codename Lisergy - A Civilization style MMO with turn based auto-battles and configurable battle IA's.
+# Codename Lisergy
 
 [![LisergyPipeline](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml)
 
