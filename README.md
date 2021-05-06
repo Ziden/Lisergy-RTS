@@ -32,7 +32,7 @@ Currently the MapServer and BattleServer are bundled into a standalone server fo
 ```
 cd LisergyServer/
 dotnet build
-cd MapServer/
+cd ../MapServer/
 dotnet build
 dotnet run 
 ```
