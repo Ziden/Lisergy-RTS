@@ -4,77 +4,6 @@
     "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\StandaloneServer\\StandaloneServer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\BattleServer\\BattleServer.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\BattleServer\\BattleServer.csproj",
-        "projectName": "BattleServer",
-        "projectPath": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\BattleServer\\BattleServer.csproj",
-        "packagesPath": "C:\\Users\\gabri\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\BattleServer\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\gabri\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "netcoreapp2.1"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "netcoreapp2.1": {
-            "targetAlias": "netcoreapp2.1",
-            "projectReferences": {
-              "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\Core\\LisergyServer.csproj": {
-                "projectPath": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\Core\\LisergyServer.csproj"
-              },
-              "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\MessageBroker\\LisergyMQ.csproj": {
-                "projectPath": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\MessageBroker\\LisergyMQ.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "netcoreapp2.1": {
-          "targetAlias": "netcoreapp2.1",
-          "dependencies": {
-            "Microsoft.NETCore.App": {
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[2.1.0, )",
-              "autoReferenced": true
-            },
-            "Telepathy": {
-              "target": "Package",
-              "version": "[1.0.341, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
     "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\Core\\LisergyServer.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -503,9 +432,6 @@
           "netcoreapp2.1": {
             "targetAlias": "netcoreapp2.1",
             "projectReferences": {
-              "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\BattleServer\\BattleServer.csproj": {
-                "projectPath": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\BattleServer\\BattleServer.csproj"
-              },
               "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\MapServer\\MapServer.csproj": {
                 "projectPath": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\MapServer\\MapServer.csproj"
               }

@@ -1,17 +1,16 @@
 ﻿using Game.Entity;
 using Game.Scheduler;
-using System;
 using System.Collections.Generic;
 
 namespace Game.Movement
 {
-    public class MovementTask : GameTask
+    public class CourseTask : GameTask
     {
         public Party Party;
         List<Tile> Path;
         public MovementIntent Intent { get; private set; }
 
-        public MovementTask(Party party, List<Tile> path, MovementIntent intent): base(party.GetMoveDelay())
+        public CourseTask(Party party, List<Tile> path, MovementIntent intent): base(party.GetMoveDelay())
         {
             this.Party = party;
             this.Path = path;

@@ -26,6 +26,10 @@ namespace Game.Entity
 
         public bool IsBattling => _battleID != null;
 
+        public bool CanMove()
+        {
+            return !IsBattling;
+        }
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)
         {
             _partyIndex = partyIndex;

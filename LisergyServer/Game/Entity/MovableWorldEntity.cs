@@ -12,9 +12,9 @@ namespace Game.Entity
         public abstract TimeSpan GetMoveDelay();
 
         [NonSerialized]
-        private MovementTask _course;
+        private CourseTask _course;
 
-        public MovementTask Course
+        public CourseTask Course
         {
             get => _course;
             set

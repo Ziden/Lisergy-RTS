@@ -62,6 +62,12 @@ namespace LisergyServer.Core
                 ev.Sender = owner;
                 ServerEventSink.SendBattleStart(ev);
             }
+            else if (eventId == EventID.BATTLE_ACTION_RESULT)
+            {
+                var ev = Serialization.ToEvent<BattleActionResultEvent>(message);
+                ev.Sender = owner;
+                ServerEventSink.SendBattleActionResult(ev);
+            }
 
             // CLIENT EVENTS (coming from client to server)
             else if(eventId == EventID.JOIN)

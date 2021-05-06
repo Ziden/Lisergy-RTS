@@ -43,7 +43,7 @@ namespace Game.Battles
         protected virtual void TakeAction(BattleUnit unit)
         {
             var enemyTeam = _battle.GetOpposingTeam(unit);
-            var enemy = enemyTeam.Random();
+            var enemy = enemyTeam.RandomUnit();
             var action = new AttackAction(unit, enemy);
             _battle.ReceiveAction(action);     
         }

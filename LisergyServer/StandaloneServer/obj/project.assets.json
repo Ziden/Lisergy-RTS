@@ -401,22 +401,6 @@
           "lib/netstandard2.0/Telepathy.dll": {}
         }
       },
-      "BattleServer/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v2.1",
-        "dependencies": {
-          "LisergyMQ": "1.0.0",
-          "LisergyServer": "1.0.0",
-          "Microsoft.NETCore.App": "2.1.0",
-          "Telepathy": "1.0.341"
-        },
-        "compile": {
-          "bin/placeholder/BattleServer.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/BattleServer.dll": {}
-        }
-      },
       "Game/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
@@ -489,8 +473,7 @@
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
           "LisergyMQ": "1.0.0",
-          "LisergyServer": "1.0.0",
-          "Microsoft.NETCore.App": "2.1.0"
+          "LisergyServer": "1.0.0"
         },
         "compile": {
           "bin/placeholder/MapServer.dll": {}
@@ -1514,11 +1497,6 @@
         "telepathy.nuspec"
       ]
     },
-    "BattleServer/1.0.0": {
-      "type": "project",
-      "path": "../BattleServer/BattleServer.csproj",
-      "msbuildProject": "../BattleServer/BattleServer.csproj"
-    },
     "Game/1.0.0": {
       "type": "project",
       "path": "../Game/Game.csproj",
@@ -1552,7 +1530,6 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
-      "BattleServer >= 1.0.0",
       "MapServer >= 1.0.0",
       "Microsoft.NETCore.App >= 2.1.0"
     ]
@@ -1586,10 +1563,8 @@
       },
       "frameworks": {
         "netcoreapp2.1": {
+          "targetAlias": "netcoreapp2.1",
           "projectReferences": {
-            "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\BattleServer\\BattleServer.csproj": {
-              "projectPath": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\BattleServer\\BattleServer.csproj"
-            },
             "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\MapServer\\MapServer.csproj": {
               "projectPath": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\MapServer\\MapServer.csproj"
             }
@@ -1604,18 +1579,26 @@
     },
     "frameworks": {
       "netcoreapp2.1": {
+        "targetAlias": "netcoreapp2.1",
         "dependencies": {
           "Microsoft.NETCore.App": {
+            "suppressParent": "All",
             "target": "Package",
             "version": "[2.1.0, )",
             "autoReferenced": true
           }
         },
         "imports": [
-          "net461"
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

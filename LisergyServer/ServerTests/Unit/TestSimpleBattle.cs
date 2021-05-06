@@ -36,24 +36,6 @@ namespace Tests
         }
 
         [Test]
-        public void TestDamage()
-        {
-            var t1 = new BattleTeam(StrongUnit);
-            var t2 = new BattleTeam(WeakUnit);
-
-            var strong = t1.Units.First();
-            var weaks = t2.Units.First();
-
-            var currentHP = weaks.Stats.HP;
-            var damage = strong.Stats.Atk - (weaks.Stats.Def / 2);
-
-            var result = strong.Attack(weaks);
-
-            Assert.AreEqual(weaks.Stats.HP, currentHP - damage);
-            Assert.AreEqual(result.Damage, damage);
-        }
-
-        [Test]
         public void TestUnitsOrderingSameSpeed()
         {
             var battle = new TestBattle(new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));

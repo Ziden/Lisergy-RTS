@@ -77,7 +77,7 @@ namespace Tests
 
             Assert.AreEqual(dungeonTile, _player.Parties.First().Tile);
 
-            // 1 battle pending processing
+            // 1 battle opened
             Assert.AreEqual(1, _game.GetListener<BattleListener>().BattleCount());
         }
     }

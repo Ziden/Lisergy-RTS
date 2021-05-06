@@ -116,6 +116,20 @@ namespace Tests
         }
 
         [Test]
+        public void TestCannotMoveBattlingUnit()
+        {
+            var tile = _party.Tile;
+            var next = tile.GetNeighbor(Direction.SOUTH);
+            _path.Add(new Position(next.X, next.Y));
+            _party.BattleID = "anything that is not null";
+
+            _path.Add(new Position(next.X + 1, next.Y));
+            SendMoveRequest();
+
+            Assert.IsNull(_party.Course);
+        }
+
+        [Test]
         public void TestMultipleMoves()
         {
             var date = DateTime.MinValue;

@@ -1,5 +1,4 @@
 ﻿using Game;
-using Game.Battle;
 using Game.Battles;
 using Game.Events;
 using Game.Events.ClientEvents;
@@ -21,7 +20,6 @@ namespace BattleServer
             ServerEventSink.OnBattleStart += OnBattleStart;
             ServerEventSink.OnBattleResult += OnBattleResult;
             ServerEventSink.OnBattleAction += OnBattleAction;
-            Console.WriteLine("[BattleServer] Registered Battle start Listener");
         }
 
         public override void Unregister()
@@ -36,8 +34,11 @@ namespace BattleServer
             if(!_battles.TryGetValue(ev.BattleID, out battle))
             {
                 ev.Sender.Send(new MessagePopupEvent(PopupType.BAD_INPUT, "Invalid battle"));
+                return;
             }
-            
+            battle.ReceiveAction(ev.Action);
+            foreach(var onlinePlayer in GetOnlinePlayers(battle))
+                onlinePlayer.Send(new BattleActionResultEvent() { ActionResult = ev.Action.Result });
         }
 
         public void OnBattleStart(BattleStartEvent ev)
@@ -49,19 +50,21 @@ namespace BattleServer
 
         public void OnBattleResult(BattleResultEvent ev)
         {
-            foreach (var userID in GetInvolveds(ev))
+            TurnBattle battle = null;
+            if (!_battles.TryGetValue(ev.BattleHeader.BattleID, out battle))
             {
-                PlayerEntity pl;
-                if (!World.Players.GetPlayer(userID, out pl))
-                    continue;
+                ev.Sender.Send(new MessagePopupEvent(PopupType.BAD_INPUT, "Invalid battle"));
+                return;
+            }
 
+            foreach (var pl in GetOnlinePlayers(battle))
+            {
                 var battlingParty = pl.Parties.Where(p => p != null && p.BattleID == ev.BattleHeader.BattleID).FirstOrDefault();
                 if (battlingParty == null)
-                    return;
-                battlingParty.BattleID = null;
-                // TODO: Copy battle values back to original entities
+                    throw new Exception($"Player {pl} in {this} without a party assigned");
                 pl.Battles.Add(ev);
             }
+            _battles.Remove(ev.BattleHeader.BattleID);
         }
 
         #endregion
@@ -75,16 +78,22 @@ namespace BattleServer
 
         public int BattleCount()
         {
-            return _battles.Count;
+            return _battles.Count;                          
         }
 
         public BattleListener(GameWorld world)
         {
             World = world;
         }
-        public string[] GetInvolveds(BattleResultEvent ev)
+
+        public IEnumerable<PlayerEntity> GetOnlinePlayers(TurnBattle battle)
         {
-            return new string[] { ev.BattleHeader.Attacker.OwnerID, ev.BattleHeader.Defender.OwnerID };
+            PlayerEntity pl;
+            foreach (var userid in new string []{ battle.Defender.OwnerID , battle.Attacker.OwnerID })
+            {
+                if(World.Players.GetPlayer(userid, out pl) && pl.Online())
+                    yield return pl; 
+            }
         }
 
         #endregion

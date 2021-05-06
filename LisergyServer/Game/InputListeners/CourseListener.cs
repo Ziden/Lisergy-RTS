@@ -31,12 +31,19 @@ namespace Game.Listeners
         {
             var party = ev.Sender.Parties[ev.PartyIndex];
             Log.Debug($"{ev.Sender} requesting party {ev.PartyIndex} to move {ev.Path.Count} tiles");
+
+            if (!party.CanMove())
+            {
+                ev.Sender.Send(new MessagePopupEvent(PopupType.BAD_INPUT));
+                return;
+            }
+
             var course = StartCourse(party, ev.Path, ev.Intent);
             if(course == null)
                 ev.Sender.Send(new MessagePopupEvent(PopupType.BAD_INPUT));
         }
 
-        public MovementTask StartCourse(Party party, List<Position> sentPath, MovementIntent intent)
+        public CourseTask StartCourse(Party party, List<Position> sentPath, MovementIntent intent)
         {
             List<Tile> path = new List<Tile>();
             var owner = party.Owner;
@@ -51,7 +58,7 @@ namespace Game.Listeners
                 Log.Debug("ADD " + tile);
                 path.Add(tile);
             }
-            party.Course = new MovementTask(party, path, intent);
+            party.Course = new CourseTask(party, path, intent);
             return party.Course;
         }
     }

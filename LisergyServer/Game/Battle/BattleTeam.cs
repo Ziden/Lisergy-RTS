@@ -32,7 +32,7 @@ namespace Game.Battles
 
         public bool AllDead { get => !Units.Any(u => !u.Dead); }
 
-        public BattleUnit Random()
+        public BattleUnit RandomUnit()
         {
             return Units.RandomElement();
         }

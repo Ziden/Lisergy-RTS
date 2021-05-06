@@ -15,4 +15,5 @@ namespace Game.Events
         public byte PartyIndex;
         public List<Position> Path;
     }
+
 }

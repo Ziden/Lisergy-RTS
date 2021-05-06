@@ -23,9 +23,9 @@ namespace Game.Events
         BATTLE_START_SUMMARY = 12,
         BATTLE_RESULT_COMPLETE = 13,
         BATTLE_RESULT_SUMMARY = 14,
-        BATTLE_ACTION = 15
-        
+        BATTLE_ACTION = 15,
+        BATTLE_ACTION_RESULT = 16
 
-        
+
     }
 }
