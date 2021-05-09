@@ -10,8 +10,8 @@ namespace Assets.Code
 {
     public class ClientStrategyGame : StrategyGame
     {
-        public ClientStrategyGame(GameSpec specs, GameWorld world) : base(specs, world) {
-           
+        public ClientStrategyGame(GameSpec specs, GameWorld world) : base(specs, world)
+        {
         }
 
         public ClientWorld GetWorld()

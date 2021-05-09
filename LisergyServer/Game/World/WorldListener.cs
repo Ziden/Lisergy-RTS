@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
+using System.Linq;
 
 namespace Game.Listeners
 {
@@ -16,12 +17,12 @@ namespace Game.Listeners
 
         public override void Register()
         {
-            ServerEventSink.OnJoinWorld += JoinWorld;
+            NetworkEvents.OnJoinWorld += JoinWorld;
         }
 
         public override void Unregister()
         {
-            ServerEventSink.OnJoinWorld -= JoinWorld;
+            NetworkEvents.OnJoinWorld -= JoinWorld;
         }
 
         public void JoinWorld(JoinWorldEvent ev)

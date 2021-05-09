@@ -59,7 +59,7 @@ namespace Tests
 
             Assert.AreEqual(battle.NextUnitToAct.UnitID, FastUnit.Id);
 
-            var lastAction = battle.AutoRun.PlayOneTurn();
+            var lastAction = battle.AutoRun.PlayOneTurn().Last();
 
             Assert.AreEqual(lastAction.Unit.UnitID, FastUnit.Id);
             Assert.AreEqual(lastAction.Unit.RT, lastAction.Unit.GetMaxRT() * 2);

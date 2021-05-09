@@ -12,7 +12,7 @@ namespace Game.Generator
 
         public override void Populate(GameWorld w, Chunk c)
         {
-            w.ChunkMap.SetFlag(c.X, c.Y, ChunkFlag.NEWBIE_CHUNK);
+            w.Map.SetFlag(c.X, c.Y, ChunkFlag.NEWBIE_CHUNK);
 
             for (var i = 0; i < GameWorld.CHUNK_SIZE; i++) {
                 c.GetTile(0, i).TileId = 1;

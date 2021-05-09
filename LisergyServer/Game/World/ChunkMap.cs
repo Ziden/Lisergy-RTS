@@ -17,12 +17,15 @@ namespace Game
         public int QtdTilesX { get => QtdChunksX * GameWorld.CHUNK_SIZE; }
         public int QtdTilesY { get => QtdChunksY * GameWorld.CHUNK_SIZE; }
 
-        public ChunkMap(int tilesAmtX, int tilesAmtY)
+        public GameWorld World { get; private set; }
+
+        public ChunkMap(GameWorld world, int tilesAmtX, int tilesAmtY)
         {
             var sizeX = tilesAmtX / GameWorld.CHUNK_SIZE;
             var sizeY = tilesAmtY / GameWorld.CHUNK_SIZE;
             _chunkMap = new Chunk[sizeX, sizeY];
             _cache = new CachedChunkMap(this);
+            this.World = world;
             Log.Debug($"Initialized chunk map {sizeX}x{sizeY}");
         }
 

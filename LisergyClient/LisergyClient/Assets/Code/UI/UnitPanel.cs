@@ -34,7 +34,7 @@ public class UnitPanel : MonoBehaviour
     {
         this.gameObject.SetActive(true);
 
-        PartyUI.RenderPortrait(unit, Face);
+        PartyUI.DrawPortrait(unit, Face);
         //PartyUI.RenderParty()
         //Face.sprite = LazyLoad.GetSpecificSpriteArt(unit.Spec.FaceArt);
 

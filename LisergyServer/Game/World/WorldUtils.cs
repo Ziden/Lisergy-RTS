@@ -161,10 +161,10 @@ namespace Game.World
         {
             switch (d)
             {
-                case Direction.EAST: return tile.Chunk.ChunkMap.GetTile(tile.X + 1, tile.Y);
-                case Direction.WEST: return tile.Chunk.ChunkMap.GetTile(tile.X - 1, tile.Y);
-                case Direction.SOUTH: return tile.Chunk.ChunkMap.GetTile(tile.X, tile.Y - 1);
-                case Direction.NORTH: return tile.Chunk.ChunkMap.GetTile(tile.X, tile.Y + 1);
+                case Direction.EAST: return tile.Chunk.Map.GetTile(tile.X + 1, tile.Y);
+                case Direction.WEST: return tile.Chunk.Map.GetTile(tile.X - 1, tile.Y);
+                case Direction.SOUTH: return tile.Chunk.Map.GetTile(tile.X, tile.Y - 1);
+                case Direction.NORTH: return tile.Chunk.Map.GetTile(tile.X, tile.Y + 1);
             }
             return null;
         }
@@ -173,8 +173,8 @@ namespace Game.World
         {
             for (var xx = tile.X - radius; xx <= tile.X + radius; xx++)
                 for (var yy = tile.Y - radius; yy <= tile.Y + radius; yy++)
-                    if (tile.Chunk.ChunkMap.ValidCoords(xx, yy))
-                        yield return tile.Chunk.ChunkMap.GetTile(xx, yy);
+                    if (tile.Chunk.Map.ValidCoords(xx, yy))
+                        yield return tile.Chunk.Map.GetTile(xx, yy);
         }
     }
 }

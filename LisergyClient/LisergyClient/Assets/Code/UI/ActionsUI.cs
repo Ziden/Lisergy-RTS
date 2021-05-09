@@ -2,6 +2,7 @@
 using Game;
 using Game.Entity;
 using Game.Events;
+using Game.Movement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,42 +118,35 @@ namespace Assets.Code.UI
             }
         }
 
-        private void AttackButton()
+        private void MoveToSelectedTile(MovementIntent intent)
         {
             ClientParty party = UIManager.PartyUI.SelectedParty;
             ClientTile selectedTile = UIManager.TileUI.SelectedTile;
             Log.Debug($"Moving {party} to {selectedTile}");
-            var map = selectedTile.Chunk.ChunkMap;
+            var map = selectedTile.Chunk.Map;
             var path = map.FindPath(party.Tile, selectedTile);
             var tilePath = path.Select(node => (ClientTile)map.GetTile(node.X, node.Y)).ToList();
             ClientEvents.StartMovementRequest(party, tilePath);
             MainBehaviour.Networking.Send(new MoveRequestEvent()
             {
                 PartyIndex = party.PartyIndex,
-                Path = path.Select(p => new Game.World.Position(p.X, p.Y)).ToList()
+                Path = path.Select(p => new Game.World.Position(p.X, p.Y)).ToList(),
+                Intent = intent
             });
-            Hide();
         }
 
         private void GuardButton() {}
 
-        private void MoveButton()
+        private void AttackButton()
         {
-            ClientParty party = UIManager.PartyUI.SelectedParty;
-            ClientTile selectedTile = UIManager.TileUI.SelectedTile;
-            Log.Debug($"Moving {party} to {selectedTile}");
-            var map = selectedTile.Chunk.ChunkMap;
-            var path = map.FindPath(party.Tile, selectedTile);
-            var tilePath = path.Select(node => (ClientTile)map.GetTile(node.X, node.Y)).ToList();
-            ClientEvents.StartMovementRequest(party, tilePath);
-            MainBehaviour.Networking.Send(new MoveRequestEvent()
-            {
-                PartyIndex = party.PartyIndex,
-                Path = path.Select(p => new Game.World.Position(p.X, p.Y)).ToList()
-               
-            });
+            MoveToSelectedTile(MovementIntent.Offensive);
             Hide();
         }
 
+        private void MoveButton()
+        {
+            MoveToSelectedTile(MovementIntent.Defensive);
+            Hide();
+        }
     }
 }

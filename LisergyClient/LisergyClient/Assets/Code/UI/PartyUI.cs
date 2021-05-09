@@ -47,7 +47,17 @@ public class PartyUI
         _rootObject.SetActive(false);
         ClientEvents.OnCameraMove += OnCameraMove;
         ClientEvents.OnClickTile += OnClickTile;
-        ServerEventSink.OnPlayerAuth += OnPlayerAuth;
+        NetworkEvents.OnPlayerAuth += OnPlayerAuth;
+    }
+
+    public void Hide()
+    {
+        _rootObject.SetActive(false);
+    }
+
+    public void Show()
+    {
+        _rootObject.SetActive(true);
     }
 
     public void OnPlayerAuth(AuthResultEvent ev)
@@ -109,17 +119,17 @@ public class PartyUI
             CameraBehaviour.FocusOnTile((ClientTile)party.Tile);
     }
 
-    public static Image RenderParty(ClientParty party, Transform parent)
+    public static Image DrawPartyIcon(ClientParty party, Transform parent)
     {
         var partyIndex = party.PartyIndex;
         var units = party.GetUnits().ToList();
         var leader = (ClientUnit)units[0];
         var imageObj = new GameObject("portrait", typeof(Image));
-        var image = RenderPortrait(leader, parent);
+        var image = DrawPortrait(leader, parent);
         return image;
     }
 
-    public static Image RenderPortrait(Unit unit, Transform parent)
+    public static Image DrawPortrait(Unit unit, Transform parent)
     {
         foreach (Transform t in parent)
             MainBehaviour.Destroy(t.gameObject);
@@ -132,10 +142,10 @@ public class PartyUI
         return image;
     }
 
-    public void RenderAllParties()
+    public void DrawAllParties()
     {
         foreach (var party in MainBehaviour.Player.Parties)
             if (party is ClientParty)
-                RenderParty((ClientParty)party, _partyButtons[party.PartyIndex].transform);
+                DrawPartyIcon((ClientParty)party, _partyButtons[party.PartyIndex].transform);
     }
 }

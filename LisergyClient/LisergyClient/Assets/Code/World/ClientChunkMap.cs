@@ -5,7 +5,7 @@ namespace Assets.Code.World
 {
     public class ClientChunkMap : ChunkMap
     {
-        public ClientChunkMap(ClientWorld world) : base(world.SizeX, world.SizeY) { }
+        public ClientChunkMap(ClientWorld world) : base(world, world.SizeX, world.SizeY) { }
 
         public override Tile GetTile(int tileX, int tileY)
         {

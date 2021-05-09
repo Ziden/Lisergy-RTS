@@ -1,10 +1,13 @@
 ﻿
+using Game;
 using Game.Scheduler;
 
 namespace LisergyServer.Commands
 {
     public class TaskCommand : Command
     {
+        public TaskCommand(StrategyGame game) : base(game) { }
+
         public override string GetCommand()
         {
             return "task";

@@ -17,11 +17,11 @@ namespace Game.Events
     public delegate void BattleActionHandler(BattleActionEvent e);
     public delegate void BattleActionResultHandler(BattleActionResultEvent e);
 
-    public class ServerEventSink
+    public class NetworkEvents
     {
         // TODO: Remove all static crap and refactor into something smart
-        private static ServerEventSink _i;
-        public ServerEventSink() {  _i = this; }
+        private static NetworkEvents _i;
+        public NetworkEvents() {  _i = this; }
 
         private event JoinEventHandler _OnJoinWorld;
         private event AuthResultHandler _OnPlayerAuth;

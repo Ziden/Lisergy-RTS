@@ -22,7 +22,7 @@ namespace Game
         public static readonly int PLAYERS_CHUNKS = 2;
 
         public WorldPlayers Players { get; set; }
-        public ChunkMap ChunkMap { get; set; }
+        public ChunkMap Map { get; set; }
 
         public ushort Seed { get; set; }
         public int SizeX { get; private set; }
@@ -33,24 +33,24 @@ namespace Game
             SizeX = sizeX;
             SizeY = sizeY;
             Players = new WorldPlayers(maxPlayers);
-            CreateChunkMap();
+            CreateMap();
         }
 
-        public virtual void CreateChunkMap()
+        public virtual void CreateMap()
         {
             _id = Guid.NewGuid().ToString();
-            ChunkMap = new ChunkMap(SizeX, SizeY);
+            Map = new ChunkMap(this, SizeX, SizeY);
             GenerateTiles();
         }
 
         public virtual void GenerateTiles()
         {
-            this.ChunkMap.GenerateTiles(this.SizeX, this.SizeY);
+            this.Map.GenerateTiles(this.SizeX, this.SizeY);
         }
 
         public virtual void PlaceNewPlayer(PlayerEntity player, Tile t = null)
         {
-            var newbieChunk = ChunkMap.GetUnnocupiedNewbieChunk();
+            var newbieChunk = Map.GetUnnocupiedNewbieChunk();
             if (newbieChunk == null)
             {
                 throw new Exception("No more room for newbie players in this world");
@@ -65,7 +65,7 @@ namespace Game
 
             ushort initialUnit = StrategyGame.Specs.InitialUnit;
             var unit = player.RecruitUnit(initialUnit);
-
+            unit.Name = "Merlin";
             var party = player.Parties[0];
             player.PlaceUnitInParty(unit, party);
             party.Tile =  t.GetNeighbor(Direction.EAST);
@@ -75,19 +75,19 @@ namespace Game
 
         public virtual IEnumerable<Tile> AllTiles()
         {
-            foreach (var chunk in ChunkMap.AllChunks())
+            foreach (var chunk in Map.AllChunks())
                 foreach (var tile in chunk.AllTiles())
                     yield return tile;
         }
 
         public Chunk GetTileChunk(int tileX, int tileY)
         {
-            return ChunkMap.GetTileChunk(tileX, tileY);
+            return Map.GetTileChunk(tileX, tileY);
         }
 
         public Tile GetTile(int tileX, int tileY)
         {
-            return ChunkMap.GetTile(tileX, tileY);
+            return Map.GetTile(tileX, tileY);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Game.Generator
 
             Log.Info("Generated Seed " + seed);
             Log.Debug($"Generating world {world.SizeX}x{world.SizeY} for {world.Players.MaxPlayers} players");
-            foreach (var chunk in world.ChunkMap.AllChunks())
+            foreach (var chunk in world.Map.AllChunks())
                 foreach (var populator in populators)
                     populator.Populate(world, chunk);
 

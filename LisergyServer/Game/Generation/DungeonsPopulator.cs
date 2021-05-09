@@ -13,6 +13,7 @@ namespace Game.Generator
             if (place != null) {
                 var dungeon = new Dungeon();
                 var enemy = new Unit(0);
+                enemy.Name = "Bandit";
                 enemy.SetSpecStats();
                 dungeon.SetBattles(new BattleTeam(enemy));
                 dungeon.Rewards = new Item[] { new Item(1, 10) }; // gold 

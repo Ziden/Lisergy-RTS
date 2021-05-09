@@ -31,9 +31,9 @@ namespace Assets.Code.World
         }
 
         // In client we generate the tiles on-demand
-        public override void CreateChunkMap()
+        public override void CreateMap()
         {
-            ChunkMap = new ClientChunkMap(this);
+            Map = new ClientChunkMap(this);
         }
     }
 }

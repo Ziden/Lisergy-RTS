@@ -7,21 +7,30 @@ namespace Game.Battles.Actions
     [Serializable]
     public class AttackAction : BattleAction
     {
-        private string _defenderID;
+        public string DefenderID;
 
         [NonSerialized]
         private BattleUnit _defender;
 
-        public BattleUnit Defender { get => _defender; set  { _defender = value; _defenderID = value.UnitID; }  }
+        public BattleUnit Defender
+        {
+            get
+            {
+                if (_defender == null)
+                    _defender = Battle.FindBattleUnit(DefenderID);
+                return _defender;
+            }
+            set { _defender = value; DefenderID = value.UnitID; }
+        }
 
-        public AttackAction(BattleUnit atk, BattleUnit def): base(atk)
+        public AttackAction(TurnBattle battle, BattleUnit atk, BattleUnit def) : base(battle, atk)
         {
             this.Defender = def;
         }
 
         public override string ToString()
         {
-            return $"<Attack {Unit} to {Defender}";
+            return $"<Attack From={UnitID} To={DefenderID}>";
         }
     }
 }

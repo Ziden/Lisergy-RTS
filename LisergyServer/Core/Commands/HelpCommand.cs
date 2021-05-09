@@ -4,7 +4,7 @@
     {
         private CommandExecutor _executor;
 
-        public HelpCommand(CommandExecutor executor)
+        public HelpCommand(CommandExecutor executor): base(null)
         {
             _executor = executor;
         }

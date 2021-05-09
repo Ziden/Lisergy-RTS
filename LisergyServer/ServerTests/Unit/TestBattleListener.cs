@@ -7,6 +7,7 @@ using Game.Events.ClientEvents;
 using NUnit.Framework;
 using ServerTests;
 using System;
+using System.Linq;
 
 namespace Tests
 {
@@ -56,22 +57,29 @@ namespace Tests
         [Test]
         public void TestActing()
         {
+            
             var id = Guid.NewGuid().ToString();
-            Listener.OnBattleStart(new BattleStartEvent()
+            var ev = new BattleStartEvent()
             {
                 Attacker = new BattleTeam(FastUnit),
                 Defender = new BattleTeam(SlowUnit),
                 BattleID = id
-            });
+            };
+            foreach (var unit in ev.Attacker.Units)
+                unit.Controlled = true;
+            foreach (var unit in ev.Defender.Units)
+                unit.Controlled = true;
 
+            Listener.OnBattleStart(ev);
+           
             var battle = Listener.GetBattle(id);
             var actingUnit = battle.CurrentActingUnit;
-            var atk = new AttackAction(actingUnit, battle.GetOpposingTeam(actingUnit).RandomUnit());
+            var atk = new AttackAction(battle, actingUnit, battle.GetOpposingTeam(actingUnit).RandomUnit());
             Listener.OnBattleAction(new BattleActionEvent(id, atk));
 
             Assert.That(battle.Result.Turns.Count == 1);
 
-            atk = new AttackAction(actingUnit, battle.GetOpposingTeam(actingUnit).RandomUnit());
+            atk = new AttackAction(battle, actingUnit, battle.GetOpposingTeam(actingUnit).RandomUnit());
             Listener.OnBattleAction(new BattleActionEvent(id, atk));
 
             Assert.That(battle.Result.Turns.Count == 2);

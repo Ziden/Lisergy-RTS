@@ -23,10 +23,11 @@ namespace MapServer
         public MapService(int port) : base(port) {
         }
 
-        public override void RegisterCommands(CommandExecutor executor)
+        public override void RegisterCommands(StrategyGame game, CommandExecutor executor)
         {
-            executor.RegisterCommand(new TileCommand());
-            executor.RegisterCommand(new TaskCommand());
+            executor.RegisterCommand(new TileCommand(game));
+            executor.RegisterCommand(new TaskCommand(game));
+            executor.RegisterCommand(new BattlesCommand(game));
         }
 
         public override void Tick()

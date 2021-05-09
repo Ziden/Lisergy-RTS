@@ -43,7 +43,7 @@ namespace Game.Battles
                 _teams.Add(battleUnit.Team);
             _units[battleUnit.UnitID] = battleUnit;
             ActionQueue.Add(battleUnit);
-            battleUnit.Tile = this._map.GetTacticsTile(x, y);
+            //battleUnit.Tile = this._map.GetTacticsTile(x, y);
         }
 
         public void PassTurn()
@@ -70,6 +70,7 @@ namespace Game.Battles
                 var result = new ActionResult() { Succeeded = false };
                 action.Result = result;
                 var unit = action.Unit;
+                /*
                 if(unit.Moved)
                 {
                     Log.Error($"{unit} already moved");
@@ -91,6 +92,7 @@ namespace Game.Battles
                 result.Succeeded = true;
                 _log.Add(action);
                 return result.Succeeded;
+                */
             }
             return false;
         }

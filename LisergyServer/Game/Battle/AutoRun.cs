@@ -21,31 +21,26 @@ namespace Game.Battles
 
         public TurnBattleResult RunAllRounds()
         {
-            while (!_battle.Attacker.AllDead && !_battle.Defender.AllDead) {
+            while (!_battle.IsOver) {
                 PlayOneTurn();
             }
             Log.Winner = _battle.Attacker.AllDead ? _battle.Defender : _battle.Attacker;
             return Log;
         }
 
-        public virtual BattleAction PlayOneTurn()
+        public virtual List<BattleAction> PlayOneTurn()
         {
             Log.NextTurn();
             var actingUnit = UnitQueue.First();
-            TakeAction(actingUnit);
-            if (!UnitQueue.Remove(actingUnit))
-                throw new Exception($"Error removing {actingUnit} from the UnitQueue");
-            actingUnit.RT += actingUnit.GetMaxRT();
-            UnitQueue.Add(actingUnit);
-            return Log.LastAction;
+            return TakeAction(actingUnit);
         }
 
-        protected virtual void TakeAction(BattleUnit unit)
+        protected virtual List<BattleAction> TakeAction(BattleUnit unit)
         {
             var enemyTeam = _battle.GetOpposingTeam(unit);
             var enemy = enemyTeam.RandomUnit();
-            var action = new AttackAction(unit, enemy);
-            _battle.ReceiveAction(action);     
+            var action = new AttackAction(_battle, unit, enemy);
+            return _battle.ReceiveAction(action);     
         }
 
         

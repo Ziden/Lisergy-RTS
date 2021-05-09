@@ -31,7 +31,7 @@ public class TileRandomizerBehaviour : MonoBehaviour
 
         var comp = tile.GetGameObject().GetComponent<TileRandomizerBehaviour>();
 
-        var map = tile.Chunk.ChunkMap;
+        var map = tile.Chunk.Map;
         var north = map.GetTile(tile.X, tile.Y - 1);
         var south = map.GetTile(tile.X, tile.Y + 1);
         var east = map.GetTile(tile.X + 1, tile.Y);

@@ -18,7 +18,7 @@ namespace Game
 
         public virtual ushort X { get; private set; }
         public virtual ushort Y { get; private set; }
-        public virtual ChunkMap ChunkMap { get; private set; }
+        public virtual ChunkMap Map { get; private set; }
         public virtual byte Flags { get => _flags; set => _flags = value; }
         public virtual Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
         public Chunk(ChunkMap w, int x, int y, Tile[,] tiles)
@@ -26,7 +26,7 @@ namespace Game
             this.X = (ushort)x;
             this.Y = (ushort)y;
             Tiles = tiles;
-            this.ChunkMap = w;
+            this.Map = w;
         }
 
         public Tile GetTile(int x, int y)

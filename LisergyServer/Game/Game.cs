@@ -36,13 +36,13 @@ namespace Game
 
         public void RegisterEventListeners()
         {
-            var networkEvents = new ServerEventSink();
+            var networkEvents = new NetworkEvents();
             _listeners.Add(new WorldListener(World));
             _listeners.Add(new CourseListener(World));
             _listeners.Add(new BattleListener(World));
         }
 
-        internal ListenerType GetListener<ListenerType>() where ListenerType: EventListener
+        public ListenerType GetListener<ListenerType>() where ListenerType: EventListener
         {
             return (ListenerType)_listeners.FirstOrDefault(l => l.GetType() == typeof(ListenerType));
         }

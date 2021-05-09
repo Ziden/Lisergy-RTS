@@ -1,6 +1,4 @@
 ﻿using Game.Events;
-using Game.Events.ServerEvents;
-using Game.World;
 using Game.Inventories;
 using System;
 using System.Collections.Generic;
@@ -19,7 +17,7 @@ namespace Game.Entity
         private Inventory _cargo = new Inventory();
 
         public byte PartyIndex { get => _partyIndex; }
-        public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(1);
+        public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(0.25);
 
         [NonSerialized]
         private string _battleID;
@@ -28,8 +26,10 @@ namespace Game.Entity
 
         public bool CanMove()
         {
-            return !IsBattling;
+            return true;
+           // return !IsBattling;
         }
+
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)
         {
             _partyIndex = partyIndex;
@@ -39,17 +39,13 @@ namespace Game.Entity
         {
             var playerTeam = new BattleTeam(this.Owner, this._units);
             _battleID = Guid.NewGuid().ToString();
-            var ev = new BattleStartEvent()
+            
+            NetworkEvents.SendBattleStart(new BattleStartEvent()
             {
                 Attacker = playerTeam,
                 Defender = enemy,
                 BattleID = _battleID
-            };
-            // TODO, send for enemy owner too ( PvP )
-            // send to attacker client
-            this.Owner.Send(ev);
-            // send to server 
-            ServerEventSink.SendBattleStart(ev);
+            });
         }
 
         public override Tile Tile

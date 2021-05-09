@@ -12,15 +12,15 @@ namespace Assets.Code
 
         public ServerListener()
         {
-            ServerEventSink.OnSpecResponse += ReceiveSpecs;
+            NetworkEvents.OnSpecResponse += ReceiveSpecs;
         }
 
         public void RegisterGameListeners()
         {
-            ServerEventSink.OnTileVisible += ReceiveTile;
-            ServerEventSink.OnEntityVisible += EntityVisible;
-            ServerEventSink.OnEntityMove += EntityMove;
-            ServerEventSink.OnMessagePopup += Message;
+            NetworkEvents.OnTileVisible += ReceiveTile;
+            NetworkEvents.OnEntityVisible += EntityVisible;
+            NetworkEvents.OnEntityMove += EntityMove;
+            NetworkEvents.OnMessagePopup += Message;
         }
 
         public void Message(MessagePopupEvent ev)
@@ -38,7 +38,6 @@ namespace Assets.Code
                 throw new System.Exception($"Server sent move event for entity {ev.ID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
             var newTile = (ClientTile)_game.GetWorld().GetTile(ev.X, ev.Y);
             knownEntity.Tile = newTile;
-
         }
 
         public void EntityVisible(EntityVisibleEvent ev)
@@ -47,7 +46,7 @@ namespace Assets.Code
             var tile = (ClientTile)_game.GetWorld().GetTile(ev.Entity.X, ev.Entity.Y);
             var clientEntity = EntityFactory.InstantiateClientEntity(ev.Entity, owner, tile);
             clientEntity.Tile = tile;
-            UIManager.PartyUI.RenderAllParties();
+            UIManager.PartyUI.DrawAllParties();
         }
 
         public void ReceiveTile(TileVisibleEvent ev)

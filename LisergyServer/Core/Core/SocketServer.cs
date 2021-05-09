@@ -23,13 +23,14 @@ namespace LisergyServer.Core
             _port = port;
             _commandExecutor = new CommandExecutor();
             _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
-            RegisterCommands(_commandExecutor);
-            Serialization.LoadSerializers();
             _socketServer = new Server();
+            Serialization.LoadSerializers();
             _game = SetupGame();
+            RegisterCommands(_game, _commandExecutor); 
+           
         }
 
-        public abstract void RegisterCommands(CommandExecutor executor);
+        public abstract void RegisterCommands(StrategyGame game, CommandExecutor executor);
         protected abstract ServerPlayer Auth(EventID eventId, int connectionID, byte[] message);
         public abstract void Tick();
         public abstract void Disconnect(int connectionID);

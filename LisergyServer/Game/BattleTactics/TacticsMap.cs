@@ -3,7 +3,7 @@ namespace Game.TacticsBattle
 {
     public class TacticsMap : ChunkMap
     {
-        public TacticsMap(int sizeX, int sizeY): base(sizeX, sizeY)
+        public TacticsMap(int sizeX, int sizeY): base(null, sizeX, sizeY)
         {
             this.GenerateTiles(sizeX, sizeY);
         }

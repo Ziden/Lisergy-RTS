@@ -14,6 +14,12 @@ namespace Assets.Code
         private static List<Tuple<WaitCondition, WaitAction>> _waiting = new List<Tuple<WaitCondition, WaitAction>>();
         private static List<Tuple<WaitCondition, WaitAction>> _done = new List<Tuple<WaitCondition, WaitAction>>();
 
+        public static void WaitFor(TimeSpan time, WaitAction action)
+        {
+            var endTime = DateTime.Now + time;
+            Wait(() => DateTime.Now > endTime, action);
+        }
+
         public static void Wait(WaitCondition condition, WaitAction action)
         {
             if (condition())

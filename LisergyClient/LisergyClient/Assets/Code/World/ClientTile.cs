@@ -55,7 +55,7 @@ namespace Assets.Code.World
             }
         }
 
-        public void RenderTile(byte tileID)
+        public void AddToScene(byte tileID)
         {
             var tileSpec = StrategyGame.Specs.GetTileSpec(tileID);
             foreach (var art in tileSpec.Arts)
@@ -83,7 +83,7 @@ namespace Assets.Code.World
             set
             {
                 StackLog.Debug($"Updating {this} tileid to {value}");
-                RenderTile(value);
+                AddToScene(value);
                 base.TileId = value;
             }
         }

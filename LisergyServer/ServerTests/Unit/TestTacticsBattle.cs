@@ -9,7 +9,7 @@ using System.Linq;
 namespace Tests
 {
     public class TestTacticsBattle
-    {
+    {    /*
         private Unit StrongUnit;
         private Unit WeakUnit;
         private Unit FastUnit;
@@ -18,6 +18,7 @@ namespace Tests
         private PlayerEntity p2;
         private StrategyGame Game;
 
+    
         [SetUp]
         public void Setup()
         {
@@ -179,5 +180,6 @@ namespace Tests
             Assert.AreEqual(true, result);
             Assert.Greater(battle.CurrentUnitTurn.RT, battle.CurrentUnitTurn.GetMaxRT());
         }
+        */
     }
 }

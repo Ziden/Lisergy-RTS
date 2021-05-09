@@ -10,8 +10,6 @@ namespace Tests
 {
     public class TestBattleActions
     {
-        private Unit StrongUnit;
-        private Unit WeakUnit;
         private Unit FastUnit;
         private Unit SlowUnit;
         private TurnBattle Battle;
@@ -36,7 +34,7 @@ namespace Tests
             var attacker = Battle.CurrentActingUnit;
             var defender = Battle.GetOpposingTeam(attacker).Units.First();
 
-            var action = new AttackAction(attacker, defender);
+            var action = new AttackAction(Battle, attacker, defender);
             Battle.ReceiveAction(action);
 
             var result = action.Result as AttackActionResult;

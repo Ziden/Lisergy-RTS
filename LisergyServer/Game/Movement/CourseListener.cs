@@ -19,12 +19,12 @@ namespace Game.Listeners
 
         public override void Register()
         {
-            ServerEventSink.OnEntityRequestMove += RequestMovement;
+            NetworkEvents.OnEntityRequestMove += RequestMovement;
         }
 
         public override void Unregister()
         {
-            ServerEventSink.OnEntityRequestMove -= RequestMovement;
+            NetworkEvents.OnEntityRequestMove -= RequestMovement;
         }
 
         public void RequestMovement(MoveRequestEvent ev)
@@ -55,7 +55,6 @@ namespace Game.Listeners
                     Log.Error($"Impassable tile {tile} in course path: {owner} moving party {party}");
                     return null;
                 }
-                Log.Debug("ADD " + tile);
                 path.Add(tile);
             }
             party.Course = new CourseTask(party, path, intent);

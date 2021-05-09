@@ -1,4 +1,5 @@
-﻿using Game;
+﻿using Assets.Code.Art;
+using Game;
 using UnityEngine;
 
 namespace Assets.Code.World
@@ -10,16 +11,16 @@ namespace Assets.Code.World
 
         public ClientParty ClientParty { get => (ClientParty)this.Party; }
 
-        public ClientUnit(PlayerEntity owner, Unit u) : base(u.SpecId)
+        public ClientUnit(Unit u) : base(u.SpecId)
         {
             this.Id = u.Id;
             this.Stats.SetStats(u.Stats);
-            StackLog.Debug($"Created new unit instance {this}");
+            this.Name = u.Name;
         }
-
+      
         public GameObject GetGameObject() => _gameObject; 
 
-        public GameObject Render()
+        public GameObject AddToScene()
         {
             if (_gameObject == null)
             {

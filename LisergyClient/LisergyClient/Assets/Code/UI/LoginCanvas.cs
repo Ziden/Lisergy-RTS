@@ -19,7 +19,7 @@ public class LoginCanvas
         Password = GameObject.transform.GetRequiredChildComponent<InputField>("Password");
         LoginButton = GameObject.transform.GetRequiredChildComponent<Button>("LoginButton");
         LoginButton.onClick.AddListener(Authenticate);
-        ServerEventSink.OnPlayerAuth += OnPlayerAuth;
+        NetworkEvents.OnPlayerAuth += OnPlayerAuth;
     }
 
     public void OnPlayerAuth(AuthResultEvent ev)

@@ -20,7 +20,7 @@ namespace Assets.Code.World
             _x = (ushort)partyFromNetwork.X;
             _y = (ushort)partyFromNetwork.Y;
             foreach (var unit in partyFromNetwork.GetUnits())
-                    this.AddUnit(new ClientUnit(owner, unit));
+                    this.AddUnit(new ClientUnit(unit));
             Render();
             StackLog.Debug($"Created new party instance {this}");
         }
@@ -63,7 +63,7 @@ namespace Assets.Code.World
         {
             foreach(var unit in GetUnits())
             {
-                var unitObject = ((ClientUnit)unit).Render();
+                var unitObject = ((ClientUnit)unit).AddToScene();
                 unitObject.transform.SetParent(_gameObject.transform);
             }  
         }

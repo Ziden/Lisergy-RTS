@@ -32,7 +32,7 @@ namespace Tests
 
             var from = Game.World.GetTile(0, 0);
             var to = Game.World.GetTile(2, 0);
-            var path = Game.World.ChunkMap.FindPath(from, to);
+            var path = Game.World.Map.FindPath(from, to);
 
             Assert.NotNull(path);
             Assert.That(path.Count == 9);
