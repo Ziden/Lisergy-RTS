@@ -25,6 +25,10 @@ namespace Game
         public virtual int X { get => _x; }
         public virtual int Y { get => _y; }
 
+        protected string _battleID;
+
+        public bool IsBattling => _battleID != null;
+
         public virtual Tile Tile
         {
             get => _tile; set

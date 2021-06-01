@@ -7,6 +7,8 @@ namespace Game.Events
     [Serializable]
     public class BattleStartEvent : ServerEvent
     {
+        public int X;
+        public int Y;
         public string BattleID;
         public BattleTeam Attacker;
         public BattleTeam Defender;

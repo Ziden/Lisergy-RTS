@@ -54,6 +54,7 @@ namespace Tests
             Assert.AreEqual(Listener.BattleCount(), 2);
         }
 
+        /*
         [Test]
         public void TestActing()
         {
@@ -84,6 +85,7 @@ namespace Tests
 
             Assert.That(battle.Result.Turns.Count == 2);
         }
+        */
 
         [Test]
         public void TestBattleFinishing()

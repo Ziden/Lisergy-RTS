@@ -8,7 +8,6 @@ using Game.Battles.Actions;
 using Game.BattleTactics;
 using Game.Events;
 using Game.Events.ClientEvents;
-using Game.Events.ServerEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +17,7 @@ using UnityEngine.UI;
 public class BattleBehaviour : MonoBehaviour
 {
     // Will pretend there's a server sending a battle
-    public static readonly bool TEST_MODE = true;
+    public static readonly bool TEST_MODE = false;
 
     public Text DamageText;
 
@@ -67,13 +66,12 @@ public class BattleBehaviour : MonoBehaviour
     {
         if(Actions.Count > 0 && DateTime.Now > NextAction)
         {
-            Log.Debug("[Battle] Executing {NextAction}");
+            Log.Debug($"[Battle] Executing {NextAction}");
             var action = Actions[0];
             NextAction = DateTime.Now + DrawBattleAction(action);
             action.Battle = Battle;
             Battle.ReceiveAction(action);
             Actions.RemoveAt(0);
-          
         }
     }
 
@@ -81,8 +79,10 @@ public class BattleBehaviour : MonoBehaviour
     {
         DamageText.text = damage.ToString();
         var pos = Camera.main.WorldToScreenPoint(unit.GetGameObject().transform.position);
-        DamageText.transform.parent.position = pos;
-
+        DamageText.transform.parent.parent.position = pos;
+        var hpBar = DamageText.transform.parent;
+        hpBar.gameObject.SetActive(true);
+        hpBar.GetComponent<HealthBar>().SetPct(80);
         DamageText.gameObject.SetActive(true);
         var seq = DOTween.Sequence();
         seq.Append(DamageText.transform.DOMoveY(DamageText.transform.position.y + 30, 0.2f));
@@ -90,7 +90,10 @@ public class BattleBehaviour : MonoBehaviour
         seq.Append(DamageText.transform.DOMoveY(DamageText.transform.position.y - 10, 0.1f));
         seq.Append(DamageText.transform.DOMoveY(DamageText.transform.position.y, 0.1f));
         seq.onComplete += () => {
-            Awaiter.WaitFor(TimeSpan.FromSeconds(0.2), () => DamageText.gameObject.SetActive(false));
+            Awaiter.WaitFor(TimeSpan.FromSeconds(0.4), () => {
+                DamageText.gameObject.SetActive(false);
+                hpBar.gameObject.SetActive(false);
+            });
         };
     }
 
@@ -116,14 +119,13 @@ public class BattleBehaviour : MonoBehaviour
                     // Swing anim
                     defender.Sprites.PlayAnimation(Sprite3D.HURT, true, 0, ActionDelaySeconds);
 
-
                     // Damage Effects
                     DrawDamage(defender, result.Damage);
                     var seq = DOTween.Sequence();
                     seq.Append(defender.GetGameObject().transform.DOMoveX(defender.GetGameObject().transform.position.x - 0.1f, damageAnimationDelay/2));
                     seq.Append(defender.GetGameObject().transform.DOMoveX(defender.GetGameObject().transform.position.x, damageAnimationDelay/2));
                     seq.onComplete += () => {
-                        Awaiter.WaitFor(TimeSpan.FromMilliseconds(300), () =>
+                        Awaiter.WaitFor(TimeSpan.FromMilliseconds(600), () =>
                         {
                             ActingUnit.GetGameObject().transform.DOMoveX(_originalPos.x, damageAnimationDelay);
                             ActingUnit.Sprites.PlayAnimation(Sprite3D.JUMP, true, 100, damageAnimationDelay);
@@ -131,9 +133,10 @@ public class BattleBehaviour : MonoBehaviour
                         });
                     };
                 });
+                return TimeSpan.FromSeconds(10);
             }
         }
-        return TimeSpan.FromSeconds(2);
+        return TimeSpan.FromSeconds(10);
     }
 
     public void OnBattleAction(BattleActionEvent ev)
@@ -149,6 +152,7 @@ public class BattleBehaviour : MonoBehaviour
     }
 
     private Vector3 _originalPos;
+    private bool _ready = false;
 
     public void WaitForAction()
     {
@@ -157,7 +161,6 @@ public class BattleBehaviour : MonoBehaviour
         var obj = ActingUnit.GetGameObject();
         _originalPos = obj.transform.position;
         obj.transform.DOLocalMove(new Vector3(ReadyDistanceMoved, 0,0), ActionDelaySeconds);
-      
         NextAction = DateTime.Now + TimeSpan.FromSeconds(ActionDelaySeconds);
         Log.Debug($"[Battle] {ActingUnit} waiting for action to handle it in {GetNextActionDelaySeconds()} seconds");
     }
@@ -168,8 +171,9 @@ public class BattleBehaviour : MonoBehaviour
         this.gameObject.SetActive(true);
         UIManager.PartyUI.Hide();
         StandardCamera = Camera.main;
+
         StandardCamera.enabled = false;
-        BattleCamera.tag = "MainCamera";
+
         Battle = new ClientTurnBattle(ev);
         Battle.AddToScene(Team1, Team2);
         NextAction = DateTime.MaxValue;

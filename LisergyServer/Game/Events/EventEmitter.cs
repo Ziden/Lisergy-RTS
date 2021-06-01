@@ -68,6 +68,12 @@ namespace LisergyServer.Core
                 ev.Sender = owner;
                 NetworkEvents.SendBattleActionResult(ev);
             }
+            else if (eventId == EventID.USER_PROFILE_UPDATE)
+            {
+                var ev = Serialization.ToEvent<PlayerDataUpdateEvent>(message);
+                ev.Sender = owner;
+                NetworkEvents.SendPlayerDataUpdate(ev);
+            }
 
             // CLIENT EVENTS (coming from client to server)
             else if(eventId == EventID.JOIN)

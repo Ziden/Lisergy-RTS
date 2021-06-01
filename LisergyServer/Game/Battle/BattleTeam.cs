@@ -9,7 +9,6 @@ namespace Game.Battles
     {
         public BattleUnit[] Units;
         public string OwnerID;
-        public bool NPC = false;
 
         public BattleTeam(params Unit[] units)
         {
@@ -25,7 +24,8 @@ namespace Game.Battles
         {
             var filtered = units.Where(u => u != null).ToList();
             Units = new BattleUnit[filtered.Count()];
-            var isUnitsControlled = owner != null && owner.Online();
+            // All battles are autobattles for now
+            var isUnitsControlled = false; // owner != null && owner.Online();
             for (var x = 0; x < filtered.Count(); x++)
             {
                 Units[x] = new BattleUnit(owner, this, filtered[x]);

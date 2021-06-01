@@ -105,6 +105,18 @@ namespace Tests
             Assert.AreEqual(result.Winner, result.Attacker);
         }
 
+
+        [Test]
+        public void TestUnitsBeingUpdated()
+        {
+            var initialHP = StrongUnit.Stats.HP;
+            var battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
+            var result = battle.AutoRun.RunAllRounds();
+
+            var finalHP = StrongUnit.Stats.HP;
+            Assert.AreNotEqual(initialHP, finalHP);
+        }
+
         [Test]
         public void TestSerialization()
         {

@@ -13,7 +13,7 @@ namespace Assets.Code.World
             if (entity is Party)
             {
                 var party = (Party)entity;
-                var clientParty = knownEntity==null ? new ClientParty(owner, party) : (ClientParty)knownEntity;
+                var clientParty = knownEntity==null ? new ClientParty(owner, party) : ((ClientParty)knownEntity).Update(party);
                 owner.Parties[party.PartyIndex] = clientParty;
                 clientParty.Id = party.Id;
                 clientParty.GetGameObject().SetActive(true);

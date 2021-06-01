@@ -1,12 +1,15 @@
 ﻿
 using Game;
 using Game.Entity;
+using Game.Events;
 using System.Collections.Generic;
 
 namespace Assets.Code
 {
     public class ClientPlayer : PlayerEntity
     {
+        public Dictionary<string, BattleStartEvent> BattlesStarts = new Dictionary<string, BattleStartEvent>();
+
         public ClientPlayer() : base()
         {
             StackLog.Debug("Created new player");

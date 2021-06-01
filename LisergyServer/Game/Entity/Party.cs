@@ -19,15 +19,9 @@ namespace Game.Entity
         public byte PartyIndex { get => _partyIndex; }
         public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(0.25);
 
-        [NonSerialized]
-        private string _battleID;
-
-        public bool IsBattling => _battleID != null;
-
         public bool CanMove()
         {
-            return true;
-           // return !IsBattling;
+           return !IsBattling;
         }
 
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)
@@ -42,6 +36,8 @@ namespace Game.Entity
             
             NetworkEvents.SendBattleStart(new BattleStartEvent()
             {
+                X = this.X,
+                Y = this.Y,
                 Attacker = playerTeam,
                 Defender = enemy,
                 BattleID = _battleID
@@ -53,20 +49,20 @@ namespace Game.Entity
             get => base.Tile;
             set
             {
-                if(value != null && value.StaticEntity is Dungeon)
+                base.Tile = value;
+                if (value != null && value.StaticEntity is Dungeon)
                 {
-                    if(this.Course != null && this.Course.Intent == MovementIntent.Offensive && this.Course.IsLastMovement())
+                    if (this.Course != null && this.Course.Intent == MovementIntent.Offensive && this.Course.IsLastMovement())
                     {
                         var enemyTeam = ((Dungeon)value.StaticEntity).Battles.First();
                         Log.Info($"{this} did an offensive move triggering a battle with {enemyTeam}");
                         StartBattle(enemyTeam);
                     }
                 }
-                base.Tile = value;
             }
         }
 
-        public string BattleID { get => _battleID; set => _battleID = value; }
+        public virtual string BattleID { get => _battleID; set => _battleID = value; }
 
         public override byte GetLineOfSight()
         {
@@ -99,7 +95,7 @@ namespace Game.Entity
 
         public override string ToString()
         {
-            return $"<Party Id={Id} Index={PartyIndex} Owner={OwnerID}>";
+            return $"<Party Battling={IsBattling} Id={Id} Index={PartyIndex} Owner={OwnerID}>";
         }
     }
 }

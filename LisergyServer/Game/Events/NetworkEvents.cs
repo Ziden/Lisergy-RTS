@@ -16,6 +16,7 @@ namespace Game.Events
     public delegate void BattleStartCompleteHandler(BattleStartEvent e);
     public delegate void BattleActionHandler(BattleActionEvent e);
     public delegate void BattleActionResultHandler(BattleActionResultEvent e);
+    public delegate void PlayerDataUpdateHandler(PlayerDataUpdateEvent e);
 
     public class NetworkEvents
     {
@@ -35,6 +36,7 @@ namespace Game.Events
         private event BattleStartCompleteHandler _OnBattleStart;
         private event BattleActionHandler _OnBattleAction;
         private event BattleActionResultHandler _OnBattleActionResult;
+        private event PlayerDataUpdateHandler _OnPlayerDataUpdate;
 
         public static event JoinEventHandler OnJoinWorld { add { _i._OnJoinWorld += value; } remove { _i._OnJoinWorld -= value; } }
         public static event AuthResultHandler OnPlayerAuth { add { _i._OnPlayerAuth += value; } remove { _i._OnPlayerAuth -= value; } }
@@ -48,6 +50,7 @@ namespace Game.Events
         public static event BattleStartCompleteHandler OnBattleStart { add { _i._OnBattleStart += value; } remove { _i._OnBattleStart -= value; } }
         public static event BattleActionHandler OnBattleAction { add { _i._OnBattleAction += value; } remove { _i._OnBattleAction -= value; } }
         public static event BattleActionResultHandler OnBattleActionResult { add { _i._OnBattleActionResult += value; } remove { _i._OnBattleActionResult -= value; } }
+        public static event PlayerDataUpdateHandler OnPlayerDataUpdate { add { _i._OnPlayerDataUpdate += value; } remove { _i._OnPlayerDataUpdate -= value; } }
 
         public static void SendEntityVisible(EntityVisibleEvent ev) => _i._OnEntityVisible?.Invoke(ev);
         public static void SendSpecResponse(GameSpecResponse ev) => _i._OnSpecResponse?.Invoke(ev);
@@ -62,5 +65,6 @@ namespace Game.Events
         public static void SendBattleAction(BattleActionEvent ev) => _i._OnBattleAction?.Invoke(ev);
 
         public static void SendBattleActionResult(BattleActionResultEvent ev) => _i._OnBattleActionResult?.Invoke(ev);
+        public static void SendPlayerDataUpdate(PlayerDataUpdateEvent ev) => _i._OnPlayerDataUpdate?.Invoke(ev);
     }
 }

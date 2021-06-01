@@ -19,8 +19,6 @@ namespace BattleServer
         {
             NetworkEvents.OnBattleStart += OnBattleStart;
             NetworkEvents.OnBattleResult += OnBattleResult;
-            NetworkEvents.OnBattleAction += OnBattleAction;
-            NetworkEvents.OnJoinWorld += OnJoinWorld;
         }
 
         public override void Unregister()
@@ -38,59 +36,33 @@ namespace BattleServer
             return _battles.Values.ToList();
         }
 
-        public void OnJoinWorld(JoinWorldEvent ev)
-        {
-            PlayerEntity player = null;
-            if (World.Players.GetPlayer(ev.Sender.UserID, out player))
-            {
-                var battlingParty = player.Parties.FirstOrDefault(p => p != null && p.BattleID != null);
-                if (battlingParty != null)
-                {
-                    var battle = GetBattle(battlingParty.BattleID);
-                    player.Send(battle.StartEvent);
-                }
-            }
-        }
-
-        #region Listener
-        public void OnBattleAction(BattleActionEvent ev)
-        {
-            TurnBattle battle = null;
-            if (!_battles.TryGetValue(ev.BattleID, out battle))
-            {
-                ev.Sender.Send(new MessagePopupEvent(PopupType.BAD_INPUT, "Invalid battle"));
-                return;
-            }
-            var actionsHappened = battle.ReceiveAction(ev.Action);
-            foreach (var onlinePlayer in GetOnlinePlayers(battle))
-                onlinePlayer.Send(new BattleActionResultEvent() { ActionResult = ev.Action.Result });
-
-            TryAutoRun(battle);
-        }
-
-        private void TryAutoRun(TurnBattle battle)
-        {
-            // AutoRun AI
-            var autoActions = new List<BattleAction>();
-            while (!battle.CurrentActingUnit.Controlled && !battle.IsOver)
-                autoActions.AddRange(battle.AutoRun.PlayOneTurn());
-
-            // Send AI results
-            if (autoActions.Count > 0)
-                foreach (var onlinePlayer in GetOnlinePlayers(battle))
-                    foreach (var action in autoActions)
-                        onlinePlayer.Send(new BattleActionEvent(battle.ID.ToString(), action));
-        }
-
         public void OnBattleStart(BattleStartEvent ev)
         {
             Console.WriteLine($"Received {ev.Attacker} vs {ev.Defender}");
+
+            // register battle
             var battle = new TurnBattle(Guid.Parse(ev.BattleID), ev.Attacker, ev.Defender);
             battle.StartEvent = ev;
             _battles[battle.ID.ToString()] = battle;
             foreach (var onlinePlayer in GetOnlinePlayers(battle))
                 onlinePlayer.Send(ev);
-            TryAutoRun(battle);
+
+            // run battle
+            var result = battle.AutoRun.RunAllRounds();
+            var resultEvent = new BattleResultEvent(battle.ID.ToString(), result);
+
+            // handle battle finish
+            foreach (var pl in GetAllPlayers(battle))
+            {
+                if (pl.Online())
+                    pl.Send(resultEvent);
+                pl.Battles.Add(resultEvent);
+                var battlingParty = pl.Parties.Where(p => p != null && p.BattleID == resultEvent.BattleHeader.BattleID).FirstOrDefault();
+                if (battlingParty != null)
+                    battlingParty.BattleID = null;
+                else
+                    Log.Error($"Party {battlingParty} was not part of battle {battle}");
+            }
         }
 
         public void OnBattleResult(BattleResultEvent ev)
@@ -110,9 +82,6 @@ namespace BattleServer
             }
             _battles.Remove(ev.BattleHeader.BattleID);
         }
-
-        #endregion
-
         #region Battle Controller
 
         public TurnBattle GetBattle(string id)
@@ -136,6 +105,16 @@ namespace BattleServer
             foreach (var userid in new string[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
             {
                 if (World.Players.GetPlayer(userid, out pl) && pl.Online())
+                    yield return pl;
+            }
+        }
+
+        public IEnumerable<PlayerEntity> GetAllPlayers(TurnBattle battle)
+        {
+            PlayerEntity pl;
+            foreach (var userid in new string[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
+            {
+                if (World.Players.GetPlayer(userid, out pl))
                     yield return pl;
             }
         }
