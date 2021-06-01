@@ -20,7 +20,7 @@ public class Networking : IDisposable
 
     public void Send<T>(T ev) where T : GameEvent
     {
-        _toSend.Add(Serialization.FromEvent<T>(ev));
+        _toSend.Add(Serialization.FromEventRaw(ev));
     }
 
     int READS_PER_TICK = 10;
@@ -48,7 +48,7 @@ public class Networking : IDisposable
                         Debug.Log("Connected To Server");
                         break;
                     case Telepathy.EventType.Data:
-                        EventEmitter.CallEventFromBytes(MainBehaviour.Player, msg.data);
+                        MainBehaviour.NetworkEvents.RunCallbacks(MainBehaviour.Player, msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
                         Debug.Log("Disconnected from Server");

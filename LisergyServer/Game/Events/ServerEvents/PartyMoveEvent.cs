@@ -8,8 +8,6 @@ namespace Game.Events
     [Serializable]
     public class EntityMoveEvent : ServerEvent
     {
-        public override EventID GetID() => EventID.PARTY_MOVE;
-
         public EntityMoveEvent(MovableWorldEntity entity, Tile tile)
         {
             this.OwnerID = entity.OwnerID;

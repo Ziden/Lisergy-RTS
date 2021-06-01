@@ -58,26 +58,35 @@ namespace Game.Events
             }
         }
 
-        public static T ToEvent<T>(byte[] message)
+        public static GameEvent ToEventRaw(byte[] message)
         {
             using (var stream = new MemoryStream(message))
             {
-                T ev;
-                stream.Position++;
-                Serializer.DeserializeDirect<T>(stream, out ev);
+                GameEvent ev;
+                ev = (GameEvent) Serializer.Deserialize(stream);
                 return ev;
             }
         }
 
-        public static byte[] FromEvent<T>(T ev) where T : GameEvent
+        public static byte[] FromEventRaw(GameEvent ev)
         {
             using (var stream = new MemoryStream())
             {
-                stream.WriteByte((byte)ev.GetID());
-                Serializer.SerializeDirect<T>(stream, ev);
+                Serializer.Serialize(stream, ev);
                 return stream.ToArray();
             }
+        }
+
+        public static T ToEvent<T>(byte[] message) where T : GameEvent
+        {
+            return (T)ToEventRaw(message);
+        }
+
+        public static byte[] FromEvent<T>(T ev) where T : GameEvent
+        {
+            return FromEventRaw(ev);
 
         }
+
     }
 }

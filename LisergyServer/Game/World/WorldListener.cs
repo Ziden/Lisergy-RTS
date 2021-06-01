@@ -1,11 +1,12 @@
 ﻿using Game;
 using Game.Events;
+using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using System.Linq;
 
 namespace Game.Listeners
 {
-    public class WorldListener : EventListener
+    public class WorldListener : IEventListener
     {
         private GameWorld _world;
 
@@ -15,16 +16,7 @@ namespace Game.Listeners
             Log.Debug("World Event Listener Registered");
         }
 
-        public override void Register()
-        {
-            NetworkEvents.OnJoinWorld += JoinWorld;
-        }
-
-        public override void Unregister()
-        {
-            NetworkEvents.OnJoinWorld -= JoinWorld;
-        }
-
+        [EventMethod]
         public void JoinWorld(JoinWorldEvent ev)
         {
             PlayerEntity player = null;

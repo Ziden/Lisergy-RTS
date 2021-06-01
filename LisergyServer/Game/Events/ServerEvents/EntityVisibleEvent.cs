@@ -14,8 +14,6 @@ namespace Game.Events.ServerEvents
 
         public WorldEntity Entity;
      
-        public override EventID GetID() => EventID.PARTY_VISIBLE;
-
         public override string ToString()
         {
             return $"<EntityVisible {Entity}>";

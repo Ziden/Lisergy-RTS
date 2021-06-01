@@ -1,30 +1,19 @@
 ﻿using Game;
 using Game.Battles;
 using Game.Events;
-using Game.Events.ClientEvents;
+using Game.Events.Bus;
 using Game.Events.ServerEvents;
-using Game.Listeners;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace BattleServer
 {
-    public class BattleListener : EventListener
+    public class BattleListener : IEventListener
     {
         public GameWorld World { get; private set; }
         private Dictionary<string, TurnBattle> _battles = new Dictionary<string, TurnBattle>();
 
-        public override void Register()
-        {
-            NetworkEvents.OnBattleStart += OnBattleStart;
-            NetworkEvents.OnBattleResult += OnBattleResult;
-        }
-
-        public override void Unregister()
-        {
-            NetworkEvents.OnBattleStart -= OnBattleStart;
-        }
 
         public void Wipe()
         {
@@ -36,6 +25,7 @@ namespace BattleServer
             return _battles.Values.ToList();
         }
 
+        [EventMethod]
         public void OnBattleStart(BattleStartEvent ev)
         {
             Console.WriteLine($"Received {ev.Attacker} vs {ev.Defender}");
@@ -65,6 +55,7 @@ namespace BattleServer
             }
         }
 
+        [EventMethod]
         public void OnBattleResult(BattleResultEvent ev)
         {
             TurnBattle battle = null;

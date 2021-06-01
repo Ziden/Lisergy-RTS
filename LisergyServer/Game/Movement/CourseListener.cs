@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Entity;
 using Game.Events;
+using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using Game.Movement;
 using Game.World;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Game.Listeners
 {
-    public class CourseListener : EventListener
+    public class CourseListener : IEventListener
     {
         private GameWorld _world;
 
@@ -17,16 +18,7 @@ namespace Game.Listeners
             this._world = world;
         }
 
-        public override void Register()
-        {
-            NetworkEvents.OnEntityRequestMove += RequestMovement;
-        }
-
-        public override void Unregister()
-        {
-            NetworkEvents.OnEntityRequestMove -= RequestMovement;
-        }
-
+        [EventMethod]
         public void RequestMovement(MoveRequestEvent ev)
         {
             var party = ev.Sender.Parties[ev.PartyIndex];
@@ -43,7 +35,7 @@ namespace Game.Listeners
                 ev.Sender.Send(new MessagePopupEvent(PopupType.BAD_INPUT));
         }
 
-        public CourseTask StartCourse(Party party, List<Position> sentPath, MovementIntent intent)
+        private CourseTask StartCourse(Party party, List<Position> sentPath, MovementIntent intent)
         {
             List<Tile> path = new List<Tile>();
             var owner = party.Owner;

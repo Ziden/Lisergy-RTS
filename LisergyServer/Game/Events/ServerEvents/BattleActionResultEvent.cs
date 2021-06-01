@@ -10,7 +10,5 @@ namespace Game.Events.ServerEvents
     public class BattleActionResultEvent : ClientEvent
     {
         public ActionResult ActionResult;
-
-        public override EventID GetID() => EventID.BATTLE_ACTION_RESULT;
     }
 }

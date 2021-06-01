@@ -9,7 +9,6 @@ namespace Game.Events
     [Serializable]
     public class MoveRequestEvent : ClientEvent
     {
-        public override EventID GetID() => EventID.PARTY_REQUEST_MOVE;
 
         public MovementIntent Intent;
         public byte PartyIndex;

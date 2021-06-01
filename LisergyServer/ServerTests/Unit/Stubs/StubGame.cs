@@ -19,11 +19,6 @@ namespace ServerTests
             this.RegisterEventListeners();
             if (!_registered)
             {
-                NetworkEvents.OnTileVisible += ev => ReceiveEvent(ev);
-                NetworkEvents.OnPlayerAuth += ev => ReceiveEvent(ev);
-                NetworkEvents.OnSpecResponse += ev => ReceiveEvent(ev);
-                NetworkEvents.OnJoinWorld += ev => ReceiveEvent(ev);
-                NetworkEvents.OnEntityVisible += ev => ReceiveEvent(ev);
                 _registered = true;
             }
             Serialization.LoadSerializers();
@@ -34,7 +29,7 @@ namespace ServerTests
 
         public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientEvent
         {
-            EventEmitter.CallEventFromBytes(sender, Serialization.FromEvent<T>(ev));
+            this.NetworkEvents.RunCallbacks(sender, Serialization.FromEventRaw(ev));
         }
 
         public TestServerPlayer CreatePlayer(int x = 10, int y = 10)

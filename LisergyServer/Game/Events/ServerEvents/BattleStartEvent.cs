@@ -12,7 +12,5 @@ namespace Game.Events
         public string BattleID;
         public BattleTeam Attacker;
         public BattleTeam Defender;
-
-        public override EventID GetID() => EventID.BATTLE_START_COMPLETE;
     }
 }

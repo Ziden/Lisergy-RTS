@@ -2,30 +2,17 @@
 using Game;
 using Game.Entity;
 using Game.Events;
+using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using System;
 
 namespace Assets.Code
 {
-    public class ServerListener
+    public class ServerListener : IEventListener
     {
         private ClientStrategyGame _game;
 
-        public ServerListener()
-        {
-            NetworkEvents.OnSpecResponse += ReceiveSpecs;
-        }
-
-        public void RegisterGameListeners()
-        {
-            NetworkEvents.OnBattleResult += BattleFinish;
-            NetworkEvents.OnBattleStart += BattleStart;
-            NetworkEvents.OnTileVisible += ReceiveTile;
-            NetworkEvents.OnEntityVisible += EntityVisible;
-            NetworkEvents.OnEntityMove += EntityMove;
-            NetworkEvents.OnMessagePopup += Message;
-        }
-
+        [EventMethod]
         public void BattleFinish(BattleResultEvent ev)
         {
             // Delay the receiving of it so battles have delays
@@ -53,6 +40,7 @@ namespace Assets.Code
             });
         }
 
+        [EventMethod]
         public void BattleStart(BattleStartEvent ev)
         {
             var pl = MainBehaviour.Player;
@@ -81,6 +69,7 @@ namespace Assets.Code
         }
 
 
+        [EventMethod]
         public void Message(MessagePopupEvent ev)
         {
             // TODO: Message factory
@@ -88,6 +77,7 @@ namespace Assets.Code
                 UIManager.Notifications.ShowNotification("Path has obstacles");
         }
 
+        [EventMethod]
         public void EntityMove(EntityMoveEvent ev)
         {
             var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
@@ -98,6 +88,7 @@ namespace Assets.Code
             knownEntity.Tile = newTile;
         }
 
+        [EventMethod]
         public void EntityVisible(EntityVisibleEvent ev)
         {
             var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Entity.OwnerID);
@@ -107,6 +98,7 @@ namespace Assets.Code
             UIManager.PartyUI.DrawAllParties();
         }
 
+        [EventMethod]
         public void ReceiveTile(TileVisibleEvent ev)
         {
             var newTile = ev.Tile;
@@ -116,13 +108,13 @@ namespace Assets.Code
             tile.SetVisible(true);
         }
 
+        [EventMethod]
         public void ReceiveSpecs(GameSpecResponse ev)
         {
             if (_game != null)
                 throw new System.Exception("Received to register specs twice");
             var world = new ClientWorld(ev);
             _game = new ClientStrategyGame(ev.Spec, world);
-            RegisterGameListeners();
         }
     }
 }

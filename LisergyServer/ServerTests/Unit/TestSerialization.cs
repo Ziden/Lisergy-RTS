@@ -18,19 +18,14 @@ namespace Tests
             {
                 this.Tile = t;
             }
-
-            public override EventID GetID() => EventID.AUTH;
             public Tile Tile;
         }
 
         [Serializable]
         public class RefEvent : GameEvent
         {
-            public override EventID GetID() => EventID.AUTH;
-
             public BattleTeam T1;
-            public BattleTeam T2;
-       
+            public BattleTeam T2;   
         }
 
         [Test]
@@ -83,6 +78,22 @@ namespace Tests
             var unserialized = Serialization.ToEvent<EntityVisibleEvent>(serialized);
 
             Assert.AreEqual(visibleEvent.Entity.Id, unserialized.Entity.Id);
+        }
+
+        [Test]
+        public void TestRawSerialization()
+        {
+            Serialization.LoadSerializers();
+            var authEvent = new AuthEvent()
+            {
+                Login = "wololo",
+                Password = "walala"
+            };
+            var bytes = Serialization.FromEventRaw(authEvent);
+            var event2 = (AuthEvent) Serialization.ToEventRaw(bytes);
+
+            Assert.AreEqual(authEvent.Login, event2.Login);
+            Assert.AreEqual(authEvent.Password, event2.Password);
         }
     }
 }

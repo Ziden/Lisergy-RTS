@@ -13,8 +13,6 @@ namespace Game.Events.ServerEvents
 
         public Tile Tile;
 
-        public override EventID GetID() => EventID.TILE_VISIBLE;
-
         public override string ToString()
         {
             return $"<TileVisible {Tile}>";

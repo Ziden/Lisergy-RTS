@@ -1,12 +1,13 @@
 ﻿using Assets.Code;
 using Game.Events;
+using Game.Events.Bus;
 using UnityEngine;
 
 public class MainBehaviour : MonoBehaviour
 {
     public static Networking Networking { get; private set; }
     public static ClientPlayer Player { get; private set; }
-    private static ServerListener GameListener { get; set; }
+    public static EventBus NetworkEvents { get; set; }
 
     void Start()
     {
@@ -42,11 +43,11 @@ public class MainBehaviour : MonoBehaviour
 
     private void Awake()
     {
-        new NetworkEvents();
+        Networking = new Networking();
+        NetworkEvents = new EventBus();
         ConfigureUnity();
         Serialization.LoadSerializers();
-        Networking = new Networking();
-        GameListener = new ServerListener();
+        NetworkEvents.RegisterListener(new ServerListener());
     }
 
     void Update()

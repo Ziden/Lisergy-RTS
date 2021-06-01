@@ -10,8 +10,6 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class MessagePopupEvent : ServerEvent
     {
-        public override EventID GetID() => EventID.MESSAGE;
-
         public MessagePopupEvent(PopupType type, params string [] args)
         {
             Type = type;

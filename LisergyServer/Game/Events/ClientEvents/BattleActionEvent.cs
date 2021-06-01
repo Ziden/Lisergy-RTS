@@ -14,7 +14,5 @@ namespace Game.Events.ClientEvents
 
         public BattleAction Action;
         public string BattleID;
-
-        public override EventID GetID() => EventID.BATTLE_ACTION;
     }
 }

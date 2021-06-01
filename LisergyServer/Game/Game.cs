@@ -1,31 +1,30 @@
 ﻿using BattleServer;
 using Game.Battle;
 using Game.Events;
+using Game.Events.Bus;
 using Game.Generator;
 using Game.Listeners;
 using Game.Scheduler;
 using GameData;
 using LisergyServer;
 using System.Collections.Generic;
-using System.Linq;
-
-/*
-    - Battle Actions Input by Client
-
-
-
-*/ 
-
-
+using System.Linq; 
 
 namespace Game
 {
     public class StrategyGame
-    {
+    { 
         public static GameSpec Specs { get; private set; }
+        public EventBus NetworkEvents { get; private set; }
 
-        public GameWorld World { get; set; }
-        public List<EventListener> _listeners = new List<EventListener>();
+        private GameWorld _world;
+        public GameWorld World { get => _world; set { 
+                _world = value;
+                if(value != null)
+                    value.Game = this;
+            } 
+        }
+        
         public GameSpec GameSpec => Specs;
 
         public StrategyGame(GameSpec specs, GameWorld world)
@@ -36,22 +35,20 @@ namespace Game
 
         public void RegisterEventListeners()
         {
-            var networkEvents = new NetworkEvents();
-            _listeners.Add(new WorldListener(World));
-            _listeners.Add(new CourseListener(World));
-            _listeners.Add(new BattleListener(World));
+            NetworkEvents = new EventBus();
+            NetworkEvents.RegisterListener(new BattleListener(World));
+            NetworkEvents.RegisterListener(new WorldListener(World));
+            NetworkEvents.RegisterListener(new CourseListener(World));
         }
 
-        public ListenerType GetListener<ListenerType>() where ListenerType: EventListener
+        public ListenerType GetListener<ListenerType>() where ListenerType: IEventListener
         {
-            return (ListenerType)_listeners.FirstOrDefault(l => l.GetType() == typeof(ListenerType));
+            return (ListenerType)NetworkEvents.GetListener(typeof(ListenerType));
         }
 
         public void ClearEventListeners()
         {
-            foreach (var listener in _listeners)
-                listener.Dispose();
-            _listeners.Clear();
+            NetworkEvents.Clear();
         }
 
         public virtual void GenerateMap()

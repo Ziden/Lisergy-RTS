@@ -1,11 +1,12 @@
 ﻿using Assets.Code;
 using Game;
 using Game.Events;
+using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoginCanvas
+public class LoginCanvas : IEventListener
 {
     public GameObject GameObject;
     public InputField Login;
@@ -19,9 +20,10 @@ public class LoginCanvas
         Password = GameObject.transform.GetRequiredChildComponent<InputField>("Password");
         LoginButton = GameObject.transform.GetRequiredChildComponent<Button>("LoginButton");
         LoginButton.onClick.AddListener(Authenticate);
-        NetworkEvents.OnPlayerAuth += OnPlayerAuth;
+        MainBehaviour.NetworkEvents.RegisterListener(this);
     }
 
+    [EventMethod]
     public void OnPlayerAuth(AuthResultEvent ev)
     {
         if(ev.Success)

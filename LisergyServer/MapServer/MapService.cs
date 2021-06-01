@@ -40,22 +40,21 @@ namespace MapServer
             _accountManager.Disconnect(connectionID);
         }
 
-        protected override ServerPlayer Auth(EventID eventId, int connectionID, byte[] message)
+        protected override ServerPlayer Auth(GameEvent ev, int connectionID)
         {
             ServerPlayer caller;
-            if (eventId != EventID.AUTH)
+            if (!(ev is AuthEvent))
             {
                 caller = _accountManager.GetPlayer(connectionID);
             }
             else
             {
-                var ev = Serialization.ToEvent<AuthEvent>(message);
                 ev.ConnectionID = connectionID;
-                caller = _accountManager.Authenticate(ev);
+                caller = _accountManager.Authenticate((AuthEvent)ev);
             }
             if (caller == null)
             {
-                Game.Log.Error($"Connection {connectionID} failed auth to send event {eventId.ToString()}");
+                Game.Log.Error($"Connection {connectionID} failed auth to send event {ev}");
                 return null;
             }
             return caller;

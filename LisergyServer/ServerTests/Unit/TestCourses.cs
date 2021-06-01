@@ -39,7 +39,7 @@ namespace Tests
         {
             var ev = new MoveRequestEvent() { Path = _path, PartyIndex = _party.PartyIndex };
             ev.Sender = _player;
-            NetworkEvents.SendRequestEntityMove(ev);
+            _game.NetworkEvents.RunCallbacks(ev);
         }
 
         [Test]

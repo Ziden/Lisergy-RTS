@@ -18,7 +18,7 @@ public class ServerBattleSimulation
 
     public ServerBattleSimulation()
     {
-        NetworkEvents.OnPlayerAuth += OnAuthTest;
+        //NetworkEvents.OnPlayerAuth += OnAuthTest;
     }
 
     public bool CanStartTest()
@@ -47,12 +47,12 @@ public class ServerBattleSimulation
             BattleID = Battle.ID.ToString(),
             Defender = Battle.Defender
         };
-        EventEmitter.CallEventFromBytes(MainBehaviour.Player, Serialization.FromEvent(ev));
+        //EventEmitter.CallEventFromBytes(MainBehaviour.Player, Serialization.FromEvent(ev));
 
         var roundActions = Battle.AutoRun.PlayOneTurn();
         foreach(var action in roundActions)
         {
-            EventEmitter.CallEventFromBytes(MainBehaviour.Player, Serialization.FromEvent(new BattleActionEvent(Battle.ID.ToString(), action)));
+            //EventEmitter.CallEventFromBytes(MainBehaviour.Player, Serialization.FromEvent(new BattleActionEvent(Battle.ID.ToString(), action)));
         }
     }
 

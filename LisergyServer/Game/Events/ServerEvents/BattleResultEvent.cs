@@ -24,8 +24,6 @@ namespace Game.Events
             for (var x = 0; x < Turns.Length; x++)
                 Turns[x] = new BattleTurnEvent(result.Turns[x]);
         }
-
-        public override EventID GetID() => EventID.BATTLE_RESULT_COMPLETE;
     }
 
     [Serializable]

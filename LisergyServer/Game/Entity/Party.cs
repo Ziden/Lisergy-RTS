@@ -21,7 +21,7 @@ namespace Game.Entity
 
         public bool CanMove()
         {
-           return !IsBattling;
+            return !IsBattling;
         }
 
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)
@@ -33,8 +33,9 @@ namespace Game.Entity
         {
             var playerTeam = new BattleTeam(this.Owner, this._units);
             _battleID = Guid.NewGuid().ToString();
-            
-            NetworkEvents.SendBattleStart(new BattleStartEvent()
+
+            // TODO: Make this better
+            Tile.Chunk.Map.World.Game.NetworkEvents.RunCallbacks(new BattleStartEvent()
             {
                 X = this.X,
                 Y = this.Y,
@@ -81,7 +82,7 @@ namespace Game.Entity
 
         public virtual void AddUnit(Unit u)
         {
-            if(u.Party != null && u.Party != this)
+            if (u.Party != null && u.Party != this)
                 u.Party.RemoveUnit(u);
             var freeIndex = Array.IndexOf(_units, null);
             SetUnit(u, freeIndex);

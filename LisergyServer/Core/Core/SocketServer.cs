@@ -31,7 +31,7 @@ namespace LisergyServer.Core
         }
 
         public abstract void RegisterCommands(StrategyGame game, CommandExecutor executor);
-        protected abstract ServerPlayer Auth(EventID eventId, int connectionID, byte[] message);
+        protected abstract ServerPlayer Auth(GameEvent ev, int connectionID);
         public abstract void Tick();
         public abstract void Disconnect(int connectionID);
         public abstract ServerType GetServerType();
@@ -74,11 +74,14 @@ namespace LisergyServer.Core
                         break;
                     case EventType.Data:
                         var message = _msg.data;
-                        var eventId = (EventID)message[0];
-                        Game.Log.Debug($"Received {eventId.ToString()} event");
-                        var caller = Auth(eventId, _msg.connectionId, _msg.data);
+
+                        var ev = Serialization.ToEventRaw(message);
+                        Game.Log.Debug($"Received {ev}");
+                        var caller = Auth(ev, _msg.connectionId);
                         if (caller != null)
-                            EventEmitter.CallEventFromBytes(caller, message);
+                        {
+                            _game.NetworkEvents.RunCallbacks(caller, message);
+                        }
                         break;
                     case EventType.Disconnected:
                         Disconnect(_msg.connectionId);

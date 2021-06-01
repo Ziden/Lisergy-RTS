@@ -65,7 +65,7 @@ namespace LisergyMessageQueue
             {
                 var body = ea.Body.ToArray();
                 Console.WriteLine("[LMQ] Received event");
-                EventEmitter.CallEventFromBytes(null, body);
+                //EventEmitter.CallEventFromBytes(null, body);
             };
             Channel.BasicConsume(queue: queueName,
                                      autoAck: true,

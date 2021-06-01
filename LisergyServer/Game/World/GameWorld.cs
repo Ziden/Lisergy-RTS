@@ -21,6 +21,7 @@ namespace Game
         // how many chunks are "player reserved chunks" per player
         public static readonly int PLAYERS_CHUNKS = 2;
 
+        public StrategyGame Game { get; set; }
         public WorldPlayers Players { get; set; }
         public ChunkMap Map { get; set; }
 

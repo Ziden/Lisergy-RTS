@@ -45,8 +45,8 @@ public class BattleBehaviour : MonoBehaviour
 
     void Start()
     {
-        NetworkEvents.OnBattleStart += StartBattle;
-        NetworkEvents.OnBattleAction += OnBattleAction;
+        //NetworkEvents.OnBattleStart += StartBattle;
+        //NetworkEvents.OnBattleAction += OnBattleAction;
       
         Debug.Log("[Battle] Battle Behaviour Waiting for Battles");
         if(!TEST_MODE)

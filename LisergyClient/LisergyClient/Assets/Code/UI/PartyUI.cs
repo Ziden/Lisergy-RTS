@@ -3,13 +3,14 @@ using Assets.Code.UI;
 using Assets.Code.World;
 using Game;
 using Game.Events;
+using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PartyUI
+public class PartyUI : IEventListener
 {
     private GameObject _rootObject;
     private GameObject _cursor;
@@ -45,9 +46,12 @@ public class PartyUI
         _partyButtons[3].onClick.AddListener(() => ButtonClick(3));
         _cursor.SetActive(false);
         _rootObject.SetActive(false);
+
+
+
         ClientEvents.OnCameraMove += OnCameraMove;
         ClientEvents.OnClickTile += OnClickTile;
-        NetworkEvents.OnPlayerAuth += OnPlayerAuth;
+        MainBehaviour.NetworkEvents.RegisterListener(this);
     }
 
     public void Hide()

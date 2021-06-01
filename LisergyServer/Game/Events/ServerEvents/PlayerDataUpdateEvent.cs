@@ -19,11 +19,6 @@ namespace Game.Events
         public UpdateType Type;
         public BattleJournalHeader[] Battles;
         public Tile[] VisibleTiles;
-
-        public override EventID GetID()
-        {
-            return EventID.USER_PROFILE_UPDATE;
-        }
     }
 
 }
