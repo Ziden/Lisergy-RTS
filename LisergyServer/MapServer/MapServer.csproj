@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NetSerializer" Version="4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Core\LisergyServer.csproj" />
     <ProjectReference Include="..\MessageBroker\LisergyMQ.csproj" />
   </ItemGroup>

@@ -1,5 +1,0 @@
-﻿2021-03-15 08:41:43.127 INFO  Logging to 'C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\bin\Debug\netcoreapp3.1\' with level Info
-2021-03-15 08:44:48.448 INFO  Logging to 'C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\bin\Debug\netcoreapp3.1\' with level Info
-2021-03-15 08:44:48.583 INFO  No valid license could be found. Falling back to trial license with start date '2021-03-15'.
-2021-03-15 17:44:00.548 INFO  Logging to 'C:\Users\gabri\source\repos\Lisergy\LisergyServer\MessageBroker\bin\Debug\netcoreapp3.1\' with level Info
-2021-03-15 17:44:00.737 INFO  No valid license could be found. Falling back to trial license with start date '2021-03-15'.

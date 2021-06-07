@@ -1,5 +1,4 @@
 ﻿using System;
-using ZeroFormatter;
 
 namespace Game.Events
 {

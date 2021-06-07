@@ -2,7 +2,6 @@
 using Game.World;
 using System;
 using System.Collections.Generic;
-using ZeroFormatter;
 
 namespace Game.Events
 {

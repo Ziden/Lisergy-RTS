@@ -1,7 +1,6 @@
 ﻿using Game;
 using Game.Events;
 using GameDataTest;
-using LisergyMessageQueue;
 using LisergyServer.Core;
 using System;
 using System.Threading;
