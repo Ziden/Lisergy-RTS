@@ -97,7 +97,7 @@ public class PartyUI : IEventListener
 
     private void ShowParty(ClientParty party)
     {
-        UIManager.UnitPanel.ShowUnit((ClientUnit)party.GetUnits().First());
+        UIManager.UnitPanel.ShowUnit((ClientUnit)party.GetValidUnits().First());
     }
 
     private void SelectParty(ClientParty party)
@@ -126,7 +126,7 @@ public class PartyUI : IEventListener
     public static Image DrawPartyIcon(ClientParty party, Transform parent)
     {
         var partyIndex = party.PartyIndex;
-        var units = party.GetUnits().ToList();
+        var units = party.GetValidUnits().ToList();
         var leader = (ClientUnit)units[0];
         var imageObj = new GameObject("portrait", typeof(Image));
         var image = DrawPortrait(leader, parent);

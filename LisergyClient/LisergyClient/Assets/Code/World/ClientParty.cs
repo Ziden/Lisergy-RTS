@@ -19,7 +19,7 @@ namespace Assets.Code.World
             BattleID = partyFromNetwork.BattleID;
             for (var i = 0; i < 4; i++)
                 this.SetUnit(null, i);
-            foreach (var unit in partyFromNetwork.GetUnits())
+            foreach (var unit in partyFromNetwork.GetValidUnits())
                 this.AddUnit(new ClientUnit(unit));
             return this;
         }
@@ -89,7 +89,7 @@ namespace Assets.Code.World
 
         public void Render()
         {
-            foreach (var unit in GetUnits())
+            foreach (var unit in GetValidUnits())
             {
                 var unitObject = ((ClientUnit)unit).AddToScene();
                 unitObject.transform.SetParent(_gameObject.transform);
