@@ -16,13 +16,13 @@ namespace LisergyServer.Commands
                 sender.SendMessage(".battles list - list all battles");
             } else if(args.GetString(0) == "list")
             {
-                var battleListener = this.Game.GetListener<BattleListener>();
+                var battleListener = this.Game.GetListener<BattlePacketListener>();
                 foreach (var battle in battleListener.GetBattles())
                     sender.SendMessage($"- {battle}");
             }
             else if (args.GetString(0) == "clear")
             {
-                var battleListener = this.Game.GetListener<BattleListener>();
+                var battleListener = this.Game.GetListener<BattlePacketListener>();
                 battleListener.Wipe();
             }
 

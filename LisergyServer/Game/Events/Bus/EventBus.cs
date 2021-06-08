@@ -17,7 +17,7 @@ namespace Game.Events.Bus
             RunCallbacks(ev);
         }
 
-        public void RunCallbacks(GameEvent ev)
+        public void RunCallbacks(BaseEvent ev)
         {
             if (!_registeredListeners.ContainsKey(ev.GetType()))
                 if (!_registeredListeners.ContainsKey(ev.GetType().BaseType))
@@ -73,7 +73,7 @@ namespace Game.Events.Bus
                     var parameter = parameters[0];
                     var hasAttribute = method.GetCustomAttributes(typeof(EventMethod), false).Any();
 
-                    if (hasAttribute && typeof(GameEvent).IsAssignableFrom(parameter.ParameterType))
+                    if (hasAttribute && typeof(BaseEvent).IsAssignableFrom(parameter.ParameterType))
                     {
                         RegisterCallback(listener, method, parameter.ParameterType);
                     }

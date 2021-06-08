@@ -1,15 +1,18 @@
-﻿
-using System;
+﻿using System;
 
 namespace Game.Events
 {
+    /// <summary>
+    /// Game Logic Events
+    /// </summary>
     [Serializable]
-    public abstract class GameEvent
+    public abstract class GameEvent: BaseEvent
     {
-        [NonSerialized]
-        public int ConnectionID;
+        private bool _cancelled = false;
 
-        [NonSerialized]
-        public PlayerEntity Sender;
+        public void Cancel()
+        {
+            _cancelled = true;
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace Tests
     public class TestSerialization
     {
         [Serializable]
-        public class TestTileEvent : GameEvent
+        public class TestTileEvent : BaseEvent
         {
             public TestTileEvent(Tile t)
             {
@@ -22,7 +22,7 @@ namespace Tests
         }
 
         [Serializable]
-        public class RefEvent : GameEvent
+        public class RefEvent : BaseEvent
         {
             public BattleTeam T1;
             public BattleTeam T2;   

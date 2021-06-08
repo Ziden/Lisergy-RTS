@@ -27,6 +27,8 @@ namespace Game
 
         protected string _battleID;
 
+        public virtual string BattleID { get => _battleID; set => _battleID = value; }
+
         public bool IsBattling => _battleID != null;
 
         public virtual Tile Tile

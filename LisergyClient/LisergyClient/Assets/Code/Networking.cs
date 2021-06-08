@@ -18,7 +18,7 @@ public class Networking : IDisposable
         Serialization.LoadSerializers();
     }
 
-    public void Send<T>(T ev) where T : GameEvent
+    public void Send<T>(T ev) where T : BaseEvent
     {
         _toSend.Add(Serialization.FromEventRaw(ev));
     }

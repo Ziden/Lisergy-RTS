@@ -41,12 +41,12 @@ namespace ServerTests
             return player;
         }
 
-        public void ReceiveEvent(GameEvent ev)
+        public void ReceiveEvent(BaseEvent ev)
         {
             ReceivedEvents.Add(ev);
         }
 
-        public List<GameEvent> ReceivedEvents = new List<GameEvent>();
+        public List<BaseEvent> ReceivedEvents = new List<BaseEvent>();
 
         public TestServerPlayer GetTestPlayer()
         {

@@ -6,11 +6,11 @@ using System.Linq;
 
 namespace Game.Listeners
 {
-    public class WorldListener : IEventListener
+    public class WorldPacketListener : IEventListener
     {
         private GameWorld _world;
 
-        public WorldListener(GameWorld w)
+        public WorldPacketListener(GameWorld w)
         {
             _world = w; 
             Log.Debug("World Event Listener Registered");

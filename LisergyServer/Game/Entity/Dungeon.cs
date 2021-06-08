@@ -1,11 +1,13 @@
-﻿using Game.Battles;
+﻿using Game.Battle;
+using Game.Battles;
 using Game.Inventories;
 using System;
+using System.Linq;
 
 namespace Game.Entity
 {
     [Serializable]
-    public class Dungeon : WorldEntity
+    public class Dungeon : WorldEntity, IBattleable
     {
         protected BattleTeam[] _battles;
         private Item[] _rewards;
@@ -31,6 +33,11 @@ namespace Game.Entity
         public override string ToString()
         {
             return $"<Dungeon battles={_battles.Length}>";
+        }
+
+        public BattleTeam ToBattleTeam()
+        {
+            return this.Battles.First();
         }
     }
 }

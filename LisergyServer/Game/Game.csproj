@@ -18,16 +18,4 @@
     <ProjectReference Include="..\GameData\GameData.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="NetSerializer">
-      <HintPath>..\NetSerializer.dll</HintPath>
-    </Reference>
-    <Reference Include="ZeroFormatter">
-      <HintPath>..\ZeroFormatter.dll</HintPath>
-    </Reference>
-    <Reference Include="ZeroFormatter.Interfaces">
-      <HintPath>..\ZeroFormatter.Interfaces.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

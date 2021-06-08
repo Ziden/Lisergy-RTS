@@ -65,7 +65,7 @@ namespace Game
             Log.Debug($"Player {UserID} built {id}");
         }
 
-        public abstract void Send<EventType>(EventType ev) where EventType : GameEvent;
+        public abstract void Send<EventType>(EventType ev) where EventType : BaseEvent;
 
         public abstract bool Online();
 

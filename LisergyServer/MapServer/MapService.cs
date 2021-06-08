@@ -40,7 +40,7 @@ namespace MapServer
             _accountManager.Disconnect(connectionID);
         }
 
-        protected override ServerPlayer Auth(GameEvent ev, int connectionID)
+        protected override ServerPlayer Auth(BaseEvent ev, int connectionID)
         {
             ServerPlayer caller;
             if (!(ev is AuthEvent))

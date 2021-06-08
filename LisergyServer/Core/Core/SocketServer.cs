@@ -31,7 +31,7 @@ namespace LisergyServer.Core
         }
 
         public abstract void RegisterCommands(StrategyGame game, CommandExecutor executor);
-        protected abstract ServerPlayer Auth(GameEvent ev, int connectionID);
+        protected abstract ServerPlayer Auth(BaseEvent ev, int connectionID);
         public abstract void Tick();
         public abstract void Disconnect(int connectionID);
         public abstract ServerType GetServerType();

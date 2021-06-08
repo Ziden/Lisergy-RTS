@@ -13,9 +13,9 @@ namespace ServerTests
     {
         public static string TEST_ID = "test_player_id";
 
-        public delegate void ReceiveEventHandler(GameEvent ev);
+        public delegate void ReceiveEventHandler(BaseEvent ev);
         public event ReceiveEventHandler OnReceiveEvent;
-        public List<GameEvent> ReceivedEvents = new List<GameEvent>();
+        public List<BaseEvent> ReceivedEvents = new List<BaseEvent>();
 
         public bool IsOnline { get; set; }
 

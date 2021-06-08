@@ -37,7 +37,7 @@ namespace Game.Events
 
             // Game
             models.Add(typeof(GameSpec));
-            models.Add(typeof(GameEvent));
+            models.Add(typeof(BaseEvent));
             if (extras != null)
             {
                 models.AddRange(extras);
@@ -47,7 +47,7 @@ namespace Game.Events
 
         static IEnumerable<Type> GetEventTypes()
         {
-            foreach (Type type in typeof(GameEvent).Assembly.GetTypes())
+            foreach (Type type in typeof(BaseEvent).Assembly.GetTypes())
             {
                 var validEvent = typeof(ClientEvent).IsAssignableFrom(type) && type != typeof(ClientEvent);
                 validEvent = validEvent || typeof(ServerEvent).IsAssignableFrom(type) && type != typeof(ServerEvent);
@@ -58,17 +58,17 @@ namespace Game.Events
             }
         }
 
-        public static GameEvent ToEventRaw(byte[] message)
+        public static BaseEvent ToEventRaw(byte[] message)
         {
             using (var stream = new MemoryStream(message))
             {
-                GameEvent ev;
-                ev = (GameEvent) Serializer.Deserialize(stream);
+                BaseEvent ev;
+                ev = (BaseEvent) Serializer.Deserialize(stream);
                 return ev;
             }
         }
 
-        public static byte[] FromEventRaw(GameEvent ev)
+        public static byte[] FromEventRaw(BaseEvent ev)
         {
             using (var stream = new MemoryStream())
             {
@@ -77,12 +77,12 @@ namespace Game.Events
             }
         }
 
-        public static T ToEvent<T>(byte[] message) where T : GameEvent
+        public static T ToEvent<T>(byte[] message) where T : BaseEvent
         {
             return (T)ToEventRaw(message);
         }
 
-        public static byte[] FromEvent<T>(T ev) where T : GameEvent
+        public static byte[] FromEvent<T>(T ev) where T : BaseEvent
         {
             return FromEventRaw(ev);
 

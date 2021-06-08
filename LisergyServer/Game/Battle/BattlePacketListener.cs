@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace BattleServer
 {
-    public class BattleListener : IEventListener
+    public class BattlePacketListener : IEventListener
     {
         public GameWorld World { get; private set; }
         private Dictionary<string, TurnBattle> _battles = new Dictionary<string, TurnBattle>();
@@ -85,7 +85,7 @@ namespace BattleServer
             return _battles.Count;
         }
 
-        public BattleListener(GameWorld world)
+        public BattlePacketListener(GameWorld world)
         {
             World = world;
         }

@@ -9,11 +9,11 @@ using System.Collections.Generic;
 
 namespace Game.Listeners
 {
-    public class CourseListener : IEventListener
+    public class CoursePacketListener : IEventListener
     {
         private GameWorld _world;
 
-        public CourseListener(GameWorld world)
+        public CoursePacketListener(GameWorld world)
         {
             this._world = world;
         }

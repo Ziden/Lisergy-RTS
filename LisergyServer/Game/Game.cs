@@ -1,14 +1,8 @@
 ﻿using BattleServer;
-using Game.Battle;
-using Game.Events;
 using Game.Events.Bus;
-using Game.Generator;
 using Game.Listeners;
-using Game.Scheduler;
+using Game.World;
 using GameData;
-using LisergyServer;
-using System.Collections.Generic;
-using System.Linq; 
 
 namespace Game
 {
@@ -16,6 +10,7 @@ namespace Game
     { 
         public static GameSpec Specs { get; private set; }
         public EventBus NetworkEvents { get; private set; }
+        public EventBus GameEvents { get; private set; }
 
         private GameWorld _world;
         public GameWorld World { get => _world; set { 
@@ -33,12 +28,14 @@ namespace Game
             Specs = specs;
         }
 
-        public void RegisterEventListeners()
+        public virtual void RegisterEventListeners()
         {
             NetworkEvents = new EventBus();
-            NetworkEvents.RegisterListener(new BattleListener(World));
-            NetworkEvents.RegisterListener(new WorldListener(World));
-            NetworkEvents.RegisterListener(new CourseListener(World));
+            GameEvents = new EventBus();
+            NetworkEvents.RegisterListener(new BattlePacketListener(World));
+            NetworkEvents.RegisterListener(new WorldPacketListener(World));
+            NetworkEvents.RegisterListener(new CoursePacketListener(World));
+            GameEvents.RegisterListener(new WorldGameListener(this));
         }
 
         public ListenerType GetListener<ListenerType>() where ListenerType: IEventListener

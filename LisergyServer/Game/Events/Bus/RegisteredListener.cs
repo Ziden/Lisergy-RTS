@@ -7,7 +7,7 @@ namespace Game.Events.Bus
         public IEventListener Listener;
         public MethodInfo Method;
 
-        public void Call(GameEvent ev)
+        public void Call(BaseEvent ev)
         {
             Method.Invoke(Listener, new object[] { ev });
         }

@@ -1,5 +1,4 @@
-﻿using Assets.Code.Art;
-using Game;
+﻿using Game;
 using UnityEngine;
 
 namespace Assets.Code.World

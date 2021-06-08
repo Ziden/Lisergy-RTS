@@ -15,7 +15,7 @@ namespace Tests
     {
         private Unit FastUnit;
         private Unit SlowUnit;
-        private BattleListener Listener;
+        private BattlePacketListener Listener;
 
         [SetUp]
         public void Setup()
@@ -29,7 +29,7 @@ namespace Tests
             SlowUnit.Stats.Speed /= 2;
 
             var game = new TestGame();
-            Listener = game.GetListener<BattleListener>();
+            Listener = game.GetListener<BattlePacketListener>();
         }
 
         [Test]

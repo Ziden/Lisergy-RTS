@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Game.Movement;
 using Game.Battles;
+using Game.Events.GameEvents;
+using Game.Battle;
 
 namespace Game.Entity
 {
     [Serializable]
-    public class Party : MovableWorldEntity
+    public class Party : MovableWorldEntity, IBattleable
     {
         private byte _partyIndex;
         private Unit[] _units = new Unit[4] { null, null, null, null };
@@ -29,50 +31,41 @@ namespace Game.Entity
             _partyIndex = partyIndex;
         }
 
-        public void StartBattle(BattleTeam enemy)
-        {
-            var playerTeam = new BattleTeam(this.Owner, this._units);
-            _battleID = Guid.NewGuid().ToString();
-
-            // TODO: Make this better
-            Tile.Chunk.Map.World.Game.NetworkEvents.RunCallbacks(new BattleStartEvent()
-            {
-                X = this.X,
-                Y = this.Y,
-                Attacker = playerTeam,
-                Defender = enemy,
-                BattleID = _battleID
-            });
-        }
-
         public override Tile Tile
         {
             get => base.Tile;
             set
             {
                 base.Tile = value;
-                if (value != null && value.StaticEntity is Dungeon)
+                if (value != null && value.StaticEntity != null)
                 {
                     if (this.Course != null && this.Course.Intent == MovementIntent.Offensive && this.Course.IsLastMovement())
                     {
-                        var enemyTeam = ((Dungeon)value.StaticEntity).Battles.First();
-                        Log.Info($"{this} did an offensive move triggering a battle with {enemyTeam}");
-                        StartBattle(enemyTeam);
+                        Tile.Game.GameEvents.RunCallbacks(new OffensiveMoveEvent()
+                        {
+                            Defender = value.StaticEntity,
+                            Attacker = this
+                        });
                     }
                 }
             }
         }
 
-        public virtual string BattleID { get => _battleID; set => _battleID = value; }
+      
 
         public override byte GetLineOfSight()
         {
             return _units.Where(u => u != null).Select(u => StrategyGame.Specs.Units[u.SpecId].LOS).Max();
         }
 
-        public IEnumerable<Unit> GetUnits()
+        public IEnumerable<Unit> GetValidUnits()
         {
             return _units.Where(u => u != null);
+        }
+
+        public Unit[] GetUnits()
+        {
+            return _units;
         }
 
         public virtual void SetUnit(Unit u, int index)
@@ -97,6 +90,16 @@ namespace Game.Entity
         public override string ToString()
         {
             return $"<Party Battling={IsBattling} Id={Id} Index={PartyIndex} Owner={OwnerID}>";
+        }
+
+        public BattleTeam ToBattleTeam()
+        {
+            return new BattleTeam(this.Owner, this._units);
+        }
+
+        public void OnBattleStart(BattleStartEvent ev)
+        {
+            this.BattleID = ev.BattleID;
         }
     }
 }

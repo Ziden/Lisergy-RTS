@@ -49,6 +49,7 @@ namespace Game
         public virtual HashSet<PlayerEntity> PlayersViewing { get => _playersViewing; }
         public float MovementFactor { get => Spec.MovementFactor; }
 
+        public StrategyGame Game => Chunk.Map.World.Game;
         public virtual WorldEntity StaticEntity
         {
             get => _staticEntity;
