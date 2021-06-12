@@ -100,7 +100,7 @@ public class PartyUI : IEventListener
         UIManager.UnitPanel.ShowUnit((ClientUnit)party.GetValidUnits().First());
     }
 
-    private void SelectParty(ClientParty party)
+    public void SelectParty(ClientParty party)
     {
         _activeParty = party.PartyIndex;
         _cursor.SetActive(true);

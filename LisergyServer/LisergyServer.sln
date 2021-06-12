@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LisergyServer", "Core\LisergyServer.csproj", "{832E3691-6476-49E5-B6FA-2175A8CEE8D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseServer", "Core\BaseServer.csproj", "{832E3691-6476-49E5-B6FA-2175A8CEE8D7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game", "Game\Game.csproj", "{1C33B0EC-B723-4230-A084-FD876AABD11B}"
 EndProject

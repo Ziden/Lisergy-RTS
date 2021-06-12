@@ -65,8 +65,8 @@ namespace MapServer
             var gameSpecs = TestSpecs.Generate();
             var game = new StrategyGame(gameSpecs, null);
             GameWorld world = Worldgen.CreateWorld(MAX_PLAYERS, WORLD_SEED,
-               new NewbieChunkPopulator()
-              , new DungeonsPopulator()
+                new NewbieChunkPopulator()
+               ,new DungeonsPopulator()
             );
             game.World = world;
             game.RegisterEventListeners();

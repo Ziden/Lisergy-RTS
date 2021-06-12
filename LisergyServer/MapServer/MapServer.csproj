@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\LisergyServer.csproj" />
+    <ProjectReference Include="..\Core\BaseServer.csproj" />
     <ProjectReference Include="..\MessageBroker\LisergyMQ.csproj" />
   </ItemGroup>
 

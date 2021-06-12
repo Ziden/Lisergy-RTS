@@ -5,7 +5,7 @@
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
-    "precompiledReferences": [],
+    "precompiledReferences": [ "Game.dll", "GameData.dll" ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": []

@@ -18,7 +18,7 @@ public class Networking : IDisposable
         Serialization.LoadSerializers();
     }
 
-    public void Send<T>(T ev) where T : BaseEvent
+    public virtual void Send<T>(T ev) where T : BaseEvent
     {
         _toSend.Add(Serialization.FromEventRaw(ev));
     }
@@ -40,8 +40,7 @@ public class Networking : IDisposable
             {
                 if (!client.GetNextMessage(out msg))
                     break;
-
-               
+ 
                 switch (msg.eventType)
                 {
                     case Telepathy.EventType.Connected:

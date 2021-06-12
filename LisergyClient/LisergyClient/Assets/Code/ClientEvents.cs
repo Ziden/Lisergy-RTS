@@ -1,5 +1,7 @@
 ﻿
+using Assets.Code.UI;
 using Assets.Code.World;
+using Game;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +13,7 @@ namespace Assets.Code
     public delegate void PlayerLoginEvent(ClientPlayer player);
     public delegate void PartyFinishedMoveEvent(ClientParty party, ClientTile oldTile, ClientTile newTile);
     public delegate void StartMovementRequest(ClientParty party, List<ClientTile> Path);
+    public delegate void ActionSelected(ClientParty p, ClientTile tile, EntityAction action);
 
     public class ClientEvents
     {
@@ -20,6 +23,7 @@ namespace Assets.Code
         public static event PlayerLoginEvent OnPlayerLogin;
         public static event PartyFinishedMoveEvent OnPartyFinishedMove;
         public static event StartMovementRequest OnStartMovementRequest;
+        public static event ActionSelected OnActionSelected;
 
         public static void CameraMove(Vector3 oldPosition, Vector3 newPosition)
         {
@@ -49,6 +53,11 @@ namespace Assets.Code
         public static void StartMovementRequest(ClientParty p, List<ClientTile> path)
         {
             OnStartMovementRequest?.Invoke(p, path);
+        }
+
+        public static void ActionSelected(ClientParty p, ClientTile tile, EntityAction action)
+        {
+            OnActionSelected?.Invoke(p, tile, action);
         }
     }
 }

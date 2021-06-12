@@ -4,6 +4,7 @@ using System.Text;
 
 namespace LisergyServer.Core
 {
+
     public enum ServerType
     {
         AUTH = 1,

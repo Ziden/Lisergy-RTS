@@ -137,13 +137,13 @@ namespace Assets.Code.UI
 
         private void GuardButton() {}
 
-        private void AttackButton()
+        public void AttackButton()
         {
             MoveToSelectedTile(MovementIntent.Offensive);
             Hide();
         }
 
-        private void MoveButton()
+        public void MoveButton()
         {
             MoveToSelectedTile(MovementIntent.Defensive);
             Hide();

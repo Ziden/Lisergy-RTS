@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\LisergyServer.csproj" />
+    <ProjectReference Include="..\Core\BaseServer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
