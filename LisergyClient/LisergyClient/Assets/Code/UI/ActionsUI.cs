@@ -48,16 +48,16 @@ namespace Assets.Code.UI
             Hide();
         }
 
-        private void BuildActions(params EntityAction [] actions)
+        private void BuildActions(params EntityAction[] actions)
         {
             foreach (var button in _actions.Values)
                 button.gameObject.SetActive(false);
 
             var ct = actions.Count();
-            if(ct > 4)
+            if (ct > 4)
                 throw new Exception("Max 4 actions for now");
 
-            if(ct >= 1)
+            if (ct >= 1)
             {
                 var action = actions[0];
                 var button = _actions[action];
@@ -84,10 +84,10 @@ namespace Assets.Code.UI
         {
             Log.Debug("Actions click tile");
             if (UIManager.PartyUI.HasSelectedParty)
-                Show(UIManager.PartyUI.SelectedParty, tile);
+                DisplayActions(UIManager.PartyUI.SelectedParty, tile);
         }
 
-        public void Show(ClientParty party, ClientTile tile)
+        public void DisplayActions(ClientParty party, ClientTile tile)
         {
             if (party.Tile == tile || tile == null)
             {
@@ -112,8 +112,9 @@ namespace Assets.Code.UI
         private void CheckButton()
         {
             var tile = UIManager.TileUI.SelectedTile;
-            if(tile.StaticEntity is ClientDungeon)
+            if (tile.StaticEntity is ClientDungeon)
             {
+                UIManager.ActionsUI.Hide();
                 UIManager.DungeonsUI.Display((ClientDungeon)tile.StaticEntity);
             }
         }
@@ -135,7 +136,7 @@ namespace Assets.Code.UI
             });
         }
 
-        private void GuardButton() {}
+        private void GuardButton() { }
 
         public void AttackButton()
         {

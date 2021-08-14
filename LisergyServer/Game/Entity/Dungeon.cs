@@ -2,6 +2,7 @@
 using Game.Battles;
 using Game.Inventories;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Game.Entity
@@ -9,10 +10,10 @@ namespace Game.Entity
     [Serializable]
     public class Dungeon : WorldEntity, IBattleable
     {
-        protected BattleTeam[] _battles;
+        protected List<Unit[]> _battles = new List<Unit[]>();
         private Item[] _rewards;
 
-        public BattleTeam[] Battles { get => _battles; }
+        public List<Unit[]> Battles { get => _battles; }
         public Item[] Rewards { get => _rewards; set => _rewards = value; }
 
         public Dungeon(): base(Gaia)
@@ -20,24 +21,25 @@ namespace Game.Entity
 
         }
 
-        public Dungeon(params BattleTeam [] fights): base(Gaia)
+        public Dungeon(params Unit[] fights): base(Gaia)
         {
-            this._battles = fights;
+            this._battles.Add(fights);
         }
 
-        public void SetBattles(params BattleTeam [] battles)
+        public void AddBattle(params Unit[] units)
         {
-            this._battles = battles;
+            this._battles.Add(units);
         }
 
         public override string ToString()
         {
-            return $"<Dungeon battles={_battles.Length}>";
+            return $"<Dungeon battles={_battles.Count}>";
         }
 
-        public BattleTeam ToBattleTeam()
+        public BattleTeam GetBattleTeam()
         {
-            return this.Battles.First();
+            var units = this.Battles.First();
+            return new BattleTeam(this, units);
         }
     }
 }

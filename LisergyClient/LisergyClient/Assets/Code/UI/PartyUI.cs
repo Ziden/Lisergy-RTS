@@ -1,8 +1,6 @@
 ﻿using Assets.Code;
-using Assets.Code.UI;
 using Assets.Code.World;
 using Game;
-using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using System;
@@ -47,8 +45,6 @@ public class PartyUI : IEventListener
         _cursor.SetActive(false);
         _rootObject.SetActive(false);
 
-
-
         ClientEvents.OnCameraMove += OnCameraMove;
         ClientEvents.OnClickTile += OnClickTile;
         MainBehaviour.NetworkEvents.RegisterListener(this);
@@ -87,7 +83,6 @@ public class PartyUI : IEventListener
         }
         else
             HideParty();
-
     }
 
     private void OnCameraMove(Vector3 oldPos, Vector3 newPos)
@@ -133,14 +128,16 @@ public class PartyUI : IEventListener
         return image;
     }
 
-    public static Image DrawPortrait(Unit unit, Transform parent)
+    private static Vector2 DefaultSize = new Vector2(58f, 84f);
+
+    public static Image DrawPortrait(Unit unit, Transform parent, float sizeModX=1, float sizeModY=1)
     {
         foreach (Transform t in parent)
             MainBehaviour.Destroy(t.gameObject);
         var imageObj = new GameObject("portrait", typeof(Image));
         var image = imageObj.GetComponent<Image>();
         image.sprite = LazyLoad.GetSpecificSpriteArt(unit.Spec.FaceArt);
-        image.rectTransform.sizeDelta = new Vector2(58f, 84f);
+        image.rectTransform.sizeDelta = new Vector2(58f * sizeModX, 84f * sizeModY);
         imageObj.transform.SetParent(parent);
         imageObj.transform.localPosition = new Vector3(0, 0, 0);
         return image;

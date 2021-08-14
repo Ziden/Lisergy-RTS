@@ -7,6 +7,6 @@ namespace Game.Battle
 {
     public interface IBattleable
     {
-        BattleTeam ToBattleTeam();
+        BattleTeam GetBattleTeam();
     }
 }

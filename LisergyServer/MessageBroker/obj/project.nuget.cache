@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "6t0Y0SqkbQV1PxNWMKe7ley0yi6+5vRwc/O3dZWVPMd707UF0kCmUY76TKaKDroOGuov4Cfwwrm/a9qOUR7PCg==",
+  "dgSpecHash": "vrEUUt5Yh91wwAoUD4GRFa7E/CQutVxgg5xPnW2QAvsfaGhdPMasqo1p5WRDUY0dX8Me4gLOAprbhAZePwESIw==",
   "success": true,
   "projectFilePath": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\MessageBroker\\LisergyMQ.csproj",
   "expectedPackageFiles": [
@@ -10,10 +10,22 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.dotnethostresolver\\2.1.0\\microsoft.netcore.dotnethostresolver.2.1.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\2.1.0\\microsoft.netcore.platforms.2.1.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.targets\\2.1.0\\microsoft.netcore.targets.2.1.0.nupkg.sha512",
+    "C:\\Users\\gabri\\.nuget\\packages\\netserializer\\4.1.1\\netserializer.4.1.1.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\rabbitmq.client\\6.2.1\\rabbitmq.client.6.2.1.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\system.threading.channels\\4.7.1\\system.threading.channels.4.7.1.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'NetSerializer 4.1.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v2.1'. This package may not be fully compatible with your project.",
+      "libraryId": "NetSerializer",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v2.1"
+      ]
+    }
+  ]
 }

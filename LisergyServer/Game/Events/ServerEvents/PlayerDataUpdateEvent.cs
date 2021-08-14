@@ -17,7 +17,7 @@ namespace Game.Events
     public class PlayerDataUpdateEvent : ServerEvent
     {
         public UpdateType Type;
-        public BattleJournalHeader[] Battles;
+        public BattleHeader[] Battles;
         public Tile[] VisibleTiles;
     }
 

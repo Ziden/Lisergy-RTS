@@ -10,18 +10,23 @@ namespace Game.Battles
         public BattleUnit[] Units;
         public string OwnerID;
 
+        [NonSerialized]
+        private WorldEntity _entity;
+
+        public BattleTeam(WorldEntity entity, params Unit[] units)
+        {
+            Init(entity, units);
+        }
+
         public BattleTeam(params Unit[] units)
         {
             Init(null, units);
         }
 
-        public BattleTeam(PlayerEntity owner, params Unit[] units)
+        private void Init(WorldEntity entity, params Unit[] units)
         {
-            Init(owner, units);
-        }
-
-        private void Init(PlayerEntity owner, params Unit[] units)
-        {
+            this._entity = entity;
+            var owner = entity?.Owner;
             var filtered = units.Where(u => u != null).ToList();
             Units = new BattleUnit[filtered.Count()];
             // All battles are autobattles for now
@@ -38,6 +43,7 @@ namespace Game.Battles
         }
 
         public bool AllDead { get => !Units.Any(u => !u.Dead); }
+        public WorldEntity Entity { get => _entity; }
 
         public BattleUnit RandomUnit()
         {

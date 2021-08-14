@@ -6,15 +6,8 @@ using System.Text;
 
 namespace Game.Battle
 {
-    public class BattleJournal
-    {
-        private static Dictionary<string, BattleResultEvent> AllJournals = new Dictionary<string, BattleResultEvent>();
-
-        private List<BattleResultEvent> Results = new List<BattleResultEvent>();
-    }
-
     [Serializable]
-    public class BattleJournalHeader
+    public class BattleHeader
     {
         public bool AttackerWins;
         public string BattleID;
@@ -22,6 +15,19 @@ namespace Game.Battle
         public BattleTeam Defender;
         public DateTime Date;
     }
+
+    [Serializable]
+    public class MiniBattleHeader
+    {
+        public bool AttackerWins;
+        public string BattleID;
+        public string attackerId;
+        public string defenderId;
+        public ushort[] AttackerUnitSpecIds;
+        public ushort[] DefenderUnitSpecIds;
+        public DateTime Date;
+    }
+
 
 
 }

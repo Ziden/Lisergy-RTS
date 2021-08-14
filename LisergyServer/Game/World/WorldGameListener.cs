@@ -23,14 +23,12 @@ namespace Game.World
             if(atk != null && def != null)
             {
                 var battleID = Guid.NewGuid().ToString();
-                ev.Attacker.BattleID = battleID;
-                ev.Defender.BattleID = battleID;
                 _game.NetworkEvents.RunCallbacks(new BattleStartEvent()
                 {
                     X = ev.Defender.X,
                     Y = ev.Defender.Y,
-                    Attacker = atk.ToBattleTeam(),
-                    Defender = def.ToBattleTeam(),
+                    Attacker = atk.GetBattleTeam(),
+                    Defender = def.GetBattleTeam(),
                     BattleID = battleID
                 });
             }

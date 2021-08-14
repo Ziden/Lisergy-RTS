@@ -29,6 +29,13 @@ namespace Game
         public void SetSpecStats()
         {
             this.Stats.SetStats(Spec.Stats);
+            HealAll();
+        }
+
+        public void HealAll()
+        {
+            this.Stats.HP = this.Stats.MaxHP;
+            this.Stats.Mp = this.Stats.MaxMP;
         }
 
         public Party Party

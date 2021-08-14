@@ -13,6 +13,11 @@ namespace Game.Entity
             this.UserID = "gaia";
         }
 
+        public static bool IsGaia(string userId)
+        {
+            return userId == "gaia";
+        }
+
         public override bool Online()
         {
             return false;

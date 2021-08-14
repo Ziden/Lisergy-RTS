@@ -8,13 +8,13 @@ namespace Game.Events
     [Serializable]
     public class BattleResultEvent : ServerEvent
     {
-        public BattleJournalHeader BattleHeader;
+        public BattleHeader BattleHeader;
 
         public BattleTurnEvent[] Turns;
 
         public BattleResultEvent(string battleID, TurnBattleResult result)
         {
-            BattleHeader = new BattleJournalHeader();
+            BattleHeader = new BattleHeader();
             BattleHeader.BattleID = battleID;
             BattleHeader.Date = DateTime.UtcNow;
             BattleHeader.Attacker = result.Attacker;

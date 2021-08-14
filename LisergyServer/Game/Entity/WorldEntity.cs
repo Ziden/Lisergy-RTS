@@ -27,7 +27,10 @@ namespace Game
 
         protected string _battleID;
 
-        public virtual string BattleID { get => _battleID; set => _battleID = value; }
+        public virtual string BattleID { get => _battleID; set { _battleID = value; if(value != null) _lastBattleTime = DateTime.Now; } }
+
+        [NonSerialized]
+        public DateTime _lastBattleTime = DateTime.MinValue;
 
         public bool IsBattling => _battleID != null;
 

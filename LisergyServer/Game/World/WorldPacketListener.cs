@@ -23,12 +23,7 @@ namespace Game.Listeners
             if (_world.Players.GetPlayer(ev.Sender.UserID, out player))
             {
                 Log.Debug($"Existing player {player.UserID} joined");
-                Log.Debug($"Sending {player.VisibleTiles.Count} visible tiles");
-                foreach (var tile in player.VisibleTiles)
-                {
-                    Log.Debug($"Sending tile {tile}");
-                    tile.SendTileInformation(player, null);
-                }
+                player.SendAllUserData();
             }
             else
             {

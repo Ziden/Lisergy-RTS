@@ -1,5 +1,6 @@
 ﻿using Game;
 using Game.Battles;
+using Game.Entity;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
@@ -12,17 +13,17 @@ namespace BattleServer
     public class BattlePacketListener : IEventListener
     {
         public GameWorld World { get; private set; }
-        private Dictionary<string, TurnBattle> _battles = new Dictionary<string, TurnBattle>();
+        private Dictionary<string, TurnBattle> _battlesHappening = new Dictionary<string, TurnBattle>();
 
 
         public void Wipe()
         {
-            _battles.Clear();
+            _battlesHappening.Clear();
         }
 
         public List<TurnBattle> GetBattles()
         {
-            return _battles.Values.ToList();
+            return _battlesHappening.Values.ToList();
         }
 
         [EventMethod]
@@ -30,10 +31,13 @@ namespace BattleServer
         {
             Console.WriteLine($"Received {ev.Attacker} vs {ev.Defender}");
 
+            ev.Attacker.Entity.BattleID = ev.BattleID;
+            ev.Defender.Entity.BattleID = ev.BattleID;
+
             // register battle
             var battle = new TurnBattle(Guid.Parse(ev.BattleID), ev.Attacker, ev.Defender);
             battle.StartEvent = ev;
-            _battles[battle.ID.ToString()] = battle;
+            _battlesHappening[battle.ID.ToString()] = battle;
             foreach (var onlinePlayer in GetOnlinePlayers(battle))
                 onlinePlayer.Send(ev);
 
@@ -41,48 +45,41 @@ namespace BattleServer
             var result = battle.AutoRun.RunAllRounds();
             var resultEvent = new BattleResultEvent(battle.ID.ToString(), result);
 
-            // handle battle finish
-            foreach (var pl in GetAllPlayers(battle))
-            {
-                if (pl.Online())
-                    pl.Send(resultEvent);
-                pl.Battles.Add(resultEvent);
-                var battlingParty = pl.Parties.Where(p => p != null && p.BattleID == resultEvent.BattleHeader.BattleID).FirstOrDefault();
-                if (battlingParty != null)
-                    battlingParty.BattleID = null;
-                else
-                    Log.Error($"Party {battlingParty} was not part of battle {battle}");
-            }
+            // For now...
+            OnBattleResult(resultEvent);
         }
 
         [EventMethod]
         public void OnBattleResult(BattleResultEvent ev)
         {
             TurnBattle battle = null;
-            if (!_battles.TryGetValue(ev.BattleHeader.BattleID, out battle))
+            if (!_battlesHappening.TryGetValue(ev.BattleHeader.BattleID, out battle))
             {
                 ev.Sender.Send(new MessagePopupEvent(PopupType.BAD_INPUT, "Invalid battle"));
                 return;
             }
-            foreach (var pl in GetOnlinePlayers(battle))
+            // handle battle finish
+            foreach (var pl in GetAllPlayers(battle))
             {
-                var battlingParty = pl.Parties.Where(p => p != null && p.BattleID == ev.BattleHeader.BattleID).FirstOrDefault();
-                if (battlingParty == null)
-                    throw new Exception($"Player {pl} in {this} without a party assigned");
+                if (pl.Online())
+                    pl.Send(ev);
                 pl.Battles.Add(ev);
+                Log.Debug($"Player {pl} completed battle {battle.ID}");
+                ev.BattleHeader.Attacker.Entity.BattleID = null;
+                ev.BattleHeader.Defender.Entity.BattleID = null;
             }
-            _battles.Remove(ev.BattleHeader.BattleID);
+            _battlesHappening.Remove(ev.BattleHeader.BattleID);
         }
         #region Battle Controller
 
         public TurnBattle GetBattle(string id)
         {
-            return _battles[id];
+            return _battlesHappening[id];
         }
 
         public int BattleCount()
         {
-            return _battles.Count;
+            return _battlesHappening.Count;
         }
 
         public BattlePacketListener(GameWorld world)
@@ -105,7 +102,7 @@ namespace BattleServer
             PlayerEntity pl;
             foreach (var userid in new string[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
             {
-                if (World.Players.GetPlayer(userid, out pl))
+                if (World.Players.GetPlayer(userid, out pl) && !Gaia.IsGaia(pl.UserID))
                     yield return pl;
             }
         }

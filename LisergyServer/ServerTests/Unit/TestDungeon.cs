@@ -1,4 +1,3 @@
-using BattleServer;
 using Game;
 using Game.Battles;
 using Game.Entity;
@@ -7,7 +6,6 @@ using Game.Scheduler;
 using Game.World;
 using NUnit.Framework;
 using ServerTests;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,7 +26,7 @@ namespace Tests
             _player = _game.GetTestPlayer();
             _path = new List<Position>();
             _party = _player.Parties[0];
-            _dungeon = new Dungeon(new BattleTeam(new Unit(0)));
+            _dungeon = new Dungeon(new Unit(0));
             GameScheduler.Clear();
         }
 
@@ -77,8 +75,8 @@ namespace Tests
 
             Assert.AreEqual(dungeonTile, _player.Parties.First().Tile);
 
-            // 1 battle opened
-            Assert.AreEqual(1, _game.GetListener<BattlePacketListener>().BattleCount());
+
+            Assert.AreEqual(1, _player.Battles.Count);
         }
     }
 }

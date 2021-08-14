@@ -193,6 +193,15 @@
           "lib/netstandard1.0/_._": {}
         }
       },
+      "NetSerializer/4.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/NetSerializer.dll": {}
+        },
+        "runtime": {
+          "lib/net45/NetSerializer.dll": {}
+        }
+      },
       "NETStandard.Library/2.0.3": {
         "type": "package",
         "dependencies": {
@@ -243,7 +252,8 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
-          "GameData": "1.0.0"
+          "GameData": "1.0.0",
+          "NetSerializer": "4.1.1"
         },
         "compile": {
           "bin/placeholder/Game.dll": {}
@@ -607,6 +617,19 @@
         "version.txt"
       ]
     },
+    "NetSerializer/4.1.1": {
+      "sha512": "+cuRiy1WxO3Y5ZNCBYZnOAIwAoCS7IKeEyJi70v9YiUJ0X3KVn66XLnN2J1o0x/WTb5g/QLBhGOb51+GPVWdxQ==",
+      "type": "package",
+      "path": "netserializer/4.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/NetSerializer.dll",
+        "lib/netstandard2.1/NetSerializer.dll",
+        "netserializer.4.1.1.nupkg.sha512",
+        "netserializer.nuspec"
+      ]
+    },
     "NETStandard.Library/2.0.3": {
       "sha512": "st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
       "type": "package",
@@ -890,5 +913,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'NetSerializer 4.1.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v2.1'. This package may not be fully compatible with your project.",
+      "libraryId": "NetSerializer",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v2.1"
+      ]
+    }
+  ]
 }

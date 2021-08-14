@@ -15,6 +15,8 @@ namespace Assets.Code
         [EventMethod]
         public void BattleFinish(BattleResultEvent ev)
         {
+            MainBehaviour.Player.Battles.Add(ev);
+
             // Delay the receiving of it so battles have delays
             Awaiter.WaitFor(TimeSpan.FromSeconds(3), () =>
             {
@@ -23,20 +25,22 @@ namespace Assets.Code
                 var def = w.GetOrCreateClientPlayer(ev.BattleHeader.Defender.OwnerID);
                 var atk = w.GetOrCreateClientPlayer(ev.BattleHeader.Attacker.OwnerID);
 
-                if (def != null)
+                if (def != null && !Gaia.IsGaia(def.UserID))
                 {
                     var partyID = ev.BattleHeader.Defender.Units[0].UnitReference.PartyId;
                     var party = def.Parties[partyID];
                     party.BattleID = null;
                 }
 
-                if (atk != null)
+                if (atk != null && !Gaia.IsGaia(atk.UserID))
                 {
                     var partyID = ev.BattleHeader.Attacker.Units[0].UnitReference.PartyId;
                     var party = atk.Parties[partyID];
                     party.BattleID = null;
                 }
 
+                Log.Info("Battle result event");
+                UIManager.BattleNotifications.Show(ev.BattleHeader);
             });
         }
 
@@ -49,22 +53,20 @@ namespace Assets.Code
             var atk = w.GetOrCreateClientPlayer(ev.Attacker.OwnerID);
             var tile = _game.GetWorld().GetTile(ev.X, ev.Y) as ClientTile;
 
-            if (def != null)
+            if (def != null && !Gaia.IsGaia(def.UserID))
             {
                 var partyID = ev.Defender.Units[0].UnitReference.PartyId;
                 var party = def.Parties[partyID];
                 party.Tile = tile;
                 party.BattleID = ev.BattleID;
-                //def.BattlesStarts[ev.BattleID] = ev;
             }
 
-            if (atk != null)
+            if (atk != null && !Gaia.IsGaia(atk.UserID))
             {
                 var partyID = ev.Attacker.Units[0].UnitReference.PartyId;
                 var party = atk.Parties[partyID];
                 party.Tile = tile;
                 party.BattleID = ev.BattleID;
-                //atk.BattlesStarts[ev.BattleID] = ev;
             }
         }
 

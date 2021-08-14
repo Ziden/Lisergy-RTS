@@ -71,5 +71,19 @@ namespace Tests
             Assert.AreEqual(firstEntityVisibleEvents.Count, secondEntityVisibleEvents.Count);
             Assert.AreEqual(firstTileVisibleEvents.Count, secondTileVisibleEvents.Count);
         }
+
+        [Test]
+        public void TestInitialUnitStats()
+        {
+            var playersBefore = Game.World.Players.PlayerCount;
+            var joinEvent = new JoinWorldEvent();
+            var player = new TestServerPlayer();
+            Game.HandleClientEvent(player, joinEvent);
+            var party = player.Parties[0];
+            var unit = party.GetUnits()[0];
+          
+
+            Assert.That(unit.Stats.HP == unit.Stats.MaxHP);
+        }
     }
 }

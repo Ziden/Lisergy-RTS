@@ -86,11 +86,15 @@ namespace Game
 
         public void SendTileInformation(PlayerEntity player, ExploringEntity viewer)
         {
+            // send tile
             player.Send(new TileVisibleEvent(this));
+
+            // send movable entities in tile
             foreach (var movingEntity in MovingEntities)
                 if (movingEntity != viewer)
                     player.Send(new EntityVisibleEvent(movingEntity));
 
+            // send static entity in tile
             if (StaticEntity != null && viewer != StaticEntity)
                 player.Send(new EntityVisibleEvent(StaticEntity));
         }

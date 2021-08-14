@@ -10,7 +10,7 @@ namespace GameData
         public int Version = 1;
 
         public byte InitialBuilding = 0;
-        public ushort InitialUnit = 2;
+        public ushort InitialUnit = 1;
 
         public Dictionary<byte, BuildingSpec> Buildings = new Dictionary<byte, BuildingSpec>();
         public Dictionary<ushort, TileSpec> Tiles = new Dictionary<ushort, TileSpec>();

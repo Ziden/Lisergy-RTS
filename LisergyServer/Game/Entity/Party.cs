@@ -23,6 +23,12 @@ namespace Game.Entity
 
         public bool CanMove()
         {
+            // 3 secs delay off battles to sync with client 3 secs delay for
+            // battle animation
+            if(this._lastBattleTime + TimeSpan.FromSeconds(3) > DateTime.Now)
+            {
+                return false;
+            }
             return !IsBattling;
         }
 
@@ -50,8 +56,6 @@ namespace Game.Entity
                 }
             }
         }
-
-      
 
         public override byte GetLineOfSight()
         {
@@ -92,14 +96,9 @@ namespace Game.Entity
             return $"<Party Battling={IsBattling} Id={Id} Index={PartyIndex} Owner={OwnerID}>";
         }
 
-        public BattleTeam ToBattleTeam()
+        public BattleTeam GetBattleTeam()
         {
-            return new BattleTeam(this.Owner, this._units);
-        }
-
-        public void OnBattleStart(BattleStartEvent ev)
-        {
-            this.BattleID = ev.BattleID;
+            return new BattleTeam(this, this._units);
         }
     }
 }

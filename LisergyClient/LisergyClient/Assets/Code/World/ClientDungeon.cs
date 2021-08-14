@@ -13,7 +13,7 @@ namespace Assets.Code.World
         {
             var prefab = Resources.Load("prefabs/buildings/dungeon");
             _gameObject = MainBehaviour.Instantiate(prefab, ((ClientChunk)tile.Chunk).GetGameObject().transform) as GameObject;
-            this.SetBattles(dungeon.Battles);
+            this._battles = dungeon.Battles;
             this.Id = dungeon.Id;
         }
     }

@@ -39,6 +39,13 @@ namespace Game
             return Buildings.First(b => b.SpecID == StrategyGame.Specs.InitialBuilding);
         }
 
+        public void SendAllUserData()
+        {
+            Log.Debug($"Sync {VisibleTiles.Count} visible tiles to "+this);
+            foreach (var tile in VisibleTiles)
+                tile.SendTileInformation(this, null);
+        }
+
         public Unit RecruitUnit(ushort unitSpecId)
         {
             var unit = new Unit(unitSpecId);

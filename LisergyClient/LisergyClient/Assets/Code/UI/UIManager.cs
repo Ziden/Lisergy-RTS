@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public GameObject actions;
     public GameObject login;
     public GameObject dungeon;
+    public GameObject battleNotification;
 
     private static LoginCanvas _loginCanvas;
     private static PartyUI _partyUI;
@@ -18,6 +19,8 @@ public class UIManager : MonoBehaviour
     private static TileUI _tileUI;
     private static ActionsUI _actionsUI;
     private static DungeonUI _dungeons;
+    private static BattleNotificationUI _battleNotification;
+
 
     public static GameNotifications Notifications { get => _notifications; }
     public static LoginCanvas LoginCanvas { get => _loginCanvas; }
@@ -26,6 +29,7 @@ public class UIManager : MonoBehaviour
     public static TileUI TileUI { get => _tileUI; }
     public static ActionsUI ActionsUI { get => _actionsUI; }
     public static DungeonUI DungeonsUI { get => _dungeons; }
+    public static BattleNotificationUI BattleNotifications { get => _battleNotification; }
 
     private void Start()
     {
@@ -38,6 +42,7 @@ public class UIManager : MonoBehaviour
         _unitUI = unitPanel.GetComponent<UnitPanel>();
         _notifications = this.gameObject.GetComponentInChildren<GameNotifications>();
         _dungeons = dungeon.GetComponent<DungeonUI>();
+        _battleNotification = battleNotification.GetComponent<BattleNotificationUI>();
         UnitPanel.gameObject.SetActive(false);
         PartyUI.GameObj.SetActive(false);
         ClientEvents.OnPlayerLogin += OnLogin;

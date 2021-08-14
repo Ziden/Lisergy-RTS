@@ -35,10 +35,12 @@ namespace Assets.Code
                 if(tuple.Item1())
                 {
                     _done.Add(tuple);
-                    tuple.Item2();
                 }
             }
-            _done.ForEach(d => _waiting.Remove(d));
+            _done.ForEach(d => {
+                _waiting.Remove(d);
+                d.Item2();
+            });
             _done.Clear();
         }
 

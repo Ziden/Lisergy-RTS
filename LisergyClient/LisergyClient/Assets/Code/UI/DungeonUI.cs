@@ -17,7 +17,7 @@ public class DungeonUI : MonoBehaviour
     private int _viewingBattle = 0;
     private ClientDungeon _dungeon;
 
-    public BattleTeam ViewingBattle => _dungeon.Battles[_viewingBattle];
+    public Unit[] ViewingBattle => _dungeon.Battles[_viewingBattle];
 
     public DungeonUI()
     {
@@ -44,11 +44,11 @@ public class DungeonUI : MonoBehaviour
         gameObject.SetActive(true);
         for (var x = 0 ; x < 4; x++)
         {
-            var unitActive = ViewingBattle.Units.Length > x;
+            var unitActive = ViewingBattle.Length > x;
             UnitPanel[x].gameObject.SetActive(unitActive);
             if (!unitActive) continue;
-            var battleUnit = ViewingBattle.Units[x];
-            UnitPanel[x].ShowUnit(battleUnit.UnitReference);
+            var battleUnit = ViewingBattle[x];
+            UnitPanel[x].ShowUnit(battleUnit);
         }
         PartyUI.DrawPartyIcon(UIManager.PartyUI.SelectedParty, PartyFace);
     }
