@@ -17,31 +17,28 @@ namespace Assets.Code
         {
             MainBehaviour.Player.Battles.Add(ev);
 
-            // Delay the receiving of it so battles have delays
-            Awaiter.WaitFor(TimeSpan.FromSeconds(3), () =>
+            var pl = MainBehaviour.Player;
+            var w = _game.GetWorld();
+            var def = w.GetOrCreateClientPlayer(ev.BattleHeader.Defender.OwnerID);
+            var atk = w.GetOrCreateClientPlayer(ev.BattleHeader.Attacker.OwnerID);
+
+            if (def != null && !Gaia.IsGaia(def.UserID))
             {
-                var pl = MainBehaviour.Player;
-                var w = _game.GetWorld();
-                var def = w.GetOrCreateClientPlayer(ev.BattleHeader.Defender.OwnerID);
-                var atk = w.GetOrCreateClientPlayer(ev.BattleHeader.Attacker.OwnerID);
+                var partyID = ev.BattleHeader.Defender.Units[0].UnitReference.PartyId;
+                var party = def.Parties[partyID];
+                party.BattleID = null;
+            }
 
-                if (def != null && !Gaia.IsGaia(def.UserID))
-                {
-                    var partyID = ev.BattleHeader.Defender.Units[0].UnitReference.PartyId;
-                    var party = def.Parties[partyID];
-                    party.BattleID = null;
-                }
+            if (atk != null && !Gaia.IsGaia(atk.UserID))
+            {
+                var partyID = ev.BattleHeader.Attacker.Units[0].UnitReference.PartyId;
+                var party = atk.Parties[partyID];
+                party.BattleID = null;
+            }
 
-                if (atk != null && !Gaia.IsGaia(atk.UserID))
-                {
-                    var partyID = ev.BattleHeader.Attacker.Units[0].UnitReference.PartyId;
-                    var party = atk.Parties[partyID];
-                    party.BattleID = null;
-                }
+            Log.Info("Battle result event");
+            UIManager.BattleNotifications.Show(ev.BattleHeader);
 
-                Log.Info("Battle result event");
-                UIManager.BattleNotifications.Show(ev.BattleHeader);
-            });
         }
 
         [EventMethod]
@@ -70,7 +67,6 @@ namespace Assets.Code
             }
         }
 
-
         [EventMethod]
         public void Message(MessagePopupEvent ev)
         {
@@ -80,12 +76,38 @@ namespace Assets.Code
         }
 
         [EventMethod]
+        public void EntityDestroy(EntityDestroyEvent ev)
+        {
+            var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
+            var knownEntity = owner.GetKnownEntity(ev.ID);
+            if (knownEntity == null)
+                throw new System.Exception($"Server sent destroy event for entity {ev.ID} from {ev.OwnerID} at however its not visible to client");
+
+            var obj = knownEntity as IGameObject;
+            MainBehaviour.Destroy(obj.GetGameObject());
+            if (knownEntity.Tile.StaticEntity == knownEntity)
+                knownEntity.Tile.StaticEntity = null;
+
+            if(knownEntity is MovableWorldEntity)
+            {
+                knownEntity.Tile.MovingEntities.Remove(knownEntity as MovableWorldEntity);
+
+            }
+
+            else if (knownEntity is MovableWorldEntity && knownEntity.Tile.MovingEntities.Contains((MovableWorldEntity)knownEntity))
+               
+            knownEntity.Tile = null;
+
+        }
+
+        [EventMethod]
         public void EntityMove(EntityMoveEvent ev)
         {
             var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
             var knownEntity = owner.GetKnownEntity(ev.ID);
             if (knownEntity == null)
-                throw new System.Exception($"Server sent move event for entity {ev.ID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
+                throw new System.Exception($"Server sent move event for entit3y {ev.ID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
+
             var newTile = (ClientTile)_game.GetWorld().GetTile(ev.X, ev.Y);
             knownEntity.Tile = newTile;
         }

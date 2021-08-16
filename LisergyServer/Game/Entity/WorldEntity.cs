@@ -27,12 +27,26 @@ namespace Game
 
         protected string _battleID;
 
-        public virtual string BattleID { get => _battleID; set { _battleID = value; if(value != null) _lastBattleTime = DateTime.Now; } }
+        public virtual string BattleID { get => _battleID; set { 
+             
+                if(value != null)
+                {
+                    _lastBattleTime = DateTime.Now;
+                } else if(value == null && _battleID != null)
+                {
+                    OnBattleFinished(_battleID);
+                }
+                _battleID = value;
+            } 
+        }
 
         [NonSerialized]
         public DateTime _lastBattleTime = DateTime.MinValue;
 
         public bool IsBattling => _battleID != null;
+
+        // Todo Move to IBattleable
+        protected virtual void OnBattleFinished(string battleID) {}
 
         public virtual Tile Tile
         {
@@ -47,8 +61,15 @@ namespace Game
                     }
                 }    
                 _tile = value;
-                _x = _tile.X;
-                _y = _tile.Y;
+                if(_tile != null)
+                {
+                    _x = _tile.X;
+                    _y = _tile.Y;
+                } else
+                {
+                    _x = 0;
+                    _y = 0;
+                }
                 Log.Debug($"{this} placed in {value}");
             }
         }

@@ -7,6 +7,7 @@ using Game.Movement;
 using Game.Battles;
 using Game.Events.GameEvents;
 using Game.Battle;
+using Game.Events.ServerEvents;
 
 namespace Game.Entity
 {
@@ -18,18 +19,25 @@ namespace Game.Entity
 
         private Inventory _cargo = new Inventory();
 
+        public bool IsAlive() => _units.Where(u => u != null && u.Stats.HP > 0).Any();
+
         public byte PartyIndex { get => _partyIndex; }
         public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(0.25);
 
         public bool CanMove()
         {
-            // 3 secs delay off battles to sync with client 3 secs delay for
-            // battle animation
-            if(this._lastBattleTime + TimeSpan.FromSeconds(3) > DateTime.Now)
-            {
-                return false;
-            }
             return !IsBattling;
+        }
+
+        protected override void OnBattleFinished(string battleID)
+        {
+            if(!IsAlive())
+            {
+                this.Tile = this.Owner.GetCenter().Tile;
+                foreach (var unit in _units)
+                    unit?.HealAll();
+            }
+            this.Owner.Send(new PartyStatsUpdateEvent(this));
         }
 
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)

@@ -17,7 +17,7 @@ namespace Game.Generator
                 enemy.SetSpecStats();
                 dungeon.AddBattle(enemy);
                 dungeon.Rewards = new Item[] { new Item(1, 10) }; // gold 
-                place.StaticEntity = dungeon;
+                dungeon.Tile = place;
             }
         }
     }

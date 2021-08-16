@@ -2,6 +2,7 @@
 using Game.Battles.Actions;
 using Game.BattleTactics;
 using Game.Events;
+using Game.Movement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Game.Battles
 {
     public class TurnBattle
     {
+        public BattleTask Task;
         internal SortedSet<BattleUnit> _actionQueue = new SortedSet<BattleUnit>();
         internal TurnBattleResult Result = new TurnBattleResult();
 

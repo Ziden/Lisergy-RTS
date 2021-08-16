@@ -1,5 +1,4 @@
 ﻿using Game.Entity;
-using Game.TacticsBattle;
 using System;
 
 namespace Game.Battles

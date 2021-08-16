@@ -19,22 +19,25 @@ namespace Game.Entity
             set
             {
                 var los = GetLineOfSight();
-                var previousTile = base.Tile;
-                HashSet<WorldEntity> oldViewers = null;
-                if (previousTile != null)
+                if(los > 0)
                 {
-                    oldViewers = previousTile.EntitiesViewing;
-                    foreach (var tile in previousTile.GetAOE(los))
-                        tile.SetUnseenBy(this);
+                    var previousTile = base.Tile;
+                    HashSet<WorldEntity> oldViewers = null;
+                    if (previousTile != null)
+                    {
+                        oldViewers = previousTile.EntitiesViewing;
+                        foreach (var tile in previousTile.GetAOE(los))
+                            tile.SetUnseenBy(this);
+                    }
+
+                    Log.Debug($"Entity {this} exploring {los}x{los} on {value}");
+                    foreach (var tile in value.GetAOE(los))
+                        tile.SetSeenBy(this);
+
+                    if (value != previousTile)
+                        SendEntityVisibilityPackets(value, previousTile);
                 }
-
-                Log.Debug($"Entity {this} exploring {los}x{los} on {value}");
-                foreach (var tile in value.GetAOE(los))
-                    tile.SetSeenBy(this);
-
                 base.Tile = value;
-                if(value != previousTile)
-                    SendEntityVisibilityPackets(value, previousTile);
             }
         }
 

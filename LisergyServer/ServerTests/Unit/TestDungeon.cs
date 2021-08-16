@@ -1,6 +1,7 @@
+using BattleServer;
 using Game;
-using Game.Battles;
 using Game.Entity;
+using Game.Events;
 using Game.Movement;
 using Game.Scheduler;
 using Game.World;
@@ -26,7 +27,7 @@ namespace Tests
             _player = _game.GetTestPlayer();
             _path = new List<Position>();
             _party = _player.Parties[0];
-            _dungeon = new Dungeon(new Unit(0));
+            _dungeon = new Dungeon(new Unit(2));
             GameScheduler.Clear();
         }
 
@@ -68,15 +69,68 @@ namespace Tests
             dungeonTile.StaticEntity = _dungeon;
 
             _player.SendMoveRequest(_player.Parties.First(), dungeonTile, MovementIntent.Offensive);
-            var course = _player.Parties.First().Course;
+            var course = party.Course;
 
             Assert.AreEqual(0, _player.Battles.Count());
+
             course.Execute();
+
+            var battle = _game.GetListener<BattlePacketListener>().GetBattle(party.BattleID);
+            battle.Task.Execute();
 
             Assert.AreEqual(dungeonTile, _player.Parties.First().Tile);
 
 
             Assert.AreEqual(1, _player.Battles.Count);
+        }
+
+        [Test]
+        public void TestDungeonRemovedWhenComplete()
+        {
+            var playerCastleTile = _player.Buildings.First().Tile;
+            var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
+            var party = _player.Parties.First();
+            party.GetUnits()[0].Stats.HP = 30000; // make sure it wins !
+            _dungeon.Tile = dungeonTile;
+
+            _player.SendMoveRequest(_player.Parties.First(), dungeonTile, MovementIntent.Offensive);
+            _player.Parties.First().Course.Execute();
+
+            var battle = _game.GetListener<BattlePacketListener>().GetBattle(party.BattleID);
+            battle.Task.Execute();
+
+            //  Dungeon completed and removed from map
+            Assert.IsTrue(_dungeon.IsComplete());
+            Assert.AreEqual(_dungeon.Tile, null);
+            Assert.AreEqual(dungeonTile.StaticEntity, null);
+            // Received another move event to remove the dungeon
+            Assert.AreEqual(_player.ReceivedEventsOfType<EntityDestroyEvent>().Count, 1);
+        }
+
+        [Test]
+        public void TestPartyDefeatHealsDungeon()
+        {
+            var playerCastleTile = _player.Buildings.First().Tile;
+            var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
+            var party = _player.Parties.First();
+            party.GetUnits()[0].Stats.HP = 1; // make sure it looses !
+            party.GetUnits()[0].Stats.Atk = 0; // make sure it looses !
+            dungeonTile.StaticEntity = _dungeon;
+
+            _player.SendMoveRequest(_player.Parties.First(), dungeonTile, MovementIntent.Offensive);
+            _player.Parties.First().Course.Execute();
+
+            var b = _game.GetListener<BattlePacketListener>().GetBattle(party.BattleID);
+            b.Task.Execute();
+
+            //  Dungeon completed and removed from map
+            Assert.IsFalse(_dungeon.IsComplete());
+            foreach (var battle in _dungeon.Battles)
+                foreach (var unit in battle)
+                    Assert.AreEqual(unit.Stats.HP, unit.Stats.MaxHP);
+
+            // Party is recalled to castle
+            Assert.AreEqual(party.Tile, playerCastleTile);
         }
     }
 }

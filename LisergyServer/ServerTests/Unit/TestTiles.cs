@@ -1,4 +1,6 @@
 using Game;
+using Game.Entity;
+using Game.Events;
 using Game.World;
 using GameDataTest;
 using NUnit.Framework;
@@ -37,6 +39,19 @@ namespace Tests
             Assert.AreEqual(tile.GetDirection(Game.World.GetTile(1, 1 - 1)), Direction.SOUTH);
             Assert.AreEqual(tile.GetDirection(Game.World.GetTile(1 + 1, 1)), Direction.EAST);
             Assert.AreEqual(tile.GetDirection(Game.World.GetTile(1 - 1, 1)), Direction.WEST);
+        }
+
+        [Test]
+        public void TestAddingStaticEntity()
+        {
+            var player = Game.GetTestPlayer();
+            var building = player.Buildings.FirstOrDefault();
+            var tile = building.Tile.GetNeighbor(Direction.NORTH);
+
+            var dungeon = new Dungeon();
+            dungeon.Tile = tile;
+
+            Assert.AreEqual(dungeon.Tile, tile);
         }
 
         [Test]

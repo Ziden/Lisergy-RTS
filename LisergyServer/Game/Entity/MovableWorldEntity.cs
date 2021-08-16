@@ -1,6 +1,7 @@
 ﻿using Game.Events;
 using Game.Movement;
 using System;
+using System.Collections.Generic;
 
 namespace Game.Entity
 {
@@ -33,12 +34,19 @@ namespace Game.Entity
                 if (base.Tile != null)
                     base.Tile.MovingEntities.Remove(this);
 
-                if (base.Tile != value && base.Tile != null && value != null)
-                    foreach (var viewer in value.PlayersViewing)
+                // changed tile
+                var allViewers = new HashSet<PlayerEntity>();
+                if (base.Tile != value && base.Tile != null)
+                {
+                    allViewers.UnionWith(base.Tile.PlayersViewing);
+                    if(value != null)
+                        allViewers.UnionWith(value.PlayersViewing);
+                }
+                    foreach (var viewer in allViewers)
                         viewer.Send(new EntityMoveEvent(this, value));
-
+                
+                value.MovingEntities.Add(this);
                 base.Tile = value;
-                base.Tile.MovingEntities.Add(this);
             }
         }
     }

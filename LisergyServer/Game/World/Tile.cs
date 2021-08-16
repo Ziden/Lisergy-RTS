@@ -1,4 +1,5 @@
 ﻿using Game.Entity;
+using Game.Events;
 using Game.Events.ServerEvents;
 using GameData;
 using System;
@@ -35,34 +36,24 @@ namespace Game
         protected HashSet<WorldEntity> _entitiesViewing = new HashSet<WorldEntity>();
 
         [NonSerialized]
-        private WorldEntity _staticEntity;
+        private StaticEntity _staticEntity;
 
         public virtual TileSpec Spec { get => StrategyGame.Specs.Tiles[this.TileId]; }
         public virtual string OwnerID { get => _staticEntity?.OwnerID; }
         public virtual ushort Y { get => _y; }
-        public virtual ushort X { get => _x; } 
+        public virtual ushort X { get => _x; }
         public virtual HashSet<WorldEntity> EntitiesViewing { get { return _entitiesViewing; } }
         public virtual Chunk Chunk { get { return _chunk; } }
         public virtual byte TileId { get => _tileId; set => _tileId = value; }
         public virtual byte ResourceID { get => _resourceID; set => _resourceID = value; }
-        public virtual List<MovableWorldEntity> MovingEntities { get { return _parties; }}
+        public virtual List<MovableWorldEntity> MovingEntities { get { return _parties; } }
         public virtual HashSet<PlayerEntity> PlayersViewing { get => _playersViewing; }
         public float MovementFactor { get => Spec.MovementFactor; }
 
         public StrategyGame Game => Chunk.Map.World.Game;
-        public virtual WorldEntity StaticEntity
-        {
-            get => _staticEntity;
-            set
-            {
-                if(value == null && _staticEntity != null)
-                    _staticEntity.Tile = null;
-                _staticEntity = value;
-                if (value != null)
-                    value.Tile = this;
-            }
-        }
-        
+        // TODO, Remove Setter for StaticEntity (use entity Tile setter)
+        public virtual StaticEntity StaticEntity { get => _staticEntity; set => _staticEntity = value; }
+
         public virtual void SetSeenBy(ExploringEntity explorer)
         {
             _entitiesViewing.Add(explorer);
@@ -86,14 +77,11 @@ namespace Game
 
         public void SendTileInformation(PlayerEntity player, ExploringEntity viewer)
         {
-            // send tile
             player.Send(new TileVisibleEvent(this));
-
             // send movable entities in tile
             foreach (var movingEntity in MovingEntities)
                 if (movingEntity != viewer)
                     player.Send(new EntityVisibleEvent(movingEntity));
-
             // send static entity in tile
             if (StaticEntity != null && viewer != StaticEntity)
                 player.Send(new EntityVisibleEvent(StaticEntity));
@@ -111,7 +99,10 @@ namespace Game
 
         public override string ToString()
         {
-            return $"<Tile {X}-{Y} ID={TileId} Res={ResourceID} Building={StaticEntity?.ToString()}>";
+            return $"<Tile {X}-{Y} ID={TileId} " +
+                (ResourceID == 0 ? "" : $"Res={ResourceID}") +
+                (StaticEntity == null ? "" : $"Building={StaticEntity?.ToString()}") +
+                ">";
         }
     }
 }

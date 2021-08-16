@@ -5,7 +5,7 @@ using System;
 namespace Game
 {
     [Serializable]
-    public class Building : ExploringEntity
+    public class Building : StaticEntity
     {
         public byte SpecID { get; private set; }
 
@@ -17,17 +17,6 @@ namespace Game
         public Building(byte id, PlayerEntity owner): base(owner)
         {
             this.SpecID = id;
-        }
-
-        public override Tile Tile
-        {
-            get { return base.Tile; }
-            set
-            {
-                if (value.StaticEntity != this)
-                    throw new Exception("Use tile.Building = value to set a building into a tile");
-                base.Tile = value;
-            }
         }
 
         public BuildingSpec GetSpec()

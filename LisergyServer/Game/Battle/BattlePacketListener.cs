@@ -15,7 +15,6 @@ namespace BattleServer
         public GameWorld World { get; private set; }
         private Dictionary<string, TurnBattle> _battlesHappening = new Dictionary<string, TurnBattle>();
 
-
         public void Wipe()
         {
             _battlesHappening.Clear();
@@ -41,12 +40,7 @@ namespace BattleServer
             foreach (var onlinePlayer in GetOnlinePlayers(battle))
                 onlinePlayer.Send(ev);
 
-            // run battle
-            var result = battle.AutoRun.RunAllRounds();
-            var resultEvent = new BattleResultEvent(battle.ID.ToString(), result);
-
-            // For now...
-            OnBattleResult(resultEvent);
+            battle.Task = new BattleTask(World.Game, battle);
         }
 
         [EventMethod]
@@ -65,9 +59,9 @@ namespace BattleServer
                     pl.Send(ev);
                 pl.Battles.Add(ev);
                 Log.Debug($"Player {pl} completed battle {battle.ID}");
-                ev.BattleHeader.Attacker.Entity.BattleID = null;
-                ev.BattleHeader.Defender.Entity.BattleID = null;
             }
+            ev.BattleHeader.Attacker.Entity.BattleID = null;
+            ev.BattleHeader.Defender.Entity.BattleID = null;
             _battlesHappening.Remove(ev.BattleHeader.BattleID);
         }
         #region Battle Controller

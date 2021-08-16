@@ -8,7 +8,7 @@ using System.Linq;
 namespace Game.Entity
 {
     [Serializable]
-    public class Dungeon : WorldEntity, IBattleable
+    public class Dungeon : StaticEntity, IBattleable
     {
         protected List<Unit[]> _battles = new List<Unit[]>();
         private Item[] _rewards;
@@ -19,6 +19,19 @@ namespace Game.Entity
         public Dungeon(): base(Gaia)
         {
 
+        }
+
+        public bool IsComplete()
+        {
+            return !_battles.Any(battle => battle.Any(unit => unit.Stats.HP != 0));
+        }
+
+        protected override void OnBattleFinished(string battleID)
+        {
+            if (IsComplete())
+            {
+                this.Tile = null;
+            }
         }
 
         public Dungeon(params Unit[] fights): base(Gaia)

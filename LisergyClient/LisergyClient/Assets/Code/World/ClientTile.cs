@@ -88,7 +88,7 @@ namespace Assets.Code.World
             }
         }
 
-        public override WorldEntity StaticEntity 
+        public override StaticEntity StaticEntity 
         {
             get { return base.StaticEntity; }
             set
