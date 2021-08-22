@@ -20,7 +20,7 @@ namespace Game
             this.SpecID = id;
         }
 
-        public BuildingSpec GetSpec()
+        public virtual BuildingSpec GetSpec()
         {
             return StrategyGame.Specs.Buildings[SpecID];
         }

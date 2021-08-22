@@ -12,7 +12,7 @@ namespace GameData.Specs
     }
 
     [Serializable]
-    public struct ArtSpec
+    public class ArtSpec
     {
         public int Index;
         public string Name;

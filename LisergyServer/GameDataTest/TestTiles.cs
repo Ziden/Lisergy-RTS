@@ -6,7 +6,7 @@ namespace GameDataTest
 {
     public class TestTiles
     {
-        public static readonly TileSpec GRASS = new TileSpec()
+        public static readonly TileSpec GRASS = new TileSpec(0)
         {
             ID=0,
             MovementFactor = 1,
@@ -15,7 +15,7 @@ namespace GameDataTest
             })
         };
 
-        public static readonly TileSpec MOUNTAIN = new TileSpec()
+        public static readonly TileSpec MOUNTAIN = new TileSpec(1)
         {
             ID = 1,
             MovementFactor = 0,
@@ -24,7 +24,7 @@ namespace GameDataTest
             })
         };
 
-        public static readonly TileSpec WATER = new TileSpec()
+        public static readonly TileSpec WATER = new TileSpec(2)
         {
             ID = 2,
             MovementFactor = 0.5f,
@@ -33,7 +33,7 @@ namespace GameDataTest
             })
         };
 
-        public static readonly TileSpec FOREST = new TileSpec()
+        public static readonly TileSpec FOREST = new TileSpec(3)
         {
             MovementFactor = 0.8f,
             ID = 3,

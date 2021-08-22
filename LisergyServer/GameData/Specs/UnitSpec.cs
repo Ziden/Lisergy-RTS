@@ -4,7 +4,7 @@ using System;
 namespace GameData.Specs
 {
     [Serializable]
-    public struct UnitSpec
+    public class UnitSpec
     {
         public string Name;
         public ushort UnitSpecID;

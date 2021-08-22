@@ -25,17 +25,17 @@ namespace GameDataTest
 
             // BUILDINGS
             // CASTLE
-            spec.Buildings[1] = new BuildingSpec() {
-                Id = 1,
-                ModelID = 1,
-                LOS = 4,
-            };
+            spec.Buildings[1] = new BuildingSpec(
+               1,
+                1,
+               4
+            );
             // FARM
-            spec.Buildings[2] = new BuildingSpec() {
-                Id = 2,
-                ModelID = 2,
-                LOS = 4,
-            };
+            spec.Buildings[2] = new BuildingSpec(
+               2,
+                2,
+                4
+            );
             spec.InitialBuilding = spec.Buildings[1].Id;
 
             TestTiles.Generate(spec);

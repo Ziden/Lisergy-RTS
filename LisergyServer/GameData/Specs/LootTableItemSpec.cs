@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace GameData.Specs
 {
     [Serializable]
-    public struct LootTableItemSpec
+    public class LootTableItemSpec
     {
         public ushort ItemSpecID;
         public double Chance;
@@ -13,7 +13,7 @@ namespace GameData.Specs
     }
 
     [Serializable]
-    public struct LootSpec
+    public class LootSpec
     {
         public ushort SpecID;
         public List<LootTableItemSpec> LootTables;

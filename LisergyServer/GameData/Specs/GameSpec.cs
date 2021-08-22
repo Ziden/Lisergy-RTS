@@ -20,7 +20,10 @@ namespace GameData
         public Dictionary<ushort, ItemSpec> Items = new Dictionary<ushort, ItemSpec>();
 
         // Does not go to client
+        [NonSerialized]
         public Dictionary<ushort, LootSpec> Loots = new Dictionary<ushort, LootSpec>();
+
+        [NonSerialized]
         public Dictionary<ushort, DungeonSpec> Dungeons = new Dictionary<ushort, DungeonSpec>();
     }
 }
