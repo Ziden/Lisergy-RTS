@@ -7,14 +7,15 @@ namespace Game
     [Serializable]
     public class Building : StaticEntity
     {
-        public byte SpecID { get; private set; }
+        public ushort SpecID { get; private set; }
 
         public override byte GetLineOfSight()
         {
+            var spec = GetSpec();
             return GetSpec().LOS;
         }
 
-        public Building(byte id, PlayerEntity owner): base(owner)
+        public Building(ushort id, PlayerEntity owner): base(owner)
         {
             this.SpecID = id;
         }

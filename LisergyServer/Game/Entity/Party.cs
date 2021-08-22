@@ -17,7 +17,8 @@ namespace Game.Entity
         private byte _partyIndex;
         private Unit[] _units = new Unit[4] { null, null, null, null };
 
-        private Inventory _cargo = new Inventory();
+        [NonSerialized]
+        private EntityCargo _cargo;
 
         public bool IsAlive() => _units.Where(u => u != null && u.Stats.HP > 0).Any();
 
@@ -43,6 +44,7 @@ namespace Game.Entity
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)
         {
             _partyIndex = partyIndex;
+            _cargo = new EntityCargo(this);
         }
 
         public override Tile Tile

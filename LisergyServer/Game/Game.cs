@@ -4,6 +4,18 @@ using Game.Listeners;
 using Game.World;
 using GameData;
 
+/*
+
+- Ver pq spawna no lugar errado qnd perde
+- Loots qnd ganhar da dungeon
+- Construir coisa no mapa
+- Interpolar movimento ?
+
+
+*/
+  
+ 
+
 namespace Game
 {
     public class StrategyGame

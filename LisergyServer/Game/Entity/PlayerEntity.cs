@@ -16,9 +16,14 @@ namespace Game
         public HashSet<Tile> VisibleTiles = new HashSet<Tile>();
         public HashSet<Tile> OnceExplored = new HashSet<Tile>();
 
-        public Party[] Parties;
+        private Party[] Parties;
 
         public List<BattleResultEvent> Battles = new List<BattleResultEvent>();
+
+        public Party GetParty(byte partyIndex)
+        {
+            return Parties[partyIndex];
+        }
 
         public PlayerEntity()
         {
@@ -64,7 +69,7 @@ namespace Game
             Log.Debug($"{UserID} moved unit {u.SpecId} to party {newParty.PartyIndex}");
         }
 
-        public void Build(byte id, Tile t)
+        public void Build(ushort id, Tile t)
         {
             var building = new Building(id, this);
             this.Buildings.Add(building);

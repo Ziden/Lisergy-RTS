@@ -21,7 +21,7 @@ namespace Game.Listeners
         [EventMethod]
         public void RequestMovement(MoveRequestEvent ev)
         {
-            var party = ev.Sender.Parties[ev.PartyIndex];
+            var party = ev.Sender.GetParty(ev.PartyIndex);
             Log.Debug($"{ev.Sender} requesting party {ev.PartyIndex} to move {ev.Path.Count} tiles");
 
             if (!party.CanMove())

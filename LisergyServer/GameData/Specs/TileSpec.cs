@@ -5,12 +5,19 @@ using System.Collections.Generic;
 namespace GameData
 {
     [Serializable]
-    public class TileSpec
+    public struct TileSpec
     {
         public byte ID;
         public List<ArtSpec> Arts;
 
         // 1=passable, 0=impassable, 0.5% slower
-        public float MovementFactor = 1.0f;
+        public float MovementFactor;
+
+        public TileSpec(byte i)
+        {
+            this.ID = i;
+            this.Arts = new List<ArtSpec>();
+            this.MovementFactor = 1.0f;
+        }
     }
 }

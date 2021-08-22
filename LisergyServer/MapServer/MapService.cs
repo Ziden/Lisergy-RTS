@@ -28,6 +28,7 @@ namespace MapServer
             executor.RegisterCommand(new TileCommand(game));
             executor.RegisterCommand(new TaskCommand(game));
             executor.RegisterCommand(new BattlesCommand(game));
+            executor.RegisterCommand(new ServerCommand(game));
         }
 
         public override void Tick()

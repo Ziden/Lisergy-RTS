@@ -1,13 +1,10 @@
 ﻿using Game.Entity;
-using GameData.buffs;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GameData.Specs
 {
     [Serializable]
-    public class UnitSpec
+    public struct UnitSpec
     {
         public string Name;
         public ushort UnitSpecID;

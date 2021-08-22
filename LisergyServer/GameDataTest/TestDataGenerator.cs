@@ -28,11 +28,13 @@ namespace GameDataTest
             spec.Buildings[1] = new BuildingSpec() {
                 Id = 1,
                 ModelID = 1,
+                LOS = 4,
             };
             // FARM
             spec.Buildings[2] = new BuildingSpec() {
                 Id = 2,
                 ModelID = 2,
+                LOS = 4,
             };
             spec.InitialBuilding = spec.Buildings[1].Id;
 

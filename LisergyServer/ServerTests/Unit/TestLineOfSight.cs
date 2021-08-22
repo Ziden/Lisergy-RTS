@@ -21,7 +21,7 @@ namespace Tests
         public void TestLOSEvents()
         {
             Game.CreatePlayer();
-            var initialBuildingSpec = StrategyGame.Specs.GetBuildingSpec(StrategyGame.Specs.InitialBuilding);
+            var initialBuildingSpec = StrategyGame.Specs.Buildings[StrategyGame.Specs.InitialBuilding];
             var player = Game.GetTestPlayer();
             var events = Game.ReceivedEvents
                 .Where(e => e is TileVisibleEvent)
@@ -38,7 +38,7 @@ namespace Tests
             Game.CreatePlayer();
             var player = Game.GetTestPlayer();
  
-            var initialBuildingSpec = StrategyGame.Specs.GetBuildingSpec(StrategyGame.Specs.InitialBuilding);
+            var initialBuildingSpec = StrategyGame.Specs.Buildings[StrategyGame.Specs.InitialBuilding];
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile;
             var areaTiles = tile.GetAOE(initialBuildingSpec.LOS).ToList();
@@ -72,7 +72,7 @@ namespace Tests
             var player = Game.GetTestPlayer();
             player.ReceivedEvents.Clear();
 
-            var party = player.Parties.First();
+            var party = player.GetParty(0);
 
             party.Tile = party.Tile;
 
@@ -86,7 +86,7 @@ namespace Tests
             Game.CreatePlayer(0, 0); // placing new user in the corner
             var player = Game.GetTestPlayer();
             player.ReceivedEvents.Clear();
-            var party = player.Parties.First();
+            var party = player.GetParty(0);
 
             party.Tile = party.Tile.GetNeighbor(Direction.EAST);
 
@@ -105,7 +105,7 @@ namespace Tests
         {
             Game.CreatePlayer(0, 0);
             var player = Game.GetTestPlayer();
-            var party = player.Parties.First();
+            var party = player.GetParty(0);
             party.Tile = party.Tile.GetNeighbor(Direction.EAST);
             player.ReceivedEvents.Clear();
 

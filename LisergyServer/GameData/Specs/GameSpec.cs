@@ -4,33 +4,23 @@ using System.Collections.Generic;
 
 namespace GameData
 {
+    // TODO: Make all immutable
     [Serializable]
     public class GameSpec
     {
         public int Version = 1;
 
-        public byte InitialBuilding = 0;
-        public ushort InitialUnit = 1;
+        public ushort InitialBuilding = 0;
+        public ushort InitialUnit = 2;
 
-        public Dictionary<byte, BuildingSpec> Buildings = new Dictionary<byte, BuildingSpec>();
+        // Goes to Client
+        public Dictionary<ushort, BuildingSpec> Buildings = new Dictionary<ushort, BuildingSpec>();
         public Dictionary<ushort, TileSpec> Tiles = new Dictionary<ushort, TileSpec>();
         public Dictionary<ushort, UnitSpec> Units = new Dictionary<ushort, UnitSpec>();
         public Dictionary<ushort, ItemSpec> Items = new Dictionary<ushort, ItemSpec>();
 
-        public BuildingSpec GetBuildingSpec(byte id)
-        {
-            BuildingSpec spec;
-            if (!Buildings.TryGetValue(id, out spec))
-                throw new Exception($"Building spec {id} does not exists");
-            return spec;
-        }
-
-        public TileSpec GetTileSpec(ushort id)
-        {
-            TileSpec spec;
-            if (!Tiles.TryGetValue(id, out spec))
-                throw new Exception($"Tile spec {id} does not exists");
-            return spec;
-        }
+        // Does not go to client
+        [NonSerialized]
+        public Dictionary<ushort, LootSpec> Loots = new Dictionary<ushort, LootSpec>();
     }
 }

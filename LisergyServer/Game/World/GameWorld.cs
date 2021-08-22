@@ -61,13 +61,13 @@ namespace Game
             {
                 t = newbieChunk.FindTileWithId(0);
             }
-            byte castleID = StrategyGame.Specs.InitialBuilding;
+            var castleID = StrategyGame.Specs.InitialBuilding;
             player.Build(castleID, t);
 
             ushort initialUnit = StrategyGame.Specs.InitialUnit;
             var unit = player.RecruitUnit(initialUnit);
             unit.Name = "Merlin";
-            var party = player.Parties[0];
+            var party = player.GetParty(0);
             player.PlaceUnitInParty(unit, party);
             party.Tile =  t.GetNeighbor(Direction.EAST);
             Log.Debug($"Placed new player in {t}");

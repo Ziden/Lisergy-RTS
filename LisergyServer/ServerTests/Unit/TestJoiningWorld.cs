@@ -30,7 +30,7 @@ namespace Tests
             Assert.AreEqual(1, Game.World.Players.PlayerCount);
             Assert.AreEqual(clientPlayer, createdPlayer);
             Assert.AreEqual(1, createdPlayer.Buildings.Count);  // initial building
-            Assert.IsTrue(createdPlayer.Parties[0] != null);    // initial party
+            Assert.IsTrue(createdPlayer.GetParty(0) != null);    // initial party
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace Tests
 
             Assert.IsTrue(tileVisibleEvent.Count > 2);
             Assert.AreEqual(2, entityVisibleEvents.Count);
-            Assert.IsTrue(entityVisibleEvents.Where(e => e.Entity == player.Parties.First()).Any());
+            Assert.IsTrue(entityVisibleEvents.Where(e => e.Entity == player.GetParty(0)).Any());
             Assert.IsTrue(entityVisibleEvents.Where(e => e.Entity == player.Buildings.First()).Any());
         }
 
@@ -79,10 +79,9 @@ namespace Tests
             var joinEvent = new JoinWorldEvent();
             var player = new TestServerPlayer();
             Game.HandleClientEvent(player, joinEvent);
-            var party = player.Parties[0];
+            var party = player.GetParty(0);
             var unit = party.GetUnits()[0];
           
-
             Assert.That(unit.Stats.HP == unit.Stats.MaxHP);
         }
     }

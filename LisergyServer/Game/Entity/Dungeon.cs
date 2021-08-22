@@ -36,6 +36,8 @@ namespace Game.Entity
 
         public Dungeon(params Unit[] fights): base(Gaia)
         {
+            foreach (var unit in fights)
+                unit.SetSpecStats();
             this._battles.Add(fights);
         }
 

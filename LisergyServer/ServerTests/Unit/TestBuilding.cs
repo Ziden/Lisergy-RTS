@@ -1,4 +1,5 @@
 using Game;
+using Game.World;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Tests
         {
             var player = Game.GetTestPlayer();
  
-            var initialBuildingSpec = StrategyGame.Specs.GetBuildingSpec(StrategyGame.Specs.InitialBuilding);
+            var initialBuildingSpec = StrategyGame.Specs.Buildings[StrategyGame.Specs.InitialBuilding];
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile;
 
@@ -44,6 +45,8 @@ namespace Tests
             Assert.IsTrue(player.Buildings.Any(b => b.SpecID == buildingSpec.Id));
             Assert.IsTrue(tile.StaticEntity == player.Buildings.Last());
             Assert.IsTrue(((Building)tile.StaticEntity).SpecID == buildingSpec.Id);
+
+            var nei = tile.GetNeighbor(Direction.NORTH);
             Assert.That(tile.EntitiesViewing.Contains(tile.StaticEntity));
 
         }

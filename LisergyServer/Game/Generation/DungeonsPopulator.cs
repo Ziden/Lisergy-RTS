@@ -16,7 +16,7 @@ namespace Game.Generator
                 enemy.Name = "Bandit";
                 enemy.SetSpecStats();
                 dungeon.AddBattle(enemy);
-                dungeon.Rewards = new Item[] { new Item(1, 10) }; // gold 
+                dungeon.Rewards = new Item[] { new Item(15, 10) }; 
                 dungeon.Tile = place;
             }
         }

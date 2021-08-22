@@ -4,14 +4,15 @@ using System.Collections.Generic;
 namespace Game.Inventories
 {
     [Serializable]
-    public class Inventory
+    public class Inventory : Dictionary<ushort, Item>
     {
-        private Dictionary<ushort, Item> _items = new Dictionary<ushort, Item>();
-
-        [NonSerialized]
-        private readonly int _defaultMaxStack = 100;
-
-        [NonSerialized]
-        private Dictionary<ushort, int> _maxStacks = new Dictionary<ushort, int>();
+        public void AddItem(Item i)
+        {
+            Item alreadyhave;
+            if (!this.TryGetValue(i.SpecID, out alreadyhave))
+                this[i.SpecID] = i;
+            else
+                alreadyhave.Amount += i.Amount;
+        }
     }
 }

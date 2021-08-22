@@ -3,10 +3,17 @@
 namespace GameData
 {
     [Serializable]
-    public class BuildingSpec
+    public struct BuildingSpec
     {
-        public byte Id;
+        public ushort Id;
         public int ModelID;
-        public byte LOS = 4;
+        public byte LOS;
+
+        public BuildingSpec(ushort id, int model, byte los=4)
+        {
+            this.Id = id;
+            this.ModelID = model;
+            this.LOS = los;
+        }
     }
 }

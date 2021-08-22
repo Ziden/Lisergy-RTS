@@ -26,8 +26,8 @@ namespace LisergyServer.Core
             _socketServer = new Server();
             Serialization.LoadSerializers();
             _game = SetupGame();
-            RegisterCommands(_game, _commandExecutor); 
-           
+            RegisterCommands(_game, _commandExecutor);
+
         }
 
         public abstract void RegisterCommands(StrategyGame game, CommandExecutor executor);
@@ -36,6 +36,12 @@ namespace LisergyServer.Core
         public abstract void Disconnect(int connectionID);
         public abstract ServerType GetServerType();
         public abstract StrategyGame SetupGame();
+
+        public static Ticker Ticker;
+
+        private static int TICKS_PER_SECOND = 20;
+        private static int TICK_DELAY_MS = 1000 / TICKS_PER_SECOND;
+        private DateTime _lastTick = DateTime.MinValue;
 
         public void Stop()
         {
@@ -46,21 +52,23 @@ namespace LisergyServer.Core
         public void RunServer()
         {
             _socketServer.Start(_port);
-            _running = true;
-            while (_running)
+            try
             {
-                try
-                {
-                    _commandExecutor.HandleConsoleCommands();
-                    Tick();
-                    ReadSocketMessages();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    Console.WriteLine("Press any key to die");
-                }
+                Ticker = new Ticker(5);
+                Ticker.Run(RunTick);
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine("Press any key to die");
+            }
+        }
+
+        private void RunTick()
+        {
+            _commandExecutor.HandleConsoleCommands();
+            Tick();
+            ReadSocketMessages();
         }
 
         private void ReadSocketMessages()

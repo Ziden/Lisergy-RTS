@@ -7,6 +7,9 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class PartyStatsUpdateEvent : ServerEvent
     {
+        public byte PartyIndex;
+        UnitStats[] Stats;
+
         public PartyStatsUpdateEvent(Party entity)
         {
             this.PartyIndex = entity.PartyIndex;
@@ -18,9 +21,6 @@ namespace Game.Events.ServerEvents
             }
 
         }
-
-        public byte PartyIndex;
-        UnitStats[] Stats;
 
         public override string ToString()
         {

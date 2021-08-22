@@ -25,7 +25,7 @@ namespace Tests
             _game = new TestGame();
             _player = _game.GetTestPlayer();
             _path = new List<Position>();
-            _party = _player.Parties[0];
+            _party = _player.GetParty(0);
             GameScheduler.Clear();
         }
 
