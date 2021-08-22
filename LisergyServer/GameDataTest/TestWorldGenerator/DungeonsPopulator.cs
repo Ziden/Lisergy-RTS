@@ -2,6 +2,7 @@
 using Game.Entity;
 using Game.Inventories;
 using Game.World;
+using GameDataTest;
 
 namespace Game.Generator
 {
@@ -11,12 +12,7 @@ namespace Game.Generator
         {
             var place = c.FindTileWithId(0);
             if (place != null) {
-                var dungeon = new Dungeon();
-                var enemy = new Unit(0);
-                enemy.Name = "Bandit";
-                enemy.SetSpecStats();
-                dungeon.AddBattle(enemy);
-                dungeon.Rewards = new Item[] { new Item(15, 10) }; 
+                var dungeon = Dungeon.BuildFromSpec(TestDungeons.EASY.DungeonSpecID);
                 dungeon.Tile = place;
             }
         }

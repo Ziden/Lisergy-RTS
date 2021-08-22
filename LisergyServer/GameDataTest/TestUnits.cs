@@ -16,9 +16,9 @@ namespace GameDataTest
             spec.Units[id] = unitSpec;
         }
 
-        public static readonly int THIEF = 0;
-        public static readonly int KNIGHT = 1;
-        public static readonly int MAGE = 2;
+        public static readonly ushort THIEF = 0;
+        public static readonly ushort KNIGHT = 1;
+        public static readonly ushort MAGE = 2;
 
         private static UnitStats BaseStats = new UnitStats(new Dictionary<Stat, short>()
             {

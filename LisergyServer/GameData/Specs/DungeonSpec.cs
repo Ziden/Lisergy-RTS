@@ -8,7 +8,7 @@ namespace GameData.Specs
     {
         public ushort DungeonSpecID;
         public ArtSpec Art;
-        public List<BattleSpec> BattlesUnitSpecIds;
+        public List<BattleSpec> BattleSpecs;
         public ushort LootSpecID;
     }
 }

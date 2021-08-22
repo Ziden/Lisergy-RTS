@@ -16,7 +16,7 @@ namespace Game
         public HashSet<Tile> VisibleTiles = new HashSet<Tile>();
         public HashSet<Tile> OnceExplored = new HashSet<Tile>();
 
-        private Party[] Parties;
+        public Party[] Parties; // refactor to stop using in client to set clientparty instances
 
         public List<BattleResultEvent> Battles = new List<BattleResultEvent>();
 

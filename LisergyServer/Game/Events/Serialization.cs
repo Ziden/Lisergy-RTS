@@ -3,6 +3,7 @@ using Game.Battles.Actions;
 using Game.BattleTactics;
 using Game.Entity;
 using GameData;
+using GameData.Specs;
 using NetSerializer;
 using System;
 using System.Collections.Generic;

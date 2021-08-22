@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Game.Generator
 {
-    public static class Worldgen
+    public static class TestWorldGenerator
     {
         private static (int, int) MeasureWorld(int playerCount)
         {

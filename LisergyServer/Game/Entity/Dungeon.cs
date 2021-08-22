@@ -10,16 +10,15 @@ namespace Game.Entity
     [Serializable]
     public class Dungeon : StaticEntity, IBattleable
     {
+        private ushort DungeonSpecID;
+
         protected List<Unit[]> _battles = new List<Unit[]>();
         private Item[] _rewards;
 
         public List<Unit[]> Battles { get => _battles; }
         public Item[] Rewards { get => _rewards; set => _rewards = value; }
 
-        public Dungeon(): base(Gaia)
-        {
-
-        }
+        public Dungeon(): base(Gaia) {}
 
         public bool IsComplete()
         {
@@ -48,13 +47,33 @@ namespace Game.Entity
 
         public override string ToString()
         {
-            return $"<Dungeon battles={_battles.Count}>";
+            return $"<Dungeon Spec={DungeonSpecID} battles={_battles.Count}>";
         }
 
         public BattleTeam GetBattleTeam()
         {
             var units = this.Battles.First();
             return new BattleTeam(this, units);
+        }
+
+        public static Dungeon BuildFromSpec(ushort specID)
+        {
+            var dg = new Dungeon();
+            var spec = StrategyGame.Specs.Dungeons[specID];
+            foreach(var battle in spec.BattleSpecs)
+            {
+                var units = new Unit[battle.UnitSpecIDS.Length];
+                for(var i =0; i < battle.UnitSpecIDS.Length; i++)
+                {
+                    var unitSpecID = battle.UnitSpecIDS[i];
+                    var unitSpec = StrategyGame.Specs.Units[unitSpecID];
+                    units[i] = new Unit(unitSpecID);
+                    units[i].SetSpecStats();
+                }
+                dg.Battles.Add(units);      
+            }
+            dg.DungeonSpecID = specID; 
+            return dg;
         }
     }
 }
