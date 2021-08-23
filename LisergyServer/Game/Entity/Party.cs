@@ -8,6 +8,7 @@ using Game.Battles;
 using Game.Events.GameEvents;
 using Game.Battle;
 using Game.Events.ServerEvents;
+using BattleServer;
 
 namespace Game.Entity
 {
@@ -25,6 +26,8 @@ namespace Game.Entity
         public byte PartyIndex { get => _partyIndex; }
         public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(0.25);
 
+        public TurnBattle Battle { get => Tile?.Game.GetListener<BattlePacketListener>().GetBattle(BattleID); }
+
         public bool CanMove()
         {
             return !IsBattling;
@@ -37,8 +40,9 @@ namespace Game.Entity
                 this.Tile = this.Owner.GetCenter().Tile;
                 foreach (var unit in _units)
                     unit?.HealAll();
+               
             }
-            this.Owner.Send(new PartyStatsUpdateEvent(this));
+            Tile.Game.GameEvents.Call(new PartyStatusUpdateEvent(this));
         }
 
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)
@@ -57,7 +61,7 @@ namespace Game.Entity
                 {
                     if (this.Course != null && this.Course.Intent == MovementIntent.Offensive && this.Course.IsLastMovement())
                     {
-                        Tile.Game.GameEvents.RunCallbacks(new OffensiveMoveEvent()
+                        Tile.Game.GameEvents.Call(new OffensiveMoveEvent()
                         {
                             Defender = value.StaticEntity,
                             Attacker = this

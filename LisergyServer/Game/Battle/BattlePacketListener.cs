@@ -26,7 +26,7 @@ namespace BattleServer
         }
 
         [EventMethod]
-        public void OnBattleStart(BattleStartEvent ev)
+        public void OnBattleStart(BattleStartPacket ev)
         {
             Console.WriteLine($"Received {ev.Attacker} vs {ev.Defender}");
 
@@ -44,19 +44,18 @@ namespace BattleServer
         }
 
         [EventMethod]
-        public void OnBattleResult(BattleResultEvent ev)
+        public void OnBattleResult(BattleResultPacket ev)
         {
             TurnBattle battle = null;
             if (!_battlesHappening.TryGetValue(ev.BattleHeader.BattleID, out battle))
             {
-                ev.Sender.Send(new MessagePopupEvent(PopupType.BAD_INPUT, "Invalid battle"));
+                ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT, "Invalid battle"));
                 return;
             }
-            // handle battle finish
+            
             foreach (var pl in GetAllPlayers(battle))
             {
-                if (pl.Online())
-                    pl.Send(ev);
+                pl.Send(ev);
                 pl.Battles.Add(ev);
                 Log.Debug($"Player {pl} completed battle {battle.ID}");
             }

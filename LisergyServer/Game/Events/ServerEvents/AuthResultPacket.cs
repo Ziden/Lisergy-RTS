@@ -5,7 +5,9 @@ using System.Text;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class SeeChunkEvent : ServerEvent
+    public class AuthResultPacket : ServerEvent
     {
+        public bool Success;
+        public string PlayerID;
     }
 }

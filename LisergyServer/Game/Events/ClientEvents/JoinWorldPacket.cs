@@ -3,7 +3,7 @@
 namespace Game.Events
 {
     [Serializable]
-    public class JoinWorldEvent : ClientEvent
+    public class JoinWorldPacket : ClientEvent
     {
 
     }

@@ -15,7 +15,7 @@ namespace Game.Battles
         internal SortedSet<BattleUnit> _actionQueue = new SortedSet<BattleUnit>();
         internal TurnBattleResult Result = new TurnBattleResult();
 
-        public BattleStartEvent StartEvent;
+        public BattleStartPacket StartEvent;
 
         public Guid ID { get; private set; }
         public BattleTeam Attacker { get; private set; }

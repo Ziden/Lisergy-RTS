@@ -124,10 +124,10 @@ namespace Tests
             var battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
             var result = battle.AutoRun.RunAllRounds();
 
-            var ev = new BattleResultEvent(battle.ID.ToString(), result);
+            var ev = new BattleResultPacket(battle.ID.ToString(), result);
 
             var bytes = Serialization.FromEvent(ev);
-            ev = Serialization.ToEvent<BattleResultEvent>(bytes);
+            ev = Serialization.ToEvent<BattleResultPacket>(bytes);
 
             Assert.AreEqual(ev.BattleHeader.Attacker.Units.First().UnitID, result.Attacker.Units.First().UnitID);
         }

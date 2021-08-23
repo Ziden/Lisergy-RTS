@@ -1,5 +1,6 @@
 ﻿using Game.Entity;
 using Game.Events;
+using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using GameData;
 using System;
@@ -58,10 +59,10 @@ namespace Game
         {
             _entitiesViewing.Add(explorer);
             if (_playersViewing.Add(explorer.Owner))
-            {
+            {             
                 explorer.Owner.OnceExplored.Add(this);
                 explorer.Owner.VisibleTiles.Add(this);
-                SendTileInformation(explorer.Owner, explorer);
+                Game.GameEvents.Call(new PlayerVisibilityChangeEvent(explorer, this, true));
             }
         }
 
@@ -71,20 +72,11 @@ namespace Game
             if (!_entitiesViewing.Any(e => e.Owner == unexplorer.Owner))
             {
                 unexplorer.Owner.VisibleTiles.Remove(this);
-                _playersViewing.Remove(unexplorer.Owner);
+                if(_playersViewing.Remove(unexplorer.Owner))
+                {
+                    Game.GameEvents.Call(new PlayerVisibilityChangeEvent(unexplorer, this, false));
+                }
             }
-        }
-
-        public void SendTileInformation(PlayerEntity player, ExploringEntity viewer)
-        {
-            player.Send(new TileVisibleEvent(this));
-            // send movable entities in tile
-            foreach (var movingEntity in MovingEntities)
-                if (movingEntity != viewer)
-                    player.Send(new EntityVisibleEvent(movingEntity));
-            // send static entity in tile
-            if (StaticEntity != null && viewer != StaticEntity)
-                player.Send(new EntityVisibleEvent(StaticEntity));
         }
 
         public virtual bool IsVisibleTo(PlayerEntity player)

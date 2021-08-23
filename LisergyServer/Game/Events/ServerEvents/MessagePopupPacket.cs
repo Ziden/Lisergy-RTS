@@ -8,9 +8,9 @@ namespace Game.Events.ServerEvents
     }
 
     [Serializable]
-    public class MessagePopupEvent : ServerEvent
+    public class MessagePopupPacket : ServerEvent
     {
-        public MessagePopupEvent(PopupType type, params string [] args)
+        public MessagePopupPacket(PopupType type, params string [] args)
         {
             Type = type;
             Args = args;

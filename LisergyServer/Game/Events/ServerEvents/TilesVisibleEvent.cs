@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class TileVisibleEvent : ServerEvent
+    public class TileVisiblePacket : ServerEvent
     {
-        public TileVisibleEvent(Tile tile)
+        public TileVisiblePacket(Tile tile)
         {
             this.Tile = tile;
         }

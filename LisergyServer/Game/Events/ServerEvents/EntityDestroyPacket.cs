@@ -6,9 +6,9 @@ using System.Text;
 namespace Game.Events
 {
     [Serializable]
-    public class EntityDestroyEvent : ServerEvent
+    public class EntityDestroyPacket : ServerEvent
     {
-        public EntityDestroyEvent(WorldEntity entity)
+        public EntityDestroyPacket(WorldEntity entity)
         {
             this.OwnerID = entity.OwnerID;
             this.ID = entity.Id;

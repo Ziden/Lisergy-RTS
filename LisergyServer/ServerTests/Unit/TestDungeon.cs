@@ -105,7 +105,7 @@ namespace Tests
             Assert.AreEqual(_dungeon.Tile, null);
             Assert.AreEqual(dungeonTile.StaticEntity, null);
             // Received another move event to remove the dungeon
-            Assert.AreEqual(_player.ReceivedEventsOfType<EntityDestroyEvent>().Count, 1);
+            Assert.AreEqual(_player.ReceivedEventsOfType<EntityDestroyPacket>().Count, 1);
         }
 
         [Test]

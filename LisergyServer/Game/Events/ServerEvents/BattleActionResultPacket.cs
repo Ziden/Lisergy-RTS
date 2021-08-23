@@ -7,7 +7,7 @@ using System.Text;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class BattleActionResultEvent : ClientEvent
+    public class BattleActionResultPacket : ClientEvent
     {
         public ActionResult ActionResult;
     }

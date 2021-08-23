@@ -14,10 +14,10 @@ namespace Game.Events.Bus
         {
             var ev = Serialization.ToEventRaw(eventBytes);
             ev.Sender = sender;
-            RunCallbacks(ev);
+            Call(ev);
         }
 
-        public void RunCallbacks(BaseEvent ev)
+        public void Call(BaseEvent ev)
         {
             if (!_registeredListeners.ContainsKey(ev.GetType()))
                 if (!_registeredListeners.ContainsKey(ev.GetType().BaseType))

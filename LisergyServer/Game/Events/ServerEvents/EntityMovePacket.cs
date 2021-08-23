@@ -6,9 +6,9 @@ using System.Text;
 namespace Game.Events
 {
     [Serializable]
-    public class EntityMoveEvent : ServerEvent
+    public class EntityMovePacket : ServerEvent
     {
-        public EntityMoveEvent(MovableWorldEntity entity, Tile tile)
+        public EntityMovePacket(MovableWorldEntity entity, Tile tile)
         {
             this.OwnerID = entity.OwnerID;
             this.ID = entity.Id;

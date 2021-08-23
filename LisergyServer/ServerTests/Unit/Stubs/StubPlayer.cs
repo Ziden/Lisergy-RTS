@@ -34,9 +34,9 @@ namespace ServerTests
         public void SendMoveRequest(Party p, Tile t, MovementIntent intent)
         {
             var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new Position(pa.X, pa.Y)).ToList();
-            var ev = new MoveRequestEvent() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };
+            var ev = new MoveRequestPacket() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };
             ev.Sender = this;
-            t.Chunk.Map.World.Game.NetworkEvents.RunCallbacks(ev);
+            t.Chunk.Map.World.Game.NetworkEvents.Call(ev);
         }
 
         public List<T> ReceivedEventsOfType<T>() where T : ServerEvent

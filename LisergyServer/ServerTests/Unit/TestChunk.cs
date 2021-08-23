@@ -18,8 +18,8 @@ namespace Tests
             var player = game.GetTestPlayer();
 
             var events = game.ReceivedEvents
-                .Where(e => e is TileVisibleEvent)
-                .Select(e => (TileVisibleEvent)e)
+                .Where(e => e is TileVisiblePacket)
+                .Select(e => (TileVisiblePacket)e)
                 .ToList();
         }
     }

@@ -6,13 +6,13 @@ using System;
 namespace Game.Events
 {
     [Serializable]
-    public class BattleResultEvent : ServerEvent
+    public class BattleResultPacket : ServerEvent
     {
         public BattleHeader BattleHeader;
 
         public BattleTurnEvent[] Turns;
 
-        public BattleResultEvent(string battleID, TurnBattleResult result)
+        public BattleResultPacket(string battleID, TurnBattleResult result)
         {
             BattleHeader = new BattleHeader();
             BattleHeader.BattleID = battleID;

@@ -37,9 +37,9 @@ namespace Tests
 
         private void SendMoveRequest()
         {
-            var ev = new MoveRequestEvent() { Path = _path, PartyIndex = _party.PartyIndex };
+            var ev = new MoveRequestPacket() { Path = _path, PartyIndex = _party.PartyIndex };
             ev.Sender = _player;
-            _game.NetworkEvents.RunCallbacks(ev);
+            _game.NetworkEvents.Call(ev);
         }
 
         [Test]
@@ -81,13 +81,13 @@ namespace Tests
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
 
-            var moveEventsb = _player.ReceivedEventsOfType<EntityMoveEvent>();
+            var moveEventsb = _player.ReceivedEventsOfType<EntityMovePacket>();
 
             SendMoveRequest();
             GameScheduler.Tick(GameScheduler.Now + _party.Course.Delay);
 
-            var moveEvents = _player.ReceivedEventsOfType<EntityMoveEvent>();
-            var tileDiscovery = _player.ReceivedEventsOfType<TileVisibleEvent>();
+            var moveEvents = _player.ReceivedEventsOfType<EntityMovePacket>();
+            var tileDiscovery = _player.ReceivedEventsOfType<TileVisiblePacket>();
             // should have received movement events
             Assert.AreEqual(1, moveEvents.Count);
             // should have explored some tiles
@@ -159,7 +159,7 @@ namespace Tests
             GameScheduler.Tick(date);
             Assert.AreEqual(next3, _party.Tile);
 
-            var moveEvents = _player.ReceivedEventsOfType<EntityMoveEvent>();
+            var moveEvents = _player.ReceivedEventsOfType<EntityMovePacket>();
             Assert.AreEqual(3, moveEvents.Count);
         }
     }

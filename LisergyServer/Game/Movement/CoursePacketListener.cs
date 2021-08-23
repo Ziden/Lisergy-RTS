@@ -19,20 +19,20 @@ namespace Game.Listeners
         }
 
         [EventMethod]
-        public void RequestMovement(MoveRequestEvent ev)
+        public void RequestMovement(MoveRequestPacket ev)
         {
             var party = ev.Sender.GetParty(ev.PartyIndex);
             Log.Debug($"{ev.Sender} requesting party {ev.PartyIndex} to move {ev.Path.Count} tiles");
 
             if (!party.CanMove())
             {
-                ev.Sender.Send(new MessagePopupEvent(PopupType.BAD_INPUT));
+                ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
                 return;
             }
 
             var course = StartCourse(party, ev.Path, ev.Intent);
             if(course == null)
-                ev.Sender.Send(new MessagePopupEvent(PopupType.BAD_INPUT));
+                ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
         }
 
         private CourseTask StartCourse(Party party, List<Position> sentPath, MovementIntent intent)

@@ -33,8 +33,8 @@ namespace Tests
         public void TestBasicSerialization()
         {
             var game = new TestGame();
-            var serialized = Serialization.FromEventRaw(new GameSpecResponse(game));
-            var deserialized = (GameSpecResponse)Serialization.ToEventRaw(serialized);
+            var serialized = Serialization.FromEventRaw(new GameSpecPacket(game));
+            var deserialized = (GameSpecPacket)Serialization.ToEventRaw(serialized);
 
             var asd = 123;
         }

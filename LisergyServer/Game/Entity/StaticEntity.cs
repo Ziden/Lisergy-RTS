@@ -17,15 +17,16 @@ namespace Game
         {
             get => base.Tile; set
             {
-                if (value != null)
-                    value.StaticEntity = this;
-                else if(base.Tile != null)
+                var newTile = value;
+                var oldTile = base.Tile;
+                base.Tile = newTile;
+
+                if (newTile != null)
+                    newTile.StaticEntity = this;
+                else if(oldTile != null)
                 {
-                    base.Tile.StaticEntity = null;
-                    foreach (var viewer in base.Tile.PlayersViewing)
-                        viewer.Send(new EntityDestroyEvent(this));
+                    oldTile.StaticEntity = null;
                 }
-                base.Tile = value;
             }
         }
 

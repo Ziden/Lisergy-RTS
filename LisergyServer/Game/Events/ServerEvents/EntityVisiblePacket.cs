@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class EntityVisibleEvent : ServerEvent
+    public class EntityVisiblePacket : ServerEvent
     {
-        public EntityVisibleEvent(WorldEntity entity)
+        public EntityVisiblePacket(WorldEntity entity)
         {
             this.Entity = entity;
         }

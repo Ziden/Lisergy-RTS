@@ -32,13 +32,13 @@ namespace Tests
         public void TestSimpleSerialization()
         {
             Serialization.LoadSerializers();
-            var authEvent = new AuthEvent()
+            var authEvent = new AuthPacket()
             {
                 Login = "wololo",
                 Password = "walala"
             };
-            var bytes = Serialization.FromEvent<AuthEvent>(authEvent);
-            var event2 = Serialization.ToEvent<AuthEvent>(bytes);
+            var bytes = Serialization.FromEvent<AuthPacket>(authEvent);
+            var event2 = Serialization.ToEvent<AuthPacket>(bytes);
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);
@@ -72,10 +72,10 @@ namespace Tests
             var building = player.Buildings.First();
             var tile = unit.Party.Tile;
 
-            var visibleEvent = game.ReceivedEvents.Where(e => e is EntityVisibleEvent).FirstOrDefault() as EntityVisibleEvent;
+            var visibleEvent = game.ReceivedEvents.Where(e => e is EntityVisiblePacket).FirstOrDefault() as EntityVisiblePacket;
 
-            var serialized = Serialization.FromEvent<EntityVisibleEvent>(visibleEvent);
-            var unserialized = Serialization.ToEvent<EntityVisibleEvent>(serialized);
+            var serialized = Serialization.FromEvent<EntityVisiblePacket>(visibleEvent);
+            var unserialized = Serialization.ToEvent<EntityVisiblePacket>(serialized);
 
             Assert.AreEqual(visibleEvent.Entity.Id, unserialized.Entity.Id);
         }
@@ -84,13 +84,13 @@ namespace Tests
         public void TestRawSerialization()
         {
             Serialization.LoadSerializers();
-            var authEvent = new AuthEvent()
+            var authEvent = new AuthPacket()
             {
                 Login = "wololo",
                 Password = "walala"
             };
             var bytes = Serialization.FromEventRaw(authEvent);
-            var event2 = (AuthEvent) Serialization.ToEventRaw(bytes);
+            var event2 = (AuthPacket) Serialization.ToEventRaw(bytes);
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);

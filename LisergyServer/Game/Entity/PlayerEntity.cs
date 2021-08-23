@@ -18,7 +18,7 @@ namespace Game
 
         public Party[] Parties; // refactor to stop using in client to set clientparty instances
 
-        public List<BattleResultEvent> Battles = new List<BattleResultEvent>();
+        public List<BattleResultPacket> Battles = new List<BattleResultPacket>();
 
         public Party GetParty(byte partyIndex)
         {
@@ -42,13 +42,6 @@ namespace Game
         public Building GetCenter()
         {
             return Buildings.First(b => b.SpecID == StrategyGame.Specs.InitialBuilding);
-        }
-
-        public void SendAllUserData()
-        {
-            Log.Debug($"Sync {VisibleTiles.Count} visible tiles to "+this);
-            foreach (var tile in VisibleTiles)
-                tile.SendTileInformation(this, null);
         }
 
         public Unit RecruitUnit(ushort unitSpecId)

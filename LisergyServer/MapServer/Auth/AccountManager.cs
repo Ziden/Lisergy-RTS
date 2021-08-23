@@ -44,7 +44,7 @@ namespace LisergyServer.Core
             Players.Remove(connectionId);
         }
 
-        public ServerPlayer Authenticate(AuthEvent ev)
+        public ServerPlayer Authenticate(AuthPacket ev)
         {
             Log.Debug($"Authenticating account {ev.Login}");
             Account acc;
@@ -60,14 +60,14 @@ namespace LisergyServer.Core
                 acc.Player = new ServerPlayer(_server);
                 acc.Player.ConnectionID = ev.ConnectionID;
                 Players[ev.ConnectionID] = acc.Player;
-                acc.Player.Send(new AuthResultEvent()
+                acc.Player.Send(new AuthResultPacket()
                 {
                     PlayerID = acc.Player.UserID,
                     Success = true
                 });
                 if (ev.SpecVersion < StrategyGame.Specs.Version)
                 {
-                    acc.Player.Send(new GameSpecResponse(_game));
+                    acc.Player.Send(new GameSpecPacket(_game));
              
                 }
                 return acc.Player;
@@ -77,7 +77,7 @@ namespace LisergyServer.Core
                 if (acc.Password != ev.Password)
                 {
                     Log.Error($"Account {ev.Login} entered bad password");
-                    acc.Player.Send(new AuthResultEvent()
+                    acc.Player.Send(new AuthResultPacket()
                     {
                         PlayerID = acc.Player.UserID,
                         Success = false
@@ -89,9 +89,9 @@ namespace LisergyServer.Core
                 Log.Info($"Account {ev.Login} connected");
                 if (ev.SpecVersion < StrategyGame.Specs.Version)
                 {
-                    acc.Player.Send(new GameSpecResponse(_game));
+                    acc.Player.Send(new GameSpecPacket(_game));
                 }
-                acc.Player.Send(new AuthResultEvent()
+                acc.Player.Send(new AuthResultPacket()
                 {
                     PlayerID = acc.Player.UserID,
                     Success = true

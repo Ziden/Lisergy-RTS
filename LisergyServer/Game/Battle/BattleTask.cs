@@ -23,10 +23,10 @@ namespace Game.Battles
             Repeat = false;
             _battle.Task = null;
             var result = _battle.AutoRun.RunAllRounds();
-            var resultEvent = new BattleResultEvent(_battle.ID.ToString(), result);
+            var resultEvent = new BattleResultPacket(_battle.ID.ToString(), result);
             // for now just run callbacks
             // TODO: place on a message queue
-            _game.NetworkEvents.RunCallbacks(resultEvent);
+            _game.NetworkEvents.Call(resultEvent);
         }
 
         public override string ToString()

@@ -3,7 +3,7 @@
 namespace Game.Events
 {
     [Serializable]
-    public class AuthEvent : ClientEvent
+    public class AuthPacket : ClientEvent
     {
         public string Login { get; set; }
         public string Password;

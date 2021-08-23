@@ -5,7 +5,7 @@ using System;
 namespace Game.Events
 {
     [Serializable]
-    public class BattleStartEvent : ServerEvent
+    public class BattleStartPacket : ServerEvent
     {
         public int X;
         public int Y;

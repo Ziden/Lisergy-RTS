@@ -4,13 +4,13 @@ using System;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class GameSpecResponse : ServerEvent
+    public class GameSpecPacket : ServerEvent
     {
         public GameSpec Spec;
         public int WorldX;
         public int WorldY;
 
-        public GameSpecResponse(StrategyGame game)
+        public GameSpecPacket(StrategyGame game)
         {
             this.Spec = game.GameSpec;
             this.WorldX = game.World.SizeX;

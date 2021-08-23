@@ -43,7 +43,7 @@ namespace Game.Entity
                         allViewers.UnionWith(value.PlayersViewing);
                 }
                     foreach (var viewer in allViewers)
-                        viewer.Send(new EntityMoveEvent(this, value));
+                        viewer.Send(new EntityMovePacket(this, value));
                 
                 value.MovingEntities.Add(this);
                 base.Tile = value;

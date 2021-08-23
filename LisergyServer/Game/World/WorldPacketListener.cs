@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Events;
 using Game.Events.Bus;
+using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using System.Linq;
 
@@ -17,13 +18,13 @@ namespace Game.Listeners
         }
 
         [EventMethod]
-        public void JoinWorld(JoinWorldEvent ev)
+        public void JoinWorld(JoinWorldPacket ev)
         {
             PlayerEntity player = null;
             if (_world.Players.GetPlayer(ev.Sender.UserID, out player))
             {
                 Log.Debug($"Existing player {player.UserID} joined");
-                player.SendAllUserData();
+                _world.Game.GameEvents.Call(new PlayerJoinedEvent(player));
             }
             else
             {
@@ -32,6 +33,5 @@ namespace Game.Listeners
                 Log.Debug($"New player {player.UserID} joined the world");
             }
         }
-
     }
 }

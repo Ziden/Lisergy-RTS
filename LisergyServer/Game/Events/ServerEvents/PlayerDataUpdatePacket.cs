@@ -14,7 +14,7 @@ namespace Game.Events
 
 
     [Serializable]
-    public class PlayerDataUpdateEvent : ServerEvent
+    public class PlayerDataUpdatePacket : ServerEvent
     {
         public UpdateType Type;
         public BattleHeader[] Battles;

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Game.Events.Bus
 {
-    public class IEventListener
+    public interface IEventListener
     {
     }
 }

@@ -44,14 +44,14 @@ namespace MapServer
         protected override ServerPlayer Auth(BaseEvent ev, int connectionID)
         {
             ServerPlayer caller;
-            if (!(ev is AuthEvent))
+            if (!(ev is AuthPacket))
             {
                 caller = _accountManager.GetPlayer(connectionID);
             }
             else
             {
                 ev.ConnectionID = connectionID;
-                caller = _accountManager.Authenticate((AuthEvent)ev);
+                caller = _accountManager.Authenticate((AuthPacket)ev);
             }
             if (caller == null)
             {

@@ -11,7 +11,6 @@ namespace Game
 
         public override byte GetLineOfSight()
         {
-            var spec = GetSpec();
             return GetSpec().LOS;
         }
 

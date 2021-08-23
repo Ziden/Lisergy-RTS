@@ -1,4 +1,6 @@
 ﻿using Game.Entity;
+using Game.Events;
+using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using System;
 
@@ -52,14 +54,16 @@ namespace Game
         {
             get => _tile; set
             {
-                if (_tile == null && value != null)
+                if (value != null)
                 {
-                    foreach (var viewer in value.EntitiesViewing)
+                    value.Game.GameEvents.Call(new EntityMoveEvent()
                     {
-                        Log.Info($"New entity placed {this}, sending visibility");
-                        //viewer.Owner.Send(new EntityVisibleEvent(this));
-                    }
-                }    
+                        Entity = this,
+                        NewTile = value,
+                        OldTile = _tile
+                    });
+                }
+                var oldTile = _tile;
                 _tile = value;
                 if(_tile != null)
                 {
@@ -69,6 +73,11 @@ namespace Game
                 {
                     _x = 0;
                     _y = 0;
+                    if(oldTile != null)
+                    {
+                        foreach (var viewer in oldTile.PlayersViewing)
+                            viewer.Send(new EntityDestroyPacket(this));
+                    }
                 }
                 Log.Debug($"{this} placed in {value}");
             }

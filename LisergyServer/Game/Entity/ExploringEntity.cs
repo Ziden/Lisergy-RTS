@@ -1,4 +1,5 @@
-﻿using Game.Events.ServerEvents;
+﻿using Game.Events.GameEvents;
+using Game.Events.ServerEvents;
 using Game.World;
 using System;
 using System.Collections.Generic;
@@ -21,41 +22,24 @@ namespace Game.Entity
                 var los = GetLineOfSight();
                 if(los > 0)
                 {
-                    var previousTile = base.Tile;
-                    HashSet<WorldEntity> oldViewers = null;
-                    if (previousTile != null)
-                    {
-                        oldViewers = previousTile.EntitiesViewing;
-                        foreach (var tile in previousTile.GetAOE(los))
-                            tile.SetUnseenBy(this);
-                    }
+                    HashSet<Tile> oldLos = new HashSet<Tile>();
+                    if (base.Tile != null)
+                        oldLos.UnionWith(base.Tile.GetAOE(los));
 
-                    Log.Debug($"Entity {this} exploring {los}x{los} on {value}");
-                    foreach (var tile in value.GetAOE(los))
+                    HashSet<Tile> newLos = new HashSet<Tile>();
+                    if (value != null)
+                        newLos.UnionWith(value.GetAOE(los).ToList());
+
+                    foreach (var tile in newLos.Except(oldLos))
                         tile.SetSeenBy(this);
 
-                    if (value != previousTile)
-                        SendEntityVisibilityPackets(value, previousTile);
+                    foreach (var tile in oldLos.Except(newLos))
+                        tile.SetUnseenBy(this);
                 }
                 base.Tile = value;
             }
         }
 
-        protected virtual void SendEntityVisibilityPackets(Tile newTile, Tile previousTile)
-        {
-            HashSet<WorldEntity> oldViewers = null;
-            if (previousTile != null)
-                oldViewers = previousTile.EntitiesViewing;
-
-            var newViewers = new HashSet<WorldEntity>(newTile.EntitiesViewing);
-            if (oldViewers != null)
-                newViewers.ExceptWith(oldViewers);
-
-            HashSet<PlayerEntity> playerViewers = new HashSet<PlayerEntity>(newViewers.Select(v => v.Owner));
-            var ev = new EntityVisibleEvent(this);
-            foreach (var viewer in newTile.EntitiesViewing)
-                if (playerViewers.Remove(viewer.Owner))
-                    viewer.Owner.Send(ev);   
-        }
+       
     }
 }
