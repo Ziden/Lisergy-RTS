@@ -1,4 +1,5 @@
-﻿using Game.Entity;
+﻿using Game.Battle;
+using Game.Entity;
 using Game.Events;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
@@ -29,26 +30,13 @@ namespace Game
 
         protected string _battleID;
 
-        public virtual string BattleID { get => _battleID; set { 
-             
-                if(value != null)
-                {
-                    _lastBattleTime = DateTime.Now;
-                } else if(value == null && _battleID != null)
-                {
-                    OnBattleFinished(_battleID);
-                }
+        public virtual string BattleID { get => _battleID; 
+            set { 
                 _battleID = value;
             } 
         }
 
-        [NonSerialized]
-        public DateTime _lastBattleTime = DateTime.MinValue;
-
         public bool IsBattling => _battleID != null;
-
-        // Todo Move to IBattleable
-        protected virtual void OnBattleFinished(string battleID) {}
 
         public virtual Tile Tile
         {

@@ -25,7 +25,7 @@ namespace Game.Entity
             return !_battles.Any(battle => battle.Any(unit => unit.Stats.HP != 0));
         }
 
-        protected override void OnBattleFinished(string battleID)
+        public void OnBattleComplete(string battleID)
         {
             if (IsComplete())
             {

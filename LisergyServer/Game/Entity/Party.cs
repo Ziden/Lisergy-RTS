@@ -33,14 +33,14 @@ namespace Game.Entity
             return !IsBattling;
         }
 
-        protected override void OnBattleFinished(string battleID)
+        public void OnBattleComplete(string battleID)
         {
-            if(!IsAlive())
+            if (!IsAlive())
             {
                 this.Tile = this.Owner.GetCenter().Tile;
                 foreach (var unit in _units)
                     unit?.HealAll();
-               
+
             }
             Tile.Game.GameEvents.Call(new PartyStatusUpdateEvent(this));
         }

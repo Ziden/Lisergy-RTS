@@ -9,5 +9,7 @@ namespace Game.Battle
     public interface IBattleable
     {
         BattleTeam GetBattleTeam();
+
+        void OnBattleComplete(string battleID);
     }
 }
