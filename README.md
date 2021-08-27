@@ -2,8 +2,6 @@
 
 [![LisergyPipeline](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml)
 
-This is a hobbie project. 
-
 The main idea of the game is a easily moddable mmo strategy game that runs on a persistent world, where it really feels more of a strategy game rather then a puzzle game, where positioning, predicting and reacting to situations are the key features of the gameplay.
 
 With turn based battles simillar to classical RPG's together with some twists where player can also setup the IA of their units via basic programming commands simillar to the Gambit system from FF12, combat should have its own little mix of games like civilization, age of empires and final fantasy.
