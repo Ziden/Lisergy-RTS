@@ -33,18 +33,6 @@ namespace Game.Entity
             {
                 if (base.Tile != null)
                     base.Tile.MovingEntities.Remove(this);
-
-                // changed tile
-                var allViewers = new HashSet<PlayerEntity>();
-                if (base.Tile != value && base.Tile != null)
-                {
-                    allViewers.UnionWith(base.Tile.PlayersViewing);
-                    if(value != null)
-                        allViewers.UnionWith(value.PlayersViewing);
-                }
-                    foreach (var viewer in allViewers)
-                        viewer.Send(new EntityMovePacket(this, value));
-                
                 value.MovingEntities.Add(this);
                 base.Tile = value;
             }

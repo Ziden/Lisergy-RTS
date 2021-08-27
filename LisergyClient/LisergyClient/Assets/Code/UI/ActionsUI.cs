@@ -128,7 +128,7 @@ namespace Assets.Code.UI
             var path = map.FindPath(party.Tile, selectedTile);
             var tilePath = path.Select(node => (ClientTile)map.GetTile(node.X, node.Y)).ToList();
             ClientEvents.StartMovementRequest(party, tilePath);
-            MainBehaviour.Networking.Send(new MoveRequestEvent()
+            MainBehaviour.Networking.Send(new MoveRequestPacket()
             {
                 PartyIndex = party.PartyIndex,
                 Path = path.Select(p => new Game.World.Position(p.X, p.Y)).ToList(),

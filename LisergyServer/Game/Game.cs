@@ -42,12 +42,12 @@ namespace Game
         {
             World = world;
             Specs = specs;
+            NetworkEvents = new EventBus();
+            GameEvents = new EventBus();
         }
 
         public virtual void RegisterEventListeners()
         {
-            NetworkEvents = new EventBus();
-            GameEvents = new EventBus();
             NetworkEvents.RegisterListener(new BattlePacketListener(World));
             NetworkEvents.RegisterListener(new WorldPacketListener(World));
             NetworkEvents.RegisterListener(new CoursePacketListener(World));

@@ -13,8 +13,9 @@ namespace Assets.Code
         private ClientStrategyGame _game;
 
         [EventMethod]
-        public void BattleFinish(BattleResultEvent ev)
+        public void BattleFinish(BattleResultPacket ev)
         {
+            Log.Debug("Received battle finish");
             MainBehaviour.Player.Battles.Add(ev);
 
             var pl = MainBehaviour.Player;
@@ -25,7 +26,7 @@ namespace Assets.Code
             if (def != null && !Gaia.IsGaia(def.UserID))
             {
                 var partyID = ev.BattleHeader.Defender.Units[0].UnitReference.PartyId;
-                var party = def.Parties[partyID];
+                var party = def.GetParty(partyID);
                 party.BattleID = null;
             }
 
@@ -38,12 +39,12 @@ namespace Assets.Code
 
             Log.Info("Battle result event");
             UIManager.BattleNotifications.Show(ev.BattleHeader);
-
         }
 
         [EventMethod]
-        public void BattleStart(BattleStartEvent ev)
+        public void BattleStart(BattleStartPacket ev)
         {
+            Log.Debug("Received battle startr");
             var pl = MainBehaviour.Player;
             var w = _game.GetWorld();
             var def = w.GetOrCreateClientPlayer(ev.Defender.OwnerID);
@@ -68,7 +69,7 @@ namespace Assets.Code
         }
 
         [EventMethod]
-        public void Message(MessagePopupEvent ev)
+        public void Message(MessagePopupPacket ev)
         {
             // TODO: Message factory
             if (ev.Type == PopupType.BAD_INPUT)
@@ -76,8 +77,9 @@ namespace Assets.Code
         }
 
         [EventMethod]
-        public void EntityDestroy(EntityDestroyEvent ev)
+        public void EntityDestroy(EntityDestroyPacket ev)
         {
+            Log.Debug("Received entity destroy");
             var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
             var knownEntity = owner.GetKnownEntity(ev.ID);
             if (knownEntity == null)
@@ -88,21 +90,15 @@ namespace Assets.Code
             if (knownEntity.Tile.StaticEntity == knownEntity)
                 knownEntity.Tile.StaticEntity = null;
 
-            if(knownEntity is MovableWorldEntity)
-            {
+            if (knownEntity is MovableWorldEntity)
                 knownEntity.Tile.MovingEntities.Remove(knownEntity as MovableWorldEntity);
-
-            }
-
-            else if (knownEntity is MovableWorldEntity && knownEntity.Tile.MovingEntities.Contains((MovableWorldEntity)knownEntity))
-               
             knownEntity.Tile = null;
-
         }
 
         [EventMethod]
-        public void EntityMove(EntityMoveEvent ev)
+        public void EntityMove(EntityMovePacket ev)
         {
+            Log.Debug("Received entity move");
             var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
             var knownEntity = owner.GetKnownEntity(ev.ID);
             if (knownEntity == null)
@@ -113,8 +109,9 @@ namespace Assets.Code
         }
 
         [EventMethod]
-        public void EntityVisible(EntityVisibleEvent ev)
+        public void EntityVisible(EntityVisiblePacket ev)
         {
+            Log.Debug("Received entity visible");
             var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Entity.OwnerID);
             var tile = (ClientTile)_game.GetWorld().GetTile(ev.Entity.X, ev.Entity.Y);
             var clientEntity = EntityFactory.InstantiateClientEntity(ev.Entity, owner, tile);
@@ -123,8 +120,9 @@ namespace Assets.Code
         }
 
         [EventMethod]
-        public void ReceiveTile(TileVisibleEvent ev)
+        public void ReceiveTile(TileVisiblePacket ev)
         {
+            Log.Debug("Received tile");
             var newTile = ev.Tile;
             var tile = (ClientTile)_game.GetWorld().GetTile(newTile.X, newTile.Y);
             tile.TileId = ev.Tile.TileId;
@@ -133,8 +131,9 @@ namespace Assets.Code
         }
 
         [EventMethod]
-        public void ReceiveSpecs(GameSpecResponse ev)
+        public void ReceiveSpecs(GameSpecPacket ev)
         {
+            Log.Debug("Received specs");
             if (_game != null)
                 throw new System.Exception("Received to register specs twice");
             var world = new ClientWorld(ev);

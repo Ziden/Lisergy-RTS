@@ -139,7 +139,7 @@ public class BattleBehaviour : MonoBehaviour
         return TimeSpan.FromSeconds(10);
     }
 
-    public void OnBattleAction(BattleActionEvent ev)
+    public void OnBattleAction(BattleActionPacket ev)
     {
         if (ev.BattleID != this.Battle.ID.ToString())
         {
@@ -165,7 +165,7 @@ public class BattleBehaviour : MonoBehaviour
         Log.Debug($"[Battle] {ActingUnit} waiting for action to handle it in {GetNextActionDelaySeconds()} seconds");
     }
 
-    public void StartBattle(BattleStartEvent ev)
+    public void StartBattle(BattleStartPacket ev)
     {
         Actions.Clear();
         this.gameObject.SetActive(true);

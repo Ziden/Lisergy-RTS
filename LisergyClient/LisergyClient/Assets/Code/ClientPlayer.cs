@@ -8,7 +8,7 @@ namespace Assets.Code
 {
     public class ClientPlayer : PlayerEntity
     {
-        public Dictionary<string, BattleStartEvent> BattlesStarts = new Dictionary<string, BattleStartEvent>();
+        public Dictionary<string, BattleStartPacket> BattlesStarts = new Dictionary<string, BattleStartPacket>();
 
         public ClientPlayer() : base()
         {

@@ -24,7 +24,7 @@ public class LoginCanvas : IEventListener
     }
 
     [EventMethod]
-    public void OnPlayerAuth(AuthResultEvent ev)
+    public void OnPlayerAuth(AuthResultPacket ev)
     {
         if(ev.Success)
         {
@@ -32,7 +32,7 @@ public class LoginCanvas : IEventListener
             {
                 UserID = ev.PlayerID
             };
-            MainBehaviour.Networking.Send(new JoinWorldEvent());
+            MainBehaviour.Networking.Send(new JoinWorldPacket());
             ClientEvents.PlayerLogin(player);
             GameObject.SetActive(false);
             UIManager.Notifications.ShowNotification("Welcome to Lisergy");
@@ -47,11 +47,11 @@ public class LoginCanvas : IEventListener
         Log.Debug("Sending Auth");
         var login = Login.text;
         var pass = Password.text;
-        var ev = new AuthEvent()
+        var ev = new AuthPacket()
         {
             Login = login,
             Password = pass
         };
-        MainBehaviour.Networking.Send<AuthEvent>(ev);
+        MainBehaviour.Networking.Send<AuthPacket>(ev);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Game.Battle;
+using Game.Entity;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.GameEvents;
@@ -28,8 +29,8 @@ namespace Game.World
         public void OnOffensiveAction(OffensiveMoveEvent ev)
         {
             IBattleable atk = ev.Attacker as IBattleable;
-            IBattleable def = ev.Defender as IBattleable;   
-            if(atk != null && def != null)
+            IBattleable def = ev.Defender as IBattleable;
+            if (atk != null && def != null)
             {
                 var battleID = Guid.NewGuid().ToString();
                 _game.NetworkEvents.Call(new BattleStartPacket()
@@ -57,7 +58,7 @@ namespace Game.World
             if (ev.TileVisible)
                 SendTileTo(ev.Tile, ev.Viewer.Owner);
 
-            if(ev.Tile.StaticEntity != null || ev.Tile.MovingEntities.Count > 0)
+            if (ev.Tile.StaticEntity != null || ev.Tile.MovingEntities.Count > 0)
             {
                 var asd = 123;
             }
@@ -69,19 +70,27 @@ namespace Game.World
             var newTile = ev.NewTile;
             var previousTile = ev.OldTile;
 
-            HashSet<WorldEntity> oldViewers = null;
+            // changed tile
+            var movableEntity = ev.Entity as MovableWorldEntity;
+            var allViewers = new HashSet<PlayerEntity>();
+            if (previousTile != newTile && movableEntity != null && previousTile != null)
+            {
+                allViewers.UnionWith(previousTile.PlayersViewing);
+                if (newTile != null)
+                    allViewers.UnionWith(newTile.PlayersViewing);
+
+                foreach (var viewer in allViewers)
+                    viewer.Send(new EntityMovePacket(movableEntity, newTile));
+            }
+
+            // Sending Visibility to new viewers
+            var newPlayersViewing = new HashSet<PlayerEntity>(newTile.PlayersViewing);
             if (previousTile != null)
-                oldViewers = previousTile.EntitiesViewing;
+                newPlayersViewing.ExceptWith(previousTile.PlayersViewing);
 
-            var newViewers = new HashSet<WorldEntity>(newTile.EntitiesViewing);
-            if (oldViewers != null)
-                newViewers.ExceptWith(oldViewers);
-
-            HashSet<PlayerEntity> playerViewers = new HashSet<PlayerEntity>(newViewers.Select(v => v.Owner));
             var packet = new EntityVisiblePacket(ev.Entity);
-            foreach (var viewer in newTile.EntitiesViewing)
-                if (playerViewers.Remove(viewer.Owner))
-                    viewer.Owner.Send(packet);
+            foreach (var viewer in newPlayersViewing)
+                viewer.Send(packet);
         }
 
         private void SendTileTo(Tile tile, PlayerEntity player)

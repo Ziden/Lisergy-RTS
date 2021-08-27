@@ -1,7 +1,6 @@
 ﻿using Assets.Code;
 using Assets.Code.World;
 using Game;
-using Game.Generator;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

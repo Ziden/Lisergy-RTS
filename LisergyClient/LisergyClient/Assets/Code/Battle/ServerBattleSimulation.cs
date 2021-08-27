@@ -2,13 +2,9 @@
 using Game;
 using Game.Battles;
 using Game.Events;
-using Game.Events.ClientEvents;
 using Game.Events.ServerEvents;
-using LisergyServer.Core;
 using System;
-using System.Collections;
 using System.Linq;
-using UnityEngine;
 
 // Can be used as a fake server to test battles
 public class ServerBattleSimulation
@@ -41,7 +37,7 @@ public class ServerBattleSimulation
         myTeam.Units[0].Controlled = true;
 
         Battle = new TurnBattle(Guid.NewGuid(), myTeam, enemyTeam);
-        var ev = new BattleStartEvent()
+        var ev = new BattleStartPacket()
         {
             Attacker = Battle.Attacker,
             BattleID = Battle.ID.ToString(),
@@ -56,7 +52,7 @@ public class ServerBattleSimulation
         }
     }
 
-    private void OnAuthTest(AuthResultEvent ev)
+    private void OnAuthTest(AuthResultPacket ev)
     {
         Awaiter.Wait(CanStartTest, StartTest);
     }

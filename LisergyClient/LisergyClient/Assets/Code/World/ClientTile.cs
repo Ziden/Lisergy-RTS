@@ -17,15 +17,31 @@ namespace Assets.Code.World
             if (_gameObj == null)
                 return;
 
-            if (_gameObj.activeSelf == visible)
-                return;
+            if(visible == false)
+            {
+                SetColor(new Color(0.5f, 0.5f, 0.5f, 1.0f));
+            } else
+            {
+                SetColor(new Color(1f, 1f, 1f, 1.0f));
+                _gameObj.SetActive(visible);
+            }  
+        }
 
-            StackLog.Debug($"Changing activaction of {this} to {visible}");
-            _gameObj.SetActive(visible);
+        private void SetColor(Color c)
+        {
+            foreach(Transform child in _gameObj.transform)
+            {
+                var rend = child.GetComponent<Renderer>();
+                if(rend != null)
+                {
+                    rend.material.color = c;
+                }
+            }
         }
 
         public override void SetSeenBy(ExploringEntity entity)
         {
+            var a = this;
             base.SetSeenBy(entity);
             StackLog.Debug($"{entity} sees {this}");
             if (entity.Owner == MainBehaviour.Player)
@@ -57,7 +73,7 @@ namespace Assets.Code.World
 
         public void AddToScene(byte tileID)
         {
-            var tileSpec = StrategyGame.Specs.GetTileSpec(tileID);
+            var tileSpec = StrategyGame.Specs.Tiles[tileID];
             foreach (var art in tileSpec.Arts)
             {
                 if (_gameObj == null)

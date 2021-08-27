@@ -56,7 +56,7 @@ namespace Game
             {
                 if (value != null)
                 {
-                    value.Game.GameEvents.Call(new EntityMoveEvent()
+                    value.Game?.GameEvents.Call(new EntityMoveEvent()
                     {
                         Entity = this,
                         NewTile = value,

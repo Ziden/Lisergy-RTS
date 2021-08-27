@@ -22,6 +22,7 @@ namespace GameDataTest
         public static GameSpec Generate()
         {
             GameSpec spec = new GameSpec();
+           
 
             // BUILDINGS
             // CASTLE
@@ -36,13 +37,14 @@ namespace GameDataTest
                 2,
                 4
             );
-            spec.InitialBuilding = spec.Buildings[1].Id;
 
             TestTiles.Generate(spec);
             TestUnits.Generate(spec);
             TestItems.Generate(spec);
             TestLoots.Generate(spec);
             TestDungeons.Generate(spec);
+            spec.InitialBuilding = spec.Buildings[1].Id;
+            spec.InitialUnit = TestUnits.MAGE;
             return spec;
         }
     }

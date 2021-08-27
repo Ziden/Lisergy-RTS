@@ -8,7 +8,7 @@ namespace Assets.Code.World
 {
     public class ClientWorld : GameWorld
     {
-        public ClientWorld(GameSpecResponse gameSpecs): base(int.MaxValue, gameSpecs.WorldX, gameSpecs.WorldY)
+        public ClientWorld(GameSpecPacket gameSpecs): base(int.MaxValue, gameSpecs.WorldX, gameSpecs.WorldY)
         {
         }
 

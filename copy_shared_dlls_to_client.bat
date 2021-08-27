@@ -1,1 +1,2 @@
 xcopy /y /s /f .\LisergyServer\Game\bin\Debug\netstandard2.0\Game.dll .\LisergyClient\LisergyClient\Assets\Plugins\Game.dll*
+xcopy /y /s /f .\LisergyServer\Game\bin\Debug\netstandard2.0\GameData.dll .\LisergyClient\LisergyClient\Assets\Plugins\GameData.dll*

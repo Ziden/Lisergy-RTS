@@ -69,6 +69,7 @@ namespace Game
         public virtual void SetUnseenBy(ExploringEntity unexplorer)
         {
             _entitiesViewing.Remove(unexplorer);
+            // TODO: Line not tested
             if (!_entitiesViewing.Any(e => e.Owner == unexplorer.Owner))
             {
                 unexplorer.Owner.VisibleTiles.Remove(this);

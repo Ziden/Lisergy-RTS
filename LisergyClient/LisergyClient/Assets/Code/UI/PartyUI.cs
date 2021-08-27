@@ -60,7 +60,7 @@ public class PartyUI : IEventListener
         _rootObject.SetActive(true);
     }
 
-    public void OnPlayerAuth(AuthResultEvent ev)
+    public void OnPlayerAuth(AuthResultPacket ev)
     {
         if (ev.Success)
             _rootObject.SetActive(true);
