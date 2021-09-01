@@ -11,34 +11,27 @@ public class BattleNotificationUI : MonoBehaviour
 
     public RawImage BattleTypeIcon;
 
-    public Color WinColor;
-    public Color LooseColor;
-
     public GameObject[] AttackerFaces;
 
     public GameObject[] DefenderFaces;
 
-    public GameObject OutcomePanel;
-    public Text OutcomeText;
-
     public Button ChestButton;
 
-    private bool Moving = false;
-    private float y;
+    [Header("Dependencies")]
+    [SerializeField] private Image outcomePanel;
+    [SerializeField] private Text outcomeText;
 
-    public void Start()
-    {
-        this.gameObject.SetActive(false);
-        y = transform.localPosition.y;
-    }
+    [Header("Settings)")]
+    [SerializeField] private Color winColor;
+    [SerializeField] private Color looseColor;
+    [SerializeField] private float movementY;
+    [SerializeField] private Ease ease;
 
-    private bool IsWin(BattleHeader header)
+
+    private void Start()
     {
-        return (
-            header.Attacker.OwnerID == MainBehaviour.Player.UserID && header.AttackerWins
-            ||
-            header.Defender.OwnerID == MainBehaviour.Player.UserID && !header.AttackerWins
-         );
+        gameObject.SetActive(false);
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y + movementY, transform.localPosition.z);
     }
 
     public void Show(BattleHeader header)
@@ -46,15 +39,19 @@ public class BattleNotificationUI : MonoBehaviour
         //if (header.Defender.OwnerID == null)
         //    BattleTypeIcon.texture = DungeonIcon;
 
+        outcomePanel.gameObject.transform.localScale = Vector3.zero;
+
         if (IsWin(header))
         {
-            OutcomePanel.GetComponent<Image>().color = Color.green;
-            OutcomeText.text = "Win";
+            outcomePanel.color = Color.green;
+            outcomeText.color = Color.black;
+            outcomeText.text = "WIN";
         }
         else
         {
-            OutcomePanel.GetComponent<Image>().color = Color.red;
-            OutcomeText.text = "Loose";
+            outcomePanel.color = Color.red;
+            outcomeText.color = Color.white;
+            outcomeText.text = "LOOSE";
         }
 
         for (var x = 0; x < 4; x++)
@@ -70,20 +67,43 @@ public class BattleNotificationUI : MonoBehaviour
                 PartyUI.DrawPortrait(header.Defender.Units[x].UnitReference, DefenderFaces[x].transform, 0.75f, 0.75f);
         }
         SlideDown();
-        Awaiter.WaitFor(TimeSpan.FromSeconds(3), () => SlideUp());
-     }
-
-    public void SlideUp()
-    {
-        this.transform.DOLocalMoveY(y + 100, 1);
-        Awaiter.WaitFor(TimeSpan.FromSeconds(1.1), () => this.gameObject.SetActive(false));
     }
 
-    public void SlideDown()
+    private void SlideDown()
     {
-        this.gameObject.SetActive(true);
-        transform.localPosition = new Vector3(transform.localPosition.x, y + 100, transform.localPosition.z);
-        this.transform.DOLocalMoveY(y, 1);
+        gameObject.SetActive(true);
+
+        var seq = DOTween.Sequence()
+            .Insert(0f, transform.DOLocalMoveY(transform.localPosition.y - movementY, 1f)).SetEase(ease)
+            .Insert(1f, outcomePanel.gameObject.transform.DOScale(1f, 1f)).SetEase(ease)
+            .OnComplete(()=>AfterShowed());
+
+     //   transform.DOLocalMoveY(transform.localPosition.y - movementY, 1f);
+
+     //   Awaiter.WaitFor(TimeSpan.FromSeconds(6), () => SlideUp());
     }
 
+    private void AfterShowed()
+    {
+        Awaiter.WaitFor(TimeSpan.FromSeconds(6), () => SlideUp());
+    }
+
+    private void SlideUp()
+    {
+        var seq = DOTween.Sequence()
+            .Insert(0f, outcomePanel.gameObject.transform.DOScale(0f, .5f)).SetEase(ease)
+            .Insert(.5f, transform.DOLocalMoveY(transform.localPosition.y + movementY, 1f)).SetEase(ease)
+            .OnComplete(() => gameObject.SetActive(false));
+
+        // Awaiter.WaitFor(TimeSpan.FromSeconds(1.1), () => gameObject.SetActive(false));
+    }
+
+    private bool IsWin(BattleHeader header)
+    {
+        return (
+            header.Attacker.OwnerID == MainBehaviour.Player.UserID && header.AttackerWins
+            ||
+            header.Defender.OwnerID == MainBehaviour.Player.UserID && !header.AttackerWins
+         );
+    }
 }
