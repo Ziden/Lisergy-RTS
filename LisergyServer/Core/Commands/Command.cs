@@ -7,7 +7,7 @@ namespace LisergyServer.Commands
 {
     public abstract class Command
     {
-        protected StrategyGame Game;
+        protected BlockchainGame Game;
 
         public abstract string GetCommand();
 
@@ -15,7 +15,7 @@ namespace LisergyServer.Commands
 
         public abstract void Execute(CommandSender sender, CommandArgs args);
 
-        public Command(StrategyGame game)
+        public Command(BlockchainGame game)
         {
             this.Game = game;
         }

@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Core\BaseServer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Smoke\" />
-  </ItemGroup>
-
 </Project>

@@ -1,57 +1,28 @@
 ﻿using BattleServer;
+using Game.BlockChain;
 using Game.Events.Bus;
 using Game.Listeners;
-using Game.World;
-using GameData;
-
-/*
-
-- Ver pq spawna no lugar errado qnd perde
-- Loots qnd ganhar da dungeon
-- Construir coisa no mapa
-- Interpolar movimento ?
-
-
-
-- nao ta enviando os dados da party qnd ela aparece em um tile ja explorado
-- tem q mandar uns entity visible event do exploring entity qnd ele andar/mudar de tile
-
-*/
-  
- 
 
 namespace Game
 {
-    public class StrategyGame
+    public class BlockchainGame
     { 
-        public static GameSpec Specs { get; private set; }
         public EventBus NetworkEvents { get; private set; }
         public EventBus GameEvents { get; private set; }
 
-        private GameWorld _world;
-        public GameWorld World { get => _world; set { 
-                _world = value;
-                if(value != null)
-                    value.Game = this;
-            } 
-        }
-        
-        public GameSpec GameSpec => Specs;
+        public IChain Chain { get; private set; }
 
-        public StrategyGame(GameSpec specs, GameWorld world)
+        public BlockchainGame(IChain blockChain)
         {
-            World = world;
-            Specs = specs;
             NetworkEvents = new EventBus();
             GameEvents = new EventBus();
+            Chain = blockChain;
         }
 
         public virtual void RegisterEventListeners()
         {
-            NetworkEvents.RegisterListener(new BattlePacketListener(World));
-            NetworkEvents.RegisterListener(new WorldPacketListener(World));
-            NetworkEvents.RegisterListener(new CoursePacketListener(World));
-            GameEvents.RegisterListener(new WorldGameListener(this));
+            NetworkEvents.RegisterListener(new BattlePacketListener(this));
+            NetworkEvents.RegisterListener(new TownPacketListener(this));
         }
 
         public ListenerType GetListener<ListenerType>() where ListenerType: IEventListener

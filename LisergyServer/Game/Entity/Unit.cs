@@ -1,5 +1,4 @@
 ﻿using Game.Entity;
-using GameData.Specs;
 using System;
 
 namespace Game
@@ -7,54 +6,25 @@ namespace Game
     [Serializable]
     public class Unit
     {
-        private byte _partyId = byte.MaxValue;
-
-        [NonSerialized]
-        private Party _party;
-
-        public string  Name { get; set; }
-        public string Id { get; protected set; }
-        public ushort SpecId { get; private set; }
+        public string Name { get; set; }
+        public string Flavour { get; set; }
+        public string Id { get; private set; }
         public UnitStats Stats { get; private set; }
-        public UnitSpec Spec { get => StrategyGame.Specs.Units[this.SpecId]; }
 
-        public Unit(ushort unitSpecId)
+        public string Sprite;
+
+        public ushort Level;
+        public Rarity Rarity;
+        public string PartyID;
+
+        public Unit()
         {
-            this.Name = "Unamed";
-            this.SpecId = unitSpecId;
             this.Id = Guid.NewGuid().ToString();
-            this.Stats = new UnitStats();
+            Stats = new UnitStats();
         }
-
-        public void SetSpecStats()
-        {
-            this.Stats.SetStats(Spec.Stats);
-            HealAll();
-        }
-
-        public void HealAll()
-        {
-            this.Stats.HP = this.Stats.MaxHP;
-            this.Stats.Mp = this.Stats.MaxMP;
-        }
-
-        public Party Party
-        {
-            get => _party;
-            set {
-                _party = value;
-                if (value != null)
-                    _partyId = value.PartyIndex;
-                else
-                    _partyId = byte.MaxValue;
-            }
-        }
-
-        public byte PartyId { get => _partyId; }
-
         public override string ToString()
         {
-            return $"<Unit name={Name} spec={SpecId}/>";
+            return $"<Unit Id={Id}/>";
         }
     }
 }

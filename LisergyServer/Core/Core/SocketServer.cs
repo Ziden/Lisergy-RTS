@@ -15,7 +15,7 @@ namespace LisergyServer.Core
         protected readonly Server _socketServer;
         private Message _msg;
         private CommandExecutor _commandExecutor;
-        protected StrategyGame _game;
+        protected BlockchainGame _game;
         private int _port;
 
         public SocketServer(int port)
@@ -30,12 +30,12 @@ namespace LisergyServer.Core
 
         }
 
-        public abstract void RegisterCommands(StrategyGame game, CommandExecutor executor);
+        public abstract void RegisterCommands(BlockchainGame game, CommandExecutor executor);
         protected abstract ServerPlayer Auth(BaseEvent ev, int connectionID);
         public abstract void Tick();
         public abstract void Disconnect(int connectionID);
         public abstract ServerType GetServerType();
-        public abstract StrategyGame SetupGame();
+        public abstract BlockchainGame SetupGame();
 
         public static Ticker Ticker;
 

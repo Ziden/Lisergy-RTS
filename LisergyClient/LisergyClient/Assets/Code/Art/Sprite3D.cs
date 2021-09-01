@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class Sprite3D : MonoBehaviour
 {
-
     private static Dictionary<string, AnimationClip> _animations = new Dictionary<string, AnimationClip>();
 
     public static readonly int FACE = 7;

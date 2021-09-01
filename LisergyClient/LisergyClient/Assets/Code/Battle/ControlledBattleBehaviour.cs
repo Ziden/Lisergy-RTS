@@ -1,6 +1,5 @@
 ﻿using Assets.Code;
 using Assets.Code.Battle;
-using Assets.Code.World;
 using DG.Tweening;
 using Game;
 using Game.Battles;
@@ -34,7 +33,7 @@ public class BattleBehaviour : MonoBehaviour
 
     private List<BattleAction> Actions = new List<BattleAction>();
 
-    private ClientUnit ActingUnit;
+    //private ClientUnit ActingUnit;
 
     private DateTime NextAction = DateTime.MaxValue;
 
@@ -75,10 +74,10 @@ public class BattleBehaviour : MonoBehaviour
         }
     }
 
-    private void DrawDamage(ClientUnit unit, int damage)
+    private void DrawDamage(Unit unit, int damage)
     {
         DamageText.text = damage.ToString();
-        var pos = Camera.main.WorldToScreenPoint(unit.GetGameObject().transform.position);
+        var pos = Vector3.zero;//Camera.main.WorldToScreenPoint(unit.GetGameObject().transform.position);
         DamageText.transform.parent.parent.position = pos;
         var hpBar = DamageText.transform.parent;
         hpBar.gameObject.SetActive(true);
@@ -99,6 +98,7 @@ public class BattleBehaviour : MonoBehaviour
 
     public TimeSpan DrawBattleAction(BattleAction action)
     {
+        /*
         Log.Debug($"[Battle] Handling {action} for {ActingUnit}");
         if (action is AttackAction)
         {
@@ -136,6 +136,7 @@ public class BattleBehaviour : MonoBehaviour
                 return TimeSpan.FromSeconds(10);
             }
         }
+        */
         return TimeSpan.FromSeconds(10);
     }
 
@@ -156,6 +157,7 @@ public class BattleBehaviour : MonoBehaviour
 
     public void WaitForAction()
     {
+        /*
         ActingUnit = Battle.CurrentActingUnit.UnitReference as ClientUnit;
         ActingUnit.Sprites.PlayAnimation(Sprite3D.WALK, true, 100, ActionDelaySeconds);
         var obj = ActingUnit.GetGameObject();
@@ -163,13 +165,14 @@ public class BattleBehaviour : MonoBehaviour
         obj.transform.DOLocalMove(new Vector3(ReadyDistanceMoved, 0,0), ActionDelaySeconds);
         NextAction = DateTime.Now + TimeSpan.FromSeconds(ActionDelaySeconds);
         Log.Debug($"[Battle] {ActingUnit} waiting for action to handle it in {GetNextActionDelaySeconds()} seconds");
+        */
     }
 
     public void StartBattle(BattleStartPacket ev)
     {
         Actions.Clear();
         this.gameObject.SetActive(true);
-        UIManager.PartyUI.Hide();
+        //UIManager.PartyUI.Hide();
         StandardCamera = Camera.main;
 
         StandardCamera.enabled = false;

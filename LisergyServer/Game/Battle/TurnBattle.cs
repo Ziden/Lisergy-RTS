@@ -2,7 +2,6 @@
 using Game.Battles.Actions;
 using Game.BattleTactics;
 using Game.Events;
-using Game.Movement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +63,7 @@ namespace Game.Battles
             unit.RT += unit.GetMaxRT();
             _actionQueue.Add(unit);
         }
+
 
         public virtual BattleTeam GetOpposingTeam(BattleUnit unit)
         {

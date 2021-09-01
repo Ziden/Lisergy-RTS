@@ -1,5 +1,4 @@
-﻿using GameData.Specs;
-using System;
+﻿using System;
 
 namespace Game.Inventories
 {
@@ -14,7 +13,6 @@ namespace Game.Inventories
             this.SpecID = specId;
             this.Amount = amount;
         }
-
-        public ItemSpec Spec { get => StrategyGame.Specs.Items[SpecID]; }
+      
     }
 }

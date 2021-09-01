@@ -1,5 +1,4 @@
-﻿using Game.Pathfinder;
-using System;
+﻿using System;
 
 namespace Game.BattleTactics
 {

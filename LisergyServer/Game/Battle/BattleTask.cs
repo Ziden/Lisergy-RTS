@@ -10,9 +10,9 @@ namespace Game.Battles
     public class BattleTask : GameTask
     {
         private TurnBattle _battle;
-        private StrategyGame _game;
+        private BlockchainGame _game;
 
-        public BattleTask(StrategyGame game, TurnBattle battle) : base(TimeSpan.FromSeconds(3))
+        public BattleTask(BlockchainGame game, TurnBattle battle) : base(TimeSpan.FromSeconds(3))
         {
             this._battle = battle;
             _game = game;

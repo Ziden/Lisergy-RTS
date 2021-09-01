@@ -6,7 +6,7 @@ namespace LisergyServer.Commands
 {
     public class BattlesCommand : Command
     {
-        public BattlesCommand(StrategyGame game) : base(game) { }
+        public BattlesCommand(BlockchainGame game) : base(game) { }
 
         public override void Execute(CommandSender sender, CommandArgs args)
         {

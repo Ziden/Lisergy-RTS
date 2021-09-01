@@ -19,11 +19,12 @@ public class ServerBattleSimulation
 
     public bool CanStartTest()
     {
-        return MainBehaviour.Player != null && MainBehaviour.Player.Parties.Length > 0 && MainBehaviour.Player.Parties[0] != null && MainBehaviour.Player.Parties[0].GetUnits().ToList().Count() > 0;
+        return MainBehaviour.Player != null;
     }
 
     public void StartTest()
     {
+        /*
         var enemyUnit = new Unit(0);
         enemyUnit.SetSpecStats();
         var enemyTeam = new BattleTeam(enemyUnit);
@@ -50,6 +51,7 @@ public class ServerBattleSimulation
         {
             //EventEmitter.CallEventFromBytes(MainBehaviour.Player, Serialization.FromEvent(new BattleActionEvent(Battle.ID.ToString(), action)));
         }
+        */
     }
 
     private void OnAuthTest(AuthResultPacket ev)

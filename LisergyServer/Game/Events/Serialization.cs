@@ -3,7 +3,6 @@ using Game.Battles.Actions;
 using Game.BattleTactics;
 using Game.Entity;
 using GameData;
-using GameData.Specs;
 using NetSerializer;
 using System;
 using System.Collections.Generic;
@@ -28,16 +27,7 @@ namespace Game.Events
             models.Add(typeof(BattleUnit));
             models.Add(typeof(BattleTeam));
 
-            // World
-            models.Add(typeof(Building));
-            models.Add(typeof(ExploringEntity));
-            models.Add(typeof(WorldEntity));
-            models.Add(typeof(Party));
-            models.Add(typeof(Tile));
-            models.Add(typeof(Dungeon));
-
             // Game
-            models.Add(typeof(GameSpec));
             models.Add(typeof(BaseEvent));
             if (extras != null)
             {

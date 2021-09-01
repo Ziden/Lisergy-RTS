@@ -1,6 +1,5 @@
 ﻿using Game;
 using Game.Events;
-using GameDataTest;
 using LisergyServer.Core;
 using System;
 using System.Threading;
@@ -25,10 +24,10 @@ namespace MapServer
         public static void Initialize()
         {
             Console.WriteLine("=============================");
-            Console.WriteLine("=        MAP SERVER         =");
+            Console.WriteLine("=        GAME SERVER        =");
             Console.WriteLine("=============================");
 
-            var server = new MapService(PORT);
+            var server = new GameService(PORT);
            
             server.RunServer();
         }

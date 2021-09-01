@@ -12,7 +12,7 @@ namespace Game.Battles
         [NonSerialized]
         private BattleTeam _team;
 
-        public UnitStats Stats { get => UnitReference.Stats; }
+        public UnitStats Stats { get => UnitReference?.Stats; }
 
         public BattleTeam Team { get => _team; set => _team = value; }
 
