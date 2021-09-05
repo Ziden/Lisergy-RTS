@@ -22,9 +22,8 @@ namespace Game.Battles
         public string UnitID { get => UnitReference.Id; }
         public Unit UnitReference { get => _unitReference; set { _unitReference = value; } }
 
-        public BattleUnit(PlayerEntity owner, BattleTeam team, Unit unit)
+        public BattleUnit(PlayerEntity owner, Unit unit)
         {
-            this.Team = team;
             UnitReference = unit;
             this.RT = GetMaxRT();
         }

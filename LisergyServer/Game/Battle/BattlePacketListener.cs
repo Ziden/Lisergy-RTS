@@ -4,7 +4,7 @@ using Game.Events.Bus;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BattleServer
+namespace BattleService
 {
     public class BattlePacketListener : IEventListener
     {

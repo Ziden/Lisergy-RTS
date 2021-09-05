@@ -3,7 +3,7 @@ using Game.Events;
 using LisergyServer.Core;
 using Telepathy;
 
-namespace BattleServer.Core
+namespace BattleService.Core
 {
     public class RemoteServerEntity : ServerPlayer
     {

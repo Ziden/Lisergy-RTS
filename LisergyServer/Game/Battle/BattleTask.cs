@@ -21,7 +21,7 @@ namespace Game.Battles
         public override void Execute()
         {
             Repeat = false;
-            _battle.Task = null;
+            //_battle.Task = null;
             var result = _battle.AutoRun.RunAllRounds();
             var resultEvent = new BattleResultPacket(_battle.ID.ToString(), result);
             // for now just run callbacks

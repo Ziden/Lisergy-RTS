@@ -34,6 +34,7 @@ namespace Game.Events
                 models.AddRange(extras);
             }
             Serializer = new Serializer(models);
+            Log.Debug("Serializers Loaded");
         }
 
         static IEnumerable<Type> GetEventTypes()
@@ -51,6 +52,10 @@ namespace Game.Events
 
         public static BaseEvent ToEventRaw(byte[] message)
         {
+            if(Serializer==null)
+            {
+                throw new Exception("Serializers not initialized.");
+            }
             using (var stream = new MemoryStream(message))
             {
                 BaseEvent ev;

@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
+using LisergyMessageQueue;
 using LisergyServer.Auth;
 using System;
 using System.Collections.Generic;
@@ -33,61 +34,80 @@ namespace LisergyServer.Core
             return pl;
         }
 
-        public void Disconnect(int connectionId)
+        public void OnDisconnect(int connectionId)
         {
             ServerPlayer pl;
             PlayerConnections.TryGetValue(connectionId, out pl);
-            if (pl != null)
-            {
-                Log.Debug($"Player {pl} disconnected");
-            }
             PlayerConnections.Remove(connectionId);
+            if(pl != null) // will be null when not authenticated
+                EventMQ.StopListening(pl.UserID);
+            Log.Debug($"Player {pl} disconnected");
+        }
+
+        public void OnConnect(int connectionId, ServerPlayer player)
+        {
+            player.ConnectionID = connectionId;
+            PlayerConnections[connectionId] = player;
+            EventMQ.StartListening(player.UserID, (byte[] ev) =>
+            {
+                var e = Serialization.ToEventRaw(ev);
+                _game.NetworkEvents.Call(e);
+            });
+            Log.Debug($"Player {player} disconnected");
+        }
+
+        private Account Register(AuthPacket ev)
+        {
+            var acc = new Account();
+            acc.ID = Guid.NewGuid();
+            acc.Login = ev.Login;
+            acc.Password = ev.Password;
+            AddAccount(acc);
+            Log.Info($"Registered new account {acc.Login}");
+            acc.Player = new ServerPlayer(_server);
+            OnConnect(ev.ConnectionID, acc.Player);
+            acc.Player.Send(new AuthResultPacket()
+            {
+                PlayerID = acc.Player.UserID,
+                Success = true
+            });
+            return acc;
+        }
+
+        private ServerPlayer Login(Account acc, AuthPacket ev)
+        {
+            if (acc.Password != ev.Password)
+            {
+                Log.Error($"Account {ev.Login} entered bad password");
+                acc.Player.Send(new AuthResultPacket()
+                {
+                    PlayerID = acc.Player.UserID,
+                    Success = false
+                });
+                return null;
+            }
+            OnConnect(ev.ConnectionID, acc.Player);
+            Log.Info($"Account {ev.Login} connected");
+            acc.Player.Send(new AuthResultPacket()
+            {
+                PlayerID = acc.Player.UserID,
+                Success = true
+            });
+            return acc.Player;
         }
 
         public ServerPlayer Authenticate(AuthPacket ev)
         {
             Log.Debug($"Authenticating account {ev.Login}");
             Account acc;
-
             if (!AccountsByLogin.TryGetValue(ev.Login, out acc))
             {
-                acc = new Account();
-                acc.ID = Guid.NewGuid();
-                acc.Login = ev.Login;
-                acc.Password = ev.Password;
-                AddAccount(acc);
-                Log.Info($"Registered new account {acc.Login}");
-                acc.Player = new ServerPlayer(_server);
-                acc.Player.ConnectionID = ev.ConnectionID;
-                PlayerConnections[ev.ConnectionID] = acc.Player;
-                acc.Player.Send(new AuthResultPacket()
-                {
-                    PlayerID = acc.Player.UserID,
-                    Success = true
-                });
+                acc = Register(ev);
                 return acc.Player;
             }
             else
             {
-                if (acc.Password != ev.Password)
-                {
-                    Log.Error($"Account {ev.Login} entered bad password");
-                    acc.Player.Send(new AuthResultPacket()
-                    {
-                        PlayerID = acc.Player.UserID,
-                        Success = false
-                    });
-                    return null;
-                }
-                acc.Player.ConnectionID = ev.ConnectionID;
-                PlayerConnections[ev.ConnectionID] = acc.Player;
-                Log.Info($"Account {ev.Login} connected");
-                acc.Player.Send(new AuthResultPacket()
-                {
-                    PlayerID = acc.Player.UserID,
-                    Success = true
-                });
-                return acc.Player;
+                return Login(acc, ev);
             }
         }
     }

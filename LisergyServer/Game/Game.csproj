@@ -14,4 +14,8 @@
     <PackageReference Include="NetSerializer" Version="4.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Town\ServerEvents\" />
+  </ItemGroup>
+
 </Project>

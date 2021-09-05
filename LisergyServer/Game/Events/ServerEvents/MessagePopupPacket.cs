@@ -14,6 +14,8 @@ namespace Game.Events.ServerEvents
         {
             Type = type;
             Args = args;
+            foreach (var a in args)
+                Log.Debug(a);
         }
 
         public string[] Args;

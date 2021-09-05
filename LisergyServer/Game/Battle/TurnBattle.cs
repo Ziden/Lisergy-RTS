@@ -1,7 +1,6 @@
 ﻿
 using Game.Battles.Actions;
 using Game.BattleTactics;
-using Game.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,27 +9,28 @@ namespace Game.Battles
 {
     public class TurnBattle
     {
-        public BattleTask Task;
+        public DateTime StartTime;
+
         internal SortedSet<BattleUnit> _actionQueue = new SortedSet<BattleUnit>();
-        internal TurnBattleResult Result = new TurnBattleResult();
-
-        public BattleStartPacket StartEvent;
-
-        public Guid ID { get; private set; }
+        public string ID { get; private set; }
         public BattleTeam Attacker { get; private set; }
         public BattleTeam Defender { get; private set; }
-        public AutoRun AutoRun { get; set; }
+
+        public TurnBattleResult Result = new TurnBattleResult();
+
+        public AutoRun AutoRun;
 
         public BattleUnit CurrentActingUnit => _actionQueue.First();
 
         public bool IsOver => Attacker.AllDead || Defender.AllDead;
 
-        public TurnBattle(Guid id, BattleTeam attacker, BattleTeam defender)
+        public TurnBattle(string id, BattleTeam attacker, BattleTeam defender)
         {
             this.ID = id;
             Attacker = Result.Attacker = attacker;
             Defender = Result.Defender = defender;
             AutoRun = new AutoRun(this);
+            StartTime = DateTime.Now;
 
             _actionQueue.UnionWith(attacker.Units);
             _actionQueue.UnionWith(defender.Units);
@@ -63,7 +63,6 @@ namespace Game.Battles
             unit.RT += unit.GetMaxRT();
             _actionQueue.Add(unit);
         }
-
 
         public virtual BattleTeam GetOpposingTeam(BattleUnit unit)
         {

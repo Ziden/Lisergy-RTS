@@ -1,5 +1,5 @@
 ﻿
-using BattleServer;
+using BattleService;
 using Game;
 
 namespace LisergyServer.Commands

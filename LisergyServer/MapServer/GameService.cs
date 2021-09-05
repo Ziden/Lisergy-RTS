@@ -1,7 +1,9 @@
 ﻿using Game;
 using Game.BlockChain;
 using Game.Events;
+using Game.InfiniteDungeon;
 using Game.Scheduler;
+using GameServer;
 using LisergyServer.Commands;
 using LisergyServer.Core;
 using System;
@@ -12,7 +14,6 @@ namespace MapServer
     {
         // TODO: Move to account server
         private AuthManager _accountManager;
-
         public override ServerType GetServerType() => ServerType.MAP;
 
         public GameService(int port) : base(port) {
@@ -33,7 +34,7 @@ namespace MapServer
 
         public override void Disconnect(int connectionID)
         {
-            _accountManager.Disconnect(connectionID);
+            _accountManager.OnDisconnect(connectionID);
         }
 
         protected override ServerPlayer Auth(BaseEvent ev, int connectionID)
@@ -60,6 +61,7 @@ namespace MapServer
         {
             var game = new BlockchainGame(new TestChain());
             game.RegisterEventListeners();
+            game.NetworkEvents.RegisterListener(new GameServerListener(game));
             _accountManager = new AuthManager(game, _socketServer);
             return game;
         }

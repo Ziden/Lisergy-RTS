@@ -9,9 +9,12 @@ namespace Game.Battles
         public BattleUnit[] Units;
         public string OwnerID;
 
+        [NonSerialized]
+        public PlayerEntity Owner;
 
         public BattleTeam(PlayerEntity owner, params Unit[] units)
         {
+            this.Owner = owner;
             this.OwnerID = owner?.UserID;
             Init(owner, units);
         }
@@ -24,8 +27,9 @@ namespace Game.Battles
             var isUnitsControlled = false; // owner != null && owner.Online();
             for (var x = 0; x < filtered.Count(); x++)
             {
-                Units[x] = new BattleUnit(owner, this, filtered[x]);
+                Units[x] = new BattleUnit(owner, filtered[x]);
                 Units[x].Controlled = isUnitsControlled;
+                Units[x].Team = this;
             }
             if (owner != null)
             {

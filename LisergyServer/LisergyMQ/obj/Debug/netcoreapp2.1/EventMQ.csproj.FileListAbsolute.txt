@@ -1,0 +1,4 @@
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\LisergyMQ\obj\Debug\netcoreapp2.1\EventMQ.csprojAssemblyReference.cache
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\LisergyMQ\obj\Debug\netcoreapp2.1\EventMQ.AssemblyInfoInputs.cache
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\LisergyMQ\obj\Debug\netcoreapp2.1\EventMQ.AssemblyInfo.cs
+C:\Users\gabri\source\repos\Lisergy\LisergyServer\LisergyMQ\obj\Debug\netcoreapp2.1\EventMQ.csproj.CoreCompileInputs.cache
