@@ -14,9 +14,34 @@ public class TavernUI : MonoBehaviour
 
     public UnitListUI UnitsUI;
 
-    void UnitSelectCallback(Unit u)
+    private Unit currentUnit;
+    private UnitGridItem currentUnitItem;
+    private UnitGridItem pastUnitItem;
+
+    private bool started;
+
+
+    void UnitSelectCallback(Unit u, UnitGridItem unitGridItem)
     {
-        UnitsUI.UnitsInfo.ShowUnit(u);
+        if (!started)
+        {
+            currentUnit = u;
+            currentUnitItem = unitGridItem;
+            started = true;
+            currentUnitItem.Selection();
+        }
+        else if (u.Name != currentUnit.Name && started)
+        {
+            pastUnitItem = currentUnitItem;
+            pastUnitItem.Unselection();
+            currentUnitItem = unitGridItem;
+            currentUnitItem.Selection();
+            currentUnit = u;
+        }
+        else
+            return;
+      
+        UnitsUI.UnitsInfo.ShowUnit(currentUnit);
     }
 
     private void Start()
@@ -26,6 +51,7 @@ public class TavernUI : MonoBehaviour
         Back.onClick.AddListener(() => {
             if (UnitsUI.gameObject.activeInHierarchy)
             {
+                started = false;
                 UnitsUI.gameObject.SetActive(false);
                 return;
             }
@@ -35,11 +61,13 @@ public class TavernUI : MonoBehaviour
         Units.onClick.AddListener(() => {
             if(UnitsUI.gameObject.activeInHierarchy)
             {
+                started = false;
                 UnitsUI.gameObject.SetActive(false);
                 return;
             }
             UnitsUI.DisplayUnits(MainBehaviour.Player.Units, UnitSelectCallback);
             UnitsUI.gameObject.SetActive(true);
+            
         });
     }
 }

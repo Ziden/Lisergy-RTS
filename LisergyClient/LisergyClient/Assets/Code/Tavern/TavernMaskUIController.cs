@@ -9,7 +9,7 @@ namespace Assets.Code.Tavern
     {
         [SerializeField] private RectTransform rectTransform;
         [SerializeField] private GridLayoutGroup gridLayoutGroup;
-        [SerializeField] private GameObject[] buttons;
+        [SerializeField] private ScrollRect scrollbarValue;
 
         private int currentUnit;
 
@@ -28,18 +28,12 @@ namespace Assets.Code.Tavern
             currentUnit = GetComponentsInChildren<UnitGridItem>().Length;
             RectTransform rt = rectTransform;
 
-            if (currentUnit > 7)
-            {
-                rt.sizeDelta = new Vector2((210 * currentUnit) + gridLayoutGroup.padding.horizontal, rt.sizeDelta.y);
-                foreach (var button in buttons)
-                    button.SetActive(true);
-            }
+            if (currentUnit > 8)
+                rt.sizeDelta = new Vector2((220 * currentUnit), rt.sizeDelta.y);
             else
-            {
-                foreach (var button in buttons)
-                    button.SetActive(false);
-                rt.sizeDelta = new Vector2(1560, rt.sizeDelta.y);
-            }
+                rt.sizeDelta = new Vector2(1760, rt.sizeDelta.y);
+
+            scrollbarValue.horizontalNormalizedPosition = 0f;
         }
     }
 }

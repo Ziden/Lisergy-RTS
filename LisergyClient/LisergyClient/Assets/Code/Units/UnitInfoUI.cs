@@ -9,6 +9,7 @@ using DG.Tweening;
 
 public class UnitInfoUI : MonoBehaviour
 {
+    [Header("Text dependencies")]
     [SerializeField] private Text atk;
     [SerializeField] private Text def;
     [SerializeField] private Text mDef;
@@ -20,9 +21,12 @@ public class UnitInfoUI : MonoBehaviour
     [SerializeField] private Text characterName;
     [SerializeField] private Text descriptionText;
 
+    [Header("Slider dependencies")]
     [SerializeField] private Slider hpBar;
     [SerializeField] private Slider mpBar;
 
+    [Header("GameObject dependencies")]
+    [SerializeField] private GameObject [] statGameObjects;
 
     [SerializeField] private GameObject weapon;
     [SerializeField] private GameObject armor;
@@ -46,9 +50,14 @@ public class UnitInfoUI : MonoBehaviour
     public void ShowUnit(Unit unit)
     {
         gameObject.transform.localScale = Vector3.zero;
+
+        foreach (var obj in statGameObjects)
+            obj.SetActive(false);
+
         this.gameObject.SetActive(true);
 
-        gameObject.transform.DOScale(Vector3.one, .3f);
+        StatsPanelAnimation();
+
         //PartyUI.DrawPortrait(unit, Face);
         //PartyUI.RenderParty()
         //Face.sprite = LazyLoad.GetSpecificSpriteArt(unit.Spec.FaceArt);
@@ -71,5 +80,19 @@ public class UnitInfoUI : MonoBehaviour
         characterName.text = unit.Name;
         characterImage.sprite = LazyLoad.GetSprite(unit.Sprite, 0);
         descriptionText.text = unit.Flavour;
+    }
+
+    private void StatsPanelAnimation()
+    {
+        var seq = DOTween.Sequence()
+            .Insert(0, gameObject.transform.DOScaleX(1f, .5f))
+            .Insert(0, gameObject.transform.DOScaleY(1f, .05f))
+            .OnComplete(() => StatsEnabler());
+    }
+
+    private void StatsEnabler()
+    {
+        foreach (var obj in statGameObjects)
+            obj.SetActive(true);
     }
 }
