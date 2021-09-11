@@ -18,4 +18,14 @@ public class UnitGridItem : MonoBehaviour
         Sprite.sprite = unitSprite;
         Name.text = Unit.Name;
     }
+
+    public void Selection()
+    {
+        Button.image.color = Color.red;
+    }
+
+    public void Unselection()
+    {
+        Button.image.color = Color.white;
+    }
 }

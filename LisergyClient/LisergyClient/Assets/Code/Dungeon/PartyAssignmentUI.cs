@@ -96,7 +96,7 @@ public class PartyAssignmentUI : MonoBehaviour
         }
     }
 
-    void OnUnitSelect(Unit u)
+    void OnUnitSelect(Unit u, UnitGridItem unitGridItem)
     {
 
         var unitObj = PartySlots[this.ViewingIndex];
@@ -112,7 +112,6 @@ public class PartyAssignmentUI : MonoBehaviour
 
         AssignedUnits[ViewingIndex] = u;
     }
-
 
     public void Assign(Unit u, int i)
     {
