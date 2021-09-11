@@ -3,6 +3,7 @@ using Assets.Code.Login;
 using Game;
 using Game.Events;
 using Game.Events.Bus;
+using Game.Listeners;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,7 +31,9 @@ public class MainBehaviour : MonoBehaviour
             Networking = new Networking();
             NetworkEvents = new EventBus();
 
+            NetworkEvents.RegisterListener(new GameListener());
             NetworkEvents.RegisterListener(new LoginPacketListener());
+            NetworkEvents.RegisterListener(new DungeonPacketListener());
 
             ConfigureUnity();
             Serialization.LoadSerializers();

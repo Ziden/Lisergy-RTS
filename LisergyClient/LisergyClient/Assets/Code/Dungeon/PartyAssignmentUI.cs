@@ -1,6 +1,7 @@
 ﻿using Assets.Code;
 using Assets.Code.Tavern;
 using Game;
+using Game.Events.ClientEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,35 +19,13 @@ public class PartyAssignmentUI : MonoBehaviour
     private Unit[] AssignedUnits;
     private int ViewingIndex;
 
-    private HashSet<Unit> GetAvailableUnits()
-    {
-        var h = new HashSet<Unit>(MainBehaviour.Player.Units);
-        Log.Debug("Count " + h.Count);
-        foreach (var unit in this.AssignedUnits.Where(u => u != null))
-            h.Remove(unit);
-        return h;
-    }
-
-    private void ClearUnits()
-    {
-        AssignedUnits = new Unit[PartySlots.Length];
-        for (var i = 0; i < PartySlots.Length; i++)
-        {
-            var unitObj = PartySlots[i];
-            var text = unitObj.transform.FindDeepComponent<Text>("Name");
-            var image = unitObj.transform.FindDeepComponent<Image>("Sprite");
-            var button = unitObj.transform.FindDeepComponent<Button>("Button");
-            text.gameObject.SetActive(false);
-            image.gameObject.SetActive(false);
-        }
-    }
-
     private void Start()
     {
-        Log.Debug("Party Assignment UI");
+        Log.Debug("Starting Party Assignment UI");
         UnitList.gameObject.SetActive(false);
         AssignedUnits = new Unit[PartySlots.Length];
 
+        EnterDungeonButton.onClick.AddListener(EnterDungeon);
         ClearUnitsButton.onClick.AddListener(ClearUnits);
 
         for (var i = 0; i < PartySlots.Length; i++)
@@ -79,6 +58,41 @@ public class PartyAssignmentUI : MonoBehaviour
                 UnitList.DisplayUnits(GetAvailableUnits(), OnUnitSelect);
                 UnitList.gameObject.SetActive(true);
             });
+        }
+    }
+
+    private void EnterDungeon()
+    {
+        if (!AssignedUnits.Any(u => u != null))
+            return;
+
+        Log.Debug("Sending request to enter dungeon");
+        MainBehaviour.Networking.Send(new EnterInfiniteDungeonPacket()
+        {
+            UnitIds = AssignedUnits.Select(u => u?.Id).ToArray()
+        });
+    }
+
+    private HashSet<Unit> GetAvailableUnits()
+    {
+        var h = new HashSet<Unit>(MainBehaviour.Player.Units);
+        Log.Debug("Count " + h.Count);
+        foreach (var unit in this.AssignedUnits.Where(u => u != null))
+            h.Remove(unit);
+        return h;
+    }
+
+    private void ClearUnits()
+    {
+        AssignedUnits = new Unit[PartySlots.Length];
+        for (var i = 0; i < PartySlots.Length; i++)
+        {
+            var unitObj = PartySlots[i];
+            var text = unitObj.transform.FindDeepComponent<Text>("Name");
+            var image = unitObj.transform.FindDeepComponent<Image>("Sprite");
+            var button = unitObj.transform.FindDeepComponent<Button>("Button");
+            text.gameObject.SetActive(false);
+            image.gameObject.SetActive(false);
         }
     }
 

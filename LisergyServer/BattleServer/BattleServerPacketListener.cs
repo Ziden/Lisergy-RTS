@@ -16,6 +16,7 @@ namespace BattleService
         [EventMethod]
         public void OnBattleRequest(BattleRefreshPacket p)
         {
+            Log.Debug($"Request to update battle {p.BattleID}");
             var battle = GetBattle(p.BattleID);
             
             EventMQ.Send(battle.Attacker.OwnerID, new BattleStartPacket()

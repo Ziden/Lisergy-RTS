@@ -8,7 +8,6 @@ namespace Assets.Code
 {
     public class ClientPlayer : PlayerEntity
     {
-
         public override bool Online()
         {
             return true;

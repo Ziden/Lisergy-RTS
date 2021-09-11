@@ -27,7 +27,7 @@ namespace Assets.Code.Tavern
             UnitsInfo?.gameObject.SetActive(false);
         }
 
-        public void DisplayUnits(HashSet<Unit> units, Action<Unit> buttonCallback)
+        public void DisplayUnits(IEnumerable<Unit> units, Action<Unit> buttonCallback)
         {
             if (!Dirty)
                 return;

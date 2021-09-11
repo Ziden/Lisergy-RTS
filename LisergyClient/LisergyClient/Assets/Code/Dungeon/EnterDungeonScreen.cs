@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Game.Events.Bus;
+using UnityEngine;
 
 public class EnterDungeonScreen : MonoBehaviour
 {

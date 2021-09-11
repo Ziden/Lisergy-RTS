@@ -15,7 +15,7 @@ public class DebugPlayer
         var unit = new Unit();
         unit.Sprite = "knight";
         unit.Name = "Yolomaster";
-        MainBehaviour.Player.Units.Add(unit);
+        MainBehaviour.Player.AddUnit(unit);
     }
 }
 

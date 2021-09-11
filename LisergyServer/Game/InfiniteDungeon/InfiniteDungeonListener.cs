@@ -11,7 +11,6 @@ namespace Game.InfiniteDungeon
 {
     public class InfiniteDungeonListener : IEventListener
     {
-
         BlockchainGame _game;
 
         public InfiniteDungeonListener(BlockchainGame game)

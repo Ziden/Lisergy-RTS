@@ -7,7 +7,7 @@ namespace Assets.Code.Battle
 {
     public class ClientTurnBattle : TurnBattle
     {
-        public ClientTurnBattle(BattleStartPacket ev): base(Guid.Parse(ev.BattleID), ev.Attacker, ev.Defender)
+        public ClientTurnBattle(BattleStartPacket ev): base(ev.BattleID, ev.Attacker, ev.Defender)
         {
            
         }

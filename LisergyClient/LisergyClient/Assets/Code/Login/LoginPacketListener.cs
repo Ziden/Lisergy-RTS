@@ -13,7 +13,9 @@ namespace Assets.Code.Login
         public void ReceivePlayer(PlayerPacket ev)
         {
             MainBehaviour.Player = new ClientPlayer();
-            MainBehaviour.Player.Units = new HashSet<Unit>(ev.Units);
+            foreach(var unit in ev.Units)
+                MainBehaviour.Player.AddUnit(unit);
+
             Log.Debug($"Received {ev.Units.Length} units");
             if(SceneManager.GetActiveScene().name == "Login")
                 SceneManager.LoadScene("Town", LoadSceneMode.Single);

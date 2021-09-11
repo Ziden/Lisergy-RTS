@@ -54,9 +54,9 @@ public class ServerBattleSimulation
         */
     }
 
-    private void OnAuthTest(AuthResultPacket ev)
-    {
-        Awaiter.Wait(CanStartTest, StartTest);
-    }
+    //private void OnAuthTest(AuthResultPacket ev)
+   // {
+    //    Awaiter.Wait(CanStartTest, StartTest);
+   // }
 }
 
