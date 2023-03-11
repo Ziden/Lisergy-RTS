@@ -65,11 +65,15 @@ namespace MapServer
         {
             var gameSpecs = TestSpecs.Generate();
             var game = new StrategyGame(gameSpecs, null);
-            GameWorld world = TestWorldGenerator.CreateWorld(MAX_PLAYERS, WORLD_SEED,
+
+            var (sizeX, sizeY) = TestWorldGenerator.MeasureWorld(MAX_PLAYERS);
+
+            game.World = new GameWorld(MAX_PLAYERS, sizeX, sizeY);
+            TestWorldGenerator.PopulateWorld(game.World, WORLD_SEED,
                 new NewbieChunkPopulator(),
                 new DungeonsPopulator()
             );
-            game.World = world;
+          
             game.RegisterEventListeners();
             _accountManager = new AccountManager(game, _socketServer);
             return game;

@@ -37,7 +37,8 @@ namespace Game.Entity
         {
             if(!IsAlive())
             {
-                this.Tile = this.Owner.GetCenter().Tile;
+                var center = this.Owner.GetCenter();
+                this.Tile = center.Tile;
                 foreach (var unit in _units)
                     unit?.HealAll();
                

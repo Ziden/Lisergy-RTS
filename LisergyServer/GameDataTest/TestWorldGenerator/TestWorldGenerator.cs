@@ -6,7 +6,7 @@ namespace Game.Generator
 {
     public static class TestWorldGenerator
     {
-        private static (int, int) MeasureWorld(int playerCount)
+        public static (int, int) MeasureWorld(int playerCount)
         {
             var amtOfChunks = playerCount * GameWorld.PLAYERS_CHUNKS;
             var amtOfTiles = amtOfChunks * GameWorld.TILES_IN_CHUNK;
@@ -17,10 +17,10 @@ namespace Game.Generator
             return (SizeX, SizeY);
         }
 
-        public static GameWorld CreateWorld(int qtdPlayers, int seed = 0, params ChunkPopulator[] populators)
+        public static GameWorld PopulateWorld(GameWorld world, int seed = 0, params ChunkPopulator[] populators)
         {
-            var (sizeX, sizeY) = MeasureWorld(qtdPlayers);
-            var world = new GameWorld(qtdPlayers, sizeX, sizeY);
+           
+       
             if (seed == 0)
                 seed = new Random().Next(0, ushort.MaxValue);
             WorldUtils.SetRandomSeed(seed);

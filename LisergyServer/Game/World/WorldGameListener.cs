@@ -28,8 +28,8 @@ namespace Game.World
         [EventMethod]
         public void OnOffensiveAction(OffensiveMoveEvent ev)
         {
-            IBattleable atk = ev.Attacker as IBattleable;
-            IBattleable def = ev.Defender as IBattleable;
+            var atk = ev.Attacker as IBattleable;
+            var def = ev.Defender as IBattleable;
             if (atk != null && def != null)
             {
                 var battleID = Guid.NewGuid().ToString();
@@ -57,11 +57,6 @@ namespace Game.World
         {
             if (ev.TileVisible)
                 SendTileTo(ev.Tile, ev.Viewer.Owner);
-
-            if (ev.Tile.StaticEntity != null || ev.Tile.MovingEntities.Count > 0)
-            {
-                var asd = 123;
-            }
         }
 
         [EventMethod]

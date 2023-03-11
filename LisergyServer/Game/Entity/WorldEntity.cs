@@ -54,15 +54,6 @@ namespace Game
         {
             get => _tile; set
             {
-                if (value != null)
-                {
-                    value.Game?.GameEvents.Call(new EntityMoveEvent()
-                    {
-                        Entity = this,
-                        NewTile = value,
-                        OldTile = _tile
-                    });
-                }
                 var oldTile = _tile;
                 _tile = value;
                 if(_tile != null)
@@ -79,7 +70,16 @@ namespace Game
                             viewer.Send(new EntityDestroyPacket(this));
                     }
                 }
-                Log.Debug($"{this} placed in {value}");
+                if (value != null)
+                {
+                    value.Game.GameEvents.Call(new EntityMoveEvent()
+                    {
+                        Entity = this,
+                        NewTile = _tile,
+                        OldTile = oldTile
+                    });
+                }
+                Log.Info($"Placed {this} in {_tile}");
             }
         }
     }
