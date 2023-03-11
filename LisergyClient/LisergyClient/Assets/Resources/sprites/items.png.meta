@@ -66,7 +66,7 @@ TextureImporter:
       213: -3939709940441476875
     second: items1_20
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -83,9 +83,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -94,12 +97,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -117,9 +120,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -599,9 +607,30 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      items1_6: -3466934339306529819
+      items1_5: 5575240454402856288
+      items1_17: 8444013618984862147
+      items1_9: 33936292979840914
+      items1_10: -6682419677213701485
+      items1_19: 1341572417191629964
+      items1_14: -4149836063407761538
+      items1_3: -1844513181151275611
+      items1_2: 6266566958418955755
+      items1_11: 8440419002851636430
+      items1_7: -7673278924591500253
+      items1_15: -2595347352140234001
+      items1_16: 8194778688351439047
+      items1_8: -7723772215987878815
+      items1_18: -3182108451773120363
+      items1_13: -2436078086230514410
+      items1_12: 7050545883529508470
+      items1_20: -3939709940441476875
+      items1_4: 4023194386237098834
+      items1_1: 7844678153481922334
+      items1_0: 7027316152575803653
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

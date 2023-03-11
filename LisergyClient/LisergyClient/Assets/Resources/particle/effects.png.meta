@@ -51,7 +51,7 @@ TextureImporter:
       213: 7139225744702399286
     second: effects_15
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -68,9 +68,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -80,11 +83,11 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -102,9 +105,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -479,9 +487,25 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      effects_1: 1957107745717523172
+      effects_2: -3914910146244942373
+      effects_14: -6780146778513566173
+      effects_6: -2634811762275802146
+      effects_5: 5546012167625906029
+      effects_9: 1549225131909812281
+      effects_4: 1274422669862156747
+      effects_13: 3831370764548767655
+      effects_3: -1166211891172804109
+      effects_8: -6853649311568494795
+      effects_10: -6405433073719687424
+      effects_11: -6171719380506522968
+      effects_7: 5931242471646302317
+      effects_0: 6609894105642088411
+      effects_15: 7139225744702399286
+      effects_12: 1164080087454881407
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

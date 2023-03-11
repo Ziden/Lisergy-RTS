@@ -84,7 +84,7 @@ TextureImporter:
       213: -2632857768817369080
     second: knight_26
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -101,9 +101,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -113,11 +116,11 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 2
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -135,9 +138,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -470,9 +478,23 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      knight_13: -7344660812612507114
+      knight_0: 4495478712733764576
+      knight_1: -2735361975599426438
+      knight_6: 8576002100360556633
+      knight_3: -5936517905134697562
+      knight_7: -7796392955062674155
+      knight_4: -3704987648149241375
+      knight_2: 5410854522603319429
+      knight_11: -6437285016975815235
+      knight_12: 7733677496383810577
+      knight_5: 1371051767199663645
+      knight_10: -4161681692043255833
+      knight_9: 4445329437732904335
+      knight_8: 2099459173452824506
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

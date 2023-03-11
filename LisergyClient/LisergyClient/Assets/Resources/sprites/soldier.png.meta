@@ -84,7 +84,7 @@ TextureImporter:
       213: 8372446143975922859
     second: soldier_26
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -101,9 +101,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -113,11 +116,11 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 2
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -135,9 +138,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -470,9 +478,23 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      soldier_11: -5556171334924629526
+      soldier_1: 6017404338080566625
+      soldier_0: 6246832655069406539
+      soldier_13: -513539032879699618
+      soldier_8: -8621434504218542063
+      soldier_2: -2451782394016434471
+      soldier_5: -6676640116428088755
+      soldier_4: -2269519568428476932
+      soldier_3: 4082732244838283841
+      soldier_7: 3240119343033235501
+      soldier_6: -2411736328533753459
+      soldier_12: 4953204187100822599
+      soldier_10: -2812487356058246685
+      soldier_9: -9162669571817907879
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -192,7 +192,7 @@ TextureImporter:
       213: -3486025168730836368
     second: mage_35
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -209,9 +209,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -221,8 +224,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 2
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -243,9 +246,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -578,9 +586,23 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      mage_7: -1308827184595644429
+      mage_10: -8995485352130813372
+      mage_6: 5179906125871286598
+      mage_5: -6014854275350682528
+      mage_0: 2971653748508199937
+      mage_13: 537988590183208327
+      mage_3: -7672788158911853900
+      mage_4: 8619904004745130942
+      mage_2: 7310728498343965544
+      mage_1: -1182937539813507409
+      mage_9: -2056482287553655689
+      mage_12: -2392962986800102977
+      mage_8: 2640012314773392344
+      mage_11: 8886161708615391911
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

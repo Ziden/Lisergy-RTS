@@ -378,7 +378,7 @@ TextureImporter:
       213: 8679410980747081526
     second: particles_124
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -395,9 +395,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -407,11 +410,11 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 2
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -429,9 +432,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2969,9 +2977,128 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      particles_51: -9170454639615964645
+      particles_59: -5119781365872852401
+      particles_98: -1313444455543431004
+      particles_19: -2114952266372126361
+      particles_30: -344452411399598852
+      particles_39: 8402680411447854465
+      particles_25: -2634034033864658519
+      particles_61: 1996592255896367470
+      particles_52: 6984915951345687443
+      particles_87: -8207096909445211143
+      particles_64: -8775712092645256811
+      particles_57: -8993233578000417252
+      particles_110: 5670132313322438475
+      particles_42: 2775543530896778605
+      particles_90: 719753231833736643
+      particles_109: -1552157454146440466
+      particles_27: 1228369361062389449
+      particles_3: -449137561210389587
+      particles_18: -7909631062678515306
+      particles_15: -4489935065248578873
+      particles_116: 671732338939303781
+      particles_80: 8434754285367039705
+      particles_115: -677956849417019713
+      particles_85: -6162826989546185734
+      particles_43: 3468089825177087706
+      particles_10: 2771832032555197376
+      particles_14: 151391851145879583
+      particles_48: -7198399123561412967
+      particles_44: -8651584522183100584
+      particles_53: 4969256161906291438
+      particles_124: 8679410980747081526
+      particles_91: 1107793787486698874
+      particles_95: -7666463494362036461
+      particles_88: 2031555053276582509
+      particles_74: 6681435051037739422
+      particles_83: 8707194610924137839
+      particles_93: -4346521806191441746
+      particles_112: -5264255959303355263
+      particles_99: -4371664759384542812
+      particles_56: -8906408525631871673
+      particles_76: 5314532416190970429
+      particles_12: 616466274194406914
+      particles_16: -7343579626775217518
+      particles_4: -2924870240721974060
+      particles_78: 3032843245634882806
+      particles_100: -2618750076025181040
+      particles_103: 5818620936954814417
+      particles_23: -905238700969809136
+      particles_81: 7093031750805471763
+      particles_54: -2115878245181467239
+      particles_31: 8559423829554916096
+      particles_79: -8401165264878994863
+      particles_92: -1557836568223124725
+      particles_33: 6109881163569095973
+      particles_58: -2491903322872973346
+      particles_77: -6187591134416905814
+      particles_65: 8873893885544858673
+      particles_26: -1492320375420837983
+      particles_97: -7024264298227195843
+      particles_67: 759924630394189800
+      particles_40: -2014388671060960819
+      particles_29: 2548827284616061062
+      particles_68: 2977189343408284104
+      particles_13: 2739380687204865531
+      particles_5: 4816342424261837737
+      particles_45: -1205402283500600051
+      particles_47: 8552595198543972661
+      particles_9: -5004791727209759167
+      particles_38: -7963010515984401619
+      particles_122: -7216615749213899806
+      particles_0: -7609486996209228562
+      particles_28: 2002741391148188966
+      particles_84: 7239941121561846751
+      particles_82: -9084257174548821096
+      particles_96: 5096773351845702891
+      particles_49: 7684811111521779028
+      particles_117: -4350259611132991143
+      particles_73: 1459510016043673114
+      particles_120: 5857147240529871408
+      particles_86: -33679358288367309
+      particles_119: -4419508265419282653
+      particles_46: -102195511480140692
+      particles_123: -4654714311955162521
+      particles_55: 6875983306317845034
+      particles_7: -7872684065047532718
+      particles_37: 9074729904623600554
+      particles_105: 65725224382186052
+      particles_106: -8261003983421828698
+      particles_71: 5425123975719408348
+      particles_11: 8980415328753738973
+      particles_94: -3826138425772137883
+      particles_2: 5597564248131343736
+      particles_69: 2506840054587528378
+      particles_121: -6374279836031022444
+      particles_75: 8111973772177688775
+      particles_50: -8923710322707659920
+      particles_66: -8265576795150440193
+      particles_89: 9177259778295015399
+      particles_36: -158042352127480320
+      particles_102: -981847597844656189
+      particles_113: 6246830398821997961
+      particles_62: 2632976281064998756
+      particles_8: -1874999468665147253
+      particles_101: -396511299378011152
+      particles_118: -2461838952753057656
+      particles_20: 7761662086729374642
+      particles_104: 915249401981241203
+      particles_114: 7781842137690787549
+      particles_108: 903717373906240881
+      particles_6: 6193290335882477365
+      particles_70: 5171653978479328623
+      particles_1: -576354014268724891
+      particles_72: -7375867660678090026
+      particles_60: 1551470739882824108
+      particles_63: 4616158951272778935
+      particles_111: -783096900764951899
+      particles_107: -4403310526524050470
+      particles_41: -7149536595885022536
+      particles_24: 8191199221143618610
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

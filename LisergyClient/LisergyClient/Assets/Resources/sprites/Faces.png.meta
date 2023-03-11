@@ -75,7 +75,7 @@ TextureImporter:
       213: 4575595625184122037
     second: Faces_23
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -92,9 +92,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -104,11 +107,11 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 2
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -126,9 +129,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -671,9 +679,33 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      Faces_16: -2205531410212600528
+      Faces_8: 1238325399474471081
+      Faces_23: 4575595625184122037
+      Faces_19: 8539454709898421426
+      Faces_7: 3360697119208892714
+      Faces_12: 5755430995237285898
+      Faces_4: 3010951858511213517
+      Faces_17: -5733005540929603233
+      Faces_1: 5219528537255451192
+      Faces_13: -7022587179109145125
+      Faces_14: 4737009841009751051
+      Faces_22: 3592886842153931431
+      Faces_9: -6889968230148230970
+      Faces_3: 6236675656088661469
+      Faces_6: -8999417144695169524
+      Faces_0: -5285785097126754818
+      Faces_18: 9190814179946814140
+      Faces_5: -8891590945244770283
+      Faces_11: -478054922161449255
+      Faces_20: 388325695829643731
+      Faces_15: -2150320263628350387
+      Faces_21: 7072610082442802830
+      Faces_10: -1484705323956593315
+      Faces_2: -2352396353401391747
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
