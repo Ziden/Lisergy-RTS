@@ -1,34 +1,49 @@
 ﻿using Game;
 using Game.Entity;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Code.World
 {
-    public class ClientParty : Party, IGameObject
+
+    public static class ClientPartyExt
+    {
+        public static ClientUnit[] GetClientUnits(this Party p)
+        {
+            return p.GetUnits().Select(u => u != null ? new ClientUnit(u) : null).ToArray();
+        } 
+    }
+
+    public class ClientParty : Party, IGameObject, IClientEntity<Party, ClientParty>
     {
         private static GameObject _container;
+
+        public ClientParty(PlayerEntity owner) : base(owner)
+        {
+
+        }
 
         private GameObject _gameObject;
         public ClientTile ClientTile { get => (ClientTile)this.Tile; }
 
-        public ClientParty Update(Party partyFromNetwork)
-        {
+        public ClientParty UpdateData(Party partyFromNetwork)
+        {    
             _id = partyFromNetwork.Id;
-            _x = (ushort)partyFromNetwork.X;
-            _y = (ushort)partyFromNetwork.Y;
             BattleID = partyFromNetwork.BattleID;
-            for (var i = 0; i < 4; i++)
-                this.SetUnit(null, i);
-            foreach (var unit in partyFromNetwork.GetValidUnits())
-                this.AddUnit(new ClientUnit(unit));
+            SetUnits(partyFromNetwork.GetClientUnits());
+            PartyIndex = partyFromNetwork.PartyIndex;
+            Owner.Parties[PartyIndex] = this;
+            Id = partyFromNetwork.Id;
+            Tile = ClientStrategyGame.ClientWorld.GetClientTile(partyFromNetwork);
             return this;
         }
 
-        public ClientParty(PlayerEntity owner, Party partyFromNetwork) : base(owner, partyFromNetwork.PartyIndex)
+        public void InstantiateInScene(Party partyFromNetwork)
         {
-            _gameObject = new GameObject($"{owner.UserID}-{Id}-{partyFromNetwork.PartyIndex}");
+            _gameObject = new GameObject($"{partyFromNetwork.OwnerID}-{Id}-{partyFromNetwork.PartyIndex}");
             _gameObject.transform.SetParent(Container.transform);
-            Update(partyFromNetwork);
+            UpdateData(partyFromNetwork);
+            this.GetGameObject().SetActive(true);
             Render();
             StackLog.Debug($"Created new party instance {this}");
         }
@@ -62,7 +77,6 @@ namespace Assets.Code.World
                     Effects.BattleEffect(this.Tile as ClientTile);
                 if (this.BattleID != null && value == null)
                     Effects.StopEffect(this.Tile);
-
                 base.BattleID = value;
             }
         }
@@ -91,11 +105,11 @@ namespace Assets.Code.World
         {
             foreach (var unit in GetValidUnits())
             {
-                var unitObject = ((ClientUnit)unit).AddToScene();
-                unitObject.transform.SetParent(_gameObject.transform);
+                var clientUnit = unit as ClientUnit;
+                clientUnit.AddToScene();
+                clientUnit.GetGameObject().transform.SetParent(_gameObject.transform);
+                clientUnit.GetGameObject().transform.localPosition = Vector3.zero;
             }
         }
-
-
     }
 }

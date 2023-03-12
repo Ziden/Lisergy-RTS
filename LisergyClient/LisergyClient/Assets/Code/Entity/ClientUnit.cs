@@ -33,8 +33,6 @@ namespace Assets.Code.World
                 _gameObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
             }
             return _gameObject;
-        }
-
-    
+        }    
     }
 }

@@ -45,9 +45,18 @@ public class PartyUI : IEventListener
         _cursor.SetActive(false);
         _rootObject.SetActive(false);
 
+        ClientEntityManager.OnPartyUpdated += OnPartyUpdated;
         ClientEvents.OnCameraMove += OnCameraMove;
         ClientEvents.OnClickTile += OnClickTile;
-        MainBehaviour.NetworkEvents.RegisterListener(this);
+        //MainBehaviour.NetworkEvents.RegisterListener(this);
+    }
+
+    private void OnPartyUpdated(ClientParty party)
+    {
+        if(party.IsMine())
+        {
+            DrawAllParties();
+        }
     }
 
     public void Hide()

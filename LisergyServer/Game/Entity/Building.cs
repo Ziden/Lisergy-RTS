@@ -7,7 +7,7 @@ namespace Game
     [Serializable]
     public class Building : StaticEntity
     {
-        public ushort SpecID { get; private set; }
+        public ushort SpecID { get; set; }
 
         public override byte GetLineOfSight()
         {
@@ -18,6 +18,11 @@ namespace Game
         {
             this.SpecID = id;
         }
+
+        public Building(PlayerEntity owner) : base(owner)
+        {
+        }
+
 
         public virtual BuildingSpec GetSpec()
         {

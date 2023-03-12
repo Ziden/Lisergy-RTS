@@ -12,6 +12,8 @@ namespace Assets.Code.World
 
         public ClientTile(ClientChunk c, int x, int y) : base(c, x, y) { }
 
+        public ClientChunk ClientChunk => Chunk as ClientChunk;
+
         public void SetVisible(bool visible)
         {
             if (_gameObj == null)

@@ -15,15 +15,16 @@ namespace Game.Entity
     [Serializable]
     public class Party : MovableWorldEntity, IBattleable
     {
+        private const int PARTY_SIZE = 4;
+
         private byte _partyIndex;
-        private Unit[] _units = new Unit[4] { null, null, null, null };
+        private Unit[] _units = new Unit[PARTY_SIZE] { null, null, null, null };
 
         [NonSerialized]
         private EntityCargo _cargo;
 
         public bool IsAlive() => _units.Where(u => u != null && u.Stats.HP > 0).Any();
 
-        public byte PartyIndex { get => _partyIndex; }
         public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(0.25);
 
         public TurnBattle Battle { get => Tile?.Game.GetListener<BattlePacketListener>().GetBattle(BattleID); }
@@ -55,6 +56,13 @@ namespace Game.Entity
             _partyIndex = partyIndex;
             _cargo = new EntityCargo(this);
         }
+
+        public Party(PlayerEntity owner) : base(owner)
+        {
+            _cargo = new EntityCargo(this);
+        }
+
+        public byte PartyIndex { get => _partyIndex; set => _partyIndex = value; }
 
         public override Tile Tile
         {
@@ -102,6 +110,12 @@ namespace Game.Entity
                 u.Party.RemoveUnit(u);
             var freeIndex = Array.IndexOf(_units, null);
             SetUnit(u, freeIndex);
+        }
+
+        public virtual void SetUnits(Unit [] units)
+        {
+            if (units.Length != PARTY_SIZE) throw new Exception("Party size not " + PARTY_SIZE);
+            this._units = units;
         }
 
         public virtual void RemoveUnit(Unit u)

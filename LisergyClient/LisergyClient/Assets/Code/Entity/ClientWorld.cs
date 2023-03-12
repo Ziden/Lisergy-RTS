@@ -14,6 +14,16 @@ namespace Assets.Code.World
 
         public Dictionary<string, Party> Parties = new Dictionary<string, Party>();
 
+        public ClientTile GetClientTile(int tileX, int tileY)
+        {
+            return Map.GetTile(tileX, tileY) as ClientTile;
+        }
+
+        public ClientTile GetClientTile(WorldEntity e)
+        {
+            return Map.GetTile(e.X, e.Y) as ClientTile;
+        }
+
         public ClientPlayer GetOrCreateClientPlayer(string uid)
         {
             if (uid == null)

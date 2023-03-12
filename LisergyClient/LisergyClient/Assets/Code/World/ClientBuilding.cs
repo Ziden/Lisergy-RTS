@@ -4,17 +4,34 @@ using UnityEngine;
 
 namespace Assets.Code.World
 {
-    public class ClientBuilding : Building, IGameObject
+    public class ClientBuilding : Building, IGameObject, IClientEntity<Building, ClientBuilding>
     {
         private GameObject _gameObject;
 
         public GameObject GetGameObject() => _gameObject;
 
-        public ClientBuilding(ushort id, ClientPlayer owner, ClientTile tile): base(id, owner)
+        public ClientBuilding(PlayerEntity owner): base(owner)
         {
-            var prefab = Resources.Load("prefabs/buildings/"+id);
-            StackLog.Debug("Instantiating BUILDING");
-            _gameObject = MainBehaviour.Instantiate(prefab, ((ClientChunk)tile.Chunk).GetGameObject().transform) as GameObject;
+           
+        }
+
+        public ClientBuilding UpdateData(Building building)
+        {
+            this.SpecID = building.SpecID;
+            this.Id = building.Id;
+            this.Tile = ClientStrategyGame.ClientWorld.GetClientTile(building);
+            return this;
+        }
+
+        public void InstantiateInScene(Building serverEntity)
+        {
+            var prefab = Resources.Load("prefabs/buildings/" + serverEntity.SpecID);
+            var tile = ClientStrategyGame.ClientWorld.GetClientTile(serverEntity);
+            _gameObject = MainBehaviour.Instantiate(prefab, tile.ClientChunk.GetGameObject().transform) as GameObject;
+            this.GetGameObject().SetActive(true);
+            UpdateData(serverEntity);
+            if (serverEntity.SpecID == StrategyGame.Specs.InitialBuilding && this.IsMine())
+                CameraBehaviour.FocusOnTile(tile);
         }
 
         public override BuildingSpec GetSpec()
