@@ -7,6 +7,7 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class PartyStatusUpdatePacket : ServerEvent
     {
+
         public byte PartyIndex;
         UnitStats[] Stats;
 

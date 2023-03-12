@@ -1,6 +1,4 @@
-﻿using Game.Events.GameEvents;
-using Game.Events.ServerEvents;
-using Game.World;
+﻿using Game.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +37,5 @@ namespace Game.Entity
                 base.Tile = value;
             }
         }
-
-       
     }
 }

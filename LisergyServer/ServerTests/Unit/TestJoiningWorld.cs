@@ -41,7 +41,7 @@ namespace Tests
             var clientPlayer = new TestServerPlayer();
             Game.HandleClientEvent(clientPlayer, joinEvent);
 
-            var entityVisibleEvents = clientPlayer.ReceivedEventsOfType<EntityVisiblePacket>();
+            var entityVisibleEvents = clientPlayer.ReceivedEventsOfType<EntityUpdatePacket>();
 
             Assert.AreEqual(2, entityVisibleEvents.Count, "Initial Party & Building should be visible");
         }
@@ -54,7 +54,7 @@ namespace Tests
             var player = new TestServerPlayer();
             Game.HandleClientEvent(player, joinEvent);
 
-            var entityVisibleEvents = player.ReceivedEventsOfType<EntityVisiblePacket>();
+            var entityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
             var tileVisibleEvent = player.ReceivedEventsOfType<TileVisiblePacket>();
 
             Assert.IsTrue(tileVisibleEvent.Count > 2);
@@ -71,14 +71,14 @@ namespace Tests
             var player = new TestServerPlayer();
             Game.HandleClientEvent(player, joinEvent);
 
-            var firstEntityVisibleEvents = player.ReceivedEventsOfType<EntityVisiblePacket>();
+            var firstEntityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
             var firstTileVisibleEvents = player.ReceivedEventsOfType<TileVisiblePacket>();
 
             player.ReceivedEvents.Clear();
 
             Game.HandleClientEvent(player, joinEvent);
 
-            var secondEntityVisibleEvents = player.ReceivedEventsOfType<EntityVisiblePacket>();
+            var secondEntityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
             var secondTileVisibleEvents = player.ReceivedEventsOfType<TileVisiblePacket>();
 
             Assert.AreEqual(firstEntityVisibleEvents.Count, secondEntityVisibleEvents.Count);

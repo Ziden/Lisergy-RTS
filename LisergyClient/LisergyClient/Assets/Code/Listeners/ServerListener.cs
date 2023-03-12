@@ -109,12 +109,12 @@ namespace Assets.Code
         }
 
         [EventMethod]
-        public void EntityVisible(EntityVisiblePacket ev)
+        public void EntityVisible(EntityUpdatePacket ev)
         {
-            Log.Debug("Received entity visible");
+            Log.Debug("Received entity update");
             var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.Entity.OwnerID);
             var tile = (ClientTile)_game.GetWorld().GetTile(ev.Entity.X, ev.Entity.Y);
-            var clientEntity = EntityFactory.InstantiateClientEntity(ev.Entity, owner, tile);
+            var clientEntity = EntityFactory.InstantiateOrUpdateEntity(ev.Entity, owner, tile);
             clientEntity.Tile = tile;
             UIManager.PartyUI.DrawAllParties();
         }

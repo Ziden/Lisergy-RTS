@@ -137,9 +137,17 @@ public class PartyUI : IEventListener
         var imageObj = new GameObject("portrait", typeof(Image));
         var image = imageObj.GetComponent<Image>();
         image.sprite = LazyLoad.GetSpecificSpriteArt(unit.Spec.FaceArt);
-        image.rectTransform.sizeDelta = new Vector2(58f * sizeModX, 84f * sizeModY);
+        var parentContainer = parent.GetComponent<RectTransform>();
+        if (parentContainer != null)
+        {
+            image.rectTransform.sizeDelta = parentContainer.sizeDelta * 0.95f;
+        } else
+        {
+            image.rectTransform.sizeDelta = DefaultSize;
+        }
         imageObj.transform.SetParent(parent);
         imageObj.transform.localPosition = new Vector3(0, 0, 0);
+        imageObj.transform.localScale = new Vector3(1, 1, 1);
         return image;
     }
 

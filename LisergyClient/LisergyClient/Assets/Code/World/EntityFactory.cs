@@ -7,7 +7,7 @@ namespace Assets.Code.World
     public class EntityFactory
     {
 
-        public static WorldEntity InstantiateClientEntity(WorldEntity entity, ClientPlayer owner, ClientTile tile)
+        public static WorldEntity InstantiateOrUpdateEntity(WorldEntity entity, ClientPlayer owner, ClientTile tile)
         {
             var knownEntity = owner.GetKnownEntity(entity.Id);
             if (entity is Party)

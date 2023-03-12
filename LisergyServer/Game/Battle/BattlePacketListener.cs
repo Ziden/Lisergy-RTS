@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.Battle;
 using Game.Battles;
 using Game.Entity;
 using Game.Events;
@@ -25,17 +26,18 @@ namespace BattleServer
             return _battlesHappening.Values.ToList();
         }
 
+        // TODO: Battle packet listeners would be in Battle Servers
         [EventMethod]
         public void OnBattleStart(BattleStartPacket ev)
         {
             Console.WriteLine($"Received {ev.Attacker} vs {ev.Defender}");
 
-            ev.Attacker.Entity.BattleID = ev.BattleID;
-            ev.Defender.Entity.BattleID = ev.BattleID;
-
             // register battle
             var battle = new TurnBattle(Guid.Parse(ev.BattleID), ev.Attacker, ev.Defender);
             battle.StartEvent = ev;
+            ev.Attacker.Entity.OnBattleStarted(battle);
+            ev.Defender.Entity.OnBattleStarted(battle);
+
             _battlesHappening[battle.ID.ToString()] = battle;
             foreach (var onlinePlayer in GetOnlinePlayers(battle))
                 onlinePlayer.Send(ev);
@@ -53,14 +55,20 @@ namespace BattleServer
                 return;
             }
             
+  
             foreach (var pl in GetAllPlayers(battle))
             {
                 pl.Send(ev);
                 pl.Battles.Add(ev);
                 Log.Debug($"Player {pl} completed battle {battle.ID}");
             }
-            ev.BattleHeader.Attacker.Entity.BattleID = null;
-            ev.BattleHeader.Defender.Entity.BattleID = null;
+
+            var atk = ev.BattleHeader.Attacker.Entity as IBattleable;
+            var def = ev.BattleHeader.Defender.Entity as IBattleable;
+
+            atk.OnBattleFinished(battle, ev.BattleHeader, ev.Turns);
+            def.OnBattleFinished(battle, ev.BattleHeader, ev.Turns);
+
             _battlesHappening.Remove(ev.BattleHeader.BattleID);
         }
         #region Battle Controller

@@ -44,7 +44,7 @@ namespace Tests
 
             var los = StrategyGame.Specs.Buildings[castleID].LOS;
             var losTiles = tile.GetAOE(los);
-            var entityVisibleEvents = player.ReceivedEventsOfType<EntityVisiblePacket>();
+            var entityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
             var tileVisibleEvent = player.ReceivedEventsOfType<TileVisiblePacket>();
 
             Assert.AreEqual(1, entityVisibleEvents.Count);

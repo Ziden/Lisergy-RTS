@@ -72,10 +72,10 @@ namespace Tests
             var building = player.Buildings.First();
             var tile = unit.Party.Tile;
 
-            var visibleEvent = game.ReceivedEvents.Where(e => e is EntityVisiblePacket).FirstOrDefault() as EntityVisiblePacket;
+            var visibleEvent = game.ReceivedEvents.Where(e => e is EntityUpdatePacket).FirstOrDefault() as EntityUpdatePacket;
 
-            var serialized = Serialization.FromEvent<EntityVisiblePacket>(visibleEvent);
-            var unserialized = Serialization.ToEvent<EntityVisiblePacket>(serialized);
+            var serialized = Serialization.FromEvent<EntityUpdatePacket>(visibleEvent);
+            var unserialized = Serialization.ToEvent<EntityUpdatePacket>(serialized);
 
             Assert.AreEqual(visibleEvent.Entity.Id, unserialized.Entity.Id);
         }

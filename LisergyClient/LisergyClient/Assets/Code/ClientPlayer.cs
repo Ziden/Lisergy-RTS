@@ -9,6 +9,7 @@ namespace Assets.Code
     public class ClientPlayer : PlayerEntity
     {
         public Dictionary<string, BattleStartPacket> BattlesStarts = new Dictionary<string, BattleStartPacket>();
+        public Dictionary<string, WorldEntity> KnowsAbout = new Dictionary<string, WorldEntity>();
 
         public ClientPlayer() : base()
         {
@@ -26,8 +27,6 @@ namespace Assets.Code
         {
             KnowsAbout[e.Id] = e;
         }
-
-        public Dictionary<string, WorldEntity> KnowsAbout = new Dictionary<string, WorldEntity>();
 
         public override bool Online()
         {

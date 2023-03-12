@@ -1,5 +1,6 @@
 ﻿using Game.Battle;
 using Game.Battles;
+using Game.Events;
 using Game.Inventories;
 using System;
 using System.Collections.Generic;
@@ -18,19 +19,13 @@ namespace Game.Entity
         public List<Unit[]> Battles { get => _battles; }
         public Item[] Rewards { get => _rewards; set => _rewards = value; }
 
+        public bool IsBattling => throw new NotImplementedException();
+
         public Dungeon(): base(Gaia) {}
 
         public bool IsComplete()
         {
             return !_battles.Any(battle => battle.Any(unit => unit.Stats.HP != 0));
-        }
-
-        protected override void OnBattleFinished(string battleID)
-        {
-            if (IsComplete())
-            {
-                this.Tile = null;
-            }
         }
 
         public Dungeon(params Unit[] fights): base(Gaia)
@@ -74,6 +69,19 @@ namespace Game.Entity
             }
             dg.DungeonSpecID = specID; 
             return dg;
+        }
+
+        public void OnBattleFinished(TurnBattle battle, BattleHeader BattleHeader, BattleTurnEvent[] Turns)
+        {
+            if (IsComplete())
+            {
+                this.Tile = null;
+            }
+        }
+
+        public void OnBattleStarted(TurnBattle battle)
+        {
+            
         }
     }
 }

@@ -33,18 +33,22 @@ namespace Game.Entity
             return !IsBattling;
         }
 
-        protected override void OnBattleFinished(string battleID)
+        protected string _battleID;
+
+        public virtual string BattleID
         {
-            if(!IsAlive())
+            get => _battleID;
+            set
             {
-                var center = this.Owner.GetCenter();
-                this.Tile = center.Tile;
-                foreach (var unit in _units)
-                    unit?.HealAll();
-               
+                if (value != null)
+                {
+                    _lastBattleTime = DateTime.Now;
+                }
+                _battleID = value;
             }
-            Tile.Game.GameEvents.Call(new PartyStatusUpdateEvent(this));
         }
+
+        public bool IsBattling => _battleID != null;
 
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)
         {
@@ -106,14 +110,32 @@ namespace Game.Entity
             _units[index] = null;
         }
 
+        public BattleTeam GetBattleTeam()
+        {
+            return new BattleTeam(this, this._units);
+        }
+
+        public void OnBattleFinished(TurnBattle battle, BattleHeader BattleHeader, BattleTurnEvent[] Turns)
+        {
+            this.BattleID = null;
+            if (!IsAlive())
+            {
+                var center = this.Owner.GetCenter();
+                this.Tile = center.Tile;
+                foreach (var unit in _units)
+                    unit?.HealAll();
+            }
+            Tile.Game.GameEvents.Call(new PartyStatusUpdateEvent(this));
+        }
+
         public override string ToString()
         {
             return $"<Party Battling={IsBattling} Id={Id} Index={PartyIndex} Owner={OwnerID}>";
         }
 
-        public BattleTeam GetBattleTeam()
+        public void OnBattleStarted(TurnBattle battle)
         {
-            return new BattleTeam(this, this._units);
+            this.BattleID = battle.ID.ToString();
         }
     }
 }

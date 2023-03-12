@@ -1,4 +1,5 @@
-﻿using Game.World;
+﻿using Game.Battle;
+using Game.World;
 using System;
 using System.Linq;
 
@@ -11,9 +12,9 @@ namespace Game.Battles
         public string OwnerID;
 
         [NonSerialized]
-        private WorldEntity _entity;
+        private IBattleable _entity;
 
-        public BattleTeam(WorldEntity entity, params Unit[] units)
+        public BattleTeam(IBattleable entity, params Unit[] units)
         {
             Init(entity, units);
         }
@@ -23,7 +24,7 @@ namespace Game.Battles
             Init(null, units);
         }
 
-        private void Init(WorldEntity entity, params Unit[] units)
+        private void Init(IBattleable entity, params Unit[] units)
         {
             this._entity = entity;
             var owner = entity?.Owner;
@@ -43,7 +44,7 @@ namespace Game.Battles
         }
 
         public bool AllDead { get => !Units.Any(u => !u.Dead); }
-        public WorldEntity Entity { get => _entity; }
+        public IBattleable Entity { get => _entity; }
 
         public BattleUnit RandomUnit()
         {

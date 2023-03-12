@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class EntityVisiblePacket : ServerEvent
+    public class EntityUpdatePacket : ServerEvent
     {
-        public EntityVisiblePacket(WorldEntity entity)
+        public EntityUpdatePacket(WorldEntity entity)
         {
             this.Entity = entity;
         }
@@ -16,7 +16,7 @@ namespace Game.Events.ServerEvents
      
         public override string ToString()
         {
-            return $"<EntityVisible {Entity}>";
+            return $"<EntityUpdate {Entity}>";
         }
     }
 }

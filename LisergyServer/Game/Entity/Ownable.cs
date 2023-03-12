@@ -4,8 +4,16 @@ using System.Text;
 
 namespace Game
 {
+
+    public interface IOwnable
+    {
+        PlayerEntity Owner { get; }
+
+        string OwnerID { get; }
+    }
+
     [Serializable]
-    public class Ownable
+    public class Ownable : IOwnable
     {
         public Ownable(PlayerEntity owner)
         {

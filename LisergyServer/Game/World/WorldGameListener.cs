@@ -83,7 +83,7 @@ namespace Game.World
             if (previousTile != null)
                 newPlayersViewing.ExceptWith(previousTile.PlayersViewing);
 
-            var packet = new EntityVisiblePacket(ev.Entity);
+            var packet = new EntityUpdatePacket(ev.Entity);
             foreach (var viewer in newPlayersViewing)
                 viewer.Send(packet);
         }
@@ -93,10 +93,10 @@ namespace Game.World
             player.Send(new TileVisiblePacket(tile));
 
             foreach (var movingEntity in tile.MovingEntities)
-                player.Send(new EntityVisiblePacket(movingEntity));
+                player.Send(new EntityUpdatePacket(movingEntity));
 
             if (tile.StaticEntity != null)
-                player.Send(new EntityVisiblePacket(tile.StaticEntity));
+                player.Send(new EntityUpdatePacket(tile.StaticEntity));
         }
     }
 }
