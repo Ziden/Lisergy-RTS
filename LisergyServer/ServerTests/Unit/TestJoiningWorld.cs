@@ -55,7 +55,7 @@ namespace Tests
             Game.HandleClientEvent(player, joinEvent);
 
             var entityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
-            var tileVisibleEvent = player.ReceivedEventsOfType<TileVisiblePacket>();
+            var tileVisibleEvent = player.ReceivedEventsOfType<TileUpdatePacket>();
 
             Assert.IsTrue(tileVisibleEvent.Count > 2);
             Assert.AreEqual(2, entityVisibleEvents.Count);
@@ -72,14 +72,14 @@ namespace Tests
             Game.HandleClientEvent(player, joinEvent);
 
             var firstEntityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
-            var firstTileVisibleEvents = player.ReceivedEventsOfType<TileVisiblePacket>();
+            var firstTileVisibleEvents = player.ReceivedEventsOfType<TileUpdatePacket>();
 
             player.ReceivedEvents.Clear();
 
             Game.HandleClientEvent(player, joinEvent);
 
             var secondEntityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
-            var secondTileVisibleEvents = player.ReceivedEventsOfType<TileVisiblePacket>();
+            var secondTileVisibleEvents = player.ReceivedEventsOfType<TileUpdatePacket>();
 
             Assert.AreEqual(firstEntityVisibleEvents.Count, secondEntityVisibleEvents.Count);
             Assert.AreEqual(firstTileVisibleEvents.Count, secondTileVisibleEvents.Count);

@@ -1,11 +1,7 @@
 ﻿using Assets.Code.World;
 using Game;
-using Game.Events.Bus;
 using GameData;
 using System;
-using System.Linq;
-using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Assets.Code
 {
@@ -27,11 +23,6 @@ namespace Assets.Code
         public ClientWorld GetWorld()
         {
            return World as ClientWorld;
-        }
-
-        public override void RegisterEventListeners()
-        {
-         
         }
     }
 }

@@ -21,7 +21,7 @@ namespace ServerTests
 
         public TestServerPlayer() : base(null)
         {
-
+            IsOnline = true;
         }
 
         public override void Send<EventType>(EventType ev)

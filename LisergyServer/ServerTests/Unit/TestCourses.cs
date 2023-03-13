@@ -87,7 +87,7 @@ namespace Tests
             GameScheduler.Tick(GameScheduler.Now + _party.Course.Delay);
 
             var moveEvents = _player.ReceivedEventsOfType<EntityMovePacket>();
-            var tileDiscovery = _player.ReceivedEventsOfType<TileVisiblePacket>();
+            var tileDiscovery = _player.ReceivedEventsOfType<TileUpdatePacket>();
             // should have received movement events
             Assert.AreEqual(1, moveEvents.Count);
             // should have explored some tiles

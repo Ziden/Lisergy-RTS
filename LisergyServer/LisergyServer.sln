@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31105.61
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseServer", "Core\BaseServer.csproj", "{832E3691-6476-49E5-B6FA-2175A8CEE8D7}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameData", "GameData\GameData.csproj", "{5B793397-7989-4CAE-A572-5AC909B8F91F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerTests", "ServerTests\ServerTests.csproj", "{4584F2EF-E15F-479C-BEC9-3DEDDC525658}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LisergyPanel", "LisergyPanel\LisergyPanel.csproj", "{DC5ED48F-EFA5-41D5-BA97-74D41B0992E5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameDataTest", "GameDataTest\GameDataTest.csproj", "{C243FA12-2F86-4682-8FB9-BFE65D0C3337}"
 EndProject
@@ -39,10 +37,6 @@ Global
 		{4584F2EF-E15F-479C-BEC9-3DEDDC525658}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4584F2EF-E15F-479C-BEC9-3DEDDC525658}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4584F2EF-E15F-479C-BEC9-3DEDDC525658}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC5ED48F-EFA5-41D5-BA97-74D41B0992E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC5ED48F-EFA5-41D5-BA97-74D41B0992E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC5ED48F-EFA5-41D5-BA97-74D41B0992E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC5ED48F-EFA5-41D5-BA97-74D41B0992E5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C243FA12-2F86-4682-8FB9-BFE65D0C3337}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C243FA12-2F86-4682-8FB9-BFE65D0C3337}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C243FA12-2F86-4682-8FB9-BFE65D0C3337}.Release|Any CPU.ActiveCfg = Release|Any CPU

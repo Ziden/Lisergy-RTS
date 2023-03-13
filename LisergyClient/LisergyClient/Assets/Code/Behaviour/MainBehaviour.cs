@@ -9,6 +9,8 @@ public class MainBehaviour : MonoBehaviour
     public static ClientPlayer Player { get; private set; }
     public static EventBus NetworkEvents { get; set; }
 
+    private ServerListener _serverPacketListener;
+
     void Start()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -47,7 +49,7 @@ public class MainBehaviour : MonoBehaviour
         NetworkEvents = new EventBus();
         ConfigureUnity();
         Serialization.LoadSerializers();
-        NetworkEvents.RegisterListener(new ServerListener());
+        _serverPacketListener = new ServerListener(NetworkEvents);
     }
 
     void Update()

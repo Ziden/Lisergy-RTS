@@ -41,6 +41,13 @@ namespace Assets.Code.World
             }
         }
 
+        public void UpdateFrom(Tile serverTile)
+        {
+            TileId = serverTile.TileId;
+            ResourceID = serverTile.ResourceID;
+            SetVisible(true);
+        }
+
         public override void SetSeenBy(ExploringEntity entity)
         {
             var a = this;

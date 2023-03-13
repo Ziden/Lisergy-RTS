@@ -12,6 +12,14 @@ namespace Assets.Code
     {
         private ClientStrategyGame _game;
 
+        public ServerListener(EventBus networkEvents)
+        {
+            networkEvents.Register<BattleResultPacket>(this, BattleFinish);
+            networkEvents.Register<BattleStartPacket>(this, BattleStart);
+            networkEvents.Register<MessagePopupPacket>(this, Message);
+            networkEvents.Register<GameSpecPacket>(this, ReceiveSpecs);
+        }
+
         [EventMethod]
         public void BattleFinish(BattleResultPacket ev)
         {
@@ -74,56 +82,6 @@ namespace Assets.Code
             // TODO: Message factory
             if (ev.Type == PopupType.BAD_INPUT)
                 UIManager.Notifications.ShowNotification("Path has obstacles");
-        }
-
-        [EventMethod]
-        public void EntityDestroy(EntityDestroyPacket ev)
-        {
-            Log.Debug("Received entity destroy");
-            var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
-            var knownEntity = owner.GetKnownEntity(ev.ID);
-            if (knownEntity == null)
-                throw new System.Exception($"Server sent destroy event for entity {ev.ID} from {ev.OwnerID} at however its not visible to client");
-
-            var obj = knownEntity as IGameObject;
-            MainBehaviour.Destroy(obj.GetGameObject());
-            if (knownEntity.Tile.StaticEntity == knownEntity)
-                knownEntity.Tile.StaticEntity = null;
-
-            if (knownEntity is MovableWorldEntity)
-                knownEntity.Tile.MovingEntities.Remove(knownEntity as MovableWorldEntity);
-            knownEntity.Tile = null;
-        }
-
-        [EventMethod]
-        public void EntityMove(EntityMovePacket ev)
-        {
-            Log.Debug("Received entity move");
-            var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
-            var knownEntity = owner.GetKnownEntity(ev.ID);
-            if (knownEntity == null)
-                throw new System.Exception($"Server sent move event for entit3y {ev.ID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
-
-            var newTile = (ClientTile)_game.GetWorld().GetTile(ev.X, ev.Y);
-            knownEntity.Tile = newTile;
-        }
-
-        [EventMethod]
-        public void EntityVisible(EntityUpdatePacket ev)
-        {
-            Log.Debug("Received entity update");
-            var clientEntity = ClientEntityManager.InstantiateOrUpdateEntity(_game, ev.Entity);
-        }
-
-        [EventMethod]
-        public void ReceiveTile(TileVisiblePacket ev)
-        {
-            Log.Debug("Received tile");
-            var newTile = ev.Tile;
-            var tile = (ClientTile)_game.GetWorld().GetTile(newTile.X, newTile.Y);
-            tile.TileId = ev.Tile.TileId;
-            tile.ResourceID = ev.Tile.ResourceID;
-            tile.SetVisible(true);
         }
 
         [EventMethod]

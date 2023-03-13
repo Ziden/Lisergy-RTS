@@ -45,7 +45,7 @@ public class PartyUI : IEventListener
         _cursor.SetActive(false);
         _rootObject.SetActive(false);
 
-        ClientEntityManager.OnPartyUpdated += OnPartyUpdated;
+        ClientEntityService.OnPartyUpdated += OnPartyUpdated;
         ClientEvents.OnCameraMove += OnCameraMove;
         ClientEvents.OnClickTile += OnClickTile;
         //MainBehaviour.NetworkEvents.RegisterListener(this);

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class TileVisiblePacket : ServerEvent
+    public class TileUpdatePacket : ServerEvent
     {
-        public TileVisiblePacket(Tile tile)
+        public TileUpdatePacket(Tile tile)
         {
             this.Tile = tile;
         }
@@ -15,7 +15,7 @@ namespace Game.Events.ServerEvents
 
         public override string ToString()
         {
-            return $"<TileVisible {Tile}>";
+            return $"<TileUpdate {Tile}>";
         }
     }
 }

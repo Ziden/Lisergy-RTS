@@ -81,18 +81,16 @@ namespace BattleServer
 
             if (atk.Owner.CanReceivePackets())
             {
-                if(!atk.IsDestroyed)
-                    atk.Owner.Send(atkPacket);
+                atk.Owner.Send(atkPacket);
                 if(!def.IsDestroyed)
                     atk.Owner.Send(defPacket);
             }
 
             if(def.Owner.CanReceivePackets())
             {
-                if (!atk.IsDestroyed)
+                if(!atk.IsDestroyed)
                     def.Owner.Send(atkPacket);
-                if (!def.IsDestroyed)
-                    def.Owner.Send(defPacket);
+                def.Owner.Send(defPacket);
             }
 
             _battlesHappening.Remove(ev.BattleHeader.BattleID);

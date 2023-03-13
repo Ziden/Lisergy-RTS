@@ -11,10 +11,10 @@ namespace Game.Events
         public EntityDestroyPacket(WorldEntity entity)
         {
             this.OwnerID = entity.OwnerID;
-            this.ID = entity.Id;
+            this.EntityID = entity.Id;
         }
 
         public string OwnerID;
-        public string ID;
+        public string EntityID;
     }
 }

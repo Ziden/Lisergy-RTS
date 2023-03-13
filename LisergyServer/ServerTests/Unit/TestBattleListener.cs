@@ -29,7 +29,7 @@ namespace Tests
             SlowUnit.Stats.Speed /= 2;
 
             var game = new TestGame();
-            Listener = game.GetListener<BattleService>();
+            Listener = game.BattleService;
         }
 
         /*

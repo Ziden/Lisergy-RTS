@@ -48,10 +48,35 @@ namespace Tests
                 BattleID = battleID
             });
 
-            party.Battle.Task.Execute();
+            var battle = _game.BattleService.GetBattle(battleID);
+            battle.Task.Execute();
 
             var statusUpdates = _player.ReceivedEventsOfType<PartyStatusUpdatePacket>();
             Assert.AreEqual(1, statusUpdates.Count);
+        }
+
+        [Test]
+        public void TestPartyDoesNotReceiveDestroyPacket()
+        {
+            var playerCastleTile = _player.Buildings.First().Tile;
+            var party = _player.GetParty(0);
+
+            var enemy = new Dungeon();
+            enemy.AddBattle(new Unit(0));
+
+            var battleID = Guid.NewGuid().ToString();
+            _game.NetworkEvents.Call(new BattleStartPacket()
+            {
+                Attacker = party.GetBattleTeam(),
+                Defender = enemy.GetBattleTeam(),
+                BattleID = battleID
+            });
+
+            var battle = _game.BattleService.GetBattle(battleID);
+            battle.Task.Execute();
+
+            var destroyPackets = _player.ReceivedEventsOfType<EntityDestroyPacket>();
+            Assert.AreEqual(0, destroyPackets.Count);
         }
     }
 }

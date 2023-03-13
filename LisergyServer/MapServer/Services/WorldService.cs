@@ -106,7 +106,7 @@ namespace Game.Listeners
 
         public void SendTileTo(Tile tile, PlayerEntity player)
         {
-            player.Send(new TileVisiblePacket(tile));
+            player.Send(new TileUpdatePacket(tile));
 
             foreach (var movingEntity in tile.MovingEntities)
                 player.Send(new EntityUpdatePacket(movingEntity));
