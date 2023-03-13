@@ -76,7 +76,7 @@ namespace Tests
 
             course.Execute();
 
-            var battle = _game.GetListener<BattlePacketListener>().GetBattle(party.BattleID);
+            var battle = _game.BattleService.GetBattle(party.BattleID);
             battle.Task.Execute();
 
             Assert.AreEqual(dungeonTile, _player.GetParty(0).Tile);
@@ -97,7 +97,7 @@ namespace Tests
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);
             _player.GetParty(0).Course.Execute();
 
-            var battle = _game.GetListener<BattlePacketListener>().GetBattle(party.BattleID);
+            var battle = _game.BattleService.GetBattle(party.BattleID);
             battle.Task.Execute();
 
             //  Dungeon completed and removed from map
@@ -121,7 +121,7 @@ namespace Tests
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);
             _player.GetParty(0).Course.Execute();
 
-            var b = _game.GetListener<BattlePacketListener>().GetBattle(party.BattleID);
+            var b = _game.BattleService.GetBattle(party.BattleID);
             b.Task.Execute();
             
             /*

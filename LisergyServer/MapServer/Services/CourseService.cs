@@ -9,13 +9,14 @@ using System.Collections.Generic;
 
 namespace Game.Listeners
 {
-    public class CoursePacketListener : IEventListener
+    public class CourseService : IEventListener
     {
         private GameWorld _world;
 
-        public CoursePacketListener(GameWorld world)
+        public CourseService(StrategyGame _game)
         {
-            this._world = world;
+            this._world = _game.World;
+            _game.NetworkEvents.Register<MoveRequestPacket>(this, RequestMovement);
         }
 
         [EventMethod]

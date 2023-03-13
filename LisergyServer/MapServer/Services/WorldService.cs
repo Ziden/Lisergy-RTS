@@ -1,28 +1,51 @@
-﻿using Game.Battle;
+﻿using Game;
+using Game.Battle;
 using Game.Entity;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
+using Game.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.World
+namespace Game.Listeners
 {
-    public class WorldGameListener : IEventListener
+    public class WorldService : IEventListener
     {
         private StrategyGame _game;
+        private GameWorld _world;
 
-        public WorldGameListener(StrategyGame game)
+        private HashSet<PlayerEntity> viewersCache = new HashSet<PlayerEntity>();
+
+        public WorldService(StrategyGame game)
         {
             _game = game;
+            _world = game.World;
+            _game.NetworkEvents.Register<JoinWorldPacket>(this, JoinWorld);
+            _game.GameEvents.Register<OffensiveMoveEvent>(this, OnOffensiveAction);
+            _game.GameEvents.Register<PlayerVisibilityChangeEvent>(this, OnVisibilityChange);
+            _game.GameEvents.Register<EntityMoveEvent>(this, OnEntityMove);
         }
 
         [EventMethod]
-        public void OnPartyStatusUpdate(PartyStatusUpdateEvent ev)
+        public void JoinWorld(JoinWorldPacket ev)
         {
-            ev.Party.Owner.Send(new PartyStatusUpdatePacket(ev.Party));
+            PlayerEntity player = null;
+            if (_world.Players.GetPlayer(ev.Sender.UserID, out player))
+            {
+                Log.Debug($"Existing player {player.UserID} joined");
+                foreach (var tile in player.VisibleTiles)
+                    SendTileTo(tile, player);
+                _world.Game.GameEvents.Call(new PlayerJoinedEvent(player));
+            }
+            else
+            {
+                player = ev.Sender;
+                _world.PlaceNewPlayer(player);
+                Log.Debug($"New player {player.UserID} joined the world");
+            }
         }
 
         [EventMethod]
@@ -45,14 +68,6 @@ namespace Game.World
         }
 
         [EventMethod]
-        public void OnPlayerJoined(PlayerJoinedEvent ev)
-        {
-            Log.Debug($"Sync {ev.Player.VisibleTiles.Count} visible tiles to " + this);
-            foreach (var tile in ev.Player.VisibleTiles)
-                SendTileTo(tile, ev.Player);
-        }
-
-        [EventMethod]
         public void OnVisibilityChange(PlayerVisibilityChangeEvent ev)
         {
             if (ev.TileVisible)
@@ -65,17 +80,18 @@ namespace Game.World
             var newTile = ev.NewTile;
             var previousTile = ev.OldTile;
 
-            // changed tile
             var movableEntity = ev.Entity as MovableWorldEntity;
-            var allViewers = new HashSet<PlayerEntity>();
+            viewersCache.Clear();
+            var allViewers = viewersCache;
             if (previousTile != newTile && movableEntity != null && previousTile != null)
             {
                 allViewers.UnionWith(previousTile.PlayersViewing);
                 if (newTile != null)
                     allViewers.UnionWith(newTile.PlayersViewing);
 
+                var movePacket = new EntityMovePacket(movableEntity, newTile);
                 foreach (var viewer in allViewers)
-                    viewer.Send(new EntityMovePacket(movableEntity, newTile));
+                    viewer.Send(movePacket);
             }
 
             // Sending Visibility to new viewers
@@ -88,7 +104,7 @@ namespace Game.World
                 viewer.Send(packet);
         }
 
-        private void SendTileTo(Tile tile, PlayerEntity player)
+        public void SendTileTo(Tile tile, PlayerEntity player)
         {
             player.Send(new TileVisiblePacket(tile));
 

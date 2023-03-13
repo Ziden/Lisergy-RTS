@@ -4,6 +4,8 @@ using System.Text;
 
 namespace Game.Entity
 {
+
+    // Gaia is nature
     [Serializable]
     public class Gaia : PlayerEntity
     {

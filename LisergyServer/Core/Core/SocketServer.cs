@@ -2,8 +2,6 @@
 using Game.Events;
 using LisergyServer.Commands;
 using System;
-using System.Net;
-using System.Net.Sockets;
 using Telepathy;
 
 namespace LisergyServer.Core
@@ -26,8 +24,8 @@ namespace LisergyServer.Core
             _socketServer = new Server();
             Serialization.LoadSerializers();
             _game = SetupGame();
+            SetupServices();
             RegisterCommands(_game, _commandExecutor);
-
         }
 
         public abstract void RegisterCommands(StrategyGame game, CommandExecutor executor);
@@ -36,6 +34,8 @@ namespace LisergyServer.Core
         public abstract void Disconnect(int connectionID);
         public abstract ServerType GetServerType();
         public abstract StrategyGame SetupGame();
+
+        public abstract void SetupServices();
 
         public static Ticker Ticker;
 

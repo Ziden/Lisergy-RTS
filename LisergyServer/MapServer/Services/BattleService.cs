@@ -11,10 +11,18 @@ using System.Linq;
 
 namespace BattleServer
 {
-    public class BattlePacketListener : IEventListener
+    public class BattleService : IEventListener
     {
         public GameWorld World { get; private set; }
         private Dictionary<string, TurnBattle> _battlesHappening = new Dictionary<string, TurnBattle>();
+
+        public BattleService(StrategyGame game)
+        {
+            World = game.World;
+            game.NetworkEvents.Register<BattleStartPacket>(this, OnBattleStart);
+            game.NetworkEvents.Register<BattleResultPacket>(this, OnBattleResult);
+        }
+
 
         public void Wipe()
         {
@@ -26,7 +34,6 @@ namespace BattleServer
             return _battlesHappening.Values.ToList();
         }
 
-        // TODO: Battle packet listeners would be in Battle Servers
         [EventMethod]
         public void OnBattleStart(BattleStartPacket ev)
         {
@@ -69,6 +76,25 @@ namespace BattleServer
             atk.OnBattleFinished(battle, ev.BattleHeader, ev.Turns);
             def.OnBattleFinished(battle, ev.BattleHeader, ev.Turns);
 
+            var atkPacket = atk.GetUpdatePacket();
+            var defPacket = def.GetUpdatePacket();
+
+            if (atk.Owner.CanReceivePackets())
+            {
+                if(!atk.IsDestroyed)
+                    atk.Owner.Send(atkPacket);
+                if(!def.IsDestroyed)
+                    atk.Owner.Send(defPacket);
+            }
+
+            if(def.Owner.CanReceivePackets())
+            {
+                if (!atk.IsDestroyed)
+                    def.Owner.Send(atkPacket);
+                if (!def.IsDestroyed)
+                    def.Owner.Send(defPacket);
+            }
+
             _battlesHappening.Remove(ev.BattleHeader.BattleID);
         }
         #region Battle Controller
@@ -82,12 +108,6 @@ namespace BattleServer
         {
             return _battlesHappening.Count;
         }
-
-        public BattlePacketListener(GameWorld world)
-        {
-            World = world;
-        }
-
         public IEnumerable<PlayerEntity> GetOnlinePlayers(TurnBattle battle)
         {
             PlayerEntity pl;

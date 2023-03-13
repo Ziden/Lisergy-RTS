@@ -23,6 +23,8 @@ namespace Game
             _id = Guid.NewGuid().ToString();
         }
 
+        public bool IsDestroyed => _tile != null;
+
         public virtual string Id { get => _id; set => _id = value; }
         public virtual int X { get => _x; }
         public virtual int Y { get => _y; }

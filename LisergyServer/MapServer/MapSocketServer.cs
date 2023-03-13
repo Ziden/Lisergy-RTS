@@ -1,7 +1,10 @@
-﻿using Game;
+﻿using BattleServer;
+using Game;
 using Game.Events;
 using Game.Generator;
+using Game.Listeners;
 using Game.Scheduler;
+using Game.World;
 using GameDataTest;
 using LisergyServer.Commands;
 using LisergyServer.Core;
@@ -9,25 +12,31 @@ using System;
 
 namespace MapServer
 {
-    public class MapService : SocketServer
+    public class MapSocketServer : SocketServer
     {
         private static readonly int MAX_PLAYERS = 100;
      
         private static int WORLD_SEED = 12345;
 
+        private StrategyGame _game;
+
         // TODO: Move to account server
-        private AccountManager _accountManager;
+        private AccountService _accountService;
+        // TODO: Move to battle server
+        private BattleService _battleService;
+        private WorldService _worldService;
+        private CourseService _courseService;
 
         public override ServerType GetServerType() => ServerType.MAP;
 
-        public MapService(int port) : base(port) {
+        public MapSocketServer(int port) : base(port) {
         }
 
         public override void RegisterCommands(StrategyGame game, CommandExecutor executor)
         {
             executor.RegisterCommand(new TileCommand(game));
             executor.RegisterCommand(new TaskCommand(game));
-            executor.RegisterCommand(new BattlesCommand(game));
+            executor.RegisterCommand(new BattlesCommand(game, _battleService));
             executor.RegisterCommand(new ServerCommand(game));
         }
 
@@ -38,7 +47,7 @@ namespace MapServer
 
         public override void Disconnect(int connectionID)
         {
-            _accountManager.Disconnect(connectionID);
+            _accountService.Disconnect(connectionID);
         }
 
         protected override ServerPlayer Auth(BaseEvent ev, int connectionID)
@@ -46,12 +55,12 @@ namespace MapServer
             ServerPlayer caller;
             if (!(ev is AuthPacket))
             {
-                caller = _accountManager.GetPlayer(connectionID);
+                caller = _accountService.GetPlayer(connectionID);
             }
             else
             {
                 ev.ConnectionID = connectionID;
-                caller = _accountManager.Authenticate((AuthPacket)ev);
+                caller = _accountService.Authenticate((AuthPacket)ev);
             }
             if (caller == null)
             {
@@ -64,19 +73,25 @@ namespace MapServer
         public override StrategyGame SetupGame()
         {
             var gameSpecs = TestSpecs.Generate();
-            var game = new StrategyGame(gameSpecs, null);
+            _game = new StrategyGame(gameSpecs, null);
 
             var (sizeX, sizeY) = TestWorldGenerator.MeasureWorld(MAX_PLAYERS);
 
-            game.World = new GameWorld(MAX_PLAYERS, sizeX, sizeY);
-            TestWorldGenerator.PopulateWorld(game.World, WORLD_SEED,
+            _game.World = new GameWorld(MAX_PLAYERS, sizeX, sizeY);
+            TestWorldGenerator.PopulateWorld(_game.World, WORLD_SEED,
                 new NewbieChunkPopulator(),
                 new DungeonsPopulator()
             );
-          
-            game.RegisterEventListeners();
-            _accountManager = new AccountManager(game, _socketServer);
-            return game;
+         
+            return _game;
+        }
+
+        public override void SetupServices()
+        {
+            _accountService = new AccountService(_game, _socketServer);
+            _battleService = new BattleService(_game);
+            _worldService = new WorldService(_game);
+            _courseService = new CourseService(_game);
         }
     }
 }

@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\BaseServer.csproj" />
+    <ProjectReference Include="..\MapServer\MapServer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

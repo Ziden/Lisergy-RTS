@@ -6,7 +6,12 @@ namespace LisergyServer.Commands
 {
     public class BattlesCommand : Command
     {
-        public BattlesCommand(StrategyGame game) : base(game) { }
+        private BattleService _service;
+
+        public BattlesCommand(StrategyGame game, BattleService battle) : base(game) 
+        {
+            _service = battle;
+        }
 
         public override void Execute(CommandSender sender, CommandArgs args)
         {
@@ -16,16 +21,13 @@ namespace LisergyServer.Commands
                 sender.SendMessage(".battles list - list all battles");
             } else if(args.GetString(0) == "list")
             {
-                var battleListener = this.Game.GetListener<BattlePacketListener>();
-                foreach (var battle in battleListener.GetBattles())
+                foreach (var battle in _service.GetBattles())
                     sender.SendMessage($"- {battle}");
             }
             else if (args.GetString(0) == "clear")
             {
-                var battleListener = this.Game.GetListener<BattlePacketListener>();
-                battleListener.Wipe();
+                _service.Wipe();
             }
-
         }
 
         public override string GetCommand()

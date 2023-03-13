@@ -41,10 +41,7 @@ namespace Game.Events.Bus
             _listeners = new HashSet<IEventListener>();
         }
 
-        public IEventListener GetListener(Type type)
-        {
-            return _listeners.FirstOrDefault(l => type.IsAssignableFrom(l.GetType()));
-        }
+
 
         private void RegisterCallback(IEventListener listener, MethodInfo method, Type eventType)
         {
@@ -61,6 +58,18 @@ namespace Game.Events.Bus
             _listeners.Add(listener);
         }
 
+        public void Register<EventType>(IEventListener listener, Action<EventType> callback)
+        {
+            if(!callback.Method.CustomAttributes.Any(a => a.AttributeType == typeof(EventMethod)))
+            {
+                throw new Exception("Listener must have [EventMethod] Attribute");
+            }
+            RegisterCallback(listener, callback.Method, typeof(EventType));
+        }
+
+        /*
+        /// Registers all callbacks from listener.
+        /// Removed as it was not really clear.
         public void RegisterListener(IEventListener listener)
         {
             var type = listener.GetType();
@@ -80,5 +89,6 @@ namespace Game.Events.Bus
                 }
             }
         }
+        */
     }
 }

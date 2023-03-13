@@ -1,6 +1,7 @@
 ﻿using Game.Battle;
 using Game.Battles;
 using Game.Events;
+using Game.Events.ServerEvents;
 using Game.Inventories;
 using System;
 using System.Collections.Generic;
@@ -83,5 +84,7 @@ namespace Game.Entity
         {
             
         }
+
+        public ServerEvent GetUpdatePacket() => new EntityUpdatePacket(this);
     }
 }

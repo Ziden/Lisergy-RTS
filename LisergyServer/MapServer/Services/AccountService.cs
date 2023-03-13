@@ -1,21 +1,29 @@
 ﻿using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
-using LisergyServer.Auth;
 using System;
 using System.Collections.Generic;
 using Telepathy;
 
 namespace LisergyServer.Core
 {
-    public class AccountManager
+    public class Account
+    {
+        public Guid ID;
+        public string Login;
+        public string Password;
+
+        public ServerPlayer Player;
+    }
+
+    public class AccountService
     {
         private Server _server { get; set; }
         private StrategyGame _game { get; set; }
         private Dictionary<int, ServerPlayer> Players = new Dictionary<int, ServerPlayer>();
         private Dictionary<string, Account> AccountsByLogin = new Dictionary<string, Account>();
 
-        public AccountManager(StrategyGame game, Server server)
+        public AccountService(StrategyGame game, Server server)
         {
             this._server = server;
             this._game = game;

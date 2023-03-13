@@ -8,7 +8,6 @@ using Game.Battles;
 using Game.Events.GameEvents;
 using Game.Battle;
 using Game.Events.ServerEvents;
-using BattleServer;
 
 namespace Game.Entity
 {
@@ -26,8 +25,6 @@ namespace Game.Entity
         public bool IsAlive() => _units.Where(u => u != null && u.Stats.HP > 0).Any();
 
         public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(0.25);
-
-        public TurnBattle Battle { get => Tile?.Game.GetListener<BattlePacketListener>().GetBattle(BattleID); }
 
         public bool CanMove()
         {
@@ -139,7 +136,6 @@ namespace Game.Entity
                 foreach (var unit in _units)
                     unit?.HealAll();
             }
-            Tile.Game.GameEvents.Call(new PartyStatusUpdateEvent(this));
         }
 
         public override string ToString()
@@ -151,5 +147,7 @@ namespace Game.Entity
         {
             this.BattleID = battle.ID.ToString();
         }
+
+        public ServerEvent GetUpdatePacket() => new PartyStatusUpdatePacket(this);
     }
 }

@@ -1,6 +1,8 @@
-﻿using Game;
+﻿using BattleServer;
+using Game;
 using Game.Battles;
 using Game.Events;
+using Game.Listeners;
 using Game.World;
 using GameData;
 using GameDataTest;
@@ -14,17 +16,30 @@ namespace ServerTests
     public class TestGame : StrategyGame
     {
         private bool _registered = false;
+
+        public BattleService BattleService { get; private set; }
+        public WorldService WorldService { get; private set; }
+        public CourseService CourseService { get; private set; }
+
+
         public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), world == null ? new GameWorld(4, 40, 40) : world)
         {
-            this.RegisterEventListeners();
+            
             if (!_registered)
             {
                 _registered = true;
             }
             Serialization.LoadSerializers();
+
+            BattleService = new BattleService(this);
+            WorldService = new WorldService(this);
+            CourseService = new CourseService(this);
+
             this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             if (createPlayer)
                 CreatePlayer();
+
+  
         }
 
         public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientEvent

@@ -25,6 +25,11 @@ namespace Game
             return Parties[partyIndex];
         }
 
+        public bool CanReceivePackets()
+        {
+            return Online() && !Gaia.IsGaia(UserID);
+        }
+
         public PlayerEntity()
         {
             this.UserID = Guid.NewGuid().ToString();
