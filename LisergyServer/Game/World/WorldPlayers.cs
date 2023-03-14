@@ -8,7 +8,7 @@ namespace Game
     {
         public int MaxPlayers { get; private set; }
 
-        private Dictionary<string, PlayerEntity> _players = new Dictionary<string, PlayerEntity>();
+        private Dictionary<GameId, PlayerEntity> _players = new Dictionary<GameId, PlayerEntity>();
 
         public WorldPlayers(int maxPlayers)
         {

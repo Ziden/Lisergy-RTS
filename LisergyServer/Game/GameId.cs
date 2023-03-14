@@ -11,6 +11,8 @@ namespace Game
     [Serializable]
     public unsafe struct GameId : IEquatable<GameId>
     {
+        public static GameId ZERO = Guid.Empty;
+
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         public byte[] _bytes;
 
@@ -31,11 +33,16 @@ namespace Game
 
         public static implicit operator GameId(string id)
         {
+            if(id == null)
+            {
+                return ZERO;
+            }
             return new GameId() { _bytes = Guid.Parse(id).ToByteArray() };
         }
 
         public static implicit operator string(GameId id)
         {
+            if (id == ZERO) return null;
             return new Guid(id._bytes).ToString();
         }
 
