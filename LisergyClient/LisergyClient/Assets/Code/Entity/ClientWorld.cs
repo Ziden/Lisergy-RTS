@@ -25,9 +25,6 @@ namespace Assets.Code.World
 
         public ClientPlayer GetOrCreateClientPlayer(GameId uid)
         {
-            if (uid == Guid.Empty)
-                return null;
-
             PlayerEntity pl;
             if (Players.GetPlayer(uid, out pl))
                 return (ClientPlayer)pl;
