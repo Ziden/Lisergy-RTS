@@ -84,7 +84,7 @@ namespace ServerTests
         public Tile RandomNotBuiltTile()
         {
             foreach (var tile in World.AllTiles())
-                if (tile.StaticEntity == null)
+                if (tile.GetComponent<TileEntityPlacementComponent>().StaticEntity == null)
                     return tile;
             return null;
         }

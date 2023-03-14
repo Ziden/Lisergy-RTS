@@ -1,5 +1,6 @@
 using Game;
 using Game.Events.ServerEvents;
+using Game.World;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Tests
 
             Assert.AreEqual(1, player.Units.Count);
             Assert.AreEqual(TestGame.Specs.InitialUnit, unit.SpecId);
-            Assert.That(unit.Party.Tile.MovingEntities.Contains(unit.Party));
+            Assert.That(unit.Party.Tile.GetComponent<TileEntityPlacementComponent>().EntitiesIn.Contains(unit.Party));
         }
 
         [Test]

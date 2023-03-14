@@ -1,5 +1,7 @@
 ﻿using Game.Events;
+using Game.Events.GameEvents;
 using Game.Movement;
+using Game.World;
 using System;
 using System.Collections.Generic;
 
@@ -28,13 +30,30 @@ namespace Game.Entity
 
         public override Tile Tile
         {
-            get { return base.Tile; }
-            set
+            get => base.Tile; set
             {
-                if (base.Tile != null)
-                    base.Tile.MovingEntities.Remove(this);
-                value.MovingEntities.Add(this);
+                var oldTile = base.Tile;
                 base.Tile = value;
+                if (oldTile != null)
+                {
+                    oldTile.CallEvent(new EntityMoveOutEvent()
+                    {
+                        Entity = this,
+                        ToTile = value,
+                        FromTile = oldTile
+                    });
+                }
+                if (value != null)
+                {
+                    value.CallEvent(new EntityMoveInEvent()
+                    {
+                        Entity = this,
+                        ToTile = _tile,
+                        FromTile = oldTile
+                    });
+                }
+
+                Log.Info($"Placed {this} in {_tile}");
             }
         }
     }

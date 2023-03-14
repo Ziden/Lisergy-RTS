@@ -26,7 +26,7 @@ namespace Game.Listeners
             _game.NetworkEvents.Register<JoinWorldPacket>(this, JoinWorld);
             _game.GameEvents.Register<OffensiveMoveEvent>(this, OnOffensiveAction);
             _game.GameEvents.Register<PlayerVisibilityChangeEvent>(this, OnVisibilityChange);
-            _game.GameEvents.Register<EntityMoveEvent>(this, OnEntityMove);
+            _game.GameEvents.Register<EntityMoveInEvent>(this, OnEntityMove);
         }
 
         [EventMethod]
@@ -68,19 +68,19 @@ namespace Game.Listeners
         }
 
         [EventMethod]
-        public void OnEntityMove(EntityMoveEvent ev)
+        public void OnEntityMove(EntityMoveInEvent ev)
         {
-            var newTile = ev.NewTile;
-            var previousTile = ev.OldTile;
+            var newTile = ev.ToTile;
+            var previousTile = ev.FromTile;
 
             var movableEntity = ev.Entity as MovableWorldEntity;
             viewersCache.Clear();
             var allViewers = viewersCache;
             if (previousTile != newTile && movableEntity != null && previousTile != null)
             {
-                allViewers.UnionWith(previousTile.PlayersViewing);
+                allViewers.UnionWith(previousTile.GetComponent<TileVisibilityComponent>().PlayersViewing);
                 if (newTile != null)
-                    allViewers.UnionWith(newTile.PlayersViewing);
+                    allViewers.UnionWith(newTile.GetComponent<TileVisibilityComponent>().PlayersViewing);
 
                 var movePacket = new EntityMovePacket(movableEntity, newTile);
                 foreach (var viewer in allViewers)
@@ -88,9 +88,9 @@ namespace Game.Listeners
             }
 
             // Sending Visibility to new viewers
-            var newPlayersViewing = new HashSet<PlayerEntity>(newTile.PlayersViewing);
+            var newPlayersViewing = new HashSet<PlayerEntity>(newTile.GetComponent<TileVisibilityComponent>().PlayersViewing);
             if (previousTile != null)
-                newPlayersViewing.ExceptWith(previousTile.PlayersViewing);
+                newPlayersViewing.ExceptWith(previousTile.GetComponent<TileVisibilityComponent>().PlayersViewing);
 
             var packet = new EntityUpdatePacket(ev.Entity);
             foreach (var viewer in newPlayersViewing)
@@ -100,12 +100,7 @@ namespace Game.Listeners
         public void SendTileTo(Tile tile, PlayerEntity player)
         {
             player.Send(new TileUpdatePacket(tile));
-
-            foreach (var movingEntity in tile.MovingEntities)
-                player.Send(new EntityUpdatePacket(movingEntity));
-
-            if (tile.StaticEntity != null)
-                player.Send(new EntityUpdatePacket(tile.StaticEntity));
+            tile.CallEvent(new TileSentToPlayerEvent(tile, player));
         }
     }
 }

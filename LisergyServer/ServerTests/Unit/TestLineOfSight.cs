@@ -68,7 +68,7 @@ namespace Tests
             foreach (var seenTile in areaTiles)
             {
                 Assert.True(seenTile.IsVisibleTo(player));
-                Assert.True(seenTile.EntitiesViewing.Contains(building));
+                Assert.True(seenTile.GetComponent<TileVisibilityComponent>().EntitiesViewing.Contains(building));
                 Assert.True(player.VisibleTiles.Contains(seenTile));
             }
         }

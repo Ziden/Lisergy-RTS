@@ -1,5 +1,6 @@
 ﻿using Game.Entity;
 using Game.Events;
+using Game.Events.GameEvents;
 using GameData;
 using System;
 
@@ -22,10 +23,10 @@ namespace Game
                 base.Tile = newTile;
 
                 if (newTile != null)
-                    newTile.StaticEntity = this;
+                    newTile.CallEvent(new StaticEntityPlacedEvent(this, newTile));
                 else if(oldTile != null)
                 {
-                    oldTile.StaticEntity = null;
+                    oldTile.CallEvent(new StaticEntityRemovedEvent(this, oldTile));
                 }
             }
         }

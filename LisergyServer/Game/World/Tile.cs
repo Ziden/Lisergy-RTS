@@ -1,8 +1,7 @@
 ﻿using Game.Entity;
 using Game.Events;
 using Game.Events.GameEvents;
-using Game.Events.ServerEvents;
-using GameData;
+using Game.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +9,9 @@ using System.Linq;
 namespace Game
 {
     [Serializable]
-    public class Tile
+    public class Tile : IComponentHolder<TileComponent, Tile>
     {
+
         private byte _resourceID;
         private byte _tileId;
         private ushort _y;
@@ -22,42 +22,35 @@ namespace Game
             this._chunk = c;
             this._x = (ushort)x;
             this._y = (ushort)y;
+            _resourceID = 0;
+            _tileId = 0;
+
+            // TODO Move somewhere else
+            _components = new ComponentStore<TileComponent, Tile>(this);
+            _components.AddComponent<TileVisibilityComponent>();
+            _components.AddComponent<TileEntityPlacementComponent>();    
         }
+
+        [NonSerialized]
+        private ComponentStore<TileComponent, Tile> _components;
 
         [NonSerialized]
         private Chunk _chunk;
 
-        [NonSerialized]
-        private List<MovableWorldEntity> _parties = new List<MovableWorldEntity>();
-
-        [NonSerialized]
-        protected HashSet<PlayerEntity> _playersViewing = new HashSet<PlayerEntity>();
-
-        [NonSerialized]
-        protected HashSet<WorldEntity> _entitiesViewing = new HashSet<WorldEntity>();
-
-        [NonSerialized]
-        private StaticEntity _staticEntity;
-
-        public virtual string OwnerID { get => _staticEntity?.OwnerID; }
         public virtual ushort Y { get => _y; }
         public virtual ushort X { get => _x; }
-        public virtual HashSet<WorldEntity> EntitiesViewing { get { return _entitiesViewing; } }
+
         public virtual Chunk Chunk { get { return _chunk; } }
         public virtual byte TileId { get => _tileId; set => _tileId = value; }
         public virtual byte ResourceID { get => _resourceID; set => _resourceID = value; }
-        public virtual List<MovableWorldEntity> MovingEntities { get { return _parties; } }
-        public virtual HashSet<PlayerEntity> PlayersViewing { get => _playersViewing; }
         public float MovementFactor { get => this.GetSpec().MovementFactor; }
 
         public StrategyGame Game => Chunk.Map.World.Game;
-        // TODO, Remove Setter for StaticEntity (use entity Tile setter)
-        public virtual StaticEntity StaticEntity { get => _staticEntity; set => _staticEntity = value; }
 
         public virtual void SetSeenBy(ExploringEntity explorer)
         {
-            _entitiesViewing.Add(explorer);
-            if (_playersViewing.Add(explorer.Owner))
+            GetComponent<TileVisibilityComponent>().EntitiesViewing.Add(explorer);
+            if (GetComponent<TileVisibilityComponent>().PlayersViewing.Add(explorer.Owner))
             {             
                 explorer.Owner.OnceExplored.Add(this);
                 explorer.Owner.VisibleTiles.Add(this);
@@ -67,11 +60,11 @@ namespace Game
 
         public virtual void SetUnseenBy(ExploringEntity unexplorer)
         {
-            _entitiesViewing.Remove(unexplorer);
-            if (!_entitiesViewing.Any(e => e.Owner == unexplorer.Owner))
+            GetComponent<TileVisibilityComponent>().EntitiesViewing.Remove(unexplorer);
+            if (!GetComponent<TileVisibilityComponent>().EntitiesViewing.Any(e => e.Owner == unexplorer.Owner))
             {
                 unexplorer.Owner.VisibleTiles.Remove(this);
-                if(_playersViewing.Remove(unexplorer.Owner))
+                if(GetComponent<TileVisibilityComponent>().PlayersViewing.Remove(unexplorer.Owner))
                 {
                     Game.GameEvents.Call(new PlayerVisibilityChangeEvent(unexplorer, this, false));
                 }
@@ -80,7 +73,7 @@ namespace Game
 
         public virtual bool IsVisibleTo(PlayerEntity player)
         {
-            return _playersViewing.Contains(player);
+            return GetComponent<TileVisibilityComponent>().PlayersViewing.Contains(player);
         }
 
         public bool Passable
@@ -92,8 +85,21 @@ namespace Game
         {
             return $"<Tile {X}-{Y} ID={TileId} " +
                 (ResourceID == 0 ? "" : $"Res={ResourceID}") +
-                (StaticEntity == null ? "" : $"Building={StaticEntity?.ToString()}") +
+                (GetComponent<TileEntityPlacementComponent>().StaticEntity == null ? "" : $"Building={GetComponent<TileEntityPlacementComponent>().StaticEntity?.ToString()}") +
                 ">";
+        }
+     
+        public T GetComponent<T>() where T : TileComponent => _components.GetComponent<T>();
+        public void AddComponent<T>() where T : TileComponent => _components.AddComponent<T>();
+
+        T IComponentHolder<TileComponent, Tile>.GetComponent<T>() => _components.GetComponent<T>();
+
+        public IReadOnlyCollection<TileComponent> GetComponents() => _components.GetComponents();
+
+        public void CallEvent(GameEvent ev)
+        {
+            _components.Events.Call(ev);
+            Game.GameEvents.Call(ev);
         }
     }
 }

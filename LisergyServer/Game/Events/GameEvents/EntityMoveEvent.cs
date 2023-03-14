@@ -4,10 +4,17 @@ using System.Text;
 
 namespace Game.Events.GameEvents
 {
-    public class EntityMoveEvent : GameEvent
+    public class EntityMoveInEvent : GameEvent
     {
         public WorldEntity Entity;
-        public Tile NewTile;
-        public Tile OldTile;
+        public Tile ToTile;
+        public Tile FromTile;
+    }
+
+    public class EntityMoveOutEvent : GameEvent
+    {
+        public WorldEntity Entity;
+        public Tile ToTile;
+        public Tile FromTile;
     }
 }

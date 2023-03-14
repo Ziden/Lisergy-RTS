@@ -2,6 +2,7 @@
 using Game.Events;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
+using Game.World;
 using System;
 
 namespace Game
@@ -34,6 +35,7 @@ namespace Game
             get => _tile; set
             {
                 var oldTile = _tile;
+              
                 _tile = value;
                 if(_tile != null)
                 {
@@ -45,19 +47,12 @@ namespace Game
                     _y = 0;
                     if(oldTile != null)
                     {
-                        foreach (var viewer in oldTile.PlayersViewing)
+                        foreach (var viewer in oldTile.GetComponent<TileVisibilityComponent>().PlayersViewing)
                             viewer.Send(new EntityDestroyPacket(this));
                     }
                 }
-                if (value != null)
-                {
-                    value.Game.GameEvents.Call(new EntityMoveEvent()
-                    {
-                        Entity = this,
-                        NewTile = _tile,
-                        OldTile = oldTile
-                    });
-                }
+               
+
                 Log.Info($"Placed {this} in {_tile}");
             }
         }

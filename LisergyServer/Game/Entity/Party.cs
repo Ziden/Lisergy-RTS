@@ -64,26 +64,6 @@ namespace Game.Entity
 
         public byte PartyIndex { get => _partyIndex; set => _partyIndex = value; }
 
-        public override Tile Tile
-        {
-            get => base.Tile;
-            set
-            {
-                base.Tile = value;
-                if (value != null && value.StaticEntity != null)
-                {
-                    if (this.Course != null && this.Course.Intent == MovementIntent.Offensive && this.Course.IsLastMovement())
-                    {
-                        Tile.Game.GameEvents.Call(new OffensiveMoveEvent()
-                        {
-                            Defender = value.StaticEntity,
-                            Attacker = this
-                        });
-                    }
-                }
-            }
-        }
-
         public override byte GetLineOfSight()
         {
             return _units.Where(u => u != null).Select(u => StrategyGame.Specs.Units[u.SpecId].LOS).Max();
