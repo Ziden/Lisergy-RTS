@@ -7,35 +7,36 @@ namespace Game
     [Serializable]
     public class Unit
     {
+        [NonSerialized]
         private byte _partyId = byte.MaxValue;
 
         [NonSerialized]
         private Party _party;
 
-        public string  Name { get; set; }
-        public string Id { get; protected set; }
+        public string Name { get; set; }
+        public GameId Id { get; protected set; }
         public ushort SpecId { get; private set; }
         public UnitStats Stats { get; private set; }
-        public UnitSpec Spec { get => StrategyGame.Specs.Units[this.SpecId]; }
 
         public Unit(ushort unitSpecId)
         {
-            this.Name = "Unamed";
+            this.Name = "NoName";
             this.SpecId = unitSpecId;
-            this.Id = Guid.NewGuid().ToString();
+            this.Id = Guid.NewGuid();
             this.Stats = new UnitStats();
         }
 
+
         public void SetSpecStats()
         {
-            this.Stats.SetStats(Spec.Stats);
+            this.Stats.SetStats(StrategyGame.Specs.Units[this.SpecId].Stats);
             HealAll();
         }
 
         public void HealAll()
         {
             this.Stats.HP = this.Stats.MaxHP;
-            this.Stats.Mp = this.Stats.MaxMP;
+            this.Stats.MP = this.Stats.MaxMP;
         }
 
         public Party Party

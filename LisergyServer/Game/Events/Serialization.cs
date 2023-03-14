@@ -20,6 +20,9 @@ namespace Game.Events
         {
             var models = GetEventTypes().ToList();
 
+            models.Add(typeof(Unit));
+            //models.Add(typeof(GameId));
+
             // Battle
             models.Add(typeof(AttackActionResult));
             models.Add(typeof(ActionResult));
@@ -46,7 +49,7 @@ namespace Game.Events
             Serializer = new Serializer(models);
         }
 
-        static IEnumerable<Type> GetEventTypes()
+        public static IEnumerable<Type> GetEventTypes()
         {
             foreach (Type type in typeof(BaseEvent).Assembly.GetTypes())
             {
@@ -74,6 +77,15 @@ namespace Game.Events
             using (var stream = new MemoryStream())
             {
                 Serializer.Serialize(stream, ev);
+                return stream.ToArray();
+            }
+        }
+
+        public static byte[] FromAnyType<T>(T o)
+        {
+            using (var stream = new MemoryStream())
+            {
+                Serializer.Serialize(stream, o);
                 return stream.ToArray();
             }
         }

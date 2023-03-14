@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>7.2</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,11 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NetSerializer" Version="4.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GameData\GameData.csproj" />
+    <ProjectReference Include="..\Serializer\Serializer.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

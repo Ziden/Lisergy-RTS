@@ -10,7 +10,7 @@ namespace Game.Battle
     public class BattleHeader
     {
         public bool AttackerWins;
-        public string BattleID;
+        public GameId BattleID;
         public BattleTeam Attacker;
         public BattleTeam Defender;
         public DateTime Date;
@@ -20,9 +20,9 @@ namespace Game.Battle
     public class MiniBattleHeader
     {
         public bool AttackerWins;
-        public string BattleID;
-        public string attackerId;
-        public string defenderId;
+        public GameId BattleID;
+        public GameId attackerId;
+        public GameId defenderId;
         public ushort[] AttackerUnitSpecIds;
         public ushort[] DefenderUnitSpecIds;
         public DateTime Date;

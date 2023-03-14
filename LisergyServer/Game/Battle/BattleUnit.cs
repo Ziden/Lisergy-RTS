@@ -19,7 +19,7 @@ namespace Game.Battles
         public int RT { get; set; }
 
         public bool Dead { get => Stats.HP == 0; }
-        public string UnitID { get => UnitReference.Id; }
+        public GameId UnitID { get => UnitReference.Id; }
         public Unit UnitReference { get => _unitReference; set { _unitReference = value; } }
 
         public BattleUnit(PlayerEntity owner, BattleTeam team, Unit unit)

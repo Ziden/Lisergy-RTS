@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Game.Battle
 {
-    public interface IBattleable : IOwnable, IUpdateable
+    public interface IBattleable : IOwnable, IMapEntity, IUpdateable
     {
         BattleTeam GetBattleTeam();
 

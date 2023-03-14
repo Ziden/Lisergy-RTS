@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "K89+P0R3M+bS8PaUZag94r8cCrUMu9xO/88AxtfI+/fy/vchE2rzGmSuakLbkjQZ3Z/5sq9W+Vz4yTGmTyx8lA==",
+  "dgSpecHash": "i0MTTlT1Y10i8Zko/aL/ZAtMslDbnoZo4pju3Vu/igPuR5wwZu8Wrp9X8upv4oV8cEpJvR02eHhxTNXYlumj4g==",
   "success": false,
   "projectFilePath": "C:\\Users\\gabri\\source\\repos\\Lisergy\\LisergyServer\\MessageBroker\\LisergyMQ.csproj",
   "expectedPackageFiles": [

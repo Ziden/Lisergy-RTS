@@ -7,13 +7,14 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class PartyStatusUpdatePacket : ServerEvent
     {
-
+        public GameId OwnerID;
         public byte PartyIndex;
         UnitStats[] Stats;
 
         public PartyStatusUpdatePacket(Party entity)
         {
-            this.PartyIndex = entity.PartyIndex;
+            PartyIndex = entity.PartyIndex;
+            OwnerID = entity.OwnerID;
             var units = entity.GetUnits();
             Stats = new UnitStats[units.Length];
             for (var x = 0; x < units.Length; x++)

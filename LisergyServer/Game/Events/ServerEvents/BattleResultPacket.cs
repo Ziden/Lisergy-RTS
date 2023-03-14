@@ -12,7 +12,7 @@ namespace Game.Events
 
         public BattleTurnEvent[] Turns;
 
-        public BattleResultPacket(string battleID, TurnBattleResult result)
+        public BattleResultPacket(GameId battleID, TurnBattleResult result)
         {
             BattleHeader = new BattleHeader();
             BattleHeader.BattleID = battleID;

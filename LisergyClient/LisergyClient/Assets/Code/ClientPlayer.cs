@@ -11,8 +11,7 @@ namespace Assets.Code
 {
     public class ClientPlayer : PlayerEntity
     {
-        public Dictionary<string, BattleStartPacket> BattlesStarts = new Dictionary<string, BattleStartPacket>();
-        public Dictionary<string, WorldEntity> KnowsAbout = new Dictionary<string, WorldEntity>();
+        public Dictionary<GameId, WorldEntity> KnowsAbout = new Dictionary<GameId, WorldEntity>();
 
         public ClientPlayer() : base()
         {
@@ -35,7 +34,7 @@ namespace Assets.Code
             return known;
         }
 
-        public WorldEntity GetKnownEntity(string id)
+        public WorldEntity GetKnownEntity(GameId id)
         {
             WorldEntity e;
             KnowsAbout.TryGetValue(id, out e);

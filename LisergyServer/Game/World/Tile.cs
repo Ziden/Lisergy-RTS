@@ -39,7 +39,6 @@ namespace Game
         [NonSerialized]
         private StaticEntity _staticEntity;
 
-        public virtual TileSpec Spec { get => StrategyGame.Specs.Tiles[this.TileId]; }
         public virtual string OwnerID { get => _staticEntity?.OwnerID; }
         public virtual ushort Y { get => _y; }
         public virtual ushort X { get => _x; }
@@ -49,7 +48,7 @@ namespace Game
         public virtual byte ResourceID { get => _resourceID; set => _resourceID = value; }
         public virtual List<MovableWorldEntity> MovingEntities { get { return _parties; } }
         public virtual HashSet<PlayerEntity> PlayersViewing { get => _playersViewing; }
-        public float MovementFactor { get => Spec.MovementFactor; }
+        public float MovementFactor { get => this.GetSpec().MovementFactor; }
 
         public StrategyGame Game => Chunk.Map.World.Game;
         // TODO, Remove Setter for StaticEntity (use entity Tile setter)

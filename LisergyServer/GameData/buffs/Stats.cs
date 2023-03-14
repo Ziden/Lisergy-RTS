@@ -1,6 +1,6 @@
 ﻿namespace GameData.buffs
 {
-    public enum Stat
+    public enum Stat : byte
     {
         // Vitals
         MHP, HP, MMP, MP,

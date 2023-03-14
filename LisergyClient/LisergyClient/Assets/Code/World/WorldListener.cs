@@ -9,21 +9,19 @@ using System.Threading.Tasks;
 
 namespace Assets.Code.World
 {
-    public class ClientWorldService : IEventListener
+    public class WorldListener : IEventListener
     {
-        ClientStrategyGame _game;
 
-        public ClientWorldService(ClientStrategyGame game)
+        public WorldListener(EventBus networkEvents)
         {
-            _game = game;
-            _game.NetworkEvents.Register<TileUpdatePacket>(this, TileUpdate);
+            networkEvents.Register<TileUpdatePacket>(this, TileUpdate);
         }
 
         [EventMethod]
         public void TileUpdate(TileUpdatePacket ev)
         {
             Log.Debug("Received tile");
-            var tile = _game.GetWorld().GetClientTile(ev.Tile.X, ev.Tile.Y);
+            var tile = ClientStrategyGame.ClientWorld.GetClientTile(ev.Tile.X, ev.Tile.Y);
             tile.UpdateFrom(ev.Tile);
         }
     }

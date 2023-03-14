@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Game.Events.GameEvents;
+using System.Reflection;
 
 namespace Game.Events.Bus
 {
@@ -9,6 +10,10 @@ namespace Game.Events.Bus
 
         public void Call(BaseEvent ev)
         {
+            if(ev.GetType() == typeof(OffensiveMoveEvent))
+            {
+                var asd = 123;
+            }
             Method.Invoke(Listener, new object[] { ev });
         }
     }

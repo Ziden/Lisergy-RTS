@@ -7,30 +7,28 @@ using System;
 
 namespace Assets.Code.World
 {
-    public class ClientEntityService : IEventListener
+    public class EntityListener : IEventListener
     {
-        private ClientStrategyGame _game;
 
         public static event Action<ClientParty> OnPartyUpdated;
         public static event Action<ClientBuilding> OnBuildingUpdated;
         public static event Action<ClientDungeon> OnDungeonUpdated;
 
-        public ClientEntityService(ClientStrategyGame game)
+        public EntityListener(EventBus networkEvents)
         {
-            _game = game;
-            _game.NetworkEvents.Register<EntityDestroyPacket>(this, EntityDestroy);
-            _game.NetworkEvents.Register<EntityMovePacket>(this, EntityMove);
-            _game.NetworkEvents.Register<EntityUpdatePacket>(this, EntityUpdate);
+            networkEvents.Register<EntityDestroyPacket>(this, EntityDestroy);
+            networkEvents.Register<EntityMovePacket>(this, EntityMove);
+            networkEvents.Register<EntityUpdatePacket>(this, EntityUpdate);
         }
 
         [EventMethod]
         public void EntityDestroy(EntityDestroyPacket ev)
         {
             Log.Debug("Received entity destroy");
-            var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
-            var knownEntity = owner.GetKnownEntity(ev.ID);
+            var owner = ClientStrategyGame.ClientWorld.GetOrCreateClientPlayer(ev.OwnerID);
+            var knownEntity = owner.GetKnownEntity(ev.EntityID);
             if (knownEntity == null)
-                throw new System.Exception($"Server sent destroy event for entity {ev.ID} from {ev.OwnerID} at however its not visible to client");
+                throw new System.Exception($"Server sent destroy event for entity {ev.EntityID} from {ev.OwnerID} at however its not visible to client");
 
             var obj = knownEntity as IGameObject;
             MainBehaviour.Destroy(obj.GetGameObject());
@@ -46,12 +44,12 @@ namespace Assets.Code.World
         public void EntityMove(EntityMovePacket ev)
         {
             Log.Debug("Received entity move");
-            var owner = _game.GetWorld().GetOrCreateClientPlayer(ev.OwnerID);
-            var knownEntity = owner.GetKnownEntity(ev.ID);
+            var owner = ClientStrategyGame.ClientWorld.GetOrCreateClientPlayer(ev.OwnerID);
+            var knownEntity = owner.GetKnownEntity(ev.EntityID);
             if (knownEntity == null)
-                throw new Exception($"Server sent move event for entit3y {ev.ID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
+                throw new Exception($"Server sent move event for entit3y {ev.EntityID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
 
-            var newTile = _game.GetWorld().GetClientTile(ev.X, ev.Y);
+            var newTile = ClientStrategyGame.ClientWorld.GetClientTile(ev.X, ev.Y);
             knownEntity.Tile = newTile;
         }
 
@@ -60,7 +58,8 @@ namespace Assets.Code.World
         {
             Log.Debug("Received entity update");
             var serverEntity = ev.Entity;
-            var owner = _game.GetWorld().GetOrCreateClientPlayer(serverEntity.OwnerID);
+            var serverOwner = serverEntity.OwnerID;
+            var owner = ClientStrategyGame.ClientWorld.GetOrCreateClientPlayer(serverEntity.OwnerID);
             serverEntity.Owner = owner;
             if (serverEntity is Party serverParty)
             {

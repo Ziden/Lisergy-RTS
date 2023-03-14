@@ -14,8 +14,10 @@ namespace Game.Entity
     [Serializable]
     public class Party : MovableWorldEntity, IBattleable
     {
+        [NonSerialized]
         private const int PARTY_SIZE = 4;
 
+        protected string _battleID;
         private byte _partyIndex;
         private Unit[] _units = new Unit[PARTY_SIZE] { null, null, null, null };
 
@@ -31,7 +33,8 @@ namespace Game.Entity
             return !IsBattling;
         }
 
-        protected string _battleID;
+        [NonSerialized]
+        private DateTime _lastBattleTime;
 
         public virtual string BattleID
         {

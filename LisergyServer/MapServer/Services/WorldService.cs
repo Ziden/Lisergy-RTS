@@ -56,14 +56,7 @@ namespace Game.Listeners
             if (atk != null && def != null)
             {
                 var battleID = Guid.NewGuid().ToString();
-                _game.NetworkEvents.Call(new BattleStartPacket()
-                {
-                    X = ev.Defender.X,
-                    Y = ev.Defender.Y,
-                    Attacker = atk.GetBattleTeam(),
-                    Defender = def.GetBattleTeam(),
-                    BattleID = battleID
-                });
+                _game.NetworkEvents.Call(new BattleStartPacket(battleID, atk, def));
             }
         }
 

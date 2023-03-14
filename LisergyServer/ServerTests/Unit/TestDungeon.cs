@@ -28,6 +28,7 @@ namespace Tests
             _path = new List<Position>();
             _party = _player.GetParty(0);
             _dungeon = new Dungeon(new Unit(1));
+            _dungeon.Tile = _game.RandomNotBuiltTile();
             GameScheduler.Clear();
         }
 
@@ -65,7 +66,7 @@ namespace Tests
             var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
-            party.GetUnits()[0].Stats.Atk = 9999;
+            party.GetUnits()[0].Stats.Atk = 255;
 
             dungeonTile.StaticEntity = _dungeon;
 
@@ -91,7 +92,7 @@ namespace Tests
             var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
-            party.GetUnits()[0].Stats.Atk = 30000; // make sure it wins !
+            party.GetUnits()[0].Stats.Atk = 255; // make sure it wins !
             _dungeon.Tile = dungeonTile;
 
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);

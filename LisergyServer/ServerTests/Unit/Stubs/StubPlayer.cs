@@ -4,6 +4,7 @@ using Game.Events;
 using Game.Movement;
 using Game.World;
 using LisergyServer.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +12,7 @@ namespace ServerTests
 {
     public class TestServerPlayer : ServerPlayer
     {
-        public static string TEST_ID = "test_player_id";
+        public static GameId TEST_ID = Guid.NewGuid();
 
         public delegate void ReceiveEventHandler(BaseEvent ev);
         public event ReceiveEventHandler OnReceiveEvent;

@@ -37,12 +37,7 @@ public class ServerBattleSimulation
         myTeam.Units[0].Controlled = true;
 
         Battle = new TurnBattle(Guid.NewGuid(), myTeam, enemyTeam);
-        var ev = new BattleStartPacket()
-        {
-            Attacker = Battle.Attacker,
-            BattleID = Battle.ID.ToString(),
-            Defender = Battle.Defender
-        };
+        //var ev = new BattleStartPacket(Battle.ID, myTeam, enemyTeam);
         //EventEmitter.CallEventFromBytes(MainBehaviour.Player, Serialization.FromEvent(ev));
 
         var roundActions = Battle.AutoRun.PlayOneTurn();

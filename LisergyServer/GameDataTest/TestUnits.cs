@@ -20,7 +20,7 @@ namespace GameDataTest
         public static readonly ushort KNIGHT = 1;
         public static readonly ushort MAGE = 2;
 
-        private static UnitStats BaseStats = new UnitStats(new Dictionary<Stat, short>()
+        private static UnitStats BaseStats = new UnitStats(new Dictionary<Stat, ushort>()
             {
                     { Stat.SPEED, 5 },
                     { Stat.ACCURACY, 5 },
@@ -39,7 +39,7 @@ namespace GameDataTest
             foreach(var item in stats)
             {
                 var value = st.GetStat(item.Item1);
-                value += item.Item2;
+                value += (ushort)item.Item2;
                 st.SetStat(item.Item1, value);
             }
                 

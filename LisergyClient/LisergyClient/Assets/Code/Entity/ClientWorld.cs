@@ -2,17 +2,16 @@
 using Game.Entity;
 using Game.Events.ServerEvents;
 using Game.World;
+using System;
 using System.Collections.Generic;
 
 namespace Assets.Code.World
 {
     public class ClientWorld : GameWorld
     {
-        public ClientWorld(GameSpecPacket gameSpecs): base(int.MaxValue, gameSpecs.WorldX, gameSpecs.WorldY)
+        public ClientWorld(int sizeX, int sizeY): base(int.MaxValue, sizeX, sizeY)
         {
         }
-
-        public Dictionary<string, Party> Parties = new Dictionary<string, Party>();
 
         public ClientTile GetClientTile(int tileX, int tileY)
         {
@@ -24,9 +23,9 @@ namespace Assets.Code.World
             return Map.GetTile(e.X, e.Y) as ClientTile;
         }
 
-        public ClientPlayer GetOrCreateClientPlayer(string uid)
+        public ClientPlayer GetOrCreateClientPlayer(GameId uid)
         {
-            if (uid == null)
+            if (uid == Guid.Empty)
                 return null;
 
             PlayerEntity pl;
@@ -43,7 +42,6 @@ namespace Assets.Code.World
             return (ClientPlayer)pl;
         }
 
-        // In client we generate the tiles on-demand
         public override void CreateMap()
         {
             Map = new ClientChunkMap(this);

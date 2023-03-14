@@ -14,7 +14,7 @@ namespace Game.Events
             this.EntityID = entity.Id;
         }
 
-        public string OwnerID;
-        public string EntityID;
+        public GameId OwnerID;
+        public GameId EntityID;
     }
 }

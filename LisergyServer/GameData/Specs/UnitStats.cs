@@ -5,31 +5,87 @@ using System.Text;
 
 namespace Game.Entity
 {
+
+
     [Serializable]
     public class UnitStats
     {
-        private Dictionary<Stat, short> _stats = new Dictionary<Stat, short>();
-        private int _level;
+
+        public ushort this[Stat stat]
+        {
+            get
+            {
+                switch (stat)
+                {
+                    case Stat.HP: return HP;
+                    case Stat.MHP: return MaxHP;
+                    case Stat.MP: return MP;
+                    case Stat.MMP: return MaxMP;
+                    case Stat.DEF: return Def;
+                    case Stat.SPEED: return Speed;
+                    case Stat.WEIGHT: return Weight;
+                    case Stat.MATK: return Matk;
+                    case Stat.MDEF: return Mdef;
+                    case Stat.ACCURACY: return Accuracy;
+                    case Stat.ATK: return Atk;
+                    case Stat.MOVE: return Move;
+                }
+                throw new Exception("Invalid stat " + stat.ToString());
+            }
+            set
+            {
+                switch (stat)
+                {
+                    case Stat.HP: HP = value; break;
+                    case Stat.MHP: MaxHP = value; break;
+                    case Stat.MP: MP = value; break;
+                    case Stat.MMP: MaxMP = value; break;
+                    case Stat.DEF: Def = (byte)value; break;
+                    case Stat.SPEED: Speed = (byte)value; break;
+                    case Stat.WEIGHT: Weight = (byte)value; break;
+                    case Stat.MATK: Matk = (byte)value; break;
+                    case Stat.MDEF: Mdef = (byte)value; break;
+                    case Stat.ACCURACY: Accuracy = (byte)value; break;
+                    case Stat.ATK: Atk = (byte)value; break;
+                    case Stat.MOVE: Move = (byte)value; break;
+                    default: throw new Exception("Invalid stat " + stat.ToString());
+                } 
+                
+            }
+        }
+
+        private ushort _level;
 
         public void SetStats(UnitStats stats)
         {
-            SetStats(stats._stats);
+            this.HP = stats.HP;
+            this.MaxHP = stats.MaxHP;
+            this.MP = stats.MP;
+            this.MaxMP = stats.MaxMP;
+            this.Atk = stats.Atk;
+            this.Def = stats.Def;
+            this.Speed = stats.Speed;
+            this.Accuracy = stats.Accuracy;
+            this.Move = stats.Move;
+            this.Matk = stats.Matk;
+            this.Mdef = stats.Mdef;
+            this.Weight = stats.Weight;
         }
 
-        public void SetStats(Dictionary<Stat, short> stats)
+        public void SetStats(Dictionary<Stat, ushort> stats)
         {
             foreach (var kp in stats)
-                _stats[kp.Key] = kp.Value;
+                this[kp.Key] = kp.Value;
         }
 
-        public short GetStat(Stat s)
+        public ushort GetStat(Stat s)
         {
-            return _stats[s];
+            return this[s];
         }
 
-        public void SetStat(Stat stat, short value)
+        public void SetStat(Stat stat, ushort value)
         {
-            _stats[stat] = value;
+            this[stat] = value;
         }
 
         public UnitStats()
@@ -37,7 +93,7 @@ namespace Game.Entity
             DefaultValues();
         }
 
-        public UnitStats(Dictionary<Stat, short> stats)
+        public UnitStats(Dictionary<Stat, ushort> stats)
         {
             DefaultValues();
             SetStats(stats);
@@ -56,25 +112,25 @@ namespace Game.Entity
 
             MaxHP = 5;
             HP = 5;
-            Mp = 2;
+            MP = 2;
             MaxMP = 2;
             Move = 5;
         }
 
         // Stats
-        public short Atk { get => _stats[Stat.ATK]; set => _stats[Stat.ATK] = value; }
-        public short Def { get => _stats[Stat.DEF]; set => _stats[Stat.DEF] = value; }
-        public short Matk { get => _stats[Stat.MATK]; set => _stats[Stat.MATK] = value; }
-        public short Mdef { get => _stats[Stat.MDEF]; set => _stats[Stat.MDEF] = value; }
-        public short Speed { get => _stats[Stat.SPEED]; set => _stats[Stat.SPEED] = value; }
-        public short Accuracy { get => _stats[Stat.ACCURACY]; set => _stats[Stat.ACCURACY] = value; }
-        public short Weight { get => _stats[Stat.WEIGHT]; set => _stats[Stat.WEIGHT] = value; }
-        public short Move { get => _stats[Stat.MOVE]; set => _stats[Stat.MOVE] = value; }
+        public byte Atk { get; set; }
+        public byte Def { get; set; }
+        public byte Matk { get; set; }
+        public byte Mdef { get; set; }
+        public byte Speed { get; set; }
+        public byte Accuracy { get; set; }
+        public byte Weight { get; set; }
+        public byte Move { get; set; }
 
         // Vitals
-        public short HP { get => _stats[Stat.HP]; set => _stats[Stat.HP] = value; }
-        public short MaxHP { get => _stats[Stat.MHP]; set => _stats[Stat.MHP] = value; }
-        public short Mp { get => _stats[Stat.MP]; set => _stats[Stat.MP] = value; }
-        public short MaxMP { get => _stats[Stat.MMP]; set => _stats[Stat.MMP] = value; }
+        public ushort HP { get; set; }
+        public ushort MaxHP { get; set; }
+        public ushort MP { get; set; }
+        public ushort MaxMP { get; set; }
     }
 }

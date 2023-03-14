@@ -12,12 +12,12 @@ namespace Game.Entity
 
         public Gaia()
         {
-            this.UserID = "gaia";
+            this.UserID = Guid.Empty;
         }
 
-        public static bool IsGaia(string userId)
+        public static bool IsGaia(GameId userId)
         {
-            return userId == "gaia";
+            return userId == Guid.Empty;
         }
 
         public override bool Online()

@@ -11,7 +11,7 @@ namespace Game
     {
         protected static Gaia Gaia { get; private set; } = new Gaia();
 
-        protected string _id;
+        protected GameId _id;
         protected ushort _x;
         protected ushort _y;
 
@@ -25,12 +25,9 @@ namespace Game
 
         public bool IsDestroyed => _tile != null;
 
-        public virtual string Id { get => _id; set => _id = value; }
-        public virtual int X { get => _x; }
-        public virtual int Y { get => _y; }
-
-        [NonSerialized]
-        public DateTime _lastBattleTime = DateTime.MinValue;
+        public virtual GameId Id { get => _id; set => _id = value; }
+        public virtual ushort X { get => _x; }
+        public virtual ushort Y { get => _y; }
 
         public virtual Tile Tile
         {

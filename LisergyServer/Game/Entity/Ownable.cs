@@ -9,7 +9,7 @@ namespace Game
     {
         PlayerEntity Owner { get; }
 
-        string OwnerID { get; }
+        GameId OwnerID { get; }
     }
 
     [Serializable]
@@ -20,12 +20,12 @@ namespace Game
             this.Owner = owner;
         }
 
-        private string _ownerId;
+        private GameId _ownerId;
 
         [NonSerialized]
         private PlayerEntity _owner;
 
-        public string OwnerID { get => _ownerId; }
+        public GameId OwnerID { get => _ownerId; }
 
         public virtual PlayerEntity Owner
         {

@@ -44,6 +44,6 @@ public class UnitPanel : MonoBehaviour
         Speed.text = unit.Stats.Speed.ToString();
         Accuracy.text = unit.Stats.Accuracy.ToString();
         HP.text = $"{unit.Stats.HP} / {unit.Stats.MaxHP}";
-        MP.text = $"{unit.Stats.Mp} / {unit.Stats.MaxMP}";
+        MP.text = $"{unit.Stats.MP} / {unit.Stats.MaxMP}";
     }
 }

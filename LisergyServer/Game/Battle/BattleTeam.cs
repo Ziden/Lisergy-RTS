@@ -9,7 +9,7 @@ namespace Game.Battles
     public class BattleTeam
     {
         public BattleUnit[] Units;
-        public string OwnerID;
+        public GameId OwnerID;
 
         [NonSerialized]
         private IBattleable _entity;

@@ -45,7 +45,7 @@ public class PartyUI : IEventListener
         _cursor.SetActive(false);
         _rootObject.SetActive(false);
 
-        ClientEntityService.OnPartyUpdated += OnPartyUpdated;
+        EntityListener.OnPartyUpdated += OnPartyUpdated;
         ClientEvents.OnCameraMove += OnCameraMove;
         ClientEvents.OnClickTile += OnClickTile;
         //MainBehaviour.NetworkEvents.RegisterListener(this);
@@ -145,7 +145,7 @@ public class PartyUI : IEventListener
             MainBehaviour.Destroy(t.gameObject);
         var imageObj = new GameObject("portrait", typeof(Image));
         var image = imageObj.GetComponent<Image>();
-        image.sprite = LazyLoad.GetSpecificSpriteArt(unit.Spec.FaceArt);
+        image.sprite = LazyLoad.GetSpecificSpriteArt(unit.GetSpec().FaceArt);
         var parentContainer = parent.GetComponent<RectTransform>();
         if (parentContainer != null)
         {

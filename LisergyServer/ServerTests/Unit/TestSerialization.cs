@@ -5,12 +5,17 @@ using Game.Events.ServerEvents;
 using NUnit.Framework;
 using ServerTests;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Tests
 {
     public class TestSerialization
     {
+
+        private TestGame _game;
+
         [Serializable]
         public class TestTileEvent : BaseEvent
         {
@@ -21,11 +26,10 @@ namespace Tests
             public Tile Tile;
         }
 
-        [Serializable]
-        public class RefEvent : BaseEvent
+        [SetUp]
+        public void Setup()
         {
-            public BattleTeam T1;
-            public BattleTeam T2;   
+            _game = new TestGame();
         }
 
         [Test]
@@ -47,9 +51,9 @@ namespace Tests
         [Test]
         public void TestTileSerialization()
         {
-            var game = new TestGame();
-            var player = game.GetTestPlayer();
-            var tile = game.World.GetTile(1, 1);
+         
+            var player = _game.GetTestPlayer();
+            var tile = _game.World.GetTile(1, 1);
             tile.ResourceID = 123;
             Serialization.LoadSerializers(typeof(TestTileEvent));
 
@@ -81,6 +85,22 @@ namespace Tests
         }
 
         [Test]
+        public void TestEntityUpdatePacket()
+        {
+            var game = new TestGame();
+
+            var player = game.GetTestPlayer();
+            var party = player.Parties[0];
+
+            var entityUpdate = new EntityUpdatePacket(party);
+
+            var serialized = Serialization.FromEvent<EntityUpdatePacket>(entityUpdate);
+            var unserialized = Serialization.ToEvent<EntityUpdatePacket>(serialized);
+
+            Assert.AreEqual(unserialized.Entity.Id, party.Id);
+        }
+
+        [Test]
         public void TestRawSerialization()
         {
             Serialization.LoadSerializers();
@@ -94,6 +114,33 @@ namespace Tests
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);
+        }
+
+
+        [Test]
+        public void TestSerializationSizes()
+        {
+            var testData = new Dictionary<Type, byte[]>();
+
+            void Record<T>(T obj)
+            {
+                testData[typeof(T)] = Serialization.FromAnyType(obj);
+            }   
+
+            Record(new TileUpdatePacket(_game.World.GetTile(1, 1)));
+            Record(new PartyStatusUpdatePacket(_game.GetTestPlayer().GetParty(0)));
+            Record(new BattleResultPacket(Guid.NewGuid().ToString(), new TurnBattleResult() { Turns = new List<Game.Battles.Actions.TurnLog>(10)}));
+            Record(new EntityDestroyPacket(_game.GetTestPlayer().GetParty(0)));
+            Record(new EntityMovePacket(_game.GetTestPlayer().GetParty(0), _game.World.GetTile(1, 1)));
+            Record(new MessagePopupPacket(PopupType.BAD_INPUT, "Yeah this is a message popup to test our serialization sizes"));
+            Record(new BattleStartPacket(GameId.Generate(), _game.GetTestPlayer().GetParty(0), _game.GetTestPlayer().GetParty(0)));
+            Record(new Unit(0));
+            Record(GameId.Generate());
+
+            foreach (var kp in testData)
+            {
+                Assert.LessOrEqual(kp.Value.Count(), 150, $"Packets should be lower then 100 bytes but {kp.Key} was not");
+            }
         }
     }
 }

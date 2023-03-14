@@ -9,7 +9,7 @@ namespace Game
 {
     public abstract class PlayerEntity
     {
-        public string UserID;
+        public GameId UserID;
 
         public HashSet<Unit> Units = new HashSet<Unit>();
         public HashSet<Building> Buildings = new HashSet<Building>();

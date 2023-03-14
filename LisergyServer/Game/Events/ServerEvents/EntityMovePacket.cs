@@ -11,17 +11,17 @@ namespace Game.Events
         public EntityMovePacket(MovableWorldEntity entity, Tile tile)
         {
             this.OwnerID = entity.OwnerID;
-            this.ID = entity.Id;
+            this.EntityID = entity.Id;
             this.Delay = entity.GetMoveDelay();
             this.X = tile.X;
             this.Y = tile.Y;
 
         }
 
-        public string OwnerID;
-        public string ID;
+        public GameId OwnerID;
+        public GameId EntityID;
         public TimeSpan Delay;
-        public int X;
-        public int Y;
+        public ushort X;
+        public ushort Y;
     }
 }

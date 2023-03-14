@@ -3,6 +3,10 @@ using Game.World;
 
 namespace Assets.Code.World
 {
+    /// <summary>
+    /// Generate tiles on demands (empty tiles).
+    /// Will wait for server to send data to instantiate.
+    /// </summary>
     public class ClientChunkMap : ChunkMap
     {
         public ClientChunkMap(ClientWorld world) : base(world, world.SizeX, world.SizeY) { }

@@ -36,17 +36,13 @@ namespace Tests
             var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
-
+            party.Tile = _game.World.GetTile(0, 0);
             var enemy = new Dungeon();
+            enemy.Tile = _game.World.GetTile(1, 1);
             enemy.AddBattle(new Unit(0));
 
             var battleID = Guid.NewGuid().ToString();
-            _game.NetworkEvents.Call(new BattleStartPacket()
-            {
-                Attacker = party.GetBattleTeam(),
-                Defender = enemy.GetBattleTeam(),
-                BattleID = battleID
-            });
+            _game.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
 
             var battle = _game.BattleService.GetBattle(battleID);
             battle.Task.Execute();
@@ -60,17 +56,18 @@ namespace Tests
         {
             var playerCastleTile = _player.Buildings.First().Tile;
             var party = _player.GetParty(0);
+            party.GetUnits()[0].Stats.Atk = 1;
+
+            party.Tile = _game.World.GetTile(0, 0);
 
             var enemy = new Dungeon();
+
+            enemy.Tile = _game.World.GetTile(1, 1);
             enemy.AddBattle(new Unit(0));
+            enemy.Battles[0][0].Stats.Atk = 255;
 
             var battleID = Guid.NewGuid().ToString();
-            _game.NetworkEvents.Call(new BattleStartPacket()
-            {
-                Attacker = party.GetBattleTeam(),
-                Defender = enemy.GetBattleTeam(),
-                BattleID = battleID
-            });
+            _game.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
 
             var battle = _game.BattleService.GetBattle(battleID);
             battle.Task.Execute();
