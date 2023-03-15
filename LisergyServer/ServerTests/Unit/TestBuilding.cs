@@ -1,5 +1,6 @@
 using Game;
 using Game.World;
+using Game.World.Components;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
@@ -27,8 +28,8 @@ namespace Tests
 
             Assert.IsTrue(player.Buildings.Count == 1);
             Assert.IsTrue(player.Buildings.Any(b => b.SpecID == initialBuildingSpec.Id));
-            Assert.IsTrue(tile.GetComponent<TileEntityPlacementComponent>().StaticEntity == player.Buildings.First());
-            Assert.IsTrue(((Building)tile.GetComponent<TileEntityPlacementComponent>().StaticEntity).SpecID == initialBuildingSpec.Id);
+            Assert.IsTrue(tile.GetComponent<EntityPlacementComponent>().StaticEntity == player.Buildings.First());
+            Assert.IsTrue(((Building)tile.GetComponent<EntityPlacementComponent>().StaticEntity).SpecID == initialBuildingSpec.Id);
         }
 
         [Test]
@@ -43,11 +44,11 @@ namespace Tests
 
             Assert.IsTrue(player.Buildings.Count == 2);
             Assert.IsTrue(player.Buildings.Any(b => b.SpecID == buildingSpec.Id));
-            Assert.IsTrue(tile.GetComponent<TileEntityPlacementComponent>().StaticEntity == player.Buildings.Last());
-            Assert.IsTrue(((Building)tile.GetComponent<TileEntityPlacementComponent>().StaticEntity).SpecID == buildingSpec.Id);
+            Assert.IsTrue(tile.GetComponent<EntityPlacementComponent>().StaticEntity == player.Buildings.Last());
+            Assert.IsTrue(((Building)tile.GetComponent<EntityPlacementComponent>().StaticEntity).SpecID == buildingSpec.Id);
 
             var nei = tile.GetNeighbor(Direction.NORTH);
-            Assert.That(tile.GetComponent<TileVisibilityComponent>().EntitiesViewing.Contains(tile.GetComponent<TileEntityPlacementComponent>().StaticEntity));
+            Assert.That(tile.GetComponent<TileVisibilityComponent>().EntitiesViewing.Contains(tile.GetComponent<EntityPlacementComponent>().StaticEntity));
 
         }
     }

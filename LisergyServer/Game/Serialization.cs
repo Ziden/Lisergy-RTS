@@ -2,6 +2,8 @@
 using Game.Battles.Actions;
 using Game.BattleTactics;
 using Game.Entity;
+using Game.Events;
+using Game.World.Data;
 using GameData;
 using GameData.Specs;
 using NetSerializer;
@@ -10,7 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Game.Events
+namespace Game
 {
     public class Serialization
     {
@@ -37,6 +39,7 @@ namespace Game.Events
             models.Add(typeof(WorldEntity));
             models.Add(typeof(Party));
             models.Add(typeof(Tile));
+            models.Add(typeof(TileData));
             models.Add(typeof(Dungeon));
 
             // Game
@@ -67,7 +70,7 @@ namespace Game.Events
             using (var stream = new MemoryStream(message))
             {
                 BaseEvent ev;
-                ev = (BaseEvent) Serializer.Deserialize(stream);
+                ev = (BaseEvent)Serializer.Deserialize(stream);
                 return ev;
             }
         }

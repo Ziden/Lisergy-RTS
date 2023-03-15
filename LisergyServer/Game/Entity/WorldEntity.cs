@@ -2,7 +2,7 @@
 using Game.Events;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
-using Game.World;
+using Game.World.Components;
 using System;
 
 namespace Game

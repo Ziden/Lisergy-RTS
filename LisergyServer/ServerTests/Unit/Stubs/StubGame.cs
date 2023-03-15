@@ -4,6 +4,7 @@ using Game.Battles;
 using Game.Events;
 using Game.Listeners;
 using Game.World;
+using Game.World.Components;
 using GameData;
 using GameDataTest;
 using LisergyServer.Core;
@@ -84,7 +85,7 @@ namespace ServerTests
         public Tile RandomNotBuiltTile()
         {
             foreach (var tile in World.AllTiles())
-                if (tile.GetComponent<TileEntityPlacementComponent>().StaticEntity == null)
+                if (tile.GetComponent<EntityPlacementComponent>().StaticEntity == null)
                     return tile;
             return null;
         }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace Game.Events.Bus
 {
-    public class EventBus
+    public class EventBus<EventType> 
     {
         private Dictionary<Type, List<RegisteredListener>> _registeredListeners;
         private HashSet<IEventListener> _listeners;
@@ -17,7 +16,7 @@ namespace Game.Events.Bus
             Call(ev);
         }
 
-        public void Call(BaseEvent ev)
+        public virtual void Call(BaseEvent ev)
         {
             if (!_registeredListeners.ContainsKey(ev.GetType()))
                 if (!_registeredListeners.ContainsKey(ev.GetType().BaseType))
@@ -61,7 +60,7 @@ namespace Game.Events.Bus
             _listeners.Add(listener);
         }
 
-        public void Register<EventType>(IEventListener listener, Action<EventType> callback)
+        public virtual void Register<EventType>(IEventListener listener, Action<EventType> callback)
         {
             /*
             if(!callback.Method.CustomAttributes.Any(a => a.AttributeType == typeof(EventMethod)))

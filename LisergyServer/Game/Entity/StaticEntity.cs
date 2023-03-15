@@ -23,10 +23,10 @@ namespace Game
                 base.Tile = newTile;
 
                 if (newTile != null)
-                    newTile.CallEvent(new StaticEntityPlacedEvent(this, newTile));
+                    newTile.CallComponentEvents(new StaticEntityPlacedEvent(this, newTile));
                 else if(oldTile != null)
                 {
-                    oldTile.CallEvent(new StaticEntityRemovedEvent(this, oldTile));
+                    oldTile.CallComponentEvents(new StaticEntityRemovedEvent(this, oldTile));
                 }
             }
         }

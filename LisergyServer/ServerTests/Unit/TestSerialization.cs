@@ -137,6 +137,8 @@ namespace Tests
             Record(new Unit(0));
             Record(GameId.Generate());
 
+            var t = testData[typeof(TileUpdatePacket)];
+
             foreach (var kp in testData)
             {
                 Assert.LessOrEqual(kp.Value.Count(), 150, $"Packets should be lower then 100 bytes but {kp.Key} was not");

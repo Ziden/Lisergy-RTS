@@ -1,3 +1,4 @@
+using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
 using NUnit.Framework;

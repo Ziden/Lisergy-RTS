@@ -5,10 +5,9 @@ using Game.Events;
 using Game.Events.Bus;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
-using Game.World;
+using Game.World.Components;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Game.Listeners
 {
@@ -100,7 +99,7 @@ namespace Game.Listeners
         public void SendTileTo(Tile tile, PlayerEntity player)
         {
             player.Send(new TileUpdatePacket(tile));
-            tile.CallEvent(new TileSentToPlayerEvent(tile, player));
+            tile.CallComponentEvents(new TileSentToPlayerEvent(tile, player));
         }
     }
 }

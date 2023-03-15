@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ServerTests;
 using System.Linq;
 using Game.World;
+using Game.World.Components;
 
 namespace Tests
 {

@@ -5,6 +5,7 @@ using Game.Events;
 using Game.Movement;
 using Game.Scheduler;
 using Game.World;
+using Game.World.Components;
 using NUnit.Framework;
 using ServerTests;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace Tests
             var party = _player.GetParty(0);
 
             // place the dungeon
-            dungeonTile.GetComponent<TileEntityPlacementComponent>().StaticEntity = _dungeon;
+            dungeonTile.GetComponent<EntityPlacementComponent>().StaticEntity = _dungeon;
             
             // send intent to move player to the party
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Defensive);
@@ -68,7 +69,7 @@ namespace Tests
             var party = _player.GetParty(0);
             party.GetUnits()[0].Stats.Atk = 255;
 
-            dungeonTile.GetComponent<TileEntityPlacementComponent>().StaticEntity = _dungeon;
+            dungeonTile.GetComponent<EntityPlacementComponent>().StaticEntity = _dungeon;
 
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);
             var course = party.Course;
@@ -104,7 +105,7 @@ namespace Tests
             //  Dungeon completed and removed from map
             Assert.IsTrue(_dungeon.IsComplete());
             Assert.AreEqual(_dungeon.Tile, null);
-            Assert.AreEqual(dungeonTile.GetComponent<TileEntityPlacementComponent>().StaticEntity, null);
+            Assert.AreEqual(dungeonTile.GetComponent<EntityPlacementComponent>().StaticEntity, null);
             // Received another move event to remove the dungeon
             Assert.AreEqual(_player.ReceivedEventsOfType<EntityDestroyPacket>().Count, 1);
         }
@@ -117,7 +118,7 @@ namespace Tests
             var party = _player.GetParty(0);
             party.GetUnits()[0].Stats.HP = 1; // make sure it looses !
             party.GetUnits()[0].Stats.Atk = 0; // make sure it looses !
-            dungeonTile.GetComponent<TileEntityPlacementComponent>().StaticEntity = _dungeon;
+            dungeonTile.GetComponent<EntityPlacementComponent>().StaticEntity = _dungeon;
 
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);
             _player.GetParty(0).Course.Execute();
