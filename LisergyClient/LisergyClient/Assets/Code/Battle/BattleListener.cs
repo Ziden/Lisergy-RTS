@@ -13,7 +13,7 @@ namespace Assets.Code.Battle
 {
     public class BattleListener : IEventListener
     {
-        public BattleListener(EventBus networkEvents)
+        public BattleListener(EventBus<ServerPacket> networkEvents)
         {
             networkEvents.Register<BattleResultPacket>(this, BattleFinish);
             networkEvents.Register<BattleStartPacket>(this, BattleStart);

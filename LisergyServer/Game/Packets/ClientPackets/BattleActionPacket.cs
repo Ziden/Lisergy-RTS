@@ -4,7 +4,7 @@ using System;
 namespace Game.Events.ClientEvents
 {
     [Serializable]
-    public class BattleActionPacket : ClientEvent
+    public class BattleActionPacket : ClientPacket
     {
         public BattleActionPacket(string BattleID, BattleAction action)
         {

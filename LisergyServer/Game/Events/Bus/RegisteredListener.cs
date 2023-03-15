@@ -1,16 +1,18 @@
 ﻿using Game.Events.GameEvents;
+using System;
 using System.Reflection;
 
 namespace Game.Events.Bus
 {
     public class RegisteredListener
     {
-        public IEventListener Listener;
-        public MethodInfo Method;
+        public WeakReference<IEventListener> Listener;
+        public Delegate Method;
+        public Type Type;
 
-        public void Call(BaseEvent ev)
+        public void Call<T>(T ev) where T : BaseEvent
         {
-            Method.Invoke(Listener, new object[] { ev });
+            Method.DynamicInvoke(ev);
         }
     }
 }

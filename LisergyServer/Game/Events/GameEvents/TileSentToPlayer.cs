@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Game.Events.GameEvents
 {
+    /// <summary>
+    /// Event whenever we need to send tile information to the client
+    /// </summary>
     public class TileSentToPlayerEvent : GameEvent
     {
         public Tile Tile;

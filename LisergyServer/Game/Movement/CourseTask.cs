@@ -10,7 +10,7 @@ namespace Game.Movement
         List<Tile> Path;
         public MovementIntent Intent { get; private set; }
 
-        public CourseTask(Party party, List<Tile> path, MovementIntent intent): base(party.GetMoveDelay())
+        public CourseTask(Party party, List<Tile> path, MovementIntent intent): base(party.GetMoveDelay(), party.Owner)
         {
             this.Party = party;
             this.Path = path;

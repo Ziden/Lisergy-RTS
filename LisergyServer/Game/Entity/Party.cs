@@ -17,7 +17,7 @@ namespace Game.Entity
         [NonSerialized]
         private const int PARTY_SIZE = 4;
 
-        protected string _battleID;
+        protected GameId _battleID;
         private byte _partyIndex;
         private Unit[] _units = new Unit[PARTY_SIZE] { null, null, null, null };
 
@@ -36,12 +36,12 @@ namespace Game.Entity
         [NonSerialized]
         private DateTime _lastBattleTime;
 
-        public virtual string BattleID
+        public virtual GameId BattleID
         {
             get => _battleID;
             set
             {
-                if (value != null)
+                if (value != GameId.ZERO)
                 {
                     _lastBattleTime = DateTime.Now;
                 }
@@ -49,7 +49,7 @@ namespace Game.Entity
             }
         }
 
-        public bool IsBattling => _battleID != null;
+        public bool IsBattling => !_battleID.IsZero();
 
         public Party(PlayerEntity owner, byte partyIndex) : base(owner)
         {
@@ -111,7 +111,7 @@ namespace Game.Entity
 
         public void OnBattleFinished(TurnBattle battle, BattleHeader BattleHeader, BattleTurnEvent[] Turns)
         {
-            this.BattleID = null;
+            this.BattleID = GameId.ZERO;
             if (!IsAlive())
             {
                 var center = this.Owner.GetCenter();
@@ -128,9 +128,9 @@ namespace Game.Entity
 
         public void OnBattleStarted(TurnBattle battle)
         {
-            this.BattleID = battle.ID.ToString();
+            this.BattleID = battle.ID;
         }
 
-        public ServerEvent GetUpdatePacket() => new PartyStatusUpdatePacket(this);
+        public ServerPacket GetUpdatePacket() => new PartyStatusUpdatePacket(this);
     }
 }

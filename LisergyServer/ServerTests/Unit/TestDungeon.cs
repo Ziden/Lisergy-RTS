@@ -57,7 +57,7 @@ namespace Tests
             GameScheduler.ForceComplete(course);
 
             Assert.AreEqual(dungeonTile, party.Tile);
-            Assert.AreEqual(party.BattleID, null);
+            Assert.IsTrue(party.BattleID.IsZero());
             Assert.AreEqual(0, _player.Battles.Count());
         }
 

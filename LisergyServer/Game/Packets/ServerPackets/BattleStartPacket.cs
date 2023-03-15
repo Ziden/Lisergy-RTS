@@ -6,7 +6,7 @@ using System;
 namespace Game.Events
 {
     [Serializable]
-    public class BattleStartPacket : ServerEvent
+    public class BattleStartPacket : ServerPacket
     {
         public ushort X;
         public ushort Y;

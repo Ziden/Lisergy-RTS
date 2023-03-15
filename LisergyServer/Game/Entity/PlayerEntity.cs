@@ -32,16 +32,11 @@ namespace Game
 
         public PlayerEntity()
         {
-            this.UserID = Guid.NewGuid().ToString();
+            this.UserID = Guid.NewGuid();
             Parties = new Party[4]
             {
                 new Party(this, 0),new Party(this, 1),new Party(this, 2),new Party(this, 3),
             };
-        }
-
-        public PlayerEntity(string id)
-        {
-            this.UserID = id;
         }
 
         public Building GetCenter()

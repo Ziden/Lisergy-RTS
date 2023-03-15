@@ -7,7 +7,7 @@ namespace Game.Battles.Actions
     [Serializable]
     public class AttackAction : BattleAction
     {
-        public string DefenderID;
+        public GameId DefenderID;
 
         [NonSerialized]
         private BattleUnit _defender;

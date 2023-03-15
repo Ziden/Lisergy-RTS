@@ -39,7 +39,7 @@ namespace Tests
         {
             var ev = new MoveRequestPacket() { Path = _path, PartyIndex = _party.PartyIndex };
             ev.Sender = _player;
-            _game.NetworkEvents.Call(ev);
+            _game.HandleClientEvent(_player, ev);
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace Tests
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
-            _party.BattleID = "anything that is not null";
+            _party.BattleID = Guid.NewGuid();
 
             _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();

@@ -20,28 +20,23 @@ namespace ServerTests.Unit
         }
 
         [Test]
-        public void CheckNull()
-        {
-            GameId id1 = null;
-            GameId id2 = Guid.Empty;
-
-            Assert.AreEqual(id1, id2);
-        }
-
-        [Test]
-        public void CheckNullComparisson()
-        {
-            GameId nu = null;
-
-            Assert.IsTrue(nu == null);
-        }
-
-        [Test]
         public void CheckNotNullComparisson()
         {
             GameId nu = GameId.Generate();
 
             Assert.IsTrue(nu != null);
+        }
+
+
+        [Test]
+        public void TestGuidBackForth()
+        {
+            var guid = Guid.NewGuid();
+            GameId id1 = guid;
+            Guid back = new Guid(id1.GetBytes());
+      
+
+            Assert.AreEqual(guid, back);
         }
 
 
@@ -62,27 +57,6 @@ namespace ServerTests.Unit
             GameId id2 = guid;
 
             Assert.IsTrue(id1.IsEqualsTo(id2));
-        }
-
-        [Test]
-        public void CheckStringAssignment()
-        {
-            var guid = Guid.NewGuid().ToString();
-            GameId id1 = guid;
-            GameId id2 = guid;
-
-            Assert.IsTrue(id1.IsEqualsTo(id2));
-        }
-
-        [Test]
-        public void TestStringDeffer()
-        {
-            var guid = Guid.NewGuid().ToString();
-            GameId id1 = guid;
-
-            string str = id1;
-
-            Assert.AreEqual(str, guid);
         }
 
         [Test]

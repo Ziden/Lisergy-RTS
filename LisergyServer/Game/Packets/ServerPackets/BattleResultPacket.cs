@@ -6,7 +6,7 @@ using System;
 namespace Game.Events
 {
     [Serializable]
-    public class BattleResultPacket : ServerEvent
+    public class BattleResultPacket : ServerPacket
     {
         public BattleHeader BattleHeader;
 

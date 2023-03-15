@@ -18,6 +18,15 @@ namespace Game
         public List<IGameSystem> Systems { get; private set; }
 
         private GameWorld _world;
+
+        public void ReceiveInput(PlayerEntity sender, byte[] input)
+        {
+            var ev = Serialization.ToEventRaw(input);
+            ev.Sender = sender;
+            NetworkEvents.Call(ev);
+            DeltaTracker.SendDeltaPackets(sender);
+        }
+
         public GameWorld World { get => _world; set { 
                 _world = value;
                 if(value != null)

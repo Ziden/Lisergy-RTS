@@ -6,22 +6,15 @@ using System.Text;
 namespace Game.Events
 {
     [Serializable]
-    public class EntityMovePacket : ServerEvent
+    public class EntityDestroyPacket : ServerPacket
     {
-        public EntityMovePacket(MovableWorldEntity entity, Tile tile)
+        public EntityDestroyPacket(WorldEntity entity)
         {
             this.OwnerID = entity.OwnerID;
             this.EntityID = entity.Id;
-            this.Delay = entity.GetMoveDelay();
-            this.X = tile.X;
-            this.Y = tile.Y;
-
         }
 
         public GameId OwnerID;
         public GameId EntityID;
-        public TimeSpan Delay;
-        public ushort X;
-        public ushort Y;
     }
 }

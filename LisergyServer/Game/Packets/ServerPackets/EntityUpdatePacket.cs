@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class EntityUpdatePacket : ServerEvent
+    public class EntityUpdatePacket : ServerPacket
     {
         public EntityUpdatePacket(WorldEntity entity)
         {

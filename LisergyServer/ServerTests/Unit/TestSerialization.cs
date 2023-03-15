@@ -129,7 +129,7 @@ namespace Tests
 
             Record(new TileUpdatePacket(_game.World.GetTile(1, 1)));
             Record(new PartyStatusUpdatePacket(_game.GetTestPlayer().GetParty(0)));
-            Record(new BattleResultPacket(Guid.NewGuid().ToString(), new TurnBattleResult() { Turns = new List<Game.Battles.Actions.TurnLog>(10)}));
+            Record(new BattleResultPacket(Guid.NewGuid(), new TurnBattleResult() { Turns = new List<Game.Battles.Actions.TurnLog>(10)}));
             Record(new EntityDestroyPacket(_game.GetTestPlayer().GetParty(0)));
             Record(new EntityMovePacket(_game.GetTestPlayer().GetParty(0), _game.World.GetTile(1, 1)));
             Record(new MessagePopupPacket(PopupType.BAD_INPUT, "Yeah this is a message popup to test our serialization sizes"));

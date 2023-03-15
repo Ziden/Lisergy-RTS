@@ -20,14 +20,13 @@ namespace Game
             {
                 var newTile = value;
                 var oldTile = base.Tile;
-                base.Tile = newTile;
-
                 if (newTile != null)
                     newTile.CallComponentEvents(new StaticEntityPlacedEvent(this, newTile));
                 else if(oldTile != null)
                 {
                     oldTile.CallComponentEvents(new StaticEntityRemovedEvent(this, oldTile));
                 }
+                base.Tile = newTile;
             }
         }
 

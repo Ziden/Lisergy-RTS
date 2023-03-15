@@ -43,12 +43,14 @@ namespace Tests
             var castleID = StrategyGame.Specs.InitialBuilding;
             player.Build(castleID, tile);
 
+            DeltaTracker.SendDeltaPackets(player);
+
             var los = StrategyGame.Specs.Buildings[castleID].LOS;
             var losTiles = tile.GetAOE(los);
-            var entityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
+            var entityUpdates = player.ReceivedEventsOfType<EntityUpdatePacket>();
             var tileVisibleEvent = player.ReceivedEventsOfType<TileUpdatePacket>();
 
-            Assert.AreEqual(1, entityVisibleEvents.Count);
+            Assert.AreEqual(1, entityUpdates.Count);
             Assert.AreEqual(losTiles.Count(), tileVisibleEvent.Count);
 
         }
@@ -110,6 +112,7 @@ namespace Tests
             var party = player.GetParty(0);
 
             party.Tile = party.Tile.GetNeighbor(Direction.EAST);
+            DeltaTracker.SendDeltaPackets(player);
 
             /*          
                                 o o o o E

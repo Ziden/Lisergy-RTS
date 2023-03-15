@@ -34,7 +34,7 @@ namespace Game
                 if (value != null)
                     _ownerId = value.UserID;
                 else
-                    _ownerId = null;
+                    _ownerId = GameId.ZERO;
                 _owner = value;
             }
         }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class TileUpdatePacket : ServerEvent
+    public class TileUpdatePacket : ServerPacket
     {
         public TileUpdatePacket(Tile tile)
         {

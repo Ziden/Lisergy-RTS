@@ -6,7 +6,7 @@ namespace Game.Events
     /// Networking events sent from the server
     /// </summary>
     [Serializable]
-    public abstract class ServerEvent: BaseEvent
+    public abstract class ServerPacket: BaseEvent
     {
        
     }

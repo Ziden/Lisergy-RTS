@@ -18,7 +18,7 @@ namespace Assets.Code
         private BattleListener _battleListener;
         private EntityListener _entityListener;
 
-        public ServerListener(EventBus networkEvents)
+        public ServerListener(EventBus<ServerPacket> networkEvents)
         {
             networkEvents.Register<MessagePopupPacket>(this, Message);
             networkEvents.Register<GameSpecPacket>(this, ReceiveSpecs);

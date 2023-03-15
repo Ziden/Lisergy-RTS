@@ -56,8 +56,8 @@ namespace Game
         {
             foreach (Type type in typeof(BaseEvent).Assembly.GetTypes())
             {
-                var validEvent = typeof(ClientEvent).IsAssignableFrom(type) && type != typeof(ClientEvent);
-                validEvent = validEvent || typeof(ServerEvent).IsAssignableFrom(type) && type != typeof(ServerEvent);
+                var validEvent = typeof(ClientPacket).IsAssignableFrom(type) && type != typeof(ClientPacket);
+                validEvent = validEvent || typeof(ServerPacket).IsAssignableFrom(type) && type != typeof(ServerPacket);
                 if (validEvent && type.IsSerializable)
                 {
                     yield return type;

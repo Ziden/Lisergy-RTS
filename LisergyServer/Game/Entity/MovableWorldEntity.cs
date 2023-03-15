@@ -34,9 +34,10 @@ namespace Game.Entity
             {
                 var oldTile = base.Tile;
                 base.Tile = value;
+
                 if (oldTile != null)
                 {
-                    oldTile.CallComponentEvents(new EntityMoveOutEvent()
+                    oldTile.CallAllEvents(new EntityMoveOutEvent()
                     {
                         Entity = this,
                         ToTile = value,
@@ -45,13 +46,13 @@ namespace Game.Entity
                 }
                 if (value != null)
                 {
-                    value.CallComponentEvents(new EntityMoveInEvent()
+                    value.CallAllEvents(new EntityMoveInEvent()
                     {
                         Entity = this,
                         ToTile = _tile,
                         FromTile = oldTile
                     });
-                }
+                } 
 
                 Log.Info($"Placed {this} in {_tile}");
             }

@@ -6,7 +6,7 @@ namespace Game.Battles
     [Serializable]
     public class BattleAction
     {
-        public string UnitID;
+        public GameId UnitID;
 
         [NonSerialized]
         private BattleUnit _unit;

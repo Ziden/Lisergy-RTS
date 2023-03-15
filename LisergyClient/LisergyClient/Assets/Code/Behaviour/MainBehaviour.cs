@@ -7,7 +7,7 @@ public class MainBehaviour : MonoBehaviour
 {
     public static Networking Networking { get; private set; }
     public static ClientPlayer Player { get; private set; }
-    public static EventBus NetworkEvents { get; set; }
+    public static EventBus<ServerPacket> ServerPackets { get; set; }
 
     private ServerListener _serverPacketListener;
 
@@ -46,10 +46,10 @@ public class MainBehaviour : MonoBehaviour
     private void Awake()
     {
         Networking = new Networking();
-        NetworkEvents = new EventBus();
+        ServerPackets = new EventBus();
         ConfigureUnity();
         Serialization.LoadSerializers();
-        _serverPacketListener = new ServerListener(NetworkEvents);
+        _serverPacketListener = new ServerListener(ServerPackets);
     }
 
     void Update()

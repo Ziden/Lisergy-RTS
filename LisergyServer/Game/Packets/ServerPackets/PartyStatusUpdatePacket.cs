@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class PartyStatusUpdatePacket : ServerEvent
+    public class PartyStatusUpdatePacket : ServerPacket
     {
         public GameId OwnerID;
         public byte PartyIndex;

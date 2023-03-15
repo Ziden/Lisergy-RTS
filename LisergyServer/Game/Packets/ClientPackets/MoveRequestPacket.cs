@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Game.Events
 {
     [Serializable]
-    public class MoveRequestPacket : ClientEvent
+    public class MoveRequestPacket : ClientPacket
     {
         public MovementIntent Intent;
         public byte PartyIndex;

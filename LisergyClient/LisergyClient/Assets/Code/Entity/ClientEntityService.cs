@@ -14,7 +14,7 @@ namespace Assets.Code.World
         public static event Action<ClientBuilding> OnBuildingUpdated;
         public static event Action<ClientDungeon> OnDungeonUpdated;
 
-        public EntityListener(EventBus networkEvents)
+        public EntityListener(EventBus<ServerPacket> networkEvents)
         {
             networkEvents.Register<EntityDestroyPacket>(this, EntityDestroy);
             networkEvents.Register<EntityMovePacket>(this, EntityMove);

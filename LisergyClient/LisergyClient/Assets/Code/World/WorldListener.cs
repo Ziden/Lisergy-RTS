@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using System;
@@ -12,7 +13,7 @@ namespace Assets.Code.World
     public class WorldListener : IEventListener
     {
 
-        public WorldListener(EventBus networkEvents)
+        public WorldListener(EventBus<ServerPacket> networkEvents)
         {
             networkEvents.Register<TileUpdatePacket>(this, TileUpdate);
         }

@@ -39,13 +39,13 @@ namespace ServerTests
             this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             if (createPlayer)
                 CreatePlayer();
-
-  
+            DeltaTracker.Clear();
         }
 
-        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientEvent
+        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientPacket
         {
             this.NetworkEvents.RunCallbacks(sender, Serialization.FromEventRaw(ev));
+            DeltaTracker.SendDeltaPackets(sender);
         }
 
         public TestServerPlayer CreatePlayer(int x = 10, int y = 10)
@@ -54,6 +54,7 @@ namespace ServerTests
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
             player.UserID = TestServerPlayer.TEST_ID;
             this.World.PlaceNewPlayer(player, this.World.GetTile(x, y));
+            DeltaTracker.SendDeltaPackets(player);
             return player;
         }
 

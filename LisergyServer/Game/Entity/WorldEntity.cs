@@ -4,11 +4,13 @@ using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using Game.World.Components;
 using System;
+using System.Collections.Generic;
 
 namespace Game
 {
+
     [Serializable]
-    public class WorldEntity : Ownable
+    public partial class WorldEntity : Ownable, IDeltaTrackable
     {
         protected static Gaia Gaia { get; private set; } = new Gaia();
 
@@ -19,9 +21,13 @@ namespace Game
         [NonSerialized]
         protected Tile _tile;
 
+        [NonSerialized]
+        protected Tile _previousTile;
+
         public WorldEntity(PlayerEntity owner) : base(owner)
         {
-            _id = Guid.NewGuid().ToString();
+            _id = Guid.NewGuid();
+            DeltaFlags = new DeltaFlags(this);
         }
 
         public bool IsDestroyed => _tile != null;
@@ -34,10 +40,19 @@ namespace Game
         {
             get => _tile; set
             {
-                var oldTile = _tile;
-              
+                _previousTile = _tile;
                 _tile = value;
-                if(_tile != null)
+
+                if (_previousTile == null || _tile == null)
+                {
+                    DeltaFlags.SetFlag(DeltaFlag.EXISTENCE);
+                }
+                else if (_previousTile != _tile)
+                {
+                    DeltaFlags.SetFlag(DeltaFlag.POSITION);
+                }
+
+                if (_tile != null)
                 {
                     _x = _tile.X;
                     _y = _tile.Y;
@@ -45,9 +60,9 @@ namespace Game
                 {
                     _x = 0;
                     _y = 0;
-                    if(oldTile != null)
+                    if(_previousTile != null)
                     {
-                        foreach (var viewer in oldTile.GetComponent<TileVisibilityComponent>().PlayersViewing)
+                        foreach (var viewer in _previousTile.GetComponent<TileVisibilityComponent>().PlayersViewing)
                             viewer.Send(new EntityDestroyPacket(this));
                     }
                 }

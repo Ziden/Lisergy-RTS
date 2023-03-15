@@ -12,7 +12,7 @@ namespace ServerTests
 {
     public class TestServerPlayer : ServerPlayer
     {
-        public static GameId TEST_ID = Guid.NewGuid();
+        public static GameId TEST_ID = GameId.Generate();
 
         public delegate void ReceiveEventHandler(BaseEvent ev);
         public event ReceiveEventHandler OnReceiveEvent;
@@ -28,8 +28,10 @@ namespace ServerTests
         public override void Send<EventType>(EventType ev)
         {
             ev.Sender = this;
-            OnReceiveEvent?.Invoke(ev);
-            ReceivedEvents.Add(ev);
+            var copy = Serialization.FromEventRaw(ev);
+            var reSerialized = Serialization.ToEventRaw(copy);
+            OnReceiveEvent?.Invoke(reSerialized);
+            ReceivedEvents.Add(reSerialized);
         }
 
         public void SendMoveRequest(Party p, Tile t, MovementIntent intent)
@@ -40,7 +42,7 @@ namespace ServerTests
             t.Chunk.Map.World.Game.NetworkEvents.Call(ev);
         }
 
-        public List<T> ReceivedEventsOfType<T>() where T : ServerEvent
+        public List<T> ReceivedEventsOfType<T>() where T : ServerPacket
         {
             return ReceivedEvents.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => e as T).ToList();
         }

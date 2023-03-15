@@ -41,7 +41,7 @@ namespace Tests
             enemy.Tile = _game.World.GetTile(1, 1);
             enemy.AddBattle(new Unit(0));
 
-            var battleID = Guid.NewGuid().ToString();
+            var battleID = Guid.NewGuid();
             _game.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
 
             var battle = _game.BattleService.GetBattle(battleID);
@@ -66,7 +66,7 @@ namespace Tests
             enemy.AddBattle(new Unit(0));
             enemy.Battles[0][0].Stats.Atk = 255;
 
-            var battleID = Guid.NewGuid().ToString();
+            var battleID = Guid.NewGuid();
             _game.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
 
             var battle = _game.BattleService.GetBattle(battleID);

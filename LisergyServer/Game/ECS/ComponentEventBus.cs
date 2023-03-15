@@ -17,7 +17,7 @@ namespace Game.ECS
 
         public void RegisterComponentEvent<EventType, ComponentType>(IGameSystem system, EntityType entity, ComponentType component, Action<EntityType, ComponentType, EventType> callback) where EventType : BaseEvent where ComponentType : IComponent
         {
-            _bus.Register<EventType> (system, ev => callback(entity, component, ev));
+            _bus.Register<EventType>(system, ev => callback(entity, component, ev));
         }
 
 
@@ -27,7 +27,7 @@ namespace Game.ECS
 
         }
 
-        public void Call<EntityType, EventType>(EntityType entity, EventType ev) where EventType : BaseEvent
+        public void Call<EventType>(EntityType entity, EventType ev) where EventType : BaseEvent
         {
             _bus.Call(ev);
         }

@@ -47,7 +47,7 @@ public class Networking : IDisposable
                         Debug.Log("Connected To Server");
                         break;
                     case Telepathy.EventType.Data:
-                        MainBehaviour.NetworkEvents.RunCallbacks(MainBehaviour.Player, msg.data);
+                        MainBehaviour.ServerPackets.RunCallbacks(MainBehaviour.Player, msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
                         Debug.Log("Disconnected from Server");

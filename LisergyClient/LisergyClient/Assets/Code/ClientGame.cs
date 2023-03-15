@@ -1,5 +1,7 @@
 ﻿using Assets.Code.World;
 using Game;
+using Game.Events;
+using Game.Events.Bus;
 using GameData;
 using System;
 
@@ -10,6 +12,8 @@ namespace Assets.Code
         public static ClientWorld ClientWorld => _instance.GetWorld();
 
         private static ClientStrategyGame _instance;
+
+        public static EventBus<GameEvent> Events => _instance.GameEvents;
 
         public ClientStrategyGame(GameSpec specs, GameWorld world) : base(specs, world)
         {

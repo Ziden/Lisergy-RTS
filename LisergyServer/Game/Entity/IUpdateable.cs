@@ -7,6 +7,6 @@ namespace Game.Entity
 {
     public interface IUpdateable
     {
-        ServerEvent GetUpdatePacket();
+        ServerPacket GetUpdatePacket();
     }
 }
