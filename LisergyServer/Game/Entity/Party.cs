@@ -24,7 +24,7 @@ namespace Game.Entity
         [NonSerialized]
         private EntityCargo _cargo;
 
-        public bool IsAlive() => _units.Where(u => u != null && u.Stats.HP > 0).Any();
+        public bool IsAlive() => _units.Where(u => u != null && u.HP > 0).Any();
 
         public override TimeSpan GetMoveDelay() => TimeSpan.FromSeconds(0.25);
 

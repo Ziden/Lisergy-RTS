@@ -134,10 +134,13 @@ namespace Tests
             Record(new EntityMovePacket(_game.GetTestPlayer().GetParty(0), _game.World.GetTile(1, 1)));
             Record(new MessagePopupPacket(PopupType.BAD_INPUT, "Yeah this is a message popup to test our serialization sizes"));
             Record(new BattleStartPacket(GameId.Generate(), _game.GetTestPlayer().GetParty(0), _game.GetTestPlayer().GetParty(0)));
+            Record(new BattleTeam(new Unit(0), new Unit(0), new Unit(0), new Unit(0)));
             Record(new Unit(0));
             Record(GameId.Generate());
 
-            var t = testData[typeof(TileUpdatePacket)];
+            var t = testData[typeof(BattleTeam)];
+            var t2 = testData[typeof(Unit)];
+            var t3 = testData[typeof(GameId)];
 
             foreach (var kp in testData)
             {

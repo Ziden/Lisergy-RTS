@@ -1,6 +1,5 @@
 ﻿using Game.World;
 using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Game
@@ -15,46 +14,29 @@ namespace Game
     {
         public static GameId ZERO = Guid.Empty;
 
-        private ulong l1;
-        private ulong l2;
-
-        public void FromPointer(ulong* pointer)
-        {
-            l1 = *pointer;
-            l2 = *(pointer + 1);
-        }
-
-        public GameId(Guid g)
-        {
-            l1 = 0;
-            l2 = 0;
-            FromPointer((ulong*)&g);
-        }
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        public byte[] _bytes;
 
         public static GameId Generate()
         {
-            return new GameId(Guid.NewGuid());
+            return new GameId() { _bytes = Guid.NewGuid().ToByteArray() };
         }
-
-        public GameId(Position pos)
-        {
-            l1 = 0;
-            l2 = 0;
-            FromPointer((ulong*)&pos);
-
-        }
-
-        public bool IsZero() => l1 == l2 && l2 == 0;
 
         public static implicit operator GameId(Guid id)
         {
-            return new GameId(id);
+            return new GameId()
+            {
+                _bytes = id == Guid.Empty ? new byte[16] : id.ToByteArray()
+            };
         }
 
-        public static bool operator ==(GameId g1, GameId g2)
+        public bool IsZero() => _bytes == null || this == ZERO;
+
+        public static implicit operator Guid(GameId id)
         {
-            return g1.IsEqualsTo(g2);
+            return new Guid(id._bytes);
         }
+
 
         public static bool operator !=(GameId g1, Guid g2)
         {
@@ -71,6 +53,11 @@ namespace Game
             return !g1.IsEqualsTo(g2);
         }
 
+        public static bool operator ==(GameId g1, GameId g2)
+        {
+            return g1.IsEqualsTo(g2);
+        }
+
         public bool Equals(GameId obj) => this.IsEqualsTo(obj);
 
         public override bool Equals(object obj)
@@ -78,33 +65,44 @@ namespace Game
             return base.Equals(obj);
         }
 
-        public unsafe bool IsEqualsTo(GameId a1)
+        public override string ToString()
         {
-            return l1 == a1.l1 && l2 == a1.l2;
+            Guid g = this;
+            return g.ToString();
         }
 
-        public byte[] GetBytes()
+        public unsafe bool IsEqualsTo(GameId id2)
         {
-            var bytes = new byte[16];
-            fixed (byte* pointer = bytes)
+            unchecked
             {
-                *((ulong*)pointer) = l1;
-                *((ulong*)pointer + 1) = l2;
+                fixed (byte* p1 = _bytes, p2 = id2._bytes)
+                {
+                    return *(long*)p1 == *(long*)p2 && *(long*)p1 + 8 == *(long*)p2 + 8;
+                }
             }
-            return bytes;
+        }
+
+        public GameId(Position pos)
+        {
+            fixed (byte* p1 = _bytes)
+            {
+                *(long*)p1 = pos.X;
+                *(long*)(p1 + 8) = pos.Y;
+            }
         }
 
         public unsafe override int GetHashCode()
         {
-            int hash = 0;
-            hash += l1.GetHashCode() * 31;
-            hash += l2.GetHashCode() * 31;
-            return hash;
-        }
-
-        public override string ToString()
-        {
-            return $"{l1}-{l2}";
+            unchecked
+            {
+                fixed (byte* p1 = _bytes)
+                {
+                    int hash = 0;
+                    hash ^= (*(long*)p1).GetHashCode();
+                    hash ^= (*(long*)p1 + 8).GetHashCode();
+                    return hash;
+                }
+            }
         }
     }
 }

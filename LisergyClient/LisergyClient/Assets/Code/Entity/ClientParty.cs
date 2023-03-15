@@ -69,7 +69,7 @@ namespace Assets.Code.World
             }
         }
 
-        public override string BattleID
+        public override GameId BattleID
         {
             get => base.BattleID; set {
 

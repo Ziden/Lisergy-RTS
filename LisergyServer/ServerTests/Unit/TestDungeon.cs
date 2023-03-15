@@ -67,7 +67,7 @@ namespace Tests
             var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
-            party.GetUnits()[0].Stats.Atk = 255;
+            party.GetUnits()[0].Atk = 255;
 
             dungeonTile.GetComponent<EntityPlacementComponent>().StaticEntity = _dungeon;
 
@@ -93,7 +93,7 @@ namespace Tests
             var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
-            party.GetUnits()[0].Stats.Atk = 255; // make sure it wins !
+            party.GetUnits()[0].Atk = 255; // make sure it wins !
             _dungeon.Tile = dungeonTile;
 
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);
@@ -116,8 +116,8 @@ namespace Tests
             var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
-            party.GetUnits()[0].Stats.HP = 1; // make sure it looses !
-            party.GetUnits()[0].Stats.Atk = 0; // make sure it looses !
+            party.GetUnits()[0].HP = 1; // make sure it looses !
+            party.GetUnits()[0].Atk = 0; // make sure it looses !
             dungeonTile.GetComponent<EntityPlacementComponent>().StaticEntity = _dungeon;
 
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);

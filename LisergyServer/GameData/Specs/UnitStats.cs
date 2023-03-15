@@ -1,15 +1,82 @@
 ﻿using GameData.buffs;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Game.Entity
 {
-
-
+    [StructLayout(LayoutKind.Sequential)]
     [Serializable]
-    public class UnitStats
+    public unsafe struct UnitStats
     {
+        public static UnitStats DEFAULT = new UnitStats()
+        {
+            Atk = 1,
+            Def = 1,
+            Matk = 1,
+            Mdef = 1,
+            Speed = 10,
+            Accuracy = 10,
+            Weight = 60,
+            MaxHP = 5,
+            HP = 5,
+            MP = 2,
+            MaxMP = 2,
+            Move = 5
+        };
+
+        public byte Atk;
+        public byte Def;
+        public byte Matk;
+        public byte Mdef;
+        public byte Speed;
+        public byte Accuracy;
+        public byte Weight;
+        public byte Move;
+
+        // Vitals
+        public ushort HP;
+        public ushort MaxHP;
+        public ushort MP;
+        public ushort MaxMP;
+
+        public UnitStats SetStats(Dictionary<Stat, ushort> stats)
+        {
+            foreach (var kp in stats)
+                this[kp.Key] = kp.Value;
+            return this;
+        }
+
+        public void SetStats(UnitStats stats)
+        {
+            var size = sizeof(UnitStats);
+            var sourcePtr = &stats;
+            fixed(UnitStats* thisPtr = &this)
+            {
+                Buffer.MemoryCopy(sourcePtr, thisPtr, size, size);
+            }
+        }
+
+        public ushort GetStat(Stat s)
+        {
+            return this[s];
+        }
+
+        public void SetStat(Stat stat, ushort value)
+        {
+            this[stat] = value;
+        }
+
+        public void AddStat(Stat stat, ushort value)
+        {
+            this[stat] += value;
+        }
+
+        public void SubStat(Stat stat, ushort value)
+        {
+            this[stat] -= value;
+        }
 
         public ushort this[Stat stat]
         {
@@ -49,88 +116,10 @@ namespace Game.Entity
                     case Stat.ATK: Atk = (byte)value; break;
                     case Stat.MOVE: Move = (byte)value; break;
                     default: throw new Exception("Invalid stat " + stat.ToString());
-                } 
-                
+                }
+
             }
+
         }
-
-        private ushort _level;
-
-        public void SetStats(UnitStats stats)
-        {
-            this.HP = stats.HP;
-            this.MaxHP = stats.MaxHP;
-            this.MP = stats.MP;
-            this.MaxMP = stats.MaxMP;
-            this.Atk = stats.Atk;
-            this.Def = stats.Def;
-            this.Speed = stats.Speed;
-            this.Accuracy = stats.Accuracy;
-            this.Move = stats.Move;
-            this.Matk = stats.Matk;
-            this.Mdef = stats.Mdef;
-            this.Weight = stats.Weight;
-        }
-
-        public void SetStats(Dictionary<Stat, ushort> stats)
-        {
-            foreach (var kp in stats)
-                this[kp.Key] = kp.Value;
-        }
-
-        public ushort GetStat(Stat s)
-        {
-            return this[s];
-        }
-
-        public void SetStat(Stat stat, ushort value)
-        {
-            this[stat] = value;
-        }
-
-        public UnitStats()
-        {
-            DefaultValues();
-        }
-
-        public UnitStats(Dictionary<Stat, ushort> stats)
-        {
-            DefaultValues();
-            SetStats(stats);
-        }
-
-        private void DefaultValues()
-        {
-            _level = 1;
-            Atk = 1;
-            Def = 1;
-            Matk = 1;
-            Mdef = 1;
-            Speed = 10;
-            Accuracy = 10;
-            Weight = 60;
-
-            MaxHP = 5;
-            HP = 5;
-            MP = 2;
-            MaxMP = 2;
-            Move = 5;
-        }
-
-        // Stats
-        public byte Atk { get; set; }
-        public byte Def { get; set; }
-        public byte Matk { get; set; }
-        public byte Mdef { get; set; }
-        public byte Speed { get; set; }
-        public byte Accuracy { get; set; }
-        public byte Weight { get; set; }
-        public byte Move { get; set; }
-
-        // Vitals
-        public ushort HP { get; set; }
-        public ushort MaxHP { get; set; }
-        public ushort MP { get; set; }
-        public ushort MaxMP { get; set; }
     }
 }

@@ -56,7 +56,7 @@ namespace Tests
         {
             var playerCastleTile = _player.Buildings.First().Tile;
             var party = _player.GetParty(0);
-            party.GetUnits()[0].Stats.Atk = 1;
+            party.GetUnits()[0].Atk = 1;
 
             party.Tile = _game.World.GetTile(0, 0);
 
@@ -64,7 +64,7 @@ namespace Tests
 
             enemy.Tile = _game.World.GetTile(1, 1);
             enemy.AddBattle(new Unit(0));
-            enemy.Battles[0][0].Stats.Atk = 255;
+            enemy.Battles[0][0].Atk = 255;
 
             var battleID = Guid.NewGuid();
             _game.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));

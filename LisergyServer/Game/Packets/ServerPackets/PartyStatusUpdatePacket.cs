@@ -1,6 +1,7 @@
 ﻿using Game.Entity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game.Events.ServerEvents
 {
@@ -15,11 +16,11 @@ namespace Game.Events.ServerEvents
         {
             PartyIndex = entity.PartyIndex;
             OwnerID = entity.OwnerID;
-            var units = entity.GetUnits();
+            var units = entity.GetUnits().Where(u => u != null).ToArray();;
             Stats = new UnitStats[units.Length];
             for (var x = 0; x < units.Length; x++)
             {
-                Stats[x] = units[x] == null ? null : units[x].Stats;
+                Stats[x] = units[x].Stats;
             }
 
         }

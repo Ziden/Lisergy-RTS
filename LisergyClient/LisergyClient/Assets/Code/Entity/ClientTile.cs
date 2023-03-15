@@ -1,16 +1,45 @@
 ﻿using Game;
 using Game.Entity;
+using Game.Events.Bus;
+using Game.Events.GameEvents;
+using Game.World.Components;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Code.World
 {
-    public class ClientTile : Tile, IGameObject
+    public class ClientTile : Tile, IGameObject, IEventListener
     {
         private GameObject _gameObj;
 
         public bool Decorated;
 
-        public ClientTile(ClientChunk c, int x, int y) : base(c, x, y) { }
+        public ClientTile(ClientChunk c, int x, int y) : base(c, x, y)
+        {
+
+            // TODO: Move to entity view
+            ClientStrategyGame.Events.Register<StaticEntityPlacedEvent>(this, OnStaticEntityPlaced);
+
+        }
+
+
+        private void OnStaticEntityPlaced(StaticEntityPlacedEvent ev)
+        {
+            /*
+             * if(ev.Tile.TileUniqueId == ev.Tile.TileUniqueId)
+            {
+                if (ev.Entity != null && value is IGameObject)
+                {
+                    var gameObject = ((IGameObject)value).GetGameObject();
+                    gameObject.transform.position = new Vector3(X, 0, Y);
+                }
+                using (new StackLog($"[Static Entity] New {value} on {this}"))
+                {
+                    base.StaticEntity = value;
+                }
+            }
+            */
+        }
 
         public ClientChunk ClientChunk => Chunk as ClientChunk;
 
@@ -19,22 +48,23 @@ namespace Assets.Code.World
             if (_gameObj == null)
                 return;
 
-            if(visible == false)
+            if (visible == false)
             {
                 SetColor(new Color(0.5f, 0.5f, 0.5f, 1.0f));
-            } else
+            }
+            else
             {
                 SetColor(new Color(1f, 1f, 1f, 1.0f));
                 _gameObj.SetActive(visible);
-            }  
+            }
         }
 
         private void SetColor(Color c)
         {
-            foreach(Transform child in _gameObj.transform)
+            foreach (Transform child in _gameObj.transform)
             {
                 var rend = child.GetComponent<Renderer>();
-                if(rend != null)
+                if (rend != null)
                 {
                     rend.material.color = c;
                 }
@@ -48,6 +78,10 @@ namespace Assets.Code.World
             SetVisible(true);
         }
 
+        // TODO: Remove & move calls to listeners in Entity View
+        public List<WorldEntity> MovingEntities => GetComponent<EntityPlacementComponent>().EntitiesIn;
+        public StaticEntity StaticEntity => GetComponent<EntityPlacementComponent>().StaticEntity;
+
         public override void SetSeenBy(ExploringEntity entity)
         {
             var a = this;
@@ -58,8 +92,8 @@ namespace Assets.Code.World
                 SetVisible(true);
                 foreach (var party in this.MovingEntities)
                     ((ClientParty)party).GetGameObject().SetActive(true);
-                if (this.StaticEntity is IGameObject)
-                    ((IGameObject)this.StaticEntity).GetGameObject().SetActive(true);
+                //if (this.StaticEntity is IGameObject)
+                //    ((IGameObject)this.StaticEntity).GetGameObject().SetActive(true);
             }
         }
 
@@ -73,10 +107,12 @@ namespace Assets.Code.World
             if (!this.IsVisibleTo(MainBehaviour.Player))
             {
                 SetVisible(false);
+                /*
                 foreach (var party in this.MovingEntities)
                     ((ClientParty)party).GetGameObject().SetActive(false);
                 if (this.StaticEntity is IGameObject)
                     ((IGameObject)this.StaticEntity).GetGameObject().SetActive(false);
+                */
             }
         }
 
@@ -110,23 +146,6 @@ namespace Assets.Code.World
                 StackLog.Debug($"Updating {this} tileid to {value}");
                 AddToScene(value);
                 base.TileId = value;
-            }
-        }
-
-        public override StaticEntity StaticEntity 
-        {
-            get { return base.StaticEntity; }
-            set
-            {
-                if (value != null && value is IGameObject)
-                {
-                    var gameObject = ((IGameObject)value).GetGameObject();
-                    gameObject.transform.position = new Vector3(X, 0, Y);
-                }
-                using (new StackLog($"[Static Entity] New {value} on {this}"))
-                {
-                    base.StaticEntity = value;
-                }
             }
         }
     }

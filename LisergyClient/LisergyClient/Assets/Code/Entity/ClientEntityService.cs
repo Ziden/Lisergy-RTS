@@ -32,12 +32,17 @@ namespace Assets.Code.World
 
             var obj = knownEntity as IGameObject;
             MainBehaviour.Destroy(obj.GetGameObject());
+
+            // TODO SEE WTF TO DO
+            /*
+            
             if (knownEntity.Tile.StaticEntity == knownEntity)
                 knownEntity.Tile.StaticEntity = null;
 
             if (knownEntity is MovableWorldEntity)
                 knownEntity.Tile.MovingEntities.Remove(knownEntity as MovableWorldEntity);
             knownEntity.Tile = null;
+            */
         }
 
         [EventMethod]

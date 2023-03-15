@@ -31,15 +31,14 @@ namespace ServerTests
                 _registered = true;
             }
             Serialization.LoadSerializers();
-
+            DeltaTracker.Clear();
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);
-
             this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             if (createPlayer)
                 CreatePlayer();
-            DeltaTracker.Clear();
+           
         }
 
         public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientPacket

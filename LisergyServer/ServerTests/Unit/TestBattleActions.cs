@@ -19,11 +19,11 @@ namespace Tests
         {
             FastUnit = new Unit(1);
             FastUnit.Name = "Fast Unit";
-            FastUnit.Stats.Speed *= 2;
+            FastUnit.Speed *= 2;
 
             SlowUnit = new Unit(1);
             SlowUnit.Name = "Slow Unit";
-            SlowUnit.Stats.Speed /= 2;
+            SlowUnit.Speed /= 2;
 
             Battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(FastUnit), new BattleTeam(SlowUnit));
         }

@@ -1,4 +1,5 @@
 ﻿using Assets.Code;
+using Game;
 using Game.Events;
 using Game.Events.Bus;
 using UnityEngine;
@@ -46,7 +47,7 @@ public class MainBehaviour : MonoBehaviour
     private void Awake()
     {
         Networking = new Networking();
-        ServerPackets = new EventBus();
+        ServerPackets = new EventBus<ServerPacket>();
         ConfigureUnity();
         Serialization.LoadSerializers();
         _serverPacketListener = new ServerListener(ServerPackets);

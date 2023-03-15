@@ -21,18 +21,18 @@ namespace Tests
         {
             StrongUnit = new Unit(1);
             StrongUnit.Name = "Strong Unit";
-            StrongUnit.Stats.Atk *= 4;
+            StrongUnit.Atk *= 4;
 
             WeakUnit = new Unit(1);
             WeakUnit.Name = "Weak Unit";
 
             FastUnit = new Unit(1);
             FastUnit.Name = "Fast Unit";
-            FastUnit.Stats.Speed *= 2;
+            FastUnit.Speed *= 2;
 
             SlowUnit = new Unit(1);
             SlowUnit.Name = "Slow Unit";
-            SlowUnit.Stats.Speed /= 2;
+            SlowUnit.Speed /= 2;
         }
 
         [Test]
@@ -80,11 +80,11 @@ namespace Tests
         [Test]
         public void TestDelayProportion()
         {
-            FastUnit.Stats.Speed = 10;
-            FastUnit.Stats.HP = 50;
+            FastUnit.Speed = 10;
+            FastUnit.HP = 50;
 
-            SlowUnit.Stats.Speed = 5;
-            SlowUnit.Stats.HP = 50;
+            SlowUnit.Speed = 5;
+            SlowUnit.HP = 50;
 
             var battle = new TestBattle(new BattleTeam(FastUnit), new BattleTeam(SlowUnit));
             var result = battle.AutoRun.RunAllRounds();
@@ -109,11 +109,11 @@ namespace Tests
         [Test]
         public void TestUnitsBeingUpdated()
         {
-            var initialHP = StrongUnit.Stats.HP;
+            var initialHP = StrongUnit.HP;
             var battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
             var result = battle.AutoRun.RunAllRounds();
 
-            var finalHP = StrongUnit.Stats.HP;
+            var finalHP = StrongUnit.HP;
             Assert.AreNotEqual(initialHP, finalHP);
         }
 

@@ -33,12 +33,38 @@ namespace ServerTests.Unit
         {
             var guid = Guid.NewGuid();
             GameId id1 = guid;
-            Guid back = new Guid(id1.GetBytes());
+            Guid back = id1;
       
 
             Assert.AreEqual(guid, back);
         }
 
+
+        [Test]
+        public void TestZero()
+        {
+            var guid = Guid.Empty;
+            GameId id1 = guid;
+            
+
+            Assert.IsTrue(id1.IsZero());
+        }
+
+        [Test]
+        public void TestZeroInit()
+        {
+            GameId zero = Guid.Empty;
+
+            Assert.IsTrue(zero.IsZero());
+        }
+
+        [Test]
+        public void TestNonInitialized()
+        {
+            GameId zero = default;
+
+            Assert.IsTrue(zero.IsZero());
+        }
 
         [Test]
         public void CheckEqual()

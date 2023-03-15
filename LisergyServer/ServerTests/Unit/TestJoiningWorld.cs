@@ -109,7 +109,7 @@ namespace Tests
             var party = player.GetParty(0);
             var unit = party.GetUnits()[0];
           
-            Assert.That(unit.Stats.HP == unit.Stats.MaxHP);
+            Assert.That(unit.HP == unit.MaxHP);
         }
     }
 }

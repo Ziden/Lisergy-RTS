@@ -12,7 +12,7 @@ namespace Game.Battles
         {
             var damage = attacker.Stats.Atk - (defender.Stats.Def / 2);
             var hp = defender.Stats.HP - damage;
-            defender.Stats.HP = (ushort)Math.Max(0, hp);
+            defender.UnitReference.HP = (ushort)Math.Max(0, hp);
             return new AttackActionResult() { Damage = damage };
         }
     }

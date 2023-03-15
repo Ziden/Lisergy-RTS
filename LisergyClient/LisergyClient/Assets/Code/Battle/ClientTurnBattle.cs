@@ -1,4 +1,5 @@
 ﻿using Assets.Code.World;
+using Game;
 using Game.Battles;
 using Game.Events;
 using System;
@@ -12,12 +13,12 @@ namespace Assets.Code.Battle
 {
     public class ClientTurnBattle : TurnBattle
     {
-        public ClientTurnBattle(BattleStartPacket ev): base(Guid.Parse(ev.BattleID), ev.Attacker, ev.Defender)
+        public ClientTurnBattle(BattleStartPacket ev): base(ev.BattleID, ev.Attacker, ev.Defender)
         {
            
         }
 
-        public ClientUnit FindUnit(string id)
+        public ClientUnit FindUnit(GameId id)
         {
             var unit= Attacker.Units.FirstOrDefault(u => u != null && u.UnitID == id);
             if(unit == null) unit = Defender.Units.FirstOrDefault(u => u != null && u.UnitID == id);
