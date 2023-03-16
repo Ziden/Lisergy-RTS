@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.Entity;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,18 @@ namespace ServerTests.Unit
             Assert.AreEqual(guid, back);
         }
 
+        public class TestClass
+        {
+            public GameId Zero;
+        }
+
+        [Test]
+        public void TestUnassigned()
+        {
+            var c = new TestClass();
+
+            Assert.IsTrue(c.Zero == Guid.Empty);
+        }
 
         [Test]
         public void TestZero()
@@ -49,6 +62,16 @@ namespace ServerTests.Unit
 
             Assert.IsTrue(id1.IsZero());
         }
+
+        [Test]
+        public void TestZeroAssignments()
+        {
+            GameId zero1 = Guid.Empty;
+            GameId zero2 = Guid.Empty;
+            zero2 = zero1;
+            Assert.IsTrue(zero1 == zero2);
+        }
+
 
         [Test]
         public void TestZeroInit()

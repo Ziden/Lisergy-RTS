@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.ECS;
 using GameData;
 using UnityEngine;
 
@@ -27,7 +28,8 @@ namespace Assets.Code.World
         {
             var prefab = Resources.Load("prefabs/buildings/" + serverEntity.SpecID);
             var tile = ClientStrategyGame.ClientWorld.GetClientTile(serverEntity);
-            _gameObject = MainBehaviour.Instantiate(prefab, tile.ClientChunk.GetGameObject().transform) as GameObject;
+            _gameObject = MainBehaviour.Instantiate(prefab, tile.GetGameObject().transform) as GameObject;
+            _gameObject.transform.localPosition = Vector3.zero;
             this.GetGameObject().SetActive(true);
             UpdateData(serverEntity);
             if (serverEntity.SpecID == StrategyGame.Specs.InitialBuilding && this.IsMine())

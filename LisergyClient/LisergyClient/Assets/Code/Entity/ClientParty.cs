@@ -56,7 +56,7 @@ namespace Assets.Code.World
             set
             {
                 var old = base.Tile;
-                if (value != null && BattleID != null)
+                if (value != null && !BattleID.IsZero())
                     Effects.BattleEffect(value as ClientTile);
 
                 base.Tile = value;
@@ -73,9 +73,9 @@ namespace Assets.Code.World
         {
             get => base.BattleID; set {
 
-                if(this.Tile != null && value != null && BattleID == null)
+                if(this.Tile != null && !value.IsZero() && BattleID.IsZero())
                     Effects.BattleEffect(this.Tile as ClientTile);
-                if (this.BattleID != null && value == null)
+                if (!this.BattleID.IsZero() && value.IsZero())
                     Effects.StopEffect(this.Tile);
                 base.BattleID = value;
             }

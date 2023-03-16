@@ -73,6 +73,10 @@ namespace Game
 
         public unsafe bool IsEqualsTo(GameId id2)
         {
+            if(id2._bytes == null)
+                return this == ZERO;
+            if(_bytes == null)
+                return id2 == ZERO;
             unchecked
             {
                 fixed (byte* p1 = _bytes, p2 = id2._bytes)
