@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.World.Data;
+using System;
 using System.Collections.Generic;
 
 namespace Game.Events.ServerEvents
@@ -6,16 +7,18 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class TileUpdatePacket : ServerPacket
     {
-        public TileUpdatePacket(Tile tile)
+        public TileUpdatePacket(in TileData data)
         {
-            this.Tile = tile;
+            _data = data;
         }
 
-        public Tile Tile;
+        private TileData _data;
+
+        public ref TileData Data => ref _data;
 
         public override string ToString()
         {
-            return $"<TileUpdate {Tile}>";
+            return $"<TileUpdate {_data}>";
         }
     }
 }

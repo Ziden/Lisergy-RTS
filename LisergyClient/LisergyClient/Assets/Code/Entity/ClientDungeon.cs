@@ -1,4 +1,5 @@
-﻿using Game;
+﻿using Assets.Code.Views;
+using Game;
 using Game.Entity;
 using UnityEngine;
 
@@ -6,23 +7,22 @@ namespace Assets.Code.World
 {
     public class ClientDungeon : Dungeon, IGameObject, IClientEntity<Dungeon, ClientDungeon>
     {
-        private GameObject _gameObject;
-
-        public GameObject GetGameObject() => _gameObject;
+        public GameObject GameObject { get; set; }
 
         public ClientDungeon UpdateData(Dungeon dungeon)
         {
             this._battles = dungeon.Battles;
             this.Id = dungeon.Id;
-            this.Tile = ClientStrategyGame.ClientWorld.GetClientTile(dungeon);
+            this.Tile = GameView.World.GetTile(dungeon);
             return this;
         }
 
         public void InstantiateInScene(Dungeon dungeon)
         {
             var prefab = Resources.Load("prefabs/buildings/dungeon");
-            var tile = ClientStrategyGame.ClientWorld.GetClientTile(dungeon);
-            _gameObject = MainBehaviour.Instantiate(prefab, tile.ClientChunk.GetGameObject().transform) as GameObject;
+            var tile = GameView.World.GetTile(dungeon);
+            var chunkView = GameView.GetView<ChunkView>(tile.Chunk);
+            GameObject = MainBehaviour.Instantiate(prefab, chunkView.GameObject.transform) as GameObject;
             UpdateData(dungeon);
         }
 

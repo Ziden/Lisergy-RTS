@@ -14,7 +14,7 @@ namespace GameDataTest
             BattleSpecs = new List<BattleSpec>()
         };
 
-        public static void Generate(GameSpec spec)
+        public static void Generate(ref GameSpec spec)
         {
             EASY.BattleSpecs.Add(new BattleSpec()
             {

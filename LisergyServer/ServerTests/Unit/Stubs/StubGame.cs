@@ -1,6 +1,7 @@
 ﻿using BattleServer;
 using Game;
 using Game.Battles;
+using Game.ECS;
 using Game.Events;
 using Game.Listeners;
 using Game.World;
@@ -22,6 +23,12 @@ namespace ServerTests
         public WorldService WorldService { get; private set; }
         public CourseService CourseService { get; private set; }
 
+        ~TestGame()
+        {
+            ComponentSet<Tile>._buses.Clear();
+            ComponentSet<WorldEntity>._buses.Clear();
+        }
+
 
         public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), world == null ? new GameWorld(4, 40, 40) : world)
         {
@@ -30,6 +37,7 @@ namespace ServerTests
             {
                 _registered = true;
             }
+            //UnmanagedMemory.Free();
             Serialization.LoadSerializers();
             DeltaTracker.Clear();
             BattleService = new BattleService(this);
@@ -37,8 +45,7 @@ namespace ServerTests
             CourseService = new CourseService(this);
             this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             if (createPlayer)
-                CreatePlayer();
-           
+                CreatePlayer();  
         }
 
         public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientPacket
@@ -52,6 +59,7 @@ namespace ServerTests
             var player = new TestServerPlayer();
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
             player.UserID = TestServerPlayer.TEST_ID;
+            var tile = this.World.GetTile(x, y);
             this.World.PlaceNewPlayer(player, this.World.GetTile(x, y));
             DeltaTracker.SendDeltaPackets(player);
             return player;
@@ -84,10 +92,11 @@ namespace ServerTests
 
         public Tile RandomNotBuiltTile()
         {
-            foreach (var tile in World.AllTiles())
+            var tiles = World.AllTiles();
+            foreach (var tile in tiles)
                 if (tile.GetComponent<EntityPlacementComponent>().StaticEntity == null)
                     return tile;
-            return null;
+            throw new System.Exception("No unbuilt tile");
         }
     }
 

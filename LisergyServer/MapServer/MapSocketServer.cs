@@ -82,7 +82,7 @@ namespace MapServer
                 new NewbieChunkPopulator(),
                 new DungeonsPopulator()
             );
-         
+            DeltaTracker.Clear();
             return _game;
         }
 

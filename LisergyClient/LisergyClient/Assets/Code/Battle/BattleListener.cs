@@ -26,7 +26,7 @@ namespace Assets.Code.Battle
             MainBehaviour.Player.Battles.Add(ev);
 
             var pl = MainBehaviour.Player;
-            var w = ClientStrategyGame.ClientWorld;
+            var w = GameView.World;
             var def = w.GetOrCreateClientPlayer(ev.BattleHeader.Defender.OwnerID);
             var atk = w.GetOrCreateClientPlayer(ev.BattleHeader.Attacker.OwnerID);
 
@@ -53,10 +53,10 @@ namespace Assets.Code.Battle
         {
             Log.Debug("Received battle startr");
             var pl = MainBehaviour.Player;
-            var w = ClientStrategyGame.ClientWorld;
+            var w = GameView.World;
             var def = w.GetOrCreateClientPlayer(ev.Defender.OwnerID);
             var atk = w.GetOrCreateClientPlayer(ev.Attacker.OwnerID);
-            var tile = w.GetClientTile(ev.X, ev.Y);
+            var tile = w.GetTile(ev.X, ev.Y);
 
             if (def != null && !Gaia.IsGaia(def.UserID))
             {

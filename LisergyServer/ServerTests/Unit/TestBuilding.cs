@@ -25,7 +25,6 @@ namespace Tests
             var initialBuildingSpec = StrategyGame.Specs.Buildings[StrategyGame.Specs.InitialBuilding];
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile;
-
             Assert.IsTrue(player.Buildings.Count == 1);
             Assert.IsTrue(player.Buildings.Any(b => b.SpecID == initialBuildingSpec.Id));
             Assert.IsTrue(tile.GetComponent<EntityPlacementComponent>().StaticEntity == player.Buildings.First());
@@ -33,6 +32,12 @@ namespace Tests
         }
 
         [Test]
+        public void TestUnbuiltTile()
+        {
+            var tile = Game.RandomNotBuiltTile();
+        }
+
+            [Test]
         public void TestNewBuilding()
         {
             var player = Game.GetTestPlayer();
@@ -47,7 +52,6 @@ namespace Tests
             Assert.IsTrue(tile.GetComponent<EntityPlacementComponent>().StaticEntity == player.Buildings.Last());
             Assert.IsTrue(((Building)tile.GetComponent<EntityPlacementComponent>().StaticEntity).SpecID == buildingSpec.Id);
 
-            var nei = tile.GetNeighbor(Direction.NORTH);
             Assert.That(tile.GetComponent<TileVisibilityComponent>().EntitiesViewing.Contains(tile.GetComponent<EntityPlacementComponent>().StaticEntity));
 
         }

@@ -4,16 +4,20 @@ using System;
 
 namespace Game
 {
-    public unsafe partial class Tile : IEntity, IDeltaTrackable
+    public unsafe partial class Tile : IEntity, IDeltaTrackable, IDeltaUpdateable<TileUpdatePacket>
     {
         [field: NonSerialized]
-        public DeltaFlags DeltaFlags { get; }
+        private DeltaFlags _flags;
+
+        public ref DeltaFlags DeltaFlags { get => ref _flags; }
+
+        public TileUpdatePacket UpdatePacket => new TileUpdatePacket(_tileData);
 
         public void ProccessDeltas(PlayerEntity trigger)
         {
-            if(DeltaFlags.HasFlag(DeltaFlag.REVEALED))
+            if(DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
             {
-                trigger.Send(new TileUpdatePacket(this));
+                trigger.Send(UpdatePacket);
             }
         }
     }

@@ -25,13 +25,13 @@ namespace Assets.Code.World
         public void EntityDestroy(EntityDestroyPacket ev)
         {
             Log.Debug("Received entity destroy");
-            var owner = ClientStrategyGame.ClientWorld.GetOrCreateClientPlayer(ev.OwnerID);
+            var owner = GameView.World.GetOrCreateClientPlayer(ev.OwnerID);
             var knownEntity = owner.GetKnownEntity(ev.EntityID);
             if (knownEntity == null)
                 throw new System.Exception($"Server sent destroy event for entity {ev.EntityID} from {ev.OwnerID} at however its not visible to client");
 
             var obj = knownEntity as IGameObject;
-            MainBehaviour.Destroy(obj.GetGameObject());
+            MainBehaviour.Destroy(obj.GameObject);
 
             // TODO SEE WTF TO DO
             /*
@@ -49,12 +49,12 @@ namespace Assets.Code.World
         public void EntityMove(EntityMovePacket ev)
         {
             Log.Debug("Received entity move");
-            var owner = ClientStrategyGame.ClientWorld.GetOrCreateClientPlayer(ev.OwnerID);
+            var owner = GameView.World.GetOrCreateClientPlayer(ev.OwnerID);
             var knownEntity = owner.GetKnownEntity(ev.EntityID);
             if (knownEntity == null)
                 throw new Exception($"Server sent move event for entit3y {ev.EntityID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
 
-            var newTile = ClientStrategyGame.ClientWorld.GetClientTile(ev.X, ev.Y);
+            var newTile = GameView.World.GetTile(ev.X, ev.Y);
             knownEntity.Tile = newTile;
         }
 
@@ -64,7 +64,7 @@ namespace Assets.Code.World
             Log.Debug("Received entity update");
             var serverEntity = ev.Entity;
             var serverOwner = serverEntity.OwnerID;
-            var owner = ClientStrategyGame.ClientWorld.GetOrCreateClientPlayer(serverEntity.OwnerID);
+            var owner = GameView.World.GetOrCreateClientPlayer(serverEntity.OwnerID);
             serverEntity.Owner = owner;
             if (serverEntity is Party serverParty)
             {

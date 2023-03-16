@@ -23,8 +23,8 @@ namespace Assets.Code.World
 
         }
 
-        private GameObject _gameObject;
-        public ClientTile ClientTile { get => (ClientTile)this.Tile; }
+        public GameObject GameObject { get; set; }
+        public Tile ClientTile { get => this.Tile; }
 
         public ClientParty UpdateData(Party partyFromNetwork)
         {    
@@ -34,21 +34,19 @@ namespace Assets.Code.World
             PartyIndex = partyFromNetwork.PartyIndex;
             Owner.Parties[PartyIndex] = this;
             Id = partyFromNetwork.Id;
-            Tile = ClientStrategyGame.ClientWorld.GetClientTile(partyFromNetwork);
+            Tile = GameView.World.GetTile(partyFromNetwork);
             return this;
         }
 
         public void InstantiateInScene(Party partyFromNetwork)
         {
-            _gameObject = new GameObject($"{partyFromNetwork.OwnerID}-{Id}-{partyFromNetwork.PartyIndex}");
-            _gameObject.transform.SetParent(Container.transform);
+            GameObject = new GameObject($"{partyFromNetwork.OwnerID}-{Id}-{partyFromNetwork.PartyIndex}");
+            GameObject.transform.SetParent(Container.transform);
             UpdateData(partyFromNetwork);
-            this.GetGameObject().SetActive(true);
+            GameObject.SetActive(true);
             Render();
             StackLog.Debug($"Created new party instance {this}");
         }
-
-        public GameObject GetGameObject() => _gameObject;
 
         public override Tile Tile
         {
@@ -57,15 +55,15 @@ namespace Assets.Code.World
             {
                 var old = base.Tile;
                 if (value != null && !BattleID.IsZero())
-                    Effects.BattleEffect(value as ClientTile);
+                    Effects.BattleEffect(value as Tile);
 
                 base.Tile = value;
                 if (value != null)
                 {
                     StackLog.Debug($"Moving {this} gameobject to {value}");
-                    _gameObject.transform.position = new Vector3(value.X, 0.1f, value.Y);
+                    GameObject.transform.position = new Vector3(value.X, 0.1f, value.Y);
                 }
-                ClientEvents.PartyFinishedMove(this, (ClientTile)old, (ClientTile)base.Tile);
+                ClientEvents.PartyFinishedMove(this, old, base.Tile);
             }
         }
 
@@ -74,7 +72,7 @@ namespace Assets.Code.World
             get => base.BattleID; set {
 
                 if(this.Tile != null && !value.IsZero() && BattleID.IsZero())
-                    Effects.BattleEffect(this.Tile as ClientTile);
+                    Effects.BattleEffect(this.Tile);
                 if (!this.BattleID.IsZero() && value.IsZero())
                     Effects.StopEffect(this.Tile);
                 base.BattleID = value;
@@ -107,8 +105,8 @@ namespace Assets.Code.World
             {
                 var clientUnit = unit as ClientUnit;
                 clientUnit.AddToScene();
-                clientUnit.GetGameObject().transform.SetParent(_gameObject.transform);
-                clientUnit.GetGameObject().transform.localPosition = Vector3.zero;
+                clientUnit.GameObject.transform.SetParent(GameObject.transform);
+                clientUnit.GameObject.transform.localPosition = Vector3.zero;
             }
         }
     }

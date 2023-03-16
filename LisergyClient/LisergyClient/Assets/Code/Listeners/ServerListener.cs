@@ -12,7 +12,7 @@ namespace Assets.Code
 {
     public class ServerListener : IEventListener
     {
-        private ClientStrategyGame _game;
+        private GameView _game;
 
         private WorldListener _worldService;
         private BattleListener _battleListener;
@@ -29,7 +29,7 @@ namespace Assets.Code
 
         private void InitializeWorld(GameSpec spec, int sizeX, int sizeY)
         {
-            _game = new ClientStrategyGame(spec, new ClientWorld(sizeX, sizeY));
+            _game = new GameView(spec, new ClientWorld(sizeX, sizeY));
         }
 
         [EventMethod]

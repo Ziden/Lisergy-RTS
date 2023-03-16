@@ -1,4 +1,5 @@
-﻿using Game.Entity;
+﻿using Game.ECS;
+using Game.Entity;
 using Game.Events;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
@@ -10,7 +11,7 @@ namespace Game
 {
 
     [Serializable]
-    public partial class WorldEntity : Ownable, IDeltaTrackable
+    public partial class WorldEntity : Ownable, IEntity, IDeltaTrackable
     {
         protected static Gaia Gaia { get; private set; } = new Gaia();
 
@@ -70,6 +71,11 @@ namespace Game
 
                 Log.Info($"Placed {this} in {_tile}");
             }
+        }
+
+        public T GetComponent<T>() where T : IComponent
+        {
+            throw new NotImplementedException();
         }
     }
 }

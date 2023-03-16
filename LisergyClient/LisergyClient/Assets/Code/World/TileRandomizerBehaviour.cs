@@ -1,7 +1,7 @@
 ﻿using Assets.Code;
+using Assets.Code.Views;
 using Assets.Code.World;
 using Game;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,59 +25,63 @@ public class TileRandomizerBehaviour : MonoBehaviour
 
     public Tile Tile { get => _tile; private set => _tile = value; }
 
-    private static void DecorateBoundaries(ClientTile tile)
+    private static void DecorateBoundaries(TileView view)
     {
+        var tile = view.Tile;
+        var comp = view.GameObject.GetComponent<TileRandomizerBehaviour>();
 
-        var comp = tile.GetGameObject().GetComponent<TileRandomizerBehaviour>();
+        var map = view.Tile.Chunk.Map as ClientChunkMap;
+        var northTile = map.GetTile(tile.X, tile.Y - 1);
+        var southTile = map.GetTile(tile.X, tile.Y + 1);
+        var eastTile = map.GetTile(tile.X + 1, tile.Y);
+        var westTile = map.GetTile(tile.X - 1, tile.Y);
+        TileView north = northTile == null ? null : GameView.GetTileView(northTile);
+        TileView south = southTile == null ? null : GameView.GetTileView(southTile);
+        TileView east = eastTile == null ? null : GameView.GetTileView(eastTile);
+        TileView west = westTile == null ? null : GameView.GetTileView(westTile);
 
-        var map = tile.Chunk.Map;
-        var north = map.GetTile(tile.X, tile.Y - 1);
-        var south = map.GetTile(tile.X, tile.Y + 1);
-        var east = map.GetTile(tile.X + 1, tile.Y);
-        var west = map.GetTile(tile.X - 1, tile.Y);
-
-        if (comp.RemoveWhenConnectNorth.Count > 0 && (north != null && north.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectNorth.Count > 0 && (north != null && north.Tile.TileId == tile.TileId))
         {
             comp.RemoveWhenConnectNorth.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectNorth.Clear();
-            if (!tile.Decorated && ((ClientTile)north).Decorated)
+            if (!view.Decorated && north.Decorated)
             {
-                DecorateBoundaries((ClientTile)north);
+                DecorateBoundaries(north);
             }
         }
-        if (comp.RemoveWhenConnectSouth.Count > 0 && (south != null && south.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectSouth.Count > 0 && (south != null && south.Tile.TileId == tile.TileId))
         {
             comp.RemoveWhenConnectSouth.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectSouth.Clear();
-            if (south != null && !tile.Decorated && ((ClientTile)south).Decorated)
+            if (south != null && !view.Decorated && south.Decorated)
             {
-                DecorateBoundaries((ClientTile)south);
+                DecorateBoundaries(south);
             }
         }
-        if (comp.RemoveWhenConnectEast.Count > 0 && (east != null && east.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectEast.Count > 0 && (east != null && east.Tile.TileId == tile.TileId))
         {
             comp.RemoveWhenConnectEast.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectEast.Clear();
-            if (east != null && !tile.Decorated && ((ClientTile)east).Decorated)
+            if (east != null && !view.Decorated && east.Decorated)
             {
-                DecorateBoundaries((ClientTile)east);
+                DecorateBoundaries(east);
             }
         }
 
-        if (comp.RemoveWhenConnectWest.Count > 0 && (west != null && west.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectWest.Count > 0 && (west != null && west.Tile.TileId == tile.TileId))
         {
             comp.RemoveWhenConnectWest.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectWest.Clear();
-            if (west != null && !tile.Decorated && ((ClientTile)west).Decorated)
+            if (west != null && !view.Decorated && west.Decorated)
             {
-                DecorateBoundaries((ClientTile)west);
+                DecorateBoundaries(west);
             }
         }
     }
 
-    public void CreateTileDecoration(ClientTile tile)
+    public void CreateTileDecoration(TileView tile)
     {
-        _tile = tile;
+        _tile = tile.Tile;
         StackLog.Debug($"Decorating {tile}");
         DecorateBoundaries(tile);
         tile.Decorated = true;

@@ -14,18 +14,18 @@ namespace Game.ECS
             _systems[typeof(ComponentType)] = system;
         }
 
-        internal static void OnAddComponent(EntityType owner, ComponentType component, ComponentEventBus<EntityType> events)
+        internal static void OnAddComponent(EntityType owner, ComponentEventBus<EntityType> events)
         { 
-            if(_systems.TryGetValue(component.GetType(), out var s)) {
-                s.OnAdded(owner, component, events);
+            if(_systems.TryGetValue(typeof(ComponentType), out var s)) {
+                s.OnComponentAdded(owner, owner.GetComponent<ComponentType>(),  events);
             }
         }
 
-        internal static void OnRemovedComponent(EntityType owner, ComponentType component, ComponentEventBus<EntityType> events)
+        internal static void OnRemovedComponent(EntityType owner, ComponentEventBus<EntityType> events)
         {
-            if (_systems.TryGetValue(component.GetType(), out var s))
+            if (_systems.TryGetValue(typeof(ComponentType), out var s))
             {
-                s.OnRemoved(owner, component, events);
+                s.OnComponentRemoved(owner, owner.GetComponent<ComponentType>(), events);
             }
         }
     }

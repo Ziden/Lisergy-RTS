@@ -1,4 +1,5 @@
-﻿using Game.World;
+﻿using Game.Events.GameEvents;
+using Game.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace Game.Entity
             get { return base.Tile; }
             set
             {
+                var t = this.GetType();
                 var los = GetLineOfSight();
                 if(los > 0)
                 {
@@ -28,11 +30,26 @@ namespace Game.Entity
                     if (value != null)
                         newLos.UnionWith(value.GetAOE(los).ToList());
 
-                    foreach (var tile in newLos.Except(oldLos))
-                        tile.SetSeenBy(this);
+                    var visEnabled = new TileVisibilityChangedEvent()
+                    {
+                        Explorer = this,
+                        Visible = true
+                    };
 
+                    foreach (var tile in newLos.Except(oldLos))
+                    {
+                        visEnabled.Tile = tile;
+                        tile.CallComponentEvents(visEnabled);
+                    }
+                       
+
+                    visEnabled.Visible = false;
                     foreach (var tile in oldLos.Except(newLos))
-                        tile.SetUnseenBy(this);
+                    {
+                        visEnabled.Tile = tile;
+                        tile.CallComponentEvents(visEnabled);
+                    }
+                        
                 }
                 base.Tile = value;
             }

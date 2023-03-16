@@ -10,6 +10,14 @@ namespace Game.World.Systems
 {
     public class EntityPlacementSystem : GameSystem<EntityPlacementComponent, Tile>
     {
+        public override void OnComponentAdded(Tile owner, EntityPlacementComponent component, ComponentEventBus<Tile> events)
+        {
+            events.RegisterComponentEvent<StaticEntityPlacedEvent, EntityPlacementComponent>(this, OnStaticEntityPlaced);
+            events.RegisterComponentEvent<StaticEntityRemovedEvent, EntityPlacementComponent>(this, OnStaticEntityRemoved);
+            events.RegisterComponentEvent<EntityMoveOutEvent, EntityPlacementComponent>(this, OnEntityMoveOut);
+            events.RegisterComponentEvent<EntityMoveInEvent, EntityPlacementComponent>(this, OnEntityMoveIn);
+            events.RegisterComponentEvent<TileSentToPlayerEvent, EntityPlacementComponent>(this, OnTileSent);
+        }
 
         public void OnTileSent(Tile owner, EntityPlacementComponent component, TileSentToPlayerEvent ev)
         {
@@ -39,6 +47,12 @@ namespace Game.World.Systems
         {
             var entity = ev.Entity as MovableWorldEntity;
             component.EntitiesIn.Add(entity);
+
+
+            var tile = ev.Entity.Tile;
+
+            var same = tile == owner;
+
             if (entity is IBattleable && component.StaticEntity != null && component.StaticEntity is IBattleable)
             {
                 if (entity.Course != null && entity.Course.Intent == MovementIntent.Offensive && entity.Course.IsLastMovement())
@@ -51,21 +65,5 @@ namespace Game.World.Systems
                 }
             }
         }
-
-        public override void OnAdded(Tile owner, EntityPlacementComponent component, ComponentEventBus<Tile> events)
-        {
-            events.RegisterComponentEvent<StaticEntityPlacedEvent, EntityPlacementComponent>(this, owner, component, OnStaticEntityPlaced);
-            events.RegisterComponentEvent<StaticEntityRemovedEvent, EntityPlacementComponent>(this, owner, component, OnStaticEntityRemoved);
-            events.RegisterComponentEvent<EntityMoveOutEvent, EntityPlacementComponent>(this, owner, component, OnEntityMoveOut);
-            events.RegisterComponentEvent<EntityMoveInEvent, EntityPlacementComponent>(this, owner, component, OnEntityMoveIn);
-            events.RegisterComponentEvent<TileSentToPlayerEvent, EntityPlacementComponent>(this, owner, component, OnTileSent);
-        }
-
-        public override void OnRemoved(Tile owner, EntityPlacementComponent component, ComponentEventBus<Tile> events)
-        {
-           
-        }
-
-    
     }
 }

@@ -22,7 +22,6 @@ namespace Game.Listeners
             _world = game.World;
             _game.NetworkEvents.Register<JoinWorldPacket>(this, JoinWorld);
             _game.GameEvents.Register<OffensiveMoveEvent>(this, OnOffensiveAction);
-            _game.GameEvents.Register<PlayerVisibilityChangeEvent>(this, OnVisibilityChange);
             _game.GameEvents.Register<EntityMoveInEvent>(this, OnEntityMove);
         }
 
@@ -35,7 +34,7 @@ namespace Game.Listeners
                 Log.Debug($"Existing player {player.UserID} joined");
                 foreach (var tile in player.VisibleTiles)
                 {
-                    player.Send(new TileUpdatePacket(tile));
+                    player.Send(tile.UpdatePacket);
                     tile.CallAllEvents(new TileSentToPlayerEvent(tile, player));
                 }
                 _world.Game.GameEvents.Call(new PlayerJoinedEvent(player));
@@ -43,7 +42,8 @@ namespace Game.Listeners
             else
             {
                 player = ev.Sender;
-                _world.PlaceNewPlayer(player);
+                var startTile = _world.GetUnusedStartingTile();
+                _world.PlaceNewPlayer(player, startTile);
                 Log.Debug($"New player {player.UserID} joined the world");
             }
         }
@@ -58,14 +58,6 @@ namespace Game.Listeners
                 var battleID = Guid.NewGuid();
                 _game.NetworkEvents.Call(new BattleStartPacket(battleID, atk, def));
             }
-        }
-
-        [EventMethod]
-        public void OnVisibilityChange(PlayerVisibilityChangeEvent ev)
-        {
-            // TODO MOEV TO DELTA
-            //if (ev.TileVisible)
-            //    SendTileTo(ev.Tile, ev.Viewer.Owner);
         }
 
         [EventMethod]

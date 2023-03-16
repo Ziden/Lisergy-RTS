@@ -9,8 +9,12 @@ using System.Collections.Generic;
 namespace Game
 {
     public class StrategyGame
-    { 
-        public static GameSpec Specs { get; private set; }
+    {
+
+        private static GameSpec _spec;
+        public static ref GameSpec Specs => ref _spec;
+
+        public ref GameSpec GameSpec => ref _spec;
 
         public EventBus<BaseEvent> NetworkEvents { get; private set; }
         public EventBus<GameEvent> GameEvents { get; private set; }
@@ -32,11 +36,9 @@ namespace Game
                 if(value != null)
                     value.Game = this;
             } 
-        }
-        
-        public GameSpec GameSpec => Specs;
+        } 
 
-        public StrategyGame(GameSpec specs, GameWorld world)
+        public StrategyGame(in GameSpec specs, GameWorld world)
         {
             World = world;
             Specs = specs;

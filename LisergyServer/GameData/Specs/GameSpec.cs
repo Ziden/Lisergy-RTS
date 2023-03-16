@@ -6,24 +6,37 @@ namespace GameData
 {
     // TODO: Make all immutable
     [Serializable]
-    public class GameSpec
+    public struct GameSpec
     {
-        public int Version = 1;
+        public int Version;
 
-        public ushort InitialBuilding = 0;
-        public ushort InitialUnit = 2;
+        public ushort InitialBuilding;
+        public ushort InitialUnit;
+
+        public GameSpec(int version)
+        {
+            InitialBuilding = 0;
+            InitialUnit = 2;
+            Version = version;
+            Buildings = new Dictionary<ushort, BuildingSpec>();
+            Tiles = new Dictionary<ushort, TileSpec>();
+            Units = new Dictionary<ushort, UnitSpec>();
+            Items = new Dictionary<ushort, ItemSpec>();
+            Loots = new Dictionary<ushort, LootSpec>();
+            Dungeons = new Dictionary<ushort, DungeonSpec>();
+        }
 
         // Goes to Client
-        public Dictionary<ushort, BuildingSpec> Buildings = new Dictionary<ushort, BuildingSpec>();
-        public Dictionary<ushort, TileSpec> Tiles = new Dictionary<ushort, TileSpec>();
-        public Dictionary<ushort, UnitSpec> Units = new Dictionary<ushort, UnitSpec>();
-        public Dictionary<ushort, ItemSpec> Items = new Dictionary<ushort, ItemSpec>();
+        public Dictionary<ushort, BuildingSpec> Buildings;
+        public Dictionary<ushort, TileSpec> Tiles;
+        public Dictionary<ushort, UnitSpec> Units;
+        public Dictionary<ushort, ItemSpec> Items;
 
         // Does not go to client
         [NonSerialized]
-        public Dictionary<ushort, LootSpec> Loots = new Dictionary<ushort, LootSpec>();
+        public Dictionary<ushort, LootSpec> Loots;
 
         [NonSerialized]
-        public Dictionary<ushort, DungeonSpec> Dungeons = new Dictionary<ushort, DungeonSpec>();
+        public Dictionary<ushort, DungeonSpec> Dungeons;
     }
 }

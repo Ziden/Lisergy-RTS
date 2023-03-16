@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("Tests")]
 namespace Game.Events.Bus
 {
     public class EventBus<EventType> 
     {
 
-        private Dictionary<Type, List<RegisteredListener>> _registeredListeners;
-        private HashSet<IEventListener> _listeners;
+        internal Dictionary<Type, List<RegisteredListener>> _registeredListeners;
+        internal HashSet<IEventListener> _listeners;
 
         public void RunCallbacks(PlayerEntity sender, byte [] eventBytes)
         {

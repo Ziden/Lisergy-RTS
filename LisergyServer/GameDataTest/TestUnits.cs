@@ -46,7 +46,7 @@ namespace GameDataTest
             return st;
         }
 
-        public static void Generate(GameSpec spec)
+        public static void Generate(ref GameSpec spec)
         {
             var tuple = (Stat.ATK, 5);
             AddUnit(spec, new UnitSpec()

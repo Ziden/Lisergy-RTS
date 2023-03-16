@@ -86,7 +86,7 @@ namespace Tests
             Game.HandleClientEvent(player, joinEvent);
 
             var firstEntityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
-            var firstTileVisibleEvents = player.ReceivedEventsOfType<TileUpdatePacket>();
+            var firstTileVisibleEvents = player.ReceivedEventsOfType<TileUpdatePacket>(); 
 
             player.ReceivedEvents.Clear();
 

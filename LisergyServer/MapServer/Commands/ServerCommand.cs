@@ -1,7 +1,8 @@
 ﻿
 using Game;
-using Game.Scheduler;
 using LisergyServer.Core;
+using System;
+using System.Diagnostics;
 
 namespace LisergyServer.Commands
 {
@@ -21,7 +22,17 @@ namespace LisergyServer.Commands
 
         public override void Execute(CommandSender sender, CommandArgs args)
         {
-            sender.SendMessage($"Server Tick Delay Average: "+SocketServer.Ticker.TPS);
+            using (Process proc = Process.GetCurrentProcess())
+            {
+                sender.SendMessage($"Private Allocated (MB): {proc.PrivateMemorySize64 / (1024 * 1024)}");
+                sender.SendMessage($"GC Heap Allocated (MB): {GC.GetTotalAllocatedBytes() / (1024 * 1024)}");
+                sender.SendMessage($"GC Total Memory (MB): {GC.GetTotalMemory(false) / (1024 * 1024)}");
+            }
+            foreach (var m in UnmanagedMemory.GetMetrics())
+            {
+                sender.SendMessage(m);
+            }
+            sender.SendMessage($"Server Tick Delay Average: " + SocketServer.Ticker.TPS);
         }
     }
 }

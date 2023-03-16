@@ -1,4 +1,5 @@
 ﻿using Assets.Code;
+using Assets.Code.Views;
 using Assets.Code.World;
 using Game;
 using Game.Events.Bus;
@@ -80,12 +81,13 @@ public class PartyUI : IEventListener
         UIManager.UnitPanel.Close();
     }
 
-    private void OnClickTile(ClientTile tile)
+    private void OnClickTile(Tile tile)
     {
+        var view = GameView.GetView<TileView>(tile);
         Log.Debug($"PartyUI displaying actions for {tile} with active party {_activeParty}");
-        if (tile != null && tile.MovingEntities.Count > 0)
+        if (tile != null && view.MovingEntities.Count > 0)
         {
-            var party = (ClientParty)tile.MovingEntities.First();
+            var party = (ClientParty)view.MovingEntities.First();
             ShowParty(party);
             if (party.IsMine())
                 SelectParty(party);
@@ -124,7 +126,7 @@ public class PartyUI : IEventListener
 
         SelectParty(party);
         if (_activeParty == partyIndex)
-            CameraBehaviour.FocusOnTile((ClientTile)party.Tile);
+            CameraBehaviour.FocusOnTile(party.Tile);
     }
 
     public static Image DrawPartyIcon(ClientParty party, Transform parent)

@@ -33,9 +33,9 @@ namespace Assets.Code.Battle
                 if (battleUnit == null) continue;
                 var clientUnit = new ClientUnit(battleUnit.UnitReference);
                 clientUnit.AddToScene();
-                clientUnit.GetGameObject().transform.SetParent(team1.GetChild(x).transform);
-                clientUnit.GetGameObject().transform.localPosition = Vector3.zero;
-                clientUnit.GetGameObject().GetComponent<SpriteRenderer>().flipX = true;
+                clientUnit.GameObject.transform.SetParent(team1.GetChild(x).transform);
+                clientUnit.GameObject.transform.localPosition = Vector3.zero;
+                clientUnit.GameObject.GetComponent<SpriteRenderer>().flipX = true;
                 Attacker.Units[x].UnitReference = clientUnit;
             }
 

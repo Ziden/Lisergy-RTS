@@ -53,7 +53,7 @@ public class DungeonUI : MonoBehaviour
         PartyUI.DrawPartyIcon(UIManager.PartyUI.SelectedParty, PartyFace);
     }
 
-    public void OnClickTile(ClientTile tile)
+    public void OnClickTile(Tile tile)
     {
         /*
         var dungeon = tile.StaticEntity as ClientDungeon;

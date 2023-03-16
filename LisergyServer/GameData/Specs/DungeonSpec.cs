@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace GameData.Specs
 {
     [Serializable]
-    public class DungeonSpec
+    public struct DungeonSpec
     {
         public ushort DungeonSpecID;
         public ArtSpec Art;

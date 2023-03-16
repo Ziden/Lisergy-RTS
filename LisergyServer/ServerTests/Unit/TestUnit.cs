@@ -23,9 +23,25 @@ namespace Tests
             var player = Game.GetTestPlayer();
             var unit = player.Units.First();
 
+            var bt = player.Buildings.First().Tile;
+
+            var building = Game.World.GetTile(10, 10).GetComponent<EntityPlacementComponent>();
+
             Assert.AreEqual(1, player.Units.Count);
             Assert.AreEqual(TestGame.Specs.InitialUnit, unit.SpecId);
             Assert.That(unit.Party.Tile.GetComponent<EntityPlacementComponent>().EntitiesIn.Contains(unit.Party));
+        }
+
+
+        [Test]
+        public void TestUnitTileReference()
+        {
+            var player = Game.GetTestPlayer();
+            var unit = player.Units.First();
+
+            var tile = Game.World.GetTile(unit.Party.Tile.X, unit.Party.Tile.Y);
+
+            Assert.AreEqual(tile, unit.Party.Tile);
         }
 
         [Test]

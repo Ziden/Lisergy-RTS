@@ -8,7 +8,7 @@ namespace Assets.Code
 {
     public class TileUI
     {
-        private ClientTile _selectedTile;
+        private Tile _selectedTile;
 
         private GameObject _tileCursor;
         private GameObject _partyCursor;
@@ -24,7 +24,7 @@ namespace Assets.Code
             _partyCursor = CreateCursor();
         }
 
-        public void StartMoveReq(ClientParty party, List<ClientTile> path)
+        public void StartMoveReq(ClientParty party, List<Tile> path)
         {
             if (IsActive(_tileCursor))
                 Inactivate(_tileCursor);
@@ -35,7 +35,7 @@ namespace Assets.Code
         {
             Activate(_partyCursor);
             MoveToTile(_partyCursor, party.Tile);
-            _partyCursor.transform.SetParent(party.GetGameObject().transform);
+            _partyCursor.transform.SetParent(party.GameObject.transform);
         }
 
         private void CameraMove(Vector3 old, Vector3 newPos)
@@ -45,9 +45,9 @@ namespace Assets.Code
             _selectedTile = null;
         }
 
-        public ClientTile SelectedTile { get => _selectedTile; }
+        public Tile SelectedTile { get => _selectedTile; }
 
-        private void ClickTile(ClientTile tile)
+        private void ClickTile(Tile tile)
         {
             Log.Debug($"TileUI selecting tile {tile}");
             if (tile != null)

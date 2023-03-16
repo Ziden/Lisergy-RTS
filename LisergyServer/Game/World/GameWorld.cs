@@ -10,16 +10,16 @@ namespace Game
         private string _id;
 
         // Amount of tiles the chunk length
-        public static readonly int CHUNK_SIZE = 8;
+        public const int CHUNK_SIZE = 8;
 
         // Bitshift needed to get the chunk of a given tile
         public static readonly int CHUNK_SIZE_BITSHIFT = CHUNK_SIZE.BitsRequired() - 1;
 
         // how many tiles is the area of a chunk
-        public static readonly int TILES_IN_CHUNK = CHUNK_SIZE * CHUNK_SIZE;
+        public const int TILES_IN_CHUNK = CHUNK_SIZE * CHUNK_SIZE;
 
         // how many chunks are "player reserved chunks" per player
-        public static readonly int PLAYERS_CHUNKS = 2;
+        public const int PLAYERS_CHUNKS = 2;
 
         public StrategyGame Game { get; set; }
         public WorldPlayers Players { get; set; }
@@ -49,18 +49,23 @@ namespace Game
             this.Map.GenerateTiles(this.SizeX, this.SizeY);
         }
 
-        public virtual void PlaceNewPlayer(PlayerEntity player, Tile t = null)
+        /// <summary>
+        /// Finds a newbie chunk that is not used and returns a random tile of it of the given
+        /// spec id
+        /// </summary>
+        public Tile GetUnusedStartingTile()
         {
-            var newbieChunk = Map.GetUnnocupiedNewbieChunk();
-            if (newbieChunk == null)
+            var freeChunk = Map.GetUnnocupiedNewbieChunk();
+            if (freeChunk.IsVoid())
             {
                 throw new Exception("No more room for newbie players in this world");
             }
+            return freeChunk.FindTileWithId(0);
+        }
+
+        public virtual void PlaceNewPlayer(PlayerEntity player, Tile t)
+        {
             Players.Add(player);
-            if(t == null)
-            {
-                t = newbieChunk.FindTileWithId(0);
-            }
             var castleID = StrategyGame.Specs.InitialBuilding;
             player.Build(castleID, t);
 

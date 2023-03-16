@@ -1,4 +1,5 @@
-﻿using Game;
+﻿using Assets.Code.Views;
+using Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,12 @@ namespace Assets.Code.World
                 MainBehaviour.Destroy(_effects[t]);
         }
 
-        public static void BattleEffect(ClientTile t)
+        public static void BattleEffect(Tile t)
         {
+            var view = GameView.Controller.GetView<TileView>(t);
             StopEffect(t);
             var prefab = Resources.Load("prefabs/BattleEffect");
-            var obj = MainBehaviour.Instantiate(prefab, t.GetGameObject().transform) as GameObject;
+            var obj = MainBehaviour.Instantiate(prefab, view.GameObject.transform) as GameObject;
             _effects[t] = obj;
             obj.transform.localPosition = new Vector3(0, 0.2f, 0);
         }

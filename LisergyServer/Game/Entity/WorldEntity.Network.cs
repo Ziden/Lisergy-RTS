@@ -11,7 +11,9 @@ namespace Game
     public partial class WorldEntity : Ownable, IDeltaTrackable
     {
         [field: NonSerialized]
-        public DeltaFlags DeltaFlags { get; }
+        private DeltaFlags _flags;
+
+        public ref DeltaFlags DeltaFlags { get => ref _flags; }
 
         public ServerPacket GenerateDeltaPacket() => new EntityUpdatePacket(this);
 
@@ -27,7 +29,7 @@ namespace Game
             {
                 OnExistenceChanged();
             }
-            if (DeltaFlags.HasFlag(DeltaFlag.REVEALED))
+            if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
             {
                 trigger.Send(new EntityUpdatePacket(this));
             }

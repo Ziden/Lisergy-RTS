@@ -78,7 +78,7 @@ public class BattleBehaviour : MonoBehaviour
     private void DrawDamage(ClientUnit unit, int damage)
     {
         DamageText.text = damage.ToString();
-        var pos = Camera.main.WorldToScreenPoint(unit.GetGameObject().transform.position);
+        var pos = Camera.main.WorldToScreenPoint(unit.GameObject.transform.position);
         DamageText.transform.parent.parent.position = pos;
         var hpBar = DamageText.transform.parent;
         hpBar.gameObject.SetActive(true);
@@ -109,7 +109,7 @@ public class BattleBehaviour : MonoBehaviour
             {
                 // Attack Animation
                 ActingUnit.Sprites.PlayAnimation(Sprite3D.ATTACK, false, 100, ActionDelaySeconds);
-                ActingUnit.GetGameObject().transform.DOLocalMove(new Vector3(ReadyDistanceMoved + AttackDistanceMoved, 0, 0), ActionDelaySeconds);
+                ActingUnit.GameObject.transform.DOLocalMove(new Vector3(ReadyDistanceMoved + AttackDistanceMoved, 0, 0), ActionDelaySeconds);
 
                 // Taking Damage
                 var defender = Battle.FindUnit(attackAction.DefenderID);
@@ -122,12 +122,12 @@ public class BattleBehaviour : MonoBehaviour
                     // Damage Effects
                     DrawDamage(defender, result.Damage);
                     var seq = DOTween.Sequence();
-                    seq.Append(defender.GetGameObject().transform.DOMoveX(defender.GetGameObject().transform.position.x - 0.1f, damageAnimationDelay/2));
-                    seq.Append(defender.GetGameObject().transform.DOMoveX(defender.GetGameObject().transform.position.x, damageAnimationDelay/2));
+                    seq.Append(defender.GameObject.transform.DOMoveX(defender.GameObject.transform.position.x - 0.1f, damageAnimationDelay/2));
+                    seq.Append(defender.GameObject.transform.DOMoveX(defender.GameObject.transform.position.x, damageAnimationDelay/2));
                     seq.onComplete += () => {
                         Awaiter.WaitFor(TimeSpan.FromMilliseconds(600), () =>
                         {
-                            ActingUnit.GetGameObject().transform.DOMoveX(_originalPos.x, damageAnimationDelay);
+                            ActingUnit.GameObject.transform.DOMoveX(_originalPos.x, damageAnimationDelay);
                             ActingUnit.Sprites.PlayAnimation(Sprite3D.JUMP, true, 100, damageAnimationDelay);
                             WaitForAction();
                         });
@@ -158,7 +158,7 @@ public class BattleBehaviour : MonoBehaviour
     {
         ActingUnit = Battle.CurrentActingUnit.UnitReference as ClientUnit;
         ActingUnit.Sprites.PlayAnimation(Sprite3D.WALK, true, 100, ActionDelaySeconds);
-        var obj = ActingUnit.GetGameObject();
+        var obj = ActingUnit.GameObject;
         _originalPos = obj.transform.position;
         obj.transform.DOLocalMove(new Vector3(ReadyDistanceMoved, 0,0), ActionDelaySeconds);
         NextAction = DateTime.Now + TimeSpan.FromSeconds(ActionDelaySeconds);

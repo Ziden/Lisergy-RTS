@@ -1,4 +1,5 @@
-﻿using Game;
+﻿using Assets.Code.Views;
+using Game;
 using Game.ECS;
 using GameData;
 using UnityEngine;
@@ -7,9 +8,7 @@ namespace Assets.Code.World
 {
     public class ClientBuilding : Building, IGameObject, IClientEntity<Building, ClientBuilding>
     {
-        private GameObject _gameObject;
-
-        public GameObject GetGameObject() => _gameObject;
+        public GameObject GameObject { get; set; }
 
         public ClientBuilding(PlayerEntity owner): base(owner)
         {
@@ -20,17 +19,18 @@ namespace Assets.Code.World
         {
             this.SpecID = building.SpecID;
             this.Id = building.Id;
-            this.Tile = ClientStrategyGame.ClientWorld.GetClientTile(building);
+            this.Tile = GameView.World.GetTile(building);
             return this;
         }
 
         public void InstantiateInScene(Building serverEntity)
         {
             var prefab = Resources.Load("prefabs/buildings/" + serverEntity.SpecID);
-            var tile = ClientStrategyGame.ClientWorld.GetClientTile(serverEntity);
-            _gameObject = MainBehaviour.Instantiate(prefab, tile.GetGameObject().transform) as GameObject;
-            _gameObject.transform.localPosition = Vector3.zero;
-            this.GetGameObject().SetActive(true);
+            var tile = GameView.World.GetTile(serverEntity);
+            var tileView = GameView.GetView<TileView>(tile);
+            GameObject = MainBehaviour.Instantiate(prefab, tileView.GameObject.transform) as GameObject;
+            GameObject.transform.localPosition = Vector3.zero;
+            this.GameObject.SetActive(true);
             UpdateData(serverEntity);
             if (serverEntity.SpecID == StrategyGame.Specs.InitialBuilding && this.IsMine())
                 CameraBehaviour.FocusOnTile(tile);

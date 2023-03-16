@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Game.World
 {
     [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
     public struct Position
     {
         public ushort X;
@@ -20,7 +22,7 @@ namespace Game.World
             this.Y = (ushort)y;
         }
 
-        public new string ToString()
+        public override string ToString()
         {
             return X + "_" + Y;
         }

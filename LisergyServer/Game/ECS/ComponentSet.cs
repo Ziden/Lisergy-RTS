@@ -1,18 +1,31 @@
 ﻿using Game.Events;
 using Game.Events.Bus;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Tests")]
 namespace Game.ECS
 {
-
+    
     public class ComponentSet<EntityType> where EntityType : IEntity
     {
-        private Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
+        internal Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
 
-        private EntityType _owner;
+        internal EntityType _owner;
 
-        private ComponentEventBus<EntityType> _events = new ComponentEventBus<EntityType>();
+        internal static ConcurrentDictionary<Type, ComponentEventBus<EntityType>> _buses = new ConcurrentDictionary<Type, ComponentEventBus<EntityType>>();
+
+        public ComponentEventBus<EntityType> GetEventBus()
+        {
+            if (!_buses.TryGetValue(typeof(EntityType), out var bus))
+            {
+                bus = new ComponentEventBus<EntityType>();
+                _buses[typeof(EntityType)] = bus;
+            }
+            return bus;
+        }
 
         public ComponentSet(EntityType owner)
         {
@@ -21,28 +34,33 @@ namespace Game.ECS
 
         public void CallEvent(BaseEvent ev)
         {
-            _events.Call(_owner, ev);
+            GetEventBus().Call(_owner, ev);
         }
 
-        public T GetComponent<T>() where T : class, IComponent
+        public T GetComponent<T>() where T : IComponent
         {
             if (_components.TryGetValue(typeof(T), out var component))
             {
-                return component as T;
+                return (T)component;
             }
             return default;
         }
 
-        public void AddComponent<T>() where T : class, IComponent
+        public void AddComponent<T>() where T : IComponent
         {
             var component = Activator.CreateInstance<T>();
             _components[typeof(T)] = component;
-            SystemRegistry<T, EntityType>.OnAddComponent(_owner, component, _events);
+            SystemRegistry<T, EntityType>.OnAddComponent(_owner, GetEventBus());
+        }
+
+        public void RemoveComponent<T>()
+        {
+            // TODO: Remove & clear listener
         }
     }
 
     public interface IComponent
     {
-   
+
     }
 }

@@ -16,16 +16,6 @@ namespace Tests
 
         private TestGame _game;
 
-        [Serializable]
-        public class TestTileEvent : BaseEvent
-        {
-            public TestTileEvent(Tile t)
-            {
-                this.Tile = t;
-            }
-            public Tile Tile;
-        }
-
         [SetUp]
         public void Setup()
         {
@@ -55,15 +45,15 @@ namespace Tests
             var player = _game.GetTestPlayer();
             var tile = _game.World.GetTile(1, 1);
             tile.ResourceID = 123;
-            Serialization.LoadSerializers(typeof(TestTileEvent));
+            Serialization.LoadSerializers(typeof(TileUpdatePacket));
 
-            var serialized = Serialization.FromEvent<TestTileEvent>(new TestTileEvent(tile));
-            var unserialized = Serialization.ToEvent<TestTileEvent>(serialized);
+            var serialized = Serialization.FromEvent<TileUpdatePacket>(tile.UpdatePacket);
+            var unserialized = Serialization.ToEvent<TileUpdatePacket>(serialized);
 
-            Assert.AreEqual(tile.TileId, unserialized.Tile.TileId);
-            Assert.AreEqual(tile.ResourceID, unserialized.Tile.ResourceID);
-            Assert.AreEqual(tile.X, unserialized.Tile.X);
-            Assert.AreEqual(tile.Y, unserialized.Tile.Y);
+            Assert.AreEqual(tile.TileId, unserialized.Data.TileId);
+            Assert.AreEqual(tile.ResourceID, unserialized.Data.ResourceId);
+            Assert.AreEqual(tile.X, unserialized.Data.X);
+            Assert.AreEqual(tile.Y, unserialized.Data.Y);
         }
 
         [Test]
@@ -127,7 +117,7 @@ namespace Tests
                 testData[typeof(T)] = Serialization.FromAnyType(obj);
             }   
 
-            Record(new TileUpdatePacket(_game.World.GetTile(1, 1)));
+            Record(_game.World.GetTile(1, 1).UpdatePacket);
             Record(new PartyStatusUpdatePacket(_game.GetTestPlayer().GetParty(0)));
             Record(new BattleResultPacket(Guid.NewGuid(), new TurnBattleResult() { Turns = new List<Game.Battles.Actions.TurnLog>(10)}));
             Record(new EntityDestroyPacket(_game.GetTestPlayer().GetParty(0)));
@@ -137,9 +127,10 @@ namespace Tests
             Record(new BattleTeam(new Unit(0), new Unit(0), new Unit(0), new Unit(0)));
             Record(new Unit(0));
             Record(GameId.Generate());
+            Record(_game.World.GetTile(1, 1));
 
             var t = testData[typeof(BattleTeam)];
-            var t2 = testData[typeof(Unit)];
+            var t2 = testData[typeof(Tile)];
             var t3 = testData[typeof(GameId)];
 
             foreach (var kp in testData)
