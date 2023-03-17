@@ -34,10 +34,10 @@ namespace Tests
         [Test]
         public void TestChunkData()
         {
-            var chunk = Game.World.Map.GetChunk(2, 2);
+            var chunk = Game.World.Map.GetChunk(1, 1);
 
-            Assert.AreEqual(2, chunk.X);
-            Assert.AreEqual(2, chunk.Y);
+            Assert.AreEqual(1, chunk.X);
+            Assert.AreEqual(1, chunk.Y);
         }
 
         [Test]

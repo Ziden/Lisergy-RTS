@@ -3,6 +3,7 @@ using Game.World;
 using Game.World.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Assets.Code.World
@@ -34,18 +35,18 @@ namespace Assets.Code.World
             return tile;
         }
 
-        public override Chunk GetTileChunk(int tileX, int tileY)
+        public override ref Chunk GetTileChunk(int tileX, int tileY)
         {
             var chunk = base.GetTileChunk(tileX, tileY);
-            if (chunk.HasValue())
+            if (chunk.IsVoid())
             {
                 int chunkX = tileX.ToChunkCoordinate();
                 var chunkY = tileY.ToChunkCoordinate();
-                chunk = new Chunk(this, chunkX, chunkY, new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE]);
-                this.Add(chunk);
-                StackLog.Debug($"Created {chunk}");
+                var newChunk = new Chunk(this, chunkX, chunkY, new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE]);
+                Log.Debug($"Allocating Chunk {newChunk}");
+                this.Add(ref newChunk);
             }
-            return chunk;
+            return ref base.GetTileChunk(tileX, tileY);
         }
     }
 }

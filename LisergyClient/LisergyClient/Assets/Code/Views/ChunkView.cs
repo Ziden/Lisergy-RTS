@@ -9,17 +9,24 @@ namespace Assets.Code.Views
     {
         private static GameObject _chunksNode;
 
-        public Chunk Chunk;
+        public bool Instantiated => _chunksNode != null;
+
+        public Chunk Entity { get; }
         public GameObject GameObject { get; set; }
 
-        public ChunkView(Chunk c) : base()
+        public ChunkView(ref Chunk c) : base()
         {
-            Chunk = c;
+            Entity = c;
+            Instantiate();
+        }
+
+        public void Instantiate()
+        {
             if (_chunksNode == null)
                 _chunksNode = new GameObject("Chunks");
-            GameObject = new GameObject($"Chunk-{Chunk.X}-{Chunk.Y}");
+            GameObject = new GameObject($"Chunk-{Entity.X}-{Entity.Y}");
             GameObject.transform.SetParent(_chunksNode.transform);
-            GameObject.transform.position = new Vector3(Chunk.X * GameWorld.CHUNK_SIZE, Chunk.Y * GameWorld.CHUNK_SIZE);
+            GameObject.transform.position = new Vector3(Entity.X * GameWorld.CHUNK_SIZE, Entity.Y * GameWorld.CHUNK_SIZE);
         }
     }
 }

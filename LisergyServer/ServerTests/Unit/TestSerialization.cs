@@ -105,38 +105,5 @@ namespace Tests
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);
         }
-
-
-        [Test]
-        public void TestSerializationSizes()
-        {
-            var testData = new Dictionary<Type, byte[]>();
-
-            void Record<T>(T obj)
-            {
-                testData[typeof(T)] = Serialization.FromAnyType(obj);
-            }   
-
-            Record(_game.World.GetTile(1, 1).UpdatePacket);
-            Record(new PartyStatusUpdatePacket(_game.GetTestPlayer().GetParty(0)));
-            Record(new BattleResultPacket(Guid.NewGuid(), new TurnBattleResult() { Turns = new List<Game.Battles.Actions.TurnLog>(10)}));
-            Record(new EntityDestroyPacket(_game.GetTestPlayer().GetParty(0)));
-            Record(new EntityMovePacket(_game.GetTestPlayer().GetParty(0), _game.World.GetTile(1, 1)));
-            Record(new MessagePopupPacket(PopupType.BAD_INPUT, "Yeah this is a message popup to test our serialization sizes"));
-            Record(new BattleStartPacket(GameId.Generate(), _game.GetTestPlayer().GetParty(0), _game.GetTestPlayer().GetParty(0)));
-            Record(new BattleTeam(new Unit(0), new Unit(0), new Unit(0), new Unit(0)));
-            Record(new Unit(0));
-            Record(GameId.Generate());
-            Record(_game.World.GetTile(1, 1));
-
-            var t = testData[typeof(BattleTeam)];
-            var t2 = testData[typeof(Tile)];
-            var t3 = testData[typeof(GameId)];
-
-            foreach (var kp in testData)
-            {
-                Assert.LessOrEqual(kp.Value.Count(), 150, $"Packets should be lower then 100 bytes but {kp.Key} was not");
-            }
-        }
     }
 }

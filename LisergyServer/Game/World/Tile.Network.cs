@@ -11,7 +11,7 @@ namespace Game
 
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
 
-        public TileUpdatePacket UpdatePacket => new TileUpdatePacket(_tileData);
+        public TileUpdatePacket UpdatePacket => new TileUpdatePacket(*_tileData);
 
         public void ProccessDeltas(PlayerEntity trigger)
         {

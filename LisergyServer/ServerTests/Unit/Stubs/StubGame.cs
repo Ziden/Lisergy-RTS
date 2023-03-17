@@ -23,21 +23,38 @@ namespace ServerTests
         public WorldService WorldService { get; private set; }
         public CourseService CourseService { get; private set; }
 
-        ~TestGame()
+        private static GameWorld TestWorld;
+
+        private static GameWorld GetTestWorld(GameWorld source = null)
         {
-            ComponentSet<Tile>._buses.Clear();
-            ComponentSet<WorldEntity>._buses.Clear();
+            if(source != null)
+            {
+                return source;
+            }
+            UnmanagedMemory.FlagMemoryToBeReused();
+            /*
+            if(TestWorld == null)
+            {
+                TestWorld = new GameWorld(4, 20, 20);
+            } else
+            {
+                DeltaTracker.Clear();
+                TestWorld.FreeMap();
+            }
+            return TestWorld;
+            */
+            return new GameWorld(4, 20, 20);
         }
 
 
-        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), world == null ? new GameWorld(4, 40, 40) : world)
+
+        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), GetTestWorld(world))
         {
             
             if (!_registered)
             {
                 _registered = true;
             }
-            //UnmanagedMemory.Free();
             Serialization.LoadSerializers();
             DeltaTracker.Clear();
             BattleService = new BattleService(this);

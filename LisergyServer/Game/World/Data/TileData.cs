@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Game.World.Data
 {
@@ -9,7 +7,6 @@ namespace Game.World.Data
     [Serializable]
     public struct TileData
     {
-        public byte ResourceId;
         public byte TileId;
         public Position Position;
 

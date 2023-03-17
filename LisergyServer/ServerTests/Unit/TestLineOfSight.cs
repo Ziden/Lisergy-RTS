@@ -79,7 +79,7 @@ namespace Tests
         [Test]
         public void TestTileAOE()
         {
-            var tile = Game.World.GetTile(12, 12);
+            var tile = Game.World.GetTile(5, 5);
 
             ushort aoe = 4;
             var range = aoe * 2 + 1;

@@ -17,16 +17,18 @@ namespace Assets.Code
 
         public static TileView GetTileView(Tile tile)
         {
-            var chunkView = GameView.GetView<ChunkView>(tile.Chunk);
+            var chunkView = GetView<ChunkView>(tile.Chunk);
             if (chunkView == null)
-                GameView.Controller.AddView(tile.Chunk, new ChunkView(tile.Chunk));
-            var tileView = GameView.GetView<TileView>(tile);
+                Controller.AddView(tile.Chunk, new ChunkView(ref tile.Chunk));
+            var tileView = GetView<TileView>(tile);
             if (tileView == null)
-                tileView = GameView.Controller.AddView(tile, new TileView(tile));
+                tileView = Controller.AddView(tile, new TileView(tile));
             return tileView;
         }
 
-        public static T GetView<T>(IEntity e) where T : IEntityView => _controller.GetView<T>(e);
+        public static T GetView<T>(object e) where T : IEntityView => _controller.GetView<T>(e);
+
+        public static IEntityView GetView(object e) => _controller.GetView(e);
 
         public static ClientWorld World => _game.World as ClientWorld;
         public static ViewController Controller => _controller;

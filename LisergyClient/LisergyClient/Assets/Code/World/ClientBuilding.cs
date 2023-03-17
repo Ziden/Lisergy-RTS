@@ -27,7 +27,7 @@ namespace Assets.Code.World
         {
             var prefab = Resources.Load("prefabs/buildings/" + serverEntity.SpecID);
             var tile = GameView.World.GetTile(serverEntity);
-            var tileView = GameView.GetView<TileView>(tile);
+            var tileView = GameView.GetTileView(tile);
             GameObject = MainBehaviour.Instantiate(prefab, tileView.GameObject.transform) as GameObject;
             GameObject.transform.localPosition = Vector3.zero;
             this.GameObject.SetActive(true);

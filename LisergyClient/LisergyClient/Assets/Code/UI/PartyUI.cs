@@ -83,9 +83,13 @@ public class PartyUI : IEventListener
 
     private void OnClickTile(Tile tile)
     {
+        if (tile == null)
+        {
+            HideParty();
+        }
         var view = GameView.GetView<TileView>(tile);
         Log.Debug($"PartyUI displaying actions for {tile} with active party {_activeParty}");
-        if (tile != null && view.MovingEntities.Count > 0)
+        if (view.MovingEntities.Count > 0)
         {
             var party = (ClientParty)view.MovingEntities.First();
             ShowParty(party);

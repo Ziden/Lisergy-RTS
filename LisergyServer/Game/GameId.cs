@@ -67,6 +67,7 @@ namespace Game
 
         public override string ToString()
         {
+            if (IsZero()) return Guid.Empty.ToString();
             Guid g = this;
             return g.ToString();
         }

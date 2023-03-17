@@ -37,6 +37,18 @@ namespace Game
             CreateMap();
         }
 
+        public void FreeMap()
+        {
+            foreach(var c in Map.AllChunks())
+            {
+                c.FreeMemoryForReuse();
+                foreach(var t in c.AllTiles())
+                {
+                    Map.ClearTile(t);
+                }
+            }
+        }
+
         public virtual void CreateMap()
         {
             _id = Guid.NewGuid().ToString();

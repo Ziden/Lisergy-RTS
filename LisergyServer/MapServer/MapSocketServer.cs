@@ -14,7 +14,7 @@ namespace MapServer
 {
     public class MapSocketServer : SocketServer
     {
-        private static readonly int MAX_PLAYERS = 100;
+        private static readonly int MAX_PLAYERS = 1000;
      
         private static int WORLD_SEED = 12345;
 

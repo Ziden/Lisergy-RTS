@@ -13,7 +13,7 @@ namespace Game
         OCCUPIED = 0b00000010
     }
 
-    public struct Chunk
+    public unsafe struct Chunk : IEntity, IDisposable
     {
         [NonSerialized]
         private ChunkData _data;
@@ -36,28 +36,31 @@ namespace Game
         public void SetFlag(byte flag) => _data.SetFlag(flag);
 
         public Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
-        public Chunk(ChunkMap w, ref ChunkData data, int x, int y, Tile[,] tiles)
+        public Chunk(ChunkMap w, int x, int y, Tile[,] tiles)
         {;
-            _data = data;
+            _data = new ChunkData();
             _data.Position = new Position(x, y);
             _data.Allocate();
             Map = w;
             _tiles = tiles;
         }
 
-        
+        public void FreeMemoryForReuse()
+        {
+            _data.FlagToBeReused();
+        }
 
-        public Tile CreateTile(int tileX, int tileY)
+        public Tile CreateTile(in int tileX, in int tileY)
         {
             var internalTileX = tileX % GameWorld.CHUNK_SIZE;
             var internalTileY = tileY % GameWorld.CHUNK_SIZE;
             var dataPointer = _data.GetTileData(internalTileX, internalTileY);
-            var tile = new Tile(ref this, ref dataPointer, tileX, tileY);
+            var tile = new Tile(ref this, dataPointer, tileX, tileY);
             return tile;
         }
 
 
-        public Tile GetTile(int x, int y)
+        public Tile GetTile(in int x, in int y)
         {
             return Tiles[x, y];
         }
@@ -72,6 +75,16 @@ namespace Game
             for (var x = 0; x < _tiles.GetLength(0); x++)
                 for (var y = 0; y < _tiles.GetLength(1); y++)
                     yield return _tiles[x, y];
+        }
+
+        public void Dispose()
+        {
+            _data.Free();
+        }
+
+        public T GetComponent<T>() where T : IComponent
+        {
+            throw new NotImplementedException();
         }
     }
 }

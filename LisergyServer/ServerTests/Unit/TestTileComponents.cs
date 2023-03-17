@@ -25,8 +25,8 @@ namespace Tests
             var c = new Chunk();
             var t1 = new TileData();
             var t2 = new TileData();
-            tile1 = new Tile(ref c, ref t1, 0, 0);
-            tile2 = new Tile(ref c, ref t2, 1, 1);
+            tile1 = new Tile(ref c, &t1, 0, 0);
+            tile2 = new Tile(ref c, &t2, 1, 1);
         }
 
         [Test]
@@ -55,8 +55,6 @@ namespace Tests
 
             Assert.IsTrue(tile1.GetComponent<EntityPlacementComponent>().StaticEntity == dg);
             Assert.IsTrue(tile2.GetComponent<EntityPlacementComponent>().StaticEntity == null);
-
-
         }
     }
 }

@@ -27,10 +27,12 @@ public class TileRandomizerBehaviour : MonoBehaviour
 
     private static void DecorateBoundaries(TileView view)
     {
-        var tile = view.Tile;
+        var tile = view.Entity;
         var comp = view.GameObject.GetComponent<TileRandomizerBehaviour>();
 
-        var map = view.Tile.Chunk.Map as ClientChunkMap;
+        Log.Debug("Decorating tile " + tile);
+
+        var map = view.Entity.Chunk.Map;
         var northTile = map.GetTile(tile.X, tile.Y - 1);
         var southTile = map.GetTile(tile.X, tile.Y + 1);
         var eastTile = map.GetTile(tile.X + 1, tile.Y);
@@ -40,7 +42,7 @@ public class TileRandomizerBehaviour : MonoBehaviour
         TileView east = eastTile == null ? null : GameView.GetTileView(eastTile);
         TileView west = westTile == null ? null : GameView.GetTileView(westTile);
 
-        if (comp.RemoveWhenConnectNorth.Count > 0 && (north != null && north.Tile.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectNorth.Count > 0 && (northTile != null && north.Entity.TileId == tile.TileId))
         {
             comp.RemoveWhenConnectNorth.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectNorth.Clear();
@@ -49,7 +51,7 @@ public class TileRandomizerBehaviour : MonoBehaviour
                 DecorateBoundaries(north);
             }
         }
-        if (comp.RemoveWhenConnectSouth.Count > 0 && (south != null && south.Tile.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectSouth.Count > 0 && (southTile != null && south.Entity.TileId == tile.TileId))
         {
             comp.RemoveWhenConnectSouth.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectSouth.Clear();
@@ -58,7 +60,7 @@ public class TileRandomizerBehaviour : MonoBehaviour
                 DecorateBoundaries(south);
             }
         }
-        if (comp.RemoveWhenConnectEast.Count > 0 && (east != null && east.Tile.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectEast.Count > 0 && (eastTile != null && east.Entity.TileId == tile.TileId))
         {
             comp.RemoveWhenConnectEast.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectEast.Clear();
@@ -68,7 +70,7 @@ public class TileRandomizerBehaviour : MonoBehaviour
             }
         }
 
-        if (comp.RemoveWhenConnectWest.Count > 0 && (west != null && west.Tile.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectWest.Count > 0 && (westTile != null && west.Entity.TileId == tile.TileId))
         {
             comp.RemoveWhenConnectWest.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectWest.Clear();
@@ -81,7 +83,7 @@ public class TileRandomizerBehaviour : MonoBehaviour
 
     public void CreateTileDecoration(TileView tile)
     {
-        _tile = tile.Tile;
+        _tile = tile.Entity;
         StackLog.Debug($"Decorating {tile}");
         DecorateBoundaries(tile);
         tile.Decorated = true;

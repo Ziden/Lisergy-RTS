@@ -3,25 +3,26 @@ using Game.Events.Bus;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Tests")]
 namespace Game.ECS
 {
-    
     public class ComponentSet<EntityType> where EntityType : IEntity
     {
         internal Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
 
         internal EntityType _owner;
 
-        internal static ConcurrentDictionary<Type, ComponentEventBus<EntityType>> _buses = new ConcurrentDictionary<Type, ComponentEventBus<EntityType>>();
+        internal static ConcurrentDictionary<Type, EntitySharedEventBus<EntityType>> _buses = new ConcurrentDictionary<Type, EntitySharedEventBus<EntityType>>();
 
-        public ComponentEventBus<EntityType> GetEventBus()
+        public EntitySharedEventBus<EntityType> GetEventBus()
         {
             if (!_buses.TryGetValue(typeof(EntityType), out var bus))
             {
-                bus = new ComponentEventBus<EntityType>();
+                bus = new EntitySharedEventBus<EntityType>();
                 _buses[typeof(EntityType)] = bus;
             }
             return bus;
@@ -37,6 +38,11 @@ namespace Game.ECS
             GetEventBus().Call(_owner, ev);
         }
 
+        public void RegisterComponentEvent<EventType, ComponentType>(Action<EntityType, ComponentType, EventType> cb) where EventType: GameEvent where ComponentType : IComponent 
+        {
+            GetEventBus().RegisterComponentEvent(cb);
+        }
+
         public T GetComponent<T>() where T : IComponent
         {
             if (_components.TryGetValue(typeof(T), out var component))
@@ -46,11 +52,12 @@ namespace Game.ECS
             return default;
         }
 
-        public void AddComponent<T>() where T : IComponent
+        public T AddComponent<T>() where T : IComponent
         {
-            var component = Activator.CreateInstance<T>();
+            var component = ComponentCreator.Build<T>();
             _components[typeof(T)] = component;
             SystemRegistry<T, EntityType>.OnAddComponent(_owner, GetEventBus());
+            return component;
         }
 
         public void RemoveComponent<T>()

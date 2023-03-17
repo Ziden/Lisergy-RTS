@@ -10,9 +10,9 @@ namespace Assets.Code.Views
 {
     public class ViewController
     {
-        public Dictionary<IEntity, IEntityView> _views = new Dictionary<IEntity, IEntityView>();
+        public Dictionary<object, IEntityView> _views = new Dictionary<object, IEntityView>();
 
-        public T GetView<T>(IEntity id) where T : IEntityView
+        public T GetView<T>(object id) where T : IEntityView
         {
             if(_views.TryGetValue(id, out var v)) {
                 return (T)v;
@@ -20,7 +20,16 @@ namespace Assets.Code.Views
             return default(T);
         }
 
-        public T AddView<T>(IEntity id, T view) where T : IEntityView
+        public IEntityView GetView(object id)
+        {
+            if (_views.TryGetValue(id, out var v))
+            {
+                return v;
+            }
+            return null;
+        }
+
+        public T AddView<T>(object id, T view) where T : IEntityView
         {
             _views[id] = view;
             return view;

@@ -8,10 +8,10 @@ namespace Game.World.Systems
 {
     public class TileVisibilitySystem : GameSystem<TileVisibilityComponent, Tile>
     {
-        public override void OnComponentAdded(Tile owner, TileVisibilityComponent component, ComponentEventBus<Tile> events)
+        public override void OnComponentAdded(Tile owner, TileVisibilityComponent component, EntitySharedEventBus<Tile> events)
         {
 
-            events.RegisterComponentEvent<TileVisibilityChangedEvent, TileVisibilityComponent>(this, OnTileVisibilityUpdated);
+            events.RegisterComponentEvent<TileVisibilityChangedEvent, TileVisibilityComponent>(OnTileVisibilityUpdated);
         }
 
         private void OnTileVisibilityUpdated(Tile tile, TileVisibilityComponent component, TileVisibilityChangedEvent ev)

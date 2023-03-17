@@ -11,12 +11,57 @@ namespace Game
 
         private static Dictionary<IntPtr, int> _allocs = new Dictionary<IntPtr, int>();
 
-        public static IntPtr Allocate(int size)
+        private static Dictionary<IntPtr, int> _available = new Dictionary<IntPtr, int>();
+
+        [DllImport("kernel32.dll")]
+        static extern void RtlZeroMemory(IntPtr dst, UIntPtr length);
+
+        public static void SetZeros(IntPtr ptr, int size)
         {
+            UIntPtr usize = new UIntPtr((uint)size);
+            RtlZeroMemory(ptr, usize);
+        }
+
+        public static IntPtr Alloc(int size)
+        {
+            var available = GetAvailable(size);
+            if(available.ToInt64() > 0)
+            {
+                _available.Remove(available);
+                _allocs[available] = size;
+                RtlZeroMemory(available, (UIntPtr)size);
+                return available;
+            }
             var p = Marshal.AllocHGlobal(size);
             _allocs[p] = size;
+            RtlZeroMemory(p, (UIntPtr)size);
             return p;
         }
+
+        private static IntPtr GetAvailable(int size) 
+        {
+            var kp = _available.FirstOrDefault(kp => kp.Value == size);
+            return kp.Key;
+        }
+
+        /// <summary>
+        /// Flag memory to be reused. Mainly for tests or reuse map server to spawn different map;
+        /// </summary>
+        public static void FlagMemoryToBeReused()
+        {
+            _available = new Dictionary<IntPtr, int>(_allocs);
+            _allocs.Clear();
+        }
+
+        public static void FlagMemoryToBeReused(IntPtr ptr)
+        {
+            if(_allocs.ContainsKey(ptr))
+            {
+                _available[ptr] = _allocs[ptr];
+                _allocs.Remove(ptr);
+            }
+        }
+
 
         public static void Free(IntPtr p)
         {
@@ -25,7 +70,7 @@ namespace Game
             _allocs.Clear();
         }
 
-        public static void Free()
+        public static void FreeAll()
         {
             foreach(var p in _allocs.Keys)
             {

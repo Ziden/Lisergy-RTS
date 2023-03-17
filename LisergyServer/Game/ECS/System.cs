@@ -14,10 +14,10 @@ namespace Game.ECS
 
     public abstract class GameSystem<ComponentType, EntityType> : IGameSystem where ComponentType : IComponent where EntityType : IEntity
     {
-        public virtual void OnComponentAdded(EntityType owner, ComponentType component, ComponentEventBus<EntityType> events) { }
+        public virtual void OnComponentAdded(EntityType owner, ComponentType component, EntitySharedEventBus<EntityType> events) { }
         public void OnDisabled() { }
         public void OnEnabled() { }
-        public virtual void OnComponentRemoved(EntityType owner, ComponentType component, ComponentEventBus<EntityType> events) { }
+        public virtual void OnComponentRemoved(EntityType owner, ComponentType component, EntitySharedEventBus<EntityType> events) { }
 
     }
 }

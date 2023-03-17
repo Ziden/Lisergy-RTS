@@ -95,11 +95,11 @@ namespace Game
             }      
         }
 
-        public virtual Chunk GetTileChunk(int tileX, int tileY)
+        public virtual ref Chunk GetTileChunk(int tileX, int tileY)
         {
             int chunkX = tileX >> GameWorld.CHUNK_SIZE_BITSHIFT;
             var chunkY = tileY >> GameWorld.CHUNK_SIZE_BITSHIFT;
-            return GetChunk(chunkX, chunkY);
+            return ref GetChunk(chunkX, chunkY);
         }
 
         public virtual Tile GetTile(int tileX, int tileY)
@@ -118,8 +118,7 @@ namespace Game
                 for (var chunkY = 0; chunkY < maxChunkY; chunkY++)
                 {
                     var tiles = new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
-                    var chunkData = new ChunkData(); 
-                    var chunk = new Chunk(this, ref chunkData, chunkX, chunkY, tiles);
+                    var chunk = new Chunk(this, chunkX, chunkY, tiles);
                     for (var x = 0; x < GameWorld.CHUNK_SIZE; x++)
                     {
                         for (var y = 0; y < GameWorld.CHUNK_SIZE; y++)
@@ -134,12 +133,20 @@ namespace Game
             }
         }
 
+        public virtual void ClearTile(Tile t)
+        {
+            t.GetComponent<TileVisibilityComponent>().EntitiesViewing.Clear();
+            t.GetComponent<TileVisibilityComponent>().PlayersViewing.Clear();
+            t.GetComponent<EntityPlacementComponent>().EntitiesIn.Clear();
+            t.GetComponent<EntityPlacementComponent>().StaticEntity = null;
+        }
+
+
         public virtual Tile GenerateTile(ref Chunk c, int tileX, int tileY)
         {
             var tile = c.CreateTile(tileX, tileY);
             tile.AddComponent<TileVisibilityComponent>();
             tile.AddComponent<EntityPlacementComponent>();
-            tile.GetComponent<EntityPlacementComponent>().Owner = tile;
             return tile;
         }
     }
