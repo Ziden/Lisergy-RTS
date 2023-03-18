@@ -18,7 +18,6 @@ namespace Assets.Code
     public class ClientEvents
     {
         public static event CameraMoveEvent OnCameraMove;
-        public static event ClickTileEvent OnClickTile;
         public static event SelectPartyEvent OnSelectParty;
         public static event PlayerLoginEvent OnPlayerLogin;
         public static event PartyFinishedMoveEvent OnPartyFinishedMove;
@@ -29,12 +28,7 @@ namespace Assets.Code
         {
             OnCameraMove?.Invoke(oldPosition, newPosition);
         }
-
-        public static void ClickTile(ClientTile tile)
-        {
-            OnClickTile?.Invoke(tile);
-        }
-
+        
         public static void SelectParty(ClientParty party)
         {
             OnSelectParty?.Invoke(party);

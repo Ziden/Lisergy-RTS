@@ -15,7 +15,7 @@ namespace Assets.Code
 
         public TileUI()
         {
-            ClientEvents.OnClickTile += ClickTile;
+            Global.InputManager().OnClickTile += ClickTile;
             ClientEvents.OnCameraMove += CameraMove;
             ClientEvents.OnSelectParty += SelectParty;
             ClientEvents.OnStartMovementRequest += StartMoveReq;
