@@ -48,6 +48,7 @@ public class MainBehaviour : MonoBehaviour
         Networking = new Networking();
         NetworkEvents = new EventBus();
         ConfigureUnity();
+        SetupServices();
         Serialization.LoadSerializers();
         _serverPacketListener = new ServerListener(NetworkEvents);
     }
@@ -56,11 +57,23 @@ public class MainBehaviour : MonoBehaviour
     {
         Networking?.Update();
         Awaiter.Update();
-        GameInput.Update();
     }
 
     private void OnApplicationQuit()
     {
         Networking?.Dispose();
+    }
+
+    
+    private void SetupServices()
+    {
+        var inputManager = CreateInputManager();
+        Global.Register(typeof(IInputManager),inputManager);
+    }
+
+
+    InputManager CreateInputManager()
+    {
+        return gameObject.AddComponent<InputManager>();
     }
 }
