@@ -13,13 +13,19 @@ namespace Game
 
         private static Dictionary<IntPtr, int> _available = new Dictionary<IntPtr, int>();
 
+        #if WINDOWS
         [DllImport("kernel32.dll")]
         static extern void RtlZeroMemory(IntPtr dst, UIntPtr length);
+        #endif
 
         public static void SetZeros(IntPtr ptr, int size)
         {
+#if WINDOWS
             UIntPtr usize = new UIntPtr((uint)size);
             RtlZeroMemory(ptr, usize);
+#else
+            Marshal.Copy(new byte[size], 0, ptr, size);
+#endif
         }
 
         public static IntPtr Alloc(int size)
@@ -29,12 +35,12 @@ namespace Game
             {
                 _available.Remove(available);
                 _allocs[available] = size;
-                RtlZeroMemory(available, (UIntPtr)size);
+                SetZeros(available, size);
                 return available;
             }
             var p = Marshal.AllocHGlobal(size);
             _allocs[p] = size;
-            RtlZeroMemory(p, (UIntPtr)size);
+            SetZeros(p, size);
             return p;
         }
 
