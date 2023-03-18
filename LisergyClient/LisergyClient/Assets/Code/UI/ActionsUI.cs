@@ -31,7 +31,7 @@ namespace Assets.Code.UI
             RegisterButton("GuardButton", EntityAction.GUARD, GuardButton);
             RegisterButton("CheckButton", EntityAction.CHECK, CheckButton);
             RegisterButton("AttackButton", EntityAction.ATTACK, AttackButton);
-            Global.InputManager().OnClickTile += OnClickTile;
+            ClientEvents.OnClickTile += OnClickTile;
             ClientEvents.OnCameraMove += OnCameraMove;
         }
 

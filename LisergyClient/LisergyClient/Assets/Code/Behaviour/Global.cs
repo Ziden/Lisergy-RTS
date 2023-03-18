@@ -19,11 +19,11 @@ namespace Assets.Code
         }
 
 
-        public static void Register<T,V>(T type, V value)
-            where T:Type 
-            where V: class
+        public static void Register<T,V>(V value)
+            where T: class 
+            where V: T
         {
-            _values[type] = value;
+            _values[typeof(T)] = value;
         }
 
 

@@ -47,7 +47,7 @@ public class PartyUI : IEventListener
 
         EntityListener.OnPartyUpdated += OnPartyUpdated;
         ClientEvents.OnCameraMove += OnCameraMove;
-        Global.InputManager().OnClickTile += OnClickTile;
+        ClientEvents.OnClickTile += OnClickTile;
         //MainBehaviour.NetworkEvents.RegisterListener(this);
     }
 

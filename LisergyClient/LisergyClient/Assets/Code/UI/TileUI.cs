@@ -57,6 +57,7 @@ namespace Assets.Code
                 MoveToTile(_tileCursor, tile);
                 _selectedTile = tile;
             }
+            ClientEvents.ClickTile(tile);
         }
 
         private void MoveToTile(GameObject cursor, Tile tile)

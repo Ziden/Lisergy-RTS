@@ -51,6 +51,7 @@ public class MainBehaviour : MonoBehaviour
         SetupServices();
         Serialization.LoadSerializers();
         _serverPacketListener = new ServerListener(NetworkEvents);
+        SetupCamera();
     }
 
     void Update()
@@ -64,11 +65,17 @@ public class MainBehaviour : MonoBehaviour
         Networking?.Dispose();
     }
 
-    
+
+    private void SetupCamera()
+    {
+        var camera = Resources.Load("prefabs/Camera");
+        Instantiate(camera, gameObject.transform);
+    }
+
     private void SetupServices()
     {
         var inputManager = CreateInputManager();
-        Global.Register(typeof(IInputManager),inputManager);
+        Global.Register<IInputManager, InputManager>(inputManager);
     }
 
 
