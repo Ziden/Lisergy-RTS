@@ -8,13 +8,12 @@ namespace Assets.Code.Views
     {
         public void RegisterEvents()
         {
-            // FIX
-            //Entity.Components.RegisterComponentEvent<TileVisibilityChangedEvent, TileView>(OnVisChange);
+            Entity.Components.RegisterComponentEvent<TileVisibilityChangedEvent, TileView>(OnVisChange);
         }
 
         private static void OnVisChange(Tile t, TileView view, TileVisibilityChangedEvent ev)
         {
-            view.SetFogOfWarDisabled(ev.Visible);
+            view?.SetFogOfWarDisabled(ev.Visible);
         }
     }
 }
