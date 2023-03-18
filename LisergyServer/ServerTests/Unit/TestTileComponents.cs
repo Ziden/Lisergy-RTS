@@ -22,11 +22,11 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            var c = new Chunk();
+            var c = new Chunk(null, 0, 0, new Tile[,] { });
             var t1 = new TileData();
             var t2 = new TileData();
-            tile1 = new Tile(ref c, &t1, 0, 0);
-            tile2 = new Tile(ref c, &t2, 1, 1);
+            tile1 = new Tile(c, &t1, 0, 0);
+            tile2 = new Tile(c, &t2, 1, 1);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace Tests
 
             var dg = new Dungeon();
 
-            tile1.CallComponentEvents(new StaticEntityPlacedEvent(dg, tile1));
+            tile1.Components.CallEvent(new StaticEntityPlacedEvent(dg, tile1));
 
             Assert.IsTrue(tile1.GetComponent<EntityPlacementComponent>().StaticEntity == dg);
             Assert.IsTrue(tile2.GetComponent<EntityPlacementComponent>().StaticEntity == null);

@@ -37,7 +37,7 @@ namespace Game.Entity
 
                 if (oldTile != null)
                 {
-                    oldTile.CallAllEvents(new EntityMoveOutEvent()
+                    oldTile.Components.CallEvent(new EntityMoveOutEvent()
                     {
                         Entity = this,
                         ToTile = value,
@@ -46,7 +46,7 @@ namespace Game.Entity
                 }
                 if (value != null)
                 {
-                    value.CallAllEvents(new EntityMoveInEvent()
+                    value.Components.CallEvent(new EntityMoveInEvent()
                     {
                         Entity = this,
                         ToTile = _tile,

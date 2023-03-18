@@ -4,7 +4,6 @@ using Game.Events;
 using Game.Generator;
 using Game.Listeners;
 using Game.Scheduler;
-using Game.World;
 using GameDataTest;
 using LisergyServer.Commands;
 using LisergyServer.Core;
@@ -14,7 +13,7 @@ namespace MapServer
 {
     public class MapSocketServer : SocketServer
     {
-        private static readonly int MAX_PLAYERS = 1000;
+        private static readonly int MAX_PLAYERS = 40;
      
         private static int WORLD_SEED = 12345;
 

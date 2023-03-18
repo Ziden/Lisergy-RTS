@@ -13,7 +13,7 @@ namespace Game
         OCCUPIED = 0b00000010
     }
 
-    public unsafe struct Chunk : IEntity, IDisposable
+    public unsafe class Chunk : IEntity, IDisposable
     {
         [NonSerialized]
         private ChunkData _data;
@@ -55,7 +55,7 @@ namespace Game
             var internalTileX = tileX % GameWorld.CHUNK_SIZE;
             var internalTileY = tileY % GameWorld.CHUNK_SIZE;
             var dataPointer = _data.GetTileData(internalTileX, internalTileY);
-            var tile = new Tile(ref this, dataPointer, tileX, tileY);
+            var tile = new Tile(this, dataPointer, tileX, tileY);
             return tile;
         }
 
@@ -83,6 +83,11 @@ namespace Game
         }
 
         public T GetComponent<T>() where T : IComponent
+        {
+            throw new NotImplementedException();
+        }
+
+        public T AddComponent<T>() where T : IComponent
         {
             throw new NotImplementedException();
         }

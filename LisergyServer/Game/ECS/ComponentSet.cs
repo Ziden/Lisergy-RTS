@@ -43,7 +43,7 @@ namespace Game.ECS
             GetEventBus().RegisterComponentEvent(cb);
         }
 
-        public T GetComponent<T>() where T : IComponent
+        public T Get<T>() where T : IComponent
         {
             if (_components.TryGetValue(typeof(T), out var component))
             {
@@ -55,6 +55,13 @@ namespace Game.ECS
         public T AddComponent<T>() where T : IComponent
         {
             var component = ComponentCreator.Build<T>();
+            _components[typeof(T)] = component;
+            SystemRegistry<T, EntityType>.OnAddComponent(_owner, GetEventBus());
+            return component;
+        }
+
+        public T AddComponent<T>(T component) where T : IComponent
+        {
             _components[typeof(T)] = component;
             SystemRegistry<T, EntityType>.OnAddComponent(_owner, GetEventBus());
             return component;

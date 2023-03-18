@@ -8,44 +8,13 @@ namespace Assets.Code.Views
     {
         public void RegisterEvents()
         {
-            RegisterViewEvent<TileVisibilityChangedEvent, TileView>(OnVisChange);
+            // FIX
+            //Entity.Components.RegisterComponentEvent<TileVisibilityChangedEvent, TileView>(OnVisChange);
         }
 
-        private void OnVisChange(Tile t, TileView view, TileVisibilityChangedEvent ev)
+        private static void OnVisChange(Tile t, TileView view, TileVisibilityChangedEvent ev)
         {
-            Debug.Log("On Vis Change");
-            if(ev.Tile == Entity)
-            {
-                SetFogOfWar(ev.Visible);
-            }
-        }
-
-        public void SetFogOfWar(bool isTileInLos)
-        {
-            if (!Instantiated)
-                return;
-
-            if (isTileInLos == false)
-            {
-                SetColor(new Color(0.5f, 0.5f, 0.5f, 1.0f));
-            }
-            else
-            {
-                SetColor(new Color(1f, 1f, 1f, 1.0f));
-                GameObject.SetActive(isTileInLos);
-            }
-        }
-
-        private void SetColor(Color c)
-        {
-            foreach (Transform child in GameObject.transform)
-            {
-                var rend = child.GetComponent<Renderer>();
-                if (rend != null)
-                {
-                    rend.material.color = c;
-                }
-            }
+            view.SetFogOfWarDisabled(ev.Visible);
         }
     }
 }

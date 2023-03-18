@@ -35,7 +35,7 @@ namespace Game.Listeners
                 foreach (var tile in player.VisibleTiles)
                 {
                     player.Send(tile.UpdatePacket);
-                    tile.CallAllEvents(new TileSentToPlayerEvent(tile, player));
+                    tile.Components.CallEvent(new TileSentToPlayerEvent(tile, player));
                 }
                 _world.Game.GameEvents.Call(new PlayerJoinedEvent(player));
             }

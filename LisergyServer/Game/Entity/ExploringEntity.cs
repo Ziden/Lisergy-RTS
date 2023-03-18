@@ -39,7 +39,7 @@ namespace Game.Entity
                     foreach (var tile in newLos.Except(oldLos))
                     {
                         visEnabled.Tile = tile;
-                        tile.CallComponentEvents(visEnabled);
+                        tile.Components.CallEvent(visEnabled);
                     }
                        
 
@@ -47,7 +47,7 @@ namespace Game.Entity
                     foreach (var tile in oldLos.Except(newLos))
                     {
                         visEnabled.Tile = tile;
-                        tile.CallComponentEvents(visEnabled);
+                        tile.Components.CallEvent(visEnabled);
                     }
                         
                 }

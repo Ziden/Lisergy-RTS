@@ -38,7 +38,7 @@ namespace Assets.Code.World
         public override ref Chunk GetTileChunk(int tileX, int tileY)
         {
             var chunk = base.GetTileChunk(tileX, tileY);
-            if (chunk.IsVoid())
+            if (chunk == null)
             {
                 int chunkX = tileX.ToChunkCoordinate();
                 var chunkY = tileY.ToChunkCoordinate();

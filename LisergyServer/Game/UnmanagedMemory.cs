@@ -84,7 +84,7 @@ namespace Game
             return new string[]
             {
                 $"Unmanaged Pointers: {_allocs.Count}",
-                $"Total Unmanaged Size: {_allocs.Values.Sum()} KB"
+                $"Total Unmanaged Size: {_allocs.Values.Sum()/1024} KB"
             };
         }
     }

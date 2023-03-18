@@ -62,7 +62,7 @@ namespace Game
                     _y = 0;
                     if(_previousTile != null)
                     {
-                        foreach (var viewer in _previousTile.GetComponent<TileVisibilityComponent>().PlayersViewing)
+                        foreach (var viewer in _previousTile.Components.Get<TileVisibilityComponent>().PlayersViewing)
                             viewer.Send(new EntityDestroyPacket(this));
                     }
                 }
@@ -73,6 +73,11 @@ namespace Game
         }
 
         public T GetComponent<T>() where T : IComponent
+        {
+            throw new NotImplementedException();
+        }
+
+        public T AddComponent<T>() where T : IComponent
         {
             throw new NotImplementedException();
         }

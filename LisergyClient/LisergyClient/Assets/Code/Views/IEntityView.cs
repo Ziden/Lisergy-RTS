@@ -33,7 +33,7 @@ namespace Assets.Code.Views
             {
                 _viewEvents = new ViewEvents<EntityType>(Entity);
             }
-            _viewEvents.RegisterEvent(cb);
+            _viewEvents.RegisterEvent(Entity, cb);
         }
     }
 
@@ -49,7 +49,7 @@ namespace Assets.Code.Views
     {
         internal EntityType _owner;
 
-        private HashSet<string> _registered = new HashSet<string>();
+        private static HashSet<string> _registered = new HashSet<string>();
 
         internal static Dictionary<Type, ViewEventBus<EntityType>> _buses = new Dictionary<Type, ViewEventBus<EntityType>>();
 
@@ -68,21 +68,20 @@ namespace Assets.Code.Views
             _owner = owner;
         }
 
-        public void CallEvent(BaseEvent ev)
-        {
-            GetEventBus().Call(_owner, ev);
-        }
-
         /// <summary>
         /// Adds global event hook to convert to entity events.
         /// Only add one per Event/View combination
         /// </summary>  
-        public void RegisterEvent<EventType, ViewType>(Action<EntityType, ViewType, EventType> cb) where EventType : GameEvent where ViewType : IEntityView
+        public void RegisterEvent<EventType, ViewType>(EntityType entity, Action<EntityType, ViewType, EventType> cb) where EventType : GameEvent where ViewType : IEntityView
         {
             var key = $"{typeof(EventType)}{typeof(ViewType)}";
             if(!_registered.Contains(key)) {
                 _registered.Add(key);
-                GameView.Events.Register<EventType>(this, e => GetEventBus().Call(_owner, e));
+                GameView.Events.Register<EventType>(this, e =>
+                {
+                    Debug.Log("Calling with " + entity);
+                    GetEventBus().Call(entity, e);
+                });
             }
             GetEventBus().RegisterComponentEvent(cb);
         }

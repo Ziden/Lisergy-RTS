@@ -10,7 +10,7 @@ namespace Game.World.Systems
 {
     public class EntityPlacementSystem : GameSystem<EntityPlacementComponent, Tile>
     {
-        public override void OnComponentAdded(Tile owner, EntityPlacementComponent component, EntitySharedEventBus<Tile> events)
+        internal override void OnComponentAdded(Tile owner, EntityPlacementComponent component, EntitySharedEventBus<Tile> events)
         {
             events.RegisterComponentEvent<StaticEntityPlacedEvent, EntityPlacementComponent>(OnStaticEntityPlaced);
             events.RegisterComponentEvent<StaticEntityRemovedEvent, EntityPlacementComponent>( OnStaticEntityRemoved);

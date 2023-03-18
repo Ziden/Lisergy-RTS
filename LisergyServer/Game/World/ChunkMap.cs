@@ -12,9 +12,6 @@ namespace Game
 {
     public unsafe class ChunkMap
     {
-
-        public static Chunk VOID_CHUNK = new Chunk();
-
         private Chunk[,] _chunkMap;
         private CachedChunkMap _cache;
 
@@ -57,16 +54,16 @@ namespace Game
             return new PathFinder(_cache).FindPath(new Position(from.X, from.Y), new Position(to.X, to.Y));
         }
 
-        public ref Chunk GetUnnocupiedNewbieChunk()
+        public Chunk GetUnnocupiedNewbieChunk()
         {
             var startingChunks = ByFlags[ChunkFlag.NEWBIE_CHUNK];
             foreach (var position in startingChunks)
             {
                 var chunk = _chunkMap[position.X, position.Y];
                 if (!chunk.Flags.HasFlag(ChunkFlag.OCCUPIED))
-                    return ref _chunkMap[position.X, position.Y];
+                    return _chunkMap[position.X, position.Y];
             }
-            return ref VOID_CHUNK;
+            return null;
         }
 
         public void Add(ref Chunk c)

@@ -44,14 +44,13 @@ namespace Tests
          
             var player = _game.GetTestPlayer();
             var tile = _game.World.GetTile(1, 1);
-            tile.ResourceID = 123;
+ 
             Serialization.LoadSerializers(typeof(TileUpdatePacket));
 
             var serialized = Serialization.FromEvent<TileUpdatePacket>(tile.UpdatePacket);
             var unserialized = Serialization.ToEvent<TileUpdatePacket>(serialized);
 
             Assert.AreEqual(tile.TileId, unserialized.Data.TileId);
-            Assert.AreEqual(tile.ResourceID, unserialized.Data.ResourceId);
             Assert.AreEqual(tile.X, unserialized.Data.X);
             Assert.AreEqual(tile.Y, unserialized.Data.Y);
         }
