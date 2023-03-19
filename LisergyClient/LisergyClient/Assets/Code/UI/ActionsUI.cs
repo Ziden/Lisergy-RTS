@@ -2,6 +2,7 @@
 using Assets.Code.World;
 using Game;
 using Game.Entity;
+using Game.Entity.Entities;
 using Game.Events;
 using Game.Movement;
 using System;
@@ -88,7 +89,7 @@ namespace Assets.Code.UI
                 DisplayActions(UIManager.PartyUI.SelectedParty, tile);
         }
 
-        public void DisplayActions(ClientParty party, Tile tile)
+        public void DisplayActions(PartyEntity party, Tile tile)
         {
             if (party.Tile == tile || tile == null)
             {
@@ -100,7 +101,7 @@ namespace Assets.Code.UI
             _gameObject.transform.position = pos;
             _gameObject.SetActive(true);
             var actions = new List<EntityAction>();
-            if (tileView.StaticEntity is Dungeon)
+            if (tileView.Building is DungeonEntity)
             {
                 actions.Add(EntityAction.CHECK);
                 actions.Add(EntityAction.ATTACK);
@@ -115,16 +116,16 @@ namespace Assets.Code.UI
         {
             var tile = UIManager.TileUI.SelectedTile;
             var tileView = GameView.GetView<TileView>(tile);
-            if (tileView.StaticEntity is ClientDungeon)
+            if (tileView.Building is DungeonEntity)
             {
                 UIManager.ActionsUI.Hide();
-                UIManager.DungeonsUI.Display((ClientDungeon)tileView.StaticEntity);
+                UIManager.DungeonsUI.Display((DungeonEntity)tileView.Building);
             }
         }
 
         private void MoveToSelectedTile(MovementIntent intent)
         {
-            ClientParty party = UIManager.PartyUI.SelectedParty;
+            var party = UIManager.PartyUI.SelectedParty;
             Tile selectedTile = UIManager.TileUI.SelectedTile;
             Log.Debug($"Moving {party} to {selectedTile}");
             var map = selectedTile.Chunk.Map;

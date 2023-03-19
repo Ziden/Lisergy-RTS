@@ -196,8 +196,8 @@ namespace Tests
 
             var lowerLosUnit = Game.GameSpec.Units.Where(kp => kp.Value.LOS < initialLos).First();
 
-            party.RemoveUnit(party.GetUnits().First());
-            party.AddUnit(new Unit(lowerLosUnit.Key));
+            party.BattleLogic.RemoveUnit(party.BattleLogic.GetUnits().First());
+            party.BattleLogic.AddUnit(new Unit(lowerLosUnit.Key));
 
             var afterLos = party.GetLineOfSight();
 

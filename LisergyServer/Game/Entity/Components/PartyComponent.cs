@@ -1,4 +1,5 @@
 ﻿using Game.ECS;
+using Game.Entity.Entities;
 using Game.World.Systems;
 using System;
 
@@ -15,7 +16,7 @@ namespace Game.Entity.Components
 
         static PartyComponent()
         {
-            SystemRegistry<PartyComponent, WorldEntity>.AddSystem(new PartySystem());
+            SystemRegistry<PartyComponent, PartyEntity>.AddSystem(new PartySystem());
         }
     }
 }

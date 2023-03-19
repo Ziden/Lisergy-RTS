@@ -2,21 +2,27 @@
 using Game.ECS;
 using Game.Entity.Components;
 using Game.Events.GameEvents;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Game.World.Systems
 {
-    public class EntityExplorationSystem : GameSystem<EntityExplorationComponent , WorldEntity>
+    public class EntityVisionSystem : GameSystem<EntityVisionComponent , WorldEntity>
     {
-        internal override void OnComponentAdded(WorldEntity owner, EntityExplorationComponent component, EntitySharedEventBus<WorldEntity> events)
+        internal override void OnComponentAdded(WorldEntity owner, EntityVisionComponent component, EntityEventBus events)
         {
-            events.RegisterComponentEvent<EntityMoveInEvent, EntityExplorationComponent>(OnEntityStepOnTile);
+            events.RegisterComponentEvent<WorldEntity, EntityMoveInEvent, EntityVisionComponent>(OnEntityStepOnTile);
         }
 
-        private static void UpdateLineOfSight(WorldEntity explorer, Tile from, Tile to)
+        private static void OnEntityStepOnTile(WorldEntity e, EntityVisionComponent c, EntityMoveInEvent ev)
         {
-            var los = explorer.Components.Get<EntityExplorationComponent>().LineOfSight;
+            UpdateVisionRange(e, ev.FromTile, ev.ToTile);
+        }
+
+        private static void UpdateVisionRange(WorldEntity explorer, Tile from, Tile to)
+        {
+            var los = explorer.Components.Get<EntityVisionComponent>().LineOfSight;
             if (los > 0)
             {
                 HashSet<Tile> oldLos = new HashSet<Tile>();
@@ -48,9 +54,5 @@ namespace Game.World.Systems
             }
         }
 
-        private static void OnEntityStepOnTile(WorldEntity e, EntityExplorationComponent c, EntityMoveInEvent ev)
-        {
-            UpdateLineOfSight(e, ev.FromTile, ev.ToTile);
-        }
     }
 }

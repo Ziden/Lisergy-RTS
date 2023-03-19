@@ -1,13 +1,15 @@
 ﻿
+using Assets.Code.Entity;
+using Assets.Code.Views;
 using Assets.Code.World;
 using Game;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Entity;
-using Game.Events;
-using System;
+using Game.Entity.Components;
+using Game.Entity.Entities;
+using Game.Events.GameEvents;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace Assets.Code
 {
@@ -20,23 +22,32 @@ namespace Assets.Code
             StackLog.Debug("Created new player");
         }
 
-        public ClientType EnsureInstantiatedAndKnown<ServerType, ClientType>(ServerType serverEntity, List<IComponent> components) where ServerType : WorldEntity where ClientType : WorldEntity, IGameObject, IClientEntity<ServerType, ClientType>
+        public ViewType UpdateClientState<EntityType, ViewType>(EntityType serverEntity, List<IComponent> components) where EntityType : WorldEntity where ViewType : EntityView<EntityType>
         {
-            var known = GetKnownEntity(serverEntity.Id) as ClientType;
-            if (known == null)
+            var clientEntity = (EntityType)GetKnownEntity(serverEntity.Id);
+            if (clientEntity == null)
             {
-                known = InstanceFactory.CreateInstance<ClientType, PlayerEntity>(this); // TODO if slow use a manual factory (e.g new ClientParty)
-                known.UpdateData(serverEntity, components);
-                known.InstantiateInScene(serverEntity);
-                KnowsAbout[serverEntity.Id] = known;
+                clientEntity = InstanceFactory.CreateInstance<EntityType, PlayerEntity>(serverEntity.Owner);
+                clientEntity.Id = serverEntity.Id;
+                EntitySynchronizer.SyncComponents(clientEntity, components);
+                var view = InstanceFactory.CreateInstance<ViewType, EntityType>(clientEntity);   
+                GameView.Controller.AddView(clientEntity, view);
+                clientEntity.Components.Add(view);
+                EntitySynchronizer.HookBaseEvents(clientEntity);
+                view.OnUpdate(serverEntity, components);
+                KnowsAbout[serverEntity.Id] = clientEntity;
+                return view;
             }
             else
             {
-                known.UpdateData(serverEntity, components);
+                EntitySynchronizer.SyncComponents(clientEntity, components);
+                var view = GameView.GetView<ViewType>(clientEntity);
+                view.OnUpdate(serverEntity, components);
+                return view;
             }
-            return known;
         }
 
+     
         public WorldEntity GetKnownEntity(GameId id)
         {
             WorldEntity e;

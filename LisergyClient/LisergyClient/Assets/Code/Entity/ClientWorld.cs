@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.DataTypes;
 using Game.Entity;
+using Game.Entity.Entities;
 using Game.Events.ServerEvents;
 using Game.World;
 using System;

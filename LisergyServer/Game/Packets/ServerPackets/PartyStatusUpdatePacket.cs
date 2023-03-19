@@ -1,5 +1,6 @@
 ﻿using Game.DataTypes;
 using Game.Entity;
+using Game.Entity.Entities;
 using System;
 using System.Linq;
 
@@ -12,11 +13,11 @@ namespace Game.Events.ServerEvents
         public byte PartyIndex;
         UnitStats[] Stats;
 
-        public PartyStatusUpdatePacket(Party entity)
+        public PartyStatusUpdatePacket(PartyEntity entity)
         {
             PartyIndex = entity.PartyIndex;
             OwnerID = entity.OwnerID;
-            var units = entity.GetUnits().Where(u => u != null).ToArray();;
+            var units = entity.BattleLogic.GetUnits().Where(u => u != null).ToArray();;
             Stats = new UnitStats[units.Length];
             for (var x = 0; x < units.Length; x++)
             {

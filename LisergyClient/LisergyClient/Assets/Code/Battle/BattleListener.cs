@@ -35,14 +35,14 @@ namespace Assets.Code.Battle
             {
                 var partyID = ev.BattleHeader.Defender.Units[0].UnitReference.PartyId;
                 var party = def.GetParty(partyID);
-                party.BattleID = GameId.ZERO;
+                party.BattleLogic.BattleID = GameId.ZERO;
             }
 
             if (atk != null && !Gaia.IsGaia(atk.UserID))
             {
                 var partyID = ev.BattleHeader.Attacker.Units[0].UnitReference.PartyId;
                 var party = atk.Parties[partyID];
-                party.BattleID = GameId.ZERO;
+                party.BattleLogic.BattleID = GameId.ZERO;
             }
 
             Log.Info("Battle result event");
@@ -64,7 +64,7 @@ namespace Assets.Code.Battle
                 var partyID = ev.Defender.Units[0].UnitReference.PartyId;
                 var party = def.Parties[partyID];
                 party.Tile = tile;
-                party.BattleID = ev.BattleID;
+                party.BattleLogic.BattleID = ev.BattleID;
             }
 
             if (atk != null && !Gaia.IsGaia(atk.UserID))
@@ -72,7 +72,7 @@ namespace Assets.Code.Battle
                 var partyID = ev.Attacker.Units[0].UnitReference.PartyId;
                 var party = atk.Parties[partyID];
                 party.Tile = tile;
-                party.BattleID = ev.BattleID;
+                party.BattleLogic.BattleID = ev.BattleID;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using Game.ECS;
+﻿using Game.DataTypes;
+using Game.ECS;
 using Game.World;
 using Game.World.Data;
 using System;
@@ -21,6 +22,9 @@ namespace Game
         [NonSerialized]
         private Tile[,] _tiles;
 
+        [NonSerialized]
+        private GameId _id;
+
         public bool IsVoid()
         {
             return _tiles == null;
@@ -39,8 +43,11 @@ namespace Game
 
         public IComponentSet Components => throw new NotImplementedException();
 
+        public GameId EntityId => _id;
+
         public Chunk(ChunkMap w, int x, int y, Tile[,] tiles)
         {;
+            _id = GameId.Generate();
             _data = new ChunkData();
             _data.Position = new Position(x, y);
             _data.Allocate();

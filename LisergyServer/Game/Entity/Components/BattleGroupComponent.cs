@@ -11,15 +11,14 @@ namespace Game.Entity.Components
     public class BattleGroupComponent : IComponent
     {
         public GameId BattleId;
-        public List<List<Unit>> Units = new List<List<Unit>>()
+        public List<List<Unit>> UnitLines = new List<List<Unit>>()
         {
             new List<Unit>()
         };
 
-
         public List<Unit> FrontLine()
         {
-            return Units[0];
+            return UnitLines[0];
         } 
 
         static BattleGroupComponent()

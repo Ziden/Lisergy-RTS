@@ -8,10 +8,21 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Tests")]
 namespace Game.ECS
 {
+
+    /// <summary>
+    /// To avoid boxing/unboxing and gain speed
+    /// </summary>
+    public class EntityContext<EntityType> where EntityType : IEntity
+    {
+        public EntityType Entity;
+
+        internal static EntityContext<EntityType> Context;
+    }
+
     /// <summary>
     /// Event bus that fires specific events for the specific component. Can wrap events knowing the sender and component instance.
     /// </summary>
-    public class EntitySharedEventBus<EntityType> : IEventListener where EntityType : IEntity
+    public class EntityEventBus : IEventListener
     {
         internal EventBus<BaseEvent> _bus = new EventBus<BaseEvent>();
         internal HashSet<string> _registered = new HashSet<string>();
@@ -29,32 +40,30 @@ namespace Game.ECS
             return false;
         }
 
-        private EntityType _currentEntity;
+        private IEntity _currentEntity;
 
-        public EntityType GetCurrentEntity() => _currentEntity;
+        public IEntity GetCurrentEntity() => _currentEntity;
 
         /// <summary>
         /// Registers events that can be targeted to the entity. The components can pickup those events.
         /// We only subscribe once per ComponentType/EventType combination so we can swap entities that are receiving the events.
         /// </summary>
-        public void RegisterComponentEvent<EventType, ComponentType>(
+        public void RegisterComponentEvent<EntityType, EventType, ComponentType>(
             Action<EntityType, ComponentType, EventType> callback)
-            where EventType : BaseEvent where ComponentType : IComponent 
+            where EventType : BaseEvent where ComponentType : IComponent where EntityType : IEntity
         {
             if (AlreadyRegistered<EventType, ComponentType>())
             {
                 return;
             }
-            Action<EventType> registeredCallback = ev =>
+            Action<EventType> componentEventCallback = ev =>
             {
                 var entity = GetCurrentEntity();
                 var component = GetComponent<ComponentType>(entity);
-                if(component != null)
-                {
-                    callback(entity, component, ev);
-                } 
+                // TODO: Remove unboxing below for speed
+                if (component != null) callback((EntityType)entity, component, ev);
             };
-            _bus.Register(null, registeredCallback);
+            _bus.Register(this, componentEventCallback);
         }
 
         public void Clear()
@@ -67,7 +76,7 @@ namespace Game.ECS
 
         }
 
-        public void Call<EventType>(EntityType entity, EventType ev) where EventType : BaseEvent
+        public void Call<EventType>(IEntity entity, EventType ev) where EventType : BaseEvent
         {
             _currentEntity = entity;
             _bus.Call(ev);

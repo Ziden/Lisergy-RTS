@@ -1,7 +1,7 @@
-﻿using Game.Battle;
-using Game.Battles;
+﻿using Game.Battles;
 using Game.Battles.Actions;
 using Game.DataTypes;
+using Game.Entity.Logic;
 using System;
 
 namespace Game.Events
@@ -15,11 +15,11 @@ namespace Game.Events
         public BattleTeam Attacker;
         public BattleTeam Defender;
 
-        public BattleStartPacket(GameId battleId, IBattleable atk, IBattleable def)
+        public BattleStartPacket(GameId battleId, IBattleableEntity atk, IBattleableEntity def)
         {
             BattleID = battleId;
-            Attacker = atk.GetBattleTeam();
-            Defender = def.GetBattleTeam();
+            Attacker = atk.BattleLogic.GetBattleTeam();
+            Defender = def.BattleLogic.GetBattleTeam();
             X = def.Tile.X;
             Y = def.Tile.Y;
         }

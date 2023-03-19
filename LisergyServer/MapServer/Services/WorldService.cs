@@ -1,6 +1,6 @@
-﻿using Game;
-using Game.Battle;
-using Game.Entity;
+﻿using Game.Entity;
+using Game.Entity.Entities;
+using Game.Entity.Logic;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.GameEvents;
@@ -47,8 +47,8 @@ namespace Game.Listeners
         [EventMethod]
         public void OnOffensiveAction(OffensiveMoveEvent ev)
         {
-            var atk = ev.Attacker as IBattleable;
-            var def = ev.Defender as IBattleable;
+            var atk = ev.Attacker as IBattleableEntity;
+            var def = ev.Defender as IBattleableEntity;
             if (atk != null && def != null)
             {
                 var battleID = Guid.NewGuid();

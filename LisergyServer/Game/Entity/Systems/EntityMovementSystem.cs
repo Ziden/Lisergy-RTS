@@ -1,14 +1,13 @@
 ﻿
 using Game.ECS;
 using Game.Entity.Components;
-using Game.Events.GameEvents;
 using Game.Movement;
 
 namespace Game.World.Systems
 {
     public class EntityMovementSystem : GameSystem<EntityMovementComponent , WorldEntity>
     {
-        internal override void OnComponentAdded(WorldEntity owner, EntityMovementComponent component, EntitySharedEventBus<WorldEntity> events)
+        internal override void OnComponentAdded(WorldEntity owner, EntityMovementComponent component, EntityEventBus events)
         {
             //events.RegisterComponentEvent<TileVisibilityChangedEvent, TileVisibilityComponent>(OnTileVisibilityUpdated);
         }

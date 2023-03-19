@@ -37,10 +37,10 @@ public class TileRandomizerBehaviour : MonoBehaviour
         var southTile = map.GetTile(tile.X, tile.Y + 1);
         var eastTile = map.GetTile(tile.X + 1, tile.Y);
         var westTile = map.GetTile(tile.X - 1, tile.Y);
-        TileView north = northTile == null ? null : GameView.GetTileView(northTile);
-        TileView south = southTile == null ? null : GameView.GetTileView(southTile);
-        TileView east = eastTile == null ? null : GameView.GetTileView(eastTile);
-        TileView west = westTile == null ? null : GameView.GetTileView(westTile);
+        TileView north = northTile == null ? null : GameView.GetOrCreateTileView(northTile);
+        TileView south = southTile == null ? null : GameView.GetOrCreateTileView(southTile);
+        TileView east = eastTile == null ? null : GameView.GetOrCreateTileView(eastTile);
+        TileView west = westTile == null ? null : GameView.GetOrCreateTileView(westTile);
 
         if (comp.RemoveWhenConnectNorth.Count > 0 && (northTile != null && north.Entity.TileId == tile.TileId))
         {

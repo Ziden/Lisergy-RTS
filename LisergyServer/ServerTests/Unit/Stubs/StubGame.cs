@@ -2,6 +2,7 @@
 using Game;
 using Game.Battles;
 using Game.ECS;
+using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.GameEvents;
 using Game.Listeners;
@@ -28,6 +29,7 @@ namespace ServerTests
 
         private static GameWorld GetTestWorld(GameWorld source = null)
         {
+            WorldUtils.SetRandomSeed(666);
             DeltaTracker.Clear();
             if(source != null)
             {

@@ -1,4 +1,5 @@
-﻿using Game.Events;
+﻿using Game.Entity.Entities;
+using Game.Events;
 using Game.Events.ServerEvents;
 using NetSerializer;
 using System;

@@ -34,7 +34,7 @@ public class BattleBehaviour : MonoBehaviour
 
     private List<BattleAction> Actions = new List<BattleAction>();
 
-    private ClientUnit ActingUnit;
+    private UnitView ActingUnit;
 
     private DateTime NextAction = DateTime.MaxValue;
 
@@ -75,7 +75,7 @@ public class BattleBehaviour : MonoBehaviour
         }
     }
 
-    private void DrawDamage(ClientUnit unit, int damage)
+    private void DrawDamage(UnitView unit, int damage)
     {
         DamageText.text = damage.ToString();
         var pos = Camera.main.WorldToScreenPoint(unit.GameObject.transform.position);
@@ -105,7 +105,7 @@ public class BattleBehaviour : MonoBehaviour
             var attackAction = (AttackAction)action;
             var result = (AttackActionResult)action.Result;
             var attackerID = attackAction.UnitID;
-            if(attackerID == ActingUnit.Id)
+            if(attackerID == ActingUnit.Unit.Id)
             {
                 // Attack Animation
                 ActingUnit.Sprites.PlayAnimation(Sprite3D.ATTACK, false, 100, ActionDelaySeconds);
@@ -117,13 +117,13 @@ public class BattleBehaviour : MonoBehaviour
                 Awaiter.WaitFor(TimeSpan.FromSeconds(ActionDelaySeconds / 2), () => {
 
                     // Swing anim
-                    defender.Sprites.PlayAnimation(Sprite3D.HURT, true, 0, ActionDelaySeconds);
+                    //defender.Sprites.PlayAnimation(Sprite3D.HURT, true, 0, ActionDelaySeconds);
 
                     // Damage Effects
-                    DrawDamage(defender, result.Damage);
+                    //DrawDamage(defender, result.Damage);
                     var seq = DOTween.Sequence();
-                    seq.Append(defender.GameObject.transform.DOMoveX(defender.GameObject.transform.position.x - 0.1f, damageAnimationDelay/2));
-                    seq.Append(defender.GameObject.transform.DOMoveX(defender.GameObject.transform.position.x, damageAnimationDelay/2));
+                    //seq.Append(defender.GameObject.transform.DOMoveX(defender.GameObject.transform.position.x - 0.1f, damageAnimationDelay/2));
+                    //seq.Append(defender.GameObject.transform.DOMoveX(defender.GameObject.transform.position.x, damageAnimationDelay/2));
                     seq.onComplete += () => {
                         Awaiter.WaitFor(TimeSpan.FromMilliseconds(600), () =>
                         {
@@ -156,7 +156,7 @@ public class BattleBehaviour : MonoBehaviour
 
     public void WaitForAction()
     {
-        ActingUnit = Battle.CurrentActingUnit.UnitReference as ClientUnit;
+        //ActingUnit = Battle.CurrentActingUnit.UnitReference;
         ActingUnit.Sprites.PlayAnimation(Sprite3D.WALK, true, 100, ActionDelaySeconds);
         var obj = ActingUnit.GameObject;
         _originalPos = obj.transform.position;

@@ -1,5 +1,6 @@
 ﻿
 using Game.ECS;
+using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.Bus;
 using Game.World.Systems;

@@ -1,6 +1,6 @@
 ﻿using Game;
-using Game.Entity;
 using Game.Entity.Components;
+using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
@@ -37,7 +37,7 @@ namespace Game.Listeners
                 ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
         }
 
-        private CourseTask StartCourse(Party party, List<Position> sentPath, MovementIntent intent)
+        private CourseTask StartCourse(PartyEntity party, List<Position> sentPath, MovementIntent intent)
         {
             List<Tile> path = new List<Tile>();
             var owner = party.Owner;

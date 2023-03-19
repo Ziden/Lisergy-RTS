@@ -2,16 +2,17 @@
 using Game.ECS;
 using Game.Events.GameEvents;
 using Game.World.Components;
+using System;
 using System.Linq;
 
 namespace Game.World.Systems
 {
     public class TileVisibilitySystem : GameSystem<TileVisibility, Tile>
     {
-        internal override void OnComponentAdded(Tile owner, TileVisibility component, EntitySharedEventBus<Tile> events)
+        internal override void OnComponentAdded(Tile owner, TileVisibility component, EntityEventBus events)
         {
 
-            events.RegisterComponentEvent<TileExplorationStateChanged, TileVisibility>(OnTileExplorationChanged);
+            events.RegisterComponentEvent<Tile, TileExplorationStateChanged, TileVisibility>(OnTileExplorationChanged);
         }
 
         private static void OnTileExplorationChanged(Tile tile, TileVisibility component, TileExplorationStateChanged ev)

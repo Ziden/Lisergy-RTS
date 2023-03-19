@@ -89,10 +89,11 @@ namespace Game.DataTypes
 
         public GameId(Position pos)
         {
+            _bytes = new byte[16];
             fixed (byte* p1 = _bytes)
             {
                 *(long*)p1 = pos.X;
-                *(long*)(p1 + 8) = pos.Y;
+                *(long*)(p1 + 1) = pos.Y;
             }
         }
 

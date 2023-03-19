@@ -2,7 +2,7 @@
 using Game.Battles.Actions;
 using Game.BattleTactics;
 using Game.ECS;
-using Game.Entity;
+using Game.Entity.Entities;
 using Game.Events;
 using Game.World.Data;
 using GameData;
@@ -39,12 +39,12 @@ namespace Game
             models.Add(typeof(BattleTeam));
 
             // World
-            models.Add(typeof(BuildingEntity));
+            models.Add(typeof(PlayerBuildingEntity));
             models.Add(typeof(WorldEntity));
-            models.Add(typeof(Party));
+            models.Add(typeof(PartyEntity));
             models.Add(typeof(Tile));
             models.Add(typeof(TileData));
-            models.Add(typeof(Dungeon));
+            models.Add(typeof(DungeonEntity));
 
             // Game
             models.Add(typeof(GameSpec));

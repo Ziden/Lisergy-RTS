@@ -1,7 +1,9 @@
 ﻿using Assets.Code;
+using Assets.Code.Entity;
 using Assets.Code.Views;
 using Assets.Code.World;
 using Game;
+using Game.Entity.Entities;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using System;
@@ -17,7 +19,7 @@ public class PartyUI : IEventListener
     private Button[] _partyButtons;
     private int _activeParty = -1;
 
-    public ClientParty SelectedParty { get => MainBehaviour.Player.Parties[_activeParty] as ClientParty; }
+    public PartyEntity SelectedParty { get => MainBehaviour.Player.Parties[_activeParty]; }
     public bool HasSelectedParty { get => _activeParty != -1; }
     public GameObject GameObj { get => _rootObject; }
 
@@ -46,15 +48,15 @@ public class PartyUI : IEventListener
         _cursor.SetActive(false);
         _rootObject.SetActive(false);
 
-        EntityListener.OnPartyUpdated += OnPartyUpdated;
+        EntityListener.OnPartyViewUpdated += OnPartyUpdated;
         ClientEvents.OnCameraMove += OnCameraMove;
         ClientEvents.OnClickTile += OnClickTile;
         //MainBehaviour.NetworkEvents.RegisterListener(this);
     }
 
-    private void OnPartyUpdated(ClientParty party)
+    private void OnPartyUpdated(PartyView view)
     {
-        if(party.IsMine())
+        if(view.Entity.IsMine())
         {
             DrawAllParties();
         }
@@ -88,14 +90,19 @@ public class PartyUI : IEventListener
             HideParty();
             return;
         }
-        var view = GameView.GetView<TileView>(tile);
+        var tileView = GameView.GetView<TileView>(tile);
         Log.Debug($"PartyUI displaying actions for {tile} with active party {_activeParty}");
-        if (view.MovingEntities.Count > 0)
+        if (tileView.Entity.EntitiesIn.Count > 0)
         {
-            var party = (ClientParty)view.MovingEntities.First();
-            ShowParty(party);
-            if (party.IsMine())
-                SelectParty(party);
+            var partyEntity = tileView.MovingEntities.FirstOrDefault(e => e is PartyEntity) as PartyEntity;
+            if(partyEntity == null)
+            {
+                HideParty();
+                return;
+            }
+            ShowParty(partyEntity);
+            if (partyEntity.IsMine())
+                SelectParty(partyEntity);
         }
         else
             HideParty();
@@ -106,12 +113,12 @@ public class PartyUI : IEventListener
         HideParty();
     }
 
-    private void ShowParty(ClientParty party)
+    private void ShowParty(PartyEntity party)
     {
-        UIManager.UnitPanel.ShowUnit((ClientUnit)party.GetValidUnits().First());
+        UIManager.UnitPanel.ShowUnit(party.BattleLogic.GetValidUnits().First());
     }
 
-    public void SelectParty(ClientParty party)
+    public void SelectParty(PartyEntity party)
     {
         _activeParty = party.PartyIndex;
         _cursor.SetActive(true);
@@ -125,7 +132,7 @@ public class PartyUI : IEventListener
     private void ButtonClick(int partyIndex)
     {
         Log.Debug($"Click button party {partyIndex}");
-        var party = MainBehaviour.Player.Parties[partyIndex] as ClientParty;
+        var party = MainBehaviour.Player.Parties[partyIndex] as PartyEntity;
         if (party == null)
             return;
 
@@ -134,11 +141,11 @@ public class PartyUI : IEventListener
             CameraBehaviour.FocusOnTile(party.Tile);
     }
 
-    public static Image DrawPartyIcon(ClientParty party, Transform parent)
+    public static Image DrawPartyIcon(PartyEntity party, Transform parent)
     {
         var partyIndex = party.PartyIndex;
-        var units = party.GetValidUnits().ToList();
-        var leader = (ClientUnit)units[0];
+        var units = party.BattleLogic.GetValidUnits().ToList();
+        var leader = units[0];
         var imageObj = new GameObject("portrait", typeof(Image));
         var image = DrawPortrait(leader, parent);
         return image;
@@ -170,7 +177,11 @@ public class PartyUI : IEventListener
     public void DrawAllParties()
     {
         foreach (var party in MainBehaviour.Player.Parties)
-            if (party is ClientParty)
-                DrawPartyIcon((ClientParty)party, _partyButtons[party.PartyIndex].transform);
+        {
+            if(party.BattleLogic.GetUnits().Count > 0)
+            {
+                DrawPartyIcon(party, _partyButtons[party.PartyIndex].transform);
+            }
+        } 
     }
 }

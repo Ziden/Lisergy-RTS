@@ -1,7 +1,7 @@
-﻿using Game.Battle;
-using Game.ECS;
+﻿using Game.ECS;
 using Game.Entity;
 using Game.Entity.Components;
+using Game.Entity.Logic;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using Game.Movement;
@@ -11,12 +11,12 @@ namespace Game.World.Systems
 {
     public class EntityPlacementSystem : GameSystem<TileHabitants, Tile>
     {
-        internal override void OnComponentAdded(Tile owner, TileHabitants component, EntitySharedEventBus<Tile> events)
+        internal override void OnComponentAdded(Tile owner, TileHabitants component, EntityEventBus events)
         {
-            events.RegisterComponentEvent<BuildingPlacedEvent, TileHabitants>(OnStaticEntityPlaced);
-            events.RegisterComponentEvent<BuildingRemovedEvent, TileHabitants>( OnStaticEntityRemoved);
-            events.RegisterComponentEvent<EntityMoveOutEvent, TileHabitants>(OnEntityMoveOut);
-            events.RegisterComponentEvent<EntityMoveInEvent, TileHabitants>(OnEntityMoveIn);
+            events.RegisterComponentEvent<Tile, BuildingPlacedEvent, TileHabitants>(OnStaticEntityPlaced);
+            events.RegisterComponentEvent<Tile, BuildingRemovedEvent, TileHabitants>( OnStaticEntityRemoved);
+            events.RegisterComponentEvent<Tile, EntityMoveOutEvent, TileHabitants>(OnEntityMoveOut);
+            events.RegisterComponentEvent<Tile, EntityMoveInEvent, TileHabitants>(OnEntityMoveIn);
         }
 
         private static void OnStaticEntityRemoved(Tile owner, TileHabitants component, BuildingRemovedEvent entity)
@@ -45,7 +45,7 @@ namespace Game.World.Systems
             component.EntitiesIn.Add(ev.Entity);
 
             // TODO: Move to entity movement system
-            if (ev.Entity is IBattleable && component.Building != null && component.Building is IBattleable)
+            if (ev.Entity is IBattleableEntity && component.Building != null && component.Building is IBattleableEntity)
             {
                 if (movement.Course != null && movement.Course.Intent == MovementIntent.Offensive && movement.Course.IsLastMovement())
                 {

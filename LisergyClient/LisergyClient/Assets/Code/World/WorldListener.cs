@@ -23,7 +23,7 @@ namespace Assets.Code.World
         public void TileUpdate(TileUpdatePacket ev)
         {
             var tile = GameView.World.GetTile(ev.Data.X, ev.Data.Y);
-            GameView.GetTileView(tile).UpdateFrom(ev.Data);
+            GameView.GetOrCreateTileView(tile).UpdateFromData(ev.Data);
         }
     }
 }

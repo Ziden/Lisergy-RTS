@@ -83,6 +83,7 @@ namespace Tests
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
             var player = new TestServerPlayer();
+
             Game.HandleClientEvent(player, joinEvent);
 
             var firstEntityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
@@ -107,7 +108,7 @@ namespace Tests
             var player = new TestServerPlayer();
             Game.HandleClientEvent(player, joinEvent);
             var party = player.GetParty(0);
-            var unit = party.GetUnits().First();
+            var unit = party.BattleLogic.GetUnits().First();
           
             Assert.That(unit.HP == unit.MaxHP);
         }

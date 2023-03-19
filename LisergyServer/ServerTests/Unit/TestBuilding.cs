@@ -1,4 +1,5 @@
 using Game;
+using Game.Entity.Entities;
 using Game.World;
 using Game.World.Components;
 using NUnit.Framework;
@@ -28,7 +29,7 @@ namespace Tests
             Assert.IsTrue(player.Buildings.Count == 1);
             Assert.IsTrue(player.Buildings.Any(b => b.SpecID == initialBuildingSpec.Id));
             Assert.IsTrue(tile.Components.Get<TileHabitants>().Building == player.Buildings.First());
-            Assert.IsTrue(tile.Components.Get<TileHabitants>().Building.SpecID == initialBuildingSpec.Id);
+            Assert.IsTrue(((PlayerBuildingEntity)tile.Components.Get<TileHabitants>().Building).SpecID == initialBuildingSpec.Id);
         }
 
         [Test]
@@ -37,7 +38,7 @@ namespace Tests
             var tile = Game.RandomNotBuiltTile();
         }
 
-            [Test]
+        [Test]
         public void TestNewBuilding()
         {
             var player = Game.GetTestPlayer();
@@ -50,7 +51,7 @@ namespace Tests
             Assert.IsTrue(player.Buildings.Count == 2);
             Assert.IsTrue(player.Buildings.Any(b => b.SpecID == buildingSpec.Id));
             Assert.IsTrue(tile.Components.Get<TileHabitants>().Building == player.Buildings.Last());
-            Assert.IsTrue(tile.Components.Get<TileHabitants>().Building.SpecID == buildingSpec.Id);
+            Assert.IsTrue(((PlayerBuildingEntity)tile.Components.Get<TileHabitants>().Building).SpecID == buildingSpec.Id);
 
             Assert.That(tile.Components.Get<TileVisibility>().EntitiesViewing.Contains(tile.Components.Get<TileHabitants>().Building));
 

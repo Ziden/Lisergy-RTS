@@ -1,5 +1,5 @@
 using Game;
-using Game.Entity;
+using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Scheduler;
@@ -17,7 +17,7 @@ namespace Tests
         private TestGame _game;
         private List<Position> _path;
         private TestServerPlayer _player;
-        private Party _party;
+        private PartyEntity _party;
 
         [SetUp]
         public void Setup()
@@ -119,7 +119,7 @@ namespace Tests
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
-            _party.BattleID = Guid.NewGuid();
+            _party.BattleLogic.BattleID = Guid.NewGuid();
 
             _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();

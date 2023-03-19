@@ -1,10 +1,7 @@
 ﻿
-using Game.Battle;
-using Game.Battles;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Entity.Components;
-using Game.Events;
 using Game.Events.GameEvents;
 using System;
 using System.Collections.Generic;
@@ -16,19 +13,15 @@ namespace Game.World.Systems
     {
         public delegate void Test(IEntity entity);
 
-        internal override void OnComponentAdded(WorldEntity owner, BattleGroupComponent component, EntitySharedEventBus<WorldEntity> events)
+        internal override void OnComponentAdded(WorldEntity owner, BattleGroupComponent component, EntityEventBus events)
         {
             
         }
-        public static void OnBattleFinished(WorldEntity entity, TurnBattle battle, BattleHeader BattleHeader, BattleTurnEvent[] Turns)
+
+        public static void NewUnitLine(WorldEntity e)
         {
-            SetBattleId(entity, GameId.ZERO);
-            if (!IsAlive(entity))
-            {
-                entity.Tile = entity.Owner.GetCenter().Tile;
-                foreach (var unit in GetUnits(entity))
-                    unit.HealAll();
-            }
+            var comp = e.Components.Get<BattleGroupComponent>();
+            comp.UnitLines.Insert(0, new List<Unit>());
         }
 
         public static void RemoveUnit(WorldEntity e, Unit u, int preferAtIndex=-1)

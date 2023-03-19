@@ -1,6 +1,7 @@
 ﻿
 using Assets.Code.World;
 using Game;
+using Game.Entity.Entities;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,18 +25,19 @@ namespace Assets.Code
             _partyCursor = CreateCursor();
         }
 
-        public void StartMoveReq(ClientParty party, List<Tile> path)
+        public void StartMoveReq(PartyEntity party, List<Tile> path)
         {
             if (IsActive(_tileCursor))
                 Inactivate(_tileCursor);
             _selectedTile = null;
         }
 
-        private void SelectParty(ClientParty party)
+        private void SelectParty(PartyEntity party)
         {
             Activate(_partyCursor);
             MoveToTile(_partyCursor, party.Tile);
-            _partyCursor.transform.SetParent(party.GameObject.transform);
+            var view = GameView.GetView(party);
+            _partyCursor.transform.SetParent(view.GameObject.transform);
         }
 
         private void CameraMove(Vector3 old, Vector3 newPos)
@@ -49,6 +51,7 @@ namespace Assets.Code
 
         private void ClickTile(Tile tile)
         {
+            if (tile == null) return;
             Log.Debug($"TileUI selecting tile {tile}");
             foreach(var e in tile.EntitiesViewing)
             {

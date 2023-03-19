@@ -18,7 +18,7 @@ namespace Assets.Code.Views
             Entity = entity;
         }
 
-        public void UpdateFrom(TileData data)
+        public void UpdateFromData(TileData data)
         {
             Entity.TileId = data.TileId;
             if (!Instantiated)
@@ -84,7 +84,7 @@ namespace Assets.Code.Views
 
         // TODO: Remove & move calls to listeners in Entity View
         public List<WorldEntity> MovingEntities => Entity.Components.Get<TileHabitants>().EntitiesIn;
-        public StaticEntity StaticEntity => Entity.Components.Get<TileHabitants>().StaticEntity;
+        public WorldEntity Building => Entity.Components.Get<TileHabitants>().Building;
 
 
         public override string ToString()

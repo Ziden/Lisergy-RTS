@@ -1,10 +1,13 @@
 ﻿using Assets.Code.Views;
 using Assets.Code.World;
 using Game;
+using Game.ECS;
+using Game.Entity;
 using Game.Events;
 using Game.Events.Bus;
 using GameData;
 using System;
+using System.Diagnostics;
 
 namespace Assets.Code
 {
@@ -14,7 +17,7 @@ namespace Assets.Code
         private static GameView _instance;
         private static ViewController _controller;
 
-        public static TileView GetTileView(Tile tile, bool ensureInstantiated = false)
+        public static TileView GetOrCreateTileView(Tile tile, bool ensureInstantiated = false)
         {
             var chunkView = GetView<ChunkView>(tile.Chunk);
             if (chunkView == null)
@@ -23,17 +26,24 @@ namespace Assets.Code
             if (tileView == null)
             {
                 tileView = Controller.AddView(tile, new TileView(tile));
+                Log.Debug($"Created tile view for {tile}");
             }
-            if(ensureInstantiated)
+            if (ensureInstantiated)
             {
                 tileView.Instantiate();
             }
             return tileView;
         }
 
-        public static T GetView<T>(object e) where T : IEntityView => _controller.GetView<T>(e);
+        public static void Destroy(IEntityView view)
+        {
+            UnityEngine.Object.Destroy(view.GameObject);
+            Controller.RemoveView(view);
+        }
 
-        public static IEntityView GetView(object e) => _controller.GetView(e);
+        public static T GetView<T>(IEntity e) where T : IEntityView => _controller.GetView<T>(e);
+
+        public static IEntityView GetView(IEntity e) => _controller.GetView(e);
 
         public static ClientWorld World => _game.World as ClientWorld;
         public static ViewController Controller => _controller;

@@ -1,5 +1,5 @@
-﻿using Game.Entity;
-using Game.Entity.Components;
+﻿using Game.Entity.Components;
+using Game.Entity.Entities;
 using Game.Scheduler;
 using System.Collections.Generic;
 
@@ -7,11 +7,11 @@ namespace Game.Movement
 {
     public class CourseTask : GameTask
     {
-        public Party Party;
+        public PartyEntity Party;
         List<Tile> Path;
         public MovementIntent Intent { get; private set; }
 
-        public CourseTask(Party party, List<Tile> path, MovementIntent intent) : base(party.Components.Get<EntityMovementComponent>().MoveDelay, party.Owner)
+        public CourseTask(PartyEntity party, List<Tile> path, MovementIntent intent) : base(party.Components.Get<EntityMovementComponent>().MoveDelay, party.Owner)
         {
             this.Party = party;
             this.Path = path;

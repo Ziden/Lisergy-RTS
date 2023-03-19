@@ -1,5 +1,6 @@
 using Game;
 using Game.Entity;
+using Game.Entity.Entities;
 using Game.Events;
 using Game.World;
 using Game.World.Data;
@@ -55,7 +56,7 @@ namespace Tests
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile.GetNeighbor(Direction.NORTH);
 
-            var dungeon = new Dungeon();
+            var dungeon = new DungeonEntity();
             dungeon.Tile = tile;
 
             Assert.AreEqual(dungeon.Tile, tile);
@@ -76,6 +77,33 @@ namespace Tests
             tile.TileId = TestTiles.MOUNTAIN.ID;
             Assert.IsFalse(tile.Passable);
             Assert.AreEqual(tile.MovementFactor, TestTiles.MOUNTAIN.MovementFactor);
+        }
+
+        [Test]
+        public void TestTileId()
+        {
+            var tile = Game.World.GetTile(5, 5);
+            var tile2 = Game.World.GetTile(6, 6);
+
+            Assert.AreNotEqual(tile.EntityId, tile2.EntityId); 
+        }
+
+        [Test]
+        public void TestTileIdSame()
+        {
+            var tile = Game.World.GetTile(5, 5);
+            var tile2 = Game.World.GetTile(5, 5);
+
+            Assert.AreEqual(tile.EntityId, tile2.EntityId);
+        }
+
+        [Test]
+        public void TestTileUniqueIds()
+        {
+            var tile = Game.World.GetTile(5, 5);
+            var tile2 = Game.World.GetTile(5, 5);
+
+            Assert.AreEqual(tile.EntityId, tile2.EntityId);
         }
     }
 }

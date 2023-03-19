@@ -1,5 +1,6 @@
 ﻿using Game.Entity;
 using Game.Entity.Components;
+using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
@@ -9,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Game
 {
-    public partial class WorldEntity : Ownable, IDeltaTrackable, IDeltaUpdateable<EntityUpdatePacket>
+    public partial class WorldEntity : IDeltaTrackable, IDeltaUpdateable<EntityUpdatePacket>
     {
         [field: NonSerialized]
         private DeltaFlags _flags;
@@ -22,17 +23,13 @@ namespace Game
 
         public void ProccessDeltas(PlayerEntity trigger)
         {
-            if(DeltaFlags.HasFlag(DeltaFlag.EXISTENCE))
-            {
+            if (DeltaFlags.HasFlag(DeltaFlag.EXISTENCE))
                 OnExistenceChanged();
-            } else if (DeltaFlags.HasFlag(DeltaFlag.POSITION))
-            {
-                OnPositionChanged();
-            }
             else if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
-            {
                 trigger.Send(UpdatePacket);
-            }
+            if (DeltaFlags.HasFlag(DeltaFlag.POSITION))
+                OnPositionChanged();
+           
         }
 
         private void OnExistenceChanged()

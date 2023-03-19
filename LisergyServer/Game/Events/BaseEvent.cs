@@ -1,4 +1,5 @@
 ﻿
+using Game.Entity.Entities;
 using System;
 
 namespace Game.Events

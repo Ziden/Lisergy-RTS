@@ -1,4 +1,5 @@
 ﻿using Game.ECS;
+using Game.Entity.Entities;
 using Game.World.Systems;
 using System.Collections.Generic;
 
@@ -7,7 +8,7 @@ namespace Game.World.Components
     public class TileHabitants : IComponent
     {
         public List<WorldEntity> EntitiesIn = new List<WorldEntity>();
-        public BuildingEntity Building;
+        public WorldEntity Building;
 
         static TileHabitants()
         {

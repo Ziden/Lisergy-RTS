@@ -1,6 +1,7 @@
 ﻿using Assets.Code.Views;
 using Assets.Code.World;
 using Game;
+using Game.Entity.Entities;
 using Game.World;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace Assets.Code.UI
 
     public class PathRenderer
     {
-        private Dictionary<ClientParty, ClientPath> _partyPaths = new Dictionary<ClientParty, ClientPath>();
+        private Dictionary<PartyEntity, ClientPath> _partyPaths = new Dictionary<PartyEntity, ClientPath>();
         private List<GameObject> _pathlinesPool = new List<GameObject>();
 
         public PathRenderer()
@@ -43,12 +44,12 @@ namespace Assets.Code.UI
             ClientEvents.OnStartMovementRequest += StartReqMove;
         }
 
-        public void StartReqMove(ClientParty party, List<Tile> path)
+        public void StartReqMove(PartyEntity party, List<Tile> path)
         {
             this.RenderPath(party, path);
         }
 
-        public void OnFinishedMove(ClientParty party, Tile oldTile, Tile newTile)
+        public void OnFinishedMove(PartyEntity party, Tile oldTile, Tile newTile)
         {
             if(_partyPaths.ContainsKey(party))
             {
@@ -85,7 +86,7 @@ namespace Assets.Code.UI
             return pooled;
         }
 
-        public ClientPath RenderPath(ClientParty party, List<Tile> tilePath)
+        public ClientPath RenderPath(PartyEntity party, List<Tile> tilePath)
         {
             //tilePath.RemoveAt(0); // remove where the party is
             var clientPath = new ClientPath();
@@ -94,7 +95,7 @@ namespace Assets.Code.UI
             for (var x = 0; x < tilePath.Count; x++)
             {
                 var nodeTile = tilePath[x];
-                var tileView = GameView.Controller.GetView<TileView>(nodeTile);
+                var tileView = GameView.GetView<TileView>(nodeTile);
                 var tilePos = tileView.GameObject.transform.position;
                 var hasNext = x < tilePath.Count - 1;
                 var hasPrevious = x > 0;

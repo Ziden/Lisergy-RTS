@@ -1,5 +1,6 @@
 ﻿using Game.Battles;
 using Game.Entity;
+using Game.Entity.Entities;
 using Game.Inventories;
 using Game.World;
 using GameDataTest;
@@ -12,7 +13,7 @@ namespace Game.Generator
         {
             var place = c.FindTileWithId(0);
             if (place != null) {
-                var dungeon = Dungeon.BuildFromSpec(TestDungeons.EASY.DungeonSpecID);
+                var dungeon = new DungeonEntity(TestDungeons.EASY.DungeonSpecID);
                 dungeon.Tile = place;
             }
         }

@@ -28,7 +28,6 @@ namespace Game.World.Data
             var bytes = GameWorld.TILES_IN_CHUNK * sizeof(TileData);
             _chunkTiles = (TileData*)UnmanagedMemory.Alloc(bytes);
             UnmanagedMemory.SetZeros((IntPtr)_chunkTiles, bytes);
-            Log.Debug($"Allocated {bytes}b for chunk {Position}");
         }
 
         public void FlagToBeReused()

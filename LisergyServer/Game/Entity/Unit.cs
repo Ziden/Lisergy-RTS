@@ -1,5 +1,6 @@
 ﻿using Game.DataTypes;
 using Game.Entity;
+using Game.Entity.Entities;
 using GameData.buffs;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Game
         private byte _partyId = byte.MaxValue;
 
         [NonSerialized]
-        private Party _party;
+        private PartyEntity _party;
 
         [field: NonSerialized]
         public string Name { get; set; }
@@ -71,7 +72,7 @@ namespace Game
             this.MP = this.MaxMP;
         }
 
-        public Party Party
+        public PartyEntity Party
         {
             get => _party;
             set

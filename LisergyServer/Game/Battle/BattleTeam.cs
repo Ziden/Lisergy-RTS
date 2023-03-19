@@ -1,5 +1,5 @@
-﻿using Game.Battle;
-using Game.DataTypes;
+﻿using Game.DataTypes;
+using Game.Entity.Logic;
 using Game.World;
 using System;
 using System.Linq;
@@ -13,9 +13,9 @@ namespace Game.Battles
         public GameId OwnerID;
 
         [NonSerialized]
-        private IBattleable _entity;
+        private IBattleableEntity _entity;
 
-        public BattleTeam(IBattleable entity, params Unit[] units)
+        public BattleTeam(IBattleableEntity entity, params Unit[] units)
         {
             Init(entity, units);
         }
@@ -25,7 +25,7 @@ namespace Game.Battles
             Init(null, units);
         }
 
-        private void Init(IBattleable entity, params Unit[] units)
+        private void Init(IBattleableEntity entity, params Unit[] units)
         {
             this._entity = entity;
             var owner = entity?.Owner;
@@ -45,7 +45,7 @@ namespace Game.Battles
         }
 
         public bool AllDead { get => !Units.Any(u => !u.Dead); }
-        public IBattleable Entity { get => _entity; }
+        public IBattleableEntity Entity { get => _entity; }
 
         public BattleUnit RandomUnit()
         {

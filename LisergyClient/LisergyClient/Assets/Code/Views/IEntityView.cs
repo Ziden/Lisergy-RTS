@@ -1,10 +1,7 @@
 ﻿
-using Game;
 using Game.ECS;
-using Game.Events;
+using Game.Entity;
 using Game.Events.Bus;
-using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,13 +11,16 @@ namespace Assets.Code.Views
     {
         bool Instantiated { get; }
         void Instantiate();
+        public abstract IEntity Entity { get; }
     }
 
     public abstract class EntityView<EntityType> : IEntityView where EntityType : IEntity
     {
+        public virtual void OnUpdate(EntityType entity, List<IComponent> syncedComponents) { }
         public abstract EntityType Entity { get; }
         public abstract bool Instantiated { get; }
         public abstract GameObject GameObject { get; set; }
+        IEntity IEntityView.Entity => Entity;
         public abstract void Instantiate();
     }
 }

@@ -1,6 +1,7 @@
 using Game;
 using Game.ECS;
 using Game.Entity;
+using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.GameEvents;
 using Game.World;
@@ -32,13 +33,12 @@ namespace Tests
         [Test]
         public void TestEventsOnlyRegisteredOnce()
         {
-            ComponentSet<Tile>._buses.Clear();
-            ComponentSet<WorldEntity>._buses.Clear();
+            ComponentSet._buses.Clear();
 
             tile1.Components.Add(new TileHabitants());
             tile2.Components.Add(new TileHabitants());
 
-            var tileBus = ComponentSet<Tile>._buses[typeof(Tile)]._bus;
+            var tileBus = ComponentSet._buses[typeof(Tile)]._bus;
 
             Assert.AreEqual(1, tileBus._listeners.Count);
         }
@@ -49,7 +49,7 @@ namespace Tests
             tile1.Components.Add(new TileHabitants());
             tile2.Components.Add(new TileHabitants());
 
-            var dg = new Dungeon();
+            var dg = new DungeonEntity();
 
             tile1.Components.CallEvent(new BuildingPlacedEvent(dg, tile1));
 
@@ -75,9 +75,9 @@ namespace Tests
             
             tile1._components.RegisterExternalComponentEvents<TestView, EntityMoveOutEvent>(TestView.Callback);
 
-            tile1.Components.CallEvent(new EntityMoveOutEvent() { Entity = new Dungeon() });
+            tile1.Components.CallEvent(new EntityMoveOutEvent() { Entity = new DungeonEntity() });
 
-            Assert.IsTrue(TestView.called.Entity is Dungeon);
+            Assert.IsTrue(TestView.called.Entity is DungeonEntity);
 
         }
     }

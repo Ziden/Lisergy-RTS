@@ -1,6 +1,7 @@
 ﻿using Assets.Code;
 using Assets.Code.UI;
 using Game;
+using Game.Entity.Entities;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour

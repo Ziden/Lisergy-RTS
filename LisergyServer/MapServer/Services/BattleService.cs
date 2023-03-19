@@ -2,9 +2,12 @@
 using Game.Battle;
 using Game.Battles;
 using Game.DataTypes;
+using Game.ECS;
 using Game.Entity;
+using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.Bus;
+using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using System;
 using System.Collections.Generic;
@@ -40,11 +43,11 @@ namespace BattleServer
         {
             Console.WriteLine($"Received {ev.Attacker} vs {ev.Defender}");
 
-            // register battle
             var battle = new TurnBattle(ev.BattleID, ev.Attacker, ev.Defender);
             battle.StartEvent = ev;
-            ev.Attacker.Entity.OnBattleStarted(battle);
-            ev.Defender.Entity.OnBattleStarted(battle);
+
+            ev.Attacker.Entity.BattleLogic.BattleID = ev.BattleID;
+            ev.Defender.Entity.BattleLogic.BattleID = ev.BattleID;
 
             _battlesHappening[battle.ID] = battle;
             foreach (var onlinePlayer in GetOnlinePlayers(battle))
@@ -61,8 +64,7 @@ namespace BattleServer
             {
                 ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT, "Invalid battle"));
                 return;
-            }
-            
+            }            
   
             foreach (var pl in GetAllPlayers(battle))
             {
@@ -71,11 +73,19 @@ namespace BattleServer
                 Log.Debug($"Player {pl} completed battle {battle.ID}");
             }
 
-            var atk = ev.BattleHeader.Attacker.Entity as IBattleable;
-            var def = ev.BattleHeader.Defender.Entity as IBattleable;
+            var atk = ev.BattleHeader.Attacker.Entity;
+            var def = ev.BattleHeader.Defender.Entity;
 
-            atk.OnBattleFinished(battle, ev.BattleHeader, ev.Turns);
-            def.OnBattleFinished(battle, ev.BattleHeader, ev.Turns);
+            var finishEvent = new BattleFinishedEvent(battle, ev.BattleHeader, ev.Turns);
+            
+            if(atk is IEntity e)
+            {
+                e.Components.CallEvent(finishEvent);
+            }
+            if (def is IEntity e2)
+            {
+                e2.Components.CallEvent(finishEvent);
+            }
 
             var atkPacket = atk.GetStatusUpdatePacket();
             var defPacket = def.GetStatusUpdatePacket();
@@ -83,13 +93,13 @@ namespace BattleServer
             if (atk.Owner.CanReceivePackets())
             {
                 atk.Owner.Send(atkPacket);
-                if(!def.IsDestroyed)
+                if(!def.BattleLogic.IsDestroyed)
                     atk.Owner.Send(defPacket);
             }
 
             if(def.Owner.CanReceivePackets())
             {
-                if(!atk.IsDestroyed)
+                if(!atk.BattleLogic.IsDestroyed)
                     def.Owner.Send(atkPacket);
                 def.Owner.Send(defPacket);
             }
