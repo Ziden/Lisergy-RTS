@@ -24,9 +24,11 @@ namespace Assets.Code.World
         {
             var prefab = Resources.Load("prefabs/buildings/dungeon");
             var tile = GameView.World.GetTile(dungeon);
-            var chunkView = GameView.GetView<ChunkView>(tile.Chunk);
-            GameObject = MainBehaviour.Instantiate(prefab, chunkView.GameObject.transform) as GameObject;
+            var tileView = GameView.GetView(tile.Chunk);
+            GameObject = MainBehaviour.Instantiate(prefab, tileView.GameObject.transform) as GameObject;
             this.Tile = GameView.World.GetTile(dungeon);
+            GameObject.transform.position = new Vector3(Tile.X, 0, tile.Y);
+            Debug.Log("Instantiated dungeon");
         }
 
         public ClientDungeon(PlayerEntity owner) 

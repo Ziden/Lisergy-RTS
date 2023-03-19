@@ -33,7 +33,7 @@ namespace Assets.Code.Views
 
             if (isTileInLos == false)
             {
-                SetColor(new Color(0.5f, 0.5f, 0.5f, 0.5f));
+                SetColor(new Color(0.5f, 0.5f, 0.5f, 1f));
             }
             else
             {
@@ -44,9 +44,13 @@ namespace Assets.Code.Views
 
         private void SetColor(Color c)
         {
-            foreach (var r in GameObject.GetComponentsInChildren<Renderer>())
+            foreach (Transform child in GameObject.transform)
             {
-                r.material.color = c;
+                var rend = child.GetComponent<Renderer>();
+                if (rend != null)
+                {
+                    rend.material.color = c;
+                }
             }
         }
 
