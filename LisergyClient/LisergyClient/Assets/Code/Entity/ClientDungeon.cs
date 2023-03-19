@@ -1,29 +1,34 @@
-﻿using Game;
+﻿using Assets.Code.Views;
+using Game;
+using Game.ECS;
 using Game.Entity;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Code.World
 {
     public class ClientDungeon : Dungeon, IGameObject, IClientEntity<Dungeon, ClientDungeon>
     {
-        private GameObject _gameObject;
+        public GameObject GameObject { get; set; }
 
-        public GameObject GetGameObject() => _gameObject;
-
-        public ClientDungeon UpdateData(Dungeon dungeon)
+        public ClientDungeon UpdateData(Dungeon dungeon, List<IComponent> syncedComponents)
         {
             this._battles = dungeon.Battles;
             this.Id = dungeon.Id;
-            this.Tile = ClientStrategyGame.ClientWorld.GetClientTile(dungeon);
+            if(GameObject != null)
+                this.Tile = GameView.World.GetTile(dungeon);
             return this;
         }
 
         public void InstantiateInScene(Dungeon dungeon)
         {
             var prefab = Resources.Load("prefabs/buildings/dungeon");
-            var tile = ClientStrategyGame.ClientWorld.GetClientTile(dungeon);
-            _gameObject = MainBehaviour.Instantiate(prefab, tile.ClientChunk.GetGameObject().transform) as GameObject;
-            UpdateData(dungeon);
+            var tile = GameView.World.GetTile(dungeon);
+            var tileView = GameView.GetView(tile.Chunk);
+            GameObject = MainBehaviour.Instantiate(prefab, tileView.GameObject.transform) as GameObject;
+            this.Tile = GameView.World.GetTile(dungeon);
+            GameObject.transform.position = new Vector3(Tile.X, 0, tile.Y);
+            Debug.Log("Instantiated dungeon");
         }
 
         public ClientDungeon(PlayerEntity owner) 

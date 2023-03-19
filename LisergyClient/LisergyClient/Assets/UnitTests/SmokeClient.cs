@@ -22,7 +22,7 @@ namespace Assets.UnitTests
 
         public void ClickTile(Tile tile)
         {
-            ClientEvents.ClickTile(tile as ClientTile);
+            ClientEvents.ClickTile(tile);
         }
 
     }

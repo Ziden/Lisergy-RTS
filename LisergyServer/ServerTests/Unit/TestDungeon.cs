@@ -1,10 +1,10 @@
-using BattleServer;
 using Game;
 using Game.Entity;
 using Game.Events;
 using Game.Movement;
 using Game.Scheduler;
 using Game.World;
+using Game.World.Components;
 using NUnit.Framework;
 using ServerTests;
 using System.Collections.Generic;
@@ -46,7 +46,7 @@ namespace Tests
             var party = _player.GetParty(0);
 
             // place the dungeon
-            dungeonTile.StaticEntity = _dungeon;
+            dungeonTile.Components.Get<EntityPlacementComponent>().StaticEntity = _dungeon;
             
             // send intent to move player to the party
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Defensive);
@@ -56,7 +56,7 @@ namespace Tests
             GameScheduler.ForceComplete(course);
 
             Assert.AreEqual(dungeonTile, party.Tile);
-            Assert.AreEqual(party.BattleID, null);
+            Assert.IsTrue(party.BattleID.IsZero());
             Assert.AreEqual(0, _player.Battles.Count());
         }
 
@@ -66,9 +66,9 @@ namespace Tests
             var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
-            party.GetUnits()[0].Stats.Atk = 255;
+            party.GetUnits().First().Atk = 255;
 
-            dungeonTile.StaticEntity = _dungeon;
+            dungeonTile.Components.Get<EntityPlacementComponent>().StaticEntity = _dungeon;
 
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);
             var course = party.Course;
@@ -92,7 +92,7 @@ namespace Tests
             var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
-            party.GetUnits()[0].Stats.Atk = 255; // make sure it wins !
+            party.GetUnits().First().Atk = 255; // make sure it wins !
             _dungeon.Tile = dungeonTile;
 
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);
@@ -104,7 +104,7 @@ namespace Tests
             //  Dungeon completed and removed from map
             Assert.IsTrue(_dungeon.IsComplete());
             Assert.AreEqual(_dungeon.Tile, null);
-            Assert.AreEqual(dungeonTile.StaticEntity, null);
+            Assert.AreEqual(dungeonTile.Components.Get<EntityPlacementComponent>().StaticEntity, null);
             // Received another move event to remove the dungeon
             Assert.AreEqual(_player.ReceivedEventsOfType<EntityDestroyPacket>().Count, 1);
         }
@@ -115,9 +115,9 @@ namespace Tests
             var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
-            party.GetUnits()[0].Stats.HP = 1; // make sure it looses !
-            party.GetUnits()[0].Stats.Atk = 0; // make sure it looses !
-            dungeonTile.StaticEntity = _dungeon;
+            party.GetUnits().First().HP = 1; // make sure it looses !
+            party.GetUnits().First().Atk = 0; // make sure it looses !
+            dungeonTile.Components.Get<EntityPlacementComponent>().StaticEntity = _dungeon;
 
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);
             _player.GetParty(0).Course.Execute();

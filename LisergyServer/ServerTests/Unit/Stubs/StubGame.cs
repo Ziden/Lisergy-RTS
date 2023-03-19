@@ -1,9 +1,12 @@
 ﻿using BattleServer;
 using Game;
 using Game.Battles;
+using Game.ECS;
 using Game.Events;
+using Game.Events.GameEvents;
 using Game.Listeners;
 using Game.World;
+using Game.World.Components;
 using GameData;
 using GameDataTest;
 using LisergyServer.Core;
@@ -21,8 +24,32 @@ namespace ServerTests
         public WorldService WorldService { get; private set; }
         public CourseService CourseService { get; private set; }
 
+        private static GameWorld TestWorld;
 
-        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), world == null ? new GameWorld(4, 40, 40) : world)
+        private static GameWorld GetTestWorld(GameWorld source = null)
+        {
+            if(source != null)
+            {
+                return source;
+            }
+            UnmanagedMemory.FlagMemoryToBeReused();
+            /*
+            if(TestWorld == null)
+            {
+                TestWorld = new GameWorld(4, 20, 20);
+            } else
+            {
+                DeltaTracker.Clear();
+                TestWorld.FreeMap();
+            }
+            return TestWorld;
+            */
+            return new GameWorld(4, 20, 20);
+        }
+
+
+
+        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), GetTestWorld(world))
         {
             
             if (!_registered)
@@ -30,29 +57,29 @@ namespace ServerTests
                 _registered = true;
             }
             Serialization.LoadSerializers();
-
+            DeltaTracker.Clear();
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);
-
             this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             if (createPlayer)
-                CreatePlayer();
-
-  
+                CreatePlayer();  
         }
 
-        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientEvent
+        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientPacket
         {
             this.NetworkEvents.RunCallbacks(sender, Serialization.FromEventRaw(ev));
+            DeltaTracker.SendDeltaPackets(sender);
         }
 
         public TestServerPlayer CreatePlayer(int x = 10, int y = 10)
         {
-            var player = new TestServerPlayer();
+            var player = new TestServerPlayer(); 
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
             player.UserID = TestServerPlayer.TEST_ID;
+            var tile = this.World.GetTile(x, y);
             this.World.PlaceNewPlayer(player, this.World.GetTile(x, y));
+            DeltaTracker.SendDeltaPackets(player);
             return player;
         }
 
@@ -83,10 +110,11 @@ namespace ServerTests
 
         public Tile RandomNotBuiltTile()
         {
-            foreach (var tile in World.AllTiles())
-                if (tile.StaticEntity == null)
+            var tiles = World.AllTiles();
+            foreach (var tile in tiles)
+                if (tile.Components.Get<EntityPlacementComponent>().StaticEntity == null)
                     return tile;
-            return null;
+            throw new System.Exception("No unbuilt tile");
         }
     }
 

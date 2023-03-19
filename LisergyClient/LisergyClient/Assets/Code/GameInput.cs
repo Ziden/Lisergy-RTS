@@ -10,7 +10,7 @@ namespace Assets.Code
         private static Ray ray;
         private static RaycastHit hit;
  
-        public static ClientTile GetTileMouseIs()
+        public static Tile GetTileMouseIs()
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
@@ -20,7 +20,7 @@ namespace Assets.Code
                 var tileComponent = hit.collider.GetComponentInParent<TileRandomizerBehaviour>();
                 if (tileComponent == null)
                     return null;
-                return (ClientTile)tileComponent.Tile;
+                return tileComponent.Tile;
             }
             return null;
         }

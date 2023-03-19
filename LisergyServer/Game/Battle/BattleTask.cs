@@ -1,9 +1,6 @@
-﻿using Game.Battles;
-using Game.Entity;
-using Game.Events;
+﻿using Game.Events;
 using Game.Scheduler;
 using System;
-using System.Collections.Generic;
 
 namespace Game.Battles
 {
@@ -12,7 +9,7 @@ namespace Game.Battles
         private TurnBattle _battle;
         private StrategyGame _game;
 
-        public BattleTask(StrategyGame game, TurnBattle battle) : base(TimeSpan.FromSeconds(3))
+        public BattleTask(StrategyGame game, TurnBattle battle) : base(TimeSpan.FromSeconds(3), null)
         {
             this._battle = battle;
             _game = game;
@@ -23,7 +20,7 @@ namespace Game.Battles
             Repeat = false;
             _battle.Task = null;
             var result = _battle.AutoRun.RunAllRounds();
-            var resultEvent = new BattleResultPacket(_battle.ID.ToString(), result);
+            var resultEvent = new BattleResultPacket(_battle.ID, result);
             // for now just run callbacks
             // TODO: place on a message queue
             _game.NetworkEvents.Call(resultEvent);

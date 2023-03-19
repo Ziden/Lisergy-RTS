@@ -3,7 +3,7 @@
 namespace GameData
 {
     [Serializable]
-    public class BuildingSpec
+    public struct BuildingSpec
     {
         public ushort Id;
         public int ModelID;

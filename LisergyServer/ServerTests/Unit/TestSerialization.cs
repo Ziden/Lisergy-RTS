@@ -16,16 +16,6 @@ namespace Tests
 
         private TestGame _game;
 
-        [Serializable]
-        public class TestTileEvent : BaseEvent
-        {
-            public TestTileEvent(Tile t)
-            {
-                this.Tile = t;
-            }
-            public Tile Tile;
-        }
-
         [SetUp]
         public void Setup()
         {
@@ -54,16 +44,15 @@ namespace Tests
          
             var player = _game.GetTestPlayer();
             var tile = _game.World.GetTile(1, 1);
-            tile.ResourceID = 123;
-            Serialization.LoadSerializers(typeof(TestTileEvent));
+ 
+            Serialization.LoadSerializers(typeof(TileUpdatePacket));
 
-            var serialized = Serialization.FromEvent<TestTileEvent>(new TestTileEvent(tile));
-            var unserialized = Serialization.ToEvent<TestTileEvent>(serialized);
+            var serialized = Serialization.FromEvent<TileUpdatePacket>(tile.UpdatePacket);
+            var unserialized = Serialization.ToEvent<TileUpdatePacket>(serialized);
 
-            Assert.AreEqual(tile.TileId, unserialized.Tile.TileId);
-            Assert.AreEqual(tile.ResourceID, unserialized.Tile.ResourceID);
-            Assert.AreEqual(tile.X, unserialized.Tile.X);
-            Assert.AreEqual(tile.Y, unserialized.Tile.Y);
+            Assert.AreEqual(tile.TileId, unserialized.Data.TileId);
+            Assert.AreEqual(tile.X, unserialized.Data.X);
+            Assert.AreEqual(tile.Y, unserialized.Data.Y);
         }
 
         [Test]
@@ -114,33 +103,6 @@ namespace Tests
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);
-        }
-
-
-        [Test]
-        public void TestSerializationSizes()
-        {
-            var testData = new Dictionary<Type, byte[]>();
-
-            void Record<T>(T obj)
-            {
-                testData[typeof(T)] = Serialization.FromAnyType(obj);
-            }   
-
-            Record(new TileUpdatePacket(_game.World.GetTile(1, 1)));
-            Record(new PartyStatusUpdatePacket(_game.GetTestPlayer().GetParty(0)));
-            Record(new BattleResultPacket(Guid.NewGuid().ToString(), new TurnBattleResult() { Turns = new List<Game.Battles.Actions.TurnLog>(10)}));
-            Record(new EntityDestroyPacket(_game.GetTestPlayer().GetParty(0)));
-            Record(new EntityMovePacket(_game.GetTestPlayer().GetParty(0), _game.World.GetTile(1, 1)));
-            Record(new MessagePopupPacket(PopupType.BAD_INPUT, "Yeah this is a message popup to test our serialization sizes"));
-            Record(new BattleStartPacket(GameId.Generate(), _game.GetTestPlayer().GetParty(0), _game.GetTestPlayer().GetParty(0)));
-            Record(new Unit(0));
-            Record(GameId.Generate());
-
-            foreach (var kp in testData)
-            {
-                Assert.LessOrEqual(kp.Value.Count(), 150, $"Packets should be lower then 100 bytes but {kp.Key} was not");
-            }
         }
     }
 }

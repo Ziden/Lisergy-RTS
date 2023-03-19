@@ -1,6 +1,8 @@
 ﻿
 using Assets.Code.World;
 using Game;
+using Game.DataTypes;
+using Game.ECS;
 using Game.Entity;
 using Game.Events;
 using System;
@@ -18,18 +20,19 @@ namespace Assets.Code
             StackLog.Debug("Created new player");
         }
 
-        public ClientType EnsureInstantiatedAndKnown<ServerType, ClientType>(ServerType serverEntity) where ServerType : WorldEntity where ClientType : WorldEntity, IGameObject, IClientEntity<ServerType, ClientType>
+        public ClientType EnsureInstantiatedAndKnown<ServerType, ClientType>(ServerType serverEntity, List<IComponent> components) where ServerType : WorldEntity where ClientType : WorldEntity, IGameObject, IClientEntity<ServerType, ClientType>
         {
             var known = GetKnownEntity(serverEntity.Id) as ClientType;
             if (known == null)
             {
                 known = InstanceFactory.CreateInstance<ClientType, PlayerEntity>(this); // TODO if slow use a manual factory (e.g new ClientParty)
+                known.UpdateData(serverEntity, components);
                 known.InstantiateInScene(serverEntity);
                 KnowsAbout[serverEntity.Id] = known;
             }
             else
             {
-                known.UpdateData(serverEntity);
+                known.UpdateData(serverEntity, components);
             }
             return known;
         }

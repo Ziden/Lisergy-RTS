@@ -1,5 +1,7 @@
 ﻿using Assets.Code.World;
+using Game;
 using Game.Battles;
+using Game.DataTypes;
 using Game.Events;
 using System;
 using System.Collections.Generic;
@@ -12,12 +14,12 @@ namespace Assets.Code.Battle
 {
     public class ClientTurnBattle : TurnBattle
     {
-        public ClientTurnBattle(BattleStartPacket ev): base(Guid.Parse(ev.BattleID), ev.Attacker, ev.Defender)
+        public ClientTurnBattle(BattleStartPacket ev): base(ev.BattleID, ev.Attacker, ev.Defender)
         {
            
         }
 
-        public ClientUnit FindUnit(string id)
+        public ClientUnit FindUnit(GameId id)
         {
             var unit= Attacker.Units.FirstOrDefault(u => u != null && u.UnitID == id);
             if(unit == null) unit = Defender.Units.FirstOrDefault(u => u != null && u.UnitID == id);
@@ -32,9 +34,9 @@ namespace Assets.Code.Battle
                 if (battleUnit == null) continue;
                 var clientUnit = new ClientUnit(battleUnit.UnitReference);
                 clientUnit.AddToScene();
-                clientUnit.GetGameObject().transform.SetParent(team1.GetChild(x).transform);
-                clientUnit.GetGameObject().transform.localPosition = Vector3.zero;
-                clientUnit.GetGameObject().GetComponent<SpriteRenderer>().flipX = true;
+                clientUnit.GameObject.transform.SetParent(team1.GetChild(x).transform);
+                clientUnit.GameObject.transform.localPosition = Vector3.zero;
+                clientUnit.GameObject.GetComponent<SpriteRenderer>().flipX = true;
                 Attacker.Units[x].UnitReference = clientUnit;
             }
 

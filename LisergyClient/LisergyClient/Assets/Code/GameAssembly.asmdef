@@ -1,12 +1,17 @@
 {
     "name": "GameAssembly",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
-    "precompiledReferences": [ "Game.dll", "GameData.dll" ],
+    "precompiledReferences": [
+        "Game.dll",
+        "GameData.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }

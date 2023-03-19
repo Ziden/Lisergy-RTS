@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Game.World
 {
     [Serializable]
-    public class Position
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Position
     {
         public ushort X;
         public ushort Y;
@@ -20,19 +22,19 @@ namespace Game.World
             this.Y = (ushort)y;
         }
 
-        public new string ToString()
+        public override string ToString()
         {
             return X + "_" + Y;
         }
 
         public static bool operator ==(Position p1, Position p2)
         {
-            return (p1?.X == p2?.X && p1?.Y == p2?.Y);
+            return (p1.X == p2.X && p1.Y == p2.Y);
         }
 
         public static bool operator !=(Position p1, Position p2)
         {
-            return (p1?.X != p2?.X || p1?.Y != p2?.Y);
+            return (p1.X != p2.X || p1.Y != p2.Y);
         }
     }
 }

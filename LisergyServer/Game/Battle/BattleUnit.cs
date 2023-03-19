@@ -1,5 +1,8 @@
-﻿using Game.Entity;
+﻿using Game.DataTypes;
+using Game.Entity;
+using GameData.buffs;
 using System;
+using System.Collections.Generic;
 
 namespace Game.Battles
 {
@@ -12,13 +15,11 @@ namespace Game.Battles
         [NonSerialized]
         private BattleTeam _team;
 
-        public UnitStats Stats { get => UnitReference.Stats; }
-
         public BattleTeam Team { get => _team; set => _team = value; }
 
         public int RT { get; set; }
 
-        public bool Dead { get => Stats.HP == 0; }
+        public bool Dead { get => _unitReference.HP == 0; }
         public GameId UnitID { get => UnitReference.Id; }
         public Unit UnitReference { get => _unitReference; set { _unitReference = value; } }
 
@@ -29,12 +30,13 @@ namespace Game.Battles
             this.RT = GetMaxRT();
         }
 
-        public int GetMaxRT() => Math.Max(1, 100 - this.Stats.Speed);
+        public int GetMaxRT() => Math.Max(1, 100 - _unitReference.Speed);
 
         public void IncreaseRT(int delay)
         {
             RT += delay;
         }
+
 
         public int CompareTo(BattleUnit obj)
         {

@@ -1,4 +1,5 @@
-﻿using Assets.Code.World;
+﻿using Assets.Code.Views;
+using Assets.Code.World;
 using Game;
 using Game.Entity;
 using Game.Events;
@@ -80,25 +81,26 @@ namespace Assets.Code.UI
                 button.gameObject.SetActive(false);
         }
 
-        private void OnClickTile(ClientTile tile)
+        private void OnClickTile(Tile tile)
         {
             Log.Debug("Actions click tile");
             if (UIManager.PartyUI.HasSelectedParty)
                 DisplayActions(UIManager.PartyUI.SelectedParty, tile);
         }
 
-        public void DisplayActions(ClientParty party, ClientTile tile)
+        public void DisplayActions(ClientParty party, Tile tile)
         {
             if (party.Tile == tile || tile == null)
             {
                 Hide();
                 return;
             }
-            var pos = Camera.main.WorldToScreenPoint(tile.GetGameObject().transform.position);
+            var tileView = GameView.Controller.GetView<TileView>(tile);
+            var pos = Camera.main.WorldToScreenPoint(tileView.GameObject.transform.position);
             _gameObject.transform.position = pos;
             _gameObject.SetActive(true);
             var actions = new List<EntityAction>();
-            if (tile.StaticEntity is ClientDungeon)
+            if (tileView.StaticEntity is Dungeon)
             {
                 actions.Add(EntityAction.CHECK);
                 actions.Add(EntityAction.ATTACK);
@@ -112,21 +114,22 @@ namespace Assets.Code.UI
         private void CheckButton()
         {
             var tile = UIManager.TileUI.SelectedTile;
-            if (tile.StaticEntity is ClientDungeon)
+            var tileView = GameView.GetView<TileView>(tile);
+            if (tileView.StaticEntity is ClientDungeon)
             {
                 UIManager.ActionsUI.Hide();
-                UIManager.DungeonsUI.Display((ClientDungeon)tile.StaticEntity);
+                UIManager.DungeonsUI.Display((ClientDungeon)tileView.StaticEntity);
             }
         }
 
         private void MoveToSelectedTile(MovementIntent intent)
         {
             ClientParty party = UIManager.PartyUI.SelectedParty;
-            ClientTile selectedTile = UIManager.TileUI.SelectedTile;
+            Tile selectedTile = UIManager.TileUI.SelectedTile;
             Log.Debug($"Moving {party} to {selectedTile}");
             var map = selectedTile.Chunk.Map;
             var path = map.FindPath(party.Tile, selectedTile);
-            var tilePath = path.Select(node => (ClientTile)map.GetTile(node.X, node.Y)).ToList();
+            var tilePath = path.Select(node => map.GetTile(node.X, node.Y)).ToList();
             ClientEvents.StartMovementRequest(party, tilePath);
             MainBehaviour.Networking.Send(new MoveRequestPacket()
             {

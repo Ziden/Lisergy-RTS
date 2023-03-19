@@ -20,7 +20,7 @@ public class LoginCanvas : IEventListener
         Password = GameObject.transform.GetRequiredChildComponent<InputField>("Password");
         LoginButton = GameObject.transform.GetRequiredChildComponent<Button>("LoginButton");
         LoginButton.onClick.AddListener(Authenticate);
-        MainBehaviour.NetworkEvents.Register<AuthResultPacket>(this, OnPlayerAuth);
+        MainBehaviour.ServerPackets.Register<AuthResultPacket>(this, OnPlayerAuth);
     }
 
     [EventMethod]

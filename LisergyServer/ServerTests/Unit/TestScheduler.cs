@@ -12,7 +12,7 @@ namespace Tests
     {
         private class TestTask : GameTask
         {
-            public TestTask(TimeSpan delay) : base(delay) {}
+            public TestTask(TimeSpan delay) : base(delay, null) {}
             public bool Ran = false;
             public override void Execute()
             {

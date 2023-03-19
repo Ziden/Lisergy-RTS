@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Battle;
 using Game.Battles;
+using Game.DataTypes;
 using Game.Entity;
 using Game.Events;
 using Game.Events.Bus;
@@ -14,7 +15,7 @@ namespace BattleServer
     public class BattleService : IEventListener
     {
         public GameWorld World { get; private set; }
-        private Dictionary<string, TurnBattle> _battlesHappening = new Dictionary<string, TurnBattle>();
+        private Dictionary<GameId, TurnBattle> _battlesHappening = new Dictionary<GameId, TurnBattle>();
 
         public BattleService(StrategyGame game)
         {
@@ -40,12 +41,12 @@ namespace BattleServer
             Console.WriteLine($"Received {ev.Attacker} vs {ev.Defender}");
 
             // register battle
-            var battle = new TurnBattle(Guid.Parse(ev.BattleID), ev.Attacker, ev.Defender);
+            var battle = new TurnBattle(ev.BattleID, ev.Attacker, ev.Defender);
             battle.StartEvent = ev;
             ev.Attacker.Entity.OnBattleStarted(battle);
             ev.Defender.Entity.OnBattleStarted(battle);
 
-            _battlesHappening[battle.ID.ToString()] = battle;
+            _battlesHappening[battle.ID] = battle;
             foreach (var onlinePlayer in GetOnlinePlayers(battle))
                 onlinePlayer.Send(ev);
 
@@ -76,8 +77,8 @@ namespace BattleServer
             atk.OnBattleFinished(battle, ev.BattleHeader, ev.Turns);
             def.OnBattleFinished(battle, ev.BattleHeader, ev.Turns);
 
-            var atkPacket = atk.GetUpdatePacket();
-            var defPacket = def.GetUpdatePacket();
+            var atkPacket = atk.GetStatusUpdatePacket();
+            var defPacket = def.GetStatusUpdatePacket();
 
             if (atk.Owner.CanReceivePackets())
             {
@@ -97,7 +98,7 @@ namespace BattleServer
         }
         #region Battle Controller
 
-        public TurnBattle GetBattle(string id)
+        public TurnBattle GetBattle(GameId id)
         {
             return _battlesHappening[id];
         }
@@ -109,7 +110,7 @@ namespace BattleServer
         public IEnumerable<PlayerEntity> GetOnlinePlayers(TurnBattle battle)
         {
             PlayerEntity pl;
-            foreach (var userid in new string[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
+            foreach (var userid in new GameId[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
             {
                 if (World.Players.GetPlayer(userid, out pl) && pl.Online())
                     yield return pl;
@@ -119,7 +120,7 @@ namespace BattleServer
         public IEnumerable<PlayerEntity> GetAllPlayers(TurnBattle battle)
         {
             PlayerEntity pl;
-            foreach (var userid in new string[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
+            foreach (var userid in new GameId[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
             {
                 if (World.Players.GetPlayer(userid, out pl) && !Gaia.IsGaia(pl.UserID))
                     yield return pl;

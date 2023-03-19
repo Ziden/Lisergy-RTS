@@ -4,7 +4,7 @@ using System;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class ServiceDiscoveryEvent : ServerEvent
+    public class ServiceDiscoveryEvent : ServerPacket
     {
         public string IP;
         public ushort Port;

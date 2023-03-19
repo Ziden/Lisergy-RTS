@@ -14,11 +14,11 @@ namespace GameDataTest
             BattleSpecs = new List<BattleSpec>()
         };
 
-        public static void Generate(GameSpec spec)
+        public static void Generate(ref GameSpec spec)
         {
             EASY.BattleSpecs.Add(new BattleSpec()
             {
-                UnitSpecIDS = new ushort[1] { TestUnits.THIEF }
+                UnitSpecIDS = new ushort[1] { TestUnitData.THIEF }
             });
             spec.Dungeons[0] = EASY;
         }

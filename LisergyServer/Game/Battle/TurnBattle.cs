@@ -1,6 +1,7 @@
 ﻿
 using Game.Battles.Actions;
 using Game.BattleTactics;
+using Game.DataTypes;
 using Game.Events;
 using Game.Movement;
 using System;
@@ -17,7 +18,7 @@ namespace Game.Battles
 
         public BattleStartPacket StartEvent;
 
-        public Guid ID { get; private set; }
+        public GameId ID { get; private set; }
         public BattleTeam Attacker { get; private set; }
         public BattleTeam Defender { get; private set; }
         public AutoRun AutoRun { get; set; }
@@ -26,7 +27,7 @@ namespace Game.Battles
 
         public bool IsOver => Attacker.AllDead || Defender.AllDead;
 
-        public TurnBattle(Guid id, BattleTeam attacker, BattleTeam defender)
+        public TurnBattle(GameId id, BattleTeam attacker, BattleTeam defender)
         {
             this.ID = id;
             Attacker = Result.Attacker = attacker;
@@ -76,14 +77,14 @@ namespace Game.Battles
             return $"<Battle ID={ID} Atk={Attacker} Def={Defender}/>";
         }
 
-        public Unit FindUnit(string id)
+        public Unit FindUnit(GameId id)
         {
             var unit = Attacker.Units.FirstOrDefault(u => u != null && u.UnitID == id);
             if (unit == null) unit = Defender.Units.FirstOrDefault(u => u != null && u.UnitID == id);
             return unit.UnitReference;
         }
 
-        public BattleUnit FindBattleUnit(string id)
+        public BattleUnit FindBattleUnit(GameId id)
         {
             var unit = Attacker.Units.FirstOrDefault(u => u != null && u.UnitID == id);
             if (unit == null) unit = Defender.Units.FirstOrDefault(u => u != null && u.UnitID == id);

@@ -1,4 +1,5 @@
 ﻿using Game.BattleTactics;
+using Game.DataTypes;
 using System;
 
 namespace Game.Battles
@@ -6,7 +7,7 @@ namespace Game.Battles
     [Serializable]
     public class BattleAction
     {
-        public string UnitID;
+        public GameId UnitID;
 
         [NonSerialized]
         private BattleUnit _unit;

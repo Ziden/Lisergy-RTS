@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Game.ECS;
+using Game.World;
+using Game.World.Data;
+using System;
 using System.Collections.Generic;
 
 namespace Game
@@ -10,26 +13,57 @@ namespace Game
         OCCUPIED = 0b00000010
     }
 
-    [Serializable]
-    public class Chunk
+    public unsafe class Chunk : IEntity, IDisposable
     {
-        private byte _flags;
+        [NonSerialized]
+        private ChunkData _data;
+
+        [NonSerialized]
         private Tile[,] _tiles;
 
-        public virtual ushort X { get; private set; }
-        public virtual ushort Y { get; private set; }
-        public virtual ChunkMap Map { get; private set; }
-        public virtual byte Flags { get => _flags; set => _flags = value; }
-        public virtual Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
-        public Chunk(ChunkMap w, int x, int y, Tile[,] tiles)
+        public bool IsVoid()
         {
-            this.X = (ushort)x;
-            this.Y = (ushort)y;
-            Tiles = tiles;
-            this.Map = w;
+            return _tiles == null;
         }
 
-        public Tile GetTile(int x, int y)
+        public ushort X => _data.Position.X;
+        public ushort Y => _data.Position.Y;
+        public Position Position => _data.Position;
+
+        public ChunkMap Map { get; private set; }
+        public byte Flags { get => _data._flags; }
+
+        public void SetFlag(byte flag) => _data.SetFlag(flag);
+
+        public Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
+
+        public IComponentSet Components => throw new NotImplementedException();
+
+        public Chunk(ChunkMap w, int x, int y, Tile[,] tiles)
+        {;
+            _data = new ChunkData();
+            _data.Position = new Position(x, y);
+            _data.Allocate();
+            Map = w;
+            _tiles = tiles;
+        }
+
+        public void FreeMemoryForReuse()
+        {
+            _data.FlagToBeReused();
+        }
+
+        public Tile CreateTile(in int tileX, in int tileY)
+        {
+            var internalTileX = tileX % GameWorld.CHUNK_SIZE;
+            var internalTileY = tileY % GameWorld.CHUNK_SIZE;
+            var dataPointer = _data.GetTileData(internalTileX, internalTileY);
+            var tile = new Tile(this, dataPointer, tileX, tileY);
+            return tile;
+        }
+
+
+        public Tile GetTile(in int x, in int y)
         {
             return Tiles[x, y];
         }
@@ -45,5 +79,12 @@ namespace Game
                 for (var y = 0; y < _tiles.GetLength(1); y++)
                     yield return _tiles[x, y];
         }
+
+        public void Dispose()
+        {
+            _data.Free();
+        }
+
+     
     }
 }

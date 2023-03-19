@@ -1,5 +1,10 @@
-﻿using Game;
+﻿using Assets.Code.Entity;
+using Game;
+using Game.DataTypes;
+using Game.ECS;
 using Game.Entity;
+using Game.Entity.Components;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,7 +13,7 @@ namespace Assets.Code.World
 
     public static class ClientPartyExt
     {
-        public static ClientUnit[] GetClientUnits(this Party p)
+        public static Unit[] GetClientUnits(this Party p)
         {
             return p.GetUnits().Select(u => u != null ? new ClientUnit(u) : null).ToArray();
         } 
@@ -23,32 +28,50 @@ namespace Assets.Code.World
 
         }
 
-        private GameObject _gameObject;
-        public ClientTile ClientTile { get => (ClientTile)this.Tile; }
+        public GameObject GameObject { get; set; }
+        public Tile ClientTile { get => this.Tile; }
 
-        public ClientParty UpdateData(Party partyFromNetwork)
+        public ClientParty UpdateData(Party partyFromNetwork, List<IComponent> syncedComponents)
         {    
             _id = partyFromNetwork.Id;
-            BattleID = partyFromNetwork.BattleID;
-            SetUnits(partyFromNetwork.GetClientUnits());
-            PartyIndex = partyFromNetwork.PartyIndex;
+            SyncComponents(syncedComponents);
             Owner.Parties[PartyIndex] = this;
             Id = partyFromNetwork.Id;
-            Tile = ClientStrategyGame.ClientWorld.GetClientTile(partyFromNetwork);
+            if(GameObject != null)
+                Tile = GameView.World.GetTile(partyFromNetwork);
             return this;
+        }
+
+        private void SyncComponents(List<IComponent> syncedComponents)
+        {
+            foreach(var c in syncedComponents)
+            {
+                if(!this.Components.Has(c.GetType())) {
+                    this.Components.Add(c);
+                } 
+                Components.Get(c.GetType()).UpdateFrom(c);
+                if(c is BattleGroupComponent bg)
+                {
+                    var frontLine = bg.FrontLine();
+                    List<Unit> newUnits = new List<Unit>();
+                    foreach(var unit in frontLine)
+                    {
+                        newUnits.Add(new ClientUnit(unit));
+                    }
+                    UpdateUnits(newUnits);
+                }
+            }
         }
 
         public void InstantiateInScene(Party partyFromNetwork)
         {
-            _gameObject = new GameObject($"{partyFromNetwork.OwnerID}-{Id}-{partyFromNetwork.PartyIndex}");
-            _gameObject.transform.SetParent(Container.transform);
-            UpdateData(partyFromNetwork);
-            this.GetGameObject().SetActive(true);
+            GameObject = new GameObject($"{partyFromNetwork.OwnerID}-{Id}");
+            GameObject.transform.SetParent(Container.transform);
+            Tile = GameView.World.GetTile(partyFromNetwork);
+            GameObject.SetActive(true);
             Render();
             StackLog.Debug($"Created new party instance {this}");
         }
-
-        public GameObject GetGameObject() => _gameObject;
 
         public override Tile Tile
         {
@@ -56,26 +79,26 @@ namespace Assets.Code.World
             set
             {
                 var old = base.Tile;
-                if (value != null && BattleID != null)
-                    Effects.BattleEffect(value as ClientTile);
+                if (value != null && !BattleID.IsZero())
+                    Effects.BattleEffect(value as Tile);
 
                 base.Tile = value;
                 if (value != null)
                 {
                     StackLog.Debug($"Moving {this} gameobject to {value}");
-                    _gameObject.transform.position = new Vector3(value.X, 0.1f, value.Y);
+                    GameObject.transform.position = new Vector3(value.X, 0.1f, value.Y);
                 }
-                ClientEvents.PartyFinishedMove(this, (ClientTile)old, (ClientTile)base.Tile);
+                ClientEvents.PartyFinishedMove(this, old, base.Tile);
             }
         }
 
-        public override string BattleID
+        public override GameId BattleID
         {
             get => base.BattleID; set {
 
-                if(this.Tile != null && value != null && BattleID == null)
-                    Effects.BattleEffect(this.Tile as ClientTile);
-                if (this.BattleID != null && value == null)
+                if(this.Tile != null && !value.IsZero() && BattleID.IsZero())
+                    Effects.BattleEffect(this.Tile);
+                if (!this.BattleID.IsZero() && value.IsZero())
                     Effects.StopEffect(this.Tile);
                 base.BattleID = value;
             }
@@ -107,8 +130,8 @@ namespace Assets.Code.World
             {
                 var clientUnit = unit as ClientUnit;
                 clientUnit.AddToScene();
-                clientUnit.GetGameObject().transform.SetParent(_gameObject.transform);
-                clientUnit.GetGameObject().transform.localPosition = Vector3.zero;
+                clientUnit.GameObject.transform.SetParent(GameObject.transform);
+                clientUnit.GameObject.transform.localPosition = Vector3.zero;
             }
         }
     }

@@ -1,7 +1,6 @@
 using BattleServer;
 using Game;
 using Game.Entity;
-using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Movement;
 using Game.Scheduler;

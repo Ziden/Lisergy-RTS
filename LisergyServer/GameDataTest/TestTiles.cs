@@ -42,7 +42,7 @@ namespace GameDataTest
             })
         };
 
-        public static void Generate(GameSpec spec)
+        public static void Generate(ref GameSpec spec)
         {
             spec.Tiles[0] = GRASS;
             spec.Tiles[1] = MOUNTAIN;

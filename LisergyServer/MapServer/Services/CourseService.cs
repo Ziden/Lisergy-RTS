@@ -1,5 +1,6 @@
 ﻿using Game;
 using Game.Entity;
+using Game.Entity.Components;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
@@ -50,6 +51,7 @@ namespace Game.Listeners
                 }
                 path.Add(tile);
             }
+
             party.Course = new CourseTask(party, path, intent);
             return party.Course;
         }
