@@ -57,7 +57,7 @@ public class Networking : IDisposable
         } else
         {
             Log.Debug("Reconnecting");
-            client.Connect("localhost", 1337);
+            client.Connect("127.0.0.1", 1337);
         }
     }
 

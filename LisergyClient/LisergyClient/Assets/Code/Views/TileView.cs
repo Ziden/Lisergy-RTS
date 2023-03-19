@@ -15,7 +15,7 @@ namespace Assets.Code.Views
         public bool Decorated { get; set; }
         public override bool Instantiated => GameObject != null;
 
-        public TileView(Tile entity) 
+        public TileView(Tile entity)
         {
             Entity = entity;
         }
@@ -23,7 +23,12 @@ namespace Assets.Code.Views
         public void UpdateFrom(TileData data)
         {
             Entity.TileId = data.TileId;
-            Instantiate();
+            if (!Instantiated)
+            {
+                Instantiate();
+                SetFogOfWarDisabled(true);
+                RegisterEvents();
+            }
         }
 
         public void SetFogOfWarDisabled(bool isTileInLos)
@@ -63,23 +68,19 @@ namespace Assets.Code.Views
             SetFogOfWarDisabled(true);
             Entity.Components.Add(this);
             RegisterEvents();
-            var tileSpec = StrategyGame.Specs.Tiles[Entity.TileId];
-            foreach (var art in tileSpec.Arts)
+            if (GameObject != null)
             {
-                if (GameObject == null)
-                {
-                    var prefab = Resources.Load("prefabs/tiles/" + art.Name);
-                    var chunkView = GameView.GetView<ChunkView>(Entity.Chunk);
-                    var parent = chunkView.GameObject.transform;
-                    GameObject = MainBehaviour.Instantiate(prefab, parent) as GameObject;
-                    GameObject.name = $"Tile_{Entity.X}-{Entity.Y}";
-                    GameObject.transform.position = new Vector3(Entity.X, 0, Entity.Y);
-                    var tileBhv = GameObject.GetComponent<TileRandomizerBehaviour>();
-                    Entity.TileId = Entity.TileId;
-                    tileBhv.CreateTileDecoration(this);
-                    return;
-                }
+                return;
             }
+
+            var chunkView = GameView.GetView<ChunkView>(Entity.Chunk);
+            var parent = chunkView.GameObject.transform;
+            GameObject = EntityLoader.LoadEntity(Entity, parent);
+            GameObject.name = $"Tile_{Entity.X}-{Entity.Y}";
+            GameObject.transform.position = new Vector3(Entity.X, 0, Entity.Y);
+            var tileBhv = GameObject.GetComponent<TileRandomizerBehaviour>();
+            Entity.TileId = Entity.TileId;
+            tileBhv.CreateTileDecoration(this);
         }
 
 
