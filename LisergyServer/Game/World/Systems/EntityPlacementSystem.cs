@@ -13,20 +13,20 @@ namespace Game.World.Systems
     {
         internal override void OnComponentAdded(Tile owner, TileHabitants component, EntitySharedEventBus<Tile> events)
         {
-            events.RegisterComponentEvent<StaticEntityPlacedEvent, TileHabitants>(OnStaticEntityPlaced);
-            events.RegisterComponentEvent<StaticEntityRemovedEvent, TileHabitants>( OnStaticEntityRemoved);
+            events.RegisterComponentEvent<BuildingPlacedEvent, TileHabitants>(OnStaticEntityPlaced);
+            events.RegisterComponentEvent<BuildingRemovedEvent, TileHabitants>( OnStaticEntityRemoved);
             events.RegisterComponentEvent<EntityMoveOutEvent, TileHabitants>(OnEntityMoveOut);
             events.RegisterComponentEvent<EntityMoveInEvent, TileHabitants>(OnEntityMoveIn);
         }
 
-        private static void OnStaticEntityRemoved(Tile owner, TileHabitants component, StaticEntityRemovedEvent entity)
+        private static void OnStaticEntityRemoved(Tile owner, TileHabitants component, BuildingRemovedEvent entity)
         {
-            component.StaticEntity = null;
+            component.Building = null;
         }
 
-        private static void OnStaticEntityPlaced(Tile owner, TileHabitants component, StaticEntityPlacedEvent ev)
+        private static void OnStaticEntityPlaced(Tile owner, TileHabitants component, BuildingPlacedEvent ev)
         {
-            component.StaticEntity = ev.Entity;
+            component.Building = ev.Entity;
         }
 
         private static void OnEntityMoveOut(Tile owner, TileHabitants component, EntityMoveOutEvent ev)
@@ -45,13 +45,13 @@ namespace Game.World.Systems
             component.EntitiesIn.Add(ev.Entity);
 
             // TODO: Move to entity movement system
-            if (ev.Entity is IBattleable && component.StaticEntity != null && component.StaticEntity is IBattleable)
+            if (ev.Entity is IBattleable && component.Building != null && component.Building is IBattleable)
             {
                 if (movement.Course != null && movement.Course.Intent == MovementIntent.Offensive && movement.Course.IsLastMovement())
                 {
                     StrategyGame.GlobalGameEvents.Call(new OffensiveMoveEvent()
                     {
-                        Defender = component.StaticEntity,
+                        Defender = component.Building,
                         Attacker = ev.Entity
                     });
                 }

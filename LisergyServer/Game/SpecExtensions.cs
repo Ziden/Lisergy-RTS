@@ -10,7 +10,7 @@ namespace Game
     {
         public static UnitSpec GetSpec(this Unit o) => StrategyGame.Specs.Units[o.SpecId];
 
-        public static BuildingSpec GetSpec(this Building o) => StrategyGame.Specs.Buildings[o.SpecID];
+        public static BuildingSpec GetSpec(this BuildingEntity o) => StrategyGame.Specs.Buildings[o.SpecID];
 
         public static TileSpec GetSpec(this Tile o) => StrategyGame.Specs.Tiles[o.TileId];
     }

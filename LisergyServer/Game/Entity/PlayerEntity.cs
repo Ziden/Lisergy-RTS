@@ -1,7 +1,9 @@
 ﻿using Game.DataTypes;
 using Game.Entity;
+using Game.Entity.Components;
 using Game.Events;
 using Game.World;
+using Game.World.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,7 @@ namespace Game
         public GameId UserID;
 
         public HashSet<Unit> Units = new HashSet<Unit>();
-        public HashSet<Building> Buildings = new HashSet<Building>();
+        public HashSet<BuildingEntity> Buildings = new HashSet<BuildingEntity>();
         public HashSet<Tile> VisibleTiles = new HashSet<Tile>();
         public HashSet<Tile> OnceExplored = new HashSet<Tile>();
 
@@ -40,7 +42,7 @@ namespace Game
             };
         }
 
-        public Building GetCenter()
+        public BuildingEntity GetCenter()
         {
             return Buildings.First(b => b.SpecID == StrategyGame.Specs.InitialBuilding);
         }
@@ -65,8 +67,9 @@ namespace Game
 
         public void Build(ushort id, Tile t)
         {
-            var building = new Building(this);
-            building.SpecID = id;
+            var building = new BuildingEntity(this);
+            building.Components.Add(new PlayerBuildingComponent() {  SpecId = id });
+            building.Components.Add(new EntityExplorationComponent() { LineOfSight = building.GetSpec().LOS });
             this.Buildings.Add(building);
             building.Tile = t;
             Log.Debug($"Player {UserID} built {id}");

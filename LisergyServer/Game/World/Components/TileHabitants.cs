@@ -7,7 +7,7 @@ namespace Game.World.Components
     public class TileHabitants : IComponent
     {
         public List<WorldEntity> EntitiesIn = new List<WorldEntity>();
-        public StaticEntity StaticEntity;
+        public BuildingEntity Building;
 
         static TileHabitants()
         {

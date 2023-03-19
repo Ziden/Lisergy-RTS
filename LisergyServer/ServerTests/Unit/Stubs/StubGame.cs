@@ -112,7 +112,7 @@ namespace ServerTests
         {
             var tiles = World.AllTiles();
             foreach (var tile in tiles)
-                if (tile.Components.Get<TileHabitants>().StaticEntity == null)
+                if (tile.Components.Get<TileHabitants>().Building == null)
                     return tile;
             throw new System.Exception("No unbuilt tile");
         }

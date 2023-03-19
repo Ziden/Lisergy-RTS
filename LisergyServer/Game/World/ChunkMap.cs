@@ -135,7 +135,7 @@ namespace Game
             t.Components.Get<TileVisibility>().EntitiesViewing.Clear();
             t.Components.Get<TileVisibility>().PlayersViewing.Clear();
             t.Components.Get<TileHabitants>().EntitiesIn.Clear();
-            t.Components.Get<TileHabitants>().StaticEntity = null;
+            t.Components.Get<TileHabitants>().Building = null;
         }
 
 

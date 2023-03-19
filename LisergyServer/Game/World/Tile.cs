@@ -49,7 +49,7 @@ namespace Game
         public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.Get<TileVisibility>().PlayersViewing;
         public IReadOnlyCollection<WorldEntity> EntitiesViewing => _components.Get<TileVisibility>().EntitiesViewing;
         public IReadOnlyList<WorldEntity> EntitiesIn => _components.Get<TileHabitants>().EntitiesIn;
-        private StaticEntity _staticEntity => _components.Get<TileHabitants>().StaticEntity;
+        private BuildingEntity _staticEntity => _components.Get<TileHabitants>().Building;
         public GameId TileUniqueId => new GameId(_tileData->Position);
 
 

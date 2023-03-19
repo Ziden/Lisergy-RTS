@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Game.Events.GameEvents
 {
-    public class StaticEntityPlacedEvent : GameEvent
+    public class BuildingPlacedEvent : GameEvent
     {
-        public StaticEntity Entity;
+        public BuildingEntity Entity;
         public Tile Tile;
 
-        public StaticEntityPlacedEvent(StaticEntity entity, Tile tile)
+        public BuildingPlacedEvent(BuildingEntity entity, Tile tile)
         {
             Entity = entity;
             Tile = tile;

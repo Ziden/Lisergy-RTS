@@ -39,7 +39,7 @@ namespace Game
             models.Add(typeof(BattleTeam));
 
             // World
-            models.Add(typeof(Building));
+            models.Add(typeof(BuildingEntity));
             models.Add(typeof(WorldEntity));
             models.Add(typeof(Party));
             models.Add(typeof(Tile));

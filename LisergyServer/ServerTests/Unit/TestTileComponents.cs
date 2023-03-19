@@ -51,10 +51,10 @@ namespace Tests
 
             var dg = new Dungeon();
 
-            tile1.Components.CallEvent(new StaticEntityPlacedEvent(dg, tile1));
+            tile1.Components.CallEvent(new BuildingPlacedEvent(dg, tile1));
 
-            Assert.IsTrue(tile1.Components.Get<TileHabitants>().StaticEntity == dg);
-            Assert.IsTrue(tile2.Components.Get<TileHabitants>().StaticEntity == null);
+            Assert.IsTrue(tile1.Components.Get<TileHabitants>().Building == dg);
+            Assert.IsTrue(tile2.Components.Get<TileHabitants>().Building == null);
         }
 
         public class TestView : IComponent

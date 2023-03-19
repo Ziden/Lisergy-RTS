@@ -10,7 +10,7 @@ using System.Linq;
 namespace Game.Entity
 {
     [Serializable]
-    public class Dungeon : StaticEntity, IBattleable
+    public class Dungeon : BuildingEntity, IBattleable
     {
         private ushort DungeonSpecID;
 
