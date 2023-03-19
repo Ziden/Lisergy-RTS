@@ -9,43 +9,32 @@ using Game.World.Components;
 
 namespace Game.World.Systems
 {
-    public class EntityPlacementSystem : GameSystem<EntityPlacementComponent, Tile>
+    public class EntityPlacementSystem : GameSystem<TileHabitants, Tile>
     {
-        internal override void OnComponentAdded(Tile owner, EntityPlacementComponent component, EntitySharedEventBus<Tile> events)
+        internal override void OnComponentAdded(Tile owner, TileHabitants component, EntitySharedEventBus<Tile> events)
         {
-            events.RegisterComponentEvent<StaticEntityPlacedEvent, EntityPlacementComponent>(OnStaticEntityPlaced);
-            events.RegisterComponentEvent<StaticEntityRemovedEvent, EntityPlacementComponent>( OnStaticEntityRemoved);
-            events.RegisterComponentEvent<EntityMoveOutEvent, EntityPlacementComponent>(OnEntityMoveOut);
-            events.RegisterComponentEvent<EntityMoveInEvent, EntityPlacementComponent>(OnEntityMoveIn);
-            events.RegisterComponentEvent<TileSentToPlayerEvent, EntityPlacementComponent>(OnTileSent);
+            events.RegisterComponentEvent<StaticEntityPlacedEvent, TileHabitants>(OnStaticEntityPlaced);
+            events.RegisterComponentEvent<StaticEntityRemovedEvent, TileHabitants>( OnStaticEntityRemoved);
+            events.RegisterComponentEvent<EntityMoveOutEvent, TileHabitants>(OnEntityMoveOut);
+            events.RegisterComponentEvent<EntityMoveInEvent, TileHabitants>(OnEntityMoveIn);
         }
 
-        // TODO Make entity sent generic
-        private static void OnTileSent(Tile owner, EntityPlacementComponent component, TileSentToPlayerEvent ev)
-        {
-            foreach (var movingEntity in component.EntitiesIn)
-                ev.Player.Send(new EntityUpdatePacket(movingEntity));
-
-            if (component.StaticEntity != null)
-                ev.Player.Send(new EntityUpdatePacket(component.StaticEntity));
-        }
-
-        private static void OnStaticEntityRemoved(Tile owner, EntityPlacementComponent component, StaticEntityRemovedEvent entity)
+        private static void OnStaticEntityRemoved(Tile owner, TileHabitants component, StaticEntityRemovedEvent entity)
         {
             component.StaticEntity = null;
         }
 
-        private static void OnStaticEntityPlaced(Tile owner, EntityPlacementComponent component, StaticEntityPlacedEvent ev)
+        private static void OnStaticEntityPlaced(Tile owner, TileHabitants component, StaticEntityPlacedEvent ev)
         {
             component.StaticEntity = ev.Entity;
         }
 
-        private static void OnEntityMoveOut(Tile owner, EntityPlacementComponent component, EntityMoveOutEvent ev)
+        private static void OnEntityMoveOut(Tile owner, TileHabitants component, EntityMoveOutEvent ev)
         {
             component.EntitiesIn.Remove(ev.Entity);
         }
 
-        private static void OnEntityMoveIn(Tile owner, EntityPlacementComponent component, EntityMoveInEvent ev)
+        private static void OnEntityMoveIn(Tile owner, TileHabitants component, EntityMoveInEvent ev)
         {
             var movement = ev.Entity.Components.Get<EntityMovementComponent>();
             if (movement == null)

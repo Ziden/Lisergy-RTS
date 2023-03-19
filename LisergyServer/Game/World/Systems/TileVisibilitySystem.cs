@@ -6,17 +6,17 @@ using System.Linq;
 
 namespace Game.World.Systems
 {
-    public class TileVisibilitySystem : GameSystem<TileVisibilityComponent, Tile>
+    public class TileVisibilitySystem : GameSystem<TileVisibility, Tile>
     {
-        internal override void OnComponentAdded(Tile owner, TileVisibilityComponent component, EntitySharedEventBus<Tile> events)
+        internal override void OnComponentAdded(Tile owner, TileVisibility component, EntitySharedEventBus<Tile> events)
         {
 
-            events.RegisterComponentEvent<TileExplorationStateChanged, TileVisibilityComponent>(OnTileExplorationChanged);
+            events.RegisterComponentEvent<TileExplorationStateChanged, TileVisibility>(OnTileExplorationChanged);
         }
 
-        private static void OnTileExplorationChanged(Tile tile, TileVisibilityComponent component, TileExplorationStateChanged ev)
+        private static void OnTileExplorationChanged(Tile tile, TileVisibility component, TileExplorationStateChanged ev)
         {
-            Log.Debug($"Tile visibility change {tile} -> {ev.Explored}");
+            var habitants = tile.Components.Get<TileHabitants>();
             if (ev.Explored)
             {
                 component.EntitiesViewing.Add(ev.Explorer);
@@ -25,7 +25,7 @@ namespace Game.World.Systems
                     ev.Explorer.Owner.OnceExplored.Add(tile);
                     ev.Explorer.Owner.VisibleTiles.Add(tile);
                     ev.Tile.Components.CallEvent(new TileVisibilityChangedEvent() { Explorer = ev.Explorer, Tile = ev.Tile, Visible = ev.Explored });
-                    tile.DeltaFlags.SetFlag(DeltaFlag.SELF_REVEALED);
+                    tile.SetFlagIncludingChildren(DeltaFlag.SELF_REVEALED);
                 }
             }
             else
@@ -37,7 +37,7 @@ namespace Game.World.Systems
                     if (component.PlayersViewing.Remove(ev.Explorer.Owner))
                     {
                         ev.Tile.Components.CallEvent(new TileVisibilityChangedEvent() { Explorer = ev.Explorer, Tile = ev.Tile, Visible = ev.Explored });
-                        tile.DeltaFlags.SetFlag(DeltaFlag.SELF_CONCEALED);
+                        tile.SetFlagIncludingChildren(DeltaFlag.SELF_CONCEALED);
                     }
                 }
             }

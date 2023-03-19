@@ -36,13 +36,13 @@ namespace Game.World.Systems
             var units = e.Components.Get<BattleGroupComponent>().FrontLine();
             if (!units.Contains(u))
             {
-                throw new System.Exception($"Trying to remove unit {u} to entity {e} but unit was not there");
+                throw new Exception($"Trying to remove unit {u} to entity {e} but unit was not there");
             }
             if(preferAtIndex != -1)
             {
                 if (!units[preferAtIndex].Equals(u))
                 {
-                    throw new System.Exception("Removing unit from wrong index");
+                    throw new Exception("Removing unit from wrong index");
                 }
                 units.RemoveAt(preferAtIndex);
             } else

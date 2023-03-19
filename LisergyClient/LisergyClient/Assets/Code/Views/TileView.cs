@@ -83,8 +83,8 @@ namespace Assets.Code.Views
 
 
         // TODO: Remove & move calls to listeners in Entity View
-        public List<WorldEntity> MovingEntities => Entity.Components.Get<EntityPlacementComponent>().EntitiesIn;
-        public StaticEntity StaticEntity => Entity.Components.Get<EntityPlacementComponent>().StaticEntity;
+        public List<WorldEntity> MovingEntities => Entity.Components.Get<TileHabitants>().EntitiesIn;
+        public StaticEntity StaticEntity => Entity.Components.Get<TileHabitants>().StaticEntity;
 
 
         public override string ToString()

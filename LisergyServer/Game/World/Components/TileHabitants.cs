@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace Game.World.Components
 {
-    public class EntityPlacementComponent : IComponent
+    public class TileHabitants : IComponent
     {
         public List<WorldEntity> EntitiesIn = new List<WorldEntity>();
         public StaticEntity StaticEntity;
 
-        static EntityPlacementComponent()
+        static TileHabitants()
         {
-            SystemRegistry<EntityPlacementComponent, Tile>.AddSystem(new EntityPlacementSystem());
+            SystemRegistry<TileHabitants, Tile>.AddSystem(new EntityPlacementSystem());
         }
     }
 }

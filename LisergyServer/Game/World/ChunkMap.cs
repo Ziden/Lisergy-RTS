@@ -132,18 +132,18 @@ namespace Game
 
         public virtual void ClearTile(Tile t)
         {
-            t.Components.Get<TileVisibilityComponent>().EntitiesViewing.Clear();
-            t.Components.Get<TileVisibilityComponent>().PlayersViewing.Clear();
-            t.Components.Get<EntityPlacementComponent>().EntitiesIn.Clear();
-            t.Components.Get<EntityPlacementComponent>().StaticEntity = null;
+            t.Components.Get<TileVisibility>().EntitiesViewing.Clear();
+            t.Components.Get<TileVisibility>().PlayersViewing.Clear();
+            t.Components.Get<TileHabitants>().EntitiesIn.Clear();
+            t.Components.Get<TileHabitants>().StaticEntity = null;
         }
 
 
         public virtual Tile GenerateTile(ref Chunk c, int tileX, int tileY)
         {
             var tile = c.CreateTile(tileX, tileY);
-            tile.Components.Add(new TileVisibilityComponent());
-            tile.Components.Add(new EntityPlacementComponent());
+            tile.Components.Add(new TileVisibility());
+            tile.Components.Add(new TileHabitants());
             return tile;
         }
     }

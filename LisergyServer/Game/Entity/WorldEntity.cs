@@ -93,7 +93,7 @@ namespace Game
                     _y = 0;
                     if(_previousTile != null)
                     {
-                        foreach (var viewer in _previousTile.Components.Get<TileVisibilityComponent>().PlayersViewing)
+                        foreach (var viewer in _previousTile.Components.Get<TileVisibility>().PlayersViewing)
                             viewer.Send(new EntityDestroyPacket(this));
                     }
                 }

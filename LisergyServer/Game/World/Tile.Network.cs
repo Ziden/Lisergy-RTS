@@ -1,4 +1,5 @@
 ﻿using Game.ECS;
+using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using System;
 
@@ -10,6 +11,8 @@ namespace Game
         private DeltaFlags _flags;
 
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
+
+        public void SetFlag(DeltaFlag flag) { }
 
         public TileUpdatePacket UpdatePacket => new TileUpdatePacket(*_tileData);
 

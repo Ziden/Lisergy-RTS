@@ -33,17 +33,14 @@ namespace Game.Listeners
                 Log.Debug($"Existing player {player.UserID} joined");
                 foreach (var tile in player.VisibleTiles)
                 {
-                    player.Send(tile.UpdatePacket);
-                    tile.Components.CallEvent(new TileSentToPlayerEvent(tile, player));
+                    tile.SetFlagIncludingChildren(DeltaFlag.SELF_REVEALED);
                 }
-                StrategyGame.GlobalGameEvents.Call(new PlayerJoinedEvent(player));
             }
             else
             {
-                player = ev.Sender;
                 var startTile = _world.GetUnusedStartingTile();
-                _world.PlaceNewPlayer(player, startTile);
-                Log.Debug($"New player {player.UserID} joined the world");
+                _world.PlaceNewPlayer(ev.Sender, startTile);
+                Log.Debug($"New player {ev.Sender.UserID} joined the world");
             }
         }
 

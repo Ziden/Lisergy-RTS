@@ -9,37 +9,37 @@ using System.Collections.Generic;
 
 namespace Game
 {
-    public partial class WorldEntity : Ownable, IDeltaTrackable
+    public partial class WorldEntity : Ownable, IDeltaTrackable, IDeltaUpdateable<EntityUpdatePacket>
     {
         [field: NonSerialized]
         private DeltaFlags _flags;
 
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
 
-        public ServerPacket GenerateDeltaPacket() => new EntityUpdatePacket(this);
+        public EntityUpdatePacket UpdatePacket => new EntityUpdatePacket(this);
 
         private static HashSet<PlayerEntity> viewersCache = new HashSet<PlayerEntity>();
 
         public void ProccessDeltas(PlayerEntity trigger)
         {
-            if(DeltaFlags.HasFlag(DeltaFlag.POSITION))
-            {
-                OnPositionChanged();
-            }
             if(DeltaFlags.HasFlag(DeltaFlag.EXISTENCE))
             {
                 OnExistenceChanged();
-            }
-            if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
+            } else if (DeltaFlags.HasFlag(DeltaFlag.POSITION))
             {
-                trigger.Send(new EntityUpdatePacket(this));
+                OnPositionChanged();
+            }
+            else if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
+            {
+                trigger.Send(UpdatePacket);
             }
         }
 
         private void OnExistenceChanged()
         {
             if (Tile == null) return; // was removed
-            foreach(var playerViewing in Tile.Components.Get<TileVisibilityComponent>().PlayersViewing)
+
+            foreach(var playerViewing in Tile.PlayersViewing)
             {
                 playerViewing.Send(new EntityUpdatePacket(this));
             }
@@ -55,18 +55,18 @@ namespace Game
             var allViewers = viewersCache;
             if (previousTile != newTile && previousTile != null)
             {
-                allViewers.UnionWith(previousTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
+                allViewers.UnionWith(previousTile.Components.Get<TileVisibility>().PlayersViewing);
                 if (newTile != null)
-                    allViewers.UnionWith(newTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
+                    allViewers.UnionWith(newTile.Components.Get<TileVisibility>().PlayersViewing);
 
                 var movePacket = new EntityMovePacket(this, movementComponent, newTile);
                 foreach (var viewer in allViewers)
                     viewer.Send(movePacket);
             }
 
-            var newPlayersViewing = new HashSet<PlayerEntity>(newTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
+            var newPlayersViewing = new HashSet<PlayerEntity>(newTile.Components.Get<TileVisibility>().PlayersViewing);
             if (previousTile != null)
-                newPlayersViewing.ExceptWith(previousTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
+                newPlayersViewing.ExceptWith(previousTile.Components.Get<TileVisibility>().PlayersViewing);
 
             var packet = new EntityUpdatePacket(this);
             foreach (var viewer in newPlayersViewing)

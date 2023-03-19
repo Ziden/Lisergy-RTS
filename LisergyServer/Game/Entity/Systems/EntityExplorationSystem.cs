@@ -16,9 +16,7 @@ namespace Game.World.Systems
 
         private static void UpdateLineOfSight(WorldEntity explorer, Tile from, Tile to)
         {
-            
             var los = explorer.Components.Get<EntityExplorationComponent>().LineOfSight;
-            Log.Debug($"Updating LOS of {explorer} (LOS={los})");
             if (los > 0)
             {
                 HashSet<Tile> oldLos = new HashSet<Tile>();

@@ -34,15 +34,25 @@ namespace Game
             DeltaFlags = new DeltaFlags(this);
         }
 
+        public void SetFlagIncludingChildren(DeltaFlag flag)
+        {
+            DeltaFlags.SetFlag(flag);
+            foreach (var e in EntitiesIn) e.DeltaFlags.SetFlag(flag);
+            if (_staticEntity != null) _staticEntity.DeltaFlags.SetFlag(flag);
+        }
+
         public ref Chunk Chunk => ref _chunk;
         public byte TileId { get => _tileData->TileId; set => _tileData->TileId = value; }
         public float MovementFactor { get => this.GetSpec().MovementFactor; }
         public ushort Y { get => _tileData->Y; set => _tileData->Y = value; }
         public ushort X { get => _tileData->X; set => _tileData->X = value; }
-        public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.Get<TileVisibilityComponent>().PlayersViewing;
-        public IReadOnlyCollection<WorldEntity> EntitiesViewing => _components.Get<TileVisibilityComponent>().EntitiesViewing;
-        public IReadOnlyList<WorldEntity> EntitiesIn => _components.Get<EntityPlacementComponent>().EntitiesIn;
+        public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.Get<TileVisibility>().PlayersViewing;
+        public IReadOnlyCollection<WorldEntity> EntitiesViewing => _components.Get<TileVisibility>().EntitiesViewing;
+        public IReadOnlyList<WorldEntity> EntitiesIn => _components.Get<TileHabitants>().EntitiesIn;
+        private StaticEntity _staticEntity => _components.Get<TileHabitants>().StaticEntity;
         public GameId TileUniqueId => new GameId(_tileData->Position);
+
+
 
         public IComponentSet Components => _components;
 

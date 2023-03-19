@@ -21,6 +21,10 @@ namespace Game
 
         public static void LoadSerializers(params Type[] extras)
         {
+            if(Serializer != null)
+            {
+                return;
+            }
             var models = GetDefaultSerializationTypes().ToList();
 
             models.Add(typeof(Unit));

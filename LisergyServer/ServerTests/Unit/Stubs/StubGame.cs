@@ -28,6 +28,7 @@ namespace ServerTests
 
         private static GameWorld GetTestWorld(GameWorld source = null)
         {
+            DeltaTracker.Clear();
             if(source != null)
             {
                 return source;
@@ -57,7 +58,6 @@ namespace ServerTests
                 _registered = true;
             }
             Serialization.LoadSerializers();
-            DeltaTracker.Clear();
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);
@@ -112,7 +112,7 @@ namespace ServerTests
         {
             var tiles = World.AllTiles();
             foreach (var tile in tiles)
-                if (tile.Components.Get<EntityPlacementComponent>().StaticEntity == null)
+                if (tile.Components.Get<TileHabitants>().StaticEntity == null)
                     return tile;
             throw new System.Exception("No unbuilt tile");
         }

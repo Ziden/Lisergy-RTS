@@ -49,7 +49,7 @@ namespace Assets.Code
 
         private void ClickTile(Tile tile)
         {
-            Log.Debug($"TileUI selecting tile {tile} {tile.EntitiesViewing.Count}");
+            Log.Debug($"TileUI selecting tile {tile}");
             foreach(var e in tile.EntitiesViewing)
             {
                 Log.Debug(""+e);

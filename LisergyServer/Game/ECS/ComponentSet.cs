@@ -84,8 +84,6 @@ namespace Game.ECS
 
         public T Add<T>(Type type, IComponent component) where T : IComponent
         {
-            var previous = Get<T>();
-            if (previous != null) return previous;
             _components[type] = component;
             SystemRegistry<T, EntityType>.OnAddComponent(_owner, GetEventBus());
             if (component.GetType().GetCustomAttributes().Any(a => a.GetType() == typeof(SyncedComponent)))

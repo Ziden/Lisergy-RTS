@@ -35,8 +35,8 @@ namespace Tests
             ComponentSet<Tile>._buses.Clear();
             ComponentSet<WorldEntity>._buses.Clear();
 
-            tile1.Components.Add(new EntityPlacementComponent());
-            tile2.Components.Add(new EntityPlacementComponent());
+            tile1.Components.Add(new TileHabitants());
+            tile2.Components.Add(new TileHabitants());
 
             var tileBus = ComponentSet<Tile>._buses[typeof(Tile)]._bus;
 
@@ -46,15 +46,15 @@ namespace Tests
         [Test]
         public void TestTileCallbacks()
         {
-            tile1.Components.Add(new EntityPlacementComponent());
-            tile2.Components.Add(new EntityPlacementComponent());
+            tile1.Components.Add(new TileHabitants());
+            tile2.Components.Add(new TileHabitants());
 
             var dg = new Dungeon();
 
             tile1.Components.CallEvent(new StaticEntityPlacedEvent(dg, tile1));
 
-            Assert.IsTrue(tile1.Components.Get<EntityPlacementComponent>().StaticEntity == dg);
-            Assert.IsTrue(tile2.Components.Get<EntityPlacementComponent>().StaticEntity == null);
+            Assert.IsTrue(tile1.Components.Get<TileHabitants>().StaticEntity == dg);
+            Assert.IsTrue(tile2.Components.Get<TileHabitants>().StaticEntity == null);
         }
 
         public class TestView : IComponent
