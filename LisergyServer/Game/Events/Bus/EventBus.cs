@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 [assembly: InternalsVisibleTo("Tests")]
 namespace Game.Events.Bus
 {
+
     public class EventBus<EventType> 
     {
 
@@ -68,7 +69,6 @@ namespace Game.Events.Bus
 
         public virtual void Register<EvType>(IEventListener listener, Action<EvType> callback)
         {
-
             RegisterCallback(listener, callback, typeof(EvType));
         }
 

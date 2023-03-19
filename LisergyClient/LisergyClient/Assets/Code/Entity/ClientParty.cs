@@ -1,5 +1,10 @@
-﻿using Game;
+﻿using Assets.Code.Entity;
+using Game;
+using Game.DataTypes;
+using Game.ECS;
 using Game.Entity;
+using Game.Entity.Components;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,7 +13,7 @@ namespace Assets.Code.World
 
     public static class ClientPartyExt
     {
-        public static ClientUnit[] GetClientUnits(this Party p)
+        public static Unit[] GetClientUnits(this Party p)
         {
             return p.GetUnits().Select(u => u != null ? new ClientUnit(u) : null).ToArray();
         } 
@@ -26,23 +31,43 @@ namespace Assets.Code.World
         public GameObject GameObject { get; set; }
         public Tile ClientTile { get => this.Tile; }
 
-        public ClientParty UpdateData(Party partyFromNetwork)
+        public ClientParty UpdateData(Party partyFromNetwork, List<IComponent> syncedComponents)
         {    
             _id = partyFromNetwork.Id;
-            BattleID = partyFromNetwork.BattleID;
-            SetUnits(partyFromNetwork.GetClientUnits());
-            PartyIndex = partyFromNetwork.PartyIndex;
+            SyncComponents(syncedComponents);
             Owner.Parties[PartyIndex] = this;
             Id = partyFromNetwork.Id;
-            Tile = GameView.World.GetTile(partyFromNetwork);
+            if(GameObject != null)
+                Tile = GameView.World.GetTile(partyFromNetwork);
             return this;
+        }
+
+        private void SyncComponents(List<IComponent> syncedComponents)
+        {
+            foreach(var c in syncedComponents)
+            {
+                if(!this.Components.Has(c.GetType())) {
+                    this.Components.Add(c);
+                } 
+                Components.Get(c.GetType()).UpdateFrom(c);
+                if(c is BattleGroupComponent bg)
+                {
+                    var frontLine = bg.FrontLine();
+                    List<Unit> newUnits = new List<Unit>();
+                    foreach(var unit in frontLine)
+                    {
+                        newUnits.Add(new ClientUnit(unit));
+                    }
+                    UpdateUnits(newUnits);
+                }
+            }
         }
 
         public void InstantiateInScene(Party partyFromNetwork)
         {
-            GameObject = new GameObject($"{partyFromNetwork.OwnerID}-{Id}-{partyFromNetwork.PartyIndex}");
+            GameObject = new GameObject($"{partyFromNetwork.OwnerID}-{Id}");
             GameObject.transform.SetParent(Container.transform);
-            UpdateData(partyFromNetwork);
+            Tile = GameView.World.GetTile(partyFromNetwork);
             GameObject.SetActive(true);
             Render();
             StackLog.Debug($"Created new party instance {this}");

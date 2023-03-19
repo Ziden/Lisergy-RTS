@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.DataTypes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

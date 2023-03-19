@@ -39,9 +39,9 @@ public class MainBehaviour : MonoBehaviour
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
-        global::Game.Log.Debug = Debug.Log;
-        global::Game.Log.Error = Debug.LogError;
-        global::Game.Log.Info = Debug.Log;
+        Game.Log.Debug = Debug.Log;
+        Game.Log.Error = Debug.LogError;
+        Game.Log.Info = Debug.Log;
     }
 
     private void Awake()

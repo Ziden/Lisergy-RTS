@@ -55,7 +55,6 @@ namespace Game.Scheduler
 
         internal static void RunTask(GameTask task)
         {
-            Log.Debug($"Running task {task}");
             _queue.Remove(task);
             _tasks.Remove(task.ID);
             task.Execute();

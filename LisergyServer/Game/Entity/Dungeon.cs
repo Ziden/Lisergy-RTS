@@ -85,6 +85,6 @@ namespace Game.Entity
             
         }
 
-        public ServerPacket GetUpdatePacket() => new EntityUpdatePacket(this);
+        public ServerPacket GetStatusUpdatePacket() => new EntityUpdatePacket(this);
     }
 }

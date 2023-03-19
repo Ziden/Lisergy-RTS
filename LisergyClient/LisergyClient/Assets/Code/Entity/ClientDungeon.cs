@@ -1,6 +1,8 @@
 ﻿using Assets.Code.Views;
 using Game;
+using Game.ECS;
 using Game.Entity;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Code.World
@@ -9,11 +11,12 @@ namespace Assets.Code.World
     {
         public GameObject GameObject { get; set; }
 
-        public ClientDungeon UpdateData(Dungeon dungeon)
+        public ClientDungeon UpdateData(Dungeon dungeon, List<IComponent> syncedComponents)
         {
             this._battles = dungeon.Battles;
             this.Id = dungeon.Id;
-            this.Tile = GameView.World.GetTile(dungeon);
+            if(GameObject != null)
+                this.Tile = GameView.World.GetTile(dungeon);
             return this;
         }
 
@@ -23,7 +26,7 @@ namespace Assets.Code.World
             var tile = GameView.World.GetTile(dungeon);
             var chunkView = GameView.GetView<ChunkView>(tile.Chunk);
             GameObject = MainBehaviour.Instantiate(prefab, chunkView.GameObject.transform) as GameObject;
-            UpdateData(dungeon);
+            this.Tile = GameView.World.GetTile(dungeon);
         }
 
         public ClientDungeon(PlayerEntity owner) 

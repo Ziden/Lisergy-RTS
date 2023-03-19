@@ -22,7 +22,6 @@ namespace Assets.Code.World
         [EventMethod]
         public void TileUpdate(TileUpdatePacket ev)
         {
-            Log.Debug("Received tile");
             var tile = GameView.World.GetTile(ev.Data.X, ev.Data.Y);
             GameView.GetTileView(tile).UpdateFrom(ev.Data);
         }

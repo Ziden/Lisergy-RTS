@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace GameDataTest
 {
-    public class TestUnits
+    public class TestUnitData
     {
         private static void AddUnit(GameSpec spec, UnitSpec unitSpec)
         {

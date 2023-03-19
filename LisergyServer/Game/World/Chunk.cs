@@ -36,6 +36,9 @@ namespace Game
         public void SetFlag(byte flag) => _data.SetFlag(flag);
 
         public Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
+
+        public IComponentSet Components => throw new NotImplementedException();
+
         public Chunk(ChunkMap w, int x, int y, Tile[,] tiles)
         {;
             _data = new ChunkData();
@@ -82,14 +85,6 @@ namespace Game
             _data.Free();
         }
 
-        public T GetComponent<T>() where T : IComponent
-        {
-            throw new NotImplementedException();
-        }
-
-        public T AddComponent<T>() where T : IComponent
-        {
-            throw new NotImplementedException();
-        }
+     
     }
 }

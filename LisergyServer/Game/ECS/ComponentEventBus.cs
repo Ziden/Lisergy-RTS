@@ -2,6 +2,7 @@
 using Game.Events.Bus;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Tests")]
@@ -17,10 +18,10 @@ namespace Game.ECS
 
         public virtual ComponentType GetComponent<ComponentType>(IEntity e) where ComponentType : IComponent
         {
-            return e.GetComponent<ComponentType>();
+            return e.Components.Get<ComponentType>();
         }
 
-        private bool AlreadyRegistered<EventType, ComponentType>()
+        public bool AlreadyRegistered<EventType, ComponentType>()
         {
             var key = $"{typeof(EventType).Name}/{typeof(ComponentType).Name}";
             if (_registered.Contains(key)) return true;
@@ -40,7 +41,7 @@ namespace Game.ECS
             Action<EntityType, ComponentType, EventType> callback)
             where EventType : BaseEvent where ComponentType : IComponent 
         {
-            if(AlreadyRegistered<EventType, ComponentType>())
+            if (AlreadyRegistered<EventType, ComponentType>())
             {
                 return;
             }
@@ -48,9 +49,17 @@ namespace Game.ECS
             {
                 var entity = GetCurrentEntity();
                 var component = GetComponent<ComponentType>(entity);
-                callback(entity, component, ev);
+                if(component != null)
+                {
+                    callback(entity, component, ev);
+                } 
             };
-            _bus.Register<EventType>(null, registeredCallback);
+            _bus.Register(null, registeredCallback);
+        }
+
+        public void Clear()
+        {
+            _bus.Clear();
         }
 
         public void RegisterEvent<EventType>(EventType ev)

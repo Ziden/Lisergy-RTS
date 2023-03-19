@@ -1,6 +1,7 @@
 ﻿
 using Game.Battles.Actions;
 using Game.BattleTactics;
+using Game.DataTypes;
 using Game.Events;
 using Game.Movement;
 using System;

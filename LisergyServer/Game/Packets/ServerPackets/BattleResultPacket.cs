@@ -1,6 +1,7 @@
 ﻿using Game.Battle;
 using Game.Battles;
 using Game.Battles.Actions;
+using Game.DataTypes;
 using System;
 
 namespace Game.Events

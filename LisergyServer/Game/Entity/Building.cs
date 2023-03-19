@@ -1,4 +1,5 @@
 ﻿using Game.Entity;
+using Game.Entity.Components;
 using GameData;
 using System;
 
@@ -7,22 +8,20 @@ namespace Game
     [Serializable]
     public class Building : StaticEntity
     {
-        public ushort SpecID { get; set; }
 
-        public override byte GetLineOfSight()
-        {
-            return GetSpec().LOS;
+        private ushort _specId;
+
+        public ushort SpecID { get => _specId; set
+            {
+                _specId = value;
+                this.Components.Add<EntityExplorationComponent>().LineOfSight = GetSpec().LOS;
+            }  
         }
 
-        public Building(ushort id, PlayerEntity owner): base(owner)
+        public Building(PlayerEntity owner): base(owner)
         {
-            this.SpecID = id;
+           
         }
-
-        public Building(PlayerEntity owner) : base(owner)
-        {
-        }
-
 
         public virtual BuildingSpec GetSpec()
         {

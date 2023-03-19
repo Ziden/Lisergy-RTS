@@ -1,4 +1,5 @@
 ﻿using Game.Entity;
+using Game.Entity.Components;
 using Game.Scheduler;
 using System.Collections.Generic;
 
@@ -10,7 +11,7 @@ namespace Game.Movement
         List<Tile> Path;
         public MovementIntent Intent { get; private set; }
 
-        public CourseTask(Party party, List<Tile> path, MovementIntent intent): base(party.GetMoveDelay(), party.Owner)
+        public CourseTask(Party party, List<Tile> path, MovementIntent intent) : base(party.Components.Get<EntityMovementComponent>().MoveDelay, party.Owner)
         {
             this.Party = party;
             this.Path = path;
@@ -19,10 +20,11 @@ namespace Game.Movement
 
         public override void Execute()
         {
-            if (Party.Course != this)
+            var course = Party.Components.Get<EntityMovementComponent>().Course;
+            if (course != this)
             {
                 Repeat = false;
-                Log.Error($"Party {Party} Had Course {Party.Course} but course {this} was trying to move the party");
+                Log.Error($"Party {Party} Had Course {course} but course {this} was trying to move the party");
                 return;
             }
             this.Party.Tile = NextTile;

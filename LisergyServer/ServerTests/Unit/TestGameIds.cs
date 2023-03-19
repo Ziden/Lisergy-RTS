@@ -1,4 +1,4 @@
-﻿using Game;
+﻿using Game.DataTypes;
 using Game.Entity;
 using NUnit.Framework;
 using System;
@@ -95,7 +95,7 @@ namespace ServerTests.Unit
             var id1 = GameId.Generate();
             var id2 = id1;
 
-            Assert.AreEqual(id1, id2);
+            Assert.IsTrue(id1 == id2);
         }
 
         [Test]

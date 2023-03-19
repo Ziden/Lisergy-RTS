@@ -1,4 +1,5 @@
 ﻿using Game.Battle;
+using Game.DataTypes;
 using Game.World;
 using System;
 using System.Linq;

@@ -8,11 +8,18 @@ namespace Assets.Code.Views
     {
         public void RegisterEvents()
         {
-            Entity.Components.RegisterComponentEvent<TileVisibilityChangedEvent, TileView>(OnVisChange);
+            Entity.Components.RegisterExternalComponentEvents<TileView, TileVisibilityChangedEvent>(OnVisChange);
+            Entity.Components.RegisterExternalComponentEvents<TileView, TileExplorationStateChanged>(OnExploChange);
         }
 
-        private static void OnVisChange(Tile t, TileView view, TileVisibilityChangedEvent ev)
+        private static void OnExploChange(TileView view, TileExplorationStateChanged ev)
         {
+            Log.Debug($"EXPLO CHANGE {view}");
+        }
+
+        private static void OnVisChange(TileView view, TileVisibilityChangedEvent ev)
+        {
+            Log.Debug($"Toggling Visibility of Tile {view.Entity}");
             view?.SetFogOfWarDisabled(ev.Visible);
         }
     }

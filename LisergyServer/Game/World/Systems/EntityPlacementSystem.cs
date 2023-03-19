@@ -1,6 +1,7 @@
 ﻿using Game.Battle;
 using Game.ECS;
 using Game.Entity;
+using Game.Entity.Components;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using Game.Movement;
@@ -19,7 +20,8 @@ namespace Game.World.Systems
             events.RegisterComponentEvent<TileSentToPlayerEvent, EntityPlacementComponent>(OnTileSent);
         }
 
-        public void OnTileSent(Tile owner, EntityPlacementComponent component, TileSentToPlayerEvent ev)
+        // TODO Make entity sent generic
+        private static void OnTileSent(Tile owner, EntityPlacementComponent component, TileSentToPlayerEvent ev)
         {
             foreach (var movingEntity in component.EntitiesIn)
                 ev.Player.Send(new EntityUpdatePacket(movingEntity));
@@ -28,39 +30,40 @@ namespace Game.World.Systems
                 ev.Player.Send(new EntityUpdatePacket(component.StaticEntity));
         }
 
-        public void OnStaticEntityRemoved(Tile owner, EntityPlacementComponent component, StaticEntityRemovedEvent entity)
+        private static void OnStaticEntityRemoved(Tile owner, EntityPlacementComponent component, StaticEntityRemovedEvent entity)
         {
             component.StaticEntity = null;
         }
 
-        public void OnStaticEntityPlaced(Tile owner, EntityPlacementComponent component, StaticEntityPlacedEvent ev)
+        private static void OnStaticEntityPlaced(Tile owner, EntityPlacementComponent component, StaticEntityPlacedEvent ev)
         {
             component.StaticEntity = ev.Entity;
         }
 
-        public void OnEntityMoveOut(Tile owner, EntityPlacementComponent component, EntityMoveOutEvent ev)
+        private static void OnEntityMoveOut(Tile owner, EntityPlacementComponent component, EntityMoveOutEvent ev)
         {
             component.EntitiesIn.Remove(ev.Entity);
         }
 
-        public void OnEntityMoveIn(Tile owner, EntityPlacementComponent component, EntityMoveInEvent ev)
+        private static void OnEntityMoveIn(Tile owner, EntityPlacementComponent component, EntityMoveInEvent ev)
         {
-            var entity = ev.Entity as MovableWorldEntity;
-            component.EntitiesIn.Add(entity);
-
-
-            var tile = ev.Entity.Tile;
-
-            var same = tile == owner;
-
-            if (entity is IBattleable && component.StaticEntity != null && component.StaticEntity is IBattleable)
+            var movement = ev.Entity.Components.Get<EntityMovementComponent>();
+            if (movement == null)
             {
-                if (entity.Course != null && entity.Course.Intent == MovementIntent.Offensive && entity.Course.IsLastMovement())
+                return;
+            }
+
+            component.EntitiesIn.Add(ev.Entity);
+
+            // TODO: Move to entity movement system
+            if (ev.Entity is IBattleable && component.StaticEntity != null && component.StaticEntity is IBattleable)
+            {
+                if (movement.Course != null && movement.Course.Intent == MovementIntent.Offensive && movement.Course.IsLastMovement())
                 {
-                    entity.Tile.Game.GameEvents.Call(new OffensiveMoveEvent()
+                    StrategyGame.GlobalGameEvents.Call(new OffensiveMoveEvent()
                     {
                         Defender = component.StaticEntity,
-                        Attacker = entity
+                        Attacker = ev.Entity
                     });
                 }
             }

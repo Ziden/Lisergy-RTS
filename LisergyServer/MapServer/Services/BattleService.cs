@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Battle;
 using Game.Battles;
+using Game.DataTypes;
 using Game.Entity;
 using Game.Events;
 using Game.Events.Bus;
@@ -76,8 +77,8 @@ namespace BattleServer
             atk.OnBattleFinished(battle, ev.BattleHeader, ev.Turns);
             def.OnBattleFinished(battle, ev.BattleHeader, ev.Turns);
 
-            var atkPacket = atk.GetUpdatePacket();
-            var defPacket = def.GetUpdatePacket();
+            var atkPacket = atk.GetStatusUpdatePacket();
+            var defPacket = def.GetStatusUpdatePacket();
 
             if (atk.Owner.CanReceivePackets())
             {

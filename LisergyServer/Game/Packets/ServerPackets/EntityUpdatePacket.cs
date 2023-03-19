@@ -1,4 +1,5 @@
-﻿using Game.Entity;
+﻿using Game.ECS;
+using Game.Entity;
 using System;
 using System.Collections.Generic;
 
@@ -7,12 +8,14 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class EntityUpdatePacket : ServerPacket
     {
+        public WorldEntity Entity;
+        public List<IComponent> SyncedComponents; 
+
         public EntityUpdatePacket(WorldEntity entity)
         {
-            this.Entity = entity;
+            Entity = entity;
+            SyncedComponents = entity.Components.GetSyncedComponents();
         }
-
-        public WorldEntity Entity;
      
         public override string ToString()
         {

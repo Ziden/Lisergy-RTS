@@ -35,8 +35,8 @@ namespace Tests
             ComponentSet<Tile>._buses.Clear();
             ComponentSet<WorldEntity>._buses.Clear();
 
-            tile1.AddComponent<EntityPlacementComponent>();
-            tile2.AddComponent<EntityPlacementComponent>();
+            tile1.Components.Add(new EntityPlacementComponent());
+            tile2.Components.Add(new EntityPlacementComponent());
 
             var tileBus = ComponentSet<Tile>._buses[typeof(Tile)]._bus;
 
@@ -46,15 +46,39 @@ namespace Tests
         [Test]
         public void TestTileCallbacks()
         {
-            tile1.AddComponent<EntityPlacementComponent>();
-            tile2.AddComponent<EntityPlacementComponent>();
+            tile1.Components.Add(new EntityPlacementComponent());
+            tile2.Components.Add(new EntityPlacementComponent());
 
             var dg = new Dungeon();
 
             tile1.Components.CallEvent(new StaticEntityPlacedEvent(dg, tile1));
 
-            Assert.IsTrue(tile1.GetComponent<EntityPlacementComponent>().StaticEntity == dg);
-            Assert.IsTrue(tile2.GetComponent<EntityPlacementComponent>().StaticEntity == null);
+            Assert.IsTrue(tile1.Components.Get<EntityPlacementComponent>().StaticEntity == dg);
+            Assert.IsTrue(tile2.Components.Get<EntityPlacementComponent>().StaticEntity == null);
+        }
+
+        public class TestView : IComponent
+        {
+            public static EntityMoveOutEvent called = null;
+
+            public static void Callback(TestView view, EntityMoveOutEvent ev) 
+            {
+                TestView.called = ev;
+            }
+    }
+
+        [Test]
+        public void TestViewEvents()
+        {
+            tile1.Components.Add(new TestView());
+
+            
+            tile1._components.RegisterExternalComponentEvents<TestView, EntityMoveOutEvent>(TestView.Callback);
+
+            tile1.Components.CallEvent(new EntityMoveOutEvent() { Entity = new Dungeon() });
+
+            Assert.IsTrue(TestView.called.Entity is Dungeon);
+
         }
     }
 }

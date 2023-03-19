@@ -21,8 +21,7 @@ namespace Game.Listeners
             _game = game;
             _world = game.World;
             _game.NetworkEvents.Register<JoinWorldPacket>(this, JoinWorld);
-            _game.GameEvents.Register<OffensiveMoveEvent>(this, OnOffensiveAction);
-            _game.GameEvents.Register<EntityMoveInEvent>(this, OnEntityMove);
+            StrategyGame.GlobalGameEvents.Register<OffensiveMoveEvent>(this, OnOffensiveAction);
         }
 
         [EventMethod]
@@ -37,7 +36,7 @@ namespace Game.Listeners
                     player.Send(tile.UpdatePacket);
                     tile.Components.CallEvent(new TileSentToPlayerEvent(tile, player));
                 }
-                _world.Game.GameEvents.Call(new PlayerJoinedEvent(player));
+                StrategyGame.GlobalGameEvents.Call(new PlayerJoinedEvent(player));
             }
             else
             {
@@ -59,13 +58,5 @@ namespace Game.Listeners
                 _game.NetworkEvents.Call(new BattleStartPacket(battleID, atk, def));
             }
         }
-
-        [EventMethod]
-        public void OnEntityMove(EntityMoveInEvent ev)
-        {
-           
-        }
-
-      
     }
 }

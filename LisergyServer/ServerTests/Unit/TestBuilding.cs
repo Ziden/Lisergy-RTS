@@ -27,8 +27,8 @@ namespace Tests
             var tile = building.Tile;
             Assert.IsTrue(player.Buildings.Count == 1);
             Assert.IsTrue(player.Buildings.Any(b => b.SpecID == initialBuildingSpec.Id));
-            Assert.IsTrue(tile.GetComponent<EntityPlacementComponent>().StaticEntity == player.Buildings.First());
-            Assert.IsTrue(((Building)tile.GetComponent<EntityPlacementComponent>().StaticEntity).SpecID == initialBuildingSpec.Id);
+            Assert.IsTrue(tile.Components.Get<EntityPlacementComponent>().StaticEntity == player.Buildings.First());
+            Assert.IsTrue(((Building)tile.Components.Get<EntityPlacementComponent>().StaticEntity).SpecID == initialBuildingSpec.Id);
         }
 
         [Test]
@@ -49,10 +49,10 @@ namespace Tests
 
             Assert.IsTrue(player.Buildings.Count == 2);
             Assert.IsTrue(player.Buildings.Any(b => b.SpecID == buildingSpec.Id));
-            Assert.IsTrue(tile.GetComponent<EntityPlacementComponent>().StaticEntity == player.Buildings.Last());
-            Assert.IsTrue(((Building)tile.GetComponent<EntityPlacementComponent>().StaticEntity).SpecID == buildingSpec.Id);
+            Assert.IsTrue(tile.Components.Get<EntityPlacementComponent>().StaticEntity == player.Buildings.Last());
+            Assert.IsTrue(((Building)tile.Components.Get<EntityPlacementComponent>().StaticEntity).SpecID == buildingSpec.Id);
 
-            Assert.That(tile.GetComponent<TileVisibilityComponent>().EntitiesViewing.Contains(tile.GetComponent<EntityPlacementComponent>().StaticEntity));
+            Assert.That(tile.Components.Get<TileVisibilityComponent>().EntitiesViewing.Contains(tile.Components.Get<EntityPlacementComponent>().StaticEntity));
 
         }
     }

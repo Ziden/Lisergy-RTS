@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\BaseServer.csproj" />
+    <ProjectReference Include="..\GameDataTest\GameDataTest.csproj" />
     <ProjectReference Include="..\MapServer\MapServer.csproj" />
   </ItemGroup>
 

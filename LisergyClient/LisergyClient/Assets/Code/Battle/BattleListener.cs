@@ -1,5 +1,6 @@
 ﻿using Assets.Code.World;
 using Game;
+using Game.DataTypes;
 using Game.Entity;
 using Game.Events;
 using Game.Events.Bus;

@@ -86,6 +86,7 @@ public class PartyUI : IEventListener
         if (tile == null)
         {
             HideParty();
+            return;
         }
         var view = GameView.GetView<TileView>(tile);
         Log.Debug($"PartyUI displaying actions for {tile} with active party {_activeParty}");

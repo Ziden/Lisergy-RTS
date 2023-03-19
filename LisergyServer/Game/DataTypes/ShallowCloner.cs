@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace Game
+namespace Game.DataTypes
 {
     /// <summary>
     /// Fastest way to shallow clone an object
@@ -16,7 +16,7 @@ namespace Game
 
         private static Func<T, T> CreateCloner()
         {
-            if(_cloners.TryGetValue(typeof(T), out var cloner))
+            if (_cloners.TryGetValue(typeof(T), out var cloner))
             {
                 return cloner;
             }
@@ -40,7 +40,7 @@ namespace Game
 
             generator.Emit(OpCodes.Ldloc, loc1);
             generator.Emit(OpCodes.Ret);
-            cloner = ((Func<T, T>)cloneMethod.CreateDelegate(typeof(Func<T, T>)));
+            cloner = (Func<T, T>)cloneMethod.CreateDelegate(typeof(Func<T, T>));
             _cloners[typeof(T)] = cloner;
             return cloner;
         }

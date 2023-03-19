@@ -2,6 +2,7 @@
 using Game;
 using Game.ECS;
 using GameData;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Code.World
@@ -15,11 +16,12 @@ namespace Assets.Code.World
            
         }
 
-        public ClientBuilding UpdateData(Building building)
+        public ClientBuilding UpdateData(Building building, List<IComponent> syncedComponents)
         {
             this.SpecID = building.SpecID;
             this.Id = building.Id;
-            this.Tile = GameView.World.GetTile(building);
+            if(GameObject != null)
+                this.Tile = GameView.World.GetTile(building);
             return this;
         }
 
@@ -27,18 +29,13 @@ namespace Assets.Code.World
         {
             var prefab = Resources.Load("prefabs/buildings/" + serverEntity.SpecID);
             var tile = GameView.World.GetTile(serverEntity);
-            var tileView = GameView.GetTileView(tile);
+            var tileView = GameView.GetTileView(tile, true);
             GameObject = MainBehaviour.Instantiate(prefab, tileView.GameObject.transform) as GameObject;
             GameObject.transform.localPosition = Vector3.zero;
             this.GameObject.SetActive(true);
-            UpdateData(serverEntity);
+            this.Tile = GameView.World.GetTile(serverEntity);
             if (serverEntity.SpecID == StrategyGame.Specs.InitialBuilding && this.IsMine())
                 CameraBehaviour.FocusOnTile(tile);
-        }
-
-        public override BuildingSpec GetSpec()
-        {
-            return StrategyGame.Specs.Buildings[this.SpecID];
         }
 
         public bool IsMine()

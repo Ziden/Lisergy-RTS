@@ -49,7 +49,12 @@ namespace Assets.Code
 
         private void ClickTile(Tile tile)
         {
-            Log.Debug($"TileUI selecting tile {tile}");
+            Log.Debug($"TileUI selecting tile {tile} {tile.EntitiesViewing.Count}");
+            foreach(var e in tile.EntitiesViewing)
+            {
+                Log.Debug(""+e);
+            }
+           
             if (tile != null)
             {
                 if (!IsActive(_tileCursor))

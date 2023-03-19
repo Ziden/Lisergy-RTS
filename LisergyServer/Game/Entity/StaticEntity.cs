@@ -5,13 +5,8 @@ using System;
 namespace Game
 {
     [Serializable]
-    public class StaticEntity : ExploringEntity
+    public class StaticEntity : WorldEntity
     {
-        public override byte GetLineOfSight()
-        {
-            return 0;
-        }
-
         public override Tile Tile
         {
             get => base.Tile; set

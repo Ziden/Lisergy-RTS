@@ -1,10 +1,12 @@
-﻿using Game.ECS;
+﻿using Game.DataTypes;
+using Game.ECS;
 using Game.Entity;
 using Game.Events;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using Game.World.Components;
 using System;
+using System.Collections.Generic;
 
 namespace Game
 {
@@ -18,6 +20,11 @@ namespace Game
         protected ushort _x;
         protected ushort _y;
 
+        [field: NonSerialized]
+        public ComponentSet<WorldEntity> _components { get; private set; }
+
+        public IComponentSet Components => _components;
+
         [NonSerialized]
         protected Tile _tile;
 
@@ -28,6 +35,7 @@ namespace Game
         {
             _id = Guid.NewGuid();
             DeltaFlags = new DeltaFlags(this);
+            _components = new ComponentSet<WorldEntity>(this);
         }
 
         public bool IsDestroyed => _tile != null;
@@ -51,6 +59,29 @@ namespace Game
                 {
                     DeltaFlags.SetFlag(DeltaFlag.POSITION);
                 }
+              
+                if (_previousTile != null)
+                {
+                    var moveOut = new EntityMoveOutEvent()
+                    {
+                        Entity = this,
+                        ToTile = value,
+                        FromTile = _previousTile
+                    };
+                    _previousTile.Components.CallEvent(moveOut);
+                    this.Components.CallEvent(moveOut);
+                }
+                if (value != null)
+                {
+                    var moveIn = new EntityMoveInEvent()
+                    {
+                        Entity = this,
+                        ToTile = _tile,
+                        FromTile = _previousTile
+                    };
+                    value.Components.CallEvent(moveIn);
+                    this.Components.CallEvent(moveIn);
+                }
 
                 if (_tile != null)
                 {
@@ -66,20 +97,8 @@ namespace Game
                             viewer.Send(new EntityDestroyPacket(this));
                     }
                 }
-               
-
-                Log.Info($"Placed {this} in {_tile}");
+                Log.Info($"Moved {this} to {_tile}");
             }
-        }
-
-        public T GetComponent<T>() where T : IComponent
-        {
-            throw new NotImplementedException();
-        }
-
-        public T AddComponent<T>() where T : IComponent
-        {
-            throw new NotImplementedException();
         }
     }
 }

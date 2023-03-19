@@ -1,4 +1,5 @@
 using Game;
+using Game.Entity;
 using Game.Events.ServerEvents;
 using Game.World.Components;
 using NUnit.Framework;
@@ -17,19 +18,40 @@ namespace Tests
             Game = new TestGame();
         }
 
+
         [Test]
         public void TestInitialUnit()
         {
             var player = Game.GetTestPlayer();
             var unit = player.Units.First();
 
-            var bt = player.Buildings.First().Tile;
-
-            var building = Game.World.GetTile(10, 10).GetComponent<EntityPlacementComponent>();
-
             Assert.AreEqual(1, player.Units.Count);
             Assert.AreEqual(TestGame.Specs.InitialUnit, unit.SpecId);
-            Assert.That(unit.Party.Tile.GetComponent<EntityPlacementComponent>().EntitiesIn.Contains(unit.Party));
+            Assert.That(unit.Party.Tile.EntitiesIn.Contains(unit.Party));
+        }
+
+        [Test]
+        public void TestUnitStatsEquality()
+        {
+            var s1 = UnitStats.DEFAULT;
+            var s2 = UnitStats.DEFAULT;
+
+            s1.HP = 1234;
+            s2.HP = 1234;
+
+            Assert.AreEqual(s1, s2);
+        }
+
+        [Test]
+        public void TestUnitStatsNonEquality()
+        {
+            var s1 = UnitStats.DEFAULT;
+            var s2 = UnitStats.DEFAULT;
+
+            s1.HP = 1234;
+            s2.HP = 123;
+
+            Assert.AreNotEqual(s1, s2);
         }
 
 

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Game
+namespace Game.DataTypes
 {
     /// <summary>
     /// Fixed string size
@@ -16,7 +16,7 @@ namespace Game
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         public byte[] _bytes;
-      
+
         public static implicit operator FixedString(string s)
         {
             return new FixedString() { _bytes = ENCODING.GetBytes(s) };
@@ -37,7 +37,7 @@ namespace Game
             return !g1.IsEqualsTo(g2);
         }
 
-        public bool Equals(FixedString obj) => this.IsEqualsTo(obj);
+        public bool Equals(FixedString obj) => IsEqualsTo(obj);
 
         public override bool Equals(object obj)
         {
@@ -54,7 +54,7 @@ namespace Game
 
         public unsafe bool IsEqualsTo(FixedString str2)
         {
-            fixed (byte* p1 = this._bytes, p2 = str2._bytes)
+            fixed (byte* p1 = _bytes, p2 = str2._bytes)
                 return memcmp((IntPtr)p1, (IntPtr)p2, (uint)str2._bytes.Length) == 0;
         }
 

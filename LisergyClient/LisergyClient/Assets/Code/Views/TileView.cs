@@ -18,18 +18,12 @@ namespace Assets.Code.Views
         public TileView(Tile entity) 
         {
             Entity = entity;
-            Entity.Components.AddComponent(this);
         }
 
         public void UpdateFrom(TileData data)
         {
             Entity.TileId = data.TileId;
-            if(!Instantiated)
-            {
-                Instantiate();
-                SetFogOfWarDisabled(true);
-                RegisterEvents();
-            }
+            Instantiate();
         }
 
         public void SetFogOfWarDisabled(bool isTileInLos)
@@ -58,6 +52,13 @@ namespace Assets.Code.Views
 
         public override void Instantiate()
         {
+            if(Instantiated)
+            {
+                return;
+            }
+            SetFogOfWarDisabled(true);
+            Entity.Components.Add(this);
+            RegisterEvents();
             var tileSpec = StrategyGame.Specs.Tiles[Entity.TileId];
             foreach (var art in tileSpec.Arts)
             {
@@ -79,8 +80,8 @@ namespace Assets.Code.Views
 
 
         // TODO: Remove & move calls to listeners in Entity View
-        public List<WorldEntity> MovingEntities => Entity.GetComponent<EntityPlacementComponent>().EntitiesIn;
-        public StaticEntity StaticEntity => Entity.GetComponent<EntityPlacementComponent>().StaticEntity;
+        public List<WorldEntity> MovingEntities => Entity.Components.Get<EntityPlacementComponent>().EntitiesIn;
+        public StaticEntity StaticEntity => Entity.Components.Get<EntityPlacementComponent>().StaticEntity;
 
 
         public override string ToString()

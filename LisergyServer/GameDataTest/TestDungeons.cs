@@ -18,7 +18,7 @@ namespace GameDataTest
         {
             EASY.BattleSpecs.Add(new BattleSpec()
             {
-                UnitSpecIDS = new ushort[1] { TestUnits.THIEF }
+                UnitSpecIDS = new ushort[1] { TestUnitData.THIEF }
             });
             spec.Dungeons[0] = EASY;
         }

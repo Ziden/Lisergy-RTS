@@ -61,24 +61,24 @@ namespace Assets.Code.World
         [EventMethod]
         public void EntityUpdate(EntityUpdatePacket ev)
         {
-            Log.Debug("Received entity update");
+            Log.Debug($"Received entity update {ev.Entity.GetType().Name} ({ev.SyncedComponents.Count} components)");
             var serverEntity = ev.Entity;
             var serverOwner = serverEntity.OwnerID;
             var owner = GameView.World.GetOrCreateClientPlayer(serverEntity.OwnerID);
             serverEntity.Owner = owner;
             if (serverEntity is Party serverParty)
             {
-                var clientEntity = owner.EnsureInstantiatedAndKnown<Party, ClientParty>(serverParty);
+                var clientEntity = owner.EnsureInstantiatedAndKnown<Party, ClientParty>(serverParty, ev.SyncedComponents);
                 OnPartyUpdated?.Invoke(clientEntity);
             }
             else if (serverEntity is Building serverBuilding)
             {
-                var clientEntity = owner.EnsureInstantiatedAndKnown<Building, ClientBuilding>(serverBuilding);
+                var clientEntity = owner.EnsureInstantiatedAndKnown<Building, ClientBuilding>(serverBuilding, ev.SyncedComponents);
                 OnBuildingUpdated?.Invoke(clientEntity);
             }
             else if (serverEntity is Dungeon serverDungeon)
             {
-                var clientEntity = owner.EnsureInstantiatedAndKnown<Dungeon, ClientDungeon>(serverDungeon);
+                var clientEntity = owner.EnsureInstantiatedAndKnown<Dungeon, ClientDungeon>(serverDungeon, ev.SyncedComponents);
                 OnDungeonUpdated?.Invoke(clientEntity);
             }
             else

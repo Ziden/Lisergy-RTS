@@ -1,4 +1,5 @@
 ﻿using Game.Entity;
+using Game.Entity.Components;
 using Game.Events;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
@@ -38,7 +39,7 @@ namespace Game
         private void OnExistenceChanged()
         {
             if (Tile == null) return; // was removed
-            foreach(var playerViewing in Tile.GetComponent<TileVisibilityComponent>().PlayersViewing)
+            foreach(var playerViewing in Tile.Components.Get<TileVisibilityComponent>().PlayersViewing)
             {
                 playerViewing.Send(new EntityUpdatePacket(this));
             }
@@ -49,23 +50,23 @@ namespace Game
             var newTile = _tile;
             var previousTile = _previousTile;
 
-            var movableEntity = this as MovableWorldEntity; // todo, no inheritance , composition
+            var movementComponent = this.Components.Get<EntityMovementComponent>();
             viewersCache.Clear();
             var allViewers = viewersCache;
-            if (previousTile != newTile && movableEntity != null && previousTile != null)
+            if (previousTile != newTile && previousTile != null)
             {
-                allViewers.UnionWith(previousTile.GetComponent<TileVisibilityComponent>().PlayersViewing);
+                allViewers.UnionWith(previousTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
                 if (newTile != null)
-                    allViewers.UnionWith(newTile.GetComponent<TileVisibilityComponent>().PlayersViewing);
+                    allViewers.UnionWith(newTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
 
-                var movePacket = new EntityMovePacket(movableEntity, newTile);
+                var movePacket = new EntityMovePacket(this, movementComponent, newTile);
                 foreach (var viewer in allViewers)
                     viewer.Send(movePacket);
             }
 
-            var newPlayersViewing = new HashSet<PlayerEntity>(newTile.GetComponent<TileVisibilityComponent>().PlayersViewing);
+            var newPlayersViewing = new HashSet<PlayerEntity>(newTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
             if (previousTile != null)
-                newPlayersViewing.ExceptWith(previousTile.GetComponent<TileVisibilityComponent>().PlayersViewing);
+                newPlayersViewing.ExceptWith(previousTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
 
             var packet = new EntityUpdatePacket(this);
             foreach (var viewer in newPlayersViewing)

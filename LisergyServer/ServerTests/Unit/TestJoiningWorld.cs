@@ -107,7 +107,7 @@ namespace Tests
             var player = new TestServerPlayer();
             Game.HandleClientEvent(player, joinEvent);
             var party = player.GetParty(0);
-            var unit = party.GetUnits()[0];
+            var unit = party.GetUnits().First();
           
             Assert.That(unit.HP == unit.MaxHP);
         }

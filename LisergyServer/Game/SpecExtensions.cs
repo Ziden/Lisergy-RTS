@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Game
 {
-    public static class SpecExtensions
+    public static class SpecExtensions 
     {
         public static UnitSpec GetSpec(this Unit o) => StrategyGame.Specs.Units[o.SpecId];
 

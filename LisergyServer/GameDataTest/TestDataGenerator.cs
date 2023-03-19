@@ -39,12 +39,12 @@ namespace GameDataTest
             );
 
             TestTiles.Generate(ref spec);
-            TestUnits.Generate(ref spec);
+            TestUnitData.Generate(ref spec);
             TestItems.Generate(ref spec);
             TestLoots.Generate(ref spec);
             TestDungeons.Generate(ref spec);
             spec.InitialBuilding = spec.Buildings[1].Id;
-            spec.InitialUnit = TestUnits.MAGE;
+            spec.InitialUnit = TestUnitData.MAGE;
             return spec;
         }
     }

@@ -2,6 +2,9 @@
 
 namespace Game.Events.GameEvents
 {
+    /// <summary>
+    /// Changes when a tile visibility changes
+    /// </summary>
     public class TileVisibilityChangedEvent : GameEvent
     {
         public Tile Tile;

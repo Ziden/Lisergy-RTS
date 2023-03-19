@@ -41,7 +41,7 @@ namespace Tests
 
             Assert.NotNull(result);
             Assert.IsTrue(result.Succeeded);
-            Assert.That(defender.Stats.HP == defender.Stats.MaxHP - result.Damage);
+            Assert.That(defender.UnitReference.HP == defender.UnitReference.MaxHP - result.Damage);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Assets.Code.Views;
 using Assets.Code.World;
 using Game;
-using Game.ECS;
 using Game.Events;
 using Game.Events.Bus;
 using GameData;
@@ -15,14 +14,20 @@ namespace Assets.Code
         private static GameView _instance;
         private static ViewController _controller;
 
-        public static TileView GetTileView(Tile tile)
+        public static TileView GetTileView(Tile tile, bool ensureInstantiated = false)
         {
             var chunkView = GetView<ChunkView>(tile.Chunk);
             if (chunkView == null)
                 Controller.AddView(tile.Chunk, new ChunkView(ref tile.Chunk));
             var tileView = GetView<TileView>(tile);
             if (tileView == null)
+            {
                 tileView = Controller.AddView(tile, new TileView(tile));
+            }
+            if(ensureInstantiated)
+            {
+                tileView.Instantiate();
+            }
             return tileView;
         }
 
@@ -32,7 +37,6 @@ namespace Assets.Code
 
         public static ClientWorld World => _game.World as ClientWorld;
         public static ViewController Controller => _controller;
-        public static EventBus<GameEvent> Events => _game.GameEvents;
 
         public GameView(GameSpec specs, GameWorld world)
         {

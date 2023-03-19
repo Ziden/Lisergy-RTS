@@ -1,6 +1,7 @@
 ﻿using Game.Battles;
 using Game.Battles.Actions;
 using Game.BattleTactics;
+using Game.ECS;
 using Game.Entity;
 using Game.Events;
 using Game.World.Data;
@@ -20,7 +21,7 @@ namespace Game
 
         public static void LoadSerializers(params Type[] extras)
         {
-            var models = GetEventTypes().ToList();
+            var models = GetDefaultSerializationTypes().ToList();
 
             models.Add(typeof(Unit));
             //models.Add(typeof(GameId));
@@ -35,7 +36,6 @@ namespace Game
 
             // World
             models.Add(typeof(Building));
-            models.Add(typeof(ExploringEntity));
             models.Add(typeof(WorldEntity));
             models.Add(typeof(Party));
             models.Add(typeof(Tile));
@@ -52,12 +52,21 @@ namespace Game
             Serializer = new Serializer(models);
         }
 
-        public static IEnumerable<Type> GetEventTypes()
+        public static IEnumerable<Type> GetDefaultSerializationTypes()
         {
             foreach (Type type in typeof(BaseEvent).Assembly.GetTypes())
             {
                 var validEvent = typeof(ClientPacket).IsAssignableFrom(type) && type != typeof(ClientPacket);
                 validEvent = validEvent || typeof(ServerPacket).IsAssignableFrom(type) && type != typeof(ServerPacket);
+                validEvent = validEvent || typeof(IComponent).IsAssignableFrom(type) && type != typeof(IComponent);
+                if (validEvent && type.IsSerializable && !type.IsInterface)
+                {
+                    yield return type;
+                }
+            }
+            foreach (Type type in typeof(IComponent).Assembly.GetTypes())
+            {
+                var validEvent = typeof(IComponent).IsAssignableFrom(type);
                 if (validEvent && type.IsSerializable)
                 {
                     yield return type;

@@ -1,10 +1,12 @@
-﻿using Game.ECS;
+﻿using Game.DataTypes;
+using Game.ECS;
 using Game.Entity;
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.World.Components;
 using Game.World.Data;
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Game
@@ -20,7 +22,7 @@ namespace Game
         private Chunk _chunk;
 
         [field: NonSerialized]
-        public ComponentSet<Tile> Components { get; private set; }
+        public ComponentSet<Tile> _components { get; private set; }
 
         public Tile(Chunk c, TileData* tileData, int x, int y)
         {
@@ -28,20 +30,21 @@ namespace Game
             _tileData = tileData;
             _tileData->X = (ushort)x;
             _tileData->Y = (ushort)y;
-            Components = new ComponentSet<Tile>(this);
+            _components = new ComponentSet<Tile>(this);
             DeltaFlags = new DeltaFlags(this);
         }
 
         public ref Chunk Chunk => ref _chunk;
         public byte TileId { get => _tileData->TileId; set => _tileData->TileId = value; }
         public float MovementFactor { get => this.GetSpec().MovementFactor; }
-        public ushort Y { get => _tileData->Y; }
-        public ushort X { get => _tileData->X; }
-
+        public ushort Y { get => _tileData->Y; set => _tileData->Y = value; }
+        public ushort X { get => _tileData->X; set => _tileData->X = value; }
+        public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.Get<TileVisibilityComponent>().PlayersViewing;
+        public IReadOnlyCollection<WorldEntity> EntitiesViewing => _components.Get<TileVisibilityComponent>().EntitiesViewing;
+        public IReadOnlyList<WorldEntity> EntitiesIn => _components.Get<EntityPlacementComponent>().EntitiesIn;
         public GameId TileUniqueId => new GameId(_tileData->Position);
 
-        public T AddComponent<T>() where T : IComponent => Components.AddComponent<T>();
-        public T GetComponent<T>() where T : IComponent => Components.Get<T>();
+        public IComponentSet Components => _components;
 
         public StrategyGame Game => Chunk.Map.World.Game;
 

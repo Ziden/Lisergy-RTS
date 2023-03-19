@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Game
+namespace Game.DataTypes
 {
     /// <summary>
     /// Simpler to serialize structure of Guids.
@@ -58,7 +58,7 @@ namespace Game
             return g1.IsEqualsTo(g2);
         }
 
-        public bool Equals(GameId obj) => this.IsEqualsTo(obj);
+        public bool Equals(GameId obj) => IsEqualsTo(obj);
 
         public override bool Equals(object obj)
         {
@@ -74,9 +74,9 @@ namespace Game
 
         public unsafe bool IsEqualsTo(GameId id2)
         {
-            if(id2._bytes == null)
+            if (id2._bytes == null)
                 return this == ZERO;
-            if(_bytes == null)
+            if (_bytes == null)
                 return id2 == ZERO;
             unchecked
             {

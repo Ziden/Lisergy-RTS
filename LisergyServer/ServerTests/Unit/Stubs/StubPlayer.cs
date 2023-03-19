@@ -1,6 +1,9 @@
 ﻿using Game;
+using Game.DataTypes;
 using Game.Entity;
 using Game.Events;
+using Game.Events.Bus;
+using Game.Events.GameEvents;
 using Game.Movement;
 using Game.World;
 using LisergyServer.Core;
@@ -10,7 +13,7 @@ using System.Linq;
 
 namespace ServerTests
 {
-    public class TestServerPlayer : ServerPlayer
+    public class TestServerPlayer : ServerPlayer, IEventListener
     {
         public static GameId TEST_ID = GameId.Generate();
 
@@ -34,6 +37,14 @@ namespace ServerTests
             ReceivedEvents.Add(reSerialized);
         }
 
+        public void ListenTo<EventType>() where EventType : GameEvent
+        {
+            StrategyGame.GlobalGameEvents.Register<EventType>(this, ev =>
+            {
+                ReceivedEvents.Add(ev);
+            });
+        }
+
         public void SendMoveRequest(Party p, Tile t, MovementIntent intent)
         {
             var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new Position(pa.X, pa.Y)).ToList();
@@ -42,7 +53,7 @@ namespace ServerTests
             t.Chunk.Map.World.Game.NetworkEvents.Call(ev);
         }
 
-        public List<T> ReceivedEventsOfType<T>() where T : ServerPacket
+        public List<T> ReceivedEventsOfType<T>() where T : BaseEvent
         {
             return ReceivedEvents.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => e as T).ToList();
         }

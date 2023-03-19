@@ -81,8 +81,6 @@ namespace Tests
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
 
-            var moveEventsb = _player.ReceivedEventsOfType<EntityMovePacket>();
-
             SendMoveRequest();
             GameScheduler.Tick(GameScheduler.Now + _party.Course.Delay);
 

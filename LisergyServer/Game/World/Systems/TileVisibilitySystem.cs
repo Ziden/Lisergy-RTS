@@ -11,18 +11,20 @@ namespace Game.World.Systems
         internal override void OnComponentAdded(Tile owner, TileVisibilityComponent component, EntitySharedEventBus<Tile> events)
         {
 
-            events.RegisterComponentEvent<TileVisibilityChangedEvent, TileVisibilityComponent>(OnTileVisibilityUpdated);
+            events.RegisterComponentEvent<TileExplorationStateChanged, TileVisibilityComponent>(OnTileExplorationChanged);
         }
 
-        private void OnTileVisibilityUpdated(Tile tile, TileVisibilityComponent component, TileVisibilityChangedEvent ev)
+        private static void OnTileExplorationChanged(Tile tile, TileVisibilityComponent component, TileExplorationStateChanged ev)
         {
-            if (ev.Visible)
+            Log.Debug($"Tile visibility change {tile} -> {ev.Explored}");
+            if (ev.Explored)
             {
                 component.EntitiesViewing.Add(ev.Explorer);
                 if (component.PlayersViewing.Add(ev.Explorer.Owner))
                 {
                     ev.Explorer.Owner.OnceExplored.Add(tile);
                     ev.Explorer.Owner.VisibleTiles.Add(tile);
+                    ev.Tile.Components.CallEvent(new TileVisibilityChangedEvent() { Explorer = ev.Explorer, Tile = ev.Tile, Visible = ev.Explored });
                     tile.DeltaFlags.SetFlag(DeltaFlag.SELF_REVEALED);
                 }
             }
@@ -34,6 +36,7 @@ namespace Game.World.Systems
                     ev.Explorer.Owner.VisibleTiles.Remove(tile);
                     if (component.PlayersViewing.Remove(ev.Explorer.Owner))
                     {
+                        ev.Tile.Components.CallEvent(new TileVisibilityChangedEvent() { Explorer = ev.Explorer, Tile = ev.Tile, Visible = ev.Explored });
                         tile.DeltaFlags.SetFlag(DeltaFlag.SELF_CONCEALED);
                     }
                 }

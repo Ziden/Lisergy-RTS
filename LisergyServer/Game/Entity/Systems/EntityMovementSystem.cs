@@ -2,6 +2,7 @@
 using Game.ECS;
 using Game.Entity.Components;
 using Game.Events.GameEvents;
+using Game.Movement;
 
 namespace Game.World.Systems
 {
@@ -12,30 +13,14 @@ namespace Game.World.Systems
             //events.RegisterComponentEvent<TileVisibilityChangedEvent, TileVisibilityComponent>(OnTileVisibilityUpdated);
         }
 
-        public void MoveEntity(WorldEntity entity, Tile otherTile)
-        {
-            entity.Tile = otherTile;
-            var oldTile = entity.Tile;
-            if (oldTile != null)
-            {
-                oldTile.Components.CallEvent(new EntityMoveOutEvent()
-                {
-                    Entity = entity,
-                    ToTile = otherTile,
-                    FromTile = oldTile
-                });
-            }
-            if (otherTile != null)
-            {
-                otherTile.Components.CallEvent(new EntityMoveInEvent()
-                {
-                    Entity = entity,
-                    ToTile = otherTile,
-                    FromTile = oldTile
-                });
-            }
+        public static CourseTask GetCourse(WorldEntity entity) => entity.Components.Get<EntityMovementComponent>().Course;
 
-            Log.Info($"Placed {this} in {otherTile}");
+        public static void SetCourse(WorldEntity entity, CourseTask newCourse)
+        {
+            var existingCourse = GetCourse(entity);
+            if (existingCourse != null && !existingCourse.HasFinished)
+                existingCourse.Cancel();
+            entity.Components.Get<EntityMovementComponent>().Course = newCourse;
         }
     }
 }
