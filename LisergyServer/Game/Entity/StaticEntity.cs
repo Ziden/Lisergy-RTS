@@ -1,32 +1,25 @@
 ﻿using Game.Entity;
-using Game.Events;
-using GameData;
+using Game.Events.GameEvents;
 using System;
 
 namespace Game
 {
     [Serializable]
-    public class StaticEntity : ExploringEntity
+    public class StaticEntity : WorldEntity
     {
-        public override byte GetLineOfSight()
-        {
-            return 0;
-        }
-
         public override Tile Tile
         {
             get => base.Tile; set
             {
                 var newTile = value;
                 var oldTile = base.Tile;
-                base.Tile = newTile;
-
                 if (newTile != null)
-                    newTile.StaticEntity = this;
+                    newTile.Components.CallEvent(new StaticEntityPlacedEvent(this, newTile));
                 else if(oldTile != null)
                 {
-                    oldTile.StaticEntity = null;
+                    oldTile.Components.CallEvent(new StaticEntityRemovedEvent(this, oldTile));
                 }
+                base.Tile = newTile;
             }
         }
 

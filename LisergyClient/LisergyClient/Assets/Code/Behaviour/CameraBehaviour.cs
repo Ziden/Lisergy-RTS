@@ -24,10 +24,10 @@ public class CameraBehaviour : MonoBehaviour
     private float mouseX, mouseY;
 
     private static int _focusSpeed = 30;
-    private ClientTile Focus = null;
+    private Tile Focus = null;
     private static bool lerping = false;
 
-    public static void FocusOnTile(ClientTile t)
+    public static void FocusOnTile(Tile t)
     {
         Log.Debug($"Focusing on tile {t}");
 

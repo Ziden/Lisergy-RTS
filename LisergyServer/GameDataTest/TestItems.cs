@@ -21,7 +21,7 @@ namespace GameDataTest
             Art = new ArtSpec() { Name = "items_15", Type = ArtType.SPRITE_SHEET }
         };
 
-        public static void Generate(GameSpec spec)
+        public static void Generate(ref GameSpec spec)
         {
             spec.Items[13] = GOLD;
             spec.Items[15] = ORE;

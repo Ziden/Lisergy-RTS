@@ -1,4 +1,5 @@
-﻿using Assets.Code.World;
+﻿using Assets.Code.Views;
+using Assets.Code.World;
 using Game;
 using Game.World;
 using System.Collections.Generic;
@@ -8,16 +9,16 @@ using UnityEngine;
 namespace Assets.Code.UI
 {
     public class ClientPath {
-        internal Dictionary<ClientTile, List<GameObject>> _pathLines = new Dictionary<ClientTile, List<GameObject>>();
+        internal Dictionary<Tile, List<GameObject>> _pathLines = new Dictionary<Tile, List<GameObject>>();
 
-        internal void Add(ClientTile tile, params GameObject [] pathLines)
+        internal void Add(Tile tile, params GameObject [] pathLines)
         {
             if (!_pathLines.ContainsKey(tile))
                 _pathLines[tile] = new List<GameObject>();
             _pathLines[tile].AddRange(pathLines);
         }
 
-        internal List<GameObject> Pop(ClientTile tile)
+        internal List<GameObject> Pop(Tile tile)
         {
             if(_pathLines.ContainsKey(tile))
             {
@@ -42,12 +43,12 @@ namespace Assets.Code.UI
             ClientEvents.OnStartMovementRequest += StartReqMove;
         }
 
-        public void StartReqMove(ClientParty party, List<ClientTile> path)
+        public void StartReqMove(ClientParty party, List<Tile> path)
         {
             this.RenderPath(party, path);
         }
 
-        public void OnFinishedMove(ClientParty party, ClientTile oldTile, ClientTile newTile)
+        public void OnFinishedMove(ClientParty party, Tile oldTile, Tile newTile)
         {
             if(_partyPaths.ContainsKey(party))
             {
@@ -67,7 +68,7 @@ namespace Assets.Code.UI
         }
 
 
-        private GameObject GetOrCreatePathLine(ClientTile tile, ClientPath clientPath)
+        private GameObject GetOrCreatePathLine(Tile tile, ClientPath clientPath)
         {
             var pooled = _pathlinesPool.FirstOrDefault(path => !path.activeInHierarchy);
             if (pooled == null)
@@ -84,7 +85,7 @@ namespace Assets.Code.UI
             return pooled;
         }
 
-        public ClientPath RenderPath(ClientParty party, List<ClientTile> tilePath)
+        public ClientPath RenderPath(ClientParty party, List<Tile> tilePath)
         {
             //tilePath.RemoveAt(0); // remove where the party is
             var clientPath = new ClientPath();
@@ -93,7 +94,8 @@ namespace Assets.Code.UI
             for (var x = 0; x < tilePath.Count; x++)
             {
                 var nodeTile = tilePath[x];
-                var tilePos = nodeTile.GetGameObject().transform.position;
+                var tileView = GameView.Controller.GetView<TileView>(nodeTile);
+                var tilePos = tileView.GameObject.transform.position;
                 var hasNext = x < tilePath.Count - 1;
                 var hasPrevious = x > 0;
                 if (hasNext)

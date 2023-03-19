@@ -10,9 +10,9 @@ namespace Game.Battles
     {
         public static AttackActionResult Attack(this BattleUnit attacker, BattleUnit defender)
         {
-            var damage = attacker.Stats.Atk - (defender.Stats.Def / 2);
-            var hp = defender.Stats.HP - damage;
-            defender.Stats.HP = (ushort)Math.Max(0, hp);
+            var damage = attacker.UnitReference.Atk - (defender.UnitReference.Def / 2);
+            var hp = defender.UnitReference.HP - damage;
+            defender.UnitReference.HP = (ushort)Math.Max(0, hp);
             return new AttackActionResult() { Damage = damage };
         }
     }

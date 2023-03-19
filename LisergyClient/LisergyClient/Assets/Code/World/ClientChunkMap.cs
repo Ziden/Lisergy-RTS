@@ -1,5 +1,10 @@
 ﻿using Game;
 using Game.World;
+using Game.World.Data;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Assets.Code.World
 {
@@ -9,7 +14,7 @@ namespace Assets.Code.World
     /// </summary>
     public class ClientChunkMap : ChunkMap
     {
-        public ClientChunkMap(ClientWorld world) : base(world, world.SizeX, world.SizeY) { }
+        public ClientChunkMap(ClientWorld world) : base(world, world.SizeX, world.SizeY) { } 
 
         public override Tile GetTile(int tileX, int tileY)
         {
@@ -23,24 +28,25 @@ namespace Assets.Code.World
             {
                 StackLog.Debug($"Creating tile {tileX} {tileY}");
                 var chunk = base.GetTileChunk(tileX, tileY);
-                tile = new ClientTile((ClientChunk)chunk, tileX, tileY);
+                tile = GenerateTile(ref chunk, tileX, tileY);
+                //tile = new Tile(chunk, CreateTileDataPointer(), tileX, tileY);
                 chunk.Tiles[tileX % GameWorld.CHUNK_SIZE, tileY % GameWorld.CHUNK_SIZE] = tile;
             }
             return tile;
         }
 
-        public override Chunk GetTileChunk(int tileX, int tileY)
+        public override ref Chunk GetTileChunk(int tileX, int tileY)
         {
             var chunk = base.GetTileChunk(tileX, tileY);
             if (chunk == null)
             {
                 int chunkX = tileX.ToChunkCoordinate();
                 var chunkY = tileY.ToChunkCoordinate();
-                chunk = new ClientChunk(this, chunkX, chunkY);
-                this.Add(chunk);
-                StackLog.Debug($"Created {chunk}");
+                var newChunk = new Chunk(this, chunkX, chunkY, new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE]);
+                Log.Debug($"Allocating Chunk {newChunk}");
+                this.Add(ref newChunk);
             }
-            return chunk;
+            return ref base.GetTileChunk(tileX, tileY);
         }
     }
 }

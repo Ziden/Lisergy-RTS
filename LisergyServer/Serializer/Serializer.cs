@@ -121,7 +121,7 @@ namespace NetSerializer
 				if (m_runtimeTypeMap.ContainsKey(type))
 					continue;
 
-				if (type.IsAbstract || type.IsInterface)
+				if (type.IsAbstract || type.IsInterface || type.GetInterface("IIgnoreSerializer") != null)
 					continue;
 
 				if (type.ContainsGenericParameters)

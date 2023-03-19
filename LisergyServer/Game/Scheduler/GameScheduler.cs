@@ -25,7 +25,10 @@ namespace Game.Scheduler
         internal static void ForceComplete(GameTask task)
         {
             while (task.Repeat)
+            {
                 task.Execute();
+            }
+            DeltaTracker.SendDeltaPackets(task.Creator);  // TODO: Maybe not best place
             _queue.Remove(task);
             _tasks.Remove(task.ID);
         }
@@ -52,10 +55,10 @@ namespace Game.Scheduler
 
         internal static void RunTask(GameTask task)
         {
-            Log.Debug($"Running task {task}");
             _queue.Remove(task);
             _tasks.Remove(task.ID);
             task.Execute();
+            DeltaTracker.SendDeltaPackets(task.Creator); // TODO: Maybe not best place
             if (task.Repeat)
             {
                 task.Start = Now;

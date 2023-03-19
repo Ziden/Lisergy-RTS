@@ -1,13 +1,18 @@
-﻿using Game.Entity;
+﻿using Game.DataTypes;
+using Game.ECS;
+using Game.Entity;
 using Game.Events;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
+using Game.World.Components;
 using System;
+using System.Collections.Generic;
 
 namespace Game
 {
+
     [Serializable]
-    public class WorldEntity : Ownable
+    public partial class WorldEntity : Ownable, IEntity, IDeltaTrackable
     {
         protected static Gaia Gaia { get; private set; } = new Gaia();
 
@@ -15,12 +20,22 @@ namespace Game
         protected ushort _x;
         protected ushort _y;
 
+        [field: NonSerialized]
+        public ComponentSet<WorldEntity> _components { get; private set; }
+
+        public IComponentSet Components => _components;
+
         [NonSerialized]
         protected Tile _tile;
 
+        [NonSerialized]
+        protected Tile _previousTile;
+
         public WorldEntity(PlayerEntity owner) : base(owner)
         {
-            _id = Guid.NewGuid().ToString();
+            _id = Guid.NewGuid();
+            DeltaFlags = new DeltaFlags(this);
+            _components = new ComponentSet<WorldEntity>(this);
         }
 
         public bool IsDestroyed => _tile != null;
@@ -33,9 +48,42 @@ namespace Game
         {
             get => _tile; set
             {
-                var oldTile = _tile;
+                _previousTile = _tile;
                 _tile = value;
-                if(_tile != null)
+
+                if (_previousTile == null || _tile == null)
+                {
+                    DeltaFlags.SetFlag(DeltaFlag.EXISTENCE);
+                }
+                else if (_previousTile != _tile)
+                {
+                    DeltaFlags.SetFlag(DeltaFlag.POSITION);
+                }
+              
+                if (_previousTile != null)
+                {
+                    var moveOut = new EntityMoveOutEvent()
+                    {
+                        Entity = this,
+                        ToTile = value,
+                        FromTile = _previousTile
+                    };
+                    _previousTile.Components.CallEvent(moveOut);
+                    this.Components.CallEvent(moveOut);
+                }
+                if (value != null)
+                {
+                    var moveIn = new EntityMoveInEvent()
+                    {
+                        Entity = this,
+                        ToTile = _tile,
+                        FromTile = _previousTile
+                    };
+                    value.Components.CallEvent(moveIn);
+                    this.Components.CallEvent(moveIn);
+                }
+
+                if (_tile != null)
                 {
                     _x = _tile.X;
                     _y = _tile.Y;
@@ -43,22 +91,13 @@ namespace Game
                 {
                     _x = 0;
                     _y = 0;
-                    if(oldTile != null)
+                    if(_previousTile != null)
                     {
-                        foreach (var viewer in oldTile.PlayersViewing)
+                        foreach (var viewer in _previousTile.Components.Get<TileVisibilityComponent>().PlayersViewing)
                             viewer.Send(new EntityDestroyPacket(this));
                     }
                 }
-                if (value != null)
-                {
-                    value.Game.GameEvents.Call(new EntityMoveEvent()
-                    {
-                        Entity = this,
-                        NewTile = _tile,
-                        OldTile = oldTile
-                    });
-                }
-                Log.Info($"Placed {this} in {_tile}");
+                Log.Info($"Moved {this} to {_tile}");
             }
         }
     }

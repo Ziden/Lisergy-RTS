@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.DataTypes;
 using Game.Entity;
 using Game.Events.ServerEvents;
 using Game.World;
@@ -13,14 +14,9 @@ namespace Assets.Code.World
         {
         }
 
-        public ClientTile GetClientTile(int tileX, int tileY)
+        public Tile GetTile(WorldEntity e)
         {
-            return Map.GetTile(tileX, tileY) as ClientTile;
-        }
-
-        public ClientTile GetClientTile(WorldEntity e)
-        {
-            return Map.GetTile(e.X, e.Y) as ClientTile;
+            return Map.GetTile(e.X, e.Y);
         }
 
         public ClientPlayer GetOrCreateClientPlayer(GameId uid)

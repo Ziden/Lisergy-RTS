@@ -7,10 +7,11 @@ namespace Game.Scheduler
         private DateTime _start;
         private DateTime _executionTime;
 
-        public GameTask(TimeSpan delay)
+        public GameTask(TimeSpan delay, PlayerEntity creator)
         {
             ID = Guid.NewGuid();
             Delay = delay;
+            Creator = creator;
             Start = GameScheduler.Now;
             GameScheduler.Add(this);
         }
@@ -19,6 +20,9 @@ namespace Game.Scheduler
         public Guid ID { get; private set; }
         public TimeSpan Delay { get; private set; }
         public DateTime Finish { get; private set; }
+
+        public PlayerEntity Creator { get; private set; }
+
         public DateTime Start
         {
             get => _start;

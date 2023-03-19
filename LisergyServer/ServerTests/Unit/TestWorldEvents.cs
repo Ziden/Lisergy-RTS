@@ -29,5 +29,23 @@ namespace Tests
             Assert.AreEqual(chunkX * GameWorld.CHUNK_SIZE + tileX, tile.X);
             Assert.AreEqual(chunkX * GameWorld.CHUNK_SIZE + tileX, tile.Y);
         }
+
+
+        [Test]
+        public void TestChunkData()
+        {
+            var chunk = Game.World.Map.GetChunk(1, 1);
+
+            Assert.AreEqual(1, chunk.X);
+            Assert.AreEqual(1, chunk.Y);
+        }
+
+        [Test]
+        public void TestGetStartingChunk()
+        {
+            var newbieChunk = Game.World.Map.GetUnnocupiedNewbieChunk();
+            var flags = newbieChunk.Flags;
+            Assert.IsFalse(newbieChunk.IsVoid());
+        }
     }
 }

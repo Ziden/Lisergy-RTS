@@ -88,7 +88,7 @@ namespace LisergyServer.Core
                         var caller = Auth(ev, _msg.connectionId);
                         if (caller != null)
                         {
-                            _game.NetworkEvents.RunCallbacks(caller, message);
+                            _game.ReceiveInput(caller, message);
                         }
                         break;
                     case EventType.Disconnected:

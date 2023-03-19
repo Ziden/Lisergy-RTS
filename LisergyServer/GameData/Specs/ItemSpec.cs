@@ -5,7 +5,7 @@ using System.Text;
 namespace GameData.Specs
 {
     [Serializable]
-    public class ItemSpec
+    public struct ItemSpec
     {
         public ushort Id;
         public ArtSpec Art;

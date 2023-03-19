@@ -2,6 +2,7 @@ using Game;
 using Game.Entity;
 using Game.Events;
 using Game.World;
+using Game.World.Data;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
@@ -9,7 +10,7 @@ using System.Linq;
 
 namespace Tests
 {
-    public class TestTile
+    public unsafe class TestTile
     {
         private TestGame Game;
 
@@ -17,6 +18,12 @@ namespace Tests
         public void Setup()
         {
             Game = new TestGame();
+        }
+
+        [Test]
+        public void TestTileAllocation()
+        {
+            
         }
 
         [Test]

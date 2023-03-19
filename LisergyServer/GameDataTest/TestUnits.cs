@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace GameDataTest
 {
-    public class TestUnits
+    public class TestUnitData
     {
         private static void AddUnit(GameSpec spec, UnitSpec unitSpec)
         {
@@ -20,7 +20,7 @@ namespace GameDataTest
         public static readonly ushort KNIGHT = 1;
         public static readonly ushort MAGE = 2;
 
-        private static UnitStats BaseStats = new UnitStats(new Dictionary<Stat, ushort>()
+        private static UnitStats BaseStats = new UnitStats().SetStats(new Dictionary<Stat, ushort>()
             {
                     { Stat.SPEED, 5 },
                     { Stat.ACCURACY, 5 },
@@ -46,7 +46,7 @@ namespace GameDataTest
             return st;
         }
 
-        public static void Generate(GameSpec spec)
+        public static void Generate(ref GameSpec spec)
         {
             var tuple = (Stat.ATK, 5);
             AddUnit(spec, new UnitSpec()

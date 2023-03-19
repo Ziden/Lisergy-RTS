@@ -5,7 +5,7 @@ using System.Text;
 namespace GameData.Specs
 {
     [Serializable]
-    public class BattleSpec
+    public struct BattleSpec
     {
         public ushort[] UnitSpecIDS;
     }
