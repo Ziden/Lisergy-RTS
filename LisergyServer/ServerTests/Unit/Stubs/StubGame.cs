@@ -7,7 +7,9 @@ using Game.World;
 using GameData;
 using GameDataTest;
 using LisergyServer.Core;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace ServerTests
@@ -22,9 +24,40 @@ namespace ServerTests
         public CourseService CourseService { get; private set; }
 
 
-        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), world == null ? new GameWorld(4, 40, 40) : world)
+        private static GameWorld GetTestWorld(GameWorld source = null)
         {
-            
+            if(source != null)
+            {
+                return source;
+            }
+            /*
+            if(TestWorld == null)
+            {
+                TestWorld = new GameWorld(4, 20, 20);
+            } else
+            {
+                DeltaTracker.Clear();
+                TestWorld.FreeMap();
+            }
+            return TestWorld;
+            */
+            var t = new Stopwatch();
+            t.Start();
+            var w = new GameWorld(4, 20, 20);
+            t.Stop();
+            Console.WriteLine("World Gen Time: " + t.ElapsedMilliseconds);
+            return w;
+        }
+
+
+
+        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), GetTestWorld(world))
+        {
+
+            var t = new Stopwatch();
+            t.Start();
+           
+          
             if (!_registered)
             {
                 _registered = true;
@@ -38,8 +71,9 @@ namespace ServerTests
             this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             if (createPlayer)
                 CreatePlayer();
+            t.Stop();
+            Console.WriteLine("Test Game Time: " + t.ElapsedMilliseconds);
 
-  
         }
 
         public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientEvent
