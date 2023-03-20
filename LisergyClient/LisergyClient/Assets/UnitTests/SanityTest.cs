@@ -5,6 +5,7 @@ using Assets.UnitTests;
 using Game.World;
 using Assets.Code.World;
 using NUnit.Framework;
+using Game.Tile;
 
 namespace Tests
 {
@@ -23,7 +24,7 @@ namespace Tests
 
             yield return new WaitForSeconds(1f);
 
-            var party = MainBehaviour.Player.Parties[0] as ClientParty;
+            var party = MainBehaviour.Player.Parties[0];
             client.ClickTile(party.Tile);
             yield return null;
 

@@ -1,6 +1,6 @@
 ﻿using Game;
+using Game.Tile;
 using Game.World;
-using Game.World.Data;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,7 +16,7 @@ namespace Assets.Code.World
     {
         public ClientChunkMap(ClientWorld world) : base(world, world.SizeX, world.SizeY) { } 
 
-        public override Tile GetTile(int tileX, int tileY)
+        public override TileEntity GetTile(int tileX, int tileY)
         {
             if (!ValidCoords(tileX, tileY))
             {
@@ -42,7 +42,7 @@ namespace Assets.Code.World
             {
                 int chunkX = tileX.ToChunkCoordinate();
                 var chunkY = tileY.ToChunkCoordinate();
-                var newChunk = new Chunk(this, chunkX, chunkY, new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE]);
+                var newChunk = new Chunk(this, chunkX, chunkY, new TileEntity[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE]);
                 Log.Debug($"Allocating Chunk {newChunk}");
                 this.Add(ref newChunk);
             }

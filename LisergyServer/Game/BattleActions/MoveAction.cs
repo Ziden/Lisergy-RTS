@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Game.Battle;
+using System;
 
-namespace Game.Battles.Actions
+namespace Game.BattleActions
 {
     [Serializable]
     public class MoveAction : BattleAction
@@ -8,7 +9,7 @@ namespace Game.Battles.Actions
         public int TileX;
         public int TileY;
 
-        public MoveAction(TurnBattle battle, BattleUnit atk, int tileX, int tileY): base(battle, atk)
+        public MoveAction(TurnBattle battle, BattleUnit atk, int tileX, int tileY) : base(battle, atk)
         {
             TileX = tileX;
             TileY = tileY;

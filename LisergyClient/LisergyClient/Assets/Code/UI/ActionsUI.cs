@@ -1,9 +1,11 @@
 ﻿using Assets.Code.Views;
-using Assets.Code.World;
 using Game;
-using Game.Entity;
-using Game.Events;
+using Game.Dungeon;
 using Game.Movement;
+using Game.Network.ClientPackets;
+using Game.Party;
+using Game.Pathfinder;
+using Game.Tile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,14 +83,14 @@ namespace Assets.Code.UI
                 button.gameObject.SetActive(false);
         }
 
-        private void OnClickTile(Tile tile)
+        private void OnClickTile(TileEntity tile)
         {
             Log.Debug("Actions click tile");
             if (UIManager.PartyUI.HasSelectedParty)
                 DisplayActions(UIManager.PartyUI.SelectedParty, tile);
         }
 
-        public void DisplayActions(ClientParty party, Tile tile)
+        public void DisplayActions(PartyEntity party, TileEntity tile)
         {
             if (party.Tile == tile || tile == null)
             {
@@ -100,7 +102,7 @@ namespace Assets.Code.UI
             _gameObject.transform.position = pos;
             _gameObject.SetActive(true);
             var actions = new List<EntityAction>();
-            if (tileView.StaticEntity is Dungeon)
+            if (tileView.Building is DungeonEntity)
             {
                 actions.Add(EntityAction.CHECK);
                 actions.Add(EntityAction.ATTACK);
@@ -115,17 +117,17 @@ namespace Assets.Code.UI
         {
             var tile = UIManager.TileUI.SelectedTile;
             var tileView = GameView.GetView<TileView>(tile);
-            if (tileView.StaticEntity is ClientDungeon)
+            if (tileView.Building is DungeonEntity)
             {
                 UIManager.ActionsUI.Hide();
-                UIManager.DungeonsUI.Display((ClientDungeon)tileView.StaticEntity);
+                UIManager.DungeonsUI.Display((DungeonEntity)tileView.Building);
             }
         }
 
         private void MoveToSelectedTile(MovementIntent intent)
         {
-            ClientParty party = UIManager.PartyUI.SelectedParty;
-            Tile selectedTile = UIManager.TileUI.SelectedTile;
+            var party = UIManager.PartyUI.SelectedParty;
+            TileEntity selectedTile = UIManager.TileUI.SelectedTile;
             Log.Debug($"Moving {party} to {selectedTile}");
             var map = selectedTile.Chunk.Map;
             var path = map.FindPath(party.Tile, selectedTile);
@@ -134,7 +136,7 @@ namespace Assets.Code.UI
             MainBehaviour.Networking.Send(new MoveRequestPacket()
             {
                 PartyIndex = party.PartyIndex,
-                Path = path.Select(p => new Game.World.Position(p.X, p.Y)).ToList(),
+                Path = path.Select(p => new Position(p.X, p.Y)).ToList(),
                 Intent = intent
             });
         }

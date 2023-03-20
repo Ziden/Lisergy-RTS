@@ -1,5 +1,4 @@
 ﻿using GameData;
-using GameData.Specs;
 using System;
 
 namespace GameDataTest
@@ -22,7 +21,7 @@ namespace GameDataTest
         public static GameSpec Generate()
         {
             GameSpec spec = new GameSpec(1);
-           
+
 
             // BUILDINGS
             // CASTLE

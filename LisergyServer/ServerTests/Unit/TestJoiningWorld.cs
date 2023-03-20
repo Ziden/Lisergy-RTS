@@ -1,6 +1,7 @@
 using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            Game = new TestGame(createPlayer:false);
+            Game = new TestGame(createPlayer: false);
             Serialization.LoadSerializers();
         }
 
@@ -83,10 +84,11 @@ namespace Tests
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
             var player = new TestServerPlayer();
+
             Game.HandleClientEvent(player, joinEvent);
 
             var firstEntityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
-            var firstTileVisibleEvents = player.ReceivedEventsOfType<TileUpdatePacket>(); 
+            var firstTileVisibleEvents = player.ReceivedEventsOfType<TileUpdatePacket>();
 
             player.ReceivedEvents.Clear();
 
@@ -107,8 +109,8 @@ namespace Tests
             var player = new TestServerPlayer();
             Game.HandleClientEvent(player, joinEvent);
             var party = player.GetParty(0);
-            var unit = party.GetUnits().First();
-          
+            var unit = party.BattleGroupLogic.GetUnits().First();
+
             Assert.That(unit.HP == unit.MaxHP);
         }
     }

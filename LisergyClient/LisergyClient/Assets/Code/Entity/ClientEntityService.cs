@@ -1,8 +1,11 @@
 ﻿using Game;
-using Game.Entity;
+using Game.Building;
+using Game.Dungeon;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
+using Game.Network.ServerPackets;
+using Game.Party;
 using System;
 
 namespace Assets.Code.World
@@ -10,9 +13,9 @@ namespace Assets.Code.World
     public class EntityListener : IEventListener
     {
 
-        public static event Action<ClientParty> OnPartyUpdated;
-        public static event Action<ClientBuilding> OnBuildingUpdated;
-        public static event Action<ClientDungeon> OnDungeonUpdated;
+        public static event Action<PartyView> OnPartyViewUpdated;
+        public static event Action<PlayerBuildingView> OnBuildingViewUpdated;
+        public static event Action<DungeonView> OnDungeonViewUpdated;
 
         public EntityListener(EventBus<ServerPacket> networkEvents)
         {
@@ -30,19 +33,9 @@ namespace Assets.Code.World
             if (knownEntity == null)
                 throw new System.Exception($"Server sent destroy event for entity {ev.EntityID} from {ev.OwnerID} at however its not visible to client");
 
-            var obj = knownEntity as IGameObject;
-            MainBehaviour.Destroy(obj.GameObject);
-
-            // TODO SEE WTF TO DO
-            /*
-            
-            if (knownEntity.Tile.StaticEntity == knownEntity)
-                knownEntity.Tile.StaticEntity = null;
-
-            if (knownEntity is MovableWorldEntity)
-                knownEntity.Tile.MovingEntities.Remove(knownEntity as MovableWorldEntity);
             knownEntity.Tile = null;
-            */
+            var view = GameView.GetView(knownEntity);
+            GameView.Destroy(view);
         }
 
         [EventMethod]
@@ -66,21 +59,25 @@ namespace Assets.Code.World
             var serverOwner = serverEntity.OwnerID;
             var owner = GameView.World.GetOrCreateClientPlayer(serverEntity.OwnerID);
             serverEntity.Owner = owner;
-            if (serverEntity is Party serverParty)
+
+            // Move this to a client system
+            if (serverEntity is PartyEntity serverParty)
             {
-                var clientEntity = owner.EnsureInstantiatedAndKnown<Party, ClientParty>(serverParty, ev.SyncedComponents);
-                OnPartyUpdated?.Invoke(clientEntity);
+                var view = owner.UpdateClientState<PartyEntity, PartyView>(serverParty, ev.SyncedComponents);
+                OnPartyViewUpdated?.Invoke(view);
             }
-            else if (serverEntity is Building serverBuilding)
+
+            else if (serverEntity is PlayerBuildingEntity serverBuilding)
             {
-                var clientEntity = owner.EnsureInstantiatedAndKnown<Building, ClientBuilding>(serverBuilding, ev.SyncedComponents);
-                OnBuildingUpdated?.Invoke(clientEntity);
+                var view = owner.UpdateClientState<PlayerBuildingEntity, PlayerBuildingView>(serverBuilding, ev.SyncedComponents);
+                OnBuildingViewUpdated?.Invoke(view);
             }
-            else if (serverEntity is Dungeon serverDungeon)
+            else if (serverEntity is DungeonEntity serverDungeon)
             {
-                var clientEntity = owner.EnsureInstantiatedAndKnown<Dungeon, ClientDungeon>(serverDungeon, ev.SyncedComponents);
-                OnDungeonUpdated?.Invoke(clientEntity);
+                var view = owner.UpdateClientState<DungeonEntity, DungeonView>(serverDungeon, ev.SyncedComponents);
+                OnDungeonViewUpdated?.Invoke(view);
             }
+
             else
                 throw new Exception($"Entity Factory does not know how to instantiate {serverEntity.GetType().Name}");
         }

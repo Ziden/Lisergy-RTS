@@ -1,7 +1,8 @@
 using Game;
-using Game.Battles;
-using Game.BattleTactics;
+using Game.Battle;
+using Game.Battler;
 using Game.Events;
+using Game.Network.ServerPackets;
 using NUnit.Framework;
 using ServerTests;
 using System;

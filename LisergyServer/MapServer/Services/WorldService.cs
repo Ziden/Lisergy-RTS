@@ -1,13 +1,12 @@
-﻿using Game;
-using Game.Battle;
-using Game.Entity;
+﻿using Game.Battler;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.GameEvents;
-using Game.Events.ServerEvents;
-using Game.World.Components;
+using Game.Network;
+using Game.Network.ClientPackets;
+using Game.Network.ServerPackets;
+using Game.Player;
 using System;
-using System.Collections.Generic;
 
 namespace Game.Listeners
 {
@@ -33,25 +32,22 @@ namespace Game.Listeners
                 Log.Debug($"Existing player {player.UserID} joined");
                 foreach (var tile in player.VisibleTiles)
                 {
-                    player.Send(tile.UpdatePacket);
-                    tile.Components.CallEvent(new TileSentToPlayerEvent(tile, player));
+                    tile.SetFlagIncludingChildren(DeltaFlag.SELF_REVEALED);
                 }
-                StrategyGame.GlobalGameEvents.Call(new PlayerJoinedEvent(player));
             }
             else
             {
-                player = ev.Sender;
                 var startTile = _world.GetUnusedStartingTile();
-                _world.PlaceNewPlayer(player, startTile);
-                Log.Debug($"New player {player.UserID} joined the world");
+                _world.PlaceNewPlayer(ev.Sender, startTile);
+                Log.Debug($"New player {ev.Sender.UserID} joined the world");
             }
         }
 
         [EventMethod]
         public void OnOffensiveAction(OffensiveMoveEvent ev)
         {
-            var atk = ev.Attacker as IBattleable;
-            var def = ev.Defender as IBattleable;
+            var atk = ev.Attacker as IBattleableEntity;
+            var def = ev.Defender as IBattleableEntity;
             if (atk != null && def != null)
             {
                 var battleID = Guid.NewGuid();

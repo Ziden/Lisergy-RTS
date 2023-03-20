@@ -1,5 +1,6 @@
 ﻿using Assets.Code.World;
 using Game;
+using Game.Tile;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,7 +11,7 @@ namespace Assets.Code
         private static Ray ray;
         private static RaycastHit hit;
  
-        public static Tile GetTileMouseIs()
+        public static TileEntity GetTileMouseIs()
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))

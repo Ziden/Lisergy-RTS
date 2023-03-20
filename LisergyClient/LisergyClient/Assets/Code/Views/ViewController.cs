@@ -1,37 +1,43 @@
-﻿using Game;
+﻿
+using Game.DataTypes;
 using Game.ECS;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.Code.Views
 {
     public class ViewController
     {
-        public Dictionary<object, IEntityView> _views = new Dictionary<object, IEntityView>();
+        public DefaultValueDictionary<Type, Dictionary<GameId, IEntityView>> _views = new DefaultValueDictionary<Type, Dictionary<GameId, IEntityView>>();
 
-        public T GetView<T>(object id) where T : IEntityView
+        public Dictionary<GameId, IEntityView> GetViews(Type t) => _views[t];
+
+        public void RemoveView(IEntityView view)
         {
-            if(_views.TryGetValue(id, out var v)) {
+            GetViews(view.GetType()).Remove(view.Entity.EntityId);
+        }
+
+        public T GetView<T>(IEntity e) where T : IEntityView
+        {
+            if (GetViews(e.GetType()).TryGetValue(e.EntityId, out var v))
+            {
                 return (T)v;
             }
             return default(T);
         }
 
-        public IEntityView GetView(object id)
+        public IEntityView GetView(IEntity e)
         {
-            if (_views.TryGetValue(id, out var v))
+            if (GetViews(e.GetType()).TryGetValue(e.EntityId, out var v))
             {
                 return v;
             }
             return null;
         }
 
-        public T AddView<T>(object id, T view) where T : IEntityView
+        public T AddView<T>(IEntity e, T view) where T : IEntityView
         {
-            _views[id] = view;
+            GetViews(e.GetType())[e.EntityId] = view;
             return view;
         }
     }

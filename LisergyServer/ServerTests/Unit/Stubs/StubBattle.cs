@@ -1,8 +1,6 @@
-﻿using Game.Battles;
+﻿using Game.Battle;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ServerTests
 {

@@ -1,32 +1,50 @@
 ﻿using Assets.Code.Views;
 using Game;
+using Game.DataTypes;
+using Game.ECS;
+using Game.Tile;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Code.World
 {
-    public class Effects
-    {
-        private static Dictionary<Tile, GameObject> _effects = new Dictionary<Tile, GameObject>();
 
-        public static void StopEffect(Tile t)
+    public class EffectRegistry
+    {
+        public IDictionary<GameId, List<GameObject>> Effects = new DefaultValueDictionary<GameId, List<GameObject>>();
+        public IDictionary<int, GameId> Indexes = new Dictionary<int, GameId>();
+    }
+
+    public static class EntityEffects<EntityType> where EntityType : IEntity
+    {
+
+        private static IDictionary<Type, EffectRegistry> _running = new DefaultValueDictionary<Type, EffectRegistry>();
+
+        private static EffectRegistry GetRunning()
         {
-            if (_effects.ContainsKey(t))
-                MainBehaviour.Destroy(_effects[t]);
+            return _running[typeof(EntityType)];
         }
 
-        public static void BattleEffect(Tile t)
+        public static void StopEffects(EntityType t)
         {
-            var view = GameView.Controller.GetView<TileView>(t);
-            StopEffect(t);
+            foreach (var e in GetRunning().Effects[t.EntityId])
+            {
+                MainBehaviour.Destroy(e);
+                GetRunning().Indexes.Remove(e.GetInstanceID());
+            }
+        }
+
+        // TODO: make generic
+        public static GameObject BattleEffect(EntityType t)
+        {
+            var view = GameView.Controller.GetView(t);
             var prefab = Resources.Load("prefabs/BattleEffect");
             var obj = MainBehaviour.Instantiate(prefab, view.GameObject.transform) as GameObject;
-            _effects[t] = obj;
+            GetRunning().Effects[t.EntityId].Add(obj);
+            GetRunning().Indexes[obj.GetInstanceID()] = t.EntityId;
             obj.transform.localPosition = new Vector3(0, 0.2f, 0);
+            return obj;
         }
     }
 }

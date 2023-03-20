@@ -1,28 +1,28 @@
-﻿
-using Game.Battles.Actions;
-using System;
+﻿using Game.BattleActions;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.Battles
+namespace Game.Battle
 {
     public class AutoRun
     {
 
-        private TurnBattle _battle;
+        private readonly TurnBattle _battle;
 
         public AutoRun(TurnBattle battle)
         {
-            this._battle = battle;
+            _battle = battle;
         }
 
-        TurnBattleResult Log => _battle.Result;
-        SortedSet<BattleUnit> UnitQueue => _battle._actionQueue;
+        private TurnBattleResult Log => _battle.Result;
+
+        private SortedSet<BattleUnit> UnitQueue => _battle._actionQueue;
 
         public TurnBattleResult RunAllRounds()
         {
-            while (!_battle.IsOver) {
-                PlayOneTurn();
+            while (!_battle.IsOver)
+            {
+                _ = PlayOneTurn();
             }
             Log.Winner = _battle.Attacker.AllDead ? _battle.Defender : _battle.Attacker;
             return Log;
@@ -31,18 +31,18 @@ namespace Game.Battles
         public virtual List<BattleAction> PlayOneTurn()
         {
             Log.NextTurn();
-            var actingUnit = UnitQueue.First();
+            BattleUnit actingUnit = UnitQueue.First();
             return TakeAction(actingUnit);
         }
 
         protected virtual List<BattleAction> TakeAction(BattleUnit unit)
         {
-            var enemyTeam = _battle.GetOpposingTeam(unit);
-            var enemy = enemyTeam.RandomUnit();
-            var action = new AttackAction(_battle, unit, enemy);
-            return _battle.ReceiveAction(action);     
+            BattleTeam enemyTeam = _battle.GetOpposingTeam(unit);
+            BattleUnit enemy = enemyTeam.RandomUnit();
+            AttackAction action = new AttackAction(_battle, unit, enemy);
+            return _battle.ReceiveAction(action);
         }
 
-        
+
     }
 }

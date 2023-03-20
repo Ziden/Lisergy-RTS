@@ -1,10 +1,7 @@
 ﻿using Game;
 using Game.DataTypes;
-using Game.Entity;
-using Game.Events.ServerEvents;
-using Game.World;
-using System;
-using System.Collections.Generic;
+using Game.Player;
+using Game.Tile;
 
 namespace Assets.Code.World
 {
@@ -14,7 +11,7 @@ namespace Assets.Code.World
         {
         }
 
-        public Tile GetTile(WorldEntity e)
+        public TileEntity GetTile(WorldEntity e)
         {
             return Map.GetTile(e.X, e.Y);
         }

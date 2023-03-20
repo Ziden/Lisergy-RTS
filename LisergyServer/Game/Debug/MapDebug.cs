@@ -1,9 +1,4 @@
-﻿using Game.World;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Game.Debug
+﻿namespace Game.Debug
 {
     public static class MapDebug
     {
@@ -15,7 +10,7 @@ namespace Game.Debug
                 for (var y = 0; y < w.SizeY; y++)
                 {
                     var tile = w.GetTile(x, y);
-                    if (tile == null)
+                    if (TileEntity == null)
                         Console.Write("N");
                     else if (tile.Building?.SpecID != 0)
                         Console.Write("^");

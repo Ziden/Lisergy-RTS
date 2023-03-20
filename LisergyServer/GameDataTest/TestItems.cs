@@ -7,7 +7,7 @@ namespace GameDataTest
     {
         public static ItemSpec GOLD = new ItemSpec()
         {
-            Id = 13, 
+            Id = 13,
             Type = ItemType.RESOURCE,
             Name = "Gold",
             Art = new ArtSpec() { Name = "items_13", Type = ArtType.SPRITE_SHEET }

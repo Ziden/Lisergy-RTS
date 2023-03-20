@@ -1,50 +1,70 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
 using Game.Entity;
-using Game.Events;
 using Game.Events.GameEvents;
-using Game.Events.ServerEvents;
-using Game.World.Components;
+using Game.FogOfWar;
+using Game.Network.ServerPackets;
+using Game.Network;
+using Game.Player;
+using Game.Tile;
 using System;
-using System.Collections.Generic;
 
 namespace Game
 {
 
     [Serializable]
-    public partial class WorldEntity : Ownable, IEntity, IDeltaTrackable
+    public partial class WorldEntity : IOwnable, IMapEntity
     {
         protected static Gaia Gaia { get; private set; } = new Gaia();
 
         protected GameId _id;
         protected ushort _x;
         protected ushort _y;
+        private GameId _ownerId;
 
+        [NonSerialized]
+        private PlayerEntity _owner;
         [field: NonSerialized]
-        public ComponentSet<WorldEntity> _components { get; private set; }
-
-        public IComponentSet Components => _components;
-
+        public ComponentSet _components { get; private set; }
         [NonSerialized]
-        protected Tile _tile;
-
+        protected TileEntity _tile;
         [NonSerialized]
-        protected Tile _previousTile;
+        protected TileEntity _previousTile;
 
-        public WorldEntity(PlayerEntity owner) : base(owner)
+        public WorldEntity(PlayerEntity owner)
         {
+            Owner = owner;
             _id = Guid.NewGuid();
             DeltaFlags = new DeltaFlags(this);
-            _components = new ComponentSet<WorldEntity>(this);
+            _components = new ComponentSet(this, owner);
         }
 
-        public bool IsDestroyed => _tile != null;
+        public bool IsInMap => _tile != null;
 
         public virtual GameId Id { get => _id; set => _id = value; }
         public virtual ushort X { get => _x; }
         public virtual ushort Y { get => _y; }
+        public IComponentSet Components => _components;
 
-        public virtual Tile Tile
+        public GameId EntityId => _id;
+
+        public GameId OwnerID { get => _ownerId; }
+
+        public virtual PlayerEntity Owner
+        {
+            get => _owner; set
+            {
+                if (value != null)
+                    _ownerId = value.UserID;
+                else
+                    _ownerId = GameId.ZERO;
+                _owner = value;
+            }
+        }
+
+        public TileEntity PreviousTile => _previousTile;
+
+        public virtual TileEntity Tile
         {
             get => _tile; set
             {
@@ -59,7 +79,7 @@ namespace Game
                 {
                     DeltaFlags.SetFlag(DeltaFlag.POSITION);
                 }
-              
+
                 if (_previousTile != null)
                 {
                     var moveOut = new EntityMoveOutEvent()
@@ -87,13 +107,14 @@ namespace Game
                 {
                     _x = _tile.X;
                     _y = _tile.Y;
-                } else
+                }
+                else
                 {
                     _x = 0;
                     _y = 0;
-                    if(_previousTile != null)
+                    if (_previousTile != null)
                     {
-                        foreach (var viewer in _previousTile.Components.Get<TileVisibilityComponent>().PlayersViewing)
+                        foreach (var viewer in _previousTile.Components.Get<TileVisibility>().PlayersViewing)
                             viewer.Send(new EntityDestroyPacket(this));
                     }
                 }

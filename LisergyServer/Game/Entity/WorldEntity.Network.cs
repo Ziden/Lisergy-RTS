@@ -1,47 +1,49 @@
-﻿using Game.Entity;
-using Game.Entity.Components;
-using Game.Events;
-using Game.Events.GameEvents;
+﻿using Game.Events;
 using Game.Events.ServerEvents;
-using Game.World.Components;
+using Game.FogOfWar;
+using Game.Movement;
+using Game.Network.ServerPackets;
+using Game.Network;
+using Game.Player;
 using System;
 using System.Collections.Generic;
 
 namespace Game
 {
-    public partial class WorldEntity : Ownable, IDeltaTrackable
+    public partial class WorldEntity : IDeltaTrackable, IDeltaUpdateable<EntityUpdatePacket>
     {
         [field: NonSerialized]
         private DeltaFlags _flags;
 
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
 
-        public ServerPacket GenerateDeltaPacket() => new EntityUpdatePacket(this);
+        public EntityUpdatePacket GetUpdatePacket(PlayerEntity receiver)
+        {
+            var packet = new EntityUpdatePacket(this);
+            packet.SyncedComponents = this.Components.GetSyncedComponents(receiver);
+            return packet;
+        }
 
         private static HashSet<PlayerEntity> viewersCache = new HashSet<PlayerEntity>();
 
         public void ProccessDeltas(PlayerEntity trigger)
         {
-            if(DeltaFlags.HasFlag(DeltaFlag.POSITION))
-            {
-                OnPositionChanged();
-            }
-            if(DeltaFlags.HasFlag(DeltaFlag.EXISTENCE))
-            {
+            if (DeltaFlags.HasFlag(DeltaFlag.EXISTENCE))
                 OnExistenceChanged();
-            }
-            if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
-            {
-                trigger.Send(new EntityUpdatePacket(this));
-            }
+            else if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
+                trigger.Send(GetUpdatePacket(trigger));
+            if (DeltaFlags.HasFlag(DeltaFlag.POSITION))
+                OnPositionChanged();
+
         }
 
         private void OnExistenceChanged()
         {
             if (Tile == null) return; // was removed
-            foreach(var playerViewing in Tile.Components.Get<TileVisibilityComponent>().PlayersViewing)
+
+            foreach (var playerViewing in Tile.PlayersViewing)
             {
-                playerViewing.Send(new EntityUpdatePacket(this));
+                playerViewing.Send(this.GetUpdatePacket(playerViewing));
             }
         }
 
@@ -55,22 +57,21 @@ namespace Game
             var allViewers = viewersCache;
             if (previousTile != newTile && previousTile != null)
             {
-                allViewers.UnionWith(previousTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
+                allViewers.UnionWith(previousTile.Components.Get<TileVisibility>().PlayersViewing);
                 if (newTile != null)
-                    allViewers.UnionWith(newTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
+                    allViewers.UnionWith(newTile.Components.Get<TileVisibility>().PlayersViewing);
 
                 var movePacket = new EntityMovePacket(this, movementComponent, newTile);
                 foreach (var viewer in allViewers)
                     viewer.Send(movePacket);
             }
 
-            var newPlayersViewing = new HashSet<PlayerEntity>(newTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
+            var newPlayersViewing = new HashSet<PlayerEntity>(newTile.Components.Get<TileVisibility>().PlayersViewing);
             if (previousTile != null)
-                newPlayersViewing.ExceptWith(previousTile.Components.Get<TileVisibilityComponent>().PlayersViewing);
+                newPlayersViewing.ExceptWith(previousTile.Components.Get<TileVisibility>().PlayersViewing);
 
-            var packet = new EntityUpdatePacket(this);
             foreach (var viewer in newPlayersViewing)
-                viewer.Send(packet);
+                viewer.Send(this.GetUpdatePacket(viewer));
         }
     }
 }

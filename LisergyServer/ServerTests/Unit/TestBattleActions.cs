@@ -1,7 +1,6 @@
-using Game;
-using Game.Battles;
-using Game.Battles.Actions;
-using Game.BattleTactics;
+using Game.Battle;
+using Game.BattleActions;
+using Game.Battler;
 using NUnit.Framework;
 using System;
 using System.Linq;

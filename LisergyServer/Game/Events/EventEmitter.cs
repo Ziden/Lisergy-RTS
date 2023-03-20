@@ -1,12 +1,7 @@
-﻿using Game;
-using Game.Events;
-using Game.Events.ClientEvents;
-using Game.Events.ServerEvents;
-
-namespace LisergyServer.Core
+﻿namespace Game.Events
 {
     public class EventEmitter
     {
-    
+
     }
 }

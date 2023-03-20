@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+
+using Game.Tile;
 
 namespace Game.Events.GameEvents
 {
-    public class StaticEntityPlacedEvent : GameEvent
+    public class BuildingPlacedEvent : GameEvent
     {
-        public StaticEntity Entity;
-        public Tile Tile;
+        public WorldEntity Entity;
+        public TileEntity Tile;
 
-        public StaticEntityPlacedEvent(StaticEntity entity, Tile tile)
+        public BuildingPlacedEvent(WorldEntity entity, TileEntity tile)
         {
             Entity = entity;
             Tile = tile;

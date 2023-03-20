@@ -1,8 +1,8 @@
-﻿using Game.BattleTactics;
+﻿using Game.Battle;
 using Game.DataTypes;
 using System;
 
-namespace Game.Battles
+namespace Game.BattleActions
 {
     [Serializable]
     public class BattleAction
@@ -22,7 +22,10 @@ namespace Game.Battles
             get
             {
                 if (_unit == null)
-                    _unit = Battle.FindBattleUnit(this.UnitID);
+                {
+                    _unit = Battle.FindBattleUnit(UnitID);
+                }
+
                 return _unit;
             }
             set { _unit = value; UnitID = value.UnitID; }
@@ -32,7 +35,7 @@ namespace Game.Battles
 
         public BattleAction(TurnBattle battle, BattleUnit atk)
         {
-            this.Unit = atk;
+            Unit = atk;
             Battle = battle;
         }
     }

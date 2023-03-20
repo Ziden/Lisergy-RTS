@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Game.Tile;
 
 namespace Game.Events.GameEvents
 {
-    public class StaticEntityRemovedEvent : GameEvent
+    public class BuildingRemovedEvent : GameEvent
     {
-        public StaticEntity Entity;
-        public Tile Tile;
+        public WorldEntity Entity;
+        public TileEntity Tile;
 
-        public StaticEntityRemovedEvent(StaticEntity entity, Tile tile)
+        public BuildingRemovedEvent(WorldEntity entity, TileEntity tile)
         {
             Entity = entity;
             Tile = tile;

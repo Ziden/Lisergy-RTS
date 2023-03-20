@@ -1,9 +1,7 @@
 using Game;
-using Game.Events.ServerEvents;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
-using System.Linq;
 
 namespace Tests
 {
@@ -15,7 +13,7 @@ namespace Tests
         public void SetupTests()
         {
             GameWorld world = new GameWorld(10, 50, 50);
-          
+
             Game = new TestGame(world);
         }
 

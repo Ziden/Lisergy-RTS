@@ -1,7 +1,12 @@
 ﻿using Assets.Code;
 using Assets.Code.World;
 using Game;
-using Game.Battles;
+using Game.Battle;
+using Game.Battler;
+using Game.Dungeon;
+using Game.Tile;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,9 +20,9 @@ public class DungeonUI : MonoBehaviour
     public GameObject StartButton;
 
     private int _viewingBattle = 0;
-    private ClientDungeon _dungeon;
+    private DungeonEntity _dungeon;
 
-    public Unit[] ViewingBattle => _dungeon.Battles[_viewingBattle];
+    public IReadOnlyList<Unit> ViewingBattle => _dungeon.BattleGroupLogic.GetUnits();
 
     public DungeonUI()
     {
@@ -37,14 +42,14 @@ public class DungeonUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Display(ClientDungeon dungeon)
+    public void Display(DungeonEntity dungeon)
     {
         _dungeon = dungeon;
         Log.Info($"Displaying {dungeon}");
         gameObject.SetActive(true);
         for (var x = 0 ; x < 4; x++)
         {
-            var unitActive = ViewingBattle.Length > x;
+            var unitActive = ViewingBattle.Count > x;
             UnitPanel[x].gameObject.SetActive(unitActive);
             if (!unitActive) continue;
             var battleUnit = ViewingBattle[x];
@@ -53,7 +58,7 @@ public class DungeonUI : MonoBehaviour
         PartyUI.DrawPartyIcon(UIManager.PartyUI.SelectedParty, PartyFace);
     }
 
-    public void OnClickTile(Tile tile)
+    public void OnClickTile(TileEntity tile)
     {
         /*
         var dungeon = tile.StaticEntity as ClientDungeon;

@@ -1,26 +1,39 @@
 ﻿using Game;
 using Game.Events.GameEvents;
+using Game.Tile;
 using UnityEngine;
 
 namespace Assets.Code.Views
 {
-    public partial class TileView : EntityView<Tile>
+    public partial class TileView : EntityView<TileEntity>
     {
         public void RegisterEvents()
         {
-            Entity.Components.RegisterExternalComponentEvents<TileView, TileVisibilityChangedEvent>(OnVisChange);
-            Entity.Components.RegisterExternalComponentEvents<TileView, TileExplorationStateChanged>(OnExploChange);
+            Entity.Components.RegisterExternalComponentEvents<TileView, TileVisibilityChangedEvent>(OnVisibilityChange);
         }
 
-        private static void OnExploChange(TileView view, TileExplorationStateChanged ev)
+        private static void OnVisibilityChange(TileView view, TileVisibilityChangedEvent ev)
         {
-            Log.Debug($"EXPLO CHANGE {view}");
+            if (!view.Instantiated)
+                return;
+
+            if (!ev.Visible)
+            {
+                view.SetColor(new Color(0.5f, 0.5f, 0.5f));
+            }
+            else
+            {
+                view.SetColor(new Color(1f, 1f, 1f));
+                view.GameObject.SetActive(ev.Visible);
+            }
         }
 
-        private static void OnVisChange(TileView view, TileVisibilityChangedEvent ev)
+        private void SetColor(Color c)
         {
-            Log.Debug($"Toggling Visibility of Tile {view.Entity}");
-            view?.SetFogOfWarDisabled(ev.Visible);
+            foreach(var r in GameObject.GetComponentsInChildren<Renderer>())
+            {
+                r.material.color = c;
+            }
         }
     }
 }

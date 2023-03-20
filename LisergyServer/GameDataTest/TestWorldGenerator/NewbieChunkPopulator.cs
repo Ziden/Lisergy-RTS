@@ -1,5 +1,4 @@
 ﻿using Game.World;
-using System;
 
 namespace Game.Generator
 {
@@ -8,13 +7,12 @@ namespace Game.Generator
         int tries = GameWorld.PLAYERS_CHUNKS;
         int wait = 0;
 
-        private static bool DEBUG = false;
-
         public override void Populate(GameWorld w, Chunk c)
         {
             w.Map.SetFlag(c.X, c.Y, ChunkFlag.NEWBIE_CHUNK);
 
-            for (var i = 0; i < GameWorld.CHUNK_SIZE; i++) {
+            for (var i = 0; i < GameWorld.CHUNK_SIZE; i++)
+            {
                 c.GetTile(0, i).TileId = 1;
                 c.GetTile(i, 0).TileId = 2;
             }
@@ -23,9 +21,9 @@ namespace Game.Generator
             {
                 for (var i = 0; i < GameWorld.CHUNK_SIZE; i++)
                 {
-                    c.GetTile(i,i).TileId = 3;
+                    c.GetTile(i, i).TileId = 3;
                 }
-                   
+
                 return;
             }
         }

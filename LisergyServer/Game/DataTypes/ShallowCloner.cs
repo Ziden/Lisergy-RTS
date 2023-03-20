@@ -10,27 +10,27 @@ namespace Game.DataTypes
     /// </summary>
     public static class ShallowCloner<T>
     {
-        private static Func<T, T> cloner = CreateCloner();
+        private static readonly Func<T, T> cloner = CreateCloner();
 
-        private static Dictionary<Type, Func<T, T>> _cloners = new Dictionary<Type, Func<T, T>>();
+        private static readonly Dictionary<Type, Func<T, T>> _cloners = new Dictionary<Type, Func<T, T>>();
 
         private static Func<T, T> CreateCloner()
         {
-            if (_cloners.TryGetValue(typeof(T), out var cloner))
+            if (_cloners.TryGetValue(typeof(T), out Func<T, T> cloner))
             {
                 return cloner;
             }
-            var cloneMethod = new DynamicMethod("CloneImplementation", typeof(T), new Type[] { typeof(T) }, true);
-            var defaultCtor = typeof(T).GetConstructor(new Type[] { });
+            DynamicMethod cloneMethod = new DynamicMethod("CloneImplementation", typeof(T), new Type[] { typeof(T) }, true);
+            ConstructorInfo defaultCtor = typeof(T).GetConstructor(new Type[] { });
 
-            var generator = cloneMethod.GetILGenerator();
+            ILGenerator generator = cloneMethod.GetILGenerator();
 
-            var loc1 = generator.DeclareLocal(typeof(T));
+            LocalBuilder loc1 = generator.DeclareLocal(typeof(T));
 
             generator.Emit(OpCodes.Newobj, defaultCtor);
             generator.Emit(OpCodes.Stloc, loc1);
 
-            foreach (var field in typeof(T).GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            foreach (FieldInfo field in typeof(T).GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
                 generator.Emit(OpCodes.Ldloc, loc1);
                 generator.Emit(OpCodes.Ldarg_0);

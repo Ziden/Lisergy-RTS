@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.ECS;
 using Game.Events.GameEvents;
 using System;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace Assets.Code.Views
 
         public Chunk Entity { get; }
         public GameObject GameObject { get; set; }
+
+        IEntity IEntityView.Entity => Entity;
 
         public ChunkView(ref Chunk c) : base()
         {

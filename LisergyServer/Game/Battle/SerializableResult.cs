@@ -1,7 +1,7 @@
-﻿using System;
-using System.Text;
+﻿using Game.BattleActions;
+using System;
 
-namespace Game.Battles.Actions
+namespace Game.Battle
 {
     [Serializable]
     public class SerializableResult
@@ -11,8 +11,10 @@ namespace Game.Battles.Actions
             Attacker = result.Attacker;
             Defender = result.Defender;
             Turns = new SerializableTurn[result.Turns.Count];
-            for (var x = 0; x < Turns.Length; x++)
+            for (int x = 0; x < Turns.Length; x++)
+            {
                 Turns[x] = new SerializableTurn(result.Turns[x]);
+            }
         }
 
         public string BattleID;
@@ -30,8 +32,10 @@ namespace Game.Battles.Actions
         public SerializableTurn(TurnLog turnLog)
         {
             Actions = new BattleAction[turnLog.Actions.Count];
-            for (var x = 0; x < turnLog.Actions.Count; x++)
+            for (int x = 0; x < turnLog.Actions.Count; x++)
+            {
                 Actions[x] = turnLog.Actions[x];
+            }
         }
     }
 }

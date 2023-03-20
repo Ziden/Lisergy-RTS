@@ -1,4 +1,7 @@
-﻿namespace Game.Events.GameEvents
+﻿using Game.Battler;
+using Game.ECS;
+
+namespace Game.Events.GameEvents
 {
     /// <summary>
     /// When a unit is removed from an entity. 
@@ -6,9 +9,9 @@
     public class UnitRemovedEvent : GameEvent
     {
         public Unit[] Units;
-        public WorldEntity Entity;
+        public IEntity Entity;
 
-        public UnitRemovedEvent(WorldEntity entity, params Unit[] units)
+        public UnitRemovedEvent(IEntity entity, params Unit[] units)
         {
             Units = units;
             Entity = entity;

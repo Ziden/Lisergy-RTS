@@ -1,6 +1,8 @@
-﻿using Game.ECS;
+﻿using Game.DataTypes;
+using Game.ECS;
+using Game.Pathfinder;
+using Game.Tile;
 using Game.World;
-using Game.World.Data;
 using System;
 using System.Collections.Generic;
 
@@ -19,7 +21,10 @@ namespace Game
         private ChunkData _data;
 
         [NonSerialized]
-        private Tile[,] _tiles;
+        private TileEntity[,] _tiles;
+
+        [NonSerialized]
+        private GameId _id;
 
         public bool IsVoid()
         {
@@ -35,12 +40,16 @@ namespace Game
 
         public void SetFlag(byte flag) => _data.SetFlag(flag);
 
-        public Tile[,] Tiles { get => _tiles; private set => _tiles = value; }
+        public TileEntity[,] Tiles { get => _tiles; private set => _tiles = value; }
 
         public IComponentSet Components => throw new NotImplementedException();
 
-        public Chunk(ChunkMap w, int x, int y, Tile[,] tiles)
-        {;
+        public GameId EntityId => _id;
+
+        public Chunk(ChunkMap w, int x, int y, TileEntity[,] tiles)
+        {
+            ;
+            _id = GameId.Generate();
             _data = new ChunkData();
             _data.Position = new Position(x, y);
             _data.Allocate();
@@ -53,17 +62,17 @@ namespace Game
             _data.FlagToBeReused();
         }
 
-        public Tile CreateTile(in int tileX, in int tileY)
+        public TileEntity CreateTile(in int tileX, in int tileY)
         {
             var internalTileX = tileX % GameWorld.CHUNK_SIZE;
             var internalTileY = tileY % GameWorld.CHUNK_SIZE;
             var dataPointer = _data.GetTileData(internalTileX, internalTileY);
-            var tile = new Tile(this, dataPointer, tileX, tileY);
+            var tile = new TileEntity(this, dataPointer, tileX, tileY);
             return tile;
         }
 
 
-        public Tile GetTile(in int x, in int y)
+        public TileEntity GetTile(in int x, in int y)
         {
             return Tiles[x, y];
         }
@@ -73,7 +82,7 @@ namespace Game
             return $"<Chunk x={X} y={Y}>";
         }
 
-        public IEnumerable<Tile> AllTiles()
+        public IEnumerable<TileEntity> AllTiles()
         {
             for (var x = 0; x < _tiles.GetLength(0); x++)
                 for (var y = 0; y < _tiles.GetLength(1); y++)
@@ -85,6 +94,6 @@ namespace Game
             _data.Free();
         }
 
-     
+
     }
 }

@@ -1,17 +1,14 @@
 ﻿using BattleServer;
 using Game;
-using Game.Battles;
-using Game.ECS;
 using Game.Events;
-using Game.Events.GameEvents;
 using Game.Listeners;
+using Game.Network;
+using Game.Player;
+using Game.Tile;
 using Game.World;
-using Game.World.Components;
 using GameData;
 using GameDataTest;
-using LisergyServer.Core;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ServerTests
 {
@@ -28,7 +25,9 @@ namespace ServerTests
 
         private static GameWorld GetTestWorld(GameWorld source = null)
         {
-            if(source != null)
+            WorldUtils.SetRandomSeed(666);
+            DeltaTracker.Clear();
+            if (source != null)
             {
                 return source;
             }
@@ -51,19 +50,18 @@ namespace ServerTests
 
         public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), GetTestWorld(world))
         {
-            
+
             if (!_registered)
             {
                 _registered = true;
             }
             Serialization.LoadSerializers();
-            DeltaTracker.Clear();
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);
             this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             if (createPlayer)
-                CreatePlayer();  
+                CreatePlayer();
         }
 
         public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientPacket
@@ -74,7 +72,7 @@ namespace ServerTests
 
         public TestServerPlayer CreatePlayer(int x = 10, int y = 10)
         {
-            var player = new TestServerPlayer(); 
+            var player = new TestServerPlayer();
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
             player.UserID = TestServerPlayer.TEST_ID;
             var tile = this.World.GetTile(x, y);
@@ -108,11 +106,11 @@ namespace ServerTests
         }
 
 
-        public Tile RandomNotBuiltTile()
+        public TileEntity RandomNotBuiltTile()
         {
             var tiles = World.AllTiles();
             foreach (var tile in tiles)
-                if (tile.Components.Get<EntityPlacementComponent>().StaticEntity == null)
+                if (tile.Components.Get<TileHabitants>().Building == null)
                     return tile;
             throw new System.Exception("No unbuilt tile");
         }

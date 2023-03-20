@@ -1,14 +1,12 @@
-﻿
-using Game.Battles.Actions;
-using Game.BattleTactics;
+﻿using Game.BattleActions;
+using Game.Battler;
 using Game.DataTypes;
 using Game.Events;
-using Game.Movement;
-using System;
+using Game.Network.ServerPackets;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.Battles
+namespace Game.Battle
 {
     public class TurnBattle
     {
@@ -29,7 +27,7 @@ namespace Game.Battles
 
         public TurnBattle(GameId id, BattleTeam attacker, BattleTeam defender)
         {
-            this.ID = id;
+            ID = id;
             Attacker = Result.Attacker = attacker;
             Defender = Result.Defender = defender;
             AutoRun = new AutoRun(this);
@@ -41,18 +39,19 @@ namespace Game.Battles
         public List<BattleAction> ReceiveAction(BattleAction action)
         {
             Result.NextTurn();
-            var unit = CurrentActingUnit;
+            BattleUnit unit = CurrentActingUnit;
             if (unit != action.Unit)
             {
-                action.Result = new ActionResult();
-                action.Result.Succeeded = false;
+                action.Result = new ActionResult
+                {
+                    Succeeded = false
+                };
                 return null;
             }
-            if(action is AttackAction)
+            if (action is AttackAction attack)
             {
-                var attack = (AttackAction)action;
                 action.Result = attack.Unit.Attack(attack.Defender);
-                action.Result.Succeeded = true;   
+                action.Result.Succeeded = true;
             }
             UpdateRT(unit);
             Result.AddAction(action);
@@ -61,15 +60,14 @@ namespace Game.Battles
 
         public void UpdateRT(BattleUnit unit)
         {
-            _actionQueue.Remove(unit);
+            _ = _actionQueue.Remove(unit);
             unit.RT += unit.GetMaxRT();
-            _actionQueue.Add(unit);
+            _ = _actionQueue.Add(unit);
         }
 
         public virtual BattleTeam GetOpposingTeam(BattleUnit unit)
         {
-            if (unit.Team == Attacker) return Defender;
-            return Attacker;
+            return unit.Team == Attacker ? Defender : Attacker;
         }
 
         public override string ToString()
@@ -79,15 +77,23 @@ namespace Game.Battles
 
         public Unit FindUnit(GameId id)
         {
-            var unit = Attacker.Units.FirstOrDefault(u => u != null && u.UnitID == id);
-            if (unit == null) unit = Defender.Units.FirstOrDefault(u => u != null && u.UnitID == id);
+            BattleUnit unit = Attacker.Units.FirstOrDefault(u => u != null && u.UnitID == id);
+            if (unit == null)
+            {
+                unit = Defender.Units.FirstOrDefault(u => u != null && u.UnitID == id);
+            }
+
             return unit.UnitReference;
         }
 
         public BattleUnit FindBattleUnit(GameId id)
         {
-            var unit = Attacker.Units.FirstOrDefault(u => u != null && u.UnitID == id);
-            if (unit == null) unit = Defender.Units.FirstOrDefault(u => u != null && u.UnitID == id);
+            BattleUnit unit = Attacker.Units.FirstOrDefault(u => u != null && u.UnitID == id);
+            if (unit == null)
+            {
+                unit = Defender.Units.FirstOrDefault(u => u != null && u.UnitID == id);
+            }
+
             return unit;
         }
     }

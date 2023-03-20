@@ -1,6 +1,7 @@
 ﻿
-using Assets.Code.World;
 using Game;
+using Game.Party;
+using Game.Tile;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Assets.Code
 {
     public class TileUI
     {
-        private Tile _selectedTile;
+        private TileEntity _selectedTile;
 
         private GameObject _tileCursor;
         private GameObject _partyCursor;
@@ -24,18 +25,19 @@ namespace Assets.Code
             _partyCursor = CreateCursor();
         }
 
-        public void StartMoveReq(ClientParty party, List<Tile> path)
+        public void StartMoveReq(PartyEntity party, List<TileEntity> path)
         {
             if (IsActive(_tileCursor))
                 Inactivate(_tileCursor);
             _selectedTile = null;
         }
 
-        private void SelectParty(ClientParty party)
+        private void SelectParty(PartyEntity party)
         {
             Activate(_partyCursor);
             MoveToTile(_partyCursor, party.Tile);
-            _partyCursor.transform.SetParent(party.GameObject.transform);
+            var view = GameView.GetView(party);
+            _partyCursor.transform.SetParent(view.GameObject.transform);
         }
 
         private void CameraMove(Vector3 old, Vector3 newPos)
@@ -45,11 +47,12 @@ namespace Assets.Code
             _selectedTile = null;
         }
 
-        public Tile SelectedTile { get => _selectedTile; }
+        public TileEntity SelectedTile { get => _selectedTile; }
 
-        private void ClickTile(Tile tile)
+        private void ClickTile(TileEntity tile)
         {
-            Log.Debug($"TileUI selecting tile {tile} {tile.EntitiesViewing.Count}");
+            if (tile == null) return;
+            Log.Debug($"TileUI selecting tile {tile}");
             foreach(var e in tile.EntitiesViewing)
             {
                 Log.Debug(""+e);
@@ -64,7 +67,7 @@ namespace Assets.Code
             }
         }
 
-        private void MoveToTile(GameObject cursor, Tile tile)
+        private void MoveToTile(GameObject cursor, TileEntity tile)
         {
             cursor.transform.position = new Vector3(tile.X, 0, tile.Y);
         }

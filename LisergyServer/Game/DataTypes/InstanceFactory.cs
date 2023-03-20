@@ -14,7 +14,7 @@ namespace Game.DataTypes
     {
         private delegate object CreateDelegate(Type type, object arg1, object arg2, object arg3);
 
-        private static Dictionary<Tuple<Type, Type, Type, Type>, CreateDelegate> cachedFuncs = new Dictionary<Tuple<Type, Type, Type, Type>, CreateDelegate>();
+        private static readonly Dictionary<Tuple<Type, Type, Type, Type>, CreateDelegate> cachedFuncs = new Dictionary<Tuple<Type, Type, Type, Type>, CreateDelegate>();
 
         public static object CreateInstance(Type type)
         {
@@ -44,7 +44,9 @@ namespace Game.DataTypes
         public static object CreateInstance(Type type, params object[] args)
         {
             if (args == null)
+            {
                 return CreateInstance(type);
+            }
 
             if (args.Length > 3 ||
               (args.Length > 0 && args[0] == null) ||
@@ -54,83 +56,95 @@ namespace Game.DataTypes
                 return Activator.CreateInstance(type, args);
             }
 
-            var arg0 = args.Length > 0 ? args[0] : null;
-            var arg1 = args.Length > 1 ? args[1] : null;
-            var arg2 = args.Length > 2 ? args[2] : null;
+            object arg0 = args.Length > 0 ? args[0] : null;
+            object arg1 = args.Length > 1 ? args[1] : null;
+            object arg2 = args.Length > 2 ? args[2] : null;
 
-            var key = Tuple.Create(
+            Tuple<Type, Type, Type, Type> key = Tuple.Create(
               type,
               arg0?.GetType() ?? typeof(TypeToIgnore),
               arg1?.GetType() ?? typeof(TypeToIgnore),
               arg2?.GetType() ?? typeof(TypeToIgnore));
 
-            if (cachedFuncs.TryGetValue(key, out CreateDelegate func))
-                return func(type, arg0, arg1, arg2);
-            else
-                return CacheFunc(key)(type, arg0, arg1, arg2);
+            return cachedFuncs.TryGetValue(key, out CreateDelegate func) ? func(type, arg0, arg1, arg2) : CacheFunc(key)(type, arg0, arg1, arg2);
         }
 
         private static CreateDelegate CacheFunc(Tuple<Type, Type, Type, Type> key)
         {
-            var types = new Type[] { key.Item1, key.Item2, key.Item3, key.Item4 };
-            var method = typeof(InstanceFactory).GetMethods()
+            Type[] types = new Type[] { key.Item1, key.Item2, key.Item3, key.Item4 };
+            MethodInfo method = typeof(InstanceFactory).GetMethods()
                                                 .Where(m => m.Name == "CreateInstance")
                                                 .Where(m => m.GetParameters().Count() == 4).Single();
-            var generic = method.MakeGenericMethod(new Type[] { key.Item2, key.Item3, key.Item4 });
+            MethodInfo generic = method.MakeGenericMethod(new Type[] { key.Item2, key.Item3, key.Item4 });
 
-            var paramExpr = new List<ParameterExpression>();
-            paramExpr.Add(Expression.Parameter(typeof(Type)));
+            List<ParameterExpression> paramExpr = new List<ParameterExpression>
+            {
+                Expression.Parameter(typeof(Type))
+            };
             for (int i = 0; i < 3; i++)
+            {
                 paramExpr.Add(Expression.Parameter(typeof(object)));
+            }
 
-            var callParamExpr = new List<Expression>();
-            callParamExpr.Add(paramExpr[0]);
+            List<Expression> callParamExpr = new List<Expression>
+            {
+                paramExpr[0]
+            };
             for (int i = 1; i < 4; i++)
+            {
                 callParamExpr.Add(Expression.Convert(paramExpr[i], types[i]));
+            }
 
-            var callExpr = Expression.Call(generic, callParamExpr);
-            var lambdaExpr = Expression.Lambda<CreateDelegate>(callExpr, paramExpr);
-            var func = lambdaExpr.Compile();
-            cachedFuncs.TryAdd(key, func);
+            MethodCallExpression callExpr = Expression.Call(generic, callParamExpr);
+            Expression<CreateDelegate> lambdaExpr = Expression.Lambda<CreateDelegate>(callExpr, paramExpr);
+            CreateDelegate func = lambdaExpr.Compile();
+            _ = cachedFuncs.TryAdd(key, func);
             return func;
         }
     }
 
     public static class InstanceFactoryGeneric<TArg1, TArg2, TArg3>
     {
-        private static Dictionary<Type, Func<TArg1, TArg2, TArg3, object>> cachedFuncs = new Dictionary<Type, Func<TArg1, TArg2, TArg3, object>>();
+        private static readonly Dictionary<Type, Func<TArg1, TArg2, TArg3, object>> cachedFuncs = new Dictionary<Type, Func<TArg1, TArg2, TArg3, object>>();
 
         public static object CreateInstance(Type type, TArg1 arg1, TArg2 arg2, TArg3 arg3)
         {
-            if (cachedFuncs.TryGetValue(type, out Func<TArg1, TArg2, TArg3, object> func))
-                return func(arg1, arg2, arg3);
-            else
-                return CacheFunc(type, arg1, arg2, arg3)(arg1, arg2, arg3);
+            return cachedFuncs.TryGetValue(type, out Func<TArg1, TArg2, TArg3, object> func)
+                ? func(arg1, arg2, arg3)
+                : CacheFunc(type, arg1, arg2, arg3)(arg1, arg2, arg3);
         }
 
         private static Func<TArg1, TArg2, TArg3, object> CacheFunc(Type type, TArg1 arg1, TArg2 arg2, TArg3 arg3)
         {
-            var constructorTypes = new List<Type>();
+            List<Type> constructorTypes = new List<Type>();
             if (typeof(TArg1) != typeof(TypeToIgnore))
+            {
                 constructorTypes.Add(typeof(TArg1));
-            if (typeof(TArg2) != typeof(TypeToIgnore))
-                constructorTypes.Add(typeof(TArg2));
-            if (typeof(TArg3) != typeof(TypeToIgnore))
-                constructorTypes.Add(typeof(TArg3));
+            }
 
-            var parameters = new List<ParameterExpression>()
+            if (typeof(TArg2) != typeof(TypeToIgnore))
+            {
+                constructorTypes.Add(typeof(TArg2));
+            }
+
+            if (typeof(TArg3) != typeof(TypeToIgnore))
+            {
+                constructorTypes.Add(typeof(TArg3));
+            }
+
+            List<ParameterExpression> parameters = new List<ParameterExpression>()
     {
       Expression.Parameter(typeof(TArg1)),
       Expression.Parameter(typeof(TArg2)),
       Expression.Parameter(typeof(TArg3)),
     };
 
-            var constructor = type.GetConstructor(constructorTypes.ToArray());
-            var constructorParameters = parameters.Take(constructorTypes.Count).ToList();
-            var newExpr = Expression.New(constructor, constructorParameters);
-            var lambdaExpr = Expression.Lambda<Func<TArg1, TArg2, TArg3, object>>(newExpr, parameters);
-            var func = lambdaExpr.Compile();
-            cachedFuncs.TryAdd(type, func);
+            ConstructorInfo constructor = type.GetConstructor(constructorTypes.ToArray());
+            List<ParameterExpression> constructorParameters = parameters.Take(constructorTypes.Count).ToList();
+            NewExpression newExpr = Expression.New(constructor, constructorParameters);
+            Expression<Func<TArg1, TArg2, TArg3, object>> lambdaExpr = Expression.Lambda<Func<TArg1, TArg2, TArg3, object>>(newExpr, parameters);
+            Func<TArg1, TArg2, TArg3, object> func = lambdaExpr.Compile();
+            _ = cachedFuncs.TryAdd(type, func);
             return func;
         }
     }
@@ -158,39 +172,38 @@ namespace Game.DataTypes
         public static Delegate Compile<DelegateType>(Type instanceType)
         {
 
-            var delegateType = typeof(DelegateType);
+            Type delegateType = typeof(DelegateType);
             if (!typeof(Delegate).IsAssignableFrom(delegateType))
             {
-                throw new ArgumentException(String.Format("{0} is not a Delegate type.", delegateType.FullName), "delegateType");
+                throw new ArgumentException(string.Format("{0} is not a Delegate type.", delegateType.FullName), "delegateType");
             }
-            var invoke = delegateType.GetMethod("Invoke");
-            var parameterTypes = invoke.GetParameters().Select(pi => pi.ParameterType).ToArray();
-            var resultType = invoke.ReturnType;
+            MethodInfo invoke = delegateType.GetMethod("Invoke");
+            Type[] parameterTypes = invoke.GetParameters().Select(pi => pi.ParameterType).ToArray();
+            Type resultType = invoke.ReturnType;
             if (!resultType.IsAssignableFrom(instanceType))
             {
-                throw new ArgumentException(String.Format("Delegate's return type ({0}) is not assignable from {1}.", resultType.FullName, instanceType.FullName));
+                throw new ArgumentException(string.Format("Delegate's return type ({0}) is not assignable from {1}.", resultType.FullName, instanceType.FullName));
             }
-            var ctor = instanceType.GetConstructor(
+            ConstructorInfo ctor = instanceType.GetConstructor(
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, parameterTypes, null);
             if (ctor == null)
             {
                 throw new ArgumentException("Can't find constructor with delegate's signature", "instanceType");
             }
-            var parapeters = parameterTypes.Select(Expression.Parameter).ToArray();
+            ParameterExpression[] parapeters = parameterTypes.Select(Expression.Parameter).ToArray();
 
-            var newExpression = Expression.Lambda(delegateType,
+            LambdaExpression newExpression = Expression.Lambda(delegateType,
                 Expression.Convert(Expression.New(ctor, parapeters), resultType),
                 parapeters);
-            var @delegate = newExpression.Compile();
+            Delegate @delegate = newExpression.Compile();
             return @delegate;
         }
 
         public static T CreateInstance<T>(Type objType) where T : class
         {
-            Func<T> returnFunc;
-            if (!DelegateStore<T>.Store.TryGetValue(objType.FullName, out returnFunc))
+            if (!DelegateStore<T>.Store.TryGetValue(objType.FullName, out Func<T> returnFunc))
             {
-                var dynMethod = new DynamicMethod("DM$OBJ_FACTORY_" + objType.Name, objType, null, objType);
+                DynamicMethod dynMethod = new DynamicMethod("DM$OBJ_FACTORY_" + objType.Name, objType, null, objType);
                 ILGenerator ilGen = dynMethod.GetILGenerator();
                 ilGen.Emit(OpCodes.Newobj, objType.GetConstructor(Type.EmptyTypes));
                 ilGen.Emit(OpCodes.Ret);

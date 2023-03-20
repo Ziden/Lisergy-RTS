@@ -1,4 +1,5 @@
 ﻿
+using BaseServer.Commands;
 using Game;
 
 namespace LisergyServer.Commands
@@ -10,7 +11,7 @@ namespace LisergyServer.Commands
         public override void Execute(CommandSender sender, CommandArgs args)
         {
             var size = args.Size;
-            if(size < 3)
+            if (size < 3)
             {
                 sender.SendMessage("---- .tile help -----");
                 sender.SendMessage(".tile <x> <y> <tileid> - sets the tileid of the given tile");

@@ -1,6 +1,4 @@
-﻿using Game.Events.GameEvents;
-using System;
-using System.Reflection;
+﻿using System;
 
 namespace Game.Events.Bus
 {
@@ -12,7 +10,7 @@ namespace Game.Events.Bus
 
         public void Call<T>(T ev) where T : BaseEvent
         {
-            Method.DynamicInvoke(ev);
+            _ = Method.DynamicInvoke(ev);
         }
     }
 }

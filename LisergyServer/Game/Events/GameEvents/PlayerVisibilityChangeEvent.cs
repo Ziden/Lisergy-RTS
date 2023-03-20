@@ -1,11 +1,10 @@
-﻿using Game.Entity;
-
+﻿using Game.Tile;
 
 namespace Game.Events.GameEvents
 {
     public class PlayerVisibilityChangeEvent : GameEvent
     {
-        public PlayerVisibilityChangeEvent(WorldEntity viewer, Tile tile, bool v)
+        public PlayerVisibilityChangeEvent(WorldEntity viewer, TileEntity tile, bool v)
         {
             this.Viewer = viewer;
             this.Tile = tile;
@@ -13,7 +12,7 @@ namespace Game.Events.GameEvents
         }
 
         public WorldEntity Viewer;
-        public Tile Tile;
+        public TileEntity Tile;
         public bool TileVisible;
     }
 }

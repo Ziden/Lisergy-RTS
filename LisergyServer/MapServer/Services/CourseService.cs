@@ -1,10 +1,11 @@
-﻿using Game;
-using Game.Entity;
-using Game.Entity.Components;
-using Game.Events;
+﻿using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using Game.Movement;
+using Game.Network.ClientPackets;
+using Game.Party;
+using Game.Pathfinder;
+using Game.Tile;
 using Game.World;
 using System.Collections.Generic;
 
@@ -33,20 +34,20 @@ namespace Game.Listeners
             }
 
             var course = StartCourse(party, ev.Path, ev.Intent);
-            if(course == null)
+            if (course == null)
                 ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
         }
 
-        private CourseTask StartCourse(Party party, List<Position> sentPath, MovementIntent intent)
+        private CourseTask StartCourse(PartyEntity party, List<Position> sentPath, MovementIntent intent)
         {
-            List<Tile> path = new List<Tile>();
+            List<TileEntity> path = new List<TileEntity>();
             var owner = party.Owner;
             foreach (var position in sentPath)
             {
                 var tile = _world.GetTile(position.X, position.Y);
                 if (!tile.Passable)
                 {
-                    Log.Error($"Impassable tile {tile} in course path: {owner} moving party {party}");
+                    Log.Error($"Impassable TileEntity {tile} in course path: {owner} moving party {party}");
                     return null;
                 }
                 path.Add(tile);

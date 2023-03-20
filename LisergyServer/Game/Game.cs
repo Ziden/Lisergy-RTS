@@ -2,7 +2,8 @@
 using Game.ECS;
 using Game.Events;
 using Game.Events.Bus;
-using Game.World.Systems;
+using Game.Network;
+using Game.Player;
 using GameData;
 using System.Collections.Generic;
 
@@ -25,18 +26,23 @@ namespace Game
 
         public void ReceiveInput(PlayerEntity sender, byte[] input)
         {
-            var ev = Serialization.ToEventRaw(input);
+            BaseEvent ev = Serialization.ToEventRaw(input);
             ev.Sender = sender;
             NetworkEvents.Call(ev);
             DeltaTracker.SendDeltaPackets(sender);
         }
 
-        public GameWorld World { get => _world; set { 
+        public GameWorld World
+        {
+            get => _world; set
+            {
                 _world = value;
-                if(value != null)
+                if (value != null)
+                {
                     value.Game = this;
-            } 
-        } 
+                }
+            }
+        }
 
         public StrategyGame(in GameSpec specs, GameWorld world)
         {

@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Game.DataTypes
 {
     public class DefaultValueDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
-        private IDictionary<TKey, TValue> _dict = new Dictionary<TKey, TValue>();
+        private readonly IDictionary<TKey, TValue> _dict = new Dictionary<TKey, TValue>();
 
         public TValue this[TKey key]
         {
             get
             {
-                TValue val;
-                if (!TryGetValue(key, out val))
+                if (!TryGetValue(key, out TValue val))
                 {
                     this[key] = (TValue)InstanceFactory.CreateInstance(typeof(TValue));
                     return this[key];
                 }
                 return val;
             }
-            set { _dict[key] = value; }
+            set => _dict[key] = value;
         }
 
         public ICollection<TKey> Keys => _dict.Keys;
@@ -79,7 +76,7 @@ namespace Game.DataTypes
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            if(!_dict.TryGetValue(key, out value))
+            if (!_dict.TryGetValue(key, out value))
             {
                 this[key] = (TValue)InstanceFactory.CreateInstance(typeof(TValue));
                 value = this[key];

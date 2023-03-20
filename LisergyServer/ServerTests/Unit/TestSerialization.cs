@@ -1,13 +1,10 @@
 using Game;
-using Game.Battles;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
 using NUnit.Framework;
 using ServerTests;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 
 namespace Tests
 {
@@ -41,13 +38,13 @@ namespace Tests
         [Test]
         public void TestTileSerialization()
         {
-         
+
             var player = _game.GetTestPlayer();
             var tile = _game.World.GetTile(1, 1);
- 
+
             Serialization.LoadSerializers(typeof(TileUpdatePacket));
 
-            var serialized = Serialization.FromEvent<TileUpdatePacket>(tile.UpdatePacket);
+            var serialized = Serialization.FromEvent<TileUpdatePacket>(tile.GetUpdatePacket(null));
             var unserialized = Serialization.ToEvent<TileUpdatePacket>(serialized);
 
             Assert.AreEqual(tile.TileId, unserialized.Data.TileId);
@@ -99,7 +96,7 @@ namespace Tests
                 Password = "walala"
             };
             var bytes = Serialization.FromEventRaw(authEvent);
-            var event2 = (AuthPacket) Serialization.ToEventRaw(bytes);
+            var event2 = (AuthPacket)Serialization.ToEventRaw(bytes);
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);
