@@ -1,10 +1,10 @@
-﻿using LisergyServer.Core;
+﻿using Game.Events;
 using System;
 
-namespace Game.Events.ServerEvents
+namespace BaseServer.Core
 {
     [Serializable]
-    public class ServiceDiscoveryEvent : ServerEvent
+    public class ServiceDiscoveryEvent : ServerPacket
     {
         public string IP;
         public ushort Port;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 
 namespace Game.Pathfinder
 {
@@ -36,9 +33,7 @@ namespace Game.Pathfinder
 
         protected void SwitchElements(int i, int j)
         {
-            T h = InnerList[i];
-            InnerList[i] = InnerList[j];
-            InnerList[j] = h;
+            (InnerList[j], InnerList[i]) = (InnerList[i], InnerList[j]);
         }
 
         protected virtual int OnCompare(int i, int j)
@@ -53,7 +48,10 @@ namespace Game.Pathfinder
             do
             {
                 if (p == 0)
+                {
                     break;
+                }
+
                 p2 = (p - 1) / 2;
                 if (OnCompare(p, p2) < 0)
                 {
@@ -61,7 +59,9 @@ namespace Game.Pathfinder
                     p = p2;
                 }
                 else
+                {
                     break;
+                }
             } while (true);
             return p;
         }
@@ -70,20 +70,28 @@ namespace Game.Pathfinder
         {
             T result = InnerList[0];
             int p = 0, p1, p2, pn;
-            InnerList[0] = InnerList[InnerList.Count - 1];
+            InnerList[0] = InnerList[^1];
             InnerList.RemoveAt(InnerList.Count - 1);
             do
             {
                 pn = p;
-                p1 = 2 * p + 1;
-                p2 = 2 * p + 2;
+                p1 = (2 * p) + 1;
+                p2 = (2 * p) + 2;
                 if (InnerList.Count > p1 && OnCompare(p, p1) > 0)
+                {
                     p = p1;
+                }
+
                 if (InnerList.Count > p2 && OnCompare(p, p2) > 0)
+                {
                     p = p2;
+                }
 
                 if (p == pn)
+                {
                     break;
+                }
+
                 SwitchElements(p, pn);
             } while (true);
 
@@ -97,7 +105,10 @@ namespace Game.Pathfinder
             do
             {
                 if (p == 0)
+                {
                     break;
+                }
+
                 p2 = (p - 1) / 2;
                 if (OnCompare(p, p2) < 0)
                 {
@@ -105,31 +116,42 @@ namespace Game.Pathfinder
                     p = p2;
                 }
                 else
+                {
                     break;
+                }
             } while (true);
             if (p < i)
+            {
                 return;
+            }
+
             do
             {
                 pn = p;
-                p1 = 2 * p + 1;
-                p2 = 2 * p + 2;
+                p1 = (2 * p) + 1;
+                p2 = (2 * p) + 2;
                 if (InnerList.Count > p1 && OnCompare(p, p1) > 0)
+                {
                     p = p1;
+                }
+
                 if (InnerList.Count > p2 && OnCompare(p, p2) > 0)
+                {
                     p = p2;
+                }
 
                 if (p == pn)
+                {
                     break;
+                }
+
                 SwitchElements(p, pn);
             } while (true);
         }
 
         public T Peek()
         {
-            if (InnerList.Count > 0)
-                return InnerList[0];
-            return default(T);
+            return InnerList.Count > 0 ? InnerList[0] : default;
         }
 
         public void Clear()
@@ -137,10 +159,7 @@ namespace Game.Pathfinder
             InnerList.Clear();
         }
 
-        public int Count
-        {
-            get { return InnerList.Count; }
-        }
+        public int Count => InnerList.Count;
 
         public void RemoveLocation(T item)
         {
@@ -149,16 +168,20 @@ namespace Game.Pathfinder
             {
 
                 if (mComparer.Compare(InnerList[i], item) == 0)
+                {
                     index = i;
+                }
             }
 
             if (index != -1)
+            {
                 InnerList.RemoveAt(index);
+            }
         }
 
         public T this[int index]
         {
-            get { return InnerList[index]; }
+            get => InnerList[index];
             set
             {
                 InnerList[index] = value;

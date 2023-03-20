@@ -2417,8 +2417,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DungeonIcon: {fileID: 21300000, guid: 3efe8a8f449891e479079814d977cdfd, type: 3}
   BattleTypeIcon: {fileID: 10847762}
-  WinColor: {r: 0.4644449, g: 0.8207547, b: 0.43747774, a: 0}
-  LooseColor: {r: 0.8113208, g: 0.55697334, b: 0.53960484, a: 0}
   AttackerFaces:
   - {fileID: 637688875}
   - {fileID: 1091095039}
@@ -2429,9 +2427,13 @@ MonoBehaviour:
   - {fileID: 262332249}
   - {fileID: 1517489096}
   - {fileID: 1599506366}
-  OutcomePanel: {fileID: 1922287077}
-  OutcomeText: {fileID: 1672849708}
   ChestButton: {fileID: 0}
+  outcomePanel: {fileID: 1922287079}
+  outcomeText: {fileID: 1672849708}
+  winColor: {r: 0, g: 0, b: 0, a: 0}
+  looseColor: {r: 0, g: 0, b: 0, a: 0}
+  movementY: 0
+  ease: 0
 --- !u!1 &1342734839
 GameObject:
   m_ObjectHideFlags: 0

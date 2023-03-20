@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Game.DataTypes;
+using Game.Player;
+using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Game
 {
@@ -20,7 +21,7 @@ namespace Game
             if (_players.ContainsKey(p.UserID))
                 return;
 
-            if(_players.Count >= MaxPlayers)
+            if (_players.Count >= MaxPlayers)
             {
                 throw new Exception("Max player limit reached");
             }
@@ -29,9 +30,9 @@ namespace Game
 
         public int PlayerCount { get => _players.Count; }
 
-        public bool GetPlayer(string id, out PlayerEntity player)
+        public bool GetPlayer(GameId id, out PlayerEntity player)
         {
-            if (id == null)
+            if (id == GameId.ZERO)
             {
                 player = null;
                 return false;
@@ -39,7 +40,7 @@ namespace Game
             return _players.TryGetValue(id, out player);
         }
 
-        public PlayerEntity GetPlayer(string id)
+        public PlayerEntity GetPlayer(GameId id)
         {
             PlayerEntity player = null;
             _players.TryGetValue(id, out player);

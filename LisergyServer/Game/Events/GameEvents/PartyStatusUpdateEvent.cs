@@ -1,17 +1,14 @@
-﻿using Game.Entity;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Game.Party;
 
 namespace Game.Events.GameEvents
 {
     public class PartyStatusUpdateEvent : GameEvent
     {
-        public Party Party;
+        public PartyEntity Party;
 
-        public PartyStatusUpdateEvent(Party p)
+        public PartyStatusUpdateEvent(PartyEntity p)
         {
-            this.Party = p;
+            Party = p;
         }
 
     }

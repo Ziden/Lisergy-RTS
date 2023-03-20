@@ -1,12 +1,12 @@
 ﻿using Game.Events;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Game.Entity
 {
-    public interface IUpdateable
+    /// <summary>
+    /// Can send status updates after status changes (e.g after battles)
+    /// </summary>
+    public interface IStatusUpdateable
     {
-        ServerEvent GetUpdatePacket();
+        ServerPacket GetStatusUpdatePacket();
     }
 }

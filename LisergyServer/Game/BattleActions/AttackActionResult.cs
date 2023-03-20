@@ -1,10 +1,9 @@
-﻿using Game.Pathfinder;
-using System;
+﻿using System;
 
-namespace Game.BattleTactics
+namespace Game.BattleActions
 {
     [Serializable]
-    public class AttackActionResult: ActionResult
+    public class AttackActionResult : ActionResult
     {
         public int Damage;
     }

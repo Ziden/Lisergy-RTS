@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Game.Battle;
+using Game.DataTypes;
+using System;
 
-namespace Game.Battles.Actions
+namespace Game.BattleActions
 {
     [Serializable]
     public class AttackAction : BattleAction
     {
-        public string DefenderID;
+        public GameId DefenderID;
 
         [NonSerialized]
         private BattleUnit _defender;
@@ -17,7 +17,10 @@ namespace Game.Battles.Actions
             get
             {
                 if (_defender == null)
+                {
                     _defender = Battle.FindBattleUnit(DefenderID);
+                }
+
                 return _defender;
             }
             set { _defender = value; DefenderID = value.UnitID; }
@@ -25,7 +28,7 @@ namespace Game.Battles.Actions
 
         public AttackAction(TurnBattle battle, BattleUnit atk, BattleUnit def) : base(battle, atk)
         {
-            this.Defender = def;
+            Defender = def;
         }
 
         public override string ToString()

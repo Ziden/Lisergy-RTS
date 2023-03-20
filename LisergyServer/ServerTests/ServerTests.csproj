@@ -4,7 +4,15 @@
     <TargetFramework>net6.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Smoke\**" />
+    <EmbeddedResource Remove="Smoke\**" />
+    <None Remove="Smoke\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="TestFastScheduler.cs" />
@@ -18,11 +26,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\BaseServer.csproj" />
+    <ProjectReference Include="..\GameDataTest\GameDataTest.csproj" />
     <ProjectReference Include="..\MapServer\MapServer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Smoke\" />
   </ItemGroup>
 
 </Project>

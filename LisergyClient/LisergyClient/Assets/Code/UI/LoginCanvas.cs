@@ -3,6 +3,7 @@ using Game;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,7 +21,7 @@ public class LoginCanvas : IEventListener
         Password = GameObject.transform.GetRequiredChildComponent<InputField>("Password");
         LoginButton = GameObject.transform.GetRequiredChildComponent<Button>("LoginButton");
         LoginButton.onClick.AddListener(Authenticate);
-        MainBehaviour.NetworkEvents.Register<AuthResultPacket>(this, OnPlayerAuth);
+        MainBehaviour.ServerPackets.Register<AuthResultPacket>(this, OnPlayerAuth);
     }
 
     [EventMethod]

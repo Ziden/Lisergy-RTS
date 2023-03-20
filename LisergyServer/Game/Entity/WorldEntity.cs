@@ -1,64 +1,124 @@
-﻿using Game.Entity;
-using Game.Events;
+﻿using Game.DataTypes;
+using Game.ECS;
+using Game.Entity;
 using Game.Events.GameEvents;
-using Game.Events.ServerEvents;
+using Game.FogOfWar;
+using Game.Network.ServerPackets;
+using Game.Network;
+using Game.Player;
+using Game.Tile;
 using System;
 
 namespace Game
 {
+
     [Serializable]
-    public class WorldEntity : Ownable
+    public partial class WorldEntity : IOwnable, IMapEntity
     {
         protected static Gaia Gaia { get; private set; } = new Gaia();
 
         protected GameId _id;
         protected ushort _x;
         protected ushort _y;
+        private GameId _ownerId;
 
         [NonSerialized]
-        protected Tile _tile;
+        private PlayerEntity _owner;
+        [field: NonSerialized]
+        public ComponentSet _components { get; private set; }
+        [NonSerialized]
+        protected TileEntity _tile;
+        [NonSerialized]
+        protected TileEntity _previousTile;
 
-        public WorldEntity(PlayerEntity owner) : base(owner)
+        public WorldEntity(PlayerEntity owner)
         {
-            _id = Guid.NewGuid().ToString();
+            Owner = owner;
+            _id = Guid.NewGuid();
+            DeltaFlags = new DeltaFlags(this);
+            _components = new ComponentSet(this, owner);
         }
 
-        public bool IsDestroyed => _tile != null;
+        public bool IsInMap => _tile != null;
 
         public virtual GameId Id { get => _id; set => _id = value; }
         public virtual ushort X { get => _x; }
         public virtual ushort Y { get => _y; }
+        public IComponentSet Components => _components;
 
-        public virtual Tile Tile
+        public GameId EntityId => _id;
+
+        public GameId OwnerID { get => _ownerId; }
+
+        public virtual PlayerEntity Owner
+        {
+            get => _owner; set
+            {
+                if (value != null)
+                    _ownerId = value.UserID;
+                else
+                    _ownerId = GameId.ZERO;
+                _owner = value;
+            }
+        }
+
+        public TileEntity PreviousTile => _previousTile;
+
+        public virtual TileEntity Tile
         {
             get => _tile; set
             {
-                var oldTile = _tile;
+                _previousTile = _tile;
                 _tile = value;
-                if(_tile != null)
+
+                if (_previousTile == null || _tile == null)
                 {
-                    _x = _tile.X;
-                    _y = _tile.Y;
-                } else
+                    DeltaFlags.SetFlag(DeltaFlag.EXISTENCE);
+                }
+                else if (_previousTile != _tile)
                 {
-                    _x = 0;
-                    _y = 0;
-                    if(oldTile != null)
+                    DeltaFlags.SetFlag(DeltaFlag.POSITION);
+                }
+
+                if (_previousTile != null)
+                {
+                    var moveOut = new EntityMoveOutEvent()
                     {
-                        foreach (var viewer in oldTile.PlayersViewing)
-                            viewer.Send(new EntityDestroyPacket(this));
-                    }
+                        Entity = this,
+                        ToTile = value,
+                        FromTile = _previousTile
+                    };
+                    _previousTile.Components.CallEvent(moveOut);
+                    this.Components.CallEvent(moveOut);
                 }
                 if (value != null)
                 {
-                    value.Game.GameEvents.Call(new EntityMoveEvent()
+                    var moveIn = new EntityMoveInEvent()
                     {
                         Entity = this,
-                        NewTile = _tile,
-                        OldTile = oldTile
-                    });
+                        ToTile = _tile,
+                        FromTile = _previousTile
+                    };
+                    value.Components.CallEvent(moveIn);
+                    this.Components.CallEvent(moveIn);
                 }
-                Log.Info($"Placed {this} in {_tile}");
+
+                if (_tile != null)
+                {
+                    _x = _tile.X;
+                    _y = _tile.Y;
+                }
+                else
+                {
+                    _x = 0;
+                    _y = 0;
+                    if (_previousTile != null)
+                    {
+                        foreach (var viewer in _previousTile.Components.Get<TileVisibility>().PlayersViewing)
+                            viewer.Send(new EntityDestroyPacket(this));
+                    }
+                }
+                Log.Info($"Moved {this} to {_tile}");
             }
         }
     }

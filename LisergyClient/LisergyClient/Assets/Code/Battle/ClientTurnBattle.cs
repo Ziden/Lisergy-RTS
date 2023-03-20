@@ -1,27 +1,27 @@
 ﻿using Assets.Code.World;
-using Game.Battles;
+using Game;
+using Game.Battle;
+using Game.Battler;
+using Game.DataTypes;
 using Game.Events;
-using System;
-using System.Collections.Generic;
+using Game.Network.ServerPackets;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Code.Battle
 {
     public class ClientTurnBattle : TurnBattle
     {
-        public ClientTurnBattle(BattleStartPacket ev): base(Guid.Parse(ev.BattleID), ev.Attacker, ev.Defender)
+        public ClientTurnBattle(BattleStartPacket ev): base(ev.BattleID, ev.Attacker, ev.Defender)
         {
            
         }
 
-        public ClientUnit FindUnit(string id)
+        public Unit FindUnit(GameId id)
         {
             var unit= Attacker.Units.FirstOrDefault(u => u != null && u.UnitID == id);
             if(unit == null) unit = Defender.Units.FirstOrDefault(u => u != null && u.UnitID == id);
-            return unit.UnitReference as ClientUnit;
+            return unit.UnitReference;
         }
 
         public void AddToScene(Transform team1, Transform team2)
@@ -30,24 +30,24 @@ namespace Assets.Code.Battle
             {
                 var battleUnit = Attacker.Units[x];
                 if (battleUnit == null) continue;
-                var clientUnit = new ClientUnit(battleUnit.UnitReference);
-                clientUnit.AddToScene();
-                clientUnit.GetGameObject().transform.SetParent(team1.GetChild(x).transform);
-                clientUnit.GetGameObject().transform.localPosition = Vector3.zero;
-                clientUnit.GetGameObject().GetComponent<SpriteRenderer>().flipX = true;
-                Attacker.Units[x].UnitReference = clientUnit;
+                var unitView = new UnitView(battleUnit.UnitReference);
+                unitView.AddToScene();
+                unitView.GameObject.transform.SetParent(team1.GetChild(x).transform);
+                unitView.GameObject.transform.localPosition = Vector3.zero;
+                unitView.GameObject.GetComponent<SpriteRenderer>().flipX = true;
+                Attacker.Units[x].UnitReference = unitView.Unit;
             }
 
             for (var x = 0; x < Defender.Units.Length; x++)
             {
                 var battleUnit = Defender.Units[x];
                 if (battleUnit == null) continue;
-                var clientUnit = new ClientUnit(battleUnit.UnitReference);
-                var unitObj = clientUnit.AddToScene();
+                var unitView = new UnitView(battleUnit.UnitReference);
+                var unitObj = unitView.AddToScene();
                 unitObj.transform.SetParent(team2.GetChild(x).transform);
                 unitObj.transform.localPosition = Vector3.zero;
                 unitObj.GetComponent<SpriteRenderer>().flipX = false;
-                Defender.Units[x].UnitReference = clientUnit;
+                Defender.Units[x].UnitReference = unitView.Unit;
             }
         }
     }

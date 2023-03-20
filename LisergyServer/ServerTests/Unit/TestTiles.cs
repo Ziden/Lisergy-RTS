@@ -1,6 +1,5 @@
-using Game;
-using Game.Entity;
-using Game.Events;
+using Game.Dungeon;
+using Game.Tile;
 using Game.World;
 using GameDataTest;
 using NUnit.Framework;
@@ -9,7 +8,7 @@ using System.Linq;
 
 namespace Tests
 {
-    public class TestTile
+    public unsafe class TestTile
     {
         private TestGame Game;
 
@@ -17,6 +16,12 @@ namespace Tests
         public void Setup()
         {
             Game = new TestGame();
+        }
+
+        [Test]
+        public void TestTileAllocation()
+        {
+
         }
 
         [Test]
@@ -48,7 +53,7 @@ namespace Tests
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile.GetNeighbor(Direction.NORTH);
 
-            var dungeon = new Dungeon();
+            var dungeon = new DungeonEntity();
             dungeon.Tile = tile;
 
             Assert.AreEqual(dungeon.Tile, tile);
@@ -69,6 +74,33 @@ namespace Tests
             tile.TileId = TestTiles.MOUNTAIN.ID;
             Assert.IsFalse(tile.Passable);
             Assert.AreEqual(tile.MovementFactor, TestTiles.MOUNTAIN.MovementFactor);
+        }
+
+        [Test]
+        public void TestTileId()
+        {
+            var tile = Game.World.GetTile(5, 5);
+            var tile2 = Game.World.GetTile(6, 6);
+
+            Assert.AreNotEqual(tile.EntityId, tile2.EntityId);
+        }
+
+        [Test]
+        public void TestTileIdSame()
+        {
+            var tile = Game.World.GetTile(5, 5);
+            var tile2 = Game.World.GetTile(5, 5);
+
+            Assert.AreEqual(tile.EntityId, tile2.EntityId);
+        }
+
+        [Test]
+        public void TestTileUniqueIds()
+        {
+            var tile = Game.World.GetTile(5, 5);
+            var tile2 = Game.World.GetTile(5, 5);
+
+            Assert.AreEqual(tile.EntityId, tile2.EntityId);
         }
     }
 }

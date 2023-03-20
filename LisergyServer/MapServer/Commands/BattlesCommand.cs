@@ -1,4 +1,5 @@
 ﻿
+using BaseServer.Commands;
 using BattleServer;
 using Game;
 
@@ -8,18 +9,19 @@ namespace LisergyServer.Commands
     {
         private BattleService _service;
 
-        public BattlesCommand(StrategyGame game, BattleService battle) : base(game) 
+        public BattlesCommand(StrategyGame game, BattleService battle) : base(game)
         {
             _service = battle;
         }
 
         public override void Execute(CommandSender sender, CommandArgs args)
         {
-            if(args.Size == 0)
+            if (args.Size == 0)
             {
                 sender.SendMessage("---- .battles help -----");
                 sender.SendMessage(".battles list - list all battles");
-            } else if(args.GetString(0) == "list")
+            }
+            else if (args.GetString(0) == "list")
             {
                 foreach (var battle in _service.GetBattles())
                     sender.SendMessage($"- {battle}");

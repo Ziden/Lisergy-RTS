@@ -1,10 +1,13 @@
-﻿using BattleServer;
+﻿using BaseServer.Commands;
+using BaseServer.Core;
+using BattleServer;
 using Game;
 using Game.Events;
 using Game.Generator;
 using Game.Listeners;
+using Game.Network;
+using Game.Network.ClientPackets;
 using Game.Scheduler;
-using Game.World;
 using GameDataTest;
 using LisergyServer.Commands;
 using LisergyServer.Core;
@@ -14,12 +17,9 @@ namespace MapServer
 {
     public class MapSocketServer : SocketServer
     {
-        private static readonly int MAX_PLAYERS = 100;
-     
+        private static readonly int MAX_PLAYERS = 40;
+
         private static int WORLD_SEED = 12345;
-
-        private StrategyGame _game;
-
         // TODO: Move to account server
         private AccountService _accountService;
         // TODO: Move to battle server
@@ -29,7 +29,8 @@ namespace MapServer
 
         public override ServerType GetServerType() => ServerType.MAP;
 
-        public MapSocketServer(int port) : base(port) {
+        public MapSocketServer(int port) : base(port)
+        {
         }
 
         public override void RegisterCommands(StrategyGame game, CommandExecutor executor)
@@ -82,7 +83,7 @@ namespace MapServer
                 new NewbieChunkPopulator(),
                 new DungeonsPopulator()
             );
-         
+            DeltaTracker.Clear();
             return _game;
         }
 

@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
 using System;
 using System.Collections.Generic;
 using Telepathy;
@@ -76,7 +77,7 @@ namespace LisergyServer.Core
                 if (ev.SpecVersion < StrategyGame.Specs.Version)
                 {
                     acc.Player.Send(new GameSpecPacket(_game));
-             
+
                 }
                 return acc.Player;
             }

@@ -1,5 +1,7 @@
+using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
@@ -13,7 +15,7 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            Game = new TestGame(createPlayer:false);
+            Game = new TestGame(createPlayer: false);
             Serialization.LoadSerializers();
         }
 
@@ -54,13 +56,26 @@ namespace Tests
             var player = new TestServerPlayer();
             Game.HandleClientEvent(player, joinEvent);
 
-            var entityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
-            var tileVisibleEvent = player.ReceivedEventsOfType<TileUpdatePacket>();
+            var entityUpdates = player.ReceivedEventsOfType<EntityUpdatePacket>();
+            var tileUpdates = player.ReceivedEventsOfType<TileUpdatePacket>();
 
-            Assert.IsTrue(tileVisibleEvent.Count > 2);
-            Assert.AreEqual(2, entityVisibleEvents.Count);
-            Assert.IsTrue(entityVisibleEvents.Where(e => e.Entity == player.GetParty(0)).Any());
-            Assert.IsTrue(entityVisibleEvents.Where(e => e.Entity == player.Buildings.First()).Any());
+            Assert.IsTrue(tileUpdates.Count > 2);
+            Assert.AreEqual(2, entityUpdates.Count);
+            Assert.IsTrue(entityUpdates.Where(e => e.Entity.Id == player.GetParty(0).Id).Any());
+            Assert.IsTrue(entityUpdates.Where(e => e.Entity.Id == player.Buildings.First().Id).Any());
+        }
+
+        [Test]
+        public void TestJoinNewPlayer()
+        {
+            var playersBefore = Game.World.Players.PlayerCount;
+            var joinEvent = new JoinWorldPacket();
+            var player = new TestServerPlayer();
+            Game.HandleClientEvent(player, joinEvent);
+
+            var entityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
+
+            Assert.AreEqual(2, entityVisibleEvents.Count, "Should view his castle and his party");
         }
 
         [Test]
@@ -69,6 +84,7 @@ namespace Tests
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
             var player = new TestServerPlayer();
+
             Game.HandleClientEvent(player, joinEvent);
 
             var firstEntityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
@@ -93,9 +109,9 @@ namespace Tests
             var player = new TestServerPlayer();
             Game.HandleClientEvent(player, joinEvent);
             var party = player.GetParty(0);
-            var unit = party.GetUnits()[0];
-          
-            Assert.That(unit.Stats.HP == unit.Stats.MaxHP);
+            var unit = party.BattleGroupLogic.GetUnits().First();
+
+            Assert.That(unit.HP == unit.MaxHP);
         }
     }
 }

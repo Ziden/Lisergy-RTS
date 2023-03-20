@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Game.Player;
 
 namespace Game.Events.GameEvents
 {
@@ -10,7 +8,7 @@ namespace Game.Events.GameEvents
 
         public PlayerJoinedEvent(PlayerEntity p)
         {
-            this.Player = p;
+            Player = p;
         }
     }
 }

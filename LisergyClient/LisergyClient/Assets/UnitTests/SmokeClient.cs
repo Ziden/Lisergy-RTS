@@ -1,7 +1,6 @@
 ﻿using Assets.Code;
-using Assets.Code.World;
-using Game;
-using Game.Entity;
+using Game.Party;
+using Game.Tile;
 
 namespace Assets.UnitTests
 {
@@ -15,14 +14,14 @@ namespace Assets.UnitTests
             loginScreen.LoginButton.onClick.Invoke();
         }
 
-        public void SelectParty(Party p)
+        public void SelectParty(PartyEntity p)
         {
-            ClientEvents.SelectParty(p as ClientParty);
+            ClientEvents.SelectParty(p);
         }
 
-        public void ClickTile(Tile tile)
+        public void ClickTile(TileEntity tile)
         {
-            Global.InputManager().OnClickTile.Invoke(tile as ClientTile);
+            Global.InputManager().OnClickTile.Invoke(tile);
         }
 
     }

@@ -1,21 +1,18 @@
-﻿using Game.Entity;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Game.Tile;
 
 namespace Game.Events.GameEvents
 {
     public class PlayerVisibilityChangeEvent : GameEvent
     {
-        public PlayerVisibilityChangeEvent(ExploringEntity viewer, Tile tile, bool v)
+        public PlayerVisibilityChangeEvent(WorldEntity viewer, TileEntity tile, bool v)
         {
             this.Viewer = viewer;
             this.Tile = tile;
             this.TileVisible = v;
         }
 
-        public ExploringEntity Viewer;
-        public Tile Tile;
+        public WorldEntity Viewer;
+        public TileEntity Tile;
         public bool TileVisible;
     }
 }

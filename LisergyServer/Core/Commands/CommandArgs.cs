@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace LisergyServer.Commands
+namespace BaseServer.Commands
 {
     public class CommandArgs
     {
-        private string [] _args;
+        private readonly string[] _args;
 
         public CommandArgs(IEnumerable<string> args)
         {
             _args = args.ToArray();
         }
 
-        public int Size
-        {
-            get => _args.Length;
-        }
+        public int Size => _args.Length;
 
         public int GetInt(int index)
         {

@@ -1,12 +1,10 @@
-﻿using Game.Events;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Game.ECS;
+using Game.Tile;
 
 namespace Game.Entity
 {
-    public interface IMapEntity
+    public interface IMapEntity : IEntity
     {
-        Tile Tile { get; }
+        TileEntity Tile { get; set; }
     }
 }

@@ -1,8 +1,5 @@
-﻿using Game.Battles;
-using Game.Events;
+﻿using Game.DataTypes;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Game.Battle
 {

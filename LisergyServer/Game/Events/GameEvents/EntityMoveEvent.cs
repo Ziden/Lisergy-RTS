@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Game.Tile;
 
 namespace Game.Events.GameEvents
 {
-    public class EntityMoveEvent : GameEvent
+    public class EntityMoveInEvent : GameEvent
     {
         public WorldEntity Entity;
-        public Tile NewTile;
-        public Tile OldTile;
+        public TileEntity ToTile;
+        public TileEntity FromTile;
+    }
+
+    public class EntityMoveOutEvent : GameEvent
+    {
+        public WorldEntity Entity;
+        public TileEntity ToTile;
+        public TileEntity FromTile;
     }
 }
+
+
+
+

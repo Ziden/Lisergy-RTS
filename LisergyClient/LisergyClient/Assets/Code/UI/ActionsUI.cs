@@ -1,8 +1,11 @@
-﻿using Assets.Code.World;
+﻿using Assets.Code.Views;
 using Game;
-using Game.Entity;
-using Game.Events;
+using Game.Dungeon;
 using Game.Movement;
+using Game.Network.ClientPackets;
+using Game.Party;
+using Game.Pathfinder;
+using Game.Tile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,25 +83,26 @@ namespace Assets.Code.UI
                 button.gameObject.SetActive(false);
         }
 
-        private void OnClickTile(ClientTile tile)
+        private void OnClickTile(TileEntity tile)
         {
             Log.Debug("Actions click tile");
             if (UIManager.PartyUI.HasSelectedParty)
                 DisplayActions(UIManager.PartyUI.SelectedParty, tile);
         }
 
-        public void DisplayActions(ClientParty party, ClientTile tile)
+        public void DisplayActions(PartyEntity party, TileEntity tile)
         {
             if (party.Tile == tile || tile == null)
             {
                 Hide();
                 return;
             }
-            var pos = Camera.main.WorldToScreenPoint(tile.GetGameObject().transform.position);
+            var tileView = GameView.Controller.GetView<TileView>(tile);
+            var pos = Camera.main.WorldToScreenPoint(tileView.GameObject.transform.position);
             _gameObject.transform.position = pos;
             _gameObject.SetActive(true);
             var actions = new List<EntityAction>();
-            if (tile.StaticEntity is ClientDungeon)
+            if (tileView.Building is DungeonEntity)
             {
                 actions.Add(EntityAction.CHECK);
                 actions.Add(EntityAction.ATTACK);
@@ -112,26 +116,27 @@ namespace Assets.Code.UI
         private void CheckButton()
         {
             var tile = UIManager.TileUI.SelectedTile;
-            if (tile.StaticEntity is ClientDungeon)
+            var tileView = GameView.GetView<TileView>(tile);
+            if (tileView.Building is DungeonEntity)
             {
                 UIManager.ActionsUI.Hide();
-                UIManager.DungeonsUI.Display((ClientDungeon)tile.StaticEntity);
+                UIManager.DungeonsUI.Display((DungeonEntity)tileView.Building);
             }
         }
 
         private void MoveToSelectedTile(MovementIntent intent)
         {
-            ClientParty party = UIManager.PartyUI.SelectedParty;
-            ClientTile selectedTile = UIManager.TileUI.SelectedTile;
+            var party = UIManager.PartyUI.SelectedParty;
+            TileEntity selectedTile = UIManager.TileUI.SelectedTile;
             Log.Debug($"Moving {party} to {selectedTile}");
             var map = selectedTile.Chunk.Map;
             var path = map.FindPath(party.Tile, selectedTile);
-            var tilePath = path.Select(node => (ClientTile)map.GetTile(node.X, node.Y)).ToList();
+            var tilePath = path.Select(node => map.GetTile(node.X, node.Y)).ToList();
             ClientEvents.StartMovementRequest(party, tilePath);
             MainBehaviour.Networking.Send(new MoveRequestPacket()
             {
                 PartyIndex = party.PartyIndex,
-                Path = path.Select(p => new Game.World.Position(p.X, p.Y)).ToList(),
+                Path = path.Select(p => new Position(p.X, p.Y)).ToList(),
                 Intent = intent
             });
         }

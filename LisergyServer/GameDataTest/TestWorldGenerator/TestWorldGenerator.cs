@@ -1,6 +1,5 @@
 ﻿using Game.World;
 using System;
-using System.Collections.Generic;
 
 namespace Game.Generator
 {
@@ -19,8 +18,6 @@ namespace Game.Generator
 
         public static GameWorld PopulateWorld(GameWorld world, int seed = 0, params ChunkPopulator[] populators)
         {
-           
-       
             if (seed == 0)
                 seed = new Random().Next(0, ushort.MaxValue);
             WorldUtils.SetRandomSeed(seed);

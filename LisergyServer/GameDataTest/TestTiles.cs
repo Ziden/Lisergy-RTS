@@ -8,7 +8,7 @@ namespace GameDataTest
     {
         public static readonly TileSpec GRASS = new TileSpec(0)
         {
-            ID=0,
+            ID = 0,
             MovementFactor = 1,
             Arts = new List<ArtSpec>(new ArtSpec[] {
                   new ArtSpec() { Name = "Plains", Type=ArtType.PREFAB }
@@ -42,7 +42,7 @@ namespace GameDataTest
             })
         };
 
-        public static void Generate(GameSpec spec)
+        public static void Generate(ref GameSpec spec)
         {
             spec.Tiles[0] = GRASS;
             spec.Tiles[1] = MOUNTAIN;

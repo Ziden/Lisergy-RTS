@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.Tile;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -61,11 +62,11 @@ namespace Game.World
             return amt;
         }
 
-        public static void AddString(this string [] array, string obj)
+        public static void AddString(this string[] array, string obj)
         {
-            for(var i  = 0; i < array.Length; i ++)
+            for (var i = 0; i < array.Length; i++)
             {
-                if(array[i]==null)
+                if (array[i] == null)
                 {
                     array[i] = obj;
                     return;
@@ -98,7 +99,7 @@ namespace Game.World
             return num << GameWorld.CHUNK_SIZE_BITSHIFT;
         }
 
-        public static void AddFlag<T>(this ref byte value, T flag) 
+        public static void AddFlag<T>(this ref byte value, T flag)
         {
             value.AddFlag((byte)(object)flag);
         }
@@ -113,7 +114,7 @@ namespace Game.World
             return value.HasFlag((byte)(object)flag);
         }
 
-        public static void AddFlag(this ref byte value, byte flag) 
+        public static void AddFlag(this ref byte value, byte flag)
         {
             value = value |= flag;
         }
@@ -128,7 +129,7 @@ namespace Game.World
             return (value & flag) != 0;
         }
 
-        public static Direction GetDirection(this Tile tile, Tile otherTile)
+        public static Direction GetDirection(this TileEntity tile, TileEntity otherTile)
         {
             if (tile.X == otherTile.X - 1 && tile.Y == otherTile.Y)
                 return Direction.EAST;
@@ -136,12 +137,12 @@ namespace Game.World
                 return Direction.WEST;
             else if (tile.X == otherTile.X && tile.Y == otherTile.Y - 1)
                 return Direction.NORTH;
-              else if (tile.X == otherTile.X && tile.Y == otherTile.Y + 1)
+            else if (tile.X == otherTile.X && tile.Y == otherTile.Y + 1)
                 return Direction.SOUTH;
             return Direction.NONE;
         }
 
-        public static Tile FindTileWithId(this Chunk chunk, byte tileID)
+        public static TileEntity FindTileWithId(this Chunk chunk, byte tileID)
         {
             var tiles = chunk.Tiles;
             var tries = 10;
@@ -149,7 +150,7 @@ namespace Game.World
             {
                 var rndX = WorldUtils._random.Next(0, tiles.GetLength(0));
                 var rndY = WorldUtils._random.Next(0, tiles.GetLength(1));
-                Tile tile = tiles[rndX, rndY];
+                TileEntity tile = tiles[rndX, rndY];
                 if (tile.TileId == tileID)
                     return tile;
                 tries--;
@@ -157,7 +158,7 @@ namespace Game.World
             return null;
         }
 
-        public static Tile GetNeighbor(this Tile tile, Direction d)
+        public static TileEntity GetNeighbor(this TileEntity tile, Direction d)
         {
             switch (d)
             {
@@ -169,7 +170,7 @@ namespace Game.World
             return null;
         }
 
-        public static IEnumerable<Tile> GetAOE(this Tile tile, ushort radius)
+        public static IEnumerable<TileEntity> GetAOE(this TileEntity tile, ushort radius)
         {
             for (var xx = tile.X - radius; xx <= tile.X + radius; xx++)
                 for (var yy = tile.Y - radius; yy <= tile.Y + radius; yy++)

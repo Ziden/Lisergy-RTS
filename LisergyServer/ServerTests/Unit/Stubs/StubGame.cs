@@ -1,15 +1,15 @@
 ﻿using BattleServer;
 using Game;
-using Game.Battles;
 using Game.Events;
 using Game.Listeners;
+using Game.Network;
+using Game.Player;
+using Game.Tile;
 using Game.World;
 using GameData;
 using GameDataTest;
 using LisergyServer.Core;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace ServerTests
@@ -23,13 +23,17 @@ namespace ServerTests
         public WorldService WorldService { get; private set; }
         public CourseService CourseService { get; private set; }
 
+        private static GameWorld TestWorld;
 
         private static GameWorld GetTestWorld(GameWorld source = null)
         {
-            if(source != null)
+            WorldUtils.SetRandomSeed(666);
+            DeltaTracker.Clear();
+            if (source != null)
             {
                 return source;
             }
+            UnmanagedMemory.FlagMemoryToBeReused();
             /*
             if(TestWorld == null)
             {
@@ -41,12 +45,7 @@ namespace ServerTests
             }
             return TestWorld;
             */
-            var t = new Stopwatch();
-            t.Start();
-            var w = new GameWorld(4, 20, 20);
-            t.Stop();
-            Console.WriteLine("World Gen Time: " + t.ElapsedMilliseconds);
-            return w;
+            return new GameWorld(4, 20, 20);
         }
 
 
@@ -54,31 +53,23 @@ namespace ServerTests
         public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), GetTestWorld(world))
         {
 
-            var t = new Stopwatch();
-            t.Start();
-           
-          
             if (!_registered)
             {
                 _registered = true;
             }
             Serialization.LoadSerializers();
-
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);
-
             this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             if (createPlayer)
                 CreatePlayer();
-            t.Stop();
-            Console.WriteLine("Test Game Time: " + t.ElapsedMilliseconds);
-
         }
 
-        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientEvent
+        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientPacket
         {
             this.NetworkEvents.RunCallbacks(sender, Serialization.FromEventRaw(ev));
+            DeltaTracker.SendDeltaPackets(sender);
         }
 
         public TestServerPlayer CreatePlayer(int x = 10, int y = 10)
@@ -86,7 +77,9 @@ namespace ServerTests
             var player = new TestServerPlayer();
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
             player.UserID = TestServerPlayer.TEST_ID;
+            var tile = this.World.GetTile(x, y);
             this.World.PlaceNewPlayer(player, this.World.GetTile(x, y));
+            DeltaTracker.SendDeltaPackets(player);
             return player;
         }
 
@@ -115,12 +108,13 @@ namespace ServerTests
         }
 
 
-        public Tile RandomNotBuiltTile()
+        public TileEntity RandomNotBuiltTile()
         {
-            foreach (var tile in World.AllTiles())
-                if (tile.StaticEntity == null)
+            var tiles = World.AllTiles();
+            foreach (var tile in tiles)
+                if (tile.Components.Get<TileHabitants>().Building == null)
                     return tile;
-            return null;
+            throw new System.Exception("No unbuilt tile");
         }
     }
 

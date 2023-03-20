@@ -1,7 +1,9 @@
-﻿using Game.Entity;
+﻿using Game.Battler;
+using Game.DataTypes;
+using Game.Player;
 using System;
 
-namespace Game.Battles
+namespace Game.Battle
 {
     [Serializable]
     public class BattleUnit : IComparable<BattleUnit>
@@ -12,38 +14,35 @@ namespace Game.Battles
         [NonSerialized]
         private BattleTeam _team;
 
-        public UnitStats Stats { get => UnitReference.Stats; }
-
         public BattleTeam Team { get => _team; set => _team = value; }
 
         public int RT { get; set; }
 
-        public bool Dead { get => Stats.HP == 0; }
-        public GameId UnitID { get => UnitReference.Id; }
-        public Unit UnitReference { get => _unitReference; set { _unitReference = value; } }
+        public bool Dead => _unitReference.HP == 0;
+        public GameId UnitID => UnitReference.Id;
+        public Unit UnitReference { get => _unitReference; set => _unitReference = value; }
 
         public BattleUnit(PlayerEntity owner, BattleTeam team, Unit unit)
         {
-            this.Team = team;
+            Team = team;
             UnitReference = unit;
-            this.RT = GetMaxRT();
+            RT = GetMaxRT();
         }
 
-        public int GetMaxRT() => Math.Max(1, 100 - this.Stats.Speed);
+        public int GetMaxRT()
+        {
+            return Math.Max(1, 100 - _unitReference.Speed);
+        }
 
         public void IncreaseRT(int delay)
         {
             RT += delay;
         }
 
+
         public int CompareTo(BattleUnit obj)
         {
-            if (obj == this)
-                return 0;
-            if (obj.RT >= this.RT)
-                return -1;
-            else
-                return 1;
+            return obj == this ? 0 : obj.RT >= RT ? -1 : 1;
         }
 
         public override string ToString()

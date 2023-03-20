@@ -1,9 +1,9 @@
 ﻿using Game.Pathfinder;
 
-namespace Game.BattleTactics
+namespace Game.BattleActions
 {
-    public class MoveActionResult: ActionResult
+    public class MoveActionResult : ActionResult
     {
-        private PathFinderNode[] Path;
+        private readonly PathFinderNode[] Path;
     }
 }

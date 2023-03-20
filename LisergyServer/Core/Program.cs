@@ -1,10 +1,10 @@
-﻿namespace MapServer
+﻿namespace BaseServer
 {
-    class Program
+    internal class Program
     {
         public static void Main(string[] args)
         {
-            
+
         }
     }
 }

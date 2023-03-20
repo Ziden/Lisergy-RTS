@@ -1,4 +1,5 @@
 ﻿using Assets.Code;
+using Game;
 using Game.Events;
 using Game.Events.Bus;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class MainBehaviour : MonoBehaviour
 {
     public static Networking Networking { get; private set; }
     public static ClientPlayer Player { get; private set; }
-    public static EventBus NetworkEvents { get; set; }
+    public static EventBus<ServerPacket> ServerPackets { get; set; }
 
     private ServerListener _serverPacketListener;
 
@@ -38,19 +39,19 @@ public class MainBehaviour : MonoBehaviour
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
-        global::Game.Log.Debug = Debug.Log;
-        global::Game.Log.Error = Debug.LogError;
-        global::Game.Log.Info = Debug.Log;
+        Game.Log.Debug = Debug.Log;
+        Game.Log.Error = Debug.LogError;
+        Game.Log.Info = Debug.Log;
     }
 
     private void Awake()
     {
         Networking = new Networking();
-        NetworkEvents = new EventBus();
+        ServerPackets = new EventBus<ServerPacket>();
         ConfigureUnity();
         SetupServices();
         Serialization.LoadSerializers();
-        _serverPacketListener = new ServerListener(NetworkEvents);
+        _serverPacketListener = new ServerListener(ServerPackets);
         SetupCamera();
     }
 

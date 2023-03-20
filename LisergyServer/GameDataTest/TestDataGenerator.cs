@@ -1,5 +1,4 @@
 ﻿using GameData;
-using GameData.Specs;
 using System;
 
 namespace GameDataTest
@@ -21,8 +20,8 @@ namespace GameDataTest
     {
         public static GameSpec Generate()
         {
-            GameSpec spec = new GameSpec();
-           
+            GameSpec spec = new GameSpec(1);
+
 
             // BUILDINGS
             // CASTLE
@@ -38,13 +37,13 @@ namespace GameDataTest
                 4
             );
 
-            TestTiles.Generate(spec);
-            TestUnits.Generate(spec);
-            TestItems.Generate(spec);
-            TestLoots.Generate(spec);
-            TestDungeons.Generate(spec);
+            TestTiles.Generate(ref spec);
+            TestUnitData.Generate(ref spec);
+            TestItems.Generate(ref spec);
+            TestLoots.Generate(ref spec);
+            TestDungeons.Generate(ref spec);
             spec.InitialBuilding = spec.Buildings[1].Id;
-            spec.InitialUnit = TestUnits.MAGE;
+            spec.InitialUnit = TestUnitData.MAGE;
             return spec;
         }
     }

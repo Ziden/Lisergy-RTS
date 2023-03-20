@@ -1,12 +1,8 @@
-﻿using Game;
+﻿using Game.DataTypes;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ServerTests.Unit
+namespace Tests
 {
     public class TestGameIds
     {
@@ -20,23 +16,6 @@ namespace ServerTests.Unit
         }
 
         [Test]
-        public void CheckNull()
-        {
-            GameId id1 = null;
-            GameId id2 = Guid.Empty;
-
-            Assert.AreEqual(id1, id2);
-        }
-
-        [Test]
-        public void CheckNullComparisson()
-        {
-            GameId nu = null;
-
-            Assert.IsTrue(nu == null);
-        }
-
-        [Test]
         public void CheckNotNullComparisson()
         {
             GameId nu = GameId.Generate();
@@ -46,12 +25,72 @@ namespace ServerTests.Unit
 
 
         [Test]
+        public void TestGuidBackForth()
+        {
+            var guid = Guid.NewGuid();
+            GameId id1 = guid;
+            Guid back = id1;
+
+
+            Assert.AreEqual(guid, back);
+        }
+
+        public class TestClass
+        {
+            public GameId Zero;
+        }
+
+        [Test]
+        public void TestUnassigned()
+        {
+            var c = new TestClass();
+
+            Assert.IsTrue(c.Zero == Guid.Empty);
+        }
+
+        [Test]
+        public void TestZero()
+        {
+            var guid = Guid.Empty;
+            GameId id1 = guid;
+
+
+            Assert.IsTrue(id1.IsZero());
+        }
+
+        [Test]
+        public void TestZeroAssignments()
+        {
+            GameId zero1 = Guid.Empty;
+            GameId zero2 = Guid.Empty;
+            zero2 = zero1;
+            Assert.IsTrue(zero1 == zero2);
+        }
+
+
+        [Test]
+        public void TestZeroInit()
+        {
+            GameId zero = Guid.Empty;
+
+            Assert.IsTrue(zero.IsZero());
+        }
+
+        [Test]
+        public void TestNonInitialized()
+        {
+            GameId zero = default;
+
+            Assert.IsTrue(zero.IsZero());
+        }
+
+        [Test]
         public void CheckEqual()
         {
             var id1 = GameId.Generate();
             var id2 = id1;
 
-            Assert.AreEqual(id1, id2);
+            Assert.IsTrue(id1 == id2);
         }
 
         [Test]
@@ -62,27 +101,6 @@ namespace ServerTests.Unit
             GameId id2 = guid;
 
             Assert.IsTrue(id1.IsEqualsTo(id2));
-        }
-
-        [Test]
-        public void CheckStringAssignment()
-        {
-            var guid = Guid.NewGuid().ToString();
-            GameId id1 = guid;
-            GameId id2 = guid;
-
-            Assert.IsTrue(id1.IsEqualsTo(id2));
-        }
-
-        [Test]
-        public void TestStringDeffer()
-        {
-            var guid = Guid.NewGuid().ToString();
-            GameId id1 = guid;
-
-            string str = id1;
-
-            Assert.AreEqual(str, guid);
         }
 
         [Test]

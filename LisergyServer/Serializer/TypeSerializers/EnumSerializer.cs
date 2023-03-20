@@ -9,43 +9,40 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace NetSerializer
 {
-	sealed class EnumSerializer : IStaticTypeSerializer
-	{
-		public bool Handles(Type type)
-		{
-			return type.IsEnum;
-		}
+    sealed class EnumSerializer : IStaticTypeSerializer
+    {
+        public bool Handles(Type type)
+        {
+            return type.IsEnum;
+        }
 
-		public IEnumerable<Type> GetSubtypes(Type type)
-		{
-			var underlyingType = Enum.GetUnderlyingType(type);
+        public IEnumerable<Type> GetSubtypes(Type type)
+        {
+            var underlyingType = Enum.GetUnderlyingType(type);
 
-			return new[] { underlyingType };
-		}
+            return new[] { underlyingType };
+        }
 
-		public MethodInfo GetStaticWriter(Type type)
-		{
-			Debug.Assert(type.IsEnum);
+        public MethodInfo GetStaticWriter(Type type)
+        {
+            Debug.Assert(type.IsEnum);
 
-			var underlyingType = Enum.GetUnderlyingType(type);
+            var underlyingType = Enum.GetUnderlyingType(type);
 
-			return Primitives.GetWritePrimitive(underlyingType);
-		}
+            return Primitives.GetWritePrimitive(underlyingType);
+        }
 
-		public MethodInfo GetStaticReader(Type type)
-		{
-			Debug.Assert(type.IsEnum);
+        public MethodInfo GetStaticReader(Type type)
+        {
+            Debug.Assert(type.IsEnum);
 
-			var underlyingType = Enum.GetUnderlyingType(type);
+            var underlyingType = Enum.GetUnderlyingType(type);
 
-			return Primitives.GetReaderPrimitive(underlyingType);
-		}
-	}
+            return Primitives.GetReaderPrimitive(underlyingType);
+        }
+    }
 }

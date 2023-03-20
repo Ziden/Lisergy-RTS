@@ -1,13 +1,7 @@
 using BattleServer;
-using Game;
-using Game.Battles;
-using Game.Battles.Actions;
-using Game.Events;
-using Game.Events.ClientEvents;
+using Game.Battler;
 using NUnit.Framework;
 using ServerTests;
-using System;
-using System.Linq;
 
 namespace Tests
 {
@@ -22,11 +16,11 @@ namespace Tests
         {
             FastUnit = new Unit(1);
             FastUnit.Name = "Fast Unit";
-            FastUnit.Stats.Speed *= 2;
+            FastUnit.Speed *= 2;
 
             SlowUnit = new Unit(1);
             SlowUnit.Name = "Slow Unit";
-            SlowUnit.Stats.Speed /= 2;
+            SlowUnit.Speed /= 2;
 
             var game = new TestGame();
             Listener = game.BattleService;

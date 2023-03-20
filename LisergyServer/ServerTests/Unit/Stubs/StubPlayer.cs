@@ -1,18 +1,22 @@
 ﻿using Game;
-using Game.Entity;
+using Game.DataTypes;
 using Game.Events;
+using Game.Events.Bus;
 using Game.Movement;
+using Game.Network.ClientPackets;
+using Game.Party;
+using Game.Pathfinder;
+using Game.Tile;
 using Game.World;
 using LisergyServer.Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ServerTests
 {
-    public class TestServerPlayer : ServerPlayer
+    public class TestServerPlayer : ServerPlayer, IEventListener
     {
-        public static GameId TEST_ID = Guid.NewGuid();
+        public static GameId TEST_ID = GameId.Generate();
 
         public delegate void ReceiveEventHandler(BaseEvent ev);
         public event ReceiveEventHandler OnReceiveEvent;
@@ -28,11 +32,21 @@ namespace ServerTests
         public override void Send<EventType>(EventType ev)
         {
             ev.Sender = this;
-            OnReceiveEvent?.Invoke(ev);
-            ReceivedEvents.Add(ev);
+            var copy = Serialization.FromEventRaw(ev);
+            var reSerialized = Serialization.ToEventRaw(copy);
+            OnReceiveEvent?.Invoke(reSerialized);
+            ReceivedEvents.Add(reSerialized);
         }
 
-        public void SendMoveRequest(Party p, Tile t, MovementIntent intent)
+        public void ListenTo<EventType>() where EventType : GameEvent
+        {
+            StrategyGame.GlobalGameEvents.Register<EventType>(this, ev =>
+            {
+                ReceivedEvents.Add(ev);
+            });
+        }
+
+        public void SendMoveRequest(PartyEntity p, TileEntity t, MovementIntent intent)
         {
             var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new Position(pa.X, pa.Y)).ToList();
             var ev = new MoveRequestPacket() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };
@@ -40,7 +54,7 @@ namespace ServerTests
             t.Chunk.Map.World.Game.NetworkEvents.Call(ev);
         }
 
-        public List<T> ReceivedEventsOfType<T>() where T : ServerEvent
+        public List<T> ReceivedEventsOfType<T>() where T : BaseEvent
         {
             return ReceivedEvents.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => e as T).ToList();
         }

@@ -1,13 +1,10 @@
 using Game;
-using Game.Battles;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
 using NUnit.Framework;
 using ServerTests;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 
 namespace Tests
 {
@@ -15,16 +12,6 @@ namespace Tests
     {
 
         private TestGame _game;
-
-        [Serializable]
-        public class TestTileEvent : BaseEvent
-        {
-            public TestTileEvent(Tile t)
-            {
-                this.Tile = t;
-            }
-            public Tile Tile;
-        }
 
         [SetUp]
         public void Setup()
@@ -51,19 +38,18 @@ namespace Tests
         [Test]
         public void TestTileSerialization()
         {
-         
+
             var player = _game.GetTestPlayer();
             var tile = _game.World.GetTile(1, 1);
-            tile.ResourceID = 123;
-            Serialization.LoadSerializers(typeof(TestTileEvent));
 
-            var serialized = Serialization.FromEvent<TestTileEvent>(new TestTileEvent(tile));
-            var unserialized = Serialization.ToEvent<TestTileEvent>(serialized);
+            Serialization.LoadSerializers(typeof(TileUpdatePacket));
 
-            Assert.AreEqual(tile.TileId, unserialized.Tile.TileId);
-            Assert.AreEqual(tile.ResourceID, unserialized.Tile.ResourceID);
-            Assert.AreEqual(tile.X, unserialized.Tile.X);
-            Assert.AreEqual(tile.Y, unserialized.Tile.Y);
+            var serialized = Serialization.FromEvent<TileUpdatePacket>(tile.GetUpdatePacket(null));
+            var unserialized = Serialization.ToEvent<TileUpdatePacket>(serialized);
+
+            Assert.AreEqual(tile.TileId, unserialized.Data.TileId);
+            Assert.AreEqual(tile.X, unserialized.Data.X);
+            Assert.AreEqual(tile.Y, unserialized.Data.Y);
         }
 
         [Test]
@@ -110,37 +96,10 @@ namespace Tests
                 Password = "walala"
             };
             var bytes = Serialization.FromEventRaw(authEvent);
-            var event2 = (AuthPacket) Serialization.ToEventRaw(bytes);
+            var event2 = (AuthPacket)Serialization.ToEventRaw(bytes);
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);
-        }
-
-
-        [Test]
-        public void TestSerializationSizes()
-        {
-            var testData = new Dictionary<Type, byte[]>();
-
-            void Record<T>(T obj)
-            {
-                testData[typeof(T)] = Serialization.FromAnyType(obj);
-            }   
-
-            Record(new TileUpdatePacket(_game.World.GetTile(1, 1)));
-            Record(new PartyStatusUpdatePacket(_game.GetTestPlayer().GetParty(0)));
-            Record(new BattleResultPacket(Guid.NewGuid().ToString(), new TurnBattleResult() { Turns = new List<Game.Battles.Actions.TurnLog>(10)}));
-            Record(new EntityDestroyPacket(_game.GetTestPlayer().GetParty(0)));
-            Record(new EntityMovePacket(_game.GetTestPlayer().GetParty(0), _game.World.GetTile(1, 1)));
-            Record(new MessagePopupPacket(PopupType.BAD_INPUT, "Yeah this is a message popup to test our serialization sizes"));
-            Record(new BattleStartPacket(GameId.Generate(), _game.GetTestPlayer().GetParty(0), _game.GetTestPlayer().GetParty(0)));
-            Record(new Unit(0));
-            Record(GameId.Generate());
-
-            foreach (var kp in testData)
-            {
-                Assert.LessOrEqual(kp.Value.Count(), 150, $"Packets should be lower then 100 bytes but {kp.Key} was not");
-            }
         }
     }
 }

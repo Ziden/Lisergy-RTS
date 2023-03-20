@@ -1,16 +1,17 @@
-﻿using Game;
+﻿using Game.FogOfWar;
 using Game.Pathfinder;
+using Game.Tile;
 using Game.World;
 using System.Collections.Generic;
 
 namespace Game
 {
-    public class ChunkMap
+    public unsafe class ChunkMap
     {
         private Chunk[,] _chunkMap;
         private CachedChunkMap _cache;
 
-        public Dictionary<ChunkFlag, List<Chunk>> ByFlags = new Dictionary<ChunkFlag, List<Chunk>>();
+        public Dictionary<ChunkFlag, List<Position>> ByFlags = new Dictionary<ChunkFlag, List<Position>>();
 
         public int QtdChunksX { get => _chunkMap.GetLength(0); }
         public int QtdChunksY { get => _chunkMap.GetLength(1); }
@@ -34,12 +35,17 @@ namespace Game
             return tileX >= 0 && tileX < QtdTilesX && tileY >= 0 && tileY < QtdTilesY;
         }
 
-        public Chunk GetChunk(int chunkX, int chunkY)
+        public ref Chunk GetChunk(int chunkX, int chunkY)
         {
-            return _chunkMap[chunkX, chunkY];
+            return ref _chunkMap[chunkX, chunkY];
         }
 
-        public List<PathFinderNode> FindPath(Tile from, Tile to)
+        public ref Chunk GetChunk(in Position pos)
+        {
+            return ref _chunkMap[pos.X, pos.Y];
+        }
+
+        public List<PathFinderNode> FindPath(TileEntity from, TileEntity to)
         {
             return new PathFinder(_cache).FindPath(new Position(from.X, from.Y), new Position(to.X, to.Y));
         }
@@ -47,15 +53,16 @@ namespace Game
         public Chunk GetUnnocupiedNewbieChunk()
         {
             var startingChunks = ByFlags[ChunkFlag.NEWBIE_CHUNK];
-            foreach (var chunk in startingChunks)
+            foreach (var position in startingChunks)
             {
+                var chunk = _chunkMap[position.X, position.Y];
                 if (!chunk.Flags.HasFlag(ChunkFlag.OCCUPIED))
-                    return chunk;
+                    return _chunkMap[position.X, position.Y];
             }
             return null;
         }
 
-        public void Add(Chunk c)
+        public void Add(ref Chunk c)
         {
             _chunkMap[c.X, c.Y] = c;
         }
@@ -63,36 +70,36 @@ namespace Game
         public void SetFlag(int chunkX, int chunkY, ChunkFlag flag)
         {
             var chunk = this._chunkMap[chunkX, chunkY];
-            chunk.Flags = chunk.Flags |= (byte)flag;
+            chunk.SetFlag((byte)flag);
             if (!ByFlags.ContainsKey(flag))
-                ByFlags.Add(flag, new List<Chunk>());
-            ByFlags[flag].Add(chunk);
+                ByFlags.Add(flag, new List<Position>());
+            ByFlags[flag].Add(chunk.Position);
         }
 
         public IEnumerable<Chunk> AllChunks()
         {
+            var i = 0;
             for (var x = 0; x < _chunkMap.GetLength(0); x++)
+            {
                 for (var y = 0; y < _chunkMap.GetLength(1); y++)
+                {
                     yield return _chunkMap[x, y];
+                }
+            }
         }
 
-        public virtual Chunk GetTileChunk(int tileX, int tileY)
+        public virtual ref Chunk GetTileChunk(int tileX, int tileY)
         {
             int chunkX = tileX >> GameWorld.CHUNK_SIZE_BITSHIFT;
             var chunkY = tileY >> GameWorld.CHUNK_SIZE_BITSHIFT;
-            return GetChunk(chunkX, chunkY);
+            return ref GetChunk(chunkX, chunkY);
         }
 
-        public virtual Tile GetTile(int tileX, int tileY)
+        public virtual TileEntity GetTile(int tileX, int tileY)
         {
             var internalTileX = tileX % GameWorld.CHUNK_SIZE;
             var internalTileY = tileY % GameWorld.CHUNK_SIZE;
             return GetTileChunk(tileX, tileY).GetTile(internalTileX, internalTileY);
-        }
-
-        public virtual Tile GetTileFromCache(int tileX, int tileY)
-        {
-            return _cache.GetTile(tileX, tileY);
         }
 
         public virtual void GenerateTiles(int sizeX, int sizeY)
@@ -103,7 +110,7 @@ namespace Game
             {
                 for (var chunkY = 0; chunkY < maxChunkY; chunkY++)
                 {
-                    var tiles = new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
+                    var tiles = new TileEntity[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
                     var chunk = new Chunk(this, chunkX, chunkY, tiles);
                     for (var x = 0; x < GameWorld.CHUNK_SIZE; x++)
                     {
@@ -111,17 +118,29 @@ namespace Game
                         {
                             var tileX = chunkX * GameWorld.CHUNK_SIZE + x;
                             var tileY = chunkY * GameWorld.CHUNK_SIZE + y;
-                            tiles[x, y] = GenerateTile(chunk, tileX, tileY);
+                            tiles[x, y] = GenerateTile(ref chunk, tileX, tileY);
                         }
                     }
-                    this.Add(chunk);
+                    this.Add(ref chunk);
                 }
             }
         }
 
-        public virtual Tile GenerateTile(Chunk c, int tileX, int tileY)
+        public virtual void ClearTile(TileEntity t)
         {
-            return new Tile(c, tileX, tileY);
+            t.Components.Get<TileVisibility>().EntitiesViewing.Clear();
+            t.Components.Get<TileVisibility>().PlayersViewing.Clear();
+            t.Components.Get<TileHabitants>().EntitiesIn.Clear();
+            t.Components.Get<TileHabitants>().Building = null;
+        }
+
+
+        public virtual TileEntity GenerateTile(ref Chunk c, int tileX, int tileY)
+        {
+            var tile = c.CreateTile(tileX, tileY);
+            tile.Components.Add(new TileVisibility());
+            tile.Components.Add(new TileHabitants());
+            return tile;
         }
     }
 }

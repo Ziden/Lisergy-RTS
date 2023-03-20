@@ -1,30 +1,37 @@
-﻿using System;
+﻿using Game.Player;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Tests")]
 namespace Game.Events.Bus
 {
-    public class EventBus
-    {
-        private Dictionary<Type, List<RegisteredListener>> _registeredListeners;
-        private HashSet<IEventListener> _listeners;
 
-        public void RunCallbacks(PlayerEntity sender, byte [] eventBytes)
+    public class EventBus<EventType>
+    {
+
+        internal Dictionary<Type, List<RegisteredListener>> _registeredListeners;
+        internal HashSet<IEventListener> _listeners;
+
+        public void RunCallbacks(PlayerEntity sender, byte[] eventBytes)
         {
-            var ev = Serialization.ToEventRaw(eventBytes);
+            BaseEvent ev = Serialization.ToEventRaw(eventBytes);
             ev.Sender = sender;
             Call(ev);
         }
 
-        public void Call(BaseEvent ev)
+        public virtual void Call(BaseEvent ev)
         {
             if (!_registeredListeners.ContainsKey(ev.GetType()))
+            {
                 if (!_registeredListeners.ContainsKey(ev.GetType().BaseType))
+                {
                     return;
+                }
+            }
 
-            var registeredEvents = _registeredListeners[ev.GetType()];
-            foreach (var registeredEvent in registeredEvents)
+            List<RegisteredListener> registeredEvents = _registeredListeners[ev.GetType()];
+            foreach (RegisteredListener registeredEvent in registeredEvents)
             {
                 registeredEvent.Call(ev);
             }
@@ -41,30 +48,30 @@ namespace Game.Events.Bus
             _listeners = new HashSet<IEventListener>();
         }
 
+        public void Clear(IEventListener listener)
+        {
+            // TODO
+        }
 
-
-        private void RegisterCallback(IEventListener listener, MethodInfo method, Type eventType)
+        private void RegisterCallback(IEventListener listener, Delegate del, Type eventType)
         {
             if (!_registeredListeners.ContainsKey(eventType))
             {
                 _registeredListeners.Add(eventType, new List<RegisteredListener>());
             }
-            var eventList = _registeredListeners[eventType];
+            List<RegisteredListener> eventList = _registeredListeners[eventType];
             eventList.Add(new RegisteredListener()
             {
-                Method = method,
-                Listener = listener
-            });
-            _listeners.Add(listener);
+                Method = del,
+                Listener = new WeakReference<IEventListener>(listener),
+                Type = eventType
+            }); ;
+            _ = _listeners.Add(listener);
         }
 
-        public void Register<EventType>(IEventListener listener, Action<EventType> callback)
+        public virtual void Register<EvType>(IEventListener listener, Action<EvType> callback)
         {
-            if(!callback.Method.CustomAttributes.Any(a => a.AttributeType == typeof(EventMethod)))
-            {
-                throw new Exception("Listener must have [EventMethod] Attribute");
-            }
-            RegisterCallback(listener, callback.Method, typeof(EventType));
+            RegisterCallback(listener, callback, typeof(EvType));
         }
 
         /*

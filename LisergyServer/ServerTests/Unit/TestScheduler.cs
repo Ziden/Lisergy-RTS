@@ -1,8 +1,5 @@
 using Game.Scheduler;
-using Game.World;
-using GameDataTest;
 using NUnit.Framework;
-using ServerTests;
 using System;
 using System.Linq;
 
@@ -12,7 +9,7 @@ namespace Tests
     {
         private class TestTask : GameTask
         {
-            public TestTask(TimeSpan delay) : base(delay) {}
+            public TestTask(TimeSpan delay) : base(delay, null) { }
             public bool Ran = false;
             public override void Execute()
             {

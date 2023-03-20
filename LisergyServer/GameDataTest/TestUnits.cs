@@ -2,12 +2,11 @@
 using GameData;
 using GameData.buffs;
 using GameData.Specs;
-using System;
 using System.Collections.Generic;
 
 namespace GameDataTest
 {
-    public class TestUnits
+    public class TestUnitData
     {
         private static void AddUnit(GameSpec spec, UnitSpec unitSpec)
         {
@@ -20,7 +19,7 @@ namespace GameDataTest
         public static readonly ushort KNIGHT = 1;
         public static readonly ushort MAGE = 2;
 
-        private static UnitStats BaseStats = new UnitStats(new Dictionary<Stat, ushort>()
+        private static UnitStats BaseStats = new UnitStats().SetStats(new Dictionary<Stat, ushort>()
             {
                     { Stat.SPEED, 5 },
                     { Stat.ACCURACY, 5 },
@@ -36,17 +35,17 @@ namespace GameDataTest
         {
             var st = new UnitStats();
             st.SetStats(BaseStats);
-            foreach(var item in stats)
+            foreach (var item in stats)
             {
                 var value = st.GetStat(item.Item1);
                 value += (ushort)item.Item2;
                 st.SetStat(item.Item1, value);
             }
-                
+
             return st;
         }
 
-        public static void Generate(GameSpec spec)
+        public static void Generate(ref GameSpec spec)
         {
             var tuple = (Stat.ATK, 5);
             AddUnit(spec, new UnitSpec()

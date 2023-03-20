@@ -1,7 +1,6 @@
-using Game;
-using Game.Battles;
-using Game.Battles.Actions;
-using Game.BattleTactics;
+using Game.Battle;
+using Game.BattleActions;
+using Game.Battler;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -19,11 +18,11 @@ namespace Tests
         {
             FastUnit = new Unit(1);
             FastUnit.Name = "Fast Unit";
-            FastUnit.Stats.Speed *= 2;
+            FastUnit.Speed *= 2;
 
             SlowUnit = new Unit(1);
             SlowUnit.Name = "Slow Unit";
-            SlowUnit.Stats.Speed /= 2;
+            SlowUnit.Speed /= 2;
 
             Battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(FastUnit), new BattleTeam(SlowUnit));
         }
@@ -41,7 +40,7 @@ namespace Tests
 
             Assert.NotNull(result);
             Assert.IsTrue(result.Succeeded);
-            Assert.That(defender.Stats.HP == defender.Stats.MaxHP - result.Damage);
+            Assert.That(defender.UnitReference.HP == defender.UnitReference.MaxHP - result.Damage);
         }
     }
 }

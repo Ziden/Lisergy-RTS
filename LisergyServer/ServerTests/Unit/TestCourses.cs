@@ -1,8 +1,11 @@
-using Game;
-using Game.Entity;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
+using Game.Network.ServerPackets;
+using Game.Party;
+using Game.Pathfinder;
 using Game.Scheduler;
+using Game.Tile;
 using Game.World;
 using NUnit.Framework;
 using ServerTests;
@@ -17,7 +20,7 @@ namespace Tests
         private TestGame _game;
         private List<Position> _path;
         private TestServerPlayer _player;
-        private Party _party;
+        private PartyEntity _party;
 
         [SetUp]
         public void Setup()
@@ -39,7 +42,7 @@ namespace Tests
         {
             var ev = new MoveRequestPacket() { Path = _path, PartyIndex = _party.PartyIndex };
             ev.Sender = _player;
-            _game.NetworkEvents.Call(ev);
+            _game.HandleClientEvent(_player, ev);
         }
 
         [Test]
@@ -81,8 +84,6 @@ namespace Tests
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
 
-            var moveEventsb = _player.ReceivedEventsOfType<EntityMovePacket>();
-
             SendMoveRequest();
             GameScheduler.Tick(GameScheduler.Now + _party.Course.Delay);
 
@@ -104,7 +105,7 @@ namespace Tests
             SendMoveRequest();
             var course1 = GameScheduler.Queue.First();
 
-            _path.Add(new Position(next.X+1, next.Y));
+            _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();
             var course2 = GameScheduler.Queue.First();
 
@@ -121,7 +122,7 @@ namespace Tests
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
-            _party.BattleID = "anything that is not null";
+            _party.BattleGroupLogic.BattleID = Guid.NewGuid();
 
             _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();
