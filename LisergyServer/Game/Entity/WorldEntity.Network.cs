@@ -1,10 +1,9 @@
-﻿using Game.Entity;
-using Game.Entity.Components;
-using Game.Entity.Entities;
-using Game.Events;
-using Game.Events.GameEvents;
+﻿using Game.Events;
 using Game.Events.ServerEvents;
-using Game.World.Components;
+using Game.FogOfWar;
+using Game.Movement;
+using Game.Packets;
+using Game.Player;
 using System;
 using System.Collections.Generic;
 
@@ -29,14 +28,14 @@ namespace Game
                 trigger.Send(UpdatePacket);
             if (DeltaFlags.HasFlag(DeltaFlag.POSITION))
                 OnPositionChanged();
-           
+
         }
 
         private void OnExistenceChanged()
         {
             if (Tile == null) return; // was removed
 
-            foreach(var playerViewing in Tile.PlayersViewing)
+            foreach (var playerViewing in Tile.PlayersViewing)
             {
                 playerViewing.Send(new EntityUpdatePacket(this));
             }

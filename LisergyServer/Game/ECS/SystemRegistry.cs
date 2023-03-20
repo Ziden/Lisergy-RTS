@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace Game.ECS
 {
@@ -12,13 +11,13 @@ namespace Game.ECS
     internal static class UntypedSystemRegistry
     {
         internal static Dictionary<Type, Delegate> componentAdder = new Dictionary<Type, Delegate>();
-    
-        public static void OnAddComponent(IEntity owner, Type componentType, EntityEventBus events) 
+
+        public static void OnAddComponent(IEntity owner, Type componentType, EntityEventBus events)
         {
             if (componentAdder.TryGetValue(componentType, out var s)) s.DynamicInvoke(owner, owner.Components.Get(componentType), events);
         }
 
-        public static void OnRemovedComponent(IEntity owner, Type componentType, EntityEventBus events) 
+        public static void OnRemovedComponent(IEntity owner, Type componentType, EntityEventBus events)
         {
             if (componentAdder.TryGetValue(componentType, out var s)) s.DynamicInvoke(owner, owner.Components.Get(componentType), events);
         }

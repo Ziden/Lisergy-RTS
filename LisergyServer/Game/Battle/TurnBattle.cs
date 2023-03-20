@@ -1,10 +1,9 @@
 ﻿
+using Game.Battler;
 using Game.Battles.Actions;
 using Game.BattleTactics;
 using Game.DataTypes;
 using Game.Events;
-using Game.Movement;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -48,11 +47,11 @@ namespace Game.Battles
                 action.Result.Succeeded = false;
                 return null;
             }
-            if(action is AttackAction)
+            if (action is AttackAction)
             {
                 var attack = (AttackAction)action;
                 action.Result = attack.Unit.Attack(attack.Defender);
-                action.Result.Succeeded = true;   
+                action.Result.Succeeded = true;
             }
             UpdateRT(unit);
             Result.AddAction(action);

@@ -1,7 +1,5 @@
-using Game;
 using Game.Entity;
 using Game.Events.ServerEvents;
-using Game.World.Components;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;

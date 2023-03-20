@@ -8,7 +8,7 @@ namespace Game.Battles.Actions
         public int TileX;
         public int TileY;
 
-        public MoveAction(TurnBattle battle, BattleUnit atk, int tileX, int tileY): base(battle, atk)
+        public MoveAction(TurnBattle battle, BattleUnit atk, int tileX, int tileY) : base(battle, atk)
         {
             TileX = tileX;
             TileY = tileY;

@@ -1,14 +1,12 @@
 ﻿using Game;
-using Game.Battle;
 using Game.Battles;
 using Game.DataTypes;
 using Game.ECS;
-using Game.Entity;
-using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
+using Game.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,8 +44,8 @@ namespace BattleServer
             var battle = new TurnBattle(ev.BattleID, ev.Attacker, ev.Defender);
             battle.StartEvent = ev;
 
-            ev.Attacker.Entity.BattleLogic.BattleID = ev.BattleID;
-            ev.Defender.Entity.BattleLogic.BattleID = ev.BattleID;
+            ev.Attacker.Entity.BattleGroupLogic.BattleID = ev.BattleID;
+            ev.Defender.Entity.BattleGroupLogic.BattleID = ev.BattleID;
 
             _battlesHappening[battle.ID] = battle;
             foreach (var onlinePlayer in GetOnlinePlayers(battle))
@@ -57,28 +55,32 @@ namespace BattleServer
         }
 
         [EventMethod]
-        public void OnBattleResult(BattleResultPacket ev)
+        public void OnBattleResult(BattleResultPacket fullResultPacket)
         {
             TurnBattle battle = null;
-            if (!_battlesHappening.TryGetValue(ev.BattleHeader.BattleID, out battle))
+            if (!_battlesHappening.TryGetValue(fullResultPacket.BattleHeader.BattleID, out battle))
             {
-                ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT, "Invalid battle"));
+                fullResultPacket.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT, "Invalid battle"));
                 return;
-            }            
-  
+            }
+
+            var summary = new BattleResultSummaryPacket(battle.ID, fullResultPacket.BattleHeader);
+
             foreach (var pl in GetAllPlayers(battle))
             {
-                pl.Send(ev);
-                pl.Battles.Add(ev);
+                pl.Send(summary);
+
+                // TODO: Send to game logic service
+                pl.Battles.Add(fullResultPacket);
                 Log.Debug($"Player {pl} completed battle {battle.ID}");
             }
 
-            var atk = ev.BattleHeader.Attacker.Entity;
-            var def = ev.BattleHeader.Defender.Entity;
+            var atk = fullResultPacket.BattleHeader.Attacker.Entity;
+            var def = fullResultPacket.BattleHeader.Defender.Entity;
 
-            var finishEvent = new BattleFinishedEvent(battle, ev.BattleHeader, ev.Turns);
-            
-            if(atk is IEntity e)
+            var finishEvent = new BattleFinishedEvent(battle, fullResultPacket.BattleHeader, fullResultPacket.Turns);
+
+            if (atk is IEntity e)
             {
                 e.Components.CallEvent(finishEvent);
             }
@@ -93,18 +95,18 @@ namespace BattleServer
             if (atk.Owner.CanReceivePackets())
             {
                 atk.Owner.Send(atkPacket);
-                if(!def.BattleLogic.IsDestroyed)
+                if (!def.BattleGroupLogic.IsDestroyed)
                     atk.Owner.Send(defPacket);
             }
 
-            if(def.Owner.CanReceivePackets())
+            if (def.Owner.CanReceivePackets())
             {
-                if(!atk.BattleLogic.IsDestroyed)
+                if (!atk.BattleGroupLogic.IsDestroyed)
                     def.Owner.Send(atkPacket);
                 def.Owner.Send(defPacket);
             }
 
-            _battlesHappening.Remove(ev.BattleHeader.BattleID);
+            _battlesHappening.Remove(fullResultPacket.BattleHeader.BattleID);
         }
         #region Battle Controller
 

@@ -4,7 +4,7 @@
     {
         // Vitals
         MHP, HP, MMP, MP,
-            
+
         // Stats
         ATK,
         DEF,

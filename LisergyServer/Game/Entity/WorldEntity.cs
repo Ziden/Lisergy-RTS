@@ -1,10 +1,12 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
 using Game.Entity;
-using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.GameEvents;
-using Game.World.Components;
+using Game.FogOfWar;
+using Game.Packets;
+using Game.Player;
+using Game.Tile;
 using System;
 
 namespace Game
@@ -25,9 +27,9 @@ namespace Game
         [field: NonSerialized]
         public ComponentSet _components { get; private set; }
         [NonSerialized]
-        protected Tile _tile;
+        protected TileEntity _tile;
         [NonSerialized]
-        protected Tile _previousTile;
+        protected TileEntity _previousTile;
 
         public WorldEntity(PlayerEntity owner)
         {
@@ -60,9 +62,9 @@ namespace Game
             }
         }
 
-        public Tile PreviousTile => _previousTile;
+        public TileEntity PreviousTile => _previousTile;
 
-        public virtual Tile Tile
+        public virtual TileEntity Tile
         {
             get => _tile; set
             {
@@ -77,7 +79,7 @@ namespace Game
                 {
                     DeltaFlags.SetFlag(DeltaFlag.POSITION);
                 }
-              
+
                 if (_previousTile != null)
                 {
                     var moveOut = new EntityMoveOutEvent()
@@ -105,11 +107,12 @@ namespace Game
                 {
                     _x = _tile.X;
                     _y = _tile.Y;
-                } else
+                }
+                else
                 {
                     _x = 0;
                     _y = 0;
-                    if(_previousTile != null)
+                    if (_previousTile != null)
                     {
                         foreach (var viewer in _previousTile.Components.Get<TileVisibility>().PlayersViewing)
                             viewer.Send(new EntityDestroyPacket(this));

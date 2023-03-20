@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LisergyServer.Core
@@ -20,12 +18,13 @@ namespace LisergyServer.Core
 
         public bool TryReadConsoleText(out string cmd)
         {
-            if(_readTask.IsCompleted)
+            if (_readTask.IsCompleted)
             {
                 cmd = _readTask.Result;
                 _readTask = _reader.ReadLineAsync();
                 return true;
-            } else
+            }
+            else
             {
                 cmd = null;
                 return false;

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Game.ECS
 {
@@ -9,7 +7,8 @@ namespace Game.ECS
     /// Validates the entity must have both components
     /// TODO: not implemented yet
     /// </summary>
-    public class RequiresComponent : Attribute {
+    public class RequiresComponent : Attribute
+    {
 
         public Type ComponentType;
 

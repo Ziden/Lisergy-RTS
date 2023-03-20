@@ -1,11 +1,6 @@
 ﻿using Game.DataTypes;
-using Game.Entity;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServerTests.Unit
 {
@@ -35,7 +30,7 @@ namespace ServerTests.Unit
             var guid = Guid.NewGuid();
             GameId id1 = guid;
             Guid back = id1;
-      
+
 
             Assert.AreEqual(guid, back);
         }
@@ -58,7 +53,7 @@ namespace ServerTests.Unit
         {
             var guid = Guid.Empty;
             GameId id1 = guid;
-            
+
 
             Assert.IsTrue(id1.IsZero());
         }

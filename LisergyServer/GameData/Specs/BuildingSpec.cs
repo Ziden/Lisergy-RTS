@@ -9,7 +9,7 @@ namespace GameData
         public int ModelID;
         public byte LOS;
 
-        public BuildingSpec(ushort id, int model, byte los=4)
+        public BuildingSpec(ushort id, int model, byte los = 4)
         {
             this.Id = id;
             this.ModelID = model;

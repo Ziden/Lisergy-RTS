@@ -1,13 +1,12 @@
 ﻿using Game;
 using Game.DataTypes;
-using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.Bus;
-using Game.Events.GameEvents;
 using Game.Movement;
+using Game.Party;
+using Game.Tile;
 using Game.World;
 using LisergyServer.Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -45,7 +44,7 @@ namespace ServerTests
             });
         }
 
-        public void SendMoveRequest(PartyEntity p, Tile t, MovementIntent intent)
+        public void SendMoveRequest(PartyEntity p, TileEntity t, MovementIntent intent)
         {
             var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new Position(pa.X, pa.Y)).ToList();
             var ev = new MoveRequestPacket() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };

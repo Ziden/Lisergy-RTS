@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+﻿using Game.Tile;
 
 namespace Game.World
 {
@@ -10,19 +7,19 @@ namespace Game.World
     /// </summary>
     public class CachedChunkMap
     {
-        public Tile[,] array;
+        public TileEntity[,] array;
         private ChunkMap _chunkMap;
 
         public CachedChunkMap(ChunkMap chunkMap)
         {
             this._chunkMap = chunkMap;
-            array = new Tile[SizeX, SizeY];
+            array = new TileEntity[SizeX, SizeY];
         }
 
-        public Tile GetTile(int x, int y)
+        public TileEntity GetTile(int x, int y)
         {
             var cached = array[x, y];
-            if(cached == null)
+            if (cached == null)
             {
                 cached = _chunkMap.GetTile(x, y);
                 array[x, y] = cached;
@@ -30,7 +27,7 @@ namespace Game.World
             return cached;
         }
 
-        public Tile this[int x, int y]
+        public TileEntity this[int x, int y]
         {
             get => GetTile(x, y);
         }

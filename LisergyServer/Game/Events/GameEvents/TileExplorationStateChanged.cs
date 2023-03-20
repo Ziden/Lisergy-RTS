@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using Game.Tile;
 
 namespace Game.Events.GameEvents
 {
     /// <summary>
     /// Triggered when an entity explores or unexplores a tile.
-    // Not necessarily the tile visibility changed
+    // Not necessarily the TileEntity visibility changed
     /// </summary>
     public class TileExplorationStateChanged : GameEvent
     {
-        public Tile Tile;
+        public TileEntity Tile;
         public WorldEntity Explorer;
         public bool Explored;
     }

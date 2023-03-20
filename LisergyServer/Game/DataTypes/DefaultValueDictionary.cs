@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Game.DataTypes
 {
@@ -79,7 +77,7 @@ namespace Game.DataTypes
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            if(!_dict.TryGetValue(key, out value))
+            if (!_dict.TryGetValue(key, out value))
             {
                 this[key] = (TValue)InstanceFactory.CreateInstance(typeof(TValue));
                 value = this[key];

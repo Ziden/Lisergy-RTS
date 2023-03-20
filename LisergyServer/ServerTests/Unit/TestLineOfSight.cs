@@ -1,12 +1,15 @@
 using Game;
+using Game.Battler;
+using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
+using Game.FogOfWar;
+using Game.Packets;
+using Game.Tile;
+using Game.World;
+using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
-using Game.World;
-using Game.World.Components;
-using GameDataTest;
-using Game.Events.GameEvents;
 
 namespace Tests
 {
@@ -99,6 +102,51 @@ namespace Tests
         }
 
         [Test]
+        public void TestPartyLineOfSight()
+        {
+            Game.CreatePlayer();
+            var player = Game.GetTestPlayer();
+            var party = player.Parties.First();
+
+            var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
+
+            Assert.AreEqual(los, party.BattleGroupLogic.GetUnits()[0].GetSpec().LOS);
+            Assert.AreEqual(los, party.BattleGroupLogic.CalculateLineOfSight());
+        }
+
+        [Test]
+        public void TestPartyUpdateLineOfSightOnRemoved()
+        {
+            Game.CreatePlayer();
+            var player = Game.GetTestPlayer();
+            var party = player.Parties.First();
+
+            party.BattleGroupLogic.RemoveUnit(party.BattleGroupLogic.GetUnits()[0]);
+
+            var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
+
+            Assert.AreEqual(los, 0);
+        }
+
+        [Test]
+        public void TestPartyUpdateLineOfSightOnAdded()
+        {
+            Game.CreatePlayer();
+            var player = Game.GetTestPlayer();
+            var party = player.Parties.First();
+
+
+            party.BattleGroupLogic.RemoveUnit(party.BattleGroupLogic.GetUnits()[0]);
+
+            var unit = new Unit(0);
+            party.BattleGroupLogic.AddUnit(unit);
+
+            var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
+
+            Assert.AreEqual(los, unit.GetSpec().LOS);
+        }
+
+        [Test]
         public void TestTileAOE()
         {
             var tile = Game.World.GetTile(5, 5);
@@ -164,7 +212,7 @@ namespace Tests
             var building = player.Buildings.First(); // 0-0
 
             Assert.AreEqual(party.GetLineOfSight(), 1);
-     
+
             party.Tile = party.Tile.GetNeighbor(Direction.EAST);
             /*          
                                 o o o o o        o o o o o
@@ -172,7 +220,7 @@ namespace Tests
                                 E E E o o    ->  E E E E o  
             P Moving right ->   B P E o o        B E P E o
 
-            The tile on top of B (Building) should be explored by the building now and not the party anymore.
+            The TileEntity on top of B (Building) should be explored by the building now and not the party anymore.
             Should not trigger visibility changes
             */
 
@@ -196,8 +244,8 @@ namespace Tests
 
             var lowerLosUnit = Game.GameSpec.Units.Where(kp => kp.Value.LOS < initialLos).First();
 
-            party.BattleLogic.RemoveUnit(party.BattleLogic.GetUnits().First());
-            party.BattleLogic.AddUnit(new Unit(lowerLosUnit.Key));
+            party.BattleGroupLogic.RemoveUnit(party.BattleGroupLogic.GetUnits().First());
+            party.BattleGroupLogic.AddUnit(new Unit(lowerLosUnit.Key));
 
             var afterLos = party.GetLineOfSight();
 

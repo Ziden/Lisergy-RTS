@@ -1,7 +1,6 @@
 using Game;
 using NUnit.Framework;
 using ServerTests;
-using System.Linq;
 
 namespace Tests
 {
@@ -18,7 +17,7 @@ namespace Tests
         [Test]
         public void GetGetTileCoords()
         {
-            // get a tile from a chunk in the middle
+            // get a TileEntity from a chunk in the middle
             var chunkX = 1;
             var tileX = 2;
             var tile = Game.World.GetTile(chunkX * GameWorld.CHUNK_SIZE + tileX, chunkX * GameWorld.CHUNK_SIZE + tileX);

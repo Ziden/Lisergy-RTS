@@ -1,6 +1,4 @@
-﻿using Game.Events;
-using Game.Events.Bus;
-using System.Collections.Generic;
+﻿using Game.Events.Bus;
 
 namespace Game.ECS
 {

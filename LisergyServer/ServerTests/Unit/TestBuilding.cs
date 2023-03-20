@@ -1,7 +1,7 @@
 using Game;
-using Game.Entity.Entities;
-using Game.World;
-using Game.World.Components;
+using Game.Building;
+using Game.FogOfWar;
+using Game.Tile;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
@@ -22,7 +22,7 @@ namespace Tests
         public void TestInitialBuilding()
         {
             var player = Game.GetTestPlayer();
- 
+
             var initialBuildingSpec = StrategyGame.Specs.Buildings[StrategyGame.Specs.InitialBuilding];
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile;

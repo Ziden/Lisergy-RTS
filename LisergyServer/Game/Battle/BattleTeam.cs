@@ -1,5 +1,5 @@
-﻿using Game.DataTypes;
-using Game.Entity.Logic;
+﻿using Game.Battler;
+using Game.DataTypes;
 using Game.World;
 using System;
 using System.Linq;

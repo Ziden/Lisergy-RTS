@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Game.Events.GameEvents
+﻿namespace Game.Events.GameEvents
 {
     public class OffensiveMoveEvent : GameEvent
     {

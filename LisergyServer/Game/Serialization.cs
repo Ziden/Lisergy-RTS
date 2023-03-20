@@ -1,12 +1,14 @@
-﻿using Game.Battles;
+﻿using Game.Battler;
+using Game.Battles;
 using Game.Battles.Actions;
 using Game.BattleTactics;
+using Game.Building;
+using Game.Dungeon;
 using Game.ECS;
-using Game.Entity.Entities;
 using Game.Events;
-using Game.World.Data;
+using Game.Party;
+using Game.Tile;
 using GameData;
-using GameData.Specs;
 using NetSerializer;
 using System;
 using System.Collections.Generic;
@@ -21,7 +23,7 @@ namespace Game
 
         public static void LoadSerializers(params Type[] extras)
         {
-            if(Serializer != null)
+            if (Serializer != null)
             {
                 return;
             }
@@ -42,7 +44,7 @@ namespace Game
             models.Add(typeof(PlayerBuildingEntity));
             models.Add(typeof(WorldEntity));
             models.Add(typeof(PartyEntity));
-            models.Add(typeof(Tile));
+            models.Add(typeof(TileEntity));
             models.Add(typeof(TileData));
             models.Add(typeof(DungeonEntity));
 

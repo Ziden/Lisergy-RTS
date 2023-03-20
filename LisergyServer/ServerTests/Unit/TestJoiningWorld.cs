@@ -14,7 +14,7 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            Game = new TestGame(createPlayer:false);
+            Game = new TestGame(createPlayer: false);
             Serialization.LoadSerializers();
         }
 
@@ -87,7 +87,7 @@ namespace Tests
             Game.HandleClientEvent(player, joinEvent);
 
             var firstEntityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
-            var firstTileVisibleEvents = player.ReceivedEventsOfType<TileUpdatePacket>(); 
+            var firstTileVisibleEvents = player.ReceivedEventsOfType<TileUpdatePacket>();
 
             player.ReceivedEvents.Clear();
 
@@ -108,8 +108,8 @@ namespace Tests
             var player = new TestServerPlayer();
             Game.HandleClientEvent(player, joinEvent);
             var party = player.GetParty(0);
-            var unit = party.BattleLogic.GetUnits().First();
-          
+            var unit = party.BattleGroupLogic.GetUnits().First();
+
             Assert.That(unit.HP == unit.MaxHP);
         }
     }

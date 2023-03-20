@@ -7,7 +7,7 @@ namespace BattleServer.Core
     public class RemoteServerEntity : ServerPlayer
     {
 
-        public RemoteServerEntity(int ConnectionID, Server server): base(server)
+        public RemoteServerEntity(int ConnectionID, Server server) : base(server)
         {
             this.ConnectionID = ConnectionID;
         }

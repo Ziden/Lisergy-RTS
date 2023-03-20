@@ -1,9 +1,10 @@
 ﻿using Game.ECS;
+using Game.Tile;
 
 namespace Game.Entity
 {
     public interface IMapEntity : IEntity
     {
-        Tile Tile { get; set; }
+        TileEntity Tile { get; set; }
     }
 }

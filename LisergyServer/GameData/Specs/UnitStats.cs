@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Game.Entity
 {
@@ -52,7 +51,7 @@ namespace Game.Entity
         {
             var size = sizeof(UnitStats);
             var sourcePtr = &stats;
-            fixed(UnitStats* thisPtr = &this)
+            fixed (UnitStats* thisPtr = &this)
             {
                 Buffer.MemoryCopy(sourcePtr, thisPtr, size, size);
             }

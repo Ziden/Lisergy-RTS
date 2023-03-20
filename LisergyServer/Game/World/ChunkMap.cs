@@ -1,12 +1,8 @@
-﻿using Game;
+﻿using Game.FogOfWar;
 using Game.Pathfinder;
+using Game.Tile;
 using Game.World;
-using Game.World.Components;
-using Game.World.Data;
-using System;
-using System.Buffers;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace Game
 {
@@ -49,7 +45,7 @@ namespace Game
             return ref _chunkMap[pos.X, pos.Y];
         }
 
-        public List<PathFinderNode> FindPath(Tile from, Tile to)
+        public List<PathFinderNode> FindPath(TileEntity from, TileEntity to)
         {
             return new PathFinder(_cache).FindPath(new Position(from.X, from.Y), new Position(to.X, to.Y));
         }
@@ -89,7 +85,7 @@ namespace Game
                 {
                     yield return _chunkMap[x, y];
                 }
-            }      
+            }
         }
 
         public virtual ref Chunk GetTileChunk(int tileX, int tileY)
@@ -99,7 +95,7 @@ namespace Game
             return ref GetChunk(chunkX, chunkY);
         }
 
-        public virtual Tile GetTile(int tileX, int tileY)
+        public virtual TileEntity GetTile(int tileX, int tileY)
         {
             var internalTileX = tileX % GameWorld.CHUNK_SIZE;
             var internalTileY = tileY % GameWorld.CHUNK_SIZE;
@@ -114,7 +110,7 @@ namespace Game
             {
                 for (var chunkY = 0; chunkY < maxChunkY; chunkY++)
                 {
-                    var tiles = new Tile[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
+                    var tiles = new TileEntity[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
                     var chunk = new Chunk(this, chunkX, chunkY, tiles);
                     for (var x = 0; x < GameWorld.CHUNK_SIZE; x++)
                     {
@@ -130,7 +126,7 @@ namespace Game
             }
         }
 
-        public virtual void ClearTile(Tile t)
+        public virtual void ClearTile(TileEntity t)
         {
             t.Components.Get<TileVisibility>().EntitiesViewing.Clear();
             t.Components.Get<TileVisibility>().PlayersViewing.Clear();
@@ -139,7 +135,7 @@ namespace Game
         }
 
 
-        public virtual Tile GenerateTile(ref Chunk c, int tileX, int tileY)
+        public virtual TileEntity GenerateTile(ref Chunk c, int tileX, int tileY)
         {
             var tile = c.CreateTile(tileX, tileY);
             tile.Components.Add(new TileVisibility());

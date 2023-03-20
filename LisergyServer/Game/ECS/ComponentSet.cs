@@ -33,7 +33,7 @@ namespace Game.ECS
     /// <summary>
     /// Represents a list of components.
     /// </summary>
-    public class ComponentSet: IComponentSet 
+    public class ComponentSet : IComponentSet
     {
         internal Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
         internal List<IComponent> _networked = new List<IComponent>();
@@ -59,7 +59,8 @@ namespace Game.ECS
 
         public T Add<T>(T c) where T : IComponent => Add<T>(c.GetType(), c);
 
-        public void CallEvent(BaseEvent ev) { 
+        public void CallEvent(BaseEvent ev)
+        {
             GetEventBus().Call(_owner, ev);
             StrategyGame.GlobalGameEvents.Call(ev);
         }

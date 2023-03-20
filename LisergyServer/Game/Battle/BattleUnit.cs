@@ -1,9 +1,7 @@
-﻿using Game.DataTypes;
-using Game.Entity;
-using Game.Entity.Entities;
-using GameData.buffs;
+﻿using Game.Battler;
+using Game.DataTypes;
+using Game.Player;
 using System;
-using System.Collections.Generic;
 
 namespace Game.Battles
 {

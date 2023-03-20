@@ -14,7 +14,7 @@ namespace Game.Battles
 
         public void NextTurn()
         {
-            Turns.Add(new TurnLog((byte)(Turns.Count+1)));
+            Turns.Add(new TurnLog((byte)(Turns.Count + 1)));
         }
 
         public void AddAction(BattleAction action)

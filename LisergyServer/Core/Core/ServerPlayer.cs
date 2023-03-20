@@ -1,7 +1,6 @@
 ﻿using Game;
-using Game.Entity.Entities;
 using Game.Events;
-using System;
+using Game.Player;
 using System.Collections.Generic;
 using Telepathy;
 
@@ -19,7 +18,7 @@ namespace LisergyServer.Core
 
         public HashSet<BaseEvent> _sent = new HashSet<BaseEvent>();
 
-        public override void Send<EventType>(EventType ev) 
+        public override void Send<EventType>(EventType ev)
         {
             Log.Debug($"Sending {ev} to {this}");
             this._server.Send(this.ConnectionID, Serialization.FromEvent<EventType>(ev));

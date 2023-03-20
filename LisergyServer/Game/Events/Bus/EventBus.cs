@@ -1,22 +1,19 @@
-﻿using Game.Entity.Entities;
+﻿using Game.Player;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("Tests")]
 namespace Game.Events.Bus
 {
 
-    public class EventBus<EventType> 
+    public class EventBus<EventType>
     {
 
         internal Dictionary<Type, List<RegisteredListener>> _registeredListeners;
         internal HashSet<IEventListener> _listeners;
 
-        public void RunCallbacks(PlayerEntity sender, byte [] eventBytes)
+        public void RunCallbacks(PlayerEntity sender, byte[] eventBytes)
         {
             var ev = Serialization.ToEventRaw(eventBytes);
             ev.Sender = sender;
@@ -49,7 +46,7 @@ namespace Game.Events.Bus
 
         public void Clear(IEventListener listener)
         {
-           // TODO
+            // TODO
         }
 
         private void RegisterCallback(IEventListener listener, Delegate del, Type eventType)

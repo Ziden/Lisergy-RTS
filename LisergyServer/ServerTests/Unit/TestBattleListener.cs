@@ -1,13 +1,7 @@
 using BattleServer;
-using Game;
-using Game.Battles;
-using Game.Battles.Actions;
-using Game.Events;
-using Game.Events.ClientEvents;
+using Game.Battler;
 using NUnit.Framework;
 using ServerTests;
-using System;
-using System.Linq;
 
 namespace Tests
 {

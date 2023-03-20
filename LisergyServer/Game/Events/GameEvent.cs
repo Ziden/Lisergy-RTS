@@ -6,7 +6,7 @@ namespace Game.Events
     /// Game Logic Events
     /// </summary>
     [Serializable]
-    public abstract class GameEvent: BaseEvent
+    public abstract class GameEvent : BaseEvent
     {
         private bool _cancelled = false;
 

@@ -1,4 +1,4 @@
-﻿using Game.Entity.Entities;
+﻿using Game.Player;
 using System;
 
 namespace Game.Scheduler
@@ -27,12 +27,13 @@ namespace Game.Scheduler
         public DateTime Start
         {
             get => _start;
-            set {
+            set
+            {
                 _start = value; Finish = _start + Delay;
             }
         }
 
-      
+
         public bool Repeat;
 
         public bool IsDue() => Finish <= GameScheduler.Now;

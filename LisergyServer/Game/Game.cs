@@ -1,9 +1,9 @@
 ﻿
 using Game.ECS;
-using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.Bus;
-using Game.World.Systems;
+using Game.Packets;
+using Game.Player;
 using GameData;
 using System.Collections.Generic;
 
@@ -32,12 +32,15 @@ namespace Game
             DeltaTracker.SendDeltaPackets(sender);
         }
 
-        public GameWorld World { get => _world; set { 
+        public GameWorld World
+        {
+            get => _world; set
+            {
                 _world = value;
-                if(value != null)
+                if (value != null)
                     value.Game = this;
-            } 
-        } 
+            }
+        }
 
         public StrategyGame(in GameSpec specs, GameWorld world)
         {

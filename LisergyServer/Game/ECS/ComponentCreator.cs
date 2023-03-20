@@ -14,7 +14,7 @@ namespace Game.ECS
 
         public static T Build<T>() where T : IComponent
         {
-            if(!_builders.TryGetValue(typeof(T), out var ctor))
+            if (!_builders.TryGetValue(typeof(T), out var ctor))
             {
                 ctor = CreateCtor(typeof(T));
                 _builders[typeof(T)] = ctor;

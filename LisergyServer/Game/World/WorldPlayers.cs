@@ -1,8 +1,7 @@
 ﻿using Game.DataTypes;
-using Game.Entity.Entities;
+using Game.Player;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Game
 {
@@ -22,7 +21,7 @@ namespace Game
             if (_players.ContainsKey(p.UserID))
                 return;
 
-            if(_players.Count >= MaxPlayers)
+            if (_players.Count >= MaxPlayers)
             {
                 throw new Exception("Max player limit reached");
             }

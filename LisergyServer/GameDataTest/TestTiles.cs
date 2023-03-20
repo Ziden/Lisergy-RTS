@@ -8,7 +8,7 @@ namespace GameDataTest
     {
         public static readonly TileSpec GRASS = new TileSpec(0)
         {
-            ID=0,
+            ID = 0,
             MovementFactor = 1,
             Arts = new List<ArtSpec>(new ArtSpec[] {
                   new ArtSpec() { Name = "Plains", Type=ArtType.PREFAB }

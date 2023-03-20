@@ -1,5 +1,5 @@
-﻿
-using Game.Entity.Entities;
+﻿using Game.Player;
+using Game.Tile;
 using Game.World;
 using System;
 using System.Collections.Generic;
@@ -40,10 +40,10 @@ namespace Game
 
         public void FreeMap()
         {
-            foreach(var c in Map.AllChunks())
+            foreach (var c in Map.AllChunks())
             {
                 c.FreeMemoryForReuse();
-                foreach(var t in c.AllTiles())
+                foreach (var t in c.AllTiles())
                 {
                     Map.ClearTile(t);
                 }
@@ -63,10 +63,10 @@ namespace Game
         }
 
         /// <summary>
-        /// Finds a newbie chunk that is not used and returns a random tile of it of the given
+        /// Finds a newbie chunk that is not used and returns a random TileEntity of it of the given
         /// spec id
         /// </summary>
-        public Tile GetUnusedStartingTile()
+        public TileEntity GetUnusedStartingTile()
         {
             var freeChunk = Map.GetUnnocupiedNewbieChunk();
             if (freeChunk.IsVoid())
@@ -76,7 +76,7 @@ namespace Game
             return freeChunk.FindTileWithId(0);
         }
 
-        public virtual void PlaceNewPlayer(PlayerEntity player, Tile t)
+        public virtual void PlaceNewPlayer(PlayerEntity player, TileEntity t)
         {
             Players.Add(player);
             var castleID = StrategyGame.Specs.InitialBuilding;
@@ -87,12 +87,12 @@ namespace Game
             unit.Name = "Merlin";
             var party = player.GetParty(0);
             player.PlaceUnitInParty(unit, party);
-            party.Tile =  t.GetNeighbor(Direction.EAST);
+            party.Tile = t.GetNeighbor(Direction.EAST);
             Log.Debug($"Placed new player in {t}");
             return;
         }
 
-        public virtual IEnumerable<Tile> AllTiles()
+        public virtual IEnumerable<TileEntity> AllTiles()
         {
             foreach (var chunk in Map.AllChunks())
                 foreach (var tile in chunk.AllTiles())
@@ -104,7 +104,7 @@ namespace Game
             return Map.GetTileChunk(tileX, tileY);
         }
 
-        public Tile GetTile(int tileX, int tileY)
+        public TileEntity GetTile(int tileX, int tileY)
         {
             return Map.GetTile(tileX, tileY);
         }

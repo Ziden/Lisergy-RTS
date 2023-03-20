@@ -1,18 +1,14 @@
 ﻿using BattleServer;
 using Game;
-using Game.Battles;
-using Game.ECS;
-using Game.Entity.Entities;
 using Game.Events;
-using Game.Events.GameEvents;
 using Game.Listeners;
+using Game.Packets;
+using Game.Player;
+using Game.Tile;
 using Game.World;
-using Game.World.Components;
 using GameData;
 using GameDataTest;
-using LisergyServer.Core;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ServerTests
 {
@@ -31,7 +27,7 @@ namespace ServerTests
         {
             WorldUtils.SetRandomSeed(666);
             DeltaTracker.Clear();
-            if(source != null)
+            if (source != null)
             {
                 return source;
             }
@@ -54,7 +50,7 @@ namespace ServerTests
 
         public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), GetTestWorld(world))
         {
-            
+
             if (!_registered)
             {
                 _registered = true;
@@ -65,7 +61,7 @@ namespace ServerTests
             CourseService = new CourseService(this);
             this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             if (createPlayer)
-                CreatePlayer();  
+                CreatePlayer();
         }
 
         public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientPacket
@@ -76,7 +72,7 @@ namespace ServerTests
 
         public TestServerPlayer CreatePlayer(int x = 10, int y = 10)
         {
-            var player = new TestServerPlayer(); 
+            var player = new TestServerPlayer();
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
             player.UserID = TestServerPlayer.TEST_ID;
             var tile = this.World.GetTile(x, y);
@@ -110,7 +106,7 @@ namespace ServerTests
         }
 
 
-        public Tile RandomNotBuiltTile()
+        public TileEntity RandomNotBuiltTile()
         {
             var tiles = World.AllTiles();
             foreach (var tile in tiles)

@@ -1,9 +1,6 @@
-using Game;
-using Game.Entity;
-using Game.Entity.Entities;
-using Game.Events;
+using Game.Dungeon;
+using Game.Tile;
 using Game.World;
-using Game.World.Data;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
@@ -24,7 +21,7 @@ namespace Tests
         [Test]
         public void TestTileAllocation()
         {
-            
+
         }
 
         [Test]
@@ -85,7 +82,7 @@ namespace Tests
             var tile = Game.World.GetTile(5, 5);
             var tile2 = Game.World.GetTile(6, 6);
 
-            Assert.AreNotEqual(tile.EntityId, tile2.EntityId); 
+            Assert.AreNotEqual(tile.EntityId, tile2.EntityId);
         }
 
         [Test]

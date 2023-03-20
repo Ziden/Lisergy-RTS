@@ -76,7 +76,7 @@ namespace LisergyServer.Core
                 if (ev.SpecVersion < StrategyGame.Specs.Version)
                 {
                     acc.Player.Send(new GameSpecPacket(_game));
-             
+
                 }
                 return acc.Player;
             }

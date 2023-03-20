@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace LisergyServer.Commands
 {
     public class CommandArgs
     {
-        private string [] _args;
+        private string[] _args;
 
         public CommandArgs(IEnumerable<string> args)
         {

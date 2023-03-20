@@ -2,7 +2,6 @@
 using GameData;
 using GameData.buffs;
 using GameData.Specs;
-using System;
 using System.Collections.Generic;
 
 namespace GameDataTest
@@ -36,13 +35,13 @@ namespace GameDataTest
         {
             var st = new UnitStats();
             st.SetStats(BaseStats);
-            foreach(var item in stats)
+            foreach (var item in stats)
             {
                 var value = st.GetStat(item.Item1);
                 value += (ushort)item.Item2;
                 st.SetStat(item.Item1, value);
             }
-                
+
             return st;
         }
 

@@ -10,7 +10,7 @@ namespace Game.Inventories
         public Inventory GetInventory(ItemType type)
         {
             Inventory i;
-            if(!_inventories.TryGetValue(type, out i))
+            if (!_inventories.TryGetValue(type, out i))
             {
                 i = new Inventory();
                 _inventories[type] = i;

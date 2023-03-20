@@ -1,4 +1,4 @@
-using Game;
+using Game.Battler;
 using Game.Battles;
 using Game.Battles.Actions;
 using Game.BattleTactics;

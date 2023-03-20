@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Game
 {
@@ -13,10 +12,10 @@ namespace Game
 
         private static Dictionary<IntPtr, int> _available = new Dictionary<IntPtr, int>();
 
-        #if WINDOWS
+#if WINDOWS
         [DllImport("kernel32.dll")]
         static extern void RtlZeroMemory(IntPtr dst, UIntPtr length);
-        #endif
+#endif
 
         public static void SetZeros(IntPtr ptr, int size)
         {
@@ -31,7 +30,7 @@ namespace Game
         public static IntPtr Alloc(int size)
         {
             var available = GetAvailable(size);
-            if(available.ToInt64() > 0)
+            if (available.ToInt64() > 0)
             {
                 _available.Remove(available);
                 _allocs[available] = size;
@@ -44,7 +43,7 @@ namespace Game
             return p;
         }
 
-        private static IntPtr GetAvailable(int size) 
+        private static IntPtr GetAvailable(int size)
         {
             var kp = _available.FirstOrDefault(kp => kp.Value == size);
             return kp.Key;
@@ -61,7 +60,7 @@ namespace Game
 
         public static void FlagMemoryToBeReused(IntPtr ptr)
         {
-            if(_allocs.ContainsKey(ptr))
+            if (_allocs.ContainsKey(ptr))
             {
                 _available[ptr] = _allocs[ptr];
                 _allocs.Remove(ptr);
@@ -78,7 +77,7 @@ namespace Game
 
         public static void FreeAll()
         {
-            foreach(var p in _allocs.Keys)
+            foreach (var p in _allocs.Keys)
             {
                 Marshal.FreeHGlobal(p);
             }

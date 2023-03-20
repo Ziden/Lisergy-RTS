@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Game.World;
+using System;
 using System.Collections.Generic;
-using Game.World;
 
 namespace Game.Pathfinder
 {

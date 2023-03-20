@@ -1,8 +1,8 @@
-using Game;
-using Game.Entity.Entities;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Party;
 using Game.Scheduler;
+using Game.Tile;
 using Game.World;
 using NUnit.Framework;
 using ServerTests;
@@ -102,7 +102,7 @@ namespace Tests
             SendMoveRequest();
             var course1 = GameScheduler.Queue.First();
 
-            _path.Add(new Position(next.X+1, next.Y));
+            _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();
             var course2 = GameScheduler.Queue.First();
 
@@ -119,7 +119,7 @@ namespace Tests
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
-            _party.BattleLogic.BattleID = Guid.NewGuid();
+            _party.BattleGroupLogic.BattleID = Guid.NewGuid();
 
             _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();

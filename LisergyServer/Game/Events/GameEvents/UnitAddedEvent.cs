@@ -1,4 +1,7 @@
-﻿namespace Game.Events.GameEvents
+﻿using Game.Battler;
+using Game.ECS;
+
+namespace Game.Events.GameEvents
 {
     /// <summary>
     /// When a unit is added to an entity. 
@@ -6,9 +9,9 @@
     public class UnitAddedEvent : GameEvent
     {
         public Unit[] Units;
-        public WorldEntity Entity;
+        public IEntity Entity;
 
-        public UnitAddedEvent(WorldEntity entity, params Unit[] units)
+        public UnitAddedEvent(IEntity entity, params Unit[] units)
         {
             Units = units;
             Entity = entity;

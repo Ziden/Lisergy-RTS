@@ -1,8 +1,5 @@
 ﻿using Game.DataTypes;
-using Game.Entity.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Game.Player;
 
 namespace Game
 {

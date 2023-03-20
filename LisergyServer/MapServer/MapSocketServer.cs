@@ -3,6 +3,7 @@ using Game;
 using Game.Events;
 using Game.Generator;
 using Game.Listeners;
+using Game.Packets;
 using Game.Scheduler;
 using GameDataTest;
 using LisergyServer.Commands;
@@ -14,7 +15,7 @@ namespace MapServer
     public class MapSocketServer : SocketServer
     {
         private static readonly int MAX_PLAYERS = 40;
-     
+
         private static int WORLD_SEED = 12345;
 
         private StrategyGame _game;
@@ -28,7 +29,8 @@ namespace MapServer
 
         public override ServerType GetServerType() => ServerType.MAP;
 
-        public MapSocketServer(int port) : base(port) {
+        public MapSocketServer(int port) : base(port)
+        {
         }
 
         public override void RegisterCommands(StrategyGame game, CommandExecutor executor)

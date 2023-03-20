@@ -1,4 +1,6 @@
-﻿namespace Game.Events.GameEvents
+﻿using Game.Packets;
+
+namespace Game.Events.GameEvents
 {
     public class DeltaProcessedEvent : GameEvent
     {

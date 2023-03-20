@@ -1,6 +1,6 @@
-﻿using Game.Entity.Components;
-using Game.Entity.Entities;
+﻿using Game.Party;
 using Game.Scheduler;
+using Game.Tile;
 using System.Collections.Generic;
 
 namespace Game.Movement
@@ -8,10 +8,10 @@ namespace Game.Movement
     public class CourseTask : GameTask
     {
         public PartyEntity Party;
-        List<Tile> Path;
+        List<TileEntity> Path;
         public MovementIntent Intent { get; private set; }
 
-        public CourseTask(PartyEntity party, List<Tile> path, MovementIntent intent) : base(party.Components.Get<EntityMovementComponent>().MoveDelay, party.Owner)
+        public CourseTask(PartyEntity party, List<TileEntity> path, MovementIntent intent) : base(party.Components.Get<EntityMovementComponent>().MoveDelay, party.Owner)
         {
             this.Party = party;
             this.Path = path;
@@ -29,7 +29,7 @@ namespace Game.Movement
             }
             this.Party.Tile = NextTile;
             Path.RemoveAt(0);
-            Repeat = Path.Count > 0;   
+            Repeat = Path.Count > 0;
         }
 
         public bool IsLastMovement()
@@ -37,7 +37,7 @@ namespace Game.Movement
             return Path == null || Path.Count <= 1;
         }
 
-        private Tile NextTile { get => Path == null || Path.Count == 0 ? null : Path[0]; }
+        private TileEntity NextTile { get => Path == null || Path.Count == 0 ? null : Path[0]; }
 
         public override string ToString()
         {

@@ -1,15 +1,5 @@
-﻿using BattleServer;
-using Game;
-using Game.Entity;
-using Game.Events.ServerEvents;
-using Game.Movement;
-using Game.Scheduler;
-using Game.World;
-using GameDataTest;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using ServerTests;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Tests
 {

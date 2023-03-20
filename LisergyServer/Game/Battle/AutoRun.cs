@@ -1,6 +1,5 @@
 ﻿
 using Game.Battles.Actions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,7 +20,8 @@ namespace Game.Battles
 
         public TurnBattleResult RunAllRounds()
         {
-            while (!_battle.IsOver) {
+            while (!_battle.IsOver)
+            {
                 PlayOneTurn();
             }
             Log.Winner = _battle.Attacker.AllDead ? _battle.Defender : _battle.Attacker;
@@ -40,9 +40,9 @@ namespace Game.Battles
             var enemyTeam = _battle.GetOpposingTeam(unit);
             var enemy = enemyTeam.RandomUnit();
             var action = new AttackAction(_battle, unit, enemy);
-            return _battle.ReceiveAction(action);     
+            return _battle.ReceiveAction(action);
         }
 
-        
+
     }
 }
