@@ -49,7 +49,7 @@ namespace Game.Battler
 
         public void ModifyStats(Dictionary<Stat, ushort> stats)
         {
-            foreach (var kp in stats)
+            foreach (KeyValuePair<Stat, ushort> kp in stats)
             {
                 _statsData.AddStat(kp.Key, kp.Value);
             }
@@ -78,14 +78,11 @@ namespace Game.Battler
             set
             {
                 _party = value;
-                if (value != null)
-                    _partyId = value.PartyIndex;
-                else
-                    _partyId = byte.MaxValue;
+                _partyId = value != null ? value.PartyIndex : byte.MaxValue;
             }
         }
 
-        public byte PartyId { get => _partyId; }
+        public byte PartyId => _partyId;
 
         public override string ToString()
         {
@@ -97,10 +94,19 @@ namespace Game.Battler
             return other != null && _partyId == other._partyId && SpecId == other.SpecId && _statsData.Equals(other._statsData);
         }
 
-        public bool Equals(Unit x, Unit y) => x != null && x.Equals(y);
+        public bool Equals(Unit x, Unit y)
+        {
+            return x != null && x.Equals(y);
+        }
 
-        public override int GetHashCode() => HashCode.Combine(SpecId, Stats, _partyId);
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(SpecId, Stats, _partyId);
+        }
 
-        public int GetHashCode(Unit obj) => obj.GetHashCode();
+        public int GetHashCode(Unit obj)
+        {
+            return obj.GetHashCode();
+        }
     }
 }

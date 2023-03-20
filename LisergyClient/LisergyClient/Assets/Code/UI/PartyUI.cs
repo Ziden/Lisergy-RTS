@@ -3,9 +3,11 @@ using Assets.Code.Entity;
 using Assets.Code.Views;
 using Assets.Code.World;
 using Game;
-using Game.Entity.Entities;
+using Game.Battler;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
+using Game.Party;
+using Game.Tile;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -83,7 +85,7 @@ public class PartyUI : IEventListener
         UIManager.UnitPanel.Close();
     }
 
-    private void OnClickTile(Tile tile)
+    private void OnClickTile(TileEntity tile)
     {
         if (tile == null)
         {
@@ -115,7 +117,7 @@ public class PartyUI : IEventListener
 
     private void ShowParty(PartyEntity party)
     {
-        UIManager.UnitPanel.ShowUnit(party.BattleLogic.GetValidUnits().First());
+        UIManager.UnitPanel.ShowUnit(party.BattleGroupLogic.GetValidUnits().First());
     }
 
     public void SelectParty(PartyEntity party)
@@ -144,7 +146,7 @@ public class PartyUI : IEventListener
     public static Image DrawPartyIcon(PartyEntity party, Transform parent)
     {
         var partyIndex = party.PartyIndex;
-        var units = party.BattleLogic.GetValidUnits().ToList();
+        var units = party.BattleGroupLogic.GetValidUnits().ToList();
         var leader = units[0];
         var imageObj = new GameObject("portrait", typeof(Image));
         var image = DrawPortrait(leader, parent);
@@ -178,7 +180,7 @@ public class PartyUI : IEventListener
     {
         foreach (var party in MainBehaviour.Player.Parties)
         {
-            if(party.BattleLogic.GetUnits().Count > 0)
+            if(party.BattleGroupLogic.GetUnits().Count > 0)
             {
                 DrawPartyIcon(party, _partyButtons[party.PartyIndex].transform);
             }

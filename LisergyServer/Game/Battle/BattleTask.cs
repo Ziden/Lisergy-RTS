@@ -1,17 +1,17 @@
-﻿using Game.Events;
+﻿using Game.Network.ServerPackets;
 using Game.Scheduler;
 using System;
 
-namespace Game.Battles
+namespace Game.Battle
 {
     public class BattleTask : GameTask
     {
-        private TurnBattle _battle;
-        private StrategyGame _game;
+        private readonly TurnBattle _battle;
+        private readonly StrategyGame _game;
 
         public BattleTask(StrategyGame game, TurnBattle battle) : base(TimeSpan.FromSeconds(3), null)
         {
-            this._battle = battle;
+            _battle = battle;
             _game = game;
         }
 
@@ -19,8 +19,8 @@ namespace Game.Battles
         {
             Repeat = false;
             _battle.Task = null;
-            var result = _battle.AutoRun.RunAllRounds();
-            var resultEvent = new BattleResultPacket(_battle.ID, result);
+            TurnBattleResult result = _battle.AutoRun.RunAllRounds();
+            BattleResultPacket resultEvent = new BattleResultPacket(_battle.ID, result);
             // for now just run callbacks
             // TODO: place on a message queue
             _game.NetworkEvents.Call(resultEvent);
@@ -28,7 +28,7 @@ namespace Game.Battles
 
         public override string ToString()
         {
-            return $"<BattleTask {ID.ToString()} {_battle}>";
+            return $"<BattleTask {ID} {_battle}>";
         }
     }
 }

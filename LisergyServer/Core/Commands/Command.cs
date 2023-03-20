@@ -1,6 +1,6 @@
 ﻿using Game;
 
-namespace LisergyServer.Commands
+namespace BaseServer.Commands
 {
     public abstract class Command
     {
@@ -14,7 +14,7 @@ namespace LisergyServer.Commands
 
         public Command(StrategyGame game)
         {
-            this.Game = game;
+            Game = game;
         }
 
         public int GetPermissionLevel()

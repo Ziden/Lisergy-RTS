@@ -1,13 +1,8 @@
-﻿using Assets.Code.Entity;
-using Assets.Code.Views;
-using Game;
-using Game.DataTypes;
+﻿using Assets.Code.Views;
+using Game.Battler;
 using Game.ECS;
-using Game.Entity;
-using Game.Entity.Components;
-using Game.Entity.Entities;
+using Game.Party;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets.Code.World
@@ -45,43 +40,10 @@ namespace Assets.Code.World
         {
             GameObject = new GameObject($"{Entity.OwnerID}-{Entity.Id}");
             GameObject.transform.SetParent(Container.transform);
+            GameObject.transform.position = new Vector3(0, 0.2f, 0);
             GameObject.SetActive(true);
             StackLog.Debug($"Created new party instance {this}");
         }
-
-        /*
-        public override Tile Tile
-        {
-            get => base.Tile;
-            set
-            {
-                var old = base.Tile;
-                if (value != null && !BattleID.IsZero())
-                    Effects.BattleEffect(value as Tile);
-
-                base.Tile = value;
-                if (value != null)
-                {
-                    GameObject.transform.position = new Vector3(value.X, 0.1f, value.Y);
-                }
-                ClientEvents.PartyFinishedMove(this, old, base.Tile);
-            }
-        }
-        */
-
-        /*
-        public override GameId BattleID
-        {
-            get => base.BattleID; set {
-
-                if(this.Tile != null && !value.IsZero() && BattleID.IsZero())
-                    Effects.BattleEffect(this.Tile);
-                if (!this.BattleID.IsZero() && value.IsZero())
-                    Effects.StopEffect(this.Tile);
-                base.BattleID = value;
-            }
-        }
-        */
 
         private static GameObject Container
         {
@@ -95,7 +57,7 @@ namespace Assets.Code.World
 
         public void CreateUnitObjects()
         {
-            foreach (var unit in Entity.BattleLogic.GetValidUnits())
+            foreach (var unit in Entity.BattleGroupLogic.GetValidUnits())
             {
                 var unitObject = new UnitView(unit);
                 unitObject.AddToScene();

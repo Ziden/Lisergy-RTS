@@ -8,7 +8,7 @@ namespace Game.Events.GameEvents
 
         public PartyStatusUpdateEvent(PartyEntity p)
         {
-            this.Party = p;
+            Party = p;
         }
 
     }

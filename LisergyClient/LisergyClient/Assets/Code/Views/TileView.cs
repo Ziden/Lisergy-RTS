@@ -1,19 +1,18 @@
 ﻿using Game;
-using Game.World.Components;
-using Game.World.Data;
+using Game.Tile;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Code.Views
 {
-    public partial class TileView : EntityView<Tile>
+    public partial class TileView : EntityView<TileEntity>
     {
-        public override Tile Entity { get; }
+        public override TileEntity Entity { get; }
         public override GameObject GameObject { get; set; }
         public bool Decorated { get; set; }
         public override bool Instantiated => GameObject != null;
 
-        public TileView(Tile entity)
+        public TileView(TileEntity entity)
         {
             Entity = entity;
         }
@@ -24,46 +23,16 @@ namespace Assets.Code.Views
             if (!Instantiated)
             {
                 Instantiate();
-                SetFogOfWarDisabled(true);
                 RegisterEvents();
             }
         }
-
-        public void SetFogOfWarDisabled(bool isTileInLos)
-        {
-            if (!Instantiated)
-                return;
-
-            if (isTileInLos == false)
-            {
-                SetColor(new Color(0.5f, 0.5f, 0.5f, 1f));
-            }
-            else
-            {
-                SetColor(new Color(1f, 1f, 1f, 1.0f));
-                GameObject.SetActive(isTileInLos);
-            }
-        }
-
-        private void SetColor(Color c)
-        {
-            foreach (Transform child in GameObject.transform)
-            {
-                var rend = child.GetComponent<Renderer>();
-                if (rend != null)
-                {
-                    rend.material.color = c;
-                }
-            }
-        }
-
+    
         public override void Instantiate()
         {
             if(Instantiated)
             {
                 return;
             }
-            SetFogOfWarDisabled(true);
             Entity.Components.Add(this);
             RegisterEvents();
             if (GameObject != null)

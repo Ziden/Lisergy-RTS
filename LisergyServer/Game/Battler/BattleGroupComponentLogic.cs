@@ -1,4 +1,4 @@
-﻿using Game.Battles;
+﻿using Game.Battle;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Entity;
@@ -32,6 +32,7 @@ namespace Game.Battler
     public interface IBattleComponentSyncedProperties
     {
         public GameId BattleID { get; set; }
+        public List<List<Unit>> UnitLines { set; }
     }
 
     public interface IBattleComponentsLogic : IBattleComponentSyncedProperties, IBattleComponentEvents, IComponentEntityLogic
@@ -71,10 +72,10 @@ namespace Game.Battler
         #region Synced Properties
         public virtual GameId BattleID
         {
-            get => _component?.BattleId ?? GameId.ZERO;
+            get => _component?.BattleID ?? GameId.ZERO;
             set
             {
-                _component.BattleId = value;
+                _component.BattleID = value;
                 OnBattleIdChanged?.Invoke(this, value);
             }
         }
@@ -89,6 +90,18 @@ namespace Game.Battler
         public bool IsBattling => !BattleID.IsZero();
 
         public bool IsDestroyed => GetUnits().All(u => u == null || u.HP <= 0);
+
+        public List<List<Unit>> UnitLines
+        {
+            set
+            {
+                // Update frontline to trigger events
+                UpdateUnits(value.First());
+                // Update rest
+                for (int x = 1; x < value.Count; x++)
+                    _component.UnitLines.Add(value[x]);
+            }
+        }
 
         public void UpdateUnits(List<Unit> newUnits)
         {

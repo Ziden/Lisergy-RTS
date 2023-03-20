@@ -1,4 +1,4 @@
-﻿namespace LisergyServer.Core
+﻿namespace BaseServer.Core
 {
 
     public enum ServerType

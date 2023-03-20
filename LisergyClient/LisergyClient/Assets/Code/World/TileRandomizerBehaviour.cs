@@ -2,12 +2,13 @@
 using Assets.Code.Views;
 using Assets.Code.World;
 using Game;
+using Game.Tile;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TileRandomizerBehaviour : MonoBehaviour
 {
-    private Tile _tile;
+    private TileEntity _tile;
 
     public List<GameObject> Remove50;
     public List<GameObject> Remove85;
@@ -23,7 +24,7 @@ public class TileRandomizerBehaviour : MonoBehaviour
 
     private static System.Random rnd = new System.Random();
 
-    public Tile Tile { get => _tile; private set => _tile = value; }
+    public TileEntity Tile { get => _tile; private set => _tile = value; }
 
     private static void DecorateBoundaries(TileView view)
     {

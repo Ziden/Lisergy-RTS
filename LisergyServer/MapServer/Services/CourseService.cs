@@ -2,7 +2,9 @@
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using Game.Movement;
+using Game.Network.ClientPackets;
 using Game.Party;
+using Game.Pathfinder;
 using Game.Tile;
 using Game.World;
 using System.Collections.Generic;

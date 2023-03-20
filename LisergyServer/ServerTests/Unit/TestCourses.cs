@@ -1,6 +1,9 @@
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
+using Game.Network.ServerPackets;
 using Game.Party;
+using Game.Pathfinder;
 using Game.Scheduler;
 using Game.Tile;
 using Game.World;

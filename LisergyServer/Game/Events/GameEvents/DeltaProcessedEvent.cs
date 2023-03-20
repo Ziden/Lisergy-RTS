@@ -1,4 +1,4 @@
-﻿using Game.Packets;
+﻿using Game.Network;
 
 namespace Game.Events.GameEvents
 {

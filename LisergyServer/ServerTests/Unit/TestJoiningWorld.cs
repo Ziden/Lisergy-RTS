@@ -1,6 +1,7 @@
 using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;

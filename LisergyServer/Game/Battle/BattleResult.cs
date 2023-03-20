@@ -1,8 +1,8 @@
-﻿using Game.Battles.Actions;
+﻿using Game.BattleActions;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.Battles
+namespace Game.Battle
 {
     public class TurnBattleResult
     {
@@ -24,7 +24,7 @@ namespace Game.Battles
 
         public BattleAction LastAction => CurrentTurn.Actions.First();
 
-        public TurnLog CurrentTurn { get => Turns.Last(); }
+        public TurnLog CurrentTurn => Turns.Last();
 
         public override string ToString()
         {

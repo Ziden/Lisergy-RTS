@@ -1,9 +1,11 @@
 ﻿using Game;
-using Game.Entity;
-using Game.Entity.Entities;
+using Game.Building;
+using Game.Dungeon;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
+using Game.Network.ServerPackets;
+using Game.Party;
 using System;
 
 namespace Assets.Code.World
@@ -57,6 +59,8 @@ namespace Assets.Code.World
             var serverOwner = serverEntity.OwnerID;
             var owner = GameView.World.GetOrCreateClientPlayer(serverEntity.OwnerID);
             serverEntity.Owner = owner;
+
+            // Move this to a client system
             if (serverEntity is PartyEntity serverParty)
             {
                 var view = owner.UpdateClientState<PartyEntity, PartyView>(serverParty, ev.SyncedComponents);

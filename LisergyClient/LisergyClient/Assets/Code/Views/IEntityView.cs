@@ -1,6 +1,5 @@
 ﻿
 using Game.ECS;
-using Game.Entity;
 using Game.Events.Bus;
 using System.Collections.Generic;
 using UnityEngine;

@@ -3,6 +3,7 @@ using Game;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -5,6 +5,7 @@ using Assets.UnitTests;
 using Game.World;
 using Assets.Code.World;
 using NUnit.Framework;
+using Game.Tile;
 
 namespace Tests
 {

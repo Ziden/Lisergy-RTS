@@ -7,8 +7,6 @@ namespace Game.Generator
         int tries = GameWorld.PLAYERS_CHUNKS;
         int wait = 0;
 
-        private static bool DEBUG = false;
-
         public override void Populate(GameWorld w, Chunk c)
         {
             w.Map.SetFlag(c.X, c.Y, ChunkFlag.NEWBIE_CHUNK);

@@ -1,9 +1,8 @@
 ﻿using Assets.Code.Entity;
 using Assets.Code.Views;
 using Game;
+using Game.Building;
 using Game.ECS;
-using Game.Entity.Entities;
-using GameData;
 using System.Collections.Generic;
 using UnityEngine;
 

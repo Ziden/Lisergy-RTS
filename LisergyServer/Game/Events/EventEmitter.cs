@@ -1,4 +1,4 @@
-﻿namespace LisergyServer.Core
+﻿namespace Game.Events
 {
     public class EventEmitter
     {

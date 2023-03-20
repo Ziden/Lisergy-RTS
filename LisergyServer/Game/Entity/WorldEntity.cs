@@ -1,10 +1,10 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
 using Game.Entity;
-using Game.Events;
 using Game.Events.GameEvents;
 using Game.FogOfWar;
-using Game.Packets;
+using Game.Network.ServerPackets;
+using Game.Network;
 using Game.Player;
 using Game.Tile;
 using System;
@@ -36,7 +36,7 @@ namespace Game
             Owner = owner;
             _id = Guid.NewGuid();
             DeltaFlags = new DeltaFlags(this);
-            _components = new ComponentSet(this);
+            _components = new ComponentSet(this, owner);
         }
 
         public bool IsInMap => _tile != null;

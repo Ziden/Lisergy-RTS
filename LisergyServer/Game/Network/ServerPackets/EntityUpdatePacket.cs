@@ -13,7 +13,6 @@ namespace Game.Events.ServerEvents
         public EntityUpdatePacket(WorldEntity entity)
         {
             Entity = entity;
-            SyncedComponents = entity.Components.GetSyncedComponents();
         }
 
         public override string ToString()

@@ -14,12 +14,18 @@ namespace Game.ECS
 
         public static void OnAddComponent(IEntity owner, Type componentType, EntityEventBus events)
         {
-            if (componentAdder.TryGetValue(componentType, out var s)) s.DynamicInvoke(owner, owner.Components.Get(componentType), events);
+            if (componentAdder.TryGetValue(componentType, out Delegate s))
+            {
+                _ = s.DynamicInvoke(owner, owner.Components.Get(componentType), events);
+            }
         }
 
         public static void OnRemovedComponent(IEntity owner, Type componentType, EntityEventBus events)
         {
-            if (componentAdder.TryGetValue(componentType, out var s)) s.DynamicInvoke(owner, owner.Components.Get(componentType), events);
+            if (componentAdder.TryGetValue(componentType, out Delegate s))
+            {
+                _ = s.DynamicInvoke(owner, owner.Components.Get(componentType), events);
+            }
         }
     }
 
@@ -30,7 +36,7 @@ namespace Game.ECS
         public delegate void OnComponentAdd(EntityType e, ComponentType c, EntityEventBus bus);
 
 
-        private static Dictionary<Type, GameSystem<ComponentType, EntityType>> _systems = new Dictionary<Type, GameSystem<ComponentType, EntityType>>();
+        private static readonly Dictionary<Type, GameSystem<ComponentType, EntityType>> _systems = new Dictionary<Type, GameSystem<ComponentType, EntityType>>();
 
         public static void AddSystem<GameSystem>(GameSystem system) where GameSystem : GameSystem<ComponentType, EntityType>
         {
@@ -40,7 +46,7 @@ namespace Game.ECS
 
         internal static void OnAddComponent(EntityType owner, EntityEventBus events)
         {
-            if (_systems.TryGetValue(typeof(ComponentType), out var s))
+            if (_systems.TryGetValue(typeof(ComponentType), out GameSystem<ComponentType, EntityType> s))
             {
                 s.OnComponentAdded(owner, owner.Components.Get<ComponentType>(), events);
             }
@@ -53,7 +59,7 @@ namespace Game.ECS
 
         internal static void OnRemovedComponent(EntityType owner, EntityEventBus events)
         {
-            if (_systems.TryGetValue(typeof(ComponentType), out var s))
+            if (_systems.TryGetValue(typeof(ComponentType), out GameSystem<ComponentType, EntityType> s))
             {
                 s.OnComponentRemoved(owner, owner.Components.Get<ComponentType>(), events);
             }

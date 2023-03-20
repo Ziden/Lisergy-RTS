@@ -3,6 +3,7 @@ using Game.Battler;
 using Game.Dungeon;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Network.ServerPackets;
 using Game.Party;
 using Game.Scheduler;
 using NUnit.Framework;
@@ -116,7 +117,7 @@ namespace Tests
         {
             var party = _player.GetParty(0);
 
-            var update = new EntityUpdatePacket(party);
+            var update = party.GetUpdatePacket(_player);
 
             var serialize = Serialization.FromEventRaw(update);
             var deserialize = Serialization.ToEvent<EntityUpdatePacket>(serialize);
@@ -133,7 +134,7 @@ namespace Tests
             var party = _player.GetParty(0);
             party.Components.Get<PartyComponent>().PartyIndex = 2;
 
-            var update = new EntityUpdatePacket(party);
+            var update = party.GetUpdatePacket(_player);
 
             var serialize = Serialization.FromEventRaw(update);
             var deserialize = Serialization.ToEvent<EntityUpdatePacket>(serialize);

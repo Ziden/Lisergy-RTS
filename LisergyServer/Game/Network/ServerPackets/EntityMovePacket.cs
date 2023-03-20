@@ -1,20 +1,21 @@
 ﻿using Game.DataTypes;
+using Game.Events;
 using Game.Movement;
 using Game.Tile;
 using System;
 
-namespace Game.Events
+namespace Game.Network.ServerPackets
 {
     [Serializable]
     public class EntityMovePacket : ServerPacket
     {
         public EntityMovePacket(WorldEntity entity, EntityMovementComponent component, TileEntity tile)
         {
-            this.OwnerID = entity.OwnerID;
-            this.EntityID = entity.Id;
-            this.Delay = component.MoveDelay;
-            this.X = tile.X;
-            this.Y = tile.Y;
+            OwnerID = entity.OwnerID;
+            EntityID = entity.Id;
+            Delay = component.MoveDelay;
+            X = tile.X;
+            Y = tile.Y;
 
         }
 

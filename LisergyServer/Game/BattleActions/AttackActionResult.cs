@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Game.BattleTactics
+namespace Game.BattleActions
 {
     [Serializable]
     public class AttackActionResult : ActionResult

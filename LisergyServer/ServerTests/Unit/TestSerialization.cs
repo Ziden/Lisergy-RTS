@@ -1,6 +1,7 @@
 using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace Tests
 
             Serialization.LoadSerializers(typeof(TileUpdatePacket));
 
-            var serialized = Serialization.FromEvent<TileUpdatePacket>(tile.UpdatePacket);
+            var serialized = Serialization.FromEvent<TileUpdatePacket>(tile.GetUpdatePacket(null));
             var unserialized = Serialization.ToEvent<TileUpdatePacket>(serialized);
 
             Assert.AreEqual(tile.TileId, unserialized.Data.TileId);

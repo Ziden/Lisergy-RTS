@@ -10,11 +10,11 @@ namespace Game.ECS
     /// </summary>
     public class ComponentCreator
     {
-        private static Dictionary<Type, ObjectActivator> _builders = new Dictionary<Type, ObjectActivator>();
+        private static readonly Dictionary<Type, ObjectActivator> _builders = new Dictionary<Type, ObjectActivator>();
 
         public static T Build<T>() where T : IComponent
         {
-            if (!_builders.TryGetValue(typeof(T), out var ctor))
+            if (!_builders.TryGetValue(typeof(T), out ObjectActivator ctor))
             {
                 ctor = CreateCtor(typeof(T));
                 _builders[typeof(T)] = ctor;
@@ -29,7 +29,7 @@ namespace Game.ECS
                 throw new NullReferenceException("type");
             }
             ConstructorInfo emptyConstructor = type.GetConstructor(Type.EmptyTypes);
-            var dynamicMethod = new DynamicMethod("CreateInstance", type, Type.EmptyTypes, true);
+            DynamicMethod dynamicMethod = new DynamicMethod("CreateInstance", type, Type.EmptyTypes, true);
             ILGenerator ilGenerator = dynamicMethod.GetILGenerator();
             ilGenerator.Emit(OpCodes.Nop);
             ilGenerator.Emit(OpCodes.Newobj, emptyConstructor);

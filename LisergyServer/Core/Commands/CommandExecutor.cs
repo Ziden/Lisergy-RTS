@@ -1,9 +1,9 @@
-﻿using LisergyServer.Core;
+﻿using BaseServer.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LisergyServer.Commands
+namespace BaseServer.Commands
 {
     public class CommandExecutor
     {
@@ -11,7 +11,7 @@ namespace LisergyServer.Commands
         private static ConsoleReader _console;
         public static readonly char CMD_CHAR = '.';
 
-        private Dictionary<string, Command> _commands = new Dictionary<string, Command>();
+        private readonly Dictionary<string, Command> _commands = new();
         private Command _cmd = null;
         private string _consoleText = null;
         private string[] _args = null;
@@ -25,7 +25,9 @@ namespace LisergyServer.Commands
         {
             _cmdSender = new ConsoleSender();
             if (_console == null)
+            {
                 _console = new ConsoleReader();
+            }
         }
 
         public void HandleConsoleCommands()
@@ -39,7 +41,7 @@ namespace LisergyServer.Commands
                 }
 
                 _args = _consoleText.Split(" ");
-                if (_commands.TryGetValue(_args[0].Substring(1, _args[0].Length - 1), out _cmd))
+                if (_commands.TryGetValue(_args[0][1..], out _cmd))
                 {
                     try
                     {
@@ -59,7 +61,7 @@ namespace LisergyServer.Commands
 
         private void Invoke(Command cmd, string cmdString)
         {
-            var args = cmdString.Split(" ");
+            _ = cmdString.Split(" ");
         }
 
         public void RegisterCommand(Command c)

@@ -1,8 +1,8 @@
 ﻿using Assets.Code.Entity;
 using Assets.Code.Views;
 using Game;
+using Game.Dungeon;
 using Game.ECS;
-using Game.Entity.Entities;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,9 +31,9 @@ namespace Assets.Code.World
         public override void Instantiate()
         {
             var prefab = Resources.Load("prefabs/buildings/dungeon");
-            var tileView = GameView.GetOrCreateTileView(Entity.Tile, true);
-            GameObject = MainBehaviour.Instantiate(prefab, tileView.GameObject.transform) as GameObject;
-            GameObject.transform.position = new Vector3(tileView.Entity.X, 0, tileView.Entity.Y);
+            var view = GameView.GetView(Entity.Tile.Chunk);
+            GameObject = MainBehaviour.Instantiate(prefab, view.GameObject.transform) as GameObject;
+            GameObject.transform.position = new Vector3(Entity.Tile.X, 0, Entity.Tile.Y);
             Debug.Log("Instantiated dungeon");
         }
     }

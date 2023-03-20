@@ -4,7 +4,7 @@ using Game.World;
 using System;
 using System.Linq;
 
-namespace Game.Battles
+namespace Game.Battle
 {
     [Serializable]
     public class BattleTeam
@@ -27,16 +27,18 @@ namespace Game.Battles
 
         private void Init(IBattleableEntity entity, params Unit[] units)
         {
-            this._entity = entity;
-            var owner = entity?.Owner;
-            var filtered = units.Where(u => u != null).ToList();
+            _entity = entity;
+            Player.PlayerEntity owner = entity?.Owner;
+            System.Collections.Generic.List<Unit> filtered = units.Where(u => u != null).ToList();
             Units = new BattleUnit[filtered.Count()];
             // All battles are autobattles for now
-            var isUnitsControlled = false; // owner != null && owner.Online();
-            for (var x = 0; x < filtered.Count(); x++)
+            bool isUnitsControlled = false; // owner != null && owner.Online();
+            for (int x = 0; x < filtered.Count(); x++)
             {
-                Units[x] = new BattleUnit(owner, this, filtered[x]);
-                Units[x].Controlled = isUnitsControlled;
+                Units[x] = new BattleUnit(owner, this, filtered[x])
+                {
+                    Controlled = isUnitsControlled
+                };
             }
             if (owner != null)
             {
@@ -44,8 +46,8 @@ namespace Game.Battles
             }
         }
 
-        public bool AllDead { get => !Units.Any(u => !u.Dead); }
-        public IBattleableEntity Entity { get => _entity; }
+        public bool AllDead => !Units.Any(u => !u.Dead);
+        public IBattleableEntity Entity => _entity;
 
         public BattleUnit RandomUnit()
         {

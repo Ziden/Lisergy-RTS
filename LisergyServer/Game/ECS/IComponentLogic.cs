@@ -12,12 +12,4 @@
         IEntity Entity { get; set; }
         IComponent Component { get; set; }
     }
-
-    /// <summary>
-    /// Means an entity have logics that can be used to sync components instead of a shallow property copy
-    /// </summary>
-    public interface IEntitySyncsLogic
-    {
-        IComponentEntityLogic[] GetLogicsToSync();
-    }
 }

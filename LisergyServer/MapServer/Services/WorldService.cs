@@ -2,7 +2,9 @@
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.GameEvents;
-using Game.Packets;
+using Game.Network;
+using Game.Network.ClientPackets;
+using Game.Network.ServerPackets;
 using Game.Player;
 using System;
 

@@ -2,7 +2,7 @@
 using Game.ECS;
 using Game.Events;
 using Game.Events.Bus;
-using Game.Packets;
+using Game.Network;
 using Game.Player;
 using GameData;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace Game
 
         public void ReceiveInput(PlayerEntity sender, byte[] input)
         {
-            var ev = Serialization.ToEventRaw(input);
+            BaseEvent ev = Serialization.ToEventRaw(input);
             ev.Sender = sender;
             NetworkEvents.Call(ev);
             DeltaTracker.SendDeltaPackets(sender);
@@ -38,7 +38,9 @@ namespace Game
             {
                 _world = value;
                 if (value != null)
+                {
                     value.Game = this;
+                }
             }
         }
 

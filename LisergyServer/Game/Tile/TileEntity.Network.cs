@@ -1,6 +1,6 @@
 ﻿using Game.ECS;
 using Game.Events.ServerEvents;
-using Game.Packets;
+using Game.Network;
 using Game.Player;
 using System;
 
@@ -15,13 +15,13 @@ namespace Game.Tile
 
         public void SetFlag(DeltaFlag flag) { }
 
-        public TileUpdatePacket UpdatePacket => new TileUpdatePacket(*_tileData);
+        public TileUpdatePacket GetUpdatePacket(PlayerEntity receiver) => new TileUpdatePacket(*_tileData);
 
         public void ProccessDeltas(PlayerEntity trigger)
         {
             if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
             {
-                trigger.Send(UpdatePacket);
+                trigger.Send(GetUpdatePacket(trigger));
             }
         }
     }

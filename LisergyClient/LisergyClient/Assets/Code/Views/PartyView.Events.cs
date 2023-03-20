@@ -1,5 +1,10 @@
-﻿using Game;
+﻿using Assets.Code.Entity;
+using Game;
+using Game.Battler;
+using Game.DataTypes;
 using Game.Events.GameEvents;
+using Game.Party;
+using UnityEngine;
 
 namespace Assets.Code.World
 {
@@ -8,31 +13,22 @@ namespace Assets.Code.World
         public void RegisterEvents()
         {
             Entity.Components.RegisterExternalComponentEvents<PartyView, EntityMoveInEvent>(OnMoveIn);
+            Entity.BattleGroupLogic.OnBattleIdChanged += OnBattleIdChanged;
+        }
+
+        private void OnBattleIdChanged(IBattleComponentsLogic logic, GameId battleId)
+        {
+            if (battleId.IsZero()) EntityEffects<PartyEntity>.StopEffects(Entity);
+            else EntityEffects<PartyEntity>.BattleEffect(Entity);
         }
 
         private static void OnMoveIn(PartyView view, EntityMoveInEvent ev)
         {
-            Log.Debug("MOVE IN");
-            if(!view.Entity.BattleLogic.BattleID.IsZero())
+            if(view.Entity.IsMine())
             {
-                Effects.BattleEffect(ev.ToTile);
+                ClientEvents.PartyFinishedMove(view.Entity, ev.FromTile, ev.ToTile);
             }
-            ClientEvents.PartyFinishedMove(view.Entity, ev.FromTile, ev.ToTile);
+            
         }
-
-        /*
-        public override GameId BattleID
-        {
-            get => base.BattleID; set {
-
-                if(this.Tile != null && !value.IsZero() && BattleID.IsZero())
-                    Effects.BattleEffect(this.Tile);
-                if (!this.BattleID.IsZero() && value.IsZero())
-                    Effects.StopEffect(this.Tile);
-                base.BattleID = value;
-            }
-        }
-        */
-
     }
 }

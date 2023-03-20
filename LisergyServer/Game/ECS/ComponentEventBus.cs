@@ -33,15 +33,22 @@ namespace Game.ECS
 
         public bool AlreadyRegistered<EventType, ComponentType>()
         {
-            var key = $"{typeof(EventType).Name}/{typeof(ComponentType).Name}";
-            if (_registered.Contains(key)) return true;
-            _registered.Add(key);
+            string key = $"{typeof(EventType).Name}/{typeof(ComponentType).Name}";
+            if (_registered.Contains(key))
+            {
+                return true;
+            }
+
+            _ = _registered.Add(key);
             return false;
         }
 
         private IEntity _currentEntity;
 
-        public IEntity GetCurrentEntity() => _currentEntity;
+        public IEntity GetCurrentEntity()
+        {
+            return _currentEntity;
+        }
 
         /// <summary>
         /// Registers events that can be targeted to the entity. The components can pickup those events.
@@ -55,14 +62,17 @@ namespace Game.ECS
             {
                 return;
             }
-            Action<EventType> componentEventCallback = ev =>
+            void componentEventCallback(EventType ev)
             {
-                var entity = GetCurrentEntity();
-                var component = GetComponent<ComponentType>(entity);
+                IEntity entity = GetCurrentEntity();
+                ComponentType component = GetComponent<ComponentType>(entity);
                 // TODO: Remove unboxing below for speed
-                if (component != null) callback((EntityType)entity, component, ev);
-            };
-            _bus.Register(this, componentEventCallback);
+                if (component != null)
+                {
+                    callback((EntityType)entity, component, ev);
+                }
+            }
+            _bus.Register(this, (Action<EventType>)componentEventCallback);
         }
 
         public void Clear()

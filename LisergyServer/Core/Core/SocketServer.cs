@@ -1,10 +1,11 @@
-﻿using Game;
+﻿using BaseServer.Commands;
+using Game;
 using Game.Events;
-using LisergyServer.Commands;
+using LisergyServer.Core;
 using System;
 using Telepathy;
 
-namespace LisergyServer.Core
+namespace BaseServer.Core
 {
     public abstract class SocketServer
     {
@@ -12,9 +13,9 @@ namespace LisergyServer.Core
 
         protected readonly Server _socketServer;
         private Message _msg;
-        private CommandExecutor _commandExecutor;
+        private readonly CommandExecutor _commandExecutor;
         protected StrategyGame _game;
-        private int _port;
+        private readonly int _port;
 
         public SocketServer(int port)
         {
@@ -39,9 +40,9 @@ namespace LisergyServer.Core
 
         public static Ticker Ticker;
 
-        private static int TICKS_PER_SECOND = 20;
-        private static int TICK_DELAY_MS = 1000 / TICKS_PER_SECOND;
-        private DateTime _lastTick = DateTime.MinValue;
+        private static readonly int TICKS_PER_SECOND = 20;
+        private static readonly int TICK_DELAY_MS = 1000 / TICKS_PER_SECOND;
+        private readonly DateTime _lastTick = DateTime.MinValue;
 
         public void Stop()
         {
@@ -51,7 +52,7 @@ namespace LisergyServer.Core
 
         public void RunServer()
         {
-            _socketServer.Start(_port);
+            _ = _socketServer.Start(_port);
             try
             {
                 Ticker = new Ticker(5);
@@ -81,11 +82,11 @@ namespace LisergyServer.Core
                         Console.WriteLine("New Connection Received");
                         break;
                     case EventType.Data:
-                        var message = _msg.data;
+                        byte[] message = _msg.data;
 
-                        var ev = Serialization.ToEventRaw(message);
-                        Game.Log.Debug($"Received {ev}");
-                        var caller = Auth(ev, _msg.connectionId);
+                        BaseEvent ev = Serialization.ToEventRaw(message);
+                        Log.Debug($"Received {ev}");
+                        ServerPlayer caller = Auth(ev, _msg.connectionId);
                         if (caller != null)
                         {
                             _game.ReceiveInput(caller, message);

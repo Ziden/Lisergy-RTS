@@ -1,10 +1,11 @@
 ﻿using Assets.Code.Views;
-using Assets.Code.World;
 using Game;
-using Game.Entity;
-using Game.Entity.Entities;
-using Game.Events;
+using Game.Dungeon;
 using Game.Movement;
+using Game.Network.ClientPackets;
+using Game.Party;
+using Game.Pathfinder;
+using Game.Tile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,14 +83,14 @@ namespace Assets.Code.UI
                 button.gameObject.SetActive(false);
         }
 
-        private void OnClickTile(Tile tile)
+        private void OnClickTile(TileEntity tile)
         {
             Log.Debug("Actions click tile");
             if (UIManager.PartyUI.HasSelectedParty)
                 DisplayActions(UIManager.PartyUI.SelectedParty, tile);
         }
 
-        public void DisplayActions(PartyEntity party, Tile tile)
+        public void DisplayActions(PartyEntity party, TileEntity tile)
         {
             if (party.Tile == tile || tile == null)
             {
@@ -126,7 +127,7 @@ namespace Assets.Code.UI
         private void MoveToSelectedTile(MovementIntent intent)
         {
             var party = UIManager.PartyUI.SelectedParty;
-            Tile selectedTile = UIManager.TileUI.SelectedTile;
+            TileEntity selectedTile = UIManager.TileUI.SelectedTile;
             Log.Debug($"Moving {party} to {selectedTile}");
             var map = selectedTile.Chunk.Map;
             var path = map.FindPath(party.Tile, selectedTile);
@@ -135,7 +136,7 @@ namespace Assets.Code.UI
             MainBehaviour.Networking.Send(new MoveRequestPacket()
             {
                 PartyIndex = party.PartyIndex,
-                Path = path.Select(p => new Game.World.Position(p.X, p.Y)).ToList(),
+                Path = path.Select(p => new Position(p.X, p.Y)).ToList(),
                 Intent = intent
             });
         }

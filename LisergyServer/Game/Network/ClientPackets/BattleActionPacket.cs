@@ -1,14 +1,15 @@
-﻿using Game.Battles;
+﻿using Game.BattleActions;
+using Game.Events;
 using System;
 
-namespace Game.Events.ClientEvents
+namespace Game.Network.ClientPackets
 {
     [Serializable]
     public class BattleActionPacket : ClientPacket
     {
         public BattleActionPacket(string BattleID, BattleAction action)
         {
-            this.Action = action;
+            Action = action;
             this.BattleID = BattleID;
         }
 

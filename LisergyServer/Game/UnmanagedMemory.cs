@@ -8,7 +8,7 @@ namespace Game
     public static class UnmanagedMemory
     {
 
-        private static Dictionary<IntPtr, int> _allocs = new Dictionary<IntPtr, int>();
+        private static readonly Dictionary<IntPtr, int> _allocs = new Dictionary<IntPtr, int>();
 
         private static Dictionary<IntPtr, int> _available = new Dictionary<IntPtr, int>();
 
@@ -29,15 +29,15 @@ namespace Game
 
         public static IntPtr Alloc(int size)
         {
-            var available = GetAvailable(size);
+            IntPtr available = GetAvailable(size);
             if (available.ToInt64() > 0)
             {
-                _available.Remove(available);
+                _ = _available.Remove(available);
                 _allocs[available] = size;
                 SetZeros(available, size);
                 return available;
             }
-            var p = Marshal.AllocHGlobal(size);
+            IntPtr p = Marshal.AllocHGlobal(size);
             _allocs[p] = size;
             SetZeros(p, size);
             return p;
@@ -45,7 +45,7 @@ namespace Game
 
         private static IntPtr GetAvailable(int size)
         {
-            var kp = _available.FirstOrDefault(kp => kp.Value == size);
+            KeyValuePair<IntPtr, int> kp = _available.FirstOrDefault(kp => kp.Value == size);
             return kp.Key;
         }
 
@@ -63,21 +63,21 @@ namespace Game
             if (_allocs.ContainsKey(ptr))
             {
                 _available[ptr] = _allocs[ptr];
-                _allocs.Remove(ptr);
+                _ = _allocs.Remove(ptr);
             }
         }
 
 
         public static void Free(IntPtr p)
         {
-            var size = _allocs[p];
+            _ = _allocs[p];
             Marshal.FreeHGlobal(p);
             _allocs.Clear();
         }
 
         public static void FreeAll()
         {
-            foreach (var p in _allocs.Keys)
+            foreach (IntPtr p in _allocs.Keys)
             {
                 Marshal.FreeHGlobal(p);
             }

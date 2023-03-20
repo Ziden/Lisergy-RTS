@@ -15,7 +15,7 @@ namespace Game.Events.Bus
 
         public void RunCallbacks(PlayerEntity sender, byte[] eventBytes)
         {
-            var ev = Serialization.ToEventRaw(eventBytes);
+            BaseEvent ev = Serialization.ToEventRaw(eventBytes);
             ev.Sender = sender;
             Call(ev);
         }
@@ -23,11 +23,15 @@ namespace Game.Events.Bus
         public virtual void Call(BaseEvent ev)
         {
             if (!_registeredListeners.ContainsKey(ev.GetType()))
+            {
                 if (!_registeredListeners.ContainsKey(ev.GetType().BaseType))
+                {
                     return;
+                }
+            }
 
-            var registeredEvents = _registeredListeners[ev.GetType()];
-            foreach (var registeredEvent in registeredEvents)
+            List<RegisteredListener> registeredEvents = _registeredListeners[ev.GetType()];
+            foreach (RegisteredListener registeredEvent in registeredEvents)
             {
                 registeredEvent.Call(ev);
             }
@@ -55,14 +59,14 @@ namespace Game.Events.Bus
             {
                 _registeredListeners.Add(eventType, new List<RegisteredListener>());
             }
-            var eventList = _registeredListeners[eventType];
+            List<RegisteredListener> eventList = _registeredListeners[eventType];
             eventList.Add(new RegisteredListener()
             {
                 Method = del,
                 Listener = new WeakReference<IEventListener>(listener),
                 Type = eventType
             }); ;
-            _listeners.Add(listener);
+            _ = _listeners.Add(listener);
         }
 
         public virtual void Register<EvType>(IEventListener listener, Action<EvType> callback)

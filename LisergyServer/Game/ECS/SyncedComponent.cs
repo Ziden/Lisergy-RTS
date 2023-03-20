@@ -11,11 +11,21 @@ namespace Game.ECS
     public class SyncedComponent : Attribute
     {
 
-        public Type LogicType;
+        /// <summary>
+        /// If entity shares the logic as sync logic using 
+        /// IEntitySyncsLogic and a type matches with this attribute it will use that type to sync this component
+        /// </summary>
+        public Type LogicPropSyncType;
 
-        public SyncedComponent(Type logicType = null)
+        /// <summary>
+        /// Only syncs for the player who is the owner of the component
+        /// </summary>
+        public bool OnlyMine = false;
+
+        public SyncedComponent(Type logicProperties = null, bool onlyMine = false)
         {
-            LogicType = logicType;
+            LogicPropSyncType = logicProperties;
+            OnlyMine = onlyMine;
         }
     }
 }

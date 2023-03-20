@@ -2,7 +2,7 @@
 using Game.ECS;
 using Game.Events.ServerEvents;
 using Game.FogOfWar;
-using Game.Packets;
+using Game.Network;
 using Game.Player;
 using System;
 using System.Collections.Generic;

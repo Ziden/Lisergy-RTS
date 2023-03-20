@@ -2,7 +2,8 @@
 using Game.Events.ServerEvents;
 using Game.FogOfWar;
 using Game.Movement;
-using Game.Packets;
+using Game.Network.ServerPackets;
+using Game.Network;
 using Game.Player;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,12 @@ namespace Game
 
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
 
-        public EntityUpdatePacket UpdatePacket => new EntityUpdatePacket(this);
+        public EntityUpdatePacket GetUpdatePacket(PlayerEntity receiver)
+        {
+            var packet = new EntityUpdatePacket(this);
+            packet.SyncedComponents = this.Components.GetSyncedComponents(receiver);
+            return packet;
+        }
 
         private static HashSet<PlayerEntity> viewersCache = new HashSet<PlayerEntity>();
 
@@ -25,7 +31,7 @@ namespace Game
             if (DeltaFlags.HasFlag(DeltaFlag.EXISTENCE))
                 OnExistenceChanged();
             else if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
-                trigger.Send(UpdatePacket);
+                trigger.Send(GetUpdatePacket(trigger));
             if (DeltaFlags.HasFlag(DeltaFlag.POSITION))
                 OnPositionChanged();
 
@@ -37,7 +43,7 @@ namespace Game
 
             foreach (var playerViewing in Tile.PlayersViewing)
             {
-                playerViewing.Send(new EntityUpdatePacket(this));
+                playerViewing.Send(this.GetUpdatePacket(playerViewing));
             }
         }
 
@@ -64,9 +70,8 @@ namespace Game
             if (previousTile != null)
                 newPlayersViewing.ExceptWith(previousTile.Components.Get<TileVisibility>().PlayersViewing);
 
-            var packet = new EntityUpdatePacket(this);
             foreach (var viewer in newPlayersViewing)
-                viewer.Send(packet);
+                viewer.Send(this.GetUpdatePacket(viewer));
         }
     }
 }

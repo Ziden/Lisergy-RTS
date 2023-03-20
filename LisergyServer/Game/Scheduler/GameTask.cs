@@ -6,7 +6,7 @@ namespace Game.Scheduler
     public abstract class GameTask : IComparable<GameTask>
     {
         private DateTime _start;
-        private DateTime _executionTime;
+        //private readonly DateTime _executionTime;
 
         public GameTask(TimeSpan delay, PlayerEntity creator)
         {
@@ -36,7 +36,10 @@ namespace Game.Scheduler
 
         public bool Repeat;
 
-        public bool IsDue() => Finish <= GameScheduler.Now;
+        public bool IsDue()
+        {
+            return Finish <= GameScheduler.Now;
+        }
 
         public abstract void Execute();
 
@@ -47,14 +50,12 @@ namespace Game.Scheduler
 
         public int CompareTo(GameTask other)
         {
-            if (other.ID == this.ID)
-                return 0;
-            return other.Finish > this.Finish ? -1 : 1;
+            return other.ID == ID ? 0 : other.Finish > Finish ? -1 : 1;
         }
 
         public override string ToString()
         {
-            return $"<Task {ID.ToString()} Start=<{Start}> End=<{Finish}>>";
+            return $"<Task {ID} Start=<{Start}> End=<{Finish}>>";
         }
     }
 }

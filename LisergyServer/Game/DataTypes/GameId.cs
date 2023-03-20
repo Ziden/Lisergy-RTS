@@ -1,4 +1,4 @@
-﻿using Game.World;
+﻿using Game.Pathfinder;
 using System;
 using System.Runtime.InteropServices;
 
@@ -30,7 +30,10 @@ namespace Game.DataTypes
             };
         }
 
-        public bool IsZero() => _bytes == null || this == ZERO;
+        public bool IsZero()
+        {
+            return _bytes == null || this == ZERO;
+        }
 
         public static implicit operator Guid(GameId id)
         {
@@ -58,7 +61,10 @@ namespace Game.DataTypes
             return g1.IsEqualsTo(g2);
         }
 
-        public bool Equals(GameId obj) => IsEqualsTo(obj);
+        public bool Equals(GameId obj)
+        {
+            return IsEqualsTo(obj);
+        }
 
         public override bool Equals(object obj)
         {
@@ -67,7 +73,11 @@ namespace Game.DataTypes
 
         public override string ToString()
         {
-            if (IsZero()) return Guid.Empty.ToString();
+            if (IsZero())
+            {
+                return Guid.Empty.ToString();
+            }
+
             Guid g = this;
             return g.ToString();
         }
@@ -75,9 +85,15 @@ namespace Game.DataTypes
         public unsafe bool IsEqualsTo(GameId id2)
         {
             if (id2._bytes == null)
+            {
                 return this == ZERO;
+            }
+
             if (_bytes == null)
+            {
                 return id2 == ZERO;
+            }
+
             unchecked
             {
                 fixed (byte* p1 = _bytes, p2 = id2._bytes)
@@ -97,7 +113,7 @@ namespace Game.DataTypes
             }
         }
 
-        public unsafe override int GetHashCode()
+        public override unsafe int GetHashCode()
         {
             unchecked
             {

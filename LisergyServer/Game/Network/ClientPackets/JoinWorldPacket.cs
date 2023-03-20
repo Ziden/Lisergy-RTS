@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Game.Events;
+using System;
 
-namespace Game.Events
+namespace Game.Network.ClientPackets
 {
     [Serializable]
     public class JoinWorldPacket : ClientPacket

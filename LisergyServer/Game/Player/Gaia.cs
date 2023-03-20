@@ -1,4 +1,5 @@
 ﻿using Game.DataTypes;
+using Game.Entity;
 using System;
 
 namespace Game.Player
@@ -20,7 +21,10 @@ namespace Game.Player
             return userId == GameId.ZERO;
         }
 
-        public static bool Owns(IOwnable ownable) => IsGaia(ownable.OwnerID);
+        public static bool Owns(IOwnable ownable)
+        {
+            return IsGaia(ownable.OwnerID);
+        }
 
         public override bool Online()
         {

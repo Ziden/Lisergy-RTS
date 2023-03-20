@@ -8,7 +8,7 @@ namespace Game.Events.GameEvents
 
         public PlayerJoinedEvent(PlayerEntity p)
         {
-            this.Player = p;
+            Player = p;
         }
     }
 }

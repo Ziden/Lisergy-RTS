@@ -1,8 +1,10 @@
 ﻿using Assets.Code;
 using Assets.Code.World;
 using Game;
-using Game.Battles;
-using Game.Entity.Entities;
+using Game.Battle;
+using Game.Battler;
+using Game.Dungeon;
+using Game.Tile;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -20,7 +22,7 @@ public class DungeonUI : MonoBehaviour
     private int _viewingBattle = 0;
     private DungeonEntity _dungeon;
 
-    public IReadOnlyList<Unit> ViewingBattle => _dungeon.BattleLogic.GetUnits();
+    public IReadOnlyList<Unit> ViewingBattle => _dungeon.BattleGroupLogic.GetUnits();
 
     public DungeonUI()
     {
@@ -56,7 +58,7 @@ public class DungeonUI : MonoBehaviour
         PartyUI.DrawPartyIcon(UIManager.PartyUI.SelectedParty, PartyFace);
     }
 
-    public void OnClickTile(Tile tile)
+    public void OnClickTile(TileEntity tile)
     {
         /*
         var dungeon = tile.StaticEntity as ClientDungeon;

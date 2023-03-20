@@ -6,12 +6,12 @@ using System.Collections.Generic;
 namespace Game.Battler
 {
     [Serializable]
-    [SyncedComponent(logicType: typeof(IBattleComponentsLogic))]
+    [SyncedComponent(typeof(IBattleComponentSyncedProperties))]
 
-    public class BattleGroupComponent : IComponent
+    public class BattleGroupComponent : IComponent, IBattleComponentSyncedProperties
     {
-        public GameId BattleId;
-        public List<List<Unit>> UnitLines = new List<List<Unit>>()
+        public GameId BattleID { get; set; }
+        public List<List<Unit>> UnitLines { get; set; } = new List<List<Unit>>()
         {
             new List<Unit>()
         };

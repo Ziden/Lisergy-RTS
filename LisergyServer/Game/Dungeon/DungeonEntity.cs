@@ -74,6 +74,6 @@ namespace Game.Dungeon
             Components.Add(new BuildingComponent());
             _battleLogic = new BattleGroupComponentLogic(this);
         }
-        public ServerPacket GetStatusUpdatePacket() => UpdatePacket;
+        public ServerPacket GetStatusUpdatePacket() => GetUpdatePacket(null);
     }
 }

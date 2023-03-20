@@ -1,8 +1,6 @@
 ﻿using Assets.Code;
-using Assets.Code.World;
-using Game;
-using Game.Entity;
-using Game.Entity.Entities;
+using Game.Party;
+using Game.Tile;
 
 namespace Assets.UnitTests
 {
@@ -21,7 +19,7 @@ namespace Assets.UnitTests
             ClientEvents.SelectParty(p);
         }
 
-        public void ClickTile(Tile tile)
+        public void ClickTile(TileEntity tile)
         {
             ClientEvents.ClickTile(tile);
         }

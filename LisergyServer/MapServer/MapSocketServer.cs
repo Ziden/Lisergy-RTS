@@ -1,9 +1,12 @@
-﻿using BattleServer;
+﻿using BaseServer.Commands;
+using BaseServer.Core;
+using BattleServer;
 using Game;
 using Game.Events;
 using Game.Generator;
 using Game.Listeners;
-using Game.Packets;
+using Game.Network;
+using Game.Network.ClientPackets;
 using Game.Scheduler;
 using GameDataTest;
 using LisergyServer.Commands;
@@ -17,9 +20,6 @@ namespace MapServer
         private static readonly int MAX_PLAYERS = 40;
 
         private static int WORLD_SEED = 12345;
-
-        private StrategyGame _game;
-
         // TODO: Move to account server
         private AccountService _accountService;
         // TODO: Move to battle server

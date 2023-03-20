@@ -1,6 +1,7 @@
 ﻿using Assets.Code;
 using Assets.Code.World;
 using Game;
+using Game.Tile;
 using System.Collections;
 using UnityEngine;
 
@@ -24,10 +25,10 @@ public class CameraBehaviour : MonoBehaviour
     private float mouseX, mouseY;
 
     private static int _focusSpeed = 30;
-    private Tile Focus = null;
+    private TileEntity Focus = null;
     private static bool lerping = false;
 
-    public static void FocusOnTile(Tile t)
+    public static void FocusOnTile(TileEntity t)
     {
         Log.Debug($"Focusing on tile {t}");
 

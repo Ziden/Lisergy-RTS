@@ -2,7 +2,7 @@
 using Game;
 using Game.Events;
 using Game.Listeners;
-using Game.Packets;
+using Game.Network;
 using Game.Player;
 using Game.Tile;
 using Game.World;

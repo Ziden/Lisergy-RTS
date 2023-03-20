@@ -1,25 +1,27 @@
 ﻿using Game.DataTypes;
 using Game.Entity;
+using Game.Events;
 using Game.Party;
+using GameData.Specs;
 using System;
 using System.Linq;
 
-namespace Game.Events.ServerEvents
+namespace Game.Network.ServerPackets
 {
     [Serializable]
     public class PartyStatusUpdatePacket : ServerPacket
     {
         public GameId OwnerID;
         public byte PartyIndex;
-        UnitStats[] Stats;
+        private readonly UnitStats[] Stats;
 
         public PartyStatusUpdatePacket(PartyEntity entity)
         {
             PartyIndex = entity.PartyIndex;
             OwnerID = entity.OwnerID;
-            var units = entity.BattleGroupLogic.GetUnits().Where(u => u != null).ToArray(); ;
+            Battler.Unit[] units = entity.BattleGroupLogic.GetUnits().Where(u => u != null).ToArray(); ;
             Stats = new UnitStats[units.Length];
-            for (var x = 0; x < units.Length; x++)
+            for (int x = 0; x < units.Length; x++)
             {
                 Stats[x] = units[x].Stats;
             }

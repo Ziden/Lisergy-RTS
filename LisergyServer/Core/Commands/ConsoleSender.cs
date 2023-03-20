@@ -1,6 +1,6 @@
 ﻿using Game;
 
-namespace LisergyServer.Commands
+namespace BaseServer.Commands
 {
     public class ConsoleSender : CommandSender
     {

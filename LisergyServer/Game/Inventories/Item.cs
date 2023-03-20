@@ -11,10 +11,10 @@ namespace Game.Inventories
 
         public Item(ushort specId, uint amount)
         {
-            this.SpecID = specId;
-            this.Amount = amount;
+            SpecID = specId;
+            Amount = amount;
         }
 
-        public ItemSpec Spec { get => StrategyGame.Specs.Items[SpecID]; }
+        public ItemSpec Spec => StrategyGame.Specs.Items[SpecID];
     }
 }

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace LisergyServer.Core
+namespace BaseServer.Core
 {
     public class ConsoleReader
     {
@@ -11,7 +11,7 @@ namespace LisergyServer.Core
 
         public ConsoleReader()
         {
-            var consoleStream = Console.OpenStandardInput();
+            Stream consoleStream = Console.OpenStandardInput();
             _reader = new StreamReader(consoleStream);
             _readTask = _reader.ReadLineAsync();
         }

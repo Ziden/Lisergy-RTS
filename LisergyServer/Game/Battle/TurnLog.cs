@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Game.BattleActions;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.Battles.Actions
+namespace Game.Battle
 {
     public class TurnLog
     {
@@ -10,7 +11,7 @@ namespace Game.Battles.Actions
 
         public TurnLog(byte round)
         {
-            this.RoundNumber = round;
+            RoundNumber = round;
         }
 
         public override string ToString()

@@ -3,7 +3,7 @@ using Game.Player;
 using System;
 using System.Collections.Generic;
 
-namespace Game.Packets
+namespace Game.Network
 {
 
     public static class DeltaTracker
@@ -83,7 +83,7 @@ namespace Game.Packets
 
     public interface IDeltaUpdateable<T> where T : ServerPacket
     {
-        public T UpdatePacket { get; }
+        public T GetUpdatePacket(PlayerEntity receiver);
     }
 
 }

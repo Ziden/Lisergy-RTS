@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Game.Battle;
+using System;
 
-namespace Game.Battles.Actions
+namespace Game.BattleActions
 {
     [Serializable]
     public class MoveAction : BattleAction

@@ -1,4 +1,4 @@
-﻿namespace LisergyServer.Commands
+﻿namespace BaseServer.Commands
 {
     public abstract class CommandSender
     {

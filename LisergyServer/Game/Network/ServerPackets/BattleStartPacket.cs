@@ -1,9 +1,10 @@
-﻿using Game.Battler;
-using Game.Battles;
+﻿using Game.Battle;
+using Game.Battler;
 using Game.DataTypes;
+using Game.Events;
 using System;
 
-namespace Game.Events
+namespace Game.Network.ServerPackets
 {
     [Serializable]
     public class BattleStartPacket : ServerPacket

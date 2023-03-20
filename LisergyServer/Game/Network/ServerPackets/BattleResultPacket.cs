@@ -1,10 +1,10 @@
 ﻿using Game.Battle;
-using Game.Battles;
-using Game.Battles.Actions;
+using Game.BattleActions;
 using Game.DataTypes;
+using Game.Events;
 using System;
 
-namespace Game.Events
+namespace Game.Network.ServerPackets
 {
     /// <summary>
     /// Full battle result.
@@ -19,15 +19,19 @@ namespace Game.Events
 
         public BattleResultPacket(GameId battleID, TurnBattleResult result)
         {
-            BattleHeader = new BattleHeader();
-            BattleHeader.BattleID = battleID;
-            BattleHeader.Date = DateTime.UtcNow;
-            BattleHeader.Attacker = result.Attacker;
-            BattleHeader.Defender = result.Defender;
+            BattleHeader = new BattleHeader
+            {
+                BattleID = battleID,
+                Date = DateTime.UtcNow,
+                Attacker = result.Attacker,
+                Defender = result.Defender
+            };
             Turns = new BattleTurnEvent[result.Turns.Count];
             BattleHeader.AttackerWins = BattleHeader.Attacker == result.Winner;
-            for (var x = 0; x < Turns.Length; x++)
+            for (int x = 0; x < Turns.Length; x++)
+            {
                 Turns[x] = new BattleTurnEvent(result.Turns[x]);
+            }
         }
     }
 
@@ -39,8 +43,10 @@ namespace Game.Events
         public BattleTurnEvent(TurnLog turnLog)
         {
             Actions = new BattleAction[turnLog.Actions.Count];
-            for (var x = 0; x < turnLog.Actions.Count; x++)
+            for (int x = 0; x < turnLog.Actions.Count; x++)
+            {
                 Actions[x] = turnLog.Actions[x];
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ using Game.Battler;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using Game.FogOfWar;
-using Game.Packets;
+using Game.Network;
 using Game.Tile;
 using Game.World;
 using GameDataTest;

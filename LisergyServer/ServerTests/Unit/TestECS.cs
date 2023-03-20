@@ -4,20 +4,33 @@ using Game.Dungeon;
 using Game.ECS;
 using Game.Events.GameEvents;
 using Game.FogOfWar;
-using Game.Packets;
+using Game.Network;
 using Game.Player;
 using NUnit.Framework;
+using ServerTests;
 using System.Collections.Generic;
 
 namespace Tests
 {
     public unsafe class TestECS
     {
-
-        [SetUp]
-        public void Setup()
+        [SyncedComponent]
+        internal class SimpleComponent : IComponent
         {
+            public int PublicField;
+            public int Property { get; set; }
+        }
 
+        [SyncedComponent(OnlyMine = false)]
+        internal class PublicSyncComponent : IComponent
+        {
+            public int Property { get; set; }
+        }
+
+        [SyncedComponent(OnlyMine=true)]
+        internal class SelfSyncComponent : IComponent
+        {
+            public int Property { get; set; }
         }
 
         [Test]
@@ -40,13 +53,6 @@ namespace Tests
             Assert.AreEqual(toAdd, components.Get<EntityVisionComponent>());
         }
 
-        internal class SimpleComponent : IComponent
-        {
-            public int PublicField;
-            public int Property { get; set; }
-        }
-
-
         [Test]
         public void TestComponentSync()
         {
@@ -57,27 +63,28 @@ namespace Tests
 
             clientEntity.Components.Add(inClient);
 
-            EntitySynchronizer.SyncComponents(clientEntity, new List<IComponent>() { fromServer });
+            ComponentSynchronizer.SyncComponents(clientEntity, new List<IComponent>() { fromServer });
 
             Assert.AreEqual(fromServer.Property, inClient.Property, "Property should be copied");
             Assert.AreEqual(fromServer.PublicField, inClient.PublicField, "Public field should be copied");
         }
 
         [Test]
-        public void TestBattleComponentLogicSync()
+        public void TestSyncOnlyMine()
         {
-            var clientEntity = new WorldEntity(new Gaia());
-            var logic = new BattleGroupComponentLogic(clientEntity);
+            var player = new TestServerPlayer();
+            var clientEntity = new WorldEntity(player);
+            var selfComponent = clientEntity.Components.Add<SelfSyncComponent>();
+            var publicComponent = clientEntity.Components.Add<PublicSyncComponent>();
 
-            SimpleComponent fromServer = new SimpleComponent() { PublicField = 5, Property = 4 };
-            SimpleComponent inClient = new SimpleComponent();
+            var selfPacket = clientEntity.GetUpdatePacket(player);
+            var publicPacket = clientEntity.GetUpdatePacket(null);
 
-            clientEntity.Components.Add(inClient);
+            Assert.IsTrue(selfPacket.SyncedComponents.Contains(selfComponent));
+            Assert.IsTrue(selfPacket.SyncedComponents.Contains(publicComponent));
+            Assert.IsTrue(!publicPacket.SyncedComponents.Contains(selfComponent));
+            Assert.IsTrue(publicPacket.SyncedComponents.Contains(publicComponent));
 
-            EntitySynchronizer.SyncComponents(clientEntity, new List<IComponent>() { fromServer });
-
-            Assert.AreEqual(fromServer.Property, inClient.Property, "Property should be copied");
-            Assert.AreEqual(fromServer.PublicField, inClient.PublicField, "Public field should be copied");
         }
 
         public class TestView : IComponent

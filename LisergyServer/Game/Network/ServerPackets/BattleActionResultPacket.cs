@@ -1,7 +1,8 @@
-﻿using Game.BattleTactics;
+﻿using Game.BattleActions;
+using Game.Events;
 using System;
 
-namespace Game.Events.ServerEvents
+namespace Game.Network.ServerPackets
 {
     [Serializable]
     public class BattleActionResultPacket : ClientPacket

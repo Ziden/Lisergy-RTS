@@ -1,6 +1,6 @@
 ﻿using Game.ECS;
 using Game.Events.GameEvents;
-using Game.Packets;
+using Game.Network;
 using Game.Tile;
 using System.Linq;
 

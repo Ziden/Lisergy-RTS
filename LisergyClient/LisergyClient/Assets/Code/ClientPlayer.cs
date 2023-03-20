@@ -1,14 +1,11 @@
 ﻿
 using Assets.Code.Entity;
 using Assets.Code.Views;
-using Assets.Code.World;
 using Game;
 using Game.DataTypes;
 using Game.ECS;
-using Game.Entity;
-using Game.Entity.Components;
-using Game.Entity.Entities;
-using Game.Events.GameEvents;
+using Game.Network;
+using Game.Player;
 using System.Collections.Generic;
 
 namespace Assets.Code
@@ -29,18 +26,21 @@ namespace Assets.Code
             {
                 clientEntity = InstanceFactory.CreateInstance<EntityType, PlayerEntity>(serverEntity.Owner);
                 clientEntity.Id = serverEntity.Id;
-                EntitySynchronizer.SyncComponents(clientEntity, components);
+
+                var previousComps = clientEntity.Components;
+                BaseEntityEvents.HookBaseEvents(clientEntity);
+                ComponentSynchronizer.SyncComponents(clientEntity, components);
                 var view = InstanceFactory.CreateInstance<ViewType, EntityType>(clientEntity);   
                 GameView.Controller.AddView(clientEntity, view);
                 clientEntity.Components.Add(view);
-                EntitySynchronizer.HookBaseEvents(clientEntity);
+               
                 view.OnUpdate(serverEntity, components);
                 KnowsAbout[serverEntity.Id] = clientEntity;
                 return view;
             }
             else
             {
-                EntitySynchronizer.SyncComponents(clientEntity, components);
+                ComponentSynchronizer.SyncComponents(clientEntity, components);
                 var view = GameView.GetView<ViewType>(clientEntity);
                 view.OnUpdate(serverEntity, components);
                 return view;

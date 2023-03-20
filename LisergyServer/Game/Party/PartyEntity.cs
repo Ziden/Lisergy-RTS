@@ -1,8 +1,10 @@
 ﻿using Game.Battler;
+using Game.ECS;
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.FogOfWar;
 using Game.Movement;
+using Game.Network.ServerPackets;
 using Game.Player;
 using System;
 
@@ -58,6 +60,9 @@ namespace Game.Party
 
         public ServerPacket GetStatusUpdatePacket() => new PartyStatusUpdatePacket(this);
 
-
+        public IComponentEntityLogic[] GetLogicsToSync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

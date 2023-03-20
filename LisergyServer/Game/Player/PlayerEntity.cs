@@ -4,6 +4,7 @@ using Game.DataTypes;
 using Game.ECS;
 using Game.Events;
 using Game.FogOfWar;
+using Game.Network.ServerPackets;
 using Game.Party;
 using Game.Tile;
 using System;

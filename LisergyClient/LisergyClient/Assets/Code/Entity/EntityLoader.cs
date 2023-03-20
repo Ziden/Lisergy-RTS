@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Game;
 using Game.ECS;
+using Game.Tile;
 using UnityEngine;
-using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Assets.Code.Views
@@ -15,12 +14,12 @@ namespace Assets.Code.Views
         /// <summary>
         ///  Key: Type of the entity, Value: prefab location
         /// </summary>
-        private static IReadOnlyDictionary<Type, string> PREFABS = new Dictionary<Type, string>() { { typeof(Tile), "prefabs/tiles/" } };
+        private static IReadOnlyDictionary<Type, string> PREFABS = new Dictionary<Type, string>() { { typeof(TileEntity), "prefabs/tiles/" } };
 
 
         public static GameObject LoadEntity(IEntity entity, Transform parent = null)
         {
-            if (entity is Tile tile)
+            if (entity is TileEntity tile)
             {
                 return LoadTile(tile, parent);
             }
@@ -35,7 +34,7 @@ namespace Assets.Code.Views
         }
 
 
-        private static GameObject LoadTile(Tile tile, Transform parent = null)
+        private static GameObject LoadTile(TileEntity tile, Transform parent = null)
         {
             var tileSpec = StrategyGame.Specs.Tiles[tile.TileId];
             if (tileSpec.Arts.Count == 0)

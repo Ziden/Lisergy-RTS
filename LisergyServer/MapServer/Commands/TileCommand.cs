@@ -1,4 +1,5 @@
 ﻿
+using BaseServer.Commands;
 using Game;
 
 namespace LisergyServer.Commands

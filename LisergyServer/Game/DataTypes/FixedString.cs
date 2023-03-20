@@ -37,7 +37,10 @@ namespace Game.DataTypes
             return !g1.IsEqualsTo(g2);
         }
 
-        public bool Equals(FixedString obj) => IsEqualsTo(obj);
+        public bool Equals(FixedString obj)
+        {
+            return IsEqualsTo(obj);
+        }
 
         public override bool Equals(object obj)
         {
@@ -55,7 +58,9 @@ namespace Game.DataTypes
         public unsafe bool IsEqualsTo(FixedString str2)
         {
             fixed (byte* p1 = _bytes, p2 = str2._bytes)
+            {
                 return memcmp((IntPtr)p1, (IntPtr)p2, (uint)str2._bytes.Length) == 0;
+            }
         }
 
         public override int GetHashCode()

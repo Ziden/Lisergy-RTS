@@ -1,5 +1,4 @@
-﻿using Game.Battles;
-using Game.DataTypes;
+﻿using Game.DataTypes;
 using System;
 
 namespace Game.Battle

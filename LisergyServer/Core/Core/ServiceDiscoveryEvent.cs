@@ -1,7 +1,7 @@
-﻿using LisergyServer.Core;
+﻿using Game.Events;
 using System;
 
-namespace Game.Events.ServerEvents
+namespace BaseServer.Core
 {
     [Serializable]
     public class ServiceDiscoveryEvent : ServerPacket

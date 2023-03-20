@@ -2,12 +2,9 @@
 using Assets.Code.World;
 using Game;
 using Game.ECS;
-using Game.Entity;
-using Game.Events;
-using Game.Events.Bus;
+using Game.Tile;
 using GameData;
 using System;
-using System.Diagnostics;
 
 namespace Assets.Code
 {
@@ -17,7 +14,7 @@ namespace Assets.Code
         private static GameView _instance;
         private static ViewController _controller;
 
-        public static TileView GetOrCreateTileView(Tile tile, bool ensureInstantiated = false)
+        public static TileView GetOrCreateTileView(TileEntity tile, bool ensureInstantiated = false)
         {
             var chunkView = GetView<ChunkView>(tile.Chunk);
             if (chunkView == null)

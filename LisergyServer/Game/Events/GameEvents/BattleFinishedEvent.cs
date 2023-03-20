@@ -1,5 +1,5 @@
 ﻿using Game.Battle;
-using Game.Battles;
+using Game.Network.ServerPackets;
 
 namespace Game.Events.GameEvents
 {

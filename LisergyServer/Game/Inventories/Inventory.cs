@@ -8,11 +8,14 @@ namespace Game.Inventories
     {
         public void AddItem(Item i)
         {
-            Item alreadyhave;
-            if (!this.TryGetValue(i.SpecID, out alreadyhave))
+            if (!TryGetValue(i.SpecID, out Item alreadyhave))
+            {
                 this[i.SpecID] = i;
+            }
             else
+            {
                 alreadyhave.Amount += i.Amount;
+            }
         }
     }
 }

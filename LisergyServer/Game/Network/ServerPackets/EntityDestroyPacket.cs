@@ -1,15 +1,16 @@
 ﻿using Game.DataTypes;
+using Game.Events;
 using System;
 
-namespace Game.Events
+namespace Game.Network.ServerPackets
 {
     [Serializable]
     public class EntityDestroyPacket : ServerPacket
     {
         public EntityDestroyPacket(WorldEntity entity)
         {
-            this.OwnerID = entity.OwnerID;
-            this.EntityID = entity.Id;
+            OwnerID = entity.OwnerID;
+            EntityID = entity.Id;
         }
 
         public GameId OwnerID;

@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using System;
 
-namespace ServerTests.Unit
+namespace Tests
 {
     public class TestGameIds
     {
