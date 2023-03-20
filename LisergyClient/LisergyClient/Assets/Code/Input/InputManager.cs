@@ -1,6 +1,7 @@
 using System;
 using Assets.Code.Code;
 using Assets.Code.World;
+using Game.Tile;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -9,7 +10,7 @@ namespace Assets.Code
 {
     public interface IInputManager
     {
-        public delegate void OnClickTileHandler(ClientTile tile);
+        public delegate void OnClickTileHandler(TileEntity tile);
         public delegate void OnCameraMoveHandler(Vector2 velocity);
         public delegate void OnCameraZoomHandler(float velocity);
 
@@ -66,7 +67,7 @@ namespace Assets.Code
 
                 var tileComponent = hit.collider.GetComponentInParent<TileRandomizerBehaviour>();
                 if (tileComponent == null) return;
-                var tile = (ClientTile)tileComponent.Tile;
+                var tile = tileComponent.Tile;
                 OnClickTile?.Invoke(tile);
             }
         }
