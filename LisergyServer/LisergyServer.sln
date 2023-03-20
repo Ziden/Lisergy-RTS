@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapServer", "MapServer\MapS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serializer", "Serializer\Serializer.csproj", "{DFA11E56-22C3-4377-B7B7-32F8555874F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServices", "GameServices\GameServices.csproj", "{DD99D62B-9B5B-46A0-BB56-37668154E1DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{DFA11E56-22C3-4377-B7B7-32F8555874F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFA11E56-22C3-4377-B7B7-32F8555874F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFA11E56-22C3-4377-B7B7-32F8555874F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD99D62B-9B5B-46A0-BB56-37668154E1DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD99D62B-9B5B-46A0-BB56-37668154E1DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD99D62B-9B5B-46A0-BB56-37668154E1DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD99D62B-9B5B-46A0-BB56-37668154E1DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
