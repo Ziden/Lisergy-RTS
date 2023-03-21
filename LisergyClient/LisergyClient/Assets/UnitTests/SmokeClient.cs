@@ -21,7 +21,7 @@ namespace Assets.UnitTests
 
         public void ClickTile(TileEntity tile)
         {
-            ClientEvents.ClickTile(tile);
+            Global.InputManager().OnClickTile.Invoke(tile);
         }
 
     }
