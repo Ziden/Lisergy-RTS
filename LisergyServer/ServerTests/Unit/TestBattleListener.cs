@@ -1,5 +1,5 @@
-using BattleServer;
 using Game.Battler;
+using Game.Services;
 using NUnit.Framework;
 using ServerTests;
 
@@ -9,7 +9,7 @@ namespace Tests
     {
         private Unit FastUnit;
         private Unit SlowUnit;
-        private BattleService Listener;
+        private BattleService Service;
 
         [SetUp]
         public void Setup()
@@ -23,7 +23,7 @@ namespace Tests
             SlowUnit.Speed /= 2;
 
             var game = new TestGame();
-            Listener = game.BattleService;
+            Service = game.BattleService;
         }
 
         /*

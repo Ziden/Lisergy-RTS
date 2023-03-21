@@ -8,7 +8,7 @@ using Game.Network.ServerPackets;
 using Game.Player;
 using System;
 
-namespace Game.Listeners
+namespace Game.Services
 {
     public class WorldService : IEventListener
     {
