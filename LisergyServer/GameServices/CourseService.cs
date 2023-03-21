@@ -9,7 +9,7 @@ using Game.Tile;
 using Game.World;
 using System.Collections.Generic;
 
-namespace Game.Listeners
+namespace Game.Services
 {
     public class CourseService : IEventListener
     {

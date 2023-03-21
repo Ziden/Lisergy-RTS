@@ -1,7 +1,7 @@
 ﻿
 using BaseServer.Commands;
-using BattleServer;
 using Game;
+using Game.Services;
 
 namespace LisergyServer.Commands
 {
