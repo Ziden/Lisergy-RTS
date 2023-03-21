@@ -1,32 +1,31 @@
 ﻿using System.Collections;
-using UnityEngine;
 using UnityEngine.TestTools;
 using Assets.UnitTests;
-using Game.World;
-using Assets.Code.World;
 using NUnit.Framework;
+using Assets.UnitTests.Stubs;
+using Game.World;
 using Game.Tile;
+using UnityEngine;
 
 namespace Tests
 {
     public class TestScript
     {
         [UnityTest]
-        public IEnumerator TestSanity() // needs a running server
+        public IEnumerator TestSanity() 
         {
-            var game = MonoBehaviour.Instantiate(Resources.Load<GameObject>("prefabs/Game"));
-            yield return null;
+            yield return UnityPlaytestUtils.LoadScene("Game");
+
+            StubServerThread.SetupTestServer();
 
             var client = new SmokeClient();
 
-            client.Login();
-            yield return null;
+            yield return client.LoginBehaviour.Login();
+            yield return client.LoginBehaviour.JoinWorld();
 
-            yield return new WaitForSeconds(1f);
 
             var party = MainBehaviour.Player.Parties[0];
             client.ClickTile(party.Tile);
-            yield return null;
 
             var otherTile = party.Tile.GetNeighbor(Direction.SOUTH);
             client.ClickTile(otherTile);
@@ -36,6 +35,8 @@ namespace Tests
             yield return new WaitForSeconds(0.2f);
 
             Assert.AreEqual(party.Tile, otherTile);
+
+            Assert.IsTrue(true);
         }
     }
 }

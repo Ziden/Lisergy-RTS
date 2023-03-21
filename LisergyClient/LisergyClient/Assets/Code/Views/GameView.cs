@@ -38,6 +38,7 @@ namespace Assets.Code
             Controller.RemoveView(view);
         }
 
+        public static bool Initialized => _instance != null;
         public static T GetView<T>(IEntity e) where T : IEntityView => _controller.GetView<T>(e);
 
         public static IEntityView GetView(IEntity e) => _controller.GetView(e);

@@ -7,7 +7,11 @@ using UnityEngine;
 
 public class Networking : IDisposable
 {
-    Client client = new Client();
+
+    // Todo: make this better, used for tests. Abstract !
+    public static Action<byte[]> SenderOverride;
+
+    public Client client = new Client();
     Message msg;
 
     private List<byte[]> _toSend = new List<byte[]>();
@@ -26,6 +30,17 @@ public class Networking : IDisposable
 
     public void Update()
     {
+        if (SenderOverride != null)
+        {
+            while (_toSend.Count > 0)
+            {
+                var ev = _toSend[0];
+                _toSend.RemoveAt(0);
+                SenderOverride(ev);
+            }
+            return;
+        }
+
         if (client.Connected)
         {
             while(_toSend.Count > 0)

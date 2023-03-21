@@ -31,7 +31,7 @@ namespace Assets.Code.World
             var owner = GameView.World.GetOrCreateClientPlayer(ev.OwnerID);
             var knownEntity = owner.GetKnownEntity(ev.EntityID);
             if (knownEntity == null)
-                throw new System.Exception($"Server sent destroy event for entity {ev.EntityID} from {ev.OwnerID} at however its not visible to client");
+                throw new Exception($"Server sent destroy event for entity {ev.EntityID} from {ev.OwnerID} at however its not visible to client");
 
             knownEntity.Tile = null;
             var view = GameView.GetView(knownEntity);
