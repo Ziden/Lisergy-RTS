@@ -28,7 +28,6 @@ namespace Assets.Code.World
 
         public static void StopEffects(EntityType t)
         {
-            Debug.Log("STOP");
             foreach (var e in GetRunning().Effects[t.EntityId])
             {
                 MainBehaviour.Destroy(e);
