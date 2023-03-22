@@ -58,7 +58,7 @@ namespace Game.Party
             return $"<Party Id={Id} Index={PartyIndex} Owner={OwnerID}>";
         }
 
-        public ServerPacket GetStatusUpdatePacket() => new PartyStatusUpdatePacket(this);
+        public ServerPacket GetStatusUpdatePacket() => GetUpdatePacket(null);
 
         public IComponentEntityLogic[] GetLogicsToSync()
         {

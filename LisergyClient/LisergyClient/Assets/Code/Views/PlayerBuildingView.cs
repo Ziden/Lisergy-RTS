@@ -10,6 +10,7 @@ namespace Assets.Code.World
 {
     public class PlayerBuildingView : EntityView<PlayerBuildingEntity>
     {
+
         public override bool Instantiated => GameObject != null;
         public override PlayerBuildingEntity Entity { get; }
         public override GameObject GameObject { get; set; }
@@ -36,8 +37,6 @@ namespace Assets.Code.World
             GameObject = MainBehaviour.Instantiate(prefab, tileView.GameObject.transform) as GameObject;
             GameObject.transform.localPosition = Vector3.zero;
             this.GameObject.SetActive(true);
-            if (Entity.SpecID == StrategyGame.Specs.InitialBuilding && Entity.IsMine())
-                CameraBehaviour.FocusOnTile(tile);
         }
     }
 }

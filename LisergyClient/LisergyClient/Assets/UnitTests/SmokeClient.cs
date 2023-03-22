@@ -1,28 +1,35 @@
 ﻿using Assets.Code;
+using Assets.UnitTests.Behaviours;
+using Assets.UnitTests.Stubs;
+using Game;
+using Game.Network.ClientPackets;
 using Game.Party;
 using Game.Tile;
+using Game.World;
+using System.Collections;
+using System.Linq;
+using UnityEngine;
 
 namespace Assets.UnitTests
 {
     public class SmokeClient
     {
-        public void Login()
+        public PartyBehaviour PartyBehaviour = new PartyBehaviour();
+        public LoginBehaviour LoginBehaviour = new LoginBehaviour();
+
+        public EntityType FindFirst<EntityType>() where EntityType : WorldEntity
         {
-            var loginScreen = UIManager.LoginCanvas;
-            loginScreen.Login.text = "asd";
-            loginScreen.Password.text = "asd";
-            loginScreen.LoginButton.onClick.Invoke();
+            return (EntityType)MainBehaviour.LocalPlayer.KnownEntities.Values.FirstOrDefault(e => e.GetType() == typeof(EntityType));
         }
 
-        public void SelectParty(PartyEntity p)
+        public TileEntity GetTileInRange(TileEntity source, int range, Direction d)
         {
-            ClientEvents.SelectParty(p);
+            while(range > 0)
+            {
+                source = source.GetNeighbor(d);
+                range--;
+            }
+            return source;
         }
-
-        public void ClickTile(TileEntity tile)
-        {
-            Global.InputManager().OnClickTile.Invoke(tile);
-        }
-
     }
 }

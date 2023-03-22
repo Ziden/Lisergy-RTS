@@ -7,7 +7,7 @@ using UnityEngine;
 public class MainBehaviour : MonoBehaviour
 {
     public static Networking Networking { get; private set; }
-    public static ClientPlayer Player { get; private set; }
+    public static LocalPlayer LocalPlayer { get; private set; }
     public static EventBus<ServerPacket> ServerPackets { get; set; }
 
     private ServerListener _serverPacketListener;
@@ -28,9 +28,10 @@ public class MainBehaviour : MonoBehaviour
         Destroy(obj);
     }
 
-    public void OnPlayerLogin(ClientPlayer player)
+    public void OnPlayerLogin(LocalPlayer player)
     {
-        MainBehaviour.Player = player;
+        MainBehaviour.LocalPlayer = player;
+        player.SetupLocalPlayer();
     }
 
     private void ConfigureUnity()

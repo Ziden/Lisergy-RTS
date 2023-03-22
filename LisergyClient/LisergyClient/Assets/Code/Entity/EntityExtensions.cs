@@ -9,6 +9,6 @@ namespace Assets.Code.Entity
 {
     public static class EntityExtensions
     {
-        public static bool IsMine(this WorldEntity entity) => entity.OwnerID == MainBehaviour.Player.UserID;
+        public static bool IsMine(this WorldEntity entity) => entity.OwnerID == MainBehaviour.LocalPlayer.UserID;
     }
 }

@@ -14,6 +14,10 @@ public class Networking : IDisposable
     public float Delta => TPS + Latency;
     
     Client client = new Client();
+
+    // Todo: make this better, used for tests. Abstract !
+    public static Action<byte[]> SenderOverride;
+
     Message msg;
 
     private List<byte[]> _toSend = new List<byte[]>();
@@ -32,6 +36,17 @@ public class Networking : IDisposable
 
     public void Update()
     {
+        if (SenderOverride != null)
+        {
+            while (_toSend.Count > 0)
+            {
+                var ev = _toSend[0];
+                _toSend.RemoveAt(0);
+                SenderOverride(ev);
+            }
+            return;
+        }
+
         if (client.Connected)
         {
             while(_toSend.Count > 0)
@@ -52,7 +67,7 @@ public class Networking : IDisposable
                         Debug.Log("Connected To Server");
                         break;
                     case Telepathy.EventType.Data:
-                        MainBehaviour.ServerPackets.RunCallbacks(MainBehaviour.Player, msg.data);
+                        MainBehaviour.ServerPackets.RunCallbacks(MainBehaviour.LocalPlayer, msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
                         Debug.Log("Disconnected from Server");

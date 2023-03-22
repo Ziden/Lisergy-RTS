@@ -20,7 +20,7 @@ public class ServerBattleSimulation
 
     public bool CanStartTest()
     {
-        return MainBehaviour.Player != null && MainBehaviour.Player.Parties.Length > 0 && MainBehaviour.Player.Parties[0] != null && MainBehaviour.Player.Parties[0].BattleGroupLogic.GetUnits().ToList().Count() > 0;
+        return MainBehaviour.LocalPlayer != null && MainBehaviour.LocalPlayer.Parties.Length > 0 && MainBehaviour.LocalPlayer.Parties[0] != null && MainBehaviour.LocalPlayer.Parties[0].BattleGroupLogic.GetUnits().ToList().Count() > 0;
     }
 
     public void StartTest()
@@ -30,7 +30,7 @@ public class ServerBattleSimulation
         var enemyTeam = new BattleTeam(enemyUnit);
         enemyTeam.Units[0].Controlled = false;
 
-        var party = MainBehaviour.Player.Parties.First();
+        var party = MainBehaviour.LocalPlayer.Parties.First();
         var myClientUnit = party.BattleGroupLogic.GetUnits().First();
         var myUnit = new Unit(myClientUnit.SpecId);
         myUnit.SetSpecStats();

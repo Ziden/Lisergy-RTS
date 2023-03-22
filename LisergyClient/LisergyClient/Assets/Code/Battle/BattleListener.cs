@@ -26,9 +26,9 @@ namespace Assets.Code.Battle
         public void BattleFinish(BattleResultPacket ev)
         {
             Log.Debug("Received battle finish");
-            MainBehaviour.Player.Battles.Add(ev);
+            MainBehaviour.LocalPlayer.Battles.Add(ev);
 
-            var pl = MainBehaviour.Player;
+            var pl = MainBehaviour.LocalPlayer;
             var w = GameView.World;
             var def = w.GetOrCreateClientPlayer(ev.BattleHeader.Defender.OwnerID);
             var atk = w.GetOrCreateClientPlayer(ev.BattleHeader.Attacker.OwnerID);
@@ -58,7 +58,7 @@ namespace Assets.Code.Battle
             Log.Debug("Received battle startr");
 
             // TODO: Remove all this crap and use logic synchronizer
-            var pl = MainBehaviour.Player;
+            var pl = MainBehaviour.LocalPlayer;
             var w = GameView.World;
             var def = w.GetOrCreateClientPlayer(ev.Defender.OwnerID);
             var atk = w.GetOrCreateClientPlayer(ev.Attacker.OwnerID);

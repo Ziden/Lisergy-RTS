@@ -1,10 +1,12 @@
 {
     "name": "UnitTests",
+    "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Plugins",
-        "GameAssembly"
+        "GameAssembly",
+        ""
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -14,11 +16,16 @@
         "nunit.framework.dll",
         "Game.dll",
         "GameData.dll",
-        "NetSerializer.dll"
+        "NetSerializer.dll",
+        "GameServices.dll",
+        "Serializer.dll",
+        "GameDataTest.dll",
+        "Telepathy.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }

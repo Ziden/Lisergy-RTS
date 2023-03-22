@@ -1,12 +1,18 @@
-﻿using Game;
+﻿using Assets.Code.Entity;
+using Assets.Code.Views;
+using Game;
 using Game.Building;
 using Game.Dungeon;
+using Game.ECS;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
+using Game.Network;
 using Game.Network.ServerPackets;
 using Game.Party;
+using Game.Player;
 using System;
+using System.Collections.Generic;
 
 namespace Assets.Code.World
 {
@@ -16,6 +22,10 @@ namespace Assets.Code.World
         public static event Action<PartyView> OnPartyViewUpdated;
         public static event Action<PlayerBuildingView> OnBuildingViewUpdated;
         public static event Action<DungeonView> OnDungeonViewUpdated;
+
+        public static event Action<PartyView> OnPartyViewCreated;
+        public static event Action<PlayerBuildingView> OnBuildingViewCreated;
+        public static event Action<DungeonView> OnDungeonViewCreated;
 
         public EntityListener(EventBus<ServerPacket> networkEvents)
         {
@@ -28,10 +38,9 @@ namespace Assets.Code.World
         public void EntityDestroy(EntityDestroyPacket ev)
         {
             Log.Debug("Received entity destroy");
-            var owner = GameView.World.GetOrCreateClientPlayer(ev.OwnerID);
-            var knownEntity = owner.GetKnownEntity(ev.EntityID);
+            var knownEntity = MainBehaviour.LocalPlayer.GetKnownEntity(ev.EntityID);
             if (knownEntity == null)
-                throw new System.Exception($"Server sent destroy event for entity {ev.EntityID} from {ev.OwnerID} at however its not visible to client");
+                throw new Exception($"Server sent destroy event for entity {ev.EntityID} from {ev.OwnerID} at however its not visible to client");
 
             knownEntity.Tile = null;
             var view = GameView.GetView(knownEntity);
@@ -43,7 +52,7 @@ namespace Assets.Code.World
         {
             Log.Debug("Received entity move");
             var owner = GameView.World.GetOrCreateClientPlayer(ev.OwnerID);
-            var knownEntity = owner.GetKnownEntity(ev.EntityID);
+            var knownEntity = MainBehaviour.LocalPlayer.GetKnownEntity(ev.EntityID);
             if (knownEntity == null)
                 throw new Exception($"Server sent move event for entit3y {ev.EntityID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
 
@@ -60,26 +69,77 @@ namespace Assets.Code.World
             var owner = GameView.World.GetOrCreateClientPlayer(serverEntity.OwnerID);
             serverEntity.Owner = owner;
 
-            // Move this to a client system
+            // Make this generic ?
             if (serverEntity is PartyEntity serverParty)
             {
-                var view = owner.UpdateClientState<PartyEntity, PartyView>(serverParty, ev.SyncedComponents);
-                OnPartyViewUpdated?.Invoke(view);
+                var result = UpdateClientState<PartyEntity, PartyView>(serverParty, ev.SyncedComponents);
+                if(result.Created)
+                {
+                    OnPartyViewCreated?.Invoke(result.View);
+                }
+                OnPartyViewUpdated?.Invoke(result.View);
             }
 
             else if (serverEntity is PlayerBuildingEntity serverBuilding)
             {
-                var view = owner.UpdateClientState<PlayerBuildingEntity, PlayerBuildingView>(serverBuilding, ev.SyncedComponents);
-                OnBuildingViewUpdated?.Invoke(view);
+                var result = UpdateClientState<PlayerBuildingEntity, PlayerBuildingView>(serverBuilding, ev.SyncedComponents);
+                if (result.Created)
+                {
+                    OnBuildingViewCreated?.Invoke(result.View);
+                }
+                OnBuildingViewUpdated?.Invoke(result.View);
             }
             else if (serverEntity is DungeonEntity serverDungeon)
             {
-                var view = owner.UpdateClientState<DungeonEntity, DungeonView>(serverDungeon, ev.SyncedComponents);
-                OnDungeonViewUpdated?.Invoke(view);
+                var result = UpdateClientState<DungeonEntity, DungeonView>(serverDungeon, ev.SyncedComponents);
+                if (result.Created)
+                {
+                    OnDungeonViewCreated?.Invoke(result.View);
+                }
+                OnDungeonViewUpdated?.Invoke(result.View);
             }
 
             else
                 throw new Exception($"Entity Factory does not know how to instantiate {serverEntity.GetType().Name}");
+        }
+
+        public class EntityUpdateResult<ViewType, EntityType> where EntityType : WorldEntity where ViewType : EntityView<EntityType>
+        {
+            public ViewType View;
+            public bool Created;
+        }
+
+        public EntityUpdateResult<ViewType, EntityType> UpdateClientState<EntityType, ViewType>(EntityType serverEntity, List<IComponent> components) where EntityType : WorldEntity where ViewType : EntityView<EntityType>
+        {
+            var localPlayer = MainBehaviour.LocalPlayer;
+            var clientEntity = (EntityType)localPlayer.GetKnownEntity(serverEntity.Id);
+            if (clientEntity == null)
+            {
+                clientEntity = InstanceFactory.CreateInstance<EntityType, PlayerEntity>(serverEntity.Owner);
+                clientEntity.Id = serverEntity.Id;
+                BaseEntityEvents.HookBaseEvents(clientEntity);
+                ComponentSynchronizer.SyncComponents(clientEntity, components);
+                var view = InstanceFactory.CreateInstance<ViewType, EntityType>(clientEntity);
+                GameView.Controller.AddView(clientEntity, view);
+                clientEntity.Components.Add(view);
+                view.OnUpdate(serverEntity, components);
+                localPlayer.KnownEntities[serverEntity.Id] = clientEntity;
+                return new EntityUpdateResult<ViewType, EntityType>()
+                {
+                    Created = true, View = view
+                };
+            }
+            else
+            {
+                ComponentSynchronizer.SyncComponents(clientEntity, components);
+                var view = GameView.GetView<ViewType>(clientEntity);
+                view.OnUpdate(serverEntity, components);
+                return new EntityUpdateResult<ViewType, EntityType>()
+                {
+                    Created = false,
+                    View = view
+                };
+            }
         }
     }
 }

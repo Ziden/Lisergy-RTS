@@ -33,6 +33,12 @@ namespace Assets.Code.World
                 MainBehaviour.Destroy(e);
                 GetRunning().Indexes.Remove(e.GetInstanceID());
             }
+            GetRunning().Effects[t.EntityId].Clear();
+        }
+
+        public static bool HasEffects(EntityType t)
+        {
+            return GetRunning().Effects[t.EntityId].Count > 0;
         }
 
         // TODO: make generic
