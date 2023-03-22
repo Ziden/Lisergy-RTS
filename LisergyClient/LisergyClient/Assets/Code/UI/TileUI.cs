@@ -16,7 +16,7 @@ namespace Assets.Code
 
         public TileUI()
         {
-            ClientEvents.OnClickTile += ClickTile;
+            Global.InputManager().OnClickTile += ClickTile;
             ClientEvents.OnCameraMove += CameraMove;
             ClientEvents.OnSelectParty += SelectParty;
             ClientEvents.OnStartMovementRequest += StartMoveReq;
@@ -65,6 +65,7 @@ namespace Assets.Code
                 MoveToTile(_tileCursor, tile);
                 _selectedTile = tile;
             }
+            ClientEvents.ClickTile(tile);
         }
 
         private void MoveToTile(GameObject cursor, TileEntity tile)

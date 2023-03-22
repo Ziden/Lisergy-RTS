@@ -50,19 +50,39 @@ public class MainBehaviour : MonoBehaviour
         Networking = new Networking();
         ServerPackets = new EventBus<ServerPacket>();
         ConfigureUnity();
+        SetupServices();
         Serialization.LoadSerializers();
         _serverPacketListener = new ServerListener(ServerPackets);
+        SetupCamera();
     }
 
     void Update()
     {
         Networking?.Update();
         Awaiter.Update();
-        GameInput.Update();
     }
 
     private void OnApplicationQuit()
     {
         Networking?.Dispose();
+    }
+
+
+    private void SetupCamera()
+    {
+        var camera = Resources.Load("prefabs/Camera");
+        Instantiate(camera, gameObject.transform);
+    }
+
+    private void SetupServices()
+    {
+        var inputManager = CreateInputManager();
+        Global.Register<IInputManager, InputManager>(inputManager);
+    }
+
+
+    InputManager CreateInputManager()
+    {
+        return gameObject.AddComponent<InputManager>();
     }
 }

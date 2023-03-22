@@ -7,6 +7,13 @@ using UnityEngine;
 
 public class Networking : IDisposable
 {
+    
+    // TODO: calculate this based on the server delay and pings
+    public float TPS  => 1f / 5f;
+    public float Latency  => 0f;
+    public float Delta => TPS + Latency;
+    
+    Client client = new Client();
 
     // Todo: make this better, used for tests. Abstract !
     public static Action<byte[]> SenderOverride;

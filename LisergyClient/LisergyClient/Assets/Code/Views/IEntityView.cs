@@ -2,6 +2,7 @@
 using Game.ECS;
 using Game.Events.Bus;
 using System.Collections.Generic;
+using Game.Events.GameEvents;
 using UnityEngine;
 
 namespace Assets.Code.Views
@@ -21,5 +22,11 @@ namespace Assets.Code.Views
         public abstract GameObject GameObject { get; set; }
         IEntity IEntityView.Entity => Entity;
         public abstract void Instantiate();
+    }
+
+
+    public interface IMovementLogic
+    {
+        void Move(EntityMoveInEvent ev);
     }
 }

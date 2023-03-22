@@ -3,11 +3,13 @@ using Game.Battler;
 using Game.ECS;
 using Game.Party;
 using System.Collections.Generic;
+using Assets.Code.Code.Utils;
+using Game.Events.GameEvents;
 using UnityEngine;
 
 namespace Assets.Code.World
 {
-    public partial class PartyView : EntityView<PartyEntity>
+    public partial class PartyView : EntityView<PartyEntity>,IMovementLogic
     {
         private static GameObject _container;
 
@@ -26,20 +28,18 @@ namespace Assets.Code.World
 
         public override void OnUpdate(PartyEntity partyFromNetwork, List<IComponent> syncedComponents)
         {
-            if (!Instantiated)
-            {
-                Instantiate();
-                CreateUnitObjects();
-                RegisterEvents();
-            }
             Entity.Tile = GameView.World.GetTile(partyFromNetwork);
+            if (!Instantiated) return;
+            Instantiate();
+            CreateUnitObjects();
+            RegisterEvents();
         }
 
         public override void Instantiate()
         {
             GameObject = new GameObject($"{Entity.OwnerID}-{Entity.Id}");
             GameObject.transform.SetParent(Container.transform);
-            GameObject.transform.position = new Vector3(0, 0.2f, 0);
+            GameObject.transform.position = Entity.Tile.Position(0.2f);
             GameObject.SetActive(true);
             StackLog.Debug($"Created new party instance {this}");
         }
@@ -65,5 +65,7 @@ namespace Assets.Code.World
                 _unitObjects[unit] = unitObject;
             }
         }
+        
+        
     }
 }
