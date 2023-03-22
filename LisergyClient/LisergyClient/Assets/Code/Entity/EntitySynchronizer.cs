@@ -5,6 +5,7 @@ using Game.Movement;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Assets.Code.Views;
 
 
 namespace Assets.Code.Entity
@@ -31,9 +32,14 @@ namespace Assets.Code.Entity
             {
                 return;
             }
+
+            if (view is IMovementLogic)
+            {
+                ((IMovementLogic)view).Move(ev);
+                return;
+            }
+
             view.GameObject.transform.position = new UnityEngine.Vector3(ev.ToTile.X, view.GameObject.transform.position.y, ev.ToTile.Y);
         }
-
-
     }
 }
