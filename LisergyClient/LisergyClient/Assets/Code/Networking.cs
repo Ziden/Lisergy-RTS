@@ -18,7 +18,6 @@ public class Networking : IDisposable
     // Todo: make this better, used for tests. Abstract !
     public static Action<byte[]> SenderOverride;
 
-    public Client client = new Client();
     Message msg;
 
     private List<byte[]> _toSend = new List<byte[]>();

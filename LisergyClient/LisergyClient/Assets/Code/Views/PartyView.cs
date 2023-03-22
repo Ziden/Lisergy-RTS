@@ -28,11 +28,11 @@ namespace Assets.Code.World
 
         public override void OnUpdate(PartyEntity partyFromNetwork, List<IComponent> syncedComponents)
         {
-            Entity.Tile = GameView.World.GetTile(partyFromNetwork);
             if (!Instantiated) return;
             Instantiate();
             CreateUnitObjects();
             RegisterEvents();
+            Entity.Tile = GameView.World.GetTile(partyFromNetwork);
         }
 
         public override void Instantiate()
