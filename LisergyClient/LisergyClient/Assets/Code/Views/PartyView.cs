@@ -26,7 +26,6 @@ namespace Assets.Code.World
 
         public override void OnUpdate(PartyEntity partyFromNetwork, List<IComponent> syncedComponents)
         {
-            Entity.Owner.Parties[Entity.PartyIndex] = Entity;
             if (!Instantiated)
             {
                 Instantiate();

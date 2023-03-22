@@ -3,10 +3,6 @@ using Assets.UnitTests.Stubs;
 using Game.Network.ClientPackets;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.UnitTests.Behaviours
@@ -15,19 +11,19 @@ namespace Assets.UnitTests.Behaviours
     {
         public IEnumerator Login()
         {
-            yield return Wait.Until(() => UIManager.LoginCanvas != null);
+            yield return Wait.Until(() => UIManager.LoginCanvas != null, "Game scene not properly initialized");
             var loginScreen = UIManager.LoginCanvas;
-            loginScreen.Login.text = "TEST";
-            loginScreen.Password.text = "TESTPASS";
+            loginScreen.Login.text = "Test Player "+Guid.NewGuid().ToString();
+            loginScreen.Password.text = "Test";
             loginScreen.LoginButton.onClick.Invoke();
             Debug.Log("Clicking Login");
-            yield return Wait.Until(() => GameView.Initialized);
+            yield return Wait.Until(() => GameView.Initialized, "Game view not initialized after logging in");
         }
 
         public IEnumerator JoinWorld()
         {
             MainBehaviour.Networking.Send(new JoinWorldPacket());
-            yield return new WaitUntil(() => MainBehaviour.Player.Parties != null && MainBehaviour.Player.Parties[0] != null);
+            yield return Wait.Until(() => GameView.World != null , "Did not receive world tiles after joining world");
         }
 
     }

@@ -17,6 +17,7 @@ namespace Game
 
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
 
+        public static int x = 0;
         public EntityUpdatePacket GetUpdatePacket(PlayerEntity receiver)
         {
             var packet = new EntityUpdatePacket(this);

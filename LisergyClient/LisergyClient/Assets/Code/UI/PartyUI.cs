@@ -21,7 +21,7 @@ public class PartyUI : IEventListener
     private Button[] _partyButtons;
     private int _activeParty = -1;
 
-    public PartyEntity SelectedParty { get => MainBehaviour.Player.Parties[_activeParty]; }
+    public PartyEntity SelectedParty { get => MainBehaviour.LocalPlayer.Parties[_activeParty]; }
     public bool HasSelectedParty { get => _activeParty != -1; }
     public GameObject GameObj { get => _rootObject; }
 
@@ -53,14 +53,17 @@ public class PartyUI : IEventListener
         EntityListener.OnPartyViewUpdated += OnPartyUpdated;
         ClientEvents.OnCameraMove += OnCameraMove;
         ClientEvents.OnClickTile += OnClickTile;
-        //MainBehaviour.NetworkEvents.RegisterListener(this);
     }
 
     private void OnPartyUpdated(PartyView view)
     {
-        if(view.Entity.IsMine())
+        if (view.Entity.IsMine())
         {
-            DrawAllParties();
+            UIManager.PartyUI.DrawAllParties();
+        }
+        if (!UIManager.PartyUI.HasSelectedParty && view.Entity.Tile != null)
+        {
+            UIManager.PartyUI.SelectParty(view.Entity);
         }
     }
 
@@ -128,13 +131,13 @@ public class PartyUI : IEventListener
         var buttonPosition = button.transform.localPosition;
         button.StartCoroutine(_cursor.transform.LerpFromTo(_cursor.transform.localPosition, buttonPosition, 0.2f));
         ShowParty(party);
-        ClientEvents.SelectParty(SelectedParty);
+        ClientEvents.SelectParty(party);
     }
 
     private void ButtonClick(int partyIndex)
     {
         Log.Debug($"Click button party {partyIndex}");
-        var party = MainBehaviour.Player.Parties[partyIndex] as PartyEntity;
+        var party = MainBehaviour.LocalPlayer.Parties[partyIndex] as PartyEntity;
         if (party == null)
             return;
 
@@ -178,7 +181,7 @@ public class PartyUI : IEventListener
 
     public void DrawAllParties()
     {
-        foreach (var party in MainBehaviour.Player.Parties)
+        foreach (var party in MainBehaviour.LocalPlayer.Parties)
         {
             if(party.BattleGroupLogic.GetUnits().Count > 0)
             {

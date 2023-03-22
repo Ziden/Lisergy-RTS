@@ -29,10 +29,7 @@ public class LoginCanvas : IEventListener
     {
         if(ev.Success)
         {
-            var player = new ClientPlayer()
-            {
-                UserID = ev.PlayerID
-            };
+            var player = new LocalPlayer(ev.PlayerID);
             MainBehaviour.Networking.Send(new JoinWorldPacket());
             ClientEvents.PlayerLogin(player);
             GameObject.SetActive(false);

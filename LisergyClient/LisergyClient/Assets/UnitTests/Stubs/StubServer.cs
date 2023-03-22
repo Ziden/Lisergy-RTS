@@ -38,7 +38,7 @@ namespace Assets.UnitTests
             InputStream.Enqueue(new StubPacket()
             {
                 Data = bytes,
-                Sender = MainBehaviour.Player
+                Sender = MainBehaviour.LocalPlayer
             });
         }
 

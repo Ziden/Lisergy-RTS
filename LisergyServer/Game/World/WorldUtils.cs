@@ -170,6 +170,17 @@ namespace Game.World
             return null;
         }
 
+        public static TileEntity GetNeighborInRange(this TileEntity source, int range, Direction d)
+        {
+            while (range > 0)
+            {
+                source = source.GetNeighbor(d);
+                range--;
+            }
+            return source;
+        }
+
+
         public static IEnumerable<TileEntity> GetAOE(this TileEntity tile, ushort radius)
         {
             for (var xx = tile.X - radius; xx <= tile.X + radius; xx++)

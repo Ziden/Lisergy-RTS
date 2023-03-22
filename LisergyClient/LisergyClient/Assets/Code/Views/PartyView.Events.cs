@@ -28,7 +28,6 @@ namespace Assets.Code.World
             {
                 ClientEvents.PartyFinishedMove(view.Entity, ev.FromTile, ev.ToTile);
             }
-            
         }
     }
 }

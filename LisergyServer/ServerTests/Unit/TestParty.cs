@@ -1,8 +1,10 @@
 ﻿using Game;
 using Game.Battler;
+using Game.DataTypes;
 using Game.Dungeon;
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Network;
 using Game.Network.ServerPackets;
 using Game.Party;
 using Game.Scheduler;
@@ -46,11 +48,33 @@ namespace Tests
             var battleID = Guid.NewGuid();
             _game.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
 
+            _player.ReceivedEvents.Clear();
+            DeltaTracker.Clear();
+
             var battle = _game.BattleService.GetBattle(battleID);
             battle.Task.Execute();
 
-            var statusUpdates = _player.ReceivedEventsOfType<PartyStatusUpdatePacket>();
-            Assert.AreEqual(1, statusUpdates.Count);
+            var statusUpdates = _player.ReceivedEventsOfType<EntityUpdatePacket>().Where(p => p.Entity.Id == party.Id);
+            Assert.AreEqual(1, statusUpdates.Count());
+        }
+
+        [Test]
+        public void TestBattleIDResetsAfterBattle()
+        {
+            var party = _player.GetParty(0);
+            party.Tile = _game.World.GetTile(0, 0);
+            var enemy = new DungeonEntity();
+            enemy.Tile = _game.World.GetTile(1, 1);
+            enemy.BattleGroupLogic.AddUnit(new Unit(0));
+
+            var battleID = Guid.NewGuid();
+            _game.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
+
+            var battle = _game.BattleService.GetBattle(battleID);
+            battle.Task.Execute();
+
+            Assert.IsTrue(battle.IsOver);
+            Assert.IsTrue(party.BattleGroupLogic.BattleID == GameId.ZERO);
         }
 
         [Test]

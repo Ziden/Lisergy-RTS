@@ -101,9 +101,9 @@ public class BattleNotificationUI : MonoBehaviour
     private bool IsWin(BattleHeader header)
     {
         return (
-            header.Attacker.OwnerID == MainBehaviour.Player.UserID && header.AttackerWins
+            header.Attacker.OwnerID == MainBehaviour.LocalPlayer.UserID && header.AttackerWins
             ||
-            header.Defender.OwnerID == MainBehaviour.Player.UserID && !header.AttackerWins
+            header.Defender.OwnerID == MainBehaviour.LocalPlayer.UserID && !header.AttackerWins
          );
     }
 }

@@ -16,20 +16,19 @@ namespace Assets.Code.World
             return Map.GetTile(e.X, e.Y);
         }
 
-        public ClientPlayer GetOrCreateClientPlayer(GameId uid)
+        public PlayerEntity GetOrCreateClientPlayer(GameId uid)
         {
             PlayerEntity pl;
             if (Players.GetPlayer(uid, out pl))
-                return (ClientPlayer)pl;
-            if (uid == MainBehaviour.Player.UserID)
+                return pl;
+            if (uid == MainBehaviour.LocalPlayer.UserID)
             {
-                Players.Add(MainBehaviour.Player);
-                return MainBehaviour.Player;
+                Players.Add(MainBehaviour.LocalPlayer);
+                return MainBehaviour.LocalPlayer;
             }
-            pl = new ClientPlayer();
-            pl.UserID = uid;
+            pl = new OtherPlayer(uid);
             Players.Add(pl);
-            return (ClientPlayer)pl;
+            return pl;
         }
 
         public override void CreateMap()

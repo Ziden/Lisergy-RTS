@@ -6,7 +6,7 @@ namespace Assets.UnitTests.Stubs
 {
     public class Wait
     {
-        public static IEnumerator Until(Func<bool> condition, float timeout = 30f)
+        public static IEnumerator Until(Func<bool> condition, string error, float timeout = 10f)
         {
             float timePassed = 0f;
             while (!condition() && timePassed < timeout)
@@ -16,7 +16,7 @@ namespace Assets.UnitTests.Stubs
             }
             if (timePassed >= timeout)
             {
-                throw new TimeoutException("Condition was not fulfilled for " + timeout + " seconds.");
+                throw new TimeoutException(error);
             }
         }
     }

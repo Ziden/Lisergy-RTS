@@ -13,7 +13,7 @@ namespace Assets.Code
         public static event Action<Vector3, Vector3> OnCameraMove;
         public static event Action<TileEntity> OnClickTile;
         public static event Action<PartyEntity> OnSelectParty;
-        public static event Action<ClientPlayer> OnPlayerLogin;
+        public static event Action<LocalPlayer> OnPlayerLogin;
         public static event Action<PartyEntity, TileEntity, TileEntity> OnPartyFinishedMove;
         public static event Action<PartyEntity, List<TileEntity>> OnStartMovementRequest;
         public static event Action<PartyEntity, TileEntity, EntityAction> OnActionSelected;
@@ -33,7 +33,7 @@ namespace Assets.Code
             OnSelectParty?.Invoke(party);
         }
 
-        public static void PlayerLogin(ClientPlayer player)
+        public static void PlayerLogin(LocalPlayer player)
         {
             OnPlayerLogin?.Invoke(player);
         }

@@ -28,11 +28,18 @@ namespace Assets.Code.World
 
         public static void StopEffects(EntityType t)
         {
+            Debug.Log("STOP");
             foreach (var e in GetRunning().Effects[t.EntityId])
             {
                 MainBehaviour.Destroy(e);
                 GetRunning().Indexes.Remove(e.GetInstanceID());
             }
+            GetRunning().Effects[t.EntityId].Clear();
+        }
+
+        public static bool HasEffects(EntityType t)
+        {
+            return GetRunning().Effects[t.EntityId].Count > 0;
         }
 
         // TODO: make generic
