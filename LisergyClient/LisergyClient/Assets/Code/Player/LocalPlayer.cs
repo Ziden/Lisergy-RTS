@@ -21,7 +21,7 @@ namespace Assets.Code
             StackLog.Debug("Created new player");
         }
 
-        private void OnPartyUpdated(PartyView view)
+        private void OnPartyCreated(PartyView view)
         {
             if (view.Entity.IsMine())
             {
@@ -41,7 +41,7 @@ namespace Assets.Code
 
         public void SetupLocalPlayer()
         {
-            EntityListener.OnPartyViewCreated += OnPartyUpdated;
+            EntityListener.OnPartyViewCreated += OnPartyCreated;
             EntityListener.OnBuildingViewCreated += OnBuildingViewCreated;
         }
      

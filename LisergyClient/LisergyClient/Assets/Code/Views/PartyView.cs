@@ -28,11 +28,12 @@ namespace Assets.Code.World
 
         public override void OnUpdate(PartyEntity partyFromNetwork, List<IComponent> syncedComponents)
         {
-            if (!Instantiated) return;
+            Entity.Tile = GameView.World.GetTile(partyFromNetwork);
+          
+            if (Instantiated) return;
+            RegisterEvents();
             Instantiate();
             CreateUnitObjects();
-            RegisterEvents();
-            Entity.Tile = GameView.World.GetTile(partyFromNetwork);
         }
 
         public override void Instantiate()
@@ -41,6 +42,7 @@ namespace Assets.Code.World
             GameObject.transform.SetParent(Container.transform);
             GameObject.transform.position = Entity.Tile.Position(0.2f);
             GameObject.SetActive(true);
+
             StackLog.Debug($"Created new party instance {this}");
         }
 

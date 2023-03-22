@@ -30,9 +30,6 @@ public class TileRandomizerBehaviour : MonoBehaviour
     {
         var tile = view.Entity;
         var comp = view.GameObject.GetComponent<TileRandomizerBehaviour>();
-
-        Log.Debug("Decorating tile " + tile);
-
         var map = view.Entity.Chunk.Map;
         var northTile = map.GetTile(tile.X, tile.Y - 1);
         var southTile = map.GetTile(tile.X, tile.Y + 1);
@@ -85,7 +82,6 @@ public class TileRandomizerBehaviour : MonoBehaviour
     public void CreateTileDecoration(TileView tile)
     {
         _tile = tile.Entity;
-        StackLog.Debug($"Decorating {tile}");
         DecorateBoundaries(tile);
         tile.Decorated = true;
 
