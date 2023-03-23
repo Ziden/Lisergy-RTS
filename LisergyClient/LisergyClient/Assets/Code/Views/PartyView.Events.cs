@@ -21,7 +21,6 @@ namespace Assets.Code.World
     public partial class PartyView
     {
         private TweenerCore<Vector3, Path, PathOptions> path;
-        private bool interpoling = false;
         private List<TileEntity> interpolingPath;
 
         public void RegisterEvents()
@@ -37,9 +36,8 @@ namespace Assets.Code.World
             {
                 var moveComponent = Entity.Components.Get<EntityMovementComponent>();
                 Debug.Log("MoveDelay: " + moveComponent.MoveDelay.TotalSeconds);
-                var duration = (moveComponent.MoveDelay.TotalSeconds + MainBehaviour.Networking.Delta) * (tiles.Count);
+                var duration = (moveComponent.MoveDelay.TotalSeconds + MainBehaviour.Networking.Delta) * tiles.Count;
                 var y = GameObject.transform.position.y;
-                interpoling = true;
                 interpolingPath = new List<TileEntity>(tiles);
                 interpolingPath.RemoveAt(0);
 
@@ -50,12 +48,7 @@ namespace Assets.Code.World
                     PathMode.TopDown2D
                 );
                 path.SetEase(Ease.Linear);
-                path.onWaypointChange += (_) => { };
-                path.onComplete += () =>
-                {
-                    interpoling = false;
-                    path = null;
-                };
+                path.SetAutoKill();
             }
         }
 
