@@ -24,3 +24,14 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+  run-unity-tests:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: game-ci/unity-test-runner@v2
+          env:
+            UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          with:
+            projectPath: LisergyClient/
+            githubToken: ${{ secrets.GITHUB_TOKEN }}
+
