@@ -37,20 +37,19 @@ namespace Assets.Code.World
             {
                 var moveComponent = Entity.Components.Get<EntityMovementComponent>();
                 Debug.Log("MoveDelay: " + moveComponent.MoveDelay.TotalSeconds);
-                var duration = (moveComponent.MoveDelay.TotalSeconds + MainBehaviour.Networking.Delta) * tiles.Count;
+                var duration = (moveComponent.MoveDelay.TotalSeconds + MainBehaviour.Networking.Delta) * (tiles.Count);
                 var y = GameObject.transform.position.y;
                 interpoling = true;
                 interpolingPath = new List<TileEntity>(tiles);
-                // Remove the first one that is the player current position
                 interpolingPath.RemoveAt(0);
 
                 path = GameObject.transform.DOPath(
                     interpolingPath.Select(t => t.Position(y)).ToArray(),
                     (float)duration,
-                    PathType.Linear,
-                    PathMode.Ignore
+                    PathType.CatmullRom,
+                    PathMode.TopDown2D
                 );
-
+                path.SetEase(Ease.Linear);
                 path.onWaypointChange += (_) => { };
                 path.onComplete += () =>
                 {

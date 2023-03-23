@@ -6,7 +6,7 @@ using Game.Tile;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileRandomizerBehaviour : MonoBehaviour
+public class TileMonoComponent : MonoBehaviour
 {
     private TileEntity _tile;
 
@@ -24,12 +24,14 @@ public class TileRandomizerBehaviour : MonoBehaviour
 
     private static System.Random rnd = new System.Random();
 
+    public bool Unclouded = false;
+
     public TileEntity Tile { get => _tile; private set => _tile = value; }
 
     private static void DecorateBoundaries(TileView view)
     {
         var tile = view.Entity;
-        var comp = view.GameObject.GetComponent<TileRandomizerBehaviour>();
+        var comp = view.GameObject.GetComponent<TileMonoComponent>();
         var map = view.Entity.Chunk.Map;
         var northTile = map.GetTile(tile.X, tile.Y - 1);
         var southTile = map.GetTile(tile.X, tile.Y + 1);
@@ -121,6 +123,5 @@ public class TileRandomizerBehaviour : MonoBehaviour
             obj.transform.localPosition = new Vector3(x, 0, y);
 
         }
-
     }
 }

@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace Assets.Code.World
 {
-
     public class EffectRegistry
     {
         public IDictionary<GameId, List<GameObject>> Effects = new DefaultValueDictionary<GameId, List<GameObject>>();
@@ -18,7 +17,6 @@ namespace Assets.Code.World
 
     public static class EntityEffects<EntityType> where EntityType : IEntity
     {
-
         private static IDictionary<Type, EffectRegistry> _running = new DefaultValueDictionary<Type, EffectRegistry>();
 
         private static EffectRegistry GetRunning()
