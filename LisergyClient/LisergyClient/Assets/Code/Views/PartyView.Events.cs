@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Code.Code.Utils;
 using Assets.Code.Entity;
 using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Core.PathCore;
+using DG.Tweening.Plugins.Options;
 using Game;
 using Game.Battler;
 using Game.DataTypes;
@@ -16,7 +20,9 @@ namespace Assets.Code.World
 {
     public partial class PartyView
     {
+        private TweenerCore<Vector3, Path, PathOptions> path;
         private bool interpoling = false;
+        private List<TileEntity> interpolingPath;
 
         public void RegisterEvents()
         {
@@ -34,12 +40,23 @@ namespace Assets.Code.World
                 var duration = (moveComponent.MoveDelay.TotalSeconds + MainBehaviour.Networking.Delta) * tiles.Count;
                 var y = GameObject.transform.position.y;
                 interpoling = true;
-                GameObject.transform.DOPath(
-                    tiles.Select(t => t.Position(y)).ToArray(),
+                interpolingPath = new List<TileEntity>(tiles);
+                // Remove the first one that is the player current position
+                interpolingPath.RemoveAt(0);
+
+                path = GameObject.transform.DOPath(
+                    interpolingPath.Select(t => t.Position(y)).ToArray(),
                     (float)duration,
                     PathType.Linear,
                     PathMode.Ignore
-                ).onComplete += () => { interpoling = false; };
+                );
+
+                path.onWaypointChange += (_) => { };
+                path.onComplete += () =>
+                {
+                    interpoling = false;
+                    path = null;
+                };
             }
         }
 
@@ -57,10 +74,29 @@ namespace Assets.Code.World
             }
         }
 
+
         public void Move(EntityMoveInEvent ev)
         {
-            // TODO Rollback
-            
+            // Receing the tiles from the interpoling task
+            if (interpolingPath?.Count > 0)
+            {
+                var first = interpolingPath[0];
+                if (first == ev.ToTile)
+                {
+                    interpolingPath.RemoveAt(0);
+                    if (interpolingPath.Count == 0)
+                    {
+                        Debug.Log("Finished interpolation of " + Entity.Id);
+                    }
+
+                    return;
+                }
+                // Some desynch happend, so the old path is no longer valid
+                path?.Kill();
+                interpolingPath = null;
+            }
+
+            GameObject.transform.position = ev.ToTile.Position(GameObject.transform.position.y);
         }
     }
 }
