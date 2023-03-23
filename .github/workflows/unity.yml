@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         projectPath:
-          - test-project
+          - LisergyClient/LisergyClient
         testMode:
           - playmode
           - editmode
