@@ -19,6 +19,7 @@ namespace Assets.Code.Views
 
         public T GetView<T>(IEntity e) where T : IEntityView
         {
+            if (e == null) return default;
             if (GetViews(e.GetType()).TryGetValue(e.EntityId, out var v))
             {
                 return (T)v;
