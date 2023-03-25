@@ -36,6 +36,10 @@ namespace Assets.Code.World
             var tileView = GameView.GetOrCreateTileView(tile, true);
             GameObject = MainBehaviour.Instantiate(prefab, tileView.GameObject.transform) as GameObject;
             GameObject.transform.localPosition = Vector3.zero;
+            foreach (var lod in GameObject.GetComponentsInChildren<LODGroup>())
+            {
+                lod.ForceLOD(2);
+            }
             this.GameObject.SetActive(true);
         }
     }
