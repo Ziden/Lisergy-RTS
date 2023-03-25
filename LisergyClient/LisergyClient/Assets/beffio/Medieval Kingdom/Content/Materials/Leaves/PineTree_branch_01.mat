@@ -161,9 +161,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _2nd_color_intensity: 1.5
+    - _2nd_color_intensity: 1.242
     - _AODiff: 1
-    - _AO_Intensity: 2
+    - _AO_Intensity: 0.32
     - _Alpha_cutout_level: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -186,7 +186,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
-    - _Smoothness_Shift: 2
+    - _Smoothness_Shift: 0.409
     - _Smoothness_shift: 0.1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -199,8 +199,8 @@ Material:
     - _Translucency: 8
     - _UVSec: 0
     - _Wind_power: 0.7
-    - _Wind_power_multiply: 0.1064
-    - _Wind_speed: 2
+    - _Wind_power_multiply: 0.032
+    - _Wind_speed: 1
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:

@@ -40,6 +40,7 @@ namespace Assets.Code.World
             {
                 lod.ForceLOD(2);
             }
+            StaticBatchingUtility.Combine(GameObject);
             this.GameObject.SetActive(true);
         }
     }

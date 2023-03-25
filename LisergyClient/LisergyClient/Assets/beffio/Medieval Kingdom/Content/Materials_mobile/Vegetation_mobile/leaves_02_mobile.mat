@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: leaves_02_mobile
-  m_Shader: {fileID: 4800000, guid: 622e53292efa62c40b5304524c246595, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0f7c21dda7fbbfc49b71ea6f47716bfc, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -161,14 +161,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _2nd_color_intensity: 1.5
+    - _2nd_color_intensity: 0.54
     - _AODiff: 2
-    - _AO_Intensity: 1.45
+    - _AO_Intensity: 1.714
     - _Alpha_cutout_level: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _Detail_level: 0.093
+    - _Detail_level: 1
     - _DstBlend: 0
     - _Emmisive_intensity: 0
     - _Float0: 0.971
@@ -182,12 +182,12 @@ Material:
     - _Leaves_2nd_color_intensity: 0.507144
     - _Metallic: 0
     - _Mode: 0
-    - _Normal_intensity: 1
+    - _Normal_intensity: 1.417
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _Smoothness_Shift: 0
-    - _Smoothness_shift: 0.1
+    - _Smoothness_shift: 0.32
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Tilling: 1
@@ -200,7 +200,7 @@ Material:
     - _UVSec: 0
     - _Wind_power: 0.7
     - _Wind_power_multiply: 0.2
-    - _Wind_speed: 2.18
+    - _Wind_speed: 2.6
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
@@ -211,7 +211,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color1: {r: 0.5930606, g: 0.697, b: 0, a: 0}
     - _Color2: {r: 1, g: 0, b: 0, a: 1}
-    - _Detail_color: {r: 0.09287083, g: 0.3490566, b: 0, a: 0}
+    - _Detail_color: {r: 0.099098615, g: 0.24528301, b: 0.04512282, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmisive_color: {r: 0.9779412, g: 0.9210103, b: 0.68312067, a: 0}
     - _Leaf_mask_color: {r: 1, g: 0, b: 0, a: 1}

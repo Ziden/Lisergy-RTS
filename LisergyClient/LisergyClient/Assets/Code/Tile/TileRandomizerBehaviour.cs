@@ -93,12 +93,6 @@ public class TileRandomizerBehaviour : MonoBehaviour
         _tile = tile.Entity;
         DecorateBoundaries(tile);
 
-        foreach(var lod in this.GetComponentsInChildren<LODGroup>())
-        {
-            Debug.Log("Setting lod on " + lod.gameObject.gameObject.name);
-            lod.ForceLOD(0);
-        }
-
         tile.Decorated = true;
 
         var removed = new List<GameObject>();

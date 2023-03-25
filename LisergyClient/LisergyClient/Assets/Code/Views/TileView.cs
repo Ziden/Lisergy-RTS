@@ -48,6 +48,11 @@ namespace Assets.Code.Views
             var tileBhv = GameObject.GetComponent<TileRandomizerBehaviour>();
             Entity.TileId = Entity.TileId;
             tileBhv.CreateTileDecoration(this);
+            foreach (var lod in GameObject.GetComponentsInChildren<LODGroup>())
+            {
+                lod.ForceLOD(2);
+            }
+            StaticBatchingUtility.Combine(GameObject);
         }
 
 

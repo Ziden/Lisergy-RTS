@@ -50,8 +50,8 @@ namespace Assets.Code.World
                     PathType.Linear,
                     PathMode.Ignore
                 );
-
-                path.onWaypointChange += (_) => { };
+                path.SetEase(Ease.Linear);
+                path.SetAutoKill(true);
                 path.onComplete += () =>
                 {
                     interpoling = false;

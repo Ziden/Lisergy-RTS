@@ -177,13 +177,13 @@ Material:
     - _AODiff: 2
     - _AO_Intensity: 0.79
     - _AO_shift: 0
-    - _Alpha_cutout_level: 0.595
+    - _Alpha_cutout_level: 0.752
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _Detail_2_level: 0
     - _Detail_Smoothness_shift: 0
-    - _Detail_level: 0.281
+    - _Detail_level: 0.564
     - _DstBlend: 0
     - _Edge_wear: 0
     - _Emmisive_intensity: 0
@@ -201,7 +201,7 @@ Material:
     - _Metalobjectusesmettalicsmoothnesmap: 0
     - _Mettallic_shift: 0
     - _Mode: 0
-    - _Normal_intensity: 1.369
+    - _Normal_intensity: 1.424
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
@@ -226,14 +226,14 @@ Material:
     - _2nd_color: {r: 0.3897059, g: 0.36391655, b: 0.36391655, a: 0}
     - _Base_Color: {r: 0.6954809, g: 0.78676474, b: 0.48594293, a: 0}
     - _Base_Leaf_color: {r: 0.5930606, g: 0.697, b: 0, a: 0}
-    - _Base_color: {r: 0.24052154, g: 0.4433962, b: 0.2722207, a: 0}
+    - _Base_color: {r: 0.06074226, g: 0.1981132, b: 0.08211106, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color1: {r: 0.5930606, g: 0.697, b: 0, a: 0}
     - _Color2: {r: 1, g: 0, b: 0, a: 1}
     - _Detail_2_color: {r: 0, g: 0.9779412, b: 0.7756083, a: 0}
-    - _Detail_color: {r: 0.13268162, g: 0.2735849, b: 0.06581523, a: 0}
+    - _Detail_color: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Emmisive_color: {r: 0.9779412, g: 0.9210103, b: 0.6831207, a: 0}
+    - _Emmisive_color: {r: 0.25309536, g: 0.4433962, b: 0.08156818, a: 0}
     - _Emmsivie_color: {r: 0.9779412, g: 0.9210103, b: 0.6831207, a: 0}
     - _Leaf_mask_color: {r: 1, g: 0, b: 0, a: 1}
     - _Leaves_2nd_color: {r: 1, g: 1, b: 1, a: 0}
