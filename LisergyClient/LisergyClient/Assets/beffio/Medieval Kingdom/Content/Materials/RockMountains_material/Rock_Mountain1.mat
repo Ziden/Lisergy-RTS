@@ -106,14 +106,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _AO_shift: 0
-    - _Alpha_cutout_level: 1
+    - _Alpha_cutout_level: 0.668
     - _Alpha_cutout_mask_map_input_level: 1
     - _BumpScale: 1
     - _Cutoff: 0
     - _DetailNormal_map_inputMapScale: 1
     - _Detail_2_level: 1
     - _Detail_Smoothness_shift: 0
-    - _Detail_level: 1
+    - _Detail_level: 0.808
     - _DstBlend: 0
     - _Edge_wear: 0.217
     - _Emmisive_intensity: 0
@@ -126,12 +126,12 @@ Material:
     - _Metalobjectusesmettalicsmoothnesmap: 0
     - _Mettallic_shift: 0.03
     - _Mode: 0
-    - _Normal_intensity: 1
+    - _Normal_intensity: 1.56
     - _Normal_map_input_intensity: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
-    - _Smoothness_shift: 0.1
+    - _Smoothness_shift: 1.68
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Tilling: 1
@@ -142,7 +142,7 @@ Material:
     - _Base_color: {r: 0.38235295, g: 0.38235295, b: 0.38235295, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Detail_2_color: {r: 0.6066176, g: 0.75, b: 0.66100407, a: 0}
-    - _Detail_color: {r: 0.78060496, g: 0.89705884, b: 0.68598616, a: 0}
+    - _Detail_color: {r: 0.028694496, g: 0.2264151, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmisive_color: {r: 0.9779412, g: 0.9210103, b: 0.6831207, a: 0}
     - _Emmsivie_color: {r: 0.9779412, g: 0.9210103, b: 0.68312067, a: 0}

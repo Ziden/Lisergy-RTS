@@ -20,7 +20,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: _Emmisive_intensity
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -195,18 +195,18 @@ Material:
     m_Ints: []
     m_Floats:
     - _AO_shift: 1.66
-    - _Alpha_cutout_level: 1
+    - _Alpha_cutout_level: 0.72
     - _Base_Normal_Intensity: 1
     - _Base_Normal_map_input_Intensity: 1
     - _Bricks_color_differrence: 0
     - _BumpScale: 1
     - _Contrast: 4
-    - _Cutoff: 0.5
+    - _Cutoff: 0
     - _DetailNormal_map_inputMapScale: 1
     - _Detail_1_level: 0.89
     - _Detail_2_level: 2
     - _Detail_Smoothness_shift: 0
-    - _Detail_level: 0.294
+    - _Detail_level: 0.998
     - _DstBlend: 0
     - _Edge_wear: 0.259
     - _Edges_intensity: 0.507144
@@ -225,11 +225,11 @@ Material:
     - _Metallic: 0
     - _Mettallic_shift: 0
     - _Mode: 0
-    - _Normal_intensity: 1
+    - _Normal_intensity: 0.568
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
-    - _Smoothness_shift: 0.5524658
+    - _Smoothness_shift: 0.35
     - _Snow_normal_intensity: 0.25
     - _Snow_smoothness: 1.255
     - _SpecularHighlights: 1
@@ -249,12 +249,12 @@ Material:
     - _top2: 0.12
     - _top3: 0.7
     m_Colors:
-    - _Base_color: {r: 0.022058845, g: 0.022058845, b: 0.022058845, a: 0}
+    - _Base_color: {r: 0.41411534, g: 0.3994749, b: 0.4433962, a: 0}
     - _Color: {r: 0.39705884, g: 0.39705884, b: 0.39705884, a: 1}
     - _Color1: {r: 1, g: 1, b: 1, a: 0}
     - _DetaiL_2_color: {r: 1, g: 1, b: 1, a: 0}
     - _Detail_2_color: {r: 0.5588235, g: 0.5588235, b: 0.5588235, a: 0}
-    - _Detail_color: {r: 0.41911763, g: 0.40041462, b: 0.3513192, a: 0}
+    - _Detail_color: {r: 0, g: 0, b: 0, a: 0}
     - _Edge_color: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmisive_color: {r: 0.9779412, g: 0.9210103, b: 0.6831207, a: 0}
