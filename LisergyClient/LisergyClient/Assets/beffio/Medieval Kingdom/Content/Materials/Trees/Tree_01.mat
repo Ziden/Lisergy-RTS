@@ -2,19 +2,25 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Tree_01
-  m_Shader: {fileID: 4800000, guid: 53db23e245600294b8245008e74fbb63, type: 3}
-  m_ShaderKeywords: _NORMALMAP
+  m_Shader: {fileID: 4800000, guid: 622e53292efa62c40b5304524c246595, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _NORMALMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -24,6 +30,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _Albedo_smoothness_map_input:
         m_Texture: {fileID: 2800000, guid: 39c3a989f5e653145a8682c1c3898b03, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Alpha_cutout_mask_map_input:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Ambien_Occulsion:
@@ -38,8 +48,16 @@ Material:
         m_Texture: {fileID: 2800000, guid: 2ff3ee893404d6d428f5af8e23da3f6a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Detail_mask_1_map_input:
+        m_Texture: {fileID: 2800000, guid: 7a947e26d6355c94898b3bf52c6e07da, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Edge_mask_map_input:
         m_Texture: {fileID: 2800000, guid: ceb848ff79e29094fa213b7a9e09f625, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emmisvie_map_input:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Hill_roughness:
@@ -170,12 +188,17 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
+    - _Alpha_cutout_level: 1
     - _Ambien_Occlusion_albedo_multiply: 0.02
     - _Ambient_occlusion_shift: 1
     - _Base_Smoothness: 1.55
     - _Base_normal_intensity: 1
+    - _Cutoff: 0
+    - _Detail_level: 1
     - _Edge_wear_level: 0.25
+    - _Emmisive_intensity: 0
     - _Float0: 1.536
     - _Float2: 0.5856935
     - _Float4: 0.25
@@ -185,14 +208,19 @@ Material:
     - _Moss_smoothness: 0
     - _Moss_tiling: 4
     - _Moss_tiling2: 4
+    - _Normal_intensity: 1
     - _Normal_map_input_intensity: 1
     - _Smoothness_shift: 1
+    - _Tilling: 1
     - _Tree_edges_light: 1.5
     - __dirty: 0
     m_Colors:
     - _Base_Color: {r: 0.28235298, g: 0.14117646, b: 0.01960784, a: 0}
+    - _Base_color: {r: 0.427451, g: 0.227451, b: 0.1372549, a: 0}
     - _Color0: {r: 1, g: 1, b: 1, a: 0}
     - _Color1: {r: 0.41382006, g: 0.5607843, b: 0, a: 0}
+    - _Detail_color: {r: 0.2720588, g: 0.2720588, b: 0.2720588, a: 0}
+    - _Emmisive_color: {r: 0.9779412, g: 0.9210103, b: 0.6831207, a: 0}
     - _Hill_Color_change: {r: 1, g: 1, b: 1, a: 0}
     - _Moss: {r: 0.69411767, g: 0.7372549, b: 0.2627451, a: 0}
     - _Moss_Color: {r: 0.5766435, g: 0.74264705, b: 0.109212816, a: 0}
@@ -200,3 +228,4 @@ Material:
     - _Moss_tiling: {r: 4, g: 4, b: 0, a: 0}
     - _Tree_01_color: {r: 1, g: 1, b: 1, a: 0}
     - _Tree_edges_light_color: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

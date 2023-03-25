@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PineTree_branch_01a
-  m_Shader: {fileID: 4800000, guid: 0f7c21dda7fbbfc49b71ea6f47716bfc, type: 3}
+  m_Shader: {fileID: 4800000, guid: 622e53292efa62c40b5304524c246595, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -207,11 +207,11 @@ Material:
     - _2nd_color: {r: 0.7794118, g: 0.47902992, b: 0.34385815, a: 0}
     - _Base_Color: {r: 0.6223836, g: 1, b: 0, a: 0}
     - _Base_Leaf_color: {r: 0.5930606, g: 0.697, b: 0, a: 0}
-    - _Base_color: {r: 0.15303981, g: 0.6886792, b: 0, a: 0}
+    - _Base_color: {r: 0.6981132, g: 0.51310974, b: 0.13501245, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color1: {r: 0.5930606, g: 0.697, b: 0, a: 0}
     - _Color2: {r: 1, g: 0, b: 0, a: 1}
-    - _Detail_color: {r: 0.049688578, g: 0.09433961, b: 0.023584902, a: 0}
+    - _Detail_color: {r: 0.056455217, g: 0.0754717, b: 0.011747954, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmisive_color: {r: 0.9779412, g: 0.9210103, b: 0.6831207, a: 0}
     - _Leaf_mask_color: {r: 1, g: 0, b: 0, a: 1}

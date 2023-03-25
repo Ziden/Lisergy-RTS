@@ -12,6 +12,8 @@ namespace Assets.Code.Views
         public bool Decorated { get; set; }
         public override bool Instantiated => GameObject != null;
 
+        private PlaneMesh Mesh { get; set; }
+
         public TileView(TileEntity entity)
         {
             Entity = entity;
@@ -48,6 +50,7 @@ namespace Assets.Code.Views
             var tileBhv = GameObject.GetComponent<TileRandomizerBehaviour>();
             Entity.TileId = Entity.TileId;
             tileBhv.CreateTileDecoration(this);
+
             foreach (var lod in GameObject.GetComponentsInChildren<LODGroup>())
             {
                 lod.ForceLOD(2);

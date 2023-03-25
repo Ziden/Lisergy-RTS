@@ -87,6 +87,32 @@ public class TileRandomizerBehaviour : MonoBehaviour
         return (int)(a < 0 && b < 0 || a >= 0 && b >= 0 ? C : -C - 1);
     }
 
+    public void MakeHills()
+    {
+        var mesh = GetComponentInChildren<PlaneMesh>();
+        if(mesh == null)
+        {
+            return;
+        }
+        var hillX = Random.Range(1, 4);
+        var hillY = Random.Range(1, 4);
+        mesh.Heights[hillX, hillY] = Random.value / 5;
+        mesh.Heights[hillX + 1, hillY] = Random.value / 5;
+        mesh.Heights[hillX, hillY + 1] = Random.value / 5;
+        mesh.Heights[hillX + 1, hillY + 1] = Random.value / 5;
+
+        if (Random.value > 0.5f)
+        {
+            hillX = Random.Range(1, 4);
+            hillY = Random.Range(1, 4);
+            mesh.Heights[hillX, hillY] = Random.value / 4;
+            mesh.Heights[hillX + 1, hillY] = Random.value / 4;
+            mesh.Heights[hillX, hillY + 1] = Random.value / 4;
+            mesh.Heights[hillX + 1, hillY + 1] = Random.value / 4;
+        }
+        mesh.Adjust();
+    }
+
     public void CreateTileDecoration(TileView tile)
     {
         Random.InitState(GetTilePositionHash(tile.Entity.X, tile.Entity.Y));
@@ -112,15 +138,16 @@ public class TileRandomizerBehaviour : MonoBehaviour
                 removed.Add(o);
         }
 
-        if(ChooseOne != null && ChooseOne.Count > 0)
+        if (ChooseOne != null && ChooseOne.Count > 0)
         {
-            var one = ChooseOne[Random.Range(0, ChooseOne.Count-1)];
-            foreach(var o in ChooseOne)
+            var one = ChooseOne[Random.Range(0, ChooseOne.Count - 1)];
+            foreach (var o in ChooseOne)
             {
-                if(o != one)
+                if (o != one)
                 {
                     removed.Add(o);
-                } else
+                }
+                else
                 {
                     o.SetActive(true);
                 }
@@ -152,5 +179,7 @@ public class TileRandomizerBehaviour : MonoBehaviour
             if (obj == null) continue;
             obj.transform.rotation = Quaternion.Euler(0, Random.value * 360, 0);
         }
+
+        MakeHills();
     }
 }

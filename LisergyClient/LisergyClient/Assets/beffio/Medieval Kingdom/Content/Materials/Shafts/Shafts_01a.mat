@@ -2,19 +2,25 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Shafts_01a
   m_Shader: {fileID: 4800000, guid: 7b2fcea9440ee244d8726c0f0af0b03f, type: 3}
-  m_ShaderKeywords: 
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _MASKOFFON_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -54,6 +60,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Ray_mask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Texture1:
         m_Texture: {fileID: 2800000, guid: 7fc46b1c5cc369044ac53a3db22654e2, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -86,23 +96,27 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Emmisionlevel: 7.49
+    - _Emmisionlevel: 2.9
     - _Float0: 0.69
     - _Float1: 1
-    - _Frequency: 0.42
+    - _Frequency: 2.25
     - _FrequencyScale: 0.17
+    - _Frequency_scale: 0.066
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _Maskoffon: 1
     - _Metallic: 0
     - _Mode: 0
-    - _Noise_level: 0.15
+    - _Noise_level: 0
     - _OcclusionStrength: 1
+    - _Opacity_shift: 0.775
     - _Opacityshift: 1
     - _Parallax: 0.02
     - _Scale: 0.402
@@ -110,9 +124,9 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Texture1tiling: 1
-    - _Texture2blend: 0.5
+    - _Texture2blend: 0.992
     - _Texture2tiling: 1
-    - _Texture3blend: 0.5
+    - _Texture3blend: 0.032
     - _Texture3tiling: 1
     - _UVSec: 0
     - _ZWrite: 1
@@ -121,6 +135,8 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color0: {r: 0.89705884, g: 0.6030649, b: 0.21107265, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Noise_speed: {r: -0.02, g: 0.01, b: 0, a: 0}
+    - _Noise_tilling: {r: 3, g: 3, b: 0, a: 0}
     - _Shaftcolor: {r: 1, g: 0.8068966, b: 0, a: 0}
     - _Texture1speed: {r: 0.08, g: 0, b: 0, a: 0}
     - _Texture1tiling: {r: 1, g: 1, b: 0, a: 0}
@@ -133,3 +149,4 @@ Material:
     - _Vector0: {r: -0.04, g: 0, b: 0, a: 0}
     - _Vector1: {r: 0.02, g: 0, b: 0, a: 0}
     - _Vector2: {r: 0.01, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []

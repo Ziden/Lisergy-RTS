@@ -49,7 +49,7 @@ public class PlaneMesh : MonoBehaviour
         return mesh;
     }
 
-    public void Render()
+    public void Adjust()
     {
         _mesh = GenerateTileMesh(Heights);
         GetComponent<MeshFilter>().mesh = _mesh;
