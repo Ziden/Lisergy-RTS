@@ -32,7 +32,7 @@ public class Networking : IDisposable
         _toSend.Add(Serialization.FromEventRaw(ev));
     }
 
-    int READS_PER_TICK = 10;
+    int READS_PER_TICK = 2;
 
     public void Update()
     {
