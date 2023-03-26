@@ -21,8 +21,6 @@ namespace Assets.Code.Views
         {
             Entity = entity;
             SetCloud(true);
-            /*
-            SetCloud(true);
             if(Entity.GetNeighbor(Direction.SOUTH) == null)
             {
                 AddCloud(Entity.X, Entity.Y-1);
@@ -39,7 +37,6 @@ namespace Assets.Code.Views
             {
                 AddCloud(Entity.X - 1, Entity.Y);
             }
-            */
         }
 
         public void UpdateFromData(TileData data)

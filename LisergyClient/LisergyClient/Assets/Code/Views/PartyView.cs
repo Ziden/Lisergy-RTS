@@ -42,7 +42,6 @@ namespace Assets.Code.World
             GameObject.transform.SetParent(Container.transform);
             GameObject.transform.position = Entity.Tile.Position(0.2f);
             GameObject.SetActive(true);
-
             StackLog.Debug($"Created new party instance {this}");
         }
 

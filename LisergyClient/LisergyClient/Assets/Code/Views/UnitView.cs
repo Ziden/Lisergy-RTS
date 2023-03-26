@@ -11,6 +11,7 @@ namespace Assets.Code.World
         public GameObject GameObject { get; set; }
         public Unit Unit;
         public Sprite3D Sprites;
+        public UnitMonoBehaviour UnitMonoBehaviour;
 
         public UnitView(Unit unit)
         {
@@ -26,6 +27,7 @@ namespace Assets.Code.World
                 var prefab = Resources.Load("prefabs/units/"+ prefabName);
                 GameObject = MainBehaviour.Instantiate(prefab) as GameObject;
                 GameObject.name = $"Unit Spec {Unit.SpecId}";
+                UnitMonoBehaviour = GameObject.GetComponent<UnitMonoBehaviour>();
             }
             return GameObject;
         }
