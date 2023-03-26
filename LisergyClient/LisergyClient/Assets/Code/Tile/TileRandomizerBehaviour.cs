@@ -6,7 +6,7 @@ using Game.Tile;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileRandomizerBehaviour : MonoBehaviour
+public class TileMonoComponent : MonoBehaviour
 {
     private TileEntity _tile;
 
@@ -29,7 +29,7 @@ public class TileRandomizerBehaviour : MonoBehaviour
     private static void DecorateBoundaries(TileView view)
     {
         var tile = view.Entity;
-        var comp = view.GameObject.GetComponent<TileRandomizerBehaviour>();
+        var comp = view.GameObject.GetComponent<TileMonoComponent>();
         var map = view.Entity.Chunk.Map;
         var northTile = map.GetTile(tile.X, tile.Y - 1);
         var southTile = map.GetTile(tile.X, tile.Y + 1);

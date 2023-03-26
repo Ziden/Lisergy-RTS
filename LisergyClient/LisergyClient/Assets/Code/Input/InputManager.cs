@@ -65,7 +65,7 @@ namespace Assets.Code
 
                 Debug.Log("Hit", hit.collider);
 
-                var tileComponent = hit.collider.GetComponentInParent<TileRandomizerBehaviour>();
+                var tileComponent = hit.collider.GetComponentInParent<TileMonoComponent>();
                 if (tileComponent == null) return;
                 var tile = tileComponent.Tile;
                 OnClickTile?.Invoke(tile);
