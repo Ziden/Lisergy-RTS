@@ -56,7 +56,7 @@ public class CameraBehaviour : MonoBehaviour
     private void Start()
     {
         _instance = this;
-        Global.InputManager().OnCameraMove += OnCameraMovement;
+        ServiceContainer.InputManager().OnCameraMove += OnCameraMovement;
     }
 
     void OnCameraMovement(Vector2 velocity)

@@ -20,7 +20,7 @@ namespace Assets.UnitTests.Behaviours
 
         public IEnumerator MoveAttackWithSelected(TileEntity targetTile)
         {
-            Global.InputManager().OnClickTile(targetTile);
+            ServiceContainer.InputManager().OnClickTile(targetTile);
             yield return null;
             UIManager.ActionsUI.AttackButton();
             yield return Wait.Until(() => UIManager.PartyUI.SelectedParty.Tile == targetTile, "Party did not move");
@@ -33,7 +33,7 @@ namespace Assets.UnitTests.Behaviours
             while (times > 0)
             {
                 var otherTile = UIManager.PartyUI.SelectedParty.Tile.GetNeighbor(d);
-                Global.InputManager().OnClickTile(otherTile); // todo: move away
+                ServiceContainer.InputManager().OnClickTile(otherTile); // todo: move away
                 yield return Wait.Until(() => UIManager.TileUI.SelectedTile == otherTile, "Tile was never selected");
                 UIManager.ActionsUI.MoveButton();
                 yield return Wait.Until(() => UIManager.PartyUI.SelectedParty.Tile == otherTile, "Party did not move");
