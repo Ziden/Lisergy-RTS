@@ -39,11 +39,6 @@ public class CameraBehaviour : MonoBehaviour
         camera.StartCoroutine(coroutine);
     }
 
-    private void OnEnable()
-    {
-        Global.InputManager().OnCameraMove += OnCameraMovement;
-    }
-
     IEnumerator LerpFromTo(Vector3 pos1, Vector3 pos2, float duration)
     {
         lerping = true;
@@ -61,6 +56,7 @@ public class CameraBehaviour : MonoBehaviour
     private void Start()
     {
         _instance = this;
+        Global.InputManager().OnCameraMove += OnCameraMovement;
     }
 
     void OnCameraMovement(Vector2 velocity)

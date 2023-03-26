@@ -55,6 +55,7 @@ namespace Assets.Code.Views
             {
                 lod.ForceLOD(2);
             }
+            GameObject.isStatic = true;
             StaticBatchingUtility.Combine(GameObject);
         }
 

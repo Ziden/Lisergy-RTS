@@ -52,7 +52,7 @@ namespace GameDataTest
             {
                 Art = new ArtSpec()
                 {
-                    Type = ArtType.SPRITE_SHEET,
+                    Type = ArtType.PREFAB,
                     Name = "Soldier"
                 },
                 Name = "Thief",
@@ -100,7 +100,7 @@ namespace GameDataTest
             {
                 Art = new ArtSpec()
                 {
-                    Type = ArtType.SPRITE_SHEET,
+                    Type = ArtType.PREFAB,
                     Name = "Mage"
                 },
                 Name = "Mage",

@@ -22,13 +22,10 @@ namespace Assets.Code.World
             if (GameObject == null)
             {
                 StackLog.Debug($"Rendering unit {this}");
-                Sprite[] sprites = LazyLoad.GetSprite(Unit.SpecId);
-                GameObject = new GameObject($"Unit Spec {Unit.SpecId}");
-                var spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = sprites[0];
-                Sprites = GameObject.AddComponent<Sprite3D>();
-                Sprites.Sprites = sprites;
-                GameObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+                var prefabName = Unit.GetSpec().Art.Name;
+                var prefab = Resources.Load("prefabs/units/"+ prefabName);
+                GameObject = MainBehaviour.Instantiate(prefab) as GameObject;
+                GameObject.name = $"Unit Spec {Unit.SpecId}";
             }
             return GameObject;
         }
