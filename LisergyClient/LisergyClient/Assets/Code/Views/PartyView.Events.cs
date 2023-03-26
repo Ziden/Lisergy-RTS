@@ -47,12 +47,37 @@ namespace Assets.Code.World
                     PathType.CatmullRom,
                     PathMode.TopDown2D
                 );
+                path.OnStart(() =>
+                {
+                    Debug.Log("Start");
+                    foreach (var unit in _unitObjects.Values)
+                    {
+                        Debug.Log("U "+unit.GameObject.name);
+                        unit.UnitMonoBehaviour.AnimWalking();
+                    }
+                });
                 path.SetEase(Ease.Linear);
-                path.SetAutoKill(true);
+                path.OnWaypointChange(idx => {
+                    var next = GameView.GetView(interpolingPath[idx]);
+                    foreach(var unit in _unitObjects.Values)
+                    {
+                        var lookPos = next.GameObject.transform.position - unit.GameObject.transform.position;
+                        lookPos.y = 0;
+                        unit.GameObject.transform.DOLookAt(next.GameObject.transform.position, 0.5f, AxisConstraint.Y);
+                    }
+                });
                 path.onComplete += () =>
                 {
                     path = null;
                 };
+                path.SetAutoKill(true);
+                path.OnKill(() =>
+                {
+                    foreach (var unit in _unitObjects.Values)
+                    {
+                        unit.UnitMonoBehaviour.AnimIddle();
+                    }
+                });
             }
         }
 

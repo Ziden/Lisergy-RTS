@@ -28,6 +28,10 @@ namespace Assets.Code.World
                 GameObject = MainBehaviour.Instantiate(prefab) as GameObject;
                 GameObject.name = $"Unit Spec {Unit.SpecId}";
                 UnitMonoBehaviour = GameObject.GetComponent<UnitMonoBehaviour>();
+                if(UnitMonoBehaviour == null)
+                {
+                    UnitMonoBehaviour = GameObject.AddComponent<UnitMonoBehaviour>();
+                }
             }
             return GameObject;
         }
