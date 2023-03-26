@@ -26,7 +26,10 @@ namespace Assets.Code.Views
         public void Instantiate()
         {
             if (_chunksNode == null)
+            {
                 _chunksNode = new GameObject("Chunks");
+                _chunksNode.isStatic = true;
+            }
             GameObject = new GameObject($"Chunk-{Entity.X}-{Entity.Y}");
             GameObject.transform.SetParent(_chunksNode.transform);
             GameObject.transform.position = new Vector3(Entity.X * GameWorld.CHUNK_SIZE, Entity.Y * GameWorld.CHUNK_SIZE);

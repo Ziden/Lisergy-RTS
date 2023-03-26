@@ -37,8 +37,8 @@ public class UIManager : MonoBehaviour
         Log.Debug("Initializing UI");
         _loginCanvas = new LoginCanvas(login);
         _loginCanvas.GameObject.SetActive(true);
-        _partyUI = new PartyUI(lowerPanel);
         _tileUI = new TileUI();
+        _partyUI = new PartyUI(lowerPanel);
         _actionsUI = new ActionsUI(actions);
         _unitUI = unitPanel.GetComponent<UnitPanel>();
         _notifications = this.gameObject.GetComponentInChildren<GameNotifications>();

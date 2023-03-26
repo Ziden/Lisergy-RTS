@@ -14,11 +14,14 @@ namespace Assets.Code.Views
         public bool Decorated { get; set; }
         public override bool Instantiated => GameObject != null;
 
-        public GameObject CloudObject = null;
+        private GameObject CloudObject;
+        private PlaneMesh Mesh { get; set; }
 
         public TileView(TileEntity entity)
         {
             Entity = entity;
+            SetCloud(true);
+            /*
             SetCloud(true);
             if(Entity.GetNeighbor(Direction.SOUTH) == null)
             {
@@ -36,6 +39,7 @@ namespace Assets.Code.Views
             {
                 AddCloud(Entity.X - 1, Entity.Y);
             }
+            */
         }
 
         public void UpdateFromData(TileData data)
@@ -90,6 +94,13 @@ namespace Assets.Code.Views
             var tileBhv = GameObject.GetComponent<TileMonoComponent>();
             Entity.TileId = Entity.TileId;
             tileBhv.CreateTileDecoration(this);
+
+            foreach (var lod in GameObject.GetComponentsInChildren<LODGroup>())
+            {
+                lod.ForceLOD(2);
+            }
+            GameObject.isStatic = true;
+            StaticBatchingUtility.Combine(GameObject);
             SetCloud(false);
         }
 

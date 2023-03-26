@@ -19,7 +19,7 @@ namespace Assets.Code.Views
 
             if (!ev.Visible)
             {
-                view.SetColor(new Color(0.5f, 0.5f, 0.5f));
+                view.SetColor(new Color(0.1f, 0.1f, 0.1f));
             }
             else
             {

@@ -48,7 +48,11 @@ namespace Assets.Code.World
                     PathMode.TopDown2D
                 );
                 path.SetEase(Ease.Linear);
-                path.SetAutoKill();
+                path.SetAutoKill(true);
+                path.onComplete += () =>
+                {
+                    path = null;
+                };
             }
         }
 

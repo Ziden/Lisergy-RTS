@@ -41,7 +41,7 @@ public class PartyUI : IEventListener
             _rootObject.transform.FindDeepChild("Squad4").GetComponent<Button>(),
         };
 
-        _cursor = GameObject.Find("Cursor").gameObject;
+        _cursor = GameObject.Find("SquadUICursor").gameObject;
 
         _partyButtons[0].onClick.AddListener(() => ButtonClick(0));
         _partyButtons[1].onClick.AddListener(() => ButtonClick(1));

@@ -53,7 +53,6 @@ public class MainBehaviour : MonoBehaviour
         SetupServices();
         Serialization.LoadSerializers();
         _serverPacketListener = new ServerListener(ServerPackets);
-        SetupCamera();
     }
 
     void Update()
@@ -65,13 +64,6 @@ public class MainBehaviour : MonoBehaviour
     private void OnApplicationQuit()
     {
         Networking?.Dispose();
-    }
-
-
-    private void SetupCamera()
-    {
-        var camera = Resources.Load("prefabs/Camera");
-        Instantiate(camera, gameObject.transform);
     }
 
     private void SetupServices()

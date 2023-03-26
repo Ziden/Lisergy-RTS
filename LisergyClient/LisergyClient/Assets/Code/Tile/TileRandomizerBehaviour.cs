@@ -10,10 +10,12 @@ public class TileMonoComponent : MonoBehaviour
 {
     private TileEntity _tile;
 
+    public List<GameObject> ChooseOne;
     public List<GameObject> Remove50;
     public List<GameObject> Remove85;
     public List<GameObject> Remove25;
     public List<GameObject> RandomizePosition;
+    public List<GameObject> RandomizeRotation;
 
     // Gets removed if the tile is connected with the same tileid to east
     // TODO: Make this better in editor window perhaps ? (defining the target tile etc)
@@ -21,10 +23,6 @@ public class TileMonoComponent : MonoBehaviour
     public List<GameObject> RemoveWhenConnectSouth;
     public List<GameObject> RemoveWhenConnectNorth;
     public List<GameObject> RemoveWhenConnectWest;
-
-    private static System.Random rnd = new System.Random();
-
-    public bool Unclouded = false;
 
     public TileEntity Tile { get => _tile; private set => _tile = value; }
 
@@ -81,27 +79,79 @@ public class TileMonoComponent : MonoBehaviour
         }
     }
 
+    public static int GetTilePositionHash(ushort a, ushort b)
+    {
+        var A = (uint)(a >= 0 ? 2 * (int)a : -2 * (int)a - 1);
+        var B = (uint)(b >= 0 ? 2 * (int)b : -2 * (int)b - 1);
+        var C = (uint)((A >= B ? A * A + A + B : A + B * B) / 2);
+        return (int)(a < 0 && b < 0 || a >= 0 && b >= 0 ? C : -C - 1);
+    }
+
+    public void MakeHills()
+    {
+        var mesh = GetComponentInChildren<PlaneMesh>();
+        if(mesh == null)
+        {
+            return;
+        }
+        var hillX = Random.Range(1, 4);
+        var hillY = Random.Range(1, 4);
+        mesh.Heights[hillX, hillY] = Random.value / 5;
+        mesh.Heights[hillX + 1, hillY] = Random.value / 5;
+        mesh.Heights[hillX, hillY + 1] = Random.value / 5;
+        mesh.Heights[hillX + 1, hillY + 1] = Random.value / 5;
+
+        if (Random.value > 0.5f)
+        {
+            hillX = Random.Range(1, 4);
+            hillY = Random.Range(1, 4);
+            mesh.Heights[hillX, hillY] = Random.value / 4;
+            mesh.Heights[hillX + 1, hillY] = Random.value / 4;
+            mesh.Heights[hillX, hillY + 1] = Random.value / 4;
+            mesh.Heights[hillX + 1, hillY + 1] = Random.value / 4;
+        }
+        mesh.Adjust();
+    }
+
     public void CreateTileDecoration(TileView tile)
     {
+        Random.InitState(GetTilePositionHash(tile.Entity.X, tile.Entity.Y));
         _tile = tile.Entity;
         DecorateBoundaries(tile);
+
         tile.Decorated = true;
 
         var removed = new List<GameObject>();
         foreach (var o in Remove50)
         {
-            if (rnd.NextDouble() < 0.55)
+            if (Random.value < 0.55)
                 removed.Add(o);
         }
         foreach (var o in Remove85)
         {
-            if (rnd.NextDouble() < 0.85)
+            if (Random.value < 0.85)
                 removed.Add(o);
         }
         foreach (var o in Remove25)
         {
-            if (rnd.NextDouble() < 0.25)
+            if (Random.value < 0.25)
                 removed.Add(o);
+        }
+
+        if (ChooseOne != null && ChooseOne.Count > 0)
+        {
+            var one = ChooseOne[Random.Range(0, ChooseOne.Count - 1)];
+            foreach (var o in ChooseOne)
+            {
+                if (o != one)
+                {
+                    removed.Add(o);
+                }
+                else
+                {
+                    o.SetActive(true);
+                }
+            }
         }
 
         foreach (var rem in removed)
@@ -117,11 +167,19 @@ public class TileMonoComponent : MonoBehaviour
 
         foreach (var obj in RandomizePosition)
         {
-
-            float x = -0.5f + (float)rnd.NextDouble();
-            float y = -0.5f + (float)rnd.NextDouble();
+            if (obj == null) continue;
+            float x = -0.5f + Random.value;
+            float y = -0.5f + Random.value;
             obj.transform.localPosition = new Vector3(x, 0, y);
-
+            obj.transform.rotation = Quaternion.Euler(0, Random.value * 360, 0);
         }
+
+        foreach (var obj in RandomizeRotation)
+        {
+            if (obj == null) continue;
+            obj.transform.rotation = Quaternion.Euler(0, Random.value * 360, 0);
+        }
+
+        MakeHills();
     }
 }

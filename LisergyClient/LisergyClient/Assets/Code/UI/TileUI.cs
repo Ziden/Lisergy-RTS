@@ -21,8 +21,8 @@ namespace Assets.Code
             ClientEvents.OnSelectParty += SelectParty;
             ClientEvents.OnStartMovementRequest += StartMoveReq;
 
-            _tileCursor = CreateCursor();
-            _partyCursor = CreateCursor();
+            _tileCursor = CreateCursor("Cursor");
+            _partyCursor = CreateCursor("UnitCursor");
         }
 
         public void StartMoveReq(PartyEntity party, List<TileEntity> path)
@@ -88,9 +88,9 @@ namespace Assets.Code
             cursor.SetActive(false);
         }
 
-        private GameObject CreateCursor()
+        private GameObject CreateCursor(string name)
         {
-            var prefab = Resources.Load("prefabs/tiles/Cursor");
+            var prefab = Resources.Load("prefabs/visuals/"+name);
             var cursor = MainBehaviour.Instantiate(prefab) as GameObject;
             cursor.SetActive(false);
             return cursor;
