@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace Assets.Code.Assets.Code.UIScreens
+{
+    public interface IScreenService : IGameService
+    {
+        T Get<T>() where T : Component;
+        T Open<T>() where T : Component;
+        void Close<T>() where T: Component;
+        bool IsOpen<T>() where T : Component;
+
+        VisualElement LoadAndAttach(MonoBehaviour parent, string reference);
+
+        UIDocument Root { get; }
+    }
+
+    public class ScreenService : IScreenService
+    {
+        private Dictionary<Type, GameObject> _inScene = new Dictionary<Type, GameObject>();
+
+        private UIDocument _parent;
+
+        public UIDocument Root => _parent;
+
+        public ScreenService()
+        {
+            _parent = GameObject.Find("Screens").GetComponent<UIDocument>();
+        }
+
+        public VisualElement LoadAndAttach(MonoBehaviour bhv, string refe)
+        {
+            var uiDoc = bhv.gameObject.AddComponent<UIDocument>();
+            uiDoc.visualTreeAsset = Resources.Load("ui/"+ refe) as VisualTreeAsset;
+            uiDoc.panelSettings = Root.panelSettings;
+            return uiDoc.rootVisualElement;        }
+
+        public bool IsOpen<T>() where T : Component
+        {
+            if (_inScene.TryGetValue(typeof(T), out var screen))
+            {
+                return screen.activeSelf;
+            }
+            return false;
+        }
+
+
+        public T Get<T>() where T : Component
+        {
+            if (_inScene.TryGetValue(typeof(T), out var screen))
+            {
+                return screen.GetComponent<T>();
+            }
+            return null;
+        }
+
+        public T Open<T>() where T : Component
+        {
+            if(_inScene.TryGetValue(typeof(T), out var screen))
+            {
+                screen.SetActive(true);
+                return screen.GetComponent<T>();
+            }
+            screen = new GameObject(typeof(T).Name);
+            screen.transform.parent = _parent.transform;
+            var component = screen.AddComponent<T>();
+            _inScene[typeof(T)] = screen;
+            return component;
+        }
+
+        public void Close<T>() where T: Component
+        {
+            if(_inScene.TryGetValue(typeof(T), out var screen))
+            {
+                screen.SetActive(false);
+            }
+        }
+    }
+}
