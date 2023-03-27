@@ -4,6 +4,7 @@ using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace Assets.Code
@@ -15,6 +16,16 @@ namespace Assets.Code
         public TextField Login;
         public TextField Password;
         public Button Submit;
+
+        void OnEnable()
+        {
+            SceneManager.LoadSceneAsync("Login", LoadSceneMode.Additive);
+        }
+
+        void OnDisable()
+        {
+            SceneManager.UnloadSceneAsync("Login");
+        }
 
         void Start()
         {

@@ -451,6 +451,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: MainCamera
       objectReference: {fileID: 0}
+    - target: {fileID: 8756013975201067417, guid: e261fa1fbb9ac8fe3a10989dcb06a1aa,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8756013975201067422, guid: e261fa1fbb9ac8fe3a10989dcb06a1aa,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
@@ -1272,7 +1277,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-2226
+  m_Name: pb_Mesh-129182
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1447,7 +1452,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-2256
+  m_Name: pb_Mesh-129212
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2593,7 +2598,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-2236
+  m_Name: pb_Mesh-129192
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -4063,7 +4068,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-2246
+  m_Name: pb_Mesh-129202
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -5816,9 +5821,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: efd6bdf48abeab14aa6adb51744d57e2, type: 3}
+  m_audioClip: {fileID: 8300000, guid: c1dc2dd8105b4244ab09c83190f18321, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.323
   m_Pitch: 1
   Loop: 1
   Mute: 0

@@ -18,8 +18,6 @@ public class MainBehaviour : MonoBehaviour
     {
         DontDestroyOnLoad(this.gameObject);
         ClientEvents.OnPlayerLogin += OnPlayerLogin;
-
-        SceneManager.LoadSceneAsync("Login", LoadSceneMode.Additive);
         ServiceContainer.Resolve<IScreenService>().Open<LoginScreen>();
     }
 
