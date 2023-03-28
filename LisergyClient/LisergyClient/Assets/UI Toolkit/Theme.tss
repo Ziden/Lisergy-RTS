@@ -1,5 +1,4 @@
-@import url("Theme.tss");
 
-@import url("/Packages/com.unity.addressables/Editor/BuildReportVisualizer/UIToolKitAssets/StyleSheets/MainToolbarButtonsLight.uss");
-@import url("/Assets/Resources/UI/unitui.uss");
+@import url("BaseStyle.uss");
+
 VisualElement {}

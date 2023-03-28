@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/BaseStyle.uss?fileID=7433441132597879392&amp;guid=c021afc8b47426b4dbb2dc791f1e017d&amp;type=3#BaseStyle" />
     <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 74px; max-height: 80px; background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Frame/frame_stageframe_01_n.png?fileID=21300000&amp;guid=8618db974c2d8471f8d4fbeec0f3697a&amp;type=3#frame_stageframe_01_n&apos;);">
         <ui:Label tabindex="-1" text="Codename Lisergy" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; height: 67px; -unity-font-style: bold; -unity-font: url(&apos;project://database/Assets/Resources/font/BreatheFireIii-PKLOB.ttf?fileID=12800000&amp;guid=43825a6ea1e3b2648b3336d410df9019&amp;type=3#BreatheFireIii-PKLOB&apos;); font-size: 25px;" />
     </ui:VisualElement>
@@ -16,7 +17,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="Submit" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 200px; padding-top: 20px; height: 30px; max-height: 60px;">
-            <ui:Button text="Login" display-tooltip-when-elided="true" name="LoginButton" class="lis-btn" style="background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Button/btn_rectangle_01_n_green.png?fileID=21300000&amp;guid=6a63ef398306547be8cad5f83b8994a3&amp;type=3#btn_rectangle_01_n_green&apos;); -unity-background-image-tint-color: rgb(255, 255, 255); background-color: rgba(255, 255, 255, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; -unity-font-style: bold; cursor: url(&apos;project://database/Assets/Addressables/UISet/cursorSword_silver.png?fileID=2800000&amp;guid=d0c0f0deefda2ba4986df6a78d653cf6&amp;type=3#cursorSword_silver&apos;); height: 35px; justify-content: center; align-items: center; -unity-text-align: middle-center; color: rgb(0, 0, 0); -unity-font: resource(&apos;font/BreatheFireIii-PKLOB&apos;); font-size: 22px; transition-property: all; transition-duration: 0s; transition-timing-function: ease; transition-delay: 0s;" />
+            <ui:Button text="Login" display-tooltip-when-elided="true" name="LoginButton" class="lis-btn button" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
