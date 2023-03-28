@@ -15,8 +15,18 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_Data:
     m_SerializedData: []
-  m_GUID: f8164cef7f9805441aeebf297a3d57f8
-  m_SerializeEntries: []
+  m_GUID: beb6838cf70ea1147b5c9efc70321ce5
+  m_SerializeEntries:
+  - m_GUID: b5f02c13c0c54aa4c86167bb884a4477
+    m_Address: Assets/Addressables/Audio/Sfx/button_click.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5cc12db70305374419f81d2c07079a0b
+    m_Address: Assets/Addressables/AssetReferences.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b09defdd2ea25a04a9d7584493f44cd4, type: 2}
   m_SchemaSet:

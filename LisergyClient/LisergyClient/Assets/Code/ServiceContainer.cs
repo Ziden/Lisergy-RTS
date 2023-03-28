@@ -4,11 +4,15 @@ using System.Collections.Generic;
 namespace Assets.Code
 {
 
-    public interface IGameService { }
+    public interface IGameService 
+    {
+        void OnSceneLoaded();
+    
+    }
 
     public static class ServiceContainer
     {
-        private static Dictionary<Type, object> _values = new();
+        private static Dictionary<Type, IGameService> _values = new();
 
         public static T Resolve<T>() where T : IGameService
         {
@@ -26,6 +30,14 @@ namespace Assets.Code
             where V: T
         {
             _values[typeof(T)] = value;
+        }
+
+        public static void OnSceneLoaded()
+        {
+            foreach(var s in _values.Values)
+            {
+                s.OnSceneLoaded();
+            }
         }
 
         // TODO: Delete this metho

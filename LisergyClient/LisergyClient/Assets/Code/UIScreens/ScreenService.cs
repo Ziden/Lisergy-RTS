@@ -29,7 +29,7 @@ namespace Assets.Code.Assets.Code.UIScreens
 
         public UIDocument Root => _parent;
 
-        public ScreenService()
+        public void OnSceneLoaded()
         {
             _parent = GameObject.Find("Screens").GetComponent<UIDocument>();
         }

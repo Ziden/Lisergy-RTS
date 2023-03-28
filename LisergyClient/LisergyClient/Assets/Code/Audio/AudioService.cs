@@ -1,4 +1,5 @@
 ﻿
+using Assets.Code.Assets.Code.Assets;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,28 +20,18 @@ namespace Assets.Code.Assets.Code.Audio
     {
         private AudioSource _audioSource;
 
-        private Dictionary<SoundFx, AudioClip> _fx = new Dictionary<SoundFx, AudioClip>();
+        private IAssetService _assets;
 
-        private void Load()
-        {
-            _fx[SoundFx.BUTTON_CLICK] = Resources.Load("Audio/Sfx/button_click") as AudioClip;
-        }
-
-        private AudioClip GetClip(SoundFx fx)
-        {
-            return _fx[fx];
-        }
-
-        public AudioService()
+        public void OnSceneLoaded()
         {
             var audio = new GameObject("Sfx");
             _audioSource = audio.AddComponent<AudioSource>();
-            Load();
+            _assets = ServiceContainer.Resolve<IAssetService>();
         }
 
         public void PlaySoundEffect(SoundFx fx, float volume = 1f)
         {
-            _audioSource.PlayOneShot(GetClip(fx), volume);
+            _assets.GetAudio(fx, audio => _audioSource.PlayOneShot(audio, volume));
         }
     }
 }

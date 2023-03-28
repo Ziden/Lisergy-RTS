@@ -76,7 +76,7 @@ public class Networking : IDisposable
             }
         } else
         {
-            Log.Debug("Reconnecting");
+            //Log.Debug("Reconnecting");
             client.Connect("127.0.0.1", 1337);
         }
     }

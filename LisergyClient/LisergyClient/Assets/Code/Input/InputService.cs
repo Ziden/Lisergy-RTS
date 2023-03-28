@@ -42,6 +42,11 @@ namespace Assets.Code
             OnCameraZoomUpdate();
         }
 
+        public void OnSceneLoaded()
+        {
+
+        }
+
         public void OnCameraZoomUpdate()
         {
             // SCROLL IS BROKEN AT THE CURRENT VERSION :P
