@@ -2,26 +2,9 @@
 
 [![LisergyPipeline](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml)
 
-A moddable mmo strategy game experiment that runs on a persistent world, where it really feels more of a strategy game rather then a puzzle game, where positioning, predicting and reacting to situations are the key features of the gameplay.
-
-With turn based battles simillar to classical RPG's together with some twists where player can also setup the IA of their units via basic programming commands simillar to the Gambit system from FF12, combat should have its own little mix of games like civilization, age of empires and final fantasy.
-
-
-Planned Features:
-- Player built structures
-- Player recruited units
-- Battles
-- IA Battles
-- Player Customizable IA for battles
-- Missions
-- Resource gathering
-- Open Trading
-- Crafting 
-- Dungeons (Sequential Battles)
-
 ## To run the server:
 
-Requirements: .net core 2.1, docker
+Requirements: .net core 6 or docker
 
 #### Running the Server
 
@@ -42,6 +25,15 @@ Or just open the solution in visual studio and click "RUN" on the MapServer solu
 Requirements: Unity
 
 Just open the project, select the single scene that exists and run it.
+
+## Core Loop
+
+![image](https://user-images.githubusercontent.com/829622/228648399-aa380216-59fb-4fc2-9444-3cec42e49723.png)
+
+## Roadmap
+
+![image](https://user-images.githubusercontent.com/829622/228648462-e2d76a1b-3cfa-410d-a59b-b74639158d17.png)
+
 
 ## Basic GDD
 
