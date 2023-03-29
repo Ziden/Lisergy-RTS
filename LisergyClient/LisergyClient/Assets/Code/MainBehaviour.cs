@@ -1,10 +1,10 @@
 ﻿using Assets.Code;
+using Assets.Code.Assets.Code.Audio;
 using Assets.Code.Assets.Code.UIScreens;
 using Game;
 using Game.Events;
 using Game.Events.Bus;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MainBehaviour : MonoBehaviour
 {
@@ -72,8 +72,8 @@ public class MainBehaviour : MonoBehaviour
     {
         ServiceContainer.Register<IInputService, InputService>(CreateInputService());
         ServiceContainer.Register<IScreenService, ScreenService>(new ScreenService());
+        ServiceContainer.Register<IAudioService, AudioService>(new AudioService());
     }
-
 
     InputService CreateInputService()
     {
