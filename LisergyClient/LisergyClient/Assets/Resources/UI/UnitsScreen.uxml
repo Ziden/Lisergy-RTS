@@ -1,26 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/unitui.uss?fileID=7433441132597879392&amp;guid=b3a333282cf72e346b245018eba3482a&amp;type=3#unitui" />
+    <Style src="project://database/Assets/Resources/UI/unitui.uss?fileID=7433441132597879392&amp;guid=b3a333282cf72e346b245018eba3482a&amp;type=3#unitui" />
     <ui:VisualElement name="Root" style="position: relative; width: 100%; height: 100%;">
-        <ui:VisualElement name="UnitBar" style="background-image: url(&apos;project://database/Assets/Addressables/UISet/panel_beige.png?fileID=2800000&amp;guid=a19b509550301614b9f2965f57308cd9&amp;type=3#panel_beige&apos;); width: 100%; height: 86px; -unity-slice-left: 5; -unity-slice-top: 3; -unity-slice-right: 5; -unity-slice-bottom: 3; -unity-background-scale-mode: stretch-to-fill; transform-origin: center; position: absolute; bottom: 0; justify-content: flex-start; align-items: center; flex-direction: row; padding-left: 5px;">
-            <ui:VisualElement name="Unit1" class="unit-ui-container">
-                <ui:VisualElement name="Face1" class="unit-ui-portrait" />
-            </ui:VisualElement>
-            <ui:VisualElement name="Unit1" class="unit-ui-container">
-                <ui:VisualElement name="Face1" class="unit-ui-portrait" />
-            </ui:VisualElement>
-            <ui:VisualElement name="Unit1" class="unit-ui-container">
-                <ui:VisualElement name="Face1" class="unit-ui-portrait" />
-            </ui:VisualElement>
-            <ui:VisualElement name="Unit1" class="unit-ui-container">
-                <ui:VisualElement name="Face1" class="unit-ui-portrait" />
-            </ui:VisualElement>
-        </ui:VisualElement>
         <ui:VisualElement name="UnitInfo" style="width: 359px; height: 147px; background-image: url(&apos;project://database/Assets/Addressables/UISet/panel_beige.png?fileID=21300000&amp;guid=a19b509550301614b9f2965f57308cd9&amp;type=3#panel_beige&apos;); position: absolute; right: 0; top: 0; flex-direction: column; align-items: flex-start;">
-            <ui:Label tabindex="-1" text="UnitName" display-tooltip-when-elided="true" name="UnitName" style="color: rgb(0, 0, 0); -unity-font-style: bold; -unity-font: url(&apos;project://database/Assets/Thaleah_PixelFont/ThaleahFat.fontsettings?fileID=12800000&amp;guid=652f7165b7c30ab46af6c4aad90a639b&amp;type=2#ThaleahFat&apos;); font-size: 15px; -unity-text-align: upper-left; margin-left: 10px; margin-top: 5px;" />
+            <ui:Label tabindex="-1" text="UnitName" display-tooltip-when-elided="true" name="UnitName" style="color: rgb(0, 0, 0); -unity-font-style: bold; -unity-font: url(&apos;project://database/Assets/Packs/Thaleah_PixelFont/ThaleahFat.fontsettings?fileID=12800000&amp;guid=652f7165b7c30ab46af6c4aad90a639b&amp;type=2#ThaleahFat&apos;); font-size: 15px; -unity-text-align: upper-left; margin-left: 10px; margin-top: 5px;" />
             <ui:VisualElement name="UnitInfoContainer" style="align-items: center; flex-direction: row; -unity-text-align: middle-left; justify-content: flex-start;">
-                <ui:VisualElement name="UnitPortrait" style="background-image: none; width: 60px; height: 77px; padding-left: 5px; margin-left: 3px; justify-content: center; align-items: center;">
-                    <ui:VisualElement style="background-image: resource(&apos;sprites/Faces&apos;); width: 90%; height: 90%; justify-content: center; align-items: center;" />
-                </ui:VisualElement>
+                <ui:VisualElement name="UnitPortrait" style="background-image: none; width: 60px; height: 77px; padding-left: 5px; margin-left: 3px; justify-content: center; align-items: center;" />
                 <ui:VisualElement name="InfoContainer" style="width: 300px;">
                     <ui:VisualElement name="Vitals">
                         <ui:VisualElement name="VitalsContainer" style="height: 26px; align-items: flex-start; justify-content: center; flex-direction: row; padding-right: 5px;">

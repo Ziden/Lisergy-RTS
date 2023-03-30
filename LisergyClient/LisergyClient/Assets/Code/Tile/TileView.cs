@@ -1,4 +1,5 @@
-﻿using Assets.Code.Assets.Code.Tile;
+﻿using Assets.Code.Assets.Code.Assets;
+using Assets.Code.Assets.Code.Tile;
 using Game;
 using Game.Tile;
 using Game.World;
@@ -17,8 +18,11 @@ namespace Assets.Code.Views
         private GameObject CloudObject;
         private PlaneMesh Mesh { get; set; }
 
+        private IAssetService _assets;
+
         public TileView(TileEntity entity)
         {
+            _assets = ServiceContainer.Resolve<IAssetService>();   
             Entity = entity;
             SetCloud(true);
             if(Entity.GetNeighbor(Direction.SOUTH) == null)
@@ -49,19 +53,16 @@ namespace Assets.Code.Views
             }
         }
 
-        private GameObject AddCloud(int x, int y)
+        private void AddCloud(int x, int y)
         {
-            var prefab = Resources.Load("prefabs/tiles/Cloud");
-            var cloud = MainBehaviour.Instantiate(prefab) as GameObject;
-            cloud.transform.position = new Vector3(x, 0.1f, y);
-            return cloud;
+            _assets.InstantiateMapObject("Cloud", new Vector3(x, 0.1f, y));
         }
 
         public void SetCloud(bool clouds)
         {
             if (clouds)
             {
-                CloudObject = AddCloud(Entity.X, Entity.Y);
+                _assets.InstantiateMapObject("Cloud", new Vector3(Entity.X, 0.1f, Entity.Y), o => CloudObject = o);
             }
             else if (CloudObject != null)
             {

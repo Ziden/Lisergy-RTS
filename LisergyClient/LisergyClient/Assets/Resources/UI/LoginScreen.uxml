@@ -17,7 +17,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="Submit" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 200px; padding-top: 20px; height: 30px; max-height: 60px;">
-            <ui:Button text="Login" display-tooltip-when-elided="true" name="LoginButton" class="lis-btn button" />
+            <ui:Button text="Login" display-tooltip-when-elided="true" name="LoginButton" class="lis-btn button" style="height: auto; background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Button/btn_rectangle_03.png?fileID=21300000&amp;guid=7fc1f566adfca485f90894d0655b431b&amp;type=3#btn_rectangle_03&apos;); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

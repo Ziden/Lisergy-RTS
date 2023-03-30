@@ -19,3 +19,10 @@ MonoBehaviour:
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
+  MapObjects:
+  - Key: Cloud
+    Reference:
+      m_AssetGUID: 3c68636528764394dbd1dcd104d7e3f4
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0

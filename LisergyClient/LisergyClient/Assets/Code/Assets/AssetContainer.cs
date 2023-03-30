@@ -3,6 +3,7 @@ using Game;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -26,14 +27,26 @@ public class AssetContainer<K, T> where T : UnityEngine.Object
                 await handle.Task;
                 _loaded[reference.AssetGUID] = handle;
             }
-            onComplete((T)reference.Asset);
+            onComplete?.Invoke((T)reference.Asset);
             return;
         }
         else throw new Exception($"Requested invalid reference for {key}. Register in AssetReferences.asset");
-        
     }
 
-    public async Task LoadAsync(string address, Action<T> onComplete)
+    public async Task InstantiateAsync(K key, Vector3 position, Quaternion rot, Action<GameObject> onComplete)
+    {
+        if (_references.TryGetValue(key, out var reference))
+        {
+            var handle = reference.InstantiateAsync(position, rot);
+            await handle.Task;
+            var instantiated = handle.Result;
+            onComplete?.Invoke(instantiated);
+            return;
+        }
+        throw new Exception($"Requested invalid reference for {key}. Register in AssetReferences.asset");
+    }
+
+    public async Task LoadAsyncByAddress(string address, Action<T> onComplete)
     {
         if (_loaded.TryGetValue(address, out var handle))
         {
@@ -48,6 +61,6 @@ public class AssetContainer<K, T> where T : UnityEngine.Object
         handle = Addressables.LoadAssetAsync<T>(address);
         await handle.Task;
         _loaded[address] = handle;
-        onComplete(handle.Result);
+        onComplete?.Invoke(handle.Result);
     }
 }

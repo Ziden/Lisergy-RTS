@@ -15,8 +15,13 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_Data:
     m_SerializedData: []
-  m_GUID: beb6838cf70ea1147b5c9efc70321ce5
+  m_GUID: 774fa0ad531a9d646928a288063c5dcc
   m_SerializeEntries:
+  - m_GUID: 682356f03c87d87428e648e19637a5af
+    m_Address: Assets/Addressables/Audio
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b5f02c13c0c54aa4c86167bb884a4477
     m_Address: Assets/Addressables/Audio/Sfx/button_click.mp3
     m_ReadOnly: 0
@@ -24,6 +29,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5cc12db70305374419f81d2c07079a0b
     m_Address: Assets/Addressables/AssetReferences.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c68636528764394dbd1dcd104d7e3f4
+    m_Address: Assets/Addressables/Prefabs/MapObjects/Cloud.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

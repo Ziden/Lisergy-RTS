@@ -5,6 +5,7 @@ using Assets.Code.Assets.Code.UIScreens;
 using Game;
 using Game.Events;
 using Game.Events.Bus;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class MainBehaviour : MonoBehaviour
@@ -48,6 +49,7 @@ public class MainBehaviour : MonoBehaviour
         Game.Log.Debug = Debug.Log;
         Game.Log.Error = Debug.LogError;
         Game.Log.Info = Debug.Log;
+        TaskScheduler.UnobservedTaskException +=  (_, e) => UnityEngine.Debug.LogException(e.Exception);
     }
 
     void Awake()
