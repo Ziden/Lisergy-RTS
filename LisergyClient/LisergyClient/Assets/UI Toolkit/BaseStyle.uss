@@ -1,5 +1,5 @@
 .unity-button:active {
-     -unity-background-image-tint-color: rgb(100, 100, 100);
+    -unity-background-image-tint-color: rgb(100, 100, 100);
 }
 
 .button {
@@ -11,7 +11,7 @@
     border-top-width: 0;
     border-bottom-width: 0;
     -unity-font-style: bold;
-    cursor: url('project://database/Assets/Addressables/UISet/cursorSword_silver.png?fileID=2800000&guid=d0c0f0deefda2ba4986df6a78d653cf6&type=3#cursorSword_silver');
+    cursor: url('project://database/Assets/Addressables/UISet/cursorSword_gold.png?fileID=2800000&guid=7720bd9275c0e2d409881676b9a5db10&type=3#cursorSword_gold');
     height: 35px;
     justify-content: center;
     align-items: center;

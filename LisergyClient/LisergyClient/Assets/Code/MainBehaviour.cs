@@ -1,4 +1,5 @@
 ﻿using Assets.Code;
+using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Assets.Code.Audio;
 using Assets.Code.Assets.Code.UIScreens;
 using Game;
@@ -17,8 +18,9 @@ public class MainBehaviour : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(this.gameObject);
-        ClientEvents.OnPlayerLogin += OnPlayerLogin;
+        ServiceContainer.OnSceneLoaded();
         ServiceContainer.Resolve<IScreenService>().Open<LoginScreen>();
+        ClientEvents.OnPlayerLogin += OnPlayerLogin;
     }
 
     public static GameObject CreatePrefab(Object prefab)
@@ -73,6 +75,7 @@ public class MainBehaviour : MonoBehaviour
         ServiceContainer.Register<IInputService, InputService>(CreateInputService());
         ServiceContainer.Register<IScreenService, ScreenService>(new ScreenService());
         ServiceContainer.Register<IAudioService, AudioService>(new AudioService());
+        ServiceContainer.Register<IAssetService, AssetService>(new AssetService());
     }
 
     InputService CreateInputService()
