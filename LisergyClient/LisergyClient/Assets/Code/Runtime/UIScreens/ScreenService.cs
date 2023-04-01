@@ -1,6 +1,7 @@
 ﻿using Assets.Code.Assets.Code.Audio;
 using System;
 using System.Collections.Generic;
+using GameAssets;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,21 +13,15 @@ namespace Assets.Code.Assets.Code.UIScreens
         T Open<T>() where T : Component;
         void Close<T>() where T: Component;
         bool IsOpen<T>() where T : Component;
-
         VisualElement LoadAndAttach(MonoBehaviour parent, string reference);
-
         UIDocument Root { get; }
     }
 
     public class ScreenService : IScreenService
     {
-
         public static readonly string BUTTON_CLASS = "unity-button";
-
         private Dictionary<Type, GameObject> _inScene = new Dictionary<Type, GameObject>();
-
         private UIDocument _parent;
-
         public UIDocument Root => _parent;
 
         public void OnSceneLoaded()
@@ -37,7 +32,7 @@ namespace Assets.Code.Assets.Code.UIScreens
         private void SetupNewScreen(VisualElement element)
         {
             foreach (var button in element.Query(null, BUTTON_CLASS).Build()) {
-                button.RegisterCallback<PointerDownEvent>(ev => ServiceContainer.Resolve<IAudioService>().PlaySoundEffect(SoundFx.BUTTON_CLICK), TrickleDown.TrickleDown);
+                button.RegisterCallback<PointerDownEvent>(ev => ServiceContainer.Resolve<IAudioService>().PlaySoundEffect(SoundFX.Buttonclick), TrickleDown.TrickleDown);
             }
         }
 
