@@ -21,6 +21,7 @@ namespace Code.Editor
 			{"Tiles", "TilePrefab"},
 			{"Buildings", "BuildingPrefab"},
 			{"Units", "UnitPrefab"},
+			{"Effects", "MapFX"},
 		};
 		
 		[MenuItem("Lisergy/Generate Addressable Map")]

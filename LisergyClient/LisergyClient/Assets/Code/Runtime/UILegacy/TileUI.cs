@@ -35,9 +35,10 @@ namespace Assets.Code
         private void SelectParty(PartyEntity party)
         {
             Activate(_partyCursor);
-            MoveToTile(_partyCursor, party.Tile);
             var view = GameView.GetView(party);
             _partyCursor.transform.SetParent(view.GameObject.transform);
+            _partyCursor.transform.transform.localPosition = Vector3.zero;
+
         }
 
         private void CameraMove(Vector3 old, Vector3 newPos)

@@ -4,12 +4,12 @@ using Game.ECS;
 using Game.Party;
 using System.Collections.Generic;
 using Assets.Code.Code.Utils;
-using Game.Events.GameEvents;
 using UnityEngine;
+using Assets.Code.Assets.Code.Runtime.Movement;
 
 namespace Assets.Code.World
 {
-    public partial class PartyView : EntityView<PartyEntity>,IMovementLogic
+    public partial class PartyView : EntityView<PartyEntity>
     {
         private static GameObject _container;
 
@@ -22,6 +22,7 @@ namespace Assets.Code.World
         public PartyView(PartyEntity party)
         {
             Entity = party;
+            _interpolation = new MovementInterpolator(Entity);
         }
 
         public override bool Instantiated => GameObject != null;
