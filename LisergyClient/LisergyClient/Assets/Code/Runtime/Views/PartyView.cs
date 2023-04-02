@@ -60,13 +60,13 @@ namespace Assets.Code.World
             foreach (var unit in Entity.BattleGroupLogic.GetValidUnits())
             {
                 var unitObject = new UnitView(unit);
-                unitObject.AddToScene();
-                unitObject.GameObject.transform.SetParent(GameObject.transform);
-                unitObject.GameObject.transform.localPosition = Vector3.zero;
-                _unitObjects[unit] = unitObject;
+                unitObject.AddToScene(o =>
+                {
+                    o.transform.SetParent(GameObject.transform);
+                    o.transform.localPosition = Vector3.zero;
+                    _unitObjects[unit] = unitObject;
+                });
             }
-        }
-        
-        
+        }    
     }
 }

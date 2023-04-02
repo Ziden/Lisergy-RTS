@@ -20,6 +20,7 @@ namespace Code.Editor
 			{"Sfx", "SoundFX"},
 			{"Tiles", "TilePrefab"},
 			{"Buildings", "BuildingPrefab"},
+			{"Units", "UnitPrefab"},
 		};
 		
 		[MenuItem("Lisergy/Generate Addressable Map")]

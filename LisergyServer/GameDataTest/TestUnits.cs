@@ -8,6 +8,8 @@ namespace GameDataTest
 {
     public class TestUnitData
     {
+        public static string Addr(string name) => $"Assets/Addressables/Prefabs/Units/{name}.prefab";
+
         private static void AddUnit(GameSpec spec, UnitSpec unitSpec)
         {
             var id = (ushort)spec.Units.Count;
@@ -50,11 +52,7 @@ namespace GameDataTest
             var tuple = (Stat.ATK, 5);
             AddUnit(spec, new UnitSpec()
             {
-                Art = new ArtSpec()
-                {
-                    Type = ArtType.PREFAB,
-                    Address = "Soldier"
-                },
+                Art = new ArtSpec() { Type = ArtType.PREFAB,Address = Addr("Mage") },
                 Name = "Thief",
                 FaceArt = new ArtSpec()
                 {
@@ -73,11 +71,7 @@ namespace GameDataTest
             });
             AddUnit(spec, new UnitSpec()
             {
-                Art = new ArtSpec()
-                {
-                    Type = ArtType.SPRITE_SHEET,
-                    Address = "Knight"
-                },
+                Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Mage") },
                 Name = "Knight",
                 LOS = 1,
                 FaceArt = new ArtSpec()
@@ -98,11 +92,7 @@ namespace GameDataTest
             });
             AddUnit(spec, new UnitSpec()
             {
-                Art = new ArtSpec()
-                {
-                    Type = ArtType.PREFAB,
-                    Address = "Mage"
-                },
+                Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Mage") },
                 Name = "Mage",
                 FaceArt = new ArtSpec()
                 {
