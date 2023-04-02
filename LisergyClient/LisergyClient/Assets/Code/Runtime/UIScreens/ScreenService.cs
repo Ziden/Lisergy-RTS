@@ -47,14 +47,6 @@ namespace Assets.Code.Assets.Code.UIScreens
             }
         }
 
-        public void LoadScreenAsset(UIScreen screen, Action<VisualTreeAsset> onLoaded)
-        {
-            _assets.GetScreen(screen, asset =>
-            {
-
-            });
-        }
-
         public bool IsOpen<T>() where T : UITKScreen
         {
             if (_inScene.TryGetValue(typeof(T), out var screen))
@@ -78,11 +70,13 @@ namespace Assets.Code.Assets.Code.UIScreens
         {
             if (_inScene.TryGetValue(typeof(T), out var loadedScreen))
             {
-                loadedScreen.Screen.OnOpen();
+                loadedScreen.Screen.OnBeforeOpen();
                 loadedScreen.Object.SetActive(true);
+                loadedScreen.Screen.OnOpen();
                 return loadedScreen.Screen as T;
             }
             var screen = (T)InstanceFactory.CreateInstance(typeof(T));
+            screen.OnBeforeOpen();
             loadedScreen = new LoadedScreen()
             {
                 Object = new GameObject(typeof(T).Name),

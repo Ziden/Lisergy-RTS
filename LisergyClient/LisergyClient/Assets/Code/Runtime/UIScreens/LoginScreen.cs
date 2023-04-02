@@ -18,7 +18,7 @@ namespace Assets.Code
 
         public override UIScreen ScreenAsset => UIScreen.LoginScreen;
 
-        public override void OnOpen()
+        public override void OnBeforeOpen()
         {
             SceneManager.LoadSceneAsync("Login", LoadSceneMode.Additive);
         }

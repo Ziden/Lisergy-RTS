@@ -8,6 +8,7 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens
         public abstract UIScreen ScreenAsset { get; }
 
         public virtual void OnLoaded(VisualElement root) { }
+        public virtual void OnBeforeOpen() { }
         public virtual void OnOpen() { }
         public virtual void OnClose() { }
     }
