@@ -4,12 +4,12 @@ using Game.ECS;
 using Game.Party;
 using System.Collections.Generic;
 using Assets.Code.Code.Utils;
-using Game.Events.GameEvents;
 using UnityEngine;
+using Assets.Code.Assets.Code.Runtime.Movement;
 
 namespace Assets.Code.World
 {
-    public partial class PartyView : EntityView<PartyEntity>,IMovementLogic
+    public partial class PartyView : EntityView<PartyEntity>
     {
         private static GameObject _container;
 
@@ -22,6 +22,7 @@ namespace Assets.Code.World
         public PartyView(PartyEntity party)
         {
             Entity = party;
+            _interpolation = new MovementInterpolator(Entity);
         }
 
         public override bool Instantiated => GameObject != null;
@@ -60,13 +61,13 @@ namespace Assets.Code.World
             foreach (var unit in Entity.BattleGroupLogic.GetValidUnits())
             {
                 var unitObject = new UnitView(unit);
-                unitObject.AddToScene();
-                unitObject.GameObject.transform.SetParent(GameObject.transform);
-                unitObject.GameObject.transform.localPosition = Vector3.zero;
-                _unitObjects[unit] = unitObject;
+                unitObject.AddToScene(o =>
+                {
+                    o.transform.SetParent(GameObject.transform);
+                    o.transform.localPosition = Vector3.zero;
+                    _unitObjects[unit] = unitObject;
+                });
             }
-        }
-        
-        
+        }    
     }
 }

@@ -14,6 +14,7 @@ namespace Assets.Code
         public static event Action<TileEntity> OnClickTile;
         public static event Action<PartyEntity> OnSelectParty;
         public static event Action<LocalPlayer> OnPlayerLogin;
+        public static event Action<PartyEntity> OnCourseCancelled;
         public static event Action<PartyEntity, TileEntity, TileEntity> OnPartyFinishedMove;
         public static event Action<PartyEntity, List<TileEntity>> OnStartMovementRequest;
         public static event Action<PartyEntity, TileEntity, EntityAction> OnActionSelected;
@@ -21,6 +22,11 @@ namespace Assets.Code
         public static void CameraMove(Vector3 oldPosition, Vector3 newPosition)
         {
             OnCameraMove?.Invoke(oldPosition, newPosition);
+        }
+
+        public static void CourseCancelled(PartyEntity party)
+        {
+            OnCourseCancelled?.Invoke(party);
         }
 
         public static void ClickTile(TileEntity tile)

@@ -33,6 +33,13 @@ namespace Game.Services
                 return;
             }
 
+            var first = ev.Path[0];
+            if (_world.GetTile(first.X, first.Y).Distance(party.Tile) > 1)
+            {
+                ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
+                return;
+            }
+
             var course = StartCourse(party, ev.Path, ev.Intent);
             if (course == null)
                 ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
@@ -42,6 +49,7 @@ namespace Game.Services
         {
             List<TileEntity> path = new List<TileEntity>();
             var owner = party.Owner;
+
             foreach (var position in sentPath)
             {
                 var tile = _world.GetTile(position.X, position.Y);

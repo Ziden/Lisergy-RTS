@@ -26,6 +26,7 @@ namespace Assets.Code.Battle
 
         public void AddToScene(Transform team1, Transform team2)
         {
+            /*
             for (var x = 0; x < Attacker.Units.Length; x++)
             {
                 var battleUnit = Attacker.Units[x];
@@ -49,6 +50,7 @@ namespace Assets.Code.Battle
                 unitObj.GetComponent<SpriteRenderer>().flipX = false;
                 Defender.Units[x].UnitReference = unitView.Unit;
             }
+            */
         }
     }
 }

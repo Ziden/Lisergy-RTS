@@ -72,6 +72,31 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12aae2521d1c4f446bb08b0e77628ede
+    m_Address: Assets/Addressables/Prefabs/Units/Mage.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02572b032dd09624a841e97aafe3d61f
+    m_Address: Assets/Addressables/Prefabs/Effects/BattleEffect.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ddec5dce738ae084bbf85a7ee8386fcc
+    m_Address: Assets/Addressables/Prefabs/Effects/HalfPath.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45badf52542492c448c2d57c23ed939f
+    m_Address: Assets/Addressables/Prefabs/Tiles/Floor.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 903a090fb95dfe446b41ebed063f6e8b
+    m_Address: Assets/Addressables/Sprites/Faces.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b09defdd2ea25a04a9d7584493f44cd4, type: 2}
   m_SchemaSet:

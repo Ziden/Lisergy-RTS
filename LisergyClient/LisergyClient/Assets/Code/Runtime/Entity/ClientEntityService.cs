@@ -117,7 +117,7 @@ namespace Assets.Code.World
             {
                 clientEntity = InstanceFactory.CreateInstance<EntityType, PlayerEntity>(serverEntity.Owner);
                 clientEntity.Id = serverEntity.Id;
-                BaseEntityEvents.HookBaseEvents(clientEntity);
+                MovementEvents.HookMovementEvents(clientEntity);
                 ComponentSynchronizer.SyncComponents(clientEntity, components);
                 var view = InstanceFactory.CreateInstance<ViewType, EntityType>(clientEntity);
                 GameView.Controller.AddView(clientEntity, view);

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4473846, g: 0.49732417, b: 0.57525253, a: 1}
+  m_IndirectSpecularColor: {r: 0.4473855, g: 0.49732518, b: 0.57525396, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1074,7 +1074,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1564
+  m_Name: pb_Mesh-231068
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1685,7 +1685,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1574
+  m_Name: pb_Mesh-231078
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2027,12 +2027,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15b24ebca345ca146a40cdbdf237b4ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DamageText: {fileID: 0}
-  Team1: {fileID: 0}
-  Team2: {fileID: 0}
-  ActionPlace1: {fileID: 0}
-  ActionPlace2: {fileID: 0}
-  BattleCamera: {fileID: 0}
 --- !u!224 &838926944 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5589961380879423672, guid: 26da8ee73af46fa46a8e9164fddbc238,
@@ -3893,7 +3887,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1554
+  m_Name: pb_Mesh-231058
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -4915,7 +4909,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1584
+  m_Name: pb_Mesh-231088
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

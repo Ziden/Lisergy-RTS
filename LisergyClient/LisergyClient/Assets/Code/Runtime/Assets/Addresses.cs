@@ -13,19 +13,39 @@ namespace GameAssets
 		Plane = 5,
 		Tree = 6,
 		Water = 7,
+		Floor = 8,
 	}
 
 
 	public enum SoundFX
 	{
-		Buttonclick = 8,
+		Buttonclick = 9,
 	}
 
 
 	public enum BuildingPrefab
 	{
-		Dungeon = 9,
-		SimpleHouse = 10,
+		Dungeon = 10,
+		SimpleHouse = 11,
+	}
+
+
+	public enum UnitPrefab
+	{
+		Mage = 12,
+	}
+
+
+	public enum MapFX
+	{
+		BattleEffect = 13,
+		HalfPath = 14,
+	}
+
+
+	public enum SpritePrefab
+	{
+		Faces = 15,
 	}
 
 	public static class AddressIdMap
@@ -39,9 +59,14 @@ namespace GameAssets
 			{ 5, "Assets/Addressables/Prefabs/Tiles/Plane.prefab"},
 			{ 6, "Assets/Addressables/Prefabs/Tiles/Tree.prefab"},
 			{ 7, "Assets/Addressables/Prefabs/Tiles/Water.prefab"},
-			{ 8, "Assets/Addressables/Audio/Sfx/button_click.mp3"},
-			{ 9, "Assets/Addressables/Prefabs/Buildings/dungeon.prefab"},
-			{ 10, "Assets/Addressables/Prefabs/Buildings/SimpleHouse.prefab"},
+			{ 8, "Assets/Addressables/Prefabs/Tiles/Floor.prefab"},
+			{ 9, "Assets/Addressables/Audio/Sfx/button_click.mp3"},
+			{ 10, "Assets/Addressables/Prefabs/Buildings/dungeon.prefab"},
+			{ 11, "Assets/Addressables/Prefabs/Buildings/SimpleHouse.prefab"},
+			{ 12, "Assets/Addressables/Prefabs/Units/Mage.prefab"},
+			{ 13, "Assets/Addressables/Prefabs/Effects/BattleEffect.prefab"},
+			{ 14, "Assets/Addressables/Prefabs/Effects/HalfPath.prefab"},
+			{ 15, "Assets/Addressables/Sprites/Faces.png"},
 		};
 	}
 }
