@@ -37,8 +37,10 @@ public class AssetContainer<K, T> where T : UnityEngine.Object where K: ICompara
         }
         await InstantiateAsync(addr, pos, rot, onComplete);
     }
+    
+    
 
-    private async Task LoadAsync(string address, Action<T> onComplete)
+    public async Task LoadAsync(string address, Action<T> onComplete)
     {
         if (_loaded.TryGetValue(address, out var handle))
         {
@@ -56,7 +58,7 @@ public class AssetContainer<K, T> where T : UnityEngine.Object where K: ICompara
         onComplete(handle.Result);
     }
     
-    private async Task InstantiateAsync(string address, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
+    public async Task InstantiateAsync(string address, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
     {
         var handle = Addressables.InstantiateAsync(address, pos, rot);
         await handle.Task;

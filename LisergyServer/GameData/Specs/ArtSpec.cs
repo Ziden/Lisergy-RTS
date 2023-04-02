@@ -6,14 +6,14 @@ namespace GameData.Specs
     {
         SPECIFIC_SPRITE,
         SPRITE_SHEET,
-        PREFAB
+        PREFAB,
     }
 
     [Serializable]
     public struct ArtSpec
     {
-        public int Index;
-        public string Name;
+        public int Index; // TODO: Remove
+        public string Address;
         public ArtType Type;
     }
 }

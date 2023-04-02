@@ -53,13 +53,13 @@ namespace GameDataTest
                 Art = new ArtSpec()
                 {
                     Type = ArtType.PREFAB,
-                    Name = "Soldier"
+                    Address = "Soldier"
                 },
                 Name = "Thief",
                 FaceArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Name = "Faces",
+                    Address = "Faces",
                     Index = 2
                 },
                 LOS = 2,
@@ -76,14 +76,14 @@ namespace GameDataTest
                 Art = new ArtSpec()
                 {
                     Type = ArtType.SPRITE_SHEET,
-                    Name = "Knight"
+                    Address = "Knight"
                 },
                 Name = "Knight",
                 LOS = 1,
                 FaceArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Name = "Faces",
+                    Address = "Faces",
                     Index = 1
                 },
                 Stats = AddToBase(
@@ -101,13 +101,13 @@ namespace GameDataTest
                 Art = new ArtSpec()
                 {
                     Type = ArtType.PREFAB,
-                    Name = "Mage"
+                    Address = "Mage"
                 },
                 Name = "Mage",
                 FaceArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Name = "Faces",
+                    Address = "Faces",
                     Index = 0
                 },
                 LOS = 3,

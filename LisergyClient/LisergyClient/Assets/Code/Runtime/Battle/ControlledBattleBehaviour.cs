@@ -13,6 +13,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
 public class BattleBehaviour : MonoBehaviour
 {
     // Will pretend there's a server sending a battle
@@ -180,3 +181,4 @@ public class BattleBehaviour : MonoBehaviour
         WaitForAction(); 
     }
 }
+*/

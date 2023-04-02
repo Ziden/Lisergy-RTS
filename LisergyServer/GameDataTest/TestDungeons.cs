@@ -8,7 +8,7 @@ namespace GameDataTest
     {
         public static DungeonSpec EASY = new DungeonSpec()
         {
-            Art = new ArtSpec() { Type = ArtType.PREFAB, Name = "buildings/dungeon" },
+            Art = new ArtSpec() { Type = ArtType.PREFAB, Address = "buildings/dungeon" },
             LootSpecID = TestLoots.GOLD_GUARANTEED.SpecID,
             DungeonSpecID = 0,
             BattleSpecs = new List<BattleSpec>()

@@ -95,8 +95,12 @@ namespace Assets.Code.Views
                 return;
             }
 
+            var spec = Entity.GetSpec();
             var chunkView = GameView.GetView<ChunkView>(Entity.Chunk);
             var parent = chunkView.GameObject.transform;
+            
+            _assets.
+            
             GameObject = EntityLoader.LoadEntity(Entity, parent);
             GameObject.name = $"Tile_{Entity.X}-{Entity.Y}";
             GameObject.transform.position = new Vector3(Entity.X, 0, Entity.Y);
