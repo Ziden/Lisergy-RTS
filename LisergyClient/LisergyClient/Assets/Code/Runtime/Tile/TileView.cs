@@ -3,6 +3,8 @@ using Game;
 using Game.Tile;
 using Game.World;
 using System.Collections.Generic;
+using Assets.Code.Assets.Code.Assets;
+using GameAssets;
 using UnityEngine;
 
 namespace Assets.Code.Views
@@ -14,13 +16,15 @@ namespace Assets.Code.Views
         public bool Decorated { get; set; }
         public override bool Instantiated => GameObject != null;
 
-        private GameObject CloudObject;
-        private PlaneMesh Mesh { get; set; }
+        private bool? _withFog = null;
+        private GameObject _fog;
+        private IAssetService _assets;
 
         public TileView(TileEntity entity)
         {
             Entity = entity;
-            SetCloud(true);
+            _assets = ServiceContainer.Resolve<IAssetService>();
+            SetFog(true);
             if(Entity.GetNeighbor(Direction.SOUTH) == null)
             {
                 AddCloud(Entity.X, Entity.Y-1);
@@ -49,25 +53,33 @@ namespace Assets.Code.Views
             }
         }
 
-        private GameObject AddCloud(int x, int y)
+        private void AddCloud(int x, int y)
         {
-            var prefab = Resources.Load("prefabs/tiles/Cloud");
-            var cloud = MainBehaviour.Instantiate(prefab) as GameObject;
-            cloud.transform.position = new Vector3(x, 0.1f, y);
-            return cloud;
+            _assets.CreateTile(TilePrefab.Cloud, new Vector3(x, 0.1f, y), Quaternion.Euler(90, 0, 0), f => f.name = "near");
         }
 
-        public void SetCloud(bool clouds)
+        public void SetFog(bool fog)
         {
-            if (clouds)
+            if (fog)
             {
-                CloudObject = AddCloud(Entity.X, Entity.Y);
+                _assets.CreateTile(TilePrefab.Cloud, new Vector3(Entity.X, 0.1f, Entity.Y), Quaternion.Euler(90, 0, 0),
+                    o =>
+                    {
+                        if (_withFog.HasValue && !_withFog.Value)
+                        {
+                            Object.Destroy(o);
+                            return;
+                        }
+                        _fog = o;
+                    });
             }
-            else if (CloudObject != null)
+            else if (_fog != null)
             {
-                MainBehaviour.Destroy(CloudObject);
-                CloudObject = null;
+                Object.Destroy(_fog);
+                _fog = null;
             }
+
+            _withFog = fog;
         }
 
         public override void Instantiate()
@@ -98,7 +110,7 @@ namespace Assets.Code.Views
             }
             GameObject.isStatic = true;
             StaticBatchingUtility.Combine(GameObject);
-            SetCloud(false);
+            SetFog(false);
         }
 
 

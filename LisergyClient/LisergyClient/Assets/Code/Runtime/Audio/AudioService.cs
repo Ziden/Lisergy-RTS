@@ -1,18 +1,14 @@
 ﻿
 using Assets.Code.Assets.Code.Assets;
 using System.Collections.Generic;
+using GameAssets;
 using UnityEngine;
 
 namespace Assets.Code.Assets.Code.Audio
 {
-    public enum SoundFx
-    {
-        BUTTON_CLICK
-    }
-
     public interface IAudioService : IGameService
     {
-        void PlaySoundEffect(SoundFx fx, float volume = 1f);
+        void PlaySoundEffect(SoundFX fx, float volume = 1f);
     }
 
 
@@ -29,7 +25,7 @@ namespace Assets.Code.Assets.Code.Audio
             _assets = ServiceContainer.Resolve<IAssetService>();
         }
 
-        public void PlaySoundEffect(SoundFx fx, float volume = 1f)
+        public void PlaySoundEffect(SoundFX fx, float volume = 1f)
         {
             _assets.GetAudio(fx, audio => _audioSource.PlayOneShot(audio, volume));
         }

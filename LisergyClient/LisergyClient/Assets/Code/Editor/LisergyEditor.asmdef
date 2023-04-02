@@ -1,0 +1,17 @@
+{
+    "name": "LisergyEditor",
+    "rootNamespace": "",
+    "references": [
+        "GameAssembly",
+        "Unity.Addressables.Editor"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
