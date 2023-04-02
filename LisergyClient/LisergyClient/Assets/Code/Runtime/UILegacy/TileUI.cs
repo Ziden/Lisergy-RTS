@@ -1,7 +1,9 @@
 ﻿
+using Assets.Code.Assets.Code.Assets;
 using Game;
 using Game.Party;
 using Game.Tile;
+using GameAssets;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,9 +22,18 @@ namespace Assets.Code
             ClientEvents.OnCameraMove += CameraMove;
             ClientEvents.OnSelectParty += SelectParty;
             ClientEvents.OnStartMovementRequest += StartMoveReq;
+            var assets = ServiceContainer.Resolve<IAssetService>();
+            assets.CreateMapObject(MapObjectPrefab.Cursor, Vector3.zero, Quaternion.Euler(0, 0, 0), o =>
+            {
+                o.SetActive(false);
+                _tileCursor = o;
+            });
 
-            _tileCursor = CreateCursor("Cursor");
-            _partyCursor = CreateCursor("UnitCursor");
+            assets.CreateMapObject(MapObjectPrefab.UnitCursor, Vector3.zero, Quaternion.Euler(0, 0, 0), o =>
+            {
+                o.SetActive(false);
+                _partyCursor = o;
+            });
         }
 
         public void StartMoveReq(PartyEntity party, List<TileEntity> path)
@@ -87,14 +98,6 @@ namespace Assets.Code
         private void Inactivate(GameObject cursor)
         {
             cursor.SetActive(false);
-        }
-
-        private GameObject CreateCursor(string name)
-        {
-            var prefab = Resources.Load("prefabs/visuals/"+name);
-            var cursor = MainBehaviour.Instantiate(prefab) as GameObject;
-            cursor.SetActive(false);
-            return cursor;
         }
     }
 }

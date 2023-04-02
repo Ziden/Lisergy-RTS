@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Game.DataTypes;
@@ -23,6 +21,8 @@ namespace Code.Editor
 			{"Units", "UnitPrefab"},
 			{"Effects", "MapFX"},
 			{"Sprites", "SpritePrefab"},
+			{"MapObjects", "MapObjectPrefab"},
+			{"Screens", "UIScreen"},
 		};
 		
 		[MenuItem("Lisergy/Generate Addressable Map")]
