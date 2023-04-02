@@ -19,11 +19,6 @@ namespace Assets.Code.Views
 
         public static GameObject LoadEntity(IEntity entity, Transform parent = null)
         {
-            if (entity is TileEntity tile)
-            {
-                return LoadTile(tile, parent);
-            }
-
             var type = entity.GetType();
             if (!PREFABS.TryGetValue(type, out var prefabLocation))
             {
@@ -32,20 +27,6 @@ namespace Assets.Code.Views
 
             return Initialize(prefabLocation, parent);
         }
-
-
-        private static GameObject LoadTile(TileEntity tile, Transform parent = null)
-        {
-            var tileSpec = StrategyGame.Specs.Tiles[tile.TileId];
-            if (tileSpec.Arts.Count == 0)
-            {
-                throw new Exception("Tile without art!");
-            }
-
-            var art = tileSpec.Arts.First();
-            return Initialize("prefabs/tiles/" + art.Name, parent);
-        }
-
 
         private static GameObject Initialize(string prefabLocation, Transform parent = null)
         {

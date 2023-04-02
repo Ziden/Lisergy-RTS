@@ -15,15 +15,60 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_Data:
     m_SerializedData: []
-  m_GUID: 02c95fdff00d84f4d95bf87caaf538e6
+  m_GUID: 57af0502c40baad4882b9011f1bb4ab0
   m_SerializeEntries:
+  - m_GUID: 3c68636528764394dbd1dcd104d7e3f4
+    m_Address: Assets/Addressables/Prefabs/Tiles/Cloud.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d6fdad717bb94524a913c0a494f246d4
+    m_Address: Assets/Addressables/Prefabs/Tiles/Fog.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02f44fe58ea59d144ba53b2733c995d7
+    m_Address: Assets/Addressables/Prefabs/Tiles/Forest.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99ec30f192f79e7409293c0de4518795
+    m_Address: Assets/Addressables/Prefabs/Tiles/Mountain.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6538429612df1f84db785fbf1074a1a0
+    m_Address: Assets/Addressables/Prefabs/Tiles/Plains.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a39b1fca5da36142a6d804fc1b9f0b3
+    m_Address: Assets/Addressables/Prefabs/Tiles/Plane.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fdf332cb9bd89f34dbe9263e4bd26307
+    m_Address: Assets/Addressables/Prefabs/Tiles/Tree.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 85467e06bec3aeb4eb671696544f94fd
+    m_Address: Assets/Addressables/Prefabs/Tiles/Water.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b5f02c13c0c54aa4c86167bb884a4477
     m_Address: Assets/Addressables/Audio/Sfx/button_click.mp3
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3c68636528764394dbd1dcd104d7e3f4
-    m_Address: Assets/Addressables/Prefabs/Tiles/Cloud.prefab
+  - m_GUID: d953d3262f9252844910fb6edfbb0140
+    m_Address: Assets/Addressables/Prefabs/Buildings/dungeon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6f90bc0e1e507743bdf6aad051d40e5
+    m_Address: Assets/Addressables/Prefabs/Buildings/SimpleHouse.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

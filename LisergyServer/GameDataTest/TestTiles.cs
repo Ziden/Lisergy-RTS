@@ -6,40 +6,34 @@ namespace GameDataTest
 {
     public class TestTiles
     {
+        private static string Addr(string name) => $"Assets/Addressables/Prefabs/Tiles/{name}.prefab";
+        
         public static readonly TileSpec GRASS = new TileSpec(0)
         {
             ID = 0,
             MovementFactor = 1,
-            Arts = new List<ArtSpec>(new ArtSpec[] {
-                  new ArtSpec() { Name = "Plains", Type=ArtType.PREFAB }
-            })
+            Art = new ArtSpec() { Address = Addr("Plains"), Type=ArtType.PREFAB }
         };
 
         public static readonly TileSpec MOUNTAIN = new TileSpec(1)
         {
             ID = 1,
             MovementFactor = 0,
-            Arts = new List<ArtSpec>(new ArtSpec[] {
-                 new ArtSpec() { Name = "Mountain", Type=ArtType.PREFAB }
-            })
+            Art = new ArtSpec() { Address = Addr("Mountain"), Type=ArtType.PREFAB }
         };
 
         public static readonly TileSpec WATER = new TileSpec(2)
         {
             ID = 2,
             MovementFactor = 0.5f,
-            Arts = new List<ArtSpec>(new ArtSpec[] {
-                   new ArtSpec() { Name = "Water", Type=ArtType.PREFAB }
-            })
+            Art = new ArtSpec() { Address = Addr("Water"), Type=ArtType.PREFAB }
         };
 
         public static readonly TileSpec FOREST = new TileSpec(3)
         {
             MovementFactor = 0.8f,
             ID = 3,
-            Arts = new List<ArtSpec>(new ArtSpec[] {
-                new ArtSpec() { Name = "Forest", Type=ArtType.PREFAB }
-            })
+            Art =new ArtSpec() { Address = Addr("Forest"), Type=ArtType.PREFAB }
         };
 
         public static void Generate(ref GameSpec spec)

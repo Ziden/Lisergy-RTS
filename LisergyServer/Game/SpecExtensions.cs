@@ -1,5 +1,6 @@
 ﻿using Game.Battler;
 using Game.Building;
+using Game.Dungeon;
 using Game.Tile;
 using GameData;
 using GameData.Specs;
@@ -21,6 +22,11 @@ namespace Game
         public static TileSpec GetSpec(this TileEntity o)
         {
             return StrategyGame.Specs.Tiles[o.TileId];
+        }
+
+        public static DungeonSpec GetSpec(this DungeonEntity o)
+        {
+            return StrategyGame.Specs.Dungeons[o.SpecID];
         }
     }
 
