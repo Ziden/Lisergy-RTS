@@ -1,17 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using Assets.Code.Assets.Code.Runtime.Movement;
 using Assets.Code.Code.Utils;
 using Assets.Code.Entity;
+using Assets.Code.Views;
 using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Core.PathCore;
-using DG.Tweening.Plugins.Options;
-using Game;
 using Game.Battler;
 using Game.DataTypes;
 using Game.Events.GameEvents;
-using Game.Movement;
 using Game.Party;
 using Game.Tile;
 using UnityEngine;
@@ -20,64 +15,49 @@ namespace Assets.Code.World
 {
     public partial class PartyView
     {
-        private TweenerCore<Vector3, Path, PathOptions> path;
-        private List<TileEntity> interpolingPath;
+        private MovementInterpolator _interpolation;
 
         public void RegisterEvents()
         {
             Entity.Components.RegisterExternalComponentEvents<PartyView, EntityMoveInEvent>(OnMoveIn);
             Entity.BattleGroupLogic.OnBattleIdChanged += OnBattleIdChanged;
+            _interpolation.OnStart += OnMovementStart;
+            _interpolation.OnFinish += OnMovementStop;
+            _interpolation.OnPrepareMoveNext += OnMovementPrepareNext;
             ClientEvents.OnStartMovementRequest += OnPartyMovementStarted;
+        }
+
+        private void OnMovementStart()
+        {
+            foreach (var unit in _unitObjects.Values)
+            {
+                unit.UnitMonoBehaviour.AnimWalking();
+            }
+        }
+
+        private void OnMovementStop()
+        {
+            foreach (var unit in _unitObjects.Values)
+            {
+                unit.UnitMonoBehaviour.AnimIddle();
+            }
+        }
+
+        private void OnMovementPrepareNext(TileView next)
+        {
+            foreach (var unit in _unitObjects.Values)
+            {
+                var lookPos = next.GameObject.transform.position - unit.GameObject.transform.position;
+                lookPos.y = 0;
+                unit.GameObject.transform.DOLookAt(next.GameObject.transform.position, 0.5f, AxisConstraint.Y);
+            }
         }
 
         private void OnPartyMovementStarted(PartyEntity party, List<TileEntity> tiles)
         {
             if (party == this.Entity)
             {
-                var moveComponent = Entity.Components.Get<EntityMovementComponent>();
-                Debug.Log("MoveDelay: " + moveComponent.MoveDelay.TotalSeconds);
-                var duration = (moveComponent.MoveDelay.TotalSeconds + MainBehaviour.Networking.Delta) * tiles.Count;
-                var y = GameObject.transform.position.y;
-                interpolingPath = new List<TileEntity>(tiles);
-                interpolingPath.RemoveAt(0);
-
-                path = GameObject.transform.DOPath(
-                    interpolingPath.Select(t => t.Position(y)).ToArray(),
-                    (float)duration,
-                    PathType.CatmullRom,
-                    PathMode.TopDown2D
-                );
-                path.OnStart(() =>
-                {
-                    Debug.Log("Start");
-                    foreach (var unit in _unitObjects.Values)
-                    {
-                        Debug.Log("U "+unit.GameObject.name);
-                        unit.UnitMonoBehaviour.AnimWalking();
-                    }
-                });
-                path.SetEase(Ease.Linear);
-                path.OnWaypointChange(idx => {
-                    var next = GameView.GetView(interpolingPath[idx]);
-                    foreach(var unit in _unitObjects.Values)
-                    {
-                        var lookPos = next.GameObject.transform.position - unit.GameObject.transform.position;
-                        lookPos.y = 0;
-                        unit.GameObject.transform.DOLookAt(next.GameObject.transform.position, 0.5f, AxisConstraint.Y);
-                    }
-                });
-                path.onComplete += () =>
-                {
-                    path = null;
-                };
-                path.SetAutoKill(true);
-                path.OnKill(() =>
-                {
-                    foreach (var unit in _unitObjects.Values)
-                    {
-                        unit.UnitMonoBehaviour.AnimIddle();
-                    }
-                });
+                _interpolation.Start(tiles);
             }
         }
 
@@ -93,31 +73,10 @@ namespace Assets.Code.World
             {
                 ClientEvents.PartyFinishedMove(view.Entity, ev.FromTile, ev.ToTile);
             }
-        }
-
-
-        public void Move(EntityMoveInEvent ev)
-        {
-            // Receing the tiles from the interpoling task
-            if (interpolingPath?.Count > 0)
+            if (!view._interpolation.Confirmed(ev.ToTile))
             {
-                var first = interpolingPath[0];
-                if (first == ev.ToTile)
-                {
-                    interpolingPath.RemoveAt(0);
-                    if (interpolingPath.Count == 0)
-                    {
-                        Debug.Log("Finished interpolation of " + Entity.Id);
-                    }
-
-                    return;
-                }
-                // Some desynch happend, so the old path is no longer valid
-                path?.Kill();
-                interpolingPath = null;
+                view.GameObject.transform.position = ev.ToTile.Position(view.GameObject.transform.position.y);
             }
-
-            GameObject.transform.position = ev.ToTile.Position(GameObject.transform.position.y);
         }
     }
 }

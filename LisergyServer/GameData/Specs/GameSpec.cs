@@ -36,7 +36,6 @@ namespace GameData
         [NonSerialized]
         public Dictionary<ushort, LootSpec> Loots;
 
-        [NonSerialized]
         public Dictionary<ushort, DungeonSpec> Dungeons;
     }
 }

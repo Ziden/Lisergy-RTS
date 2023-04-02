@@ -1,7 +1,7 @@
-﻿using Assets.Code.Views;
+﻿using Assets.Code.Assets.Code.Assets;
 using Game;
 using Game.Battler;
-using Game.ECS;
+using System;
 using UnityEngine;
 
 namespace Assets.Code.World
@@ -10,31 +10,30 @@ namespace Assets.Code.World
     {
         public GameObject GameObject { get; set; }
         public Unit Unit;
-        public Sprite3D Sprites;
         public UnitMonoBehaviour UnitMonoBehaviour;
+        private IAssetService _assets;
+
 
         public UnitView(Unit unit)
         {
             Unit = unit;
+            _assets = ServiceContainer.Resolve<IAssetService>();
         }
 
-        public GameObject AddToScene()
+        public void AddToScene(Action<GameObject> onAdded)
         {
-            if (GameObject == null)
+            var prefabName = Unit.GetSpec().Art.Address;
+            _assets.CreatePrefab(Unit.GetSpec().Art, Vector3.zero, Quaternion.Euler(0, 0, 0), o =>
             {
-                StackLog.Debug($"Rendering unit {this}");
-                var prefabName = Unit.GetSpec().Art.Name;
-                var prefab = Resources.Load("prefabs/units/"+ prefabName);
-                GameObject = MainBehaviour.Instantiate(prefab) as GameObject;
+                GameObject = o;
                 GameObject.name = $"Unit Spec {Unit.SpecId}";
                 UnitMonoBehaviour = GameObject.GetComponent<UnitMonoBehaviour>();
-                if(UnitMonoBehaviour == null)
+                if (UnitMonoBehaviour == null)
                 {
                     UnitMonoBehaviour = GameObject.AddComponent<UnitMonoBehaviour>();
                 }
-            }
-            return GameObject;
+                onAdded(o);
+            });
         }
-
     }
 }

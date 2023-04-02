@@ -23,10 +23,4 @@ namespace Assets.Code.Views
         IEntity IEntityView.Entity => Entity;
         public abstract void Instantiate();
     }
-
-
-    public interface IMovementLogic
-    {
-        void Move(EntityMoveInEvent ev);
-    }
 }

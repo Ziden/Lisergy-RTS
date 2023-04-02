@@ -10,7 +10,7 @@ namespace GameDataTest
             Id = 13,
             Type = ItemType.RESOURCE,
             Name = "Gold",
-            Art = new ArtSpec() { Name = "items_13", Type = ArtType.SPRITE_SHEET }
+            Art = new ArtSpec() { Address = "items_13", Type = ArtType.SPRITE_SHEET }
         };
 
         public static ItemSpec ORE = new ItemSpec()
@@ -18,7 +18,7 @@ namespace GameDataTest
             Id = 15,
             Type = ItemType.RESOURCE,
             Name = "Ore",
-            Art = new ArtSpec() { Name = "items_15", Type = ArtType.SPRITE_SHEET }
+            Art = new ArtSpec() { Address = "items_15", Type = ArtType.SPRITE_SHEET }
         };
 
         public static void Generate(ref GameSpec spec)

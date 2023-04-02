@@ -8,7 +8,7 @@ namespace GameData
     public struct TileSpec
     {
         public byte ID;
-        public List<ArtSpec> Arts;
+        public ArtSpec Art;
 
         // 1=passable, 0=impassable, 0.5% slower
         public float MovementFactor;
@@ -16,7 +16,7 @@ namespace GameData
         public TileSpec(byte i)
         {
             this.ID = i;
-            this.Arts = new List<ArtSpec>();
+            this.Art = default;
             this.MovementFactor = 1.0f;
         }
     }

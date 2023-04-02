@@ -170,6 +170,11 @@ namespace Game.World
             return null;
         }
 
+        public static int Distance(this TileEntity tile, TileEntity t2)
+        {
+            return Math.Abs(tile.X - t2.X) + Math.Abs(tile.Y - t2.Y);
+        }
+
         public static TileEntity GetNeighborInRange(this TileEntity source, int range, Direction d)
         {
             while (range > 0)
