@@ -1,4 +1,4 @@
-﻿using Assets.Code.Entity;
+﻿using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Views;
 using Game;
 using Game.Building;
@@ -15,9 +15,12 @@ namespace Assets.Code.World
         public override PlayerBuildingEntity Entity { get; }
         public override GameObject GameObject { get; set; }
 
+        private IAssetService _assets;
+
         public PlayerBuildingView(PlayerBuildingEntity e)
         {
             Entity = e;
+            _assets = ServiceContainer.Resolve<IAssetService>();
         }
 
         public override void OnUpdate(PlayerBuildingEntity serverEntity, List<IComponent> syncedComponents)
@@ -31,17 +34,22 @@ namespace Assets.Code.World
 
         public override void Instantiate()
         {
-            var prefab = Resources.Load("prefabs/buildings/" + Entity.SpecID);
-            var tile = GameView.World.GetTile(Entity);
-            var tileView = GameView.GetOrCreateTileView(tile, true);
-            GameObject = MainBehaviour.Instantiate(prefab, tileView.GameObject.transform) as GameObject;
-            GameObject.transform.localPosition = Vector3.zero;
-            foreach (var lod in GameObject.GetComponentsInChildren<LODGroup>())
+            var spec = Entity.GetSpec();
+            _assets.CreatePrefab(spec.Art, Vector3.zero, Quaternion.Euler(0, 0, 0), o =>
             {
-                lod.ForceLOD(2);
-            }
-            StaticBatchingUtility.Combine(GameObject);
-            this.GameObject.SetActive(true);
+                var tile = GameView.World.GetTile(Entity);
+                var tileView = GameView.GetOrCreateTileView(tile, true);
+                GameObject = o;
+                GameObject.transform.parent = tileView.GameObject.transform;
+                GameObject.transform.localPosition = Vector3.zero;
+
+                foreach (var lod in GameObject.GetComponentsInChildren<LODGroup>())
+                {
+                    lod.ForceLOD(2);
+                }
+                StaticBatchingUtility.Combine(GameObject);
+                this.GameObject.SetActive(true);
+            });
         }
     }
 }

@@ -10,7 +10,6 @@ namespace Assets.Code.World
     {
         public GameObject GameObject { get; set; }
         public Unit Unit;
-        public Sprite3D Sprites;
         public UnitMonoBehaviour UnitMonoBehaviour;
 
         public UnitView(Unit unit)
@@ -23,7 +22,7 @@ namespace Assets.Code.World
             if (GameObject == null)
             {
                 StackLog.Debug($"Rendering unit {this}");
-                var prefabName = Unit.GetSpec().Art.Name;
+                var prefabName = Unit.GetSpec().Art.Address;
                 var prefab = Resources.Load("prefabs/units/"+ prefabName);
                 GameObject = MainBehaviour.Instantiate(prefab) as GameObject;
                 GameObject.name = $"Unit Spec {Unit.SpecId}";

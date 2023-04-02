@@ -98,25 +98,23 @@ namespace Assets.Code.Views
             var spec = Entity.GetSpec();
             var chunkView = GameView.GetView<ChunkView>(Entity.Chunk);
             var parent = chunkView.GameObject.transform;
-            
-            _assets.
-            
-            GameObject = EntityLoader.LoadEntity(Entity, parent);
-            GameObject.name = $"Tile_{Entity.X}-{Entity.Y}";
-            GameObject.transform.position = new Vector3(Entity.X, 0, Entity.Y);
-            var tileBhv = GameObject.GetComponent<TileMonoComponent>();
-            Entity.TileId = Entity.TileId;
-            tileBhv.CreateTileDecoration(this);
 
-            foreach (var lod in GameObject.GetComponentsInChildren<LODGroup>())
+            _assets.CreatePrefab(spec.Art, new Vector3(Entity.X, 0, Entity.Y), Quaternion.Euler(0, 0, 0), o =>
             {
-                lod.ForceLOD(2);
-            }
-            GameObject.isStatic = true;
-            StaticBatchingUtility.Combine(GameObject);
-            SetFog(false);
+                GameObject = o;
+                GameObject.name = $"Tile_{Entity.X}-{Entity.Y}";
+                var tileBhv = GameObject.GetComponent<TileMonoComponent>();
+                Entity.TileId = Entity.TileId;
+                tileBhv.CreateTileDecoration(this);
+                foreach (var lod in GameObject.GetComponentsInChildren<LODGroup>())
+                {
+                    lod.ForceLOD(2);
+                }
+                GameObject.isStatic = true;
+                StaticBatchingUtility.Combine(GameObject);
+                SetFog(false);
+            });
         }
-
 
         // TODO: Remove & move calls to listeners in Entity View
         public List<WorldEntity> MovingEntities => Entity.Components.Get<TileHabitants>().EntitiesIn;

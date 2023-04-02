@@ -16,27 +16,15 @@ namespace GameDataTest
         F8 = 1 << 7
     }
 
+
+
     public class TestSpecs
     {
         public static GameSpec Generate()
         {
             GameSpec spec = new GameSpec(1);
 
-
-            // BUILDINGS
-            // CASTLE
-            spec.Buildings[1] = new BuildingSpec(
-               1,
-                1,
-               4
-            );
-            // FARM
-            spec.Buildings[2] = new BuildingSpec(
-               2,
-                2,
-                4
-            );
-
+            TestBuildings.Generate(ref spec);
             TestTiles.Generate(ref spec);
             TestUnitData.Generate(ref spec);
             TestItems.Generate(ref spec);

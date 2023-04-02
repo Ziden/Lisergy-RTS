@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameData.Specs;
+using System;
 
 namespace GameData
 {
@@ -6,13 +7,13 @@ namespace GameData
     public struct BuildingSpec
     {
         public ushort Id;
-        public int ModelID;
+        public ArtSpec Art;
         public byte LOS;
 
-        public BuildingSpec(ushort id, int model, byte los = 4)
+        public BuildingSpec(ushort id, ArtSpec art, byte los = 4)
         {
             this.Id = id;
-            this.ModelID = model;
+            this.Art = art;
             this.LOS = los;
         }
     }
