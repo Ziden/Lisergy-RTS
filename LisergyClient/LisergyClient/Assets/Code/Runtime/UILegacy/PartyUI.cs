@@ -1,4 +1,5 @@
 ﻿using Assets.Code;
+using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Entity;
 using Assets.Code.Views;
 using Assets.Code.World;
@@ -25,6 +26,8 @@ public class PartyUI : IEventListener
     public bool HasSelectedParty { get => _activeParty != -1; }
     public GameObject GameObj { get => _rootObject; }
 
+    private IAssetService _assets;
+
     public PartyUI(GameObject root)
     {
         Log.Debug("Initializing party UI");
@@ -32,7 +35,8 @@ public class PartyUI : IEventListener
         _rootObject.SetActive(true);
         if (_rootObject == null)
             throw new Exception("Could not find PartyUI");
-       
+
+        _assets = ServiceContainer.Resolve<IAssetService>();
         _partyButtons = new Button[4]
         {
             _rootObject.transform.FindDeepChild("Squad1").GetComponent<Button>(),
@@ -164,7 +168,10 @@ public class PartyUI : IEventListener
             MainBehaviour.Destroy(t.gameObject);
         var imageObj = new GameObject("portrait", typeof(Image));
         var image = imageObj.GetComponent<Image>();
-        //image.sprite = LazyLoad.GetSpecificSpriteArt(unit.GetSpec().FaceArt);
+        ServiceContainer.Resolve<IAssetService>().GetSprite(unit.GetSpec().FaceArt, sprite =>
+        {
+            image.sprite = sprite;
+        });
         var parentContainer = parent.GetComponent<RectTransform>();
         if (parentContainer != null)
         {

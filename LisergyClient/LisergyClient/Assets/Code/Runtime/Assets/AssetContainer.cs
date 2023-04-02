@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class AssetContainer<K, T> where T : UnityEngine.Object where K: IComparable, IFormattable, IConvertible
+public class AssetContainer<K, T> where K: IComparable, IFormattable, IConvertible
 {
     private Dictionary<string, AsyncOperationHandle<T>> _loaded = new Dictionary<string, AsyncOperationHandle<T>>();
 
@@ -43,6 +43,7 @@ public class AssetContainer<K, T> where T : UnityEngine.Object where K: ICompara
         onComplete(handle.Result);
     }
 }
+
 
 public class PrefabContainer
 {

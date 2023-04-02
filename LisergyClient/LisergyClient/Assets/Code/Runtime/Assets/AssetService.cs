@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Assets.Code.Assets.Code.Assets
 {
-
     public interface IAssetService : IGameService
     {
         Task GetAudio(SoundFX effect, Action<AudioClip> onComplete);
@@ -14,10 +13,12 @@ namespace Assets.Code.Assets.Code.Assets
         Task CreateTile(TilePrefab tile, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
         Task CreateBuilding(BuildingPrefab b, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
         Task CreatePrefab(ArtSpec spec, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
+        Task GetSprite(ArtSpec spec, Action<Sprite> onComplete);
     }
     
     public class AssetService : IAssetService
     {
+        private AssetContainer<SpritePrefab, Sprite[]> _sprites = new();
         private AssetContainer<SoundFX, AudioClip> _audios = new ();
         private PrefabContainer _prefabs = new();
 
@@ -48,6 +49,10 @@ namespace Assets.Code.Assets.Code.Assets
             await _prefabs.InstantiateAsync(spec.Address, pos, rot, onComplete);
         }
 
+        public async Task GetSprite(ArtSpec spec, Action<Sprite> onComplete)
+        {
+            await _sprites.LoadAsync(spec.Address, sprites => onComplete(sprites[spec.Index]));
+        }
 
         public void OnSceneLoaded() { }
     }

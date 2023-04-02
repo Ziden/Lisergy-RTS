@@ -15,6 +15,5 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
     {
         internal List<TileEntity> InterpolingPath;
         internal TweenerCore<Vector3, Path, PathOptions> TweenPath;
-
     }
 }

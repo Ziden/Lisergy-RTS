@@ -9,7 +9,8 @@ namespace GameDataTest
     public class TestUnitData
     {
         public static string Addr(string name) => $"Assets/Addressables/Prefabs/Units/{name}.prefab";
-
+        public static string AddrFace => $"Assets/Addressables/Sprites/Faces.png";
+      
         private static void AddUnit(GameSpec spec, UnitSpec unitSpec)
         {
             var id = (ushort)spec.Units.Count;
@@ -57,7 +58,7 @@ namespace GameDataTest
                 FaceArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = "Faces",
+                    Address = AddrFace,
                     Index = 2
                 },
                 LOS = 2,
@@ -77,7 +78,7 @@ namespace GameDataTest
                 FaceArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = "Faces",
+                    Address = AddrFace,
                     Index = 1
                 },
                 Stats = AddToBase(
@@ -97,7 +98,7 @@ namespace GameDataTest
                 FaceArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = "Faces",
+                    Address = AddrFace,
                     Index = 0
                 },
                 LOS = 3,

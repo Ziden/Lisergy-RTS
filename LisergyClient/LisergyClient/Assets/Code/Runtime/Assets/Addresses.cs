@@ -42,6 +42,12 @@ namespace GameAssets
 		HalfPath = 14,
 	}
 
+
+	public enum SpritePrefab
+	{
+		Faces = 15,
+	}
+
 	public static class AddressIdMap
 	{
 		public static IReadOnlyDictionary<int, string> IdMap = new Dictionary<int, string>() {
@@ -60,6 +66,7 @@ namespace GameAssets
 			{ 12, "Assets/Addressables/Prefabs/Units/Mage.prefab"},
 			{ 13, "Assets/Addressables/Prefabs/Effects/BattleEffect.prefab"},
 			{ 14, "Assets/Addressables/Prefabs/Effects/HalfPath.prefab"},
+			{ 15, "Assets/Addressables/Sprites/Faces.png"},
 		};
 	}
 }
