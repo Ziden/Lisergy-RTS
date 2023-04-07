@@ -11,6 +11,8 @@ namespace Assets.Code.Views
 {
     public partial class TileView : EntityView<TileEntity>
     {
+        private static GameObject _fogContainer;
+
         public override TileEntity Entity { get; }
         public override GameObject GameObject { get; set; }
         public bool Decorated { get; set; }
@@ -55,16 +57,19 @@ namespace Assets.Code.Views
 
         private void AddCloud(int x, int y)
         {
-            _assets.CreateTile(TilePrefab.Cloud, new Vector3(x, 0.1f, y), Quaternion.Euler(90, 0, 0), f => f.name = "near");
+            if (_fogContainer == null) _fogContainer = new GameObject("FogContainer");
+            _assets.CreateTile(TilePrefab.Cloud, new Vector3(x, 0.1f, y), Quaternion.Euler(90, 0, 0), f => f.transform.parent = _fogContainer.transform);
         }
 
         public void SetFog(bool fog)
         {
             if (fog)
             {
+                if (_fogContainer == null) _fogContainer = new GameObject("FogContainer");
                 _assets.CreateTile(TilePrefab.Cloud, new Vector3(Entity.X, 0.1f, Entity.Y), Quaternion.Euler(90, 0, 0),
                     o =>
                     {
+                        o.transform.parent = _fogContainer.transform;
                         if (_withFog.HasValue && !_withFog.Value)
                         {
                             Object.Destroy(o);
@@ -102,6 +107,7 @@ namespace Assets.Code.Views
             _assets.CreatePrefab(spec.Art, new Vector3(Entity.X, 0, Entity.Y), Quaternion.Euler(0, 0, 0), o =>
             {
                 GameObject = o;
+                GameObject.transform.parent = parent;
                 GameObject.name = $"Tile_{Entity.X}-{Entity.Y}";
                 var tileBhv = GameObject.GetComponent<TileMonoComponent>();
                 Entity.TileId = Entity.TileId;
