@@ -48,6 +48,20 @@ namespace GameAssets
 		Faces = 15,
 	}
 
+
+	public enum MapObjectPrefab
+	{
+		Cursor = 16,
+		UnitCursor = 17,
+	}
+
+
+	public enum UIScreen
+	{
+		LoginScreen = 18,
+		PartySelectBar = 19,
+	}
+
 	public static class AddressIdMap
 	{
 		public static IReadOnlyDictionary<int, string> IdMap = new Dictionary<int, string>() {
@@ -67,6 +81,10 @@ namespace GameAssets
 			{ 13, "Assets/Addressables/Prefabs/Effects/BattleEffect.prefab"},
 			{ 14, "Assets/Addressables/Prefabs/Effects/HalfPath.prefab"},
 			{ 15, "Assets/Addressables/Sprites/Faces.png"},
+			{ 16, "Assets/Addressables/Prefabs/MapObjects/Cursor.prefab"},
+			{ 17, "Assets/Addressables/Prefabs/MapObjects/UnitCursor.prefab"},
+			{ 18, "Assets/Addressables/UIScreens/LoginScreen.uxml"},
+			{ 19, "Assets/Addressables/UIScreens/PartySelectBar.uxml"},
 		};
 	}
 }

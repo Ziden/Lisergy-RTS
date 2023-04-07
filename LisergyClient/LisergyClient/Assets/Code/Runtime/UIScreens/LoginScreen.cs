@@ -1,39 +1,39 @@
+using Assets.Code.Assets.Code.Runtime.UIScreens;
 using Assets.Code.Assets.Code.UIScreens;
 using Game;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
-using UnityEngine;
+using GameAssets;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace Assets.Code
 {
-    public class LoginScreen : MonoBehaviour, IEventListener
+    public class LoginScreen : UITKScreen, IEventListener
     {
-        public VisualElement Root;
-
         public TextField Login;
         public TextField Password;
         public Button Submit;
 
-        void OnEnable()
+        public override UIScreen ScreenAsset => UIScreen.LoginScreen;
+
+        public override void OnBeforeOpen()
         {
             SceneManager.LoadSceneAsync("Login", LoadSceneMode.Additive);
         }
 
-        void OnDisable()
+        public override void OnClose()
         {
             SceneManager.UnloadSceneAsync("Login");
         }
 
-        void Start()
+        public override void OnLoaded(VisualElement root)
         {
             var service = ServiceContainer.Resolve<IScreenService>();
-            Root = service.LoadAndAttach(this, "LoginScreen");
-            Login = Root.Q<TextField>("Login");
-            Password = Root.Q<TextField>("Password");
-            Submit = Root.Q<Button>("LoginButton");
+            Login = root.Q<TextField>("Login");
+            Password = root.Q<TextField>("Password");
+            Submit = root.Q<Button>("LoginButton");
             Submit.clicked += Authenticate;
             MainBehaviour.ServerPackets.Register<AuthResultPacket>(this, OnPlayerAuth);
         }
