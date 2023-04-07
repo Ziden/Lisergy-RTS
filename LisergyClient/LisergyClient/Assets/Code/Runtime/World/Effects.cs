@@ -1,4 +1,5 @@
-﻿using Assets.Code.Views;
+﻿using Assets.Code.Assets.Code.Assets;
+using Assets.Code.Views;
 using Game;
 using Game.DataTypes;
 using Game.ECS;
@@ -39,16 +40,17 @@ namespace Assets.Code.World
             return GetRunning().Effects[t.EntityId].Count > 0;
         }
 
-        // TODO: make generic
-        public static GameObject BattleEffect(EntityType t)
+        public static void BattleEffect(EntityType t)
         {
+            var assets = ServiceContainer.Resolve<IAssetService>();
             var view = GameView.Controller.GetView(t);
-            var prefab = Resources.Load("prefabs/BattleEffect");
-            var obj = MainBehaviour.Instantiate(prefab, view.GameObject.transform) as GameObject;
-            GetRunning().Effects[t.EntityId].Add(obj);
-            GetRunning().Indexes[obj.GetInstanceID()] = t.EntityId;
-            obj.transform.localPosition = new Vector3(0, 0.2f, 0);
-            return obj;
+            assets.CreateMapFX(GameAssets.MapFX.BattleEffect, view.GameObject.transform.position, Quaternion.identity, o =>
+            {
+                o.transform.parent = view.GameObject.transform;
+                GetRunning().Effects[t.EntityId].Add(o);
+                GetRunning().Indexes[o.GetInstanceID()] = t.EntityId;
+                o.transform.localPosition = new Vector3(0, 0.2f, 0);
+            });
         }
     }
 }
