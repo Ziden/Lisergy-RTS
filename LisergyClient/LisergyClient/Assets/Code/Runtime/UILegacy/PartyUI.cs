@@ -30,6 +30,7 @@ public class PartyUI : IEventListener
 
     public PartyUI(GameObject root)
     {
+
         Log.Debug("Initializing party UI");
         _rootObject = root;
         _rootObject.SetActive(true);
@@ -61,6 +62,7 @@ public class PartyUI : IEventListener
 
     private void OnPartyUpdated(PartyView view)
     {
+        /*
         if (view.Entity.IsMine())
         {
             UIManager.PartyUI.DrawAllParties();
@@ -69,6 +71,7 @@ public class PartyUI : IEventListener
         {
             UIManager.PartyUI.SelectParty(view.Entity);
         }
+        */
     }
 
     public void Hide()

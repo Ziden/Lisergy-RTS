@@ -35,12 +35,13 @@ public class CameraBehaviour : MonoBehaviour
         Log.Debug($"Focusing on tile {t}");
 
         var camera = Get();
-        var coroutine = camera.LerpFromTo(camera.transform.position, new Vector3(t.X - 2, 5, t.Y - 2), 0.2f);
+        var coroutine = camera.LerpTo(new Vector3(t.X - 2, 5, t.Y - 2), 0.2f);
         camera.StartCoroutine(coroutine);
     }
 
-    IEnumerator LerpFromTo(Vector3 pos1, Vector3 pos2, float duration)
+    IEnumerator LerpTo(Vector3 pos2, float duration)
     {
+        var pos1 = Get().transform.position;
         lerping = true;
         for (float t = 0f; t < duration; t += Time.deltaTime)
         {
@@ -57,6 +58,7 @@ public class CameraBehaviour : MonoBehaviour
     {
         _instance = this;
         ServiceContainer.InputManager().OnCameraMove += OnCameraMovement;
+        Debug.Log("Camera Initialized");
     }
 
     void OnCameraMovement(Vector2 velocity)

@@ -86,8 +86,8 @@ namespace Assets.Code.UI
         private void OnClickTile(TileEntity tile)
         {
             Log.Debug("Actions click tile");
-            if (UIManager.PartyUI.HasSelectedParty)
-                DisplayActions(UIManager.PartyUI.SelectedParty, tile);
+            //if (UIManager.PartyUI.HasSelectedParty)
+            //    DisplayActions(UIManager.PartyUI.SelectedParty, tile);
         }
 
         public void DisplayActions(PartyEntity party, TileEntity tile)
@@ -126,6 +126,7 @@ namespace Assets.Code.UI
 
         private void MoveToSelectedTile(MovementIntent intent)
         {
+            /*
             var party = UIManager.PartyUI.SelectedParty;
             TileEntity selectedTile = UIManager.TileUI.SelectedTile;
             Log.Debug($"Moving {party} to {selectedTile}");
@@ -139,6 +140,7 @@ namespace Assets.Code.UI
                 Path = path.Select(p => new Position(p.X, p.Y)).ToList(),
                 Intent = intent
             });
+            */
         }
 
         private void GuardButton() { }

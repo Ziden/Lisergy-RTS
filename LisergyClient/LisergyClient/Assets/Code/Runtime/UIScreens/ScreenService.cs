@@ -15,7 +15,6 @@ namespace Assets.Code.Assets.Code.UIScreens
         public GameObject Object;
     }
 
-
     public interface IScreenService : IGameService
     {
         T Get<T>() where T : UITKScreen;

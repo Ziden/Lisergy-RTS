@@ -107,6 +107,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 484da347efc34a6458e9fc70ac0579b9
+    m_Address: Assets/Addressables/UIScreens/LoginScreen.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29602cd6413a7334e90aa70311ec28d4
+    m_Address: Assets/Addressables/UIScreens/PartySelectBar.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b09defdd2ea25a04a9d7584493f44cd4, type: 2}
   m_SchemaSet:

@@ -55,7 +55,7 @@ public class DungeonUI : MonoBehaviour
             var battleUnit = ViewingBattle[x];
             UnitPanel[x].ShowUnit(battleUnit);
         }
-        PartyUI.DrawPartyIcon(UIManager.PartyUI.SelectedParty, PartyFace);
+        //PartyUI.DrawPartyIcon(UIManager.PartyUI.SelectedParty, PartyFace);
     }
 
     public void OnClickTile(TileEntity tile)

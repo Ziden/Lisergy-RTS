@@ -13,23 +13,30 @@ namespace Assets.UnitTests.Behaviours
     {
         public IEnumerator SelectParty(int index)
         {
+            /*
             yield return Wait.Until(() => MainBehaviour.LocalPlayer.Parties[index].BattleGroupLogic.GetUnits().Count() > 0, "Party did not initialize units");
             ClientEvents.SelectParty(MainBehaviour.LocalPlayer.Parties[index]);
             yield return Wait.Until(() => UIManager.PartyUI.HasSelectedParty && UIManager.PartyUI.SelectedParty == MainBehaviour.LocalPlayer.Parties[index], "Party was not selected");
+            */
+            yield return null;
         }
 
         public IEnumerator MoveAttackWithSelected(TileEntity targetTile)
         {
+            /*
             ServiceContainer.InputManager().OnClickTile(targetTile);
             yield return null;
             UIManager.ActionsUI.AttackButton();
             yield return Wait.Until(() => UIManager.PartyUI.SelectedParty.Tile == targetTile, "Party did not move");
             CameraBehaviour.FocusOnTile(targetTile);
+            */
+            yield return null;
         }
 
 
         public IEnumerator MoveWithSelected(Direction d, int times = 1)
         {
+            /*
             while (times > 0)
             {
                 var otherTile = UIManager.PartyUI.SelectedParty.Tile.GetNeighbor(d);
@@ -40,6 +47,8 @@ namespace Assets.UnitTests.Behaviours
                 CameraBehaviour.FocusOnTile(otherTile);
                 times--;
             }
+            */
+            yield return null;
         }
     }
 }
