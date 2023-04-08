@@ -17,10 +17,12 @@ namespace Assets.Code.Assets.Code.Assets
         Task CreatePrefab(ArtSpec spec, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
         Task GetSprite(ArtSpec spec, Action<Sprite> onComplete);
         Task GetScreen(UIScreen screen, Action<VisualTreeAsset> onComplete);
+        Task GetUISetting(UISetting setting, Action<PanelSettings> onComplete);
     }
     
     public class AssetService : IAssetService
     {
+        private AssetContainer<UISetting, PanelSettings> _uiSettings = new();
         private AssetContainer<UIScreen, VisualTreeAsset> _screens = new();
         private AssetContainer<SpritePrefab, Sprite[]> _sprites = new();
         private AssetContainer<SoundFX, AudioClip> _audios = new ();
@@ -66,6 +68,11 @@ namespace Assets.Code.Assets.Code.Assets
         public async Task GetSprite(ArtSpec spec, Action<Sprite> onComplete)
         {
             await _sprites.LoadAsync(spec.Address, sprites => onComplete(sprites[spec.Index]));
+        }
+
+        public async Task GetUISetting(UISetting setting, Action<PanelSettings> onComplete)
+        {
+            await _uiSettings.LoadAsync(setting, onComplete);
         }
 
         public void OnSceneLoaded() { }

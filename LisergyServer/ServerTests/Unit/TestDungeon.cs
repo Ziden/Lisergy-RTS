@@ -20,7 +20,7 @@ namespace Tests
     public class TestDungeon
     {
         private TestGame _game;
-        private List<Position> _path;
+        private List<MapPosition> _path;
         private TestServerPlayer _player;
         private PartyEntity _party;
         private DungeonEntity _dungeon;
@@ -30,7 +30,7 @@ namespace Tests
         {
             _game = new TestGame();
             _player = _game.GetTestPlayer();
-            _path = new List<Position>();
+            _path = new List<MapPosition>();
             _party = _player.GetParty(0);
             _dungeon = new DungeonEntity();
             _dungeon.Tile = _game.World.GetTile(8, 8);

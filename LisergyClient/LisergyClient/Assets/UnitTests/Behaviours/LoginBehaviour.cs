@@ -1,5 +1,6 @@
 ﻿using Assets.Code;
 using Assets.Code.Assets.Code.UIScreens;
+using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.UnitTests.Stubs;
 using Game.Network.ClientPackets;
 using System;

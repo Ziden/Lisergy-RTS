@@ -3,6 +3,7 @@ using Assets.Code.Assets.Code;
 using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Assets.Code.Audio;
 using Assets.Code.Assets.Code.UIScreens;
+using Assets.Code.Assets.Code.UIScreens.Base;
 using Game;
 using Game.Events;
 using Game.Events.Bus;

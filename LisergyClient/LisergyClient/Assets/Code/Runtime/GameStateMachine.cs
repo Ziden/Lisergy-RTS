@@ -1,4 +1,6 @@
 ﻿using Assets.Code.Assets.Code.UIScreens;
+using Assets.Code.Assets.Code.UIScreens.Base;
+using Assets.Code.UI;
 using Stateless;
 using UnityEngine;
 
@@ -26,7 +28,7 @@ namespace Assets.Code.Assets.Code
                 .Permit(Trigger.LoggedIn, State.GameScreen);
 
             _stateMachine.Configure(State.GameScreen)
-                .OnActivate(OnGameScreen);
+                .OnEntry(OnGameScreen);
 
             AddListeners();
             _stateMachine.Activate();
@@ -34,19 +36,23 @@ namespace Assets.Code.Assets.Code
 
         private void AddListeners()
         {
-            ClientEvents.OnPlayerLogin += e => _stateMachine.Fire(Trigger.LoggedIn);
+            ClientEvents.OnPlayerLogin += e =>
+            {
+                Debug.Log("State - onLoggedIn");
+                _stateMachine.Fire(Trigger.LoggedIn);
+            };
         }
 
         private void OnGameScreen()
         {
+            Debug.Log("State - onGameScreen");
             _screens.Open<PartySelectbar>();
         }
 
         private void OnLogin()
         {
-            Debug.Log("Login Screen");
+            Debug.Log("State - onLoginScreen");
             _screens.Open<LoginScreen>();
-           
         }
     }
 }

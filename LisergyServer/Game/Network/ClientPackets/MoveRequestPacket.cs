@@ -1,6 +1,7 @@
 ﻿using Game.Events;
 using Game.Movement;
 using Game.Pathfinder;
+using Game.World;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +12,7 @@ namespace Game.Network.ClientPackets
     {
         public MovementIntent Intent;
         public byte PartyIndex;
-        public List<Position> Path;
+        public List<MapPosition> Path;
     }
 
 }

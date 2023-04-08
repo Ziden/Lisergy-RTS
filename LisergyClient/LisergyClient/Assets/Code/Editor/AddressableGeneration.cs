@@ -23,6 +23,7 @@ namespace Code.Editor
 			{"Sprites", "SpritePrefab"},
 			{"MapObjects", "MapObjectPrefab"},
 			{"Screens", "UIScreen"},
+			{"UISetting", "UISetting"},
 		};
 		
 		[MenuItem("Lisergy/Generate Addressable Map")]

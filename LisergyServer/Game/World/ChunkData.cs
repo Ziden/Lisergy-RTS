@@ -16,7 +16,7 @@ namespace Game.World
     {
         public TileData* _chunkTiles;
         public byte _flags;
-        public Position Position;
+        public MapPosition Position;
 
         public TileData* GetTileData(int x, int y) => _chunkTiles + x + y * GameWorld.CHUNK_SIZE;
 

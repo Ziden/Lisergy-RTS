@@ -15,10 +15,50 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_Data:
     m_SerializedData: []
-  m_GUID: 57af0502c40baad4882b9011f1bb4ab0
+  m_GUID: f82b3ae4bc2c6bd47b19754bd451fd88
   m_SerializeEntries:
+  - m_GUID: ddec5dce738ae084bbf85a7ee8386fcc
+    m_Address: Assets/Addressables/Prefabs/Effects/HalfPath.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df0102968a7703b47a2fd6d2ad48ef8c
+    m_Address: Assets/Addressables
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02572b032dd09624a841e97aafe3d61f
+    m_Address: Assets/Addressables/Prefabs/Effects/BattleEffect.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d953d3262f9252844910fb6edfbb0140
+    m_Address: Assets/Addressables/Prefabs/Buildings/dungeon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6f90bc0e1e507743bdf6aad051d40e5
+    m_Address: Assets/Addressables/Prefabs/Buildings/SimpleHouse.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88dda11852ccfb64e9c61040112396ad
+    m_Address: Assets/Addressables/Prefabs/MapObjects/Cursor.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 829af9d339aca1241a0fb1267780cc2d
+    m_Address: Assets/Addressables/Prefabs/MapObjects/UnitCursor.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3c68636528764394dbd1dcd104d7e3f4
     m_Address: Assets/Addressables/Prefabs/Tiles/Cloud.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45badf52542492c448c2d57c23ed939f
+    m_Address: Assets/Addressables/Prefabs/Tiles/Floor.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -57,38 +97,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b5f02c13c0c54aa4c86167bb884a4477
-    m_Address: Assets/Addressables/Audio/Sfx/button_click.mp3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d953d3262f9252844910fb6edfbb0140
-    m_Address: Assets/Addressables/Prefabs/Buildings/dungeon.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f6f90bc0e1e507743bdf6aad051d40e5
-    m_Address: Assets/Addressables/Prefabs/Buildings/SimpleHouse.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 12aae2521d1c4f446bb08b0e77628ede
     m_Address: Assets/Addressables/Prefabs/Units/Mage.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 02572b032dd09624a841e97aafe3d61f
-    m_Address: Assets/Addressables/Prefabs/Effects/BattleEffect.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ddec5dce738ae084bbf85a7ee8386fcc
-    m_Address: Assets/Addressables/Prefabs/Effects/HalfPath.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 45badf52542492c448c2d57c23ed939f
-    m_Address: Assets/Addressables/Prefabs/Tiles/Floor.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -97,18 +107,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 88dda11852ccfb64e9c61040112396ad
-    m_Address: Assets/Addressables/Prefabs/MapObjects/Cursor.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 829af9d339aca1241a0fb1267780cc2d
-    m_Address: Assets/Addressables/Prefabs/MapObjects/UnitCursor.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 484da347efc34a6458e9fc70ac0579b9
     m_Address: Assets/Addressables/UIScreens/LoginScreen.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29602cd6413a7334e90aa70311ec28d4
+    m_Address: Assets/Addressables/UIScreens/PartySelectBar.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7605a49d87c51514b8b7d44838172917
+    m_Address: Assets/Addressables/UIScreens/UnitActions.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9af3c803aeea3fe43983be9aa4b6a64f
+    m_Address: Assets/Addressables/UISettings/PanelSettings.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -33,7 +33,7 @@ namespace Game
 
         public ushort X => _data.Position.X;
         public ushort Y => _data.Position.Y;
-        public Position Position => _data.Position;
+        public MapPosition Position => _data.Position;
 
         public ChunkMap Map { get; private set; }
         public byte Flags { get => _data._flags; }
@@ -51,7 +51,7 @@ namespace Game
             ;
             _id = GameId.Generate();
             _data = new ChunkData();
-            _data.Position = new Position(x, y);
+            _data.Position = new MapPosition(x, y);
             _data.Allocate();
             Map = w;
             _tiles = tiles;

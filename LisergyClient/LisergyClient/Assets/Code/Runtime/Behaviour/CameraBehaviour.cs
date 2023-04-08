@@ -21,7 +21,7 @@ public class CameraBehaviour : MonoBehaviour
     public float zoomSpeed = 50f;
     public float borderWidth = 10f;
     public bool edgeScrolling = false;
-    public Camera cam;
+    public Camera Camera;
     private float zoomMin = -100;
     private float zoomMax = 200;
     private float mouseX, mouseY;
@@ -110,11 +110,11 @@ public class CameraBehaviour : MonoBehaviour
     {
         // Local variable to temporarily store our camera's position
 
-        Vector3 camPos = cam.transform.position;
+        Vector3 camPos = Camera.transform.position;
 
         // Local variable to store the distance of the camera from the camera_target
 
-        float distance = Vector3.Distance(transform.position, cam.transform.position);
+        float distance = Vector3.Distance(transform.position, Camera.transform.position);
 
 
         // When we scroll our mouse wheel up, zoom in if the camera is not within the minimum distance (set by our zoomMin variable)
@@ -122,7 +122,7 @@ public class CameraBehaviour : MonoBehaviour
         if (Input.GetAxis("Mouse ScrollWheel") > 0f && distance > zoomMin)
 
         {
-            camPos += cam.transform.forward * zoomSpeed * Time.deltaTime;
+            camPos += Camera.transform.forward * zoomSpeed * Time.deltaTime;
         }
 
 
@@ -131,13 +131,13 @@ public class CameraBehaviour : MonoBehaviour
         if (Input.GetAxis("Mouse ScrollWheel") < 0f && distance < zoomMax)
 
         {
-            camPos -= cam.transform.forward * zoomSpeed * Time.deltaTime;
+            camPos -= Camera.transform.forward * zoomSpeed * Time.deltaTime;
         }
 
 
         // Set the camera's position to the position of the temporary variable
 
-        cam.transform.position = camPos;
+        Camera.transform.position = camPos;
     }
 
     // End of file
