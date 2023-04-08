@@ -34,7 +34,7 @@ namespace Tests
 
             #region Move Party
             yield return _client.PartyBehaviour.SelectParty(0);
-            var party = UIManager.PartyUI.SelectedParty;
+            PartyEntity party = null; // UIManager.PartyUI.SelectedParty;
             var east = party.Tile.GetNeighbor(Direction.NORTH);
             yield return _client.PartyBehaviour.MoveWithSelected(Direction.NORTH);
             Assert.That(party.Tile == east, "Party did not move");

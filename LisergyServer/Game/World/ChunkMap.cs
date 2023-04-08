@@ -11,7 +11,7 @@ namespace Game
         private Chunk[,] _chunkMap;
         private CachedChunkMap _cache;
 
-        public Dictionary<ChunkFlag, List<Position>> ByFlags = new Dictionary<ChunkFlag, List<Position>>();
+        public Dictionary<ChunkFlag, List<MapPosition>> ByFlags = new Dictionary<ChunkFlag, List<MapPosition>>();
 
         public int QtdChunksX { get => _chunkMap.GetLength(0); }
         public int QtdChunksY { get => _chunkMap.GetLength(1); }
@@ -40,14 +40,14 @@ namespace Game
             return ref _chunkMap[chunkX, chunkY];
         }
 
-        public ref Chunk GetChunk(in Position pos)
+        public ref Chunk GetChunk(in MapPosition pos)
         {
             return ref _chunkMap[pos.X, pos.Y];
         }
 
         public List<PathFinderNode> FindPath(TileEntity from, TileEntity to)
         {
-            return new PathFinder(_cache).FindPath(new Position(from.X, from.Y), new Position(to.X, to.Y));
+            return new PathFinder(_cache).FindPath(new MapPosition(from.X, from.Y), new MapPosition(to.X, to.Y));
         }
 
         public Chunk GetUnnocupiedNewbieChunk()
@@ -72,7 +72,7 @@ namespace Game
             var chunk = this._chunkMap[chunkX, chunkY];
             chunk.SetFlag((byte)flag);
             if (!ByFlags.ContainsKey(flag))
-                ByFlags.Add(flag, new List<Position>());
+                ByFlags.Add(flag, new List<MapPosition>());
             ByFlags[flag].Add(chunk.Position);
         }
 

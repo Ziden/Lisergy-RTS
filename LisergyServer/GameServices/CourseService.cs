@@ -45,7 +45,7 @@ namespace Game.Services
                 ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
         }
 
-        private CourseTask StartCourse(PartyEntity party, List<Position> sentPath, MovementIntent intent)
+        private CourseTask StartCourse(PartyEntity party, List<MapPosition> sentPath, MovementIntent intent)
         {
             List<TileEntity> path = new List<TileEntity>();
             var owner = party.Owner;

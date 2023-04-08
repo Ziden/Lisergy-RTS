@@ -1,7 +1,9 @@
 ﻿using Assets.Code;
+using Assets.Code.Assets.Code;
 using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Assets.Code.Audio;
 using Assets.Code.Assets.Code.UIScreens;
+using Assets.Code.Assets.Code.UIScreens.Base;
 using Game;
 using Game.Events;
 using Game.Events.Bus;
@@ -15,12 +17,14 @@ public class MainBehaviour : MonoBehaviour
 
     private ServerListener _serverPacketListener;
 
+    private GameStateMachine _stateMachine;
+
     void Start()
     {
         DontDestroyOnLoad(this.gameObject);
         ServiceContainer.OnSceneLoaded();
-        ServiceContainer.Resolve<IScreenService>().Open<LoginScreen>();
         ClientEvents.OnPlayerLogin += OnPlayerLogin;
+        _stateMachine = new GameStateMachine();
     }
 
     public static GameObject CreatePrefab(Object prefab)

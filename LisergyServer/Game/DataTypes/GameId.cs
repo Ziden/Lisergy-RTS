@@ -1,4 +1,5 @@
 ﻿using Game.Pathfinder;
+using Game.World;
 using System;
 using System.Runtime.InteropServices;
 
@@ -103,7 +104,7 @@ namespace Game.DataTypes
             }
         }
 
-        public GameId(Position pos)
+        public GameId(MapPosition pos)
         {
             _bytes = new byte[16];
             fixed (byte* p1 = _bytes)

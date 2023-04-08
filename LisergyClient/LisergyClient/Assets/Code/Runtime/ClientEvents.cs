@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace Assets.Code
 {
+    /// <summary>
+    /// Events fired only internally in client
+    /// </summary>
     public class ClientEvents
     {
         public static event Action<Vector3, Vector3> OnCameraMove;

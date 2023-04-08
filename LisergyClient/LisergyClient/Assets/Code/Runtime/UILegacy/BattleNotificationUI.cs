@@ -56,6 +56,7 @@ public class BattleNotificationUI : MonoBehaviour
 
         for (var x = 0; x < 4; x++)
         {
+            /*
             if (x >= header.Attacker.Units.Length)
                 AttackerFaces[x].SetActive(false);
             else
@@ -65,6 +66,7 @@ public class BattleNotificationUI : MonoBehaviour
                 DefenderFaces[x].SetActive(false);
             else
                 PartyUI.DrawPortrait(header.Defender.Units[x].UnitReference, DefenderFaces[x].transform, 0.75f, 0.75f);
+            */
         }
         SlideDown();
     }
