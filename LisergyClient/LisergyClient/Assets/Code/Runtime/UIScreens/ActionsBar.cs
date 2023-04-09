@@ -9,6 +9,7 @@ using Game.Tile;
 using GameAssets;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -30,6 +31,7 @@ namespace Assets.Code.UI
     {
         public override UIScreen ScreenAsset => UIScreen.UnitActions;
         private Dictionary<EntityAction, Button> _buttons = new Dictionary<UI.EntityAction, Button>();
+        public List<EntityAction> NoPartyActions = new EntityAction[] { EntityAction.CHECK }.ToList();
 
         public override void OnLoaded(VisualElement root)
         {
@@ -61,9 +63,13 @@ namespace Assets.Code.UI
 
         private List<EntityAction> EvaluateActions(PartyEntity party, TileEntity tile)
         {
+            if(!party.IsInMap)
+            {
+                return NoPartyActions;
+            }
             if (party.Tile == tile || tile == null)
             {
-                return null;
+                return NoPartyActions;
             }
             var tileView = GameView.GetView<TileView>(tile);
             var actions = new List<EntityAction>();
@@ -106,7 +112,7 @@ namespace Assets.Code.UI
             var visible = new List<VisualElement>();
             foreach (var kp in _buttons)
             {
-                if (true || actions.Contains(kp.Key))
+                if (actions.Contains(kp.Key))
                 {
                     visible.Add(_buttons[kp.Key]);
                     _buttons[kp.Key].style.display = DisplayStyle.Flex;
@@ -117,7 +123,8 @@ namespace Assets.Code.UI
                 }
             }
             MoveTo(tile);
-            CircularLayoutGroup.ArrangeButtonsInCircle(80, 360 / 2, visible.ToArray());
+            var angle = visible.Count * 45;
+            CircularLayoutGroup.ArrangeButtonsInCircle(80, angle, visible.ToArray());
         }
     }
 }

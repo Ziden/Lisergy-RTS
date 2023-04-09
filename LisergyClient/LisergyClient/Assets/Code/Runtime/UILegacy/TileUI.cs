@@ -14,25 +14,17 @@ namespace Assets.Code
         private TileEntity _selectedTile;
 
         private GameObject _tileCursor;
-        private GameObject _partyCursor;
 
         public TileUI()
         {
             ServiceContainer.InputManager().OnClickTile += ClickTile;
             ClientEvents.OnCameraMove += OnCameraMove;
-            ClientEvents.OnSelectParty += OnSelectParty;
             ClientEvents.OnStartMovementRequest += OnStartMovement;
             var assets = ServiceContainer.Resolve<IAssetService>();
             assets.CreateMapObject(MapObjectPrefab.Cursor, Vector3.zero, Quaternion.Euler(0, 0, 0), o =>
             {
                 o.SetActive(false);
                 _tileCursor = o;
-            });
-
-            assets.CreateMapObject(MapObjectPrefab.UnitCursor, Vector3.zero, Quaternion.Euler(0, 0, 0), o =>
-            {
-                o.SetActive(false);
-                _partyCursor = o;
             });
         }
 
@@ -41,16 +33,6 @@ namespace Assets.Code
             if (IsActive(_tileCursor))
                 Inactivate(_tileCursor);
             _selectedTile = null;
-        }
-
-        private void OnSelectParty(PartyEntity party)
-        {
-            Activate(_partyCursor);
-            var view = GameView.GetView(party);
-            if (view == null) return;
-            _partyCursor.transform.SetParent(view.GameObject.transform);
-            _partyCursor.transform.transform.localPosition = Vector3.zero;
-
         }
 
         private void OnCameraMove(Vector3 old, Vector3 newPos)

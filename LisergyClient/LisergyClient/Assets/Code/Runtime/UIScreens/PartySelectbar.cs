@@ -28,11 +28,19 @@ namespace Assets.Code
         private VisualElement _cursor;
         private Button[] _partyButtons = new Button[4];
         private PathRenderer _pathRenderer;
+        private GameObject _partyCursor;
+
         public override UIScreen ScreenAsset => UIScreen.PartySelectBar;
 
         public PartySelectbar()
         {
             _pathRenderer = new PathRenderer();
+            var assets = ServiceContainer.Resolve<IAssetService>();
+            assets.CreateMapObject(MapObjectPrefab.UnitCursor, Vector3.zero, Quaternion.Euler(0, 0, 0), o =>
+            {
+                o.SetActive(false);
+                _partyCursor = o;
+            });
         }
 
         public override void OnOpen()
@@ -97,7 +105,7 @@ namespace Assets.Code
             var party = view.Entity;
             var units = party.BattleGroupLogic.GetValidUnits().ToList();
             var leader = units[0];
-            ServiceContainer.Resolve<IAssetService>().GetSprite(leader.GetSpec().FaceArt, sprite =>
+            ServiceContainer.Resolve<IAssetService>().GetSprite(leader.GetSpec().IconArt, sprite =>
             {
                 _partyButtons[party.PartyIndex].style.backgroundImage = new StyleBackground(sprite);
             });
@@ -109,14 +117,28 @@ namespace Assets.Code
             var party = MainBehaviour.LocalPlayer.Parties[partyIndex];
             if (party == null) return;
             SelectParty(party);
-            CameraBehaviour.FocusOnTile(party.Tile);
         }
 
         private void SelectParty(PartyEntity party)
         {
             var button = _partyButtons[party.PartyIndex];
             _cursor.style.display = DisplayStyle.Flex;
-            _cursor.style.left = button.worldBound.xMin - _cursor.parent.worldBound.xMin - 4;
+            _cursor.style.left = button.worldBound.xMin - _cursor.parent.worldBound.xMin - 9;
+           
+            if(party.IsInMap)
+            {
+                if(ClientState.SelectedParty == party)
+                    CameraBehaviour.FocusOnTile(party.Tile);
+
+                _partyCursor.SetActive(true);
+                var view = GameView.GetView(party);
+                if (view == null) return;
+                _partyCursor.transform.SetParent(view.GameObject.transform);
+                _partyCursor.transform.transform.localPosition = Vector3.zero;
+            } else
+            {
+                _partyCursor.SetActive(false);
+            }
             ClientEvents.SelectParty(party);
         }
 

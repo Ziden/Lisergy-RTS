@@ -1,0 +1,250 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: BaseGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: BaseGroup
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 4c9e3810dbb5a4240a055fd3d1052da8
+  m_SerializeEntries:
+  - m_GUID: f564210fa52875245a297e2c115f82e3
+    m_Address: Assets/Addressables/Sprites/Badges/alchemy.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4aa938c7957a86f4e89d02bfdd09d504
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_assassin.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eace365ae25e0f24790e03fcfeb86b37
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_barbarian.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 381e4462059564343a1cc7151c9ec212
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_hunter.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dfece0cac72b8eb44ab7d00c0c2f261d
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_mage.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84e233730bdbca447a97a76257ac9b26
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_necro.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3556bb7b79b85e4e969dde0a81b317c
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_paladin.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07b006f41c9969f42bfc49859951c94b
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_priest.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 984e0e0fdaded8e4ab5ae907bab99cd4
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_rogue.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 105f1d1e6275d2f45bc26011ef2cdd8f
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_warrior.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8b63d6546434104da27224db83a102f
+    m_Address: Assets/Addressables/Sprites/Badges/blacksmith_craft.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 37892fbc7431cf64586f4fed33f2795e
+    m_Address: Assets/Addressables/Sprites/Badges/carpentry.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f28e2ab2bfdc1044be799c0fbe8a7bb
+    m_Address: Assets/Addressables/Sprites/Badges/diplomacy.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 31d64aef9bd39604e8cbee7590397522
+    m_Address: Assets/Addressables/Sprites/Badges/farming.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07a51cceb6acc664ea36df43d6e4c32f
+    m_Address: Assets/Addressables/Sprites/Badges/fishing.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd1e5cd791405ec468b510ef7b55047e
+    m_Address: Assets/Addressables/Sprites/Badges/hunting.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43ee29b5a29445a4d8405a256efc8931
+    m_Address: Assets/Addressables/Sprites/Badges/mining.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7612453751ed3ac4a9e438e2b0ff64d8
+    m_Address: Assets/Addressables/Sprites/Badges/tailoring.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 903a090fb95dfe446b41ebed063f6e8b
+    m_Address: Assets/Addressables/Sprites/Faces.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12aae2521d1c4f446bb08b0e77628ede
+    m_Address: Assets/Addressables/Prefabs/Units/Mage.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45badf52542492c448c2d57c23ed939f
+    m_Address: Assets/Addressables/Prefabs/Tiles/Floor.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 293b467a7c617aa47b3f500f45ed3937
+    m_Address: Assets/Addressables/Prefabs/Tiles/Fog50.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c68636528764394dbd1dcd104d7e3f4
+    m_Address: Assets/Addressables/Prefabs/Tiles/FogBlack.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29de4f8a7bec6ba4b88180eb8f72f3d2
+    m_Address: Assets/Addressables/Prefabs/Tiles/FogBorderContainer.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02f44fe58ea59d144ba53b2733c995d7
+    m_Address: Assets/Addressables/Prefabs/Tiles/Forest.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99ec30f192f79e7409293c0de4518795
+    m_Address: Assets/Addressables/Prefabs/Tiles/Mountain.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6538429612df1f84db785fbf1074a1a0
+    m_Address: Assets/Addressables/Prefabs/Tiles/Plains.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a39b1fca5da36142a6d804fc1b9f0b3
+    m_Address: Assets/Addressables/Prefabs/Tiles/Plane.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fdf332cb9bd89f34dbe9263e4bd26307
+    m_Address: Assets/Addressables/Prefabs/Tiles/Tree.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 85467e06bec3aeb4eb671696544f94fd
+    m_Address: Assets/Addressables/Prefabs/Tiles/Water.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88dda11852ccfb64e9c61040112396ad
+    m_Address: Assets/Addressables/Prefabs/MapObjects/Cursor.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 829af9d339aca1241a0fb1267780cc2d
+    m_Address: Assets/Addressables/Prefabs/MapObjects/UnitCursor.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02572b032dd09624a841e97aafe3d61f
+    m_Address: Assets/Addressables/Prefabs/Effects/BattleEffect.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ddec5dce738ae084bbf85a7ee8386fcc
+    m_Address: Assets/Addressables/Prefabs/Effects/HalfPath.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7e9585aa9e17894ca1ba9545b5c0cef
+    m_Address: Assets/Addressables/Prefabs/Buildings/Castle.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d953d3262f9252844910fb6edfbb0140
+    m_Address: Assets/Addressables/Prefabs/Buildings/dungeon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6f90bc0e1e507743bdf6aad051d40e5
+    m_Address: Assets/Addressables/Prefabs/Buildings/SimpleHouse.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 484da347efc34a6458e9fc70ac0579b9
+    m_Address: Assets/Addressables/UIScreens/LoginScreen.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29602cd6413a7334e90aa70311ec28d4
+    m_Address: Assets/Addressables/UIScreens/PartySelectBar.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7605a49d87c51514b8b7d44838172917
+    m_Address: Assets/Addressables/UIScreens/UnitActions.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5311a5284c977b5409a7dca15b20c7ad
+    m_Address: Assets/Addressables/UIScreens/Notifications/BattleWinNotification.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9af3c803aeea3fe43983be9aa4b6a64f
+    m_Address: Assets/Addressables/UISettings/PanelSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5f02c13c0c54aa4c86167bb884a4477
+    m_Address: Assets/Addressables/Audio/Sfx/button_click.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1dc2dd8105b4244ab09c83190f18321
+    m_Address: Assets/Addressables/Audio/Bgm/alexander-nakarada-tavern-loop-one.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: efd6bdf48abeab14aa6adb51744d57e2
+    m_Address: Assets/Addressables/Audio/Bgm/alexander-nakarada-the-vikings.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: b09defdd2ea25a04a9d7584493f44cd4, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 43c8166322a123f4d931705de9dfc798, type: 2}
+    - {fileID: 11400000, guid: eabb91ecb4f1f4f489bf24f7da33dd0f, type: 2}
