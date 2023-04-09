@@ -25,6 +25,8 @@ namespace Game.Battle
             Init(null, units);
         }
 
+        public BattleUnit Leader => Units[0];
+
         private void Init(IBattleableEntity entity, params Unit[] units)
         {
             _entity = entity;

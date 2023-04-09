@@ -19,15 +19,13 @@ namespace Assets.Code.Editor
         {
             if (!assetPath.StartsWith(TexturesFolderPath)) return;
 
+            if (assetPath.Contains("Ui")) return;
             TextureImporter importer = (TextureImporter)assetImporter;
             importer.textureCompression = TextureImporterCompression.Compressed;
             importer.compressionQuality = CompressionQuality;
             importer.maxTextureSize = MaxTextureSize;
             importer.mipmapEnabled = false;
             importer.isReadable = false;
-            importer.alphaIsTransparency = false;
-            importer.alphaSource = TextureImporterAlphaSource.None;
-            importer.filterMode = FilterMode.Point;
         }
     }
 

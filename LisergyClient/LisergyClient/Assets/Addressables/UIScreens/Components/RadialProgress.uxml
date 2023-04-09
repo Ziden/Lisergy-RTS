@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/base.uss?fileID=7433441132597879392&amp;guid=f09695809089cfe4d9eac34818d302c8&amp;type=3#base" />
+    <Assets.Code.Assets.Code.Runtime.UIScreens.Parts.RadialProgress style="background-image: none; rotate: 0;" />
+</ui:UXML>

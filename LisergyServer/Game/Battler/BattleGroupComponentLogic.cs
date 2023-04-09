@@ -48,6 +48,7 @@ namespace Game.Battler
         bool IsDestroyed { get; }
         void NewUnitLine();
         byte CalculateLineOfSight();
+        public Unit Leader { get; }
     }
 
     public class BattleGroupComponentLogic : IBattleComponentsLogic
@@ -102,6 +103,8 @@ namespace Game.Battler
                     _component.UnitLines.Add(value[x]);
             }
         }
+
+        public Unit Leader => GetUnits().First();
 
         public void UpdateUnits(List<Unit> newUnits)
         {

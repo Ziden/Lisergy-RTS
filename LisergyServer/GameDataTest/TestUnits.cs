@@ -9,8 +9,9 @@ namespace GameDataTest
     public class TestUnitData
     {
         public static string Addr(string name) => $"Assets/Addressables/Prefabs/Units/{name}.prefab";
-        public static string AddrFace => $"Assets/Addressables/Sprites/Faces.png";
-      
+
+        public static string AddrFace(string name) => $"Assets/Addressables/Sprites/Badges/{name}.png";
+
         private static void AddUnit(GameSpec spec, UnitSpec unitSpec)
         {
             var id = (ushort)spec.Units.Count;
@@ -55,11 +56,10 @@ namespace GameDataTest
             {
                 Art = new ArtSpec() { Type = ArtType.PREFAB,Address = Addr("Mage") },
                 Name = "Thief",
-                FaceArt = new ArtSpec()
+                IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = AddrFace,
-                    Index = 2
+                    Address = AddrFace("Badge_thief"),
                 },
                 LOS = 2,
                 Stats = AddToBase(
@@ -75,11 +75,10 @@ namespace GameDataTest
                 Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Mage") },
                 Name = "Knight",
                 LOS = 1,
-                FaceArt = new ArtSpec()
+                IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = AddrFace,
-                    Index = 1
+                    Address = AddrFace("Badge_warrior"),
                 },
                 Stats = AddToBase(
                     (Stat.ATK, 1),
@@ -95,11 +94,10 @@ namespace GameDataTest
             {
                 Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Mage") },
                 Name = "Mage",
-                FaceArt = new ArtSpec()
+                IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = AddrFace,
-                    Index = 0
+                    Address = AddrFace("Badge_mage"),
                 },
                 LOS = 3,
                 Stats = AddToBase(

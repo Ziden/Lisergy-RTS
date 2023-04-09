@@ -1,5 +1,4 @@
-﻿using Assets.Code.Views;
-using Game.Tile;
+﻿using Game.Tile;
 using Game.World;
 using GameAssets;
 using System.Collections.Generic;

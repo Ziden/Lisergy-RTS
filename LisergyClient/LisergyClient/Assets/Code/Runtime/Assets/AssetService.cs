@@ -24,7 +24,8 @@ namespace Assets.Code.Assets.Code.Assets
     {
         private AssetContainer<UISetting, PanelSettings> _uiSettings = new();
         private AssetContainer<UIScreen, VisualTreeAsset> _screens = new();
-        private AssetContainer<SpritePrefab, Sprite[]> _sprites = new();
+        private AssetContainer<SpritePrefab, Sprite[]> _spriteSheets = new();
+        private AssetContainer<SpritePrefab, Sprite> _sprites = new();
         private AssetContainer<SoundFX, AudioClip> _audios = new ();
         private PrefabContainer _prefabs = new();
 
@@ -67,7 +68,14 @@ namespace Assets.Code.Assets.Code.Assets
 
         public async Task GetSprite(ArtSpec spec, Action<Sprite> onComplete)
         {
-            await _sprites.LoadAsync(spec.Address, sprites => onComplete(sprites[spec.Index]));
+            if(spec.Type == ArtType.SPRITE_SHEET)
+            {
+                await _spriteSheets.LoadAsync(spec.Address, sprites => onComplete(sprites[spec.Index]));
+            } else
+            {
+                await _sprites.LoadAsync(spec.Address, sprite => onComplete(sprite));
+            }
+            
         }
 
         public async Task GetUISetting(UISetting setting, Action<PanelSettings> onComplete)
