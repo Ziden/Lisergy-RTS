@@ -7,6 +7,8 @@ using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using GameData;
 using System;
+using System.Linq;
+using UnityEngine;
 
 namespace Assets.Code
 {
@@ -36,8 +38,7 @@ namespace Assets.Code
         public void Message(MessagePopupPacket ev)
         {
             // TODO: Message factory
-            if (ev.Type == PopupType.BAD_INPUT)
-                UIManager.Notifications.ShowNotification("Path has obstacles");
+            Debug.LogWarning(ev.Args.First());
         }
 
         [EventMethod]
@@ -45,7 +46,7 @@ namespace Assets.Code
         {
             Log.Debug("Received specs");
             if (_game != null)
-                throw new System.Exception("Received to register specs twice");
+                throw new Exception("Received to register specs twice");
             InitializeWorld(ev.Spec, ev.WorldX, ev.WorldY);
         }
     }

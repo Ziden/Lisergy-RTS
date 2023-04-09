@@ -15,3 +15,39 @@ Button:hover {
 Button:active {
     -unity-background-image-tint-color: gray;
 }
+
+.radial-progress--background {
+    border-left-color: rgba(103, 10, 10, 255);
+    border-right-color: rgba(103, 10, 10, 255);
+    border-top-color: rgba(103, 10, 10, 255);
+    border-bottom-color: rgba(103, 10, 10, 255);
+    border-left-width: 5px;
+    border-right-width: 5px;
+    border-top-width: 5px;
+    border-bottom-width: 5px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    overflow: hidden;
+    border-top-left-radius: 20px;
+}
+
+.radial-progress {
+    min-width: 26px;
+    min-height: 20px;
+    --track-color: red;
+    --progress-color: #30D42D;
+    --percentage-color: white;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    flex-direction: row;
+    justify-content: center;
+    width: 100px; 
+    height: 100px;
+}
+
+.radial-progress__label {
+    -unity-text-align: middle-left;
+    color: var(--percentage-color);
+}

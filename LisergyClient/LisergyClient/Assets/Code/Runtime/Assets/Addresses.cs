@@ -47,20 +47,17 @@ namespace GameAssets
 		Water = 29,
 	}
 
-
 	public enum MapObjectPrefab
 	{
 		Cursor = 30,
 		UnitCursor = 31,
 	}
 
-
 	public enum MapFX
 	{
 		BattleEffect = 32,
 		HalfPath = 33,
 	}
-
 
 	public enum BuildingPrefab
 	{
@@ -69,15 +66,13 @@ namespace GameAssets
 		SimpleHouse = 36,
 	}
 
-
 	public enum UIScreen
 	{
 		LoginScreen = 37,
 		PartySelectBar = 38,
 		UnitActions = 39,
-		BattleWinNotification = 40,
+		BattleNotification = 40,
 	}
-
 
 	public enum UISetting
 	{

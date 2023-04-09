@@ -3,16 +3,11 @@ using Assets.Code.Assets.Code.Runtime;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.Entity;
 using Assets.Code.UI;
-using Assets.Code.Views;
 using Assets.Code.World;
 using Game;
 using Game.Events.Bus;
-using Game.Movement;
-using Game.Network.ClientPackets;
 using Game.Party;
-using Game.Pathfinder;
 using Game.Tile;
-using Game.World;
 using GameAssets;
 using System.Linq;
 using UnityEngine;
@@ -103,8 +98,7 @@ namespace Assets.Code
         public void UpdatePartyIcon(PartyView view)
         {
             var party = view.Entity;
-            var units = party.BattleGroupLogic.GetValidUnits().ToList();
-            var leader = units[0];
+            var leader = party.BattleGroupLogic.Leader;
             ServiceContainer.Resolve<IAssetService>().GetSprite(leader.GetSpec().IconArt, sprite =>
             {
                 _partyButtons[party.PartyIndex].style.backgroundImage = new StyleBackground(sprite);

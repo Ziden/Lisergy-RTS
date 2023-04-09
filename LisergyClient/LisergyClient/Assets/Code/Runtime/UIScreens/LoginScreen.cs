@@ -60,7 +60,6 @@ namespace Assets.Code
                 MainBehaviour.Networking.Send(new JoinWorldPacket());
                 ClientEvents.PlayerLogin(player);
                 ServiceContainer.Resolve<IScreenService>().Close<LoginScreen>();
-                UIManager.Notifications?.ShowNotification("Welcome to Lisergy");
             }
             else
             {

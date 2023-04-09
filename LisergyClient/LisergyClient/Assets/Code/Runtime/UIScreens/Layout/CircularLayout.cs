@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-namespace Assets.Code.Assets.Code.Runtime.UI.Elements
+namespace Assets.Code.Assets.Code.Runtime.UIScreens.Layout
 {
     public class CircularLayoutGroup : LayoutGroup
     {
@@ -50,12 +45,12 @@ namespace Assets.Code.Assets.Code.Runtime.UI.Elements
 
         public override void SetLayoutHorizontal()
         {
-            
+
         }
 
         public override void SetLayoutVertical()
         {
-          
+
         }
     }
 }

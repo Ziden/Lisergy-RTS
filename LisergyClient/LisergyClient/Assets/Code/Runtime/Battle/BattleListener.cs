@@ -1,4 +1,5 @@
-﻿using Assets.Code.World;
+﻿using Assets.Code.Assets.Code.UIScreens.Base;
+using Assets.Code.World;
 using Game;
 using Game.DataTypes;
 using Game.Entity;
@@ -49,7 +50,10 @@ namespace Assets.Code.Battle
             }
 
             Log.Info("Battle result event");
-            UIManager.BattleNotifications.Show(ev.BattleHeader);
+            ServiceContainer.Resolve<IScreenService>().Open<BattleNotificationScreen, BattleNotificationSetup>(new BattleNotificationSetup()
+            {
+                BattleHeader = ev.BattleHeader
+            });
         }
 
         [EventMethod]
