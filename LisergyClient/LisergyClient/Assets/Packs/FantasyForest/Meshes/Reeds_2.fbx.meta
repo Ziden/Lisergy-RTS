@@ -1,29 +1,71 @@
 fileFormatVersion: 2
 guid: 5a37812b0a350784aaf9eedbb1faf4e3
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2100000: Grass_large.004
-    2100002: Material.014
-    2100004: Material.013
-    2100006: Grass_large.003
-    2100008: Grass_large.005
-    2100010: Material.016
-    2100012: Material.015
-    2100014: Grass_large.006
-    2100016: Material.018
-    2100018: Material.017
-    2100020: Grass_large.007
-    2100022: Material.020
-    2100024: Material.019
-    2100026: Grass_large.008
-    2100028: Material.022
-    2100030: Material.021
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Reeds_2
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: //RootNode
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      21: 2100000
+    second: Grass_large.004
+  - first:
+      21: 2100002
+    second: Material.014
+  - first:
+      21: 2100004
+    second: Material.013
+  - first:
+      21: 2100006
+    second: Grass_large.003
+  - first:
+      21: 2100008
+    second: Grass_large.005
+  - first:
+      21: 2100010
+    second: Material.016
+  - first:
+      21: 2100012
+    second: Material.015
+  - first:
+      21: 2100014
+    second: Grass_large.006
+  - first:
+      21: 2100016
+    second: Material.018
+  - first:
+      21: 2100018
+    second: Material.017
+  - first:
+      21: 2100020
+    second: Grass_large.007
+  - first:
+      21: 2100022
+    second: Material.020
+  - first:
+      21: 2100024
+    second: Material.019
+  - first:
+      21: 2100026
+    second: Grass_large.008
+  - first:
+      21: 2100028
+    second: Material.022
+  - first:
+      21: 2100030
+    second: Material.021
+  - first:
+      23: 2300000
+    second: //RootNode
+  - first:
+      33: 3300000
+    second: //RootNode
+  - first:
+      43: 4300000
+    second: Reeds_2
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -31,7 +73,7 @@ ModelImporter:
       name: Material.021
     second: {fileID: 2100000, guid: 3959f89f62c853546b7b6d2868d3e121, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -39,7 +81,8 @@ ModelImporter:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     resampleCurves: 1
-    optimizeGameObjects: 0
+    optimizeGameObjects: 1
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -49,7 +92,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 2
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -57,32 +100,42 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 0
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -91,10 +144,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 0
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -104,13 +157,19 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 0
   humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

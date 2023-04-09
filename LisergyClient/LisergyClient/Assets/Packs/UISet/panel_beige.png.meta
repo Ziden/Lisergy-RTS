@@ -6,7 +6,7 @@ TextureImporter:
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -25,7 +25,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -51,7 +51,7 @@ TextureImporter:
   spritePixelsToUnits: 100
   spriteBorder: {x: 8, y: 10, z: 8, w: 7}
   spriteGenerateFallbackPhysicsShape: 1
-  alphaUsage: 1
+  alphaUsage: 0
   alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 8
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -307,15 +307,15 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       panel_beige_0: 1998283002
-      panel_beige_4: -1233964689
-      panel_beige_7: -1412859976
-      panel_beige_5: 1329668725
       panel_beige_1: 648263892
-      panel_beige_3: 1461427210
-      panel_beige_8: -1291357195
-      panel_beige_6: 1064601874
       panel_beige_2: 1025614094
-  spritePackingTag: 
+      panel_beige_3: 1461427210
+      panel_beige_4: -1233964689
+      panel_beige_5: 1329668725
+      panel_beige_6: 1064601874
+      panel_beige_7: -1412859976
+      panel_beige_8: -1291357195
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
   assetBundleName: 

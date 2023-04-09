@@ -136,7 +136,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal_map_input:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: abdf0ea32c5d9a9459d3e4ead7c70937, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -177,13 +177,13 @@ Material:
     - _AODiff: 2
     - _AO_Intensity: 0.79
     - _AO_shift: 0
-    - _Alpha_cutout_level: 0.752
+    - _Alpha_cutout_level: 0.503
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _Detail_2_level: 0
     - _Detail_Smoothness_shift: 0
-    - _Detail_level: 0.564
+    - _Detail_level: 0.236
     - _DstBlend: 0
     - _Edge_wear: 0
     - _Emmisive_intensity: 0
@@ -201,7 +201,7 @@ Material:
     - _Metalobjectusesmettalicsmoothnesmap: 0
     - _Mettallic_shift: 0
     - _Mode: 0
-    - _Normal_intensity: 1.424
+    - _Normal_intensity: 2
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0

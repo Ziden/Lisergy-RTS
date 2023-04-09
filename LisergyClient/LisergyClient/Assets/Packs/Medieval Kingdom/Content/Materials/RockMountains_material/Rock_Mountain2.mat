@@ -106,7 +106,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AO_shift: 0.832
-    - _Alpha_cutout_level: 1
+    - _Alpha_cutout_level: 0.69
     - _Alpha_cutout_mask_map_input_level: 1
     - _BumpScale: 1
     - _Cutoff: 0
@@ -126,12 +126,12 @@ Material:
     - _Metalobjectusesmettalicsmoothnesmap: 0
     - _Mettallic_shift: 0
     - _Mode: 0
-    - _Normal_intensity: 1.368
+    - _Normal_intensity: 1.146
     - _Normal_map_input_intensity: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
-    - _Smoothness_shift: 2.66
+    - _Smoothness_shift: 1.92
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Tilling: 1
