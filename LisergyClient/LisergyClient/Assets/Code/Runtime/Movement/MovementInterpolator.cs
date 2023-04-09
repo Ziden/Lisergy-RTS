@@ -39,6 +39,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
         /// </summary>
         public bool Confirmed(TileEntity confirmedTile)
         {
+            Debug.Log($"Confirming {confirmedTile}");
             if (Running)
             {
                 if (Next == confirmedTile)
@@ -65,7 +66,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
             var index = _component.InterpolingPath.IndexOf(confirmedTile);
             if (index != -1)
             {
-                Debug.Log("RESYNC");
+                Debug.LogWarning("Resync Movement");
                 _component.InterpolingPath.RemoveRange(0, index);
                 _component.TweenPath.GotoWaypoint(index);
                 return true;

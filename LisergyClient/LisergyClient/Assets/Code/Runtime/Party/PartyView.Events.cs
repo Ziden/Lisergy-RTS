@@ -9,6 +9,7 @@ using Game.DataTypes;
 using Game.Events.GameEvents;
 using Game.Party;
 using Game.Tile;
+using UnityEngine;
 
 namespace Assets.Code.World
 {
@@ -44,6 +45,7 @@ namespace Assets.Code.World
 
         private void OnMovementPrepareNext(TileView next)
         {
+            Debug.Log("Prepare move next");
             foreach (var unit in _unitObjects.Values)
             {
                 var lookPos = next.GameObject.transform.position - unit.GameObject.transform.position;

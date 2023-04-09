@@ -19,16 +19,15 @@ namespace Assets.Code.Battle
     {
         public BattleListener(EventBus<ServerPacket> networkEvents)
         {
+            networkEvents.Register<BattleResultSummaryPacket>(this, BattleSummary);
             networkEvents.Register<BattleResultPacket>(this, BattleFinish);
             networkEvents.Register<BattleStartPacket>(this, BattleStart);
         }
 
         [EventMethod]
-        public void BattleFinish(BattleResultPacket ev)
+        public void BattleSummary(BattleResultSummaryPacket ev)
         {
-            Log.Debug("Received battle finish");
-            MainBehaviour.LocalPlayer.Battles.Add(ev);
-
+            Log.Info($"Battle Summary Received {ev.BattleHeader.BattleID}");
             var pl = MainBehaviour.LocalPlayer;
             var w = GameView.World;
             var def = w.GetOrCreateClientPlayer(ev.BattleHeader.Defender.OwnerID);
@@ -50,10 +49,19 @@ namespace Assets.Code.Battle
             }
 
             Log.Info("Battle result event");
+            /*
             ServiceContainer.Resolve<IScreenService>().Open<BattleNotificationScreen, BattleNotificationSetup>(new BattleNotificationSetup()
             {
                 BattleHeader = ev.BattleHeader
-            });
+            })
+            */
+        }
+
+        [EventMethod]
+        public void BattleFinish(BattleResultPacket ev)
+        {
+            Log.Info($"Battle Finish Received {ev.BattleHeader.BattleID}");
+            MainBehaviour.LocalPlayer.Battles.Add(ev);
         }
 
         [EventMethod]
