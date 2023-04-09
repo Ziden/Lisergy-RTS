@@ -96,19 +96,19 @@ public class TileMonoComponent : MonoBehaviour
         }
         var hillX = Random.Range(1, 4);
         var hillY = Random.Range(1, 4);
-        mesh.Heights[hillX, hillY] = Random.value / 5;
-        mesh.Heights[hillX + 1, hillY] = Random.value / 5;
-        mesh.Heights[hillX, hillY + 1] = Random.value / 5;
-        mesh.Heights[hillX + 1, hillY + 1] = Random.value / 5;
+        mesh.Heights[hillX, hillY] = Random.value / 12;
+        mesh.Heights[hillX + 1, hillY] = Random.value / 12;
+        mesh.Heights[hillX, hillY + 1] = Random.value / 12;
+        mesh.Heights[hillX + 1, hillY + 1] = Random.value / 12;
 
         if (Random.value > 0.5f)
         {
             hillX = Random.Range(1, 4);
             hillY = Random.Range(1, 4);
-            mesh.Heights[hillX, hillY] = Random.value / 4;
-            mesh.Heights[hillX + 1, hillY] = Random.value / 4;
-            mesh.Heights[hillX, hillY + 1] = Random.value / 4;
-            mesh.Heights[hillX + 1, hillY + 1] = Random.value / 4;
+            mesh.Heights[hillX, hillY] = Random.value / 8;
+            mesh.Heights[hillX + 1, hillY] = Random.value / 8;
+            mesh.Heights[hillX, hillY + 1] = Random.value / 8;
+            mesh.Heights[hillX + 1, hillY + 1] = Random.value / 8;
         }
         mesh.Adjust();
     }

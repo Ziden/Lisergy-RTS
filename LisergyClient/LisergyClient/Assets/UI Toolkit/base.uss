@@ -1,0 +1,17 @@
+.unity-base-field-input__input {
+    color: red;
+    border-width: 0;
+}
+
+TextInput {
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+Button:hover {
+    -unity-background-image-tint-color: yellow;
+}
+
+Button:active {
+    -unity-background-image-tint-color: gray;
+}
