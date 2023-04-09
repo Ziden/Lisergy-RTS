@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace Assets.Code.Editor
 {
+    /*
     public class CompressTextures
     {
         [MenuItem("Lisergy/Compress Textures")]
@@ -36,4 +37,5 @@ namespace Assets.Code.Editor
             AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
         }
     }
+    */
 }

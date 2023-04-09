@@ -4,7 +4,7 @@ Shader "beffio/Medieval_Kingdom/Mobile"
 {
 	Properties
 	{
-		_Base_color("Base_color", Color) = (0.427451,0.227451,0.1372549,0)
+		_Base_color("Color", Color) = (0.427451,0.227451,0.1372549,0)
 		_Cutoff( "Mask Clip Value", Float ) = 0
 		_Detail_color("Detail_color", Color) = (0.2720588,0.2720588,0.2720588,0)
 		_Detail_level("Detail_level", Range( 0 , 1)) = 1

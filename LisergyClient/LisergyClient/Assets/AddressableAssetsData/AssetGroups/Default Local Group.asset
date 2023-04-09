@@ -53,17 +53,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3c68636528764394dbd1dcd104d7e3f4
-    m_Address: Assets/Addressables/Prefabs/Tiles/Cloud.prefab
+    m_Address: Assets/Addressables/Prefabs/Tiles/FogBlack.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 45badf52542492c448c2d57c23ed939f
     m_Address: Assets/Addressables/Prefabs/Tiles/Floor.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d6fdad717bb94524a913c0a494f246d4
-    m_Address: Assets/Addressables/Prefabs/Tiles/Fog.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -124,6 +119,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9af3c803aeea3fe43983be9aa4b6a64f
     m_Address: Assets/Addressables/UISettings/PanelSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 293b467a7c617aa47b3f500f45ed3937
+    m_Address: Assets/Addressables/Prefabs/Tiles/Fog50.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
