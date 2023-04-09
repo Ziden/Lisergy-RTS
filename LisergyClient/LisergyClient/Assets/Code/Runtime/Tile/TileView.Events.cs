@@ -1,7 +1,5 @@
-﻿using Game;
-using Game.Events.GameEvents;
+﻿using Game.Events.GameEvents;
 using Game.Tile;
-using UnityEngine;
 
 namespace Assets.Code.Views
 {
@@ -19,20 +17,12 @@ namespace Assets.Code.Views
 
             if (!ev.Visible)
             {
-                view.SetColor(new Color(0.1f, 0.1f, 0.1f));
+                view.SetFogInTileView(true, true);
             }
             else
             {
-                view.SetColor(new Color(1f, 1f, 1f));
+                view.SetFogInTileView(false, true);
                 view.GameObject.SetActive(ev.Visible);
-            }
-        }
-
-        private void SetColor(Color c)
-        {
-            foreach(var r in GameObject.GetComponentsInChildren<Renderer>())
-            {
-                r.material.color = c;
             }
         }
     }

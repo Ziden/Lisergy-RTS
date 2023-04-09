@@ -99,7 +99,8 @@ namespace Code.Editor
 
 		private static string Format(string s)
 		{
-			var x = s.Replace("_", "");
+			var x = s.Replace(" ", "");
+			x = x.Replace("-", "_");
 			if (x.Length == 0) return "null";
 			x = Regex.Replace(x, "([A-Z])([A-Z]+)($|[A-Z])",
 				m => m.Groups[1].Value + m.Groups[2].Value.ToLower() + m.Groups[3].Value);

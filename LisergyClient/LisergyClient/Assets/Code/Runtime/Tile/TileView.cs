@@ -11,38 +11,20 @@ namespace Assets.Code.Views
 {
     public partial class TileView : EntityView<TileEntity>
     {
-        private static GameObject _fogContainer;
-
         public override TileEntity Entity { get; }
         public override GameObject GameObject { get; set; }
         public bool Decorated { get; set; }
         public override bool Instantiated => GameObject != null;
 
-        private bool? _withFog = null;
-        private GameObject _fog;
         private IAssetService _assets;
+
+        public TileView GetNeighbor(Direction d) => GameView.GetView<TileView>(Entity.GetNeighbor(d));
 
         public TileView(TileEntity entity)
         {
             Entity = entity;
             _assets = ServiceContainer.Resolve<IAssetService>();
-            SetFog(true);
-            if(Entity.GetNeighbor(Direction.SOUTH) == null)
-            {
-                AddCloud(Entity.X, Entity.Y-1);
-            }
-            if (Entity.GetNeighbor(Direction.NORTH) == null)
-            {
-                AddCloud(Entity.X, Entity.Y + 1);
-            }
-            if (Entity.GetNeighbor(Direction.EAST) == null)
-            {
-                AddCloud(Entity.X + 1, Entity.Y);
-            }
-            if (Entity.GetNeighbor(Direction.WEST) == null)
-            {
-                AddCloud(Entity.X - 1, Entity.Y);
-            }
+            this.InitializeFog();
         }
 
         public void UpdateFromData(TileData data)
@@ -52,36 +34,6 @@ namespace Assets.Code.Views
             {
                 Instantiate();
                 RegisterEvents();
-            }
-        }
-
-        private void AddCloud(int x, int y)
-        {
-            if (_fogContainer == null) _fogContainer = new GameObject("FogContainer");
-            _assets.CreateTile(TilePrefab.Cloud, new Vector3(x, 0.1f, y), Quaternion.Euler(90, 0, 0), f => f.transform.parent = _fogContainer.transform);
-        }
-
-        public void SetFog(bool fog)
-        {   _withFog = fog;
-            if (fog)
-            {
-                if (_fogContainer == null) _fogContainer = new GameObject("FogContainer");
-                _assets.CreateTile(TilePrefab.Cloud, new Vector3(Entity.X, 0.1f, Entity.Y), Quaternion.Euler(90, 0, 0),
-                    o =>
-                    {
-                        if (_withFog.HasValue && !_withFog.Value)
-                        {
-                            Object.Destroy(o);
-                            return;
-                        }
-                        o.transform.parent = _fogContainer.transform;
-                        _fog = o;
-                    });
-            }
-            else if (_fog != null)
-            {
-                Object.Destroy(_fog);
-                _fog = null;
             }
         }
 
@@ -112,14 +64,11 @@ namespace Assets.Code.Views
                 tileBhv.CreateTileDecoration(this);
                 GameObject.isStatic = true;
                 StaticBatchingUtility.Combine(GameObject);
-                SetFog(false);
+                SetFogInTileView(false, false);
             });
         }
 
-        // TODO: Remove & move calls to listeners in Entity View
-        public List<WorldEntity> MovingEntities => Entity.Components.Get<TileHabitants>().EntitiesIn;
         public WorldEntity Building => Entity.Components.Get<TileHabitants>().Building;
-
 
         public override string ToString()
         {

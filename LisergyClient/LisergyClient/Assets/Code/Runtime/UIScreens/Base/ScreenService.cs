@@ -45,7 +45,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         {
             foreach (var button in element.Query(null, BUTTON_CLASS).Build())
             {
-                button.RegisterCallback<PointerDownEvent>(ev => ServiceContainer.Resolve<IAudioService>().PlaySoundEffect(SoundFX.Buttonclick), TrickleDown.TrickleDown);
+                button.RegisterCallback<PointerDownEvent>(ev => ServiceContainer.Resolve<IAudioService>().PlaySoundEffect(SoundFX.Button_click), TrickleDown.TrickleDown);
             }
         }
 
