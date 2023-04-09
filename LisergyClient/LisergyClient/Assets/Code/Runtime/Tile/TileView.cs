@@ -62,19 +62,19 @@ namespace Assets.Code.Views
         }
 
         public void SetFog(bool fog)
-        {
+        {   _withFog = fog;
             if (fog)
             {
                 if (_fogContainer == null) _fogContainer = new GameObject("FogContainer");
                 _assets.CreateTile(TilePrefab.Cloud, new Vector3(Entity.X, 0.1f, Entity.Y), Quaternion.Euler(90, 0, 0),
                     o =>
                     {
-                        o.transform.parent = _fogContainer.transform;
                         if (_withFog.HasValue && !_withFog.Value)
                         {
                             Object.Destroy(o);
                             return;
                         }
+                        o.transform.parent = _fogContainer.transform;
                         _fog = o;
                     });
             }
@@ -83,8 +83,6 @@ namespace Assets.Code.Views
                 Object.Destroy(_fog);
                 _fog = null;
             }
-
-            _withFog = fog;
         }
 
         public override void Instantiate()
@@ -112,10 +110,6 @@ namespace Assets.Code.Views
                 var tileBhv = GameObject.GetComponent<TileMonoComponent>();
                 Entity.TileId = Entity.TileId;
                 tileBhv.CreateTileDecoration(this);
-                foreach (var lod in GameObject.GetComponentsInChildren<LODGroup>())
-                {
-                    lod.ForceLOD(2);
-                }
                 GameObject.isStatic = true;
                 StaticBatchingUtility.Combine(GameObject);
                 SetFog(false);

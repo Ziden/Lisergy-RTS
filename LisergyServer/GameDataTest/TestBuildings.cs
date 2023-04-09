@@ -15,7 +15,7 @@ namespace GameDataTest
             // CASTLE
             spec.Buildings[1] = new BuildingSpec(
                1,
-               new ArtSpec() { Address = Addr("SimpleHouse") },
+               new ArtSpec() { Address = Addr("Castle") },
                4
             );
             // FARM

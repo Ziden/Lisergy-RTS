@@ -96,19 +96,19 @@ public class TileMonoComponent : MonoBehaviour
         }
         var hillX = Random.Range(1, 4);
         var hillY = Random.Range(1, 4);
-        mesh.Heights[hillX, hillY] = Random.value / 5;
-        mesh.Heights[hillX + 1, hillY] = Random.value / 5;
-        mesh.Heights[hillX, hillY + 1] = Random.value / 5;
-        mesh.Heights[hillX + 1, hillY + 1] = Random.value / 5;
+        mesh.Heights[hillX, hillY] = Random.value / 12;
+        mesh.Heights[hillX + 1, hillY] = Random.value / 12;
+        mesh.Heights[hillX, hillY + 1] = Random.value / 12;
+        mesh.Heights[hillX + 1, hillY + 1] = Random.value / 12;
 
         if (Random.value > 0.5f)
         {
             hillX = Random.Range(1, 4);
             hillY = Random.Range(1, 4);
-            mesh.Heights[hillX, hillY] = Random.value / 4;
-            mesh.Heights[hillX + 1, hillY] = Random.value / 4;
-            mesh.Heights[hillX, hillY + 1] = Random.value / 4;
-            mesh.Heights[hillX + 1, hillY + 1] = Random.value / 4;
+            mesh.Heights[hillX, hillY] = Random.value / 8;
+            mesh.Heights[hillX + 1, hillY] = Random.value / 8;
+            mesh.Heights[hillX, hillY + 1] = Random.value / 8;
+            mesh.Heights[hillX + 1, hillY + 1] = Random.value / 8;
         }
         mesh.Adjust();
     }
@@ -140,7 +140,7 @@ public class TileMonoComponent : MonoBehaviour
 
         if (ChooseOne != null && ChooseOne.Count > 0)
         {
-            var one = ChooseOne[Random.Range(0, ChooseOne.Count - 1)];
+            var one = ChooseOne[Random.Range(0, ChooseOne.Count)];
             foreach (var o in ChooseOne)
             {
                 if (o != one)
@@ -158,12 +158,10 @@ public class TileMonoComponent : MonoBehaviour
         {
             if (RandomizePosition != null)
                 RandomizePosition.Remove(rem);
+            if (RandomizeRotation != null)
+                RandomizeRotation.Remove(rem);
             Destroy(rem);
         }
-
-
-        if (RandomizePosition == null || RandomizePosition.Count == 0)
-            return;
 
         foreach (var obj in RandomizePosition)
         {
@@ -171,13 +169,13 @@ public class TileMonoComponent : MonoBehaviour
             float x = -0.5f + Random.value;
             float y = -0.5f + Random.value;
             obj.transform.localPosition = new Vector3(x, 0, y);
-            obj.transform.rotation = Quaternion.Euler(0, Random.value * 360, 0);
+            obj.transform.localRotation = Quaternion.Euler(0, Random.value * 360, 0);
         }
 
         foreach (var obj in RandomizeRotation)
         {
             if (obj == null) continue;
-            obj.transform.rotation = Quaternion.Euler(0, Random.value * 360, 0);
+            obj.transform.Rotate(new Vector3(0, Random.value * 360, 0), Space.Self);
         }
 
         MakeHills();

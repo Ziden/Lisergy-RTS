@@ -1,166 +1,433 @@
 fileFormatVersion: 2
 guid: af5ec7a734add7742be450d595a22f21
-timeCreated: 1554872074
-licenseType: Store
 ModelImporter:
-  serializedVersion: 19
-  fileIDToRecycleName:
-    100000: Ankle_L
-    100002: Ankle_R
-    100004: Back_Attachment
-    100006: Ball_L
-    100008: Ball_R
-    100010: Cape_Attachment_01
-    100012: Cape_Attachment_02
-    100014: Cape_Attachment_03
-    100016: Cape_Attachment_04
-    100018: //RootNode
-    100020: Chest_Attachment
-    100022: Clavicle_L
-    100024: Clavicle_R
-    100026: Elbow_Attachment_L
-    100028: Elbow_Attachment_R
-    100030: Elbow_L
-    100032: Elbow_R
-    100034: Eyebrows
-    100036: Eyes
-    100038: Finger_01
-    100040: Finger_01 1
-    100042: Finger_02
-    100044: Finger_02 1
-    100046: Finger_03
-    100048: Finger_03 1
-    100050: Finger_04
-    100052: Finger_04 1
-    100054: Hand_L
-    100056: Hand_R
-    100058: Head
-    100060: Head_Attachment
-    100062: Hips
-    100064: Hips_Attachment
-    100066: IndexFinger_01
-    100068: IndexFinger_01 1
-    100070: IndexFinger_02
-    100072: IndexFinger_02 1
-    100074: IndexFinger_03
-    100076: IndexFinger_03 1
-    100078: IndexFinger_04
-    100080: IndexFinger_04 1
-    100082: Knee_Attachment_L
-    100084: Knee_Attachment_R
-    100086: LowerLeg_L
-    100088: LowerLeg_R
-    100090: Neck
-    100092: Root
-    100094: Shoulder_Attachment_L
-    100096: Shoulder_Attachment_R
-    100098: Shoulder_L
-    100100: Shoulder_R
-    100102: Spine_01
-    100104: Spine_02
-    100106: Spine_03
-    100108: Thumb_01
-    100110: Thumb_01 1
-    100112: Thumb_02
-    100114: Thumb_02 1
-    100116: Thumb_03
-    100118: Thumb_03 1
-    100120: Toes_L
-    100122: Toes_R
-    100124: UpperLeg_L
-    100126: UpperLeg_R
-    400000: Ankle_L
-    400002: Ankle_R
-    400004: Back_Attachment
-    400006: Ball_L
-    400008: Ball_R
-    400010: Cape_Attachment_01
-    400012: Cape_Attachment_02
-    400014: Cape_Attachment_03
-    400016: Cape_Attachment_04
-    400018: //RootNode
-    400020: Chest_Attachment
-    400022: Clavicle_L
-    400024: Clavicle_R
-    400026: Elbow_Attachment_L
-    400028: Elbow_Attachment_R
-    400030: Elbow_L
-    400032: Elbow_R
-    400034: Eyebrows
-    400036: Eyes
-    400038: Finger_01
-    400040: Finger_01 1
-    400042: Finger_02
-    400044: Finger_02 1
-    400046: Finger_03
-    400048: Finger_03 1
-    400050: Finger_04
-    400052: Finger_04 1
-    400054: Hand_L
-    400056: Hand_R
-    400058: Head
-    400060: Head_Attachment
-    400062: Hips
-    400064: Hips_Attachment
-    400066: IndexFinger_01
-    400068: IndexFinger_01 1
-    400070: IndexFinger_02
-    400072: IndexFinger_02 1
-    400074: IndexFinger_03
-    400076: IndexFinger_03 1
-    400078: IndexFinger_04
-    400080: IndexFinger_04 1
-    400082: Knee_Attachment_L
-    400084: Knee_Attachment_R
-    400086: LowerLeg_L
-    400088: LowerLeg_R
-    400090: Neck
-    400092: Root
-    400094: Shoulder_Attachment_L
-    400096: Shoulder_Attachment_R
-    400098: Shoulder_L
-    400100: Shoulder_R
-    400102: Spine_01
-    400104: Spine_02
-    400106: Spine_03
-    400108: Thumb_01
-    400110: Thumb_01 1
-    400112: Thumb_02
-    400114: Thumb_02 1
-    400116: Thumb_03
-    400118: Thumb_03 1
-    400120: Toes_L
-    400122: Toes_R
-    400124: UpperLeg_L
-    400126: UpperLeg_R
-    7400000: Take 001
-    9500000: //RootNode
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: Ankle_L
+  - first:
+      1: 100002
+    second: Ankle_R
+  - first:
+      1: 100004
+    second: Back_Attachment
+  - first:
+      1: 100006
+    second: Ball_L
+  - first:
+      1: 100008
+    second: Ball_R
+  - first:
+      1: 100010
+    second: Cape_Attachment_01
+  - first:
+      1: 100012
+    second: Cape_Attachment_02
+  - first:
+      1: 100014
+    second: Cape_Attachment_03
+  - first:
+      1: 100016
+    second: Cape_Attachment_04
+  - first:
+      1: 100018
+    second: //RootNode
+  - first:
+      1: 100020
+    second: Chest_Attachment
+  - first:
+      1: 100022
+    second: Clavicle_L
+  - first:
+      1: 100024
+    second: Clavicle_R
+  - first:
+      1: 100026
+    second: Elbow_Attachment_L
+  - first:
+      1: 100028
+    second: Elbow_Attachment_R
+  - first:
+      1: 100030
+    second: Elbow_L
+  - first:
+      1: 100032
+    second: Elbow_R
+  - first:
+      1: 100034
+    second: Eyebrows
+  - first:
+      1: 100036
+    second: Eyes
+  - first:
+      1: 100038
+    second: Finger_01
+  - first:
+      1: 100040
+    second: Finger_01 1
+  - first:
+      1: 100042
+    second: Finger_02
+  - first:
+      1: 100044
+    second: Finger_02 1
+  - first:
+      1: 100046
+    second: Finger_03
+  - first:
+      1: 100048
+    second: Finger_03 1
+  - first:
+      1: 100050
+    second: Finger_04
+  - first:
+      1: 100052
+    second: Finger_04 1
+  - first:
+      1: 100054
+    second: Hand_L
+  - first:
+      1: 100056
+    second: Hand_R
+  - first:
+      1: 100058
+    second: Head
+  - first:
+      1: 100060
+    second: Head_Attachment
+  - first:
+      1: 100062
+    second: Hips
+  - first:
+      1: 100064
+    second: Hips_Attachment
+  - first:
+      1: 100066
+    second: IndexFinger_01
+  - first:
+      1: 100068
+    second: IndexFinger_01 1
+  - first:
+      1: 100070
+    second: IndexFinger_02
+  - first:
+      1: 100072
+    second: IndexFinger_02 1
+  - first:
+      1: 100074
+    second: IndexFinger_03
+  - first:
+      1: 100076
+    second: IndexFinger_03 1
+  - first:
+      1: 100078
+    second: IndexFinger_04
+  - first:
+      1: 100080
+    second: IndexFinger_04 1
+  - first:
+      1: 100082
+    second: Knee_Attachment_L
+  - first:
+      1: 100084
+    second: Knee_Attachment_R
+  - first:
+      1: 100086
+    second: LowerLeg_L
+  - first:
+      1: 100088
+    second: LowerLeg_R
+  - first:
+      1: 100090
+    second: Neck
+  - first:
+      1: 100092
+    second: Root
+  - first:
+      1: 100094
+    second: Shoulder_Attachment_L
+  - first:
+      1: 100096
+    second: Shoulder_Attachment_R
+  - first:
+      1: 100098
+    second: Shoulder_L
+  - first:
+      1: 100100
+    second: Shoulder_R
+  - first:
+      1: 100102
+    second: Spine_01
+  - first:
+      1: 100104
+    second: Spine_02
+  - first:
+      1: 100106
+    second: Spine_03
+  - first:
+      1: 100108
+    second: Thumb_01
+  - first:
+      1: 100110
+    second: Thumb_01 1
+  - first:
+      1: 100112
+    second: Thumb_02
+  - first:
+      1: 100114
+    second: Thumb_02 1
+  - first:
+      1: 100116
+    second: Thumb_03
+  - first:
+      1: 100118
+    second: Thumb_03 1
+  - first:
+      1: 100120
+    second: Toes_L
+  - first:
+      1: 100122
+    second: Toes_R
+  - first:
+      1: 100124
+    second: UpperLeg_L
+  - first:
+      1: 100126
+    second: UpperLeg_R
+  - first:
+      4: 400000
+    second: Ankle_L
+  - first:
+      4: 400002
+    second: Ankle_R
+  - first:
+      4: 400004
+    second: Back_Attachment
+  - first:
+      4: 400006
+    second: Ball_L
+  - first:
+      4: 400008
+    second: Ball_R
+  - first:
+      4: 400010
+    second: Cape_Attachment_01
+  - first:
+      4: 400012
+    second: Cape_Attachment_02
+  - first:
+      4: 400014
+    second: Cape_Attachment_03
+  - first:
+      4: 400016
+    second: Cape_Attachment_04
+  - first:
+      4: 400018
+    second: //RootNode
+  - first:
+      4: 400020
+    second: Chest_Attachment
+  - first:
+      4: 400022
+    second: Clavicle_L
+  - first:
+      4: 400024
+    second: Clavicle_R
+  - first:
+      4: 400026
+    second: Elbow_Attachment_L
+  - first:
+      4: 400028
+    second: Elbow_Attachment_R
+  - first:
+      4: 400030
+    second: Elbow_L
+  - first:
+      4: 400032
+    second: Elbow_R
+  - first:
+      4: 400034
+    second: Eyebrows
+  - first:
+      4: 400036
+    second: Eyes
+  - first:
+      4: 400038
+    second: Finger_01
+  - first:
+      4: 400040
+    second: Finger_01 1
+  - first:
+      4: 400042
+    second: Finger_02
+  - first:
+      4: 400044
+    second: Finger_02 1
+  - first:
+      4: 400046
+    second: Finger_03
+  - first:
+      4: 400048
+    second: Finger_03 1
+  - first:
+      4: 400050
+    second: Finger_04
+  - first:
+      4: 400052
+    second: Finger_04 1
+  - first:
+      4: 400054
+    second: Hand_L
+  - first:
+      4: 400056
+    second: Hand_R
+  - first:
+      4: 400058
+    second: Head
+  - first:
+      4: 400060
+    second: Head_Attachment
+  - first:
+      4: 400062
+    second: Hips
+  - first:
+      4: 400064
+    second: Hips_Attachment
+  - first:
+      4: 400066
+    second: IndexFinger_01
+  - first:
+      4: 400068
+    second: IndexFinger_01 1
+  - first:
+      4: 400070
+    second: IndexFinger_02
+  - first:
+      4: 400072
+    second: IndexFinger_02 1
+  - first:
+      4: 400074
+    second: IndexFinger_03
+  - first:
+      4: 400076
+    second: IndexFinger_03 1
+  - first:
+      4: 400078
+    second: IndexFinger_04
+  - first:
+      4: 400080
+    second: IndexFinger_04 1
+  - first:
+      4: 400082
+    second: Knee_Attachment_L
+  - first:
+      4: 400084
+    second: Knee_Attachment_R
+  - first:
+      4: 400086
+    second: LowerLeg_L
+  - first:
+      4: 400088
+    second: LowerLeg_R
+  - first:
+      4: 400090
+    second: Neck
+  - first:
+      4: 400092
+    second: Root
+  - first:
+      4: 400094
+    second: Shoulder_Attachment_L
+  - first:
+      4: 400096
+    second: Shoulder_Attachment_R
+  - first:
+      4: 400098
+    second: Shoulder_L
+  - first:
+      4: 400100
+    second: Shoulder_R
+  - first:
+      4: 400102
+    second: Spine_01
+  - first:
+      4: 400104
+    second: Spine_02
+  - first:
+      4: 400106
+    second: Spine_03
+  - first:
+      4: 400108
+    second: Thumb_01
+  - first:
+      4: 400110
+    second: Thumb_01 1
+  - first:
+      4: 400112
+    second: Thumb_02
+  - first:
+      4: 400114
+    second: Thumb_02 1
+  - first:
+      4: 400116
+    second: Thumb_03
+  - first:
+      4: 400118
+    second: Thumb_03 1
+  - first:
+      4: 400120
+    second: Toes_L
+  - first:
+      4: 400122
+    second: Toes_R
+  - first:
+      4: 400124
+    second: UpperLeg_L
+  - first:
+      4: 400126
+    second: UpperLeg_R
+  - first:
+      74: 7400000
+    second: Take 001
+  - first:
+      95: 9500000
+    second: //RootNode
+  externalObjects: {}
   materials:
-    importMaterials: 0
+    materialImportMode: 0
     materialName: 0
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     resampleCurves: 1
-    optimizeGameObjects: 0
+    optimizeGameObjects: 1
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: 
+    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
+      copied configuration does not match position in animation file:\n\t'UpperLeg_L'
+      : position error = 2666.579102 mm\n"
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 3
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 2
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
       name: Take 001
       takeName: Take 001
+      internalID: 0
       firstFrame: 1
       lastFrame: 80
       wrapMode: 0
@@ -331,26 +598,48 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 0
     importBlendShapes: 0
+    importCameras: 0
+    importLights: 0
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 0
     keepQuads: 0
     weldVertices: 0
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 0
+    meshOptimizationFlags: -1
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 0
     normalImportMode: 1
     tangentImportMode: 3
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 1
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human:
     - boneName: Hips
       humanName: Hips
@@ -4860,15 +5149,20 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 038320a534bd8b444b43734860d1a211,
     type: 3}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
+  avatarSetup: 2
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

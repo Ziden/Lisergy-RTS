@@ -1,41 +1,107 @@
 fileFormatVersion: 2
 guid: 24a13632236368f4ba11c9d233add998
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: //RootNode
-    100002: Spruce_5_LOD0
-    100004: Spruce_5_LOD1
-    100006: Spruce_5_LOD2
-    400000: //RootNode
-    400002: Spruce_5_LOD0
-    400004: Spruce_5_LOD1
-    400006: Spruce_5_LOD2
-    2100000: Material.126
-    2100002: spruce_trunk.011
-    2100004: Default OBJ.001
-    2100006: Material.003
-    2100008: spruce_branch.002
-    2100010: spruce_trunk.003
-    2100012: spruce_branch.001
-    2100014: spruce_trunk.001
-    2100016: Material.002
-    2300000: //RootNode
-    2300002: Spruce_5_LOD0
-    2300004: Spruce_5_LOD1
-    2300006: Spruce_5_LOD2
-    3300000: //RootNode
-    3300002: Spruce_5_LOD0
-    3300004: Spruce_5_LOD1
-    3300006: Spruce_5_LOD2
-    4300000: Plane.026
-    4300002: spruce_05
-    4300004: Plane.023
-    4300006: Spruce_5_LOD0
-    4300008: Spruce_5_LOD1
-    4300010: Spruce_5_LOD2
-    20500000: //RootNode
-    2186277476908879412: ImportLogs
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: //RootNode
+  - first:
+      1: 100002
+    second: Spruce_5_LOD0
+  - first:
+      1: 100004
+    second: Spruce_5_LOD1
+  - first:
+      1: 100006
+    second: Spruce_5_LOD2
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      4: 400002
+    second: Spruce_5_LOD0
+  - first:
+      4: 400004
+    second: Spruce_5_LOD1
+  - first:
+      4: 400006
+    second: Spruce_5_LOD2
+  - first:
+      21: 2100000
+    second: Material.126
+  - first:
+      21: 2100002
+    second: spruce_trunk.011
+  - first:
+      21: 2100004
+    second: Default OBJ.001
+  - first:
+      21: 2100006
+    second: Material.003
+  - first:
+      21: 2100008
+    second: spruce_branch.002
+  - first:
+      21: 2100010
+    second: spruce_trunk.003
+  - first:
+      21: 2100012
+    second: spruce_branch.001
+  - first:
+      21: 2100014
+    second: spruce_trunk.001
+  - first:
+      21: 2100016
+    second: Material.002
+  - first:
+      23: 2300000
+    second: //RootNode
+  - first:
+      23: 2300002
+    second: Spruce_5_LOD0
+  - first:
+      23: 2300004
+    second: Spruce_5_LOD1
+  - first:
+      23: 2300006
+    second: Spruce_5_LOD2
+  - first:
+      33: 3300000
+    second: //RootNode
+  - first:
+      33: 3300002
+    second: Spruce_5_LOD0
+  - first:
+      33: 3300004
+    second: Spruce_5_LOD1
+  - first:
+      33: 3300006
+    second: Spruce_5_LOD2
+  - first:
+      43: 4300000
+    second: Plane.026
+  - first:
+      43: 4300002
+    second: spruce_05
+  - first:
+      43: 4300004
+    second: Plane.023
+  - first:
+      43: 4300006
+    second: Spruce_5_LOD0
+  - first:
+      43: 4300008
+    second: Spruce_5_LOD1
+  - first:
+      43: 4300010
+    second: Spruce_5_LOD2
+  - first:
+      205: 20500000
+    second: //RootNode
+  - first:
+      41386430: 2186277476908879412
+    second: ImportLogs
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -73,7 +139,7 @@ ModelImporter:
       name: spruce_trunk.011
     second: {fileID: 2100000, guid: 2da579371d53f9b44a77c50ca20a184b, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -81,7 +147,8 @@ ModelImporter:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     resampleCurves: 1
-    optimizeGameObjects: 0
+    optimizeGameObjects: 1
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -91,7 +158,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 2
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -99,7 +166,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages:
     - 0.25
@@ -109,25 +176,35 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 0
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -136,10 +213,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 0
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -149,13 +226,19 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 0.85
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 0
   humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

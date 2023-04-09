@@ -2,24 +2,35 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: BigBarrell_wood
-  m_Shader: {fileID: 4800000, guid: ca8c7b0a6e455b34a956d170adcc5914, type: 3}
-  m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP
+  m_Shader: {fileID: 4800000, guid: 622e53292efa62c40b5304524c246595, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _METALLICGLOSSMAP
+  - _NORMALMAP
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _AO_Input:
         m_Texture: {fileID: 2800000, guid: f77bc66b9c4f5434ea97a481b8e34fc4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Albedo_smoothness_map_input:
+        m_Texture: {fileID: 2800000, guid: 3320889b6ffef344396a6dc6a830a0d5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Alpha_cutout_mask_map_input:
@@ -46,12 +57,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Detail_mask_2_map_input:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _Detail_mask_1_map_input:
         m_Texture: {fileID: 2800000, guid: 0f8dc076c749f13478e921de7fac9e25, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail_mask_2_map_input:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Edge_mask_map_input:
@@ -66,12 +77,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 680780ef350cbaf409b1851a07c5a09f, type: 3}
+    - _Emmisvie_map_input:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Albedo_smoothness_map_input:
-        m_Texture: {fileID: 2800000, guid: 3320889b6ffef344396a6dc6a830a0d5, type: 3}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 680780ef350cbaf409b1851a07c5a09f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Material_pattern:
@@ -194,16 +205,18 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _AO_Intensity: 1
     - _AO_shift: 0
+    - _Alpha_cutout_level: 0.771
     - _Alpha_cutout_mask_map_input_level: 1
     - _BumpScale: 0.15
     - _Cutoff: 0
     - _DetailNormal_map_inputMapScale: 1
     - _Detail_2_level: 0
     - _Detail_Smoothness_shift: 0
-    - _Detail_level: 0
+    - _Detail_level: 1
     - _Detail_smoothness: 0
     - _DstBlend: 0
     - _Edge_wear: 0
@@ -220,8 +233,10 @@ Material:
     - _Material_Smoothness_shift: 1
     - _Metal_object: 0
     - _Metallic: 0
+    - _Metalobjectusesmettalicsmoothnesmap: 0
     - _Mettallic_shift: 0
     - _Mode: 0
+    - _Normal_intensity: 2
     - _Normal_map_inputIntensity: 0.5
     - _Normal_map_input_intensity: 0.5
     - _OcclusionStrength: 1
@@ -230,9 +245,11 @@ Material:
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _Smoothness_Shift: 0
+    - _Smoothness_shift: 1.06
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Tiling: 1
+    - _Tilling: 1
     - _UVSec: 0
     - _Wood_Smoothness: 0.587
     - _ZWrite: 1
@@ -247,8 +264,9 @@ Material:
     - _Color3: {r: 0.18431373, g: 0.46274513, b: 0.40784317, a: 0}
     - _Color4: {r: 0.42745098, g: 0.22745097, b: 0.13725486, a: 0}
     - _Detail_2_color: {r: 0, g: 0.9779412, b: 0.7756083, a: 0}
-    - _Detail_color: {r: 0, g: 0.9779412, b: 0.7756083, a: 0}
+    - _Detail_color: {r: 0.6415094, g: 0.58715916, b: 0.24510503, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Emmisive_color: {r: 0.9779412, g: 0.9210103, b: 0.6831207, a: 0}
     - _Emmsivie_color: {r: 0.9779412, g: 0.9210103, b: 0.68312067, a: 0}
     - _Material_Tiling: {r: 1, g: 1, b: 0, a: 0}
     - _Paint_color: {r: 0.18431339, g: 0.46274477, b: 0.40784281, a: 0}
@@ -257,3 +275,4 @@ Material:
     - _Wood_base: {r: 0.7279412, g: 0.31109607, b: 0.12310725, a: 0}
     - _Wood_tiling: {r: 1, g: 1, b: 0, a: 0}
     - _paint_Color: {r: 0.18431336, g: 0.46274477, b: 0.40784287, a: 0}
+  m_BuildTextureStacks: []

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 
   m_DefaultFontAsset: {fileID: 0}
-  m_DefaultFontAssetPath: Fonts & Materials/
+  m_DefaultFontAssetPath: 
   m_FallbackFontAssets: []
   m_MatchMaterialPreset: 0
   m_MissingCharacterUnicode: 0
