@@ -99,7 +99,7 @@ Material:
     - _GlossyReflections: 1
     - _Metallic: 0.619
     - _Mode: 0
-    - _Normal_intensity: 0.236
+    - _Normal_intensity: 0.993
     - _OcclusionStrength: 1
     - _Parallax: 0.08
     - _SmoothnessTextureChannel: 0
@@ -113,7 +113,7 @@ Material:
     m_Colors:
     - _Base_color: {r: 0.34721842, g: 0.7075472, b: 0.33708617, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Detail_color: {r: 0.23558326, g: 0.6886792, b: 0.19815768, a: 0}
+    - _Detail_color: {r: 0.08088002, g: 0.3207547, b: 0.062032744, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmisive_color: {r: 0.9779412, g: 0.9210103, b: 0.6831207, a: 0}
   m_BuildTextureStacks: []

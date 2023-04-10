@@ -7,10 +7,14 @@ using Assets.Code.Assets.Code.UIScreens.Base;
 using Game;
 using Game.Events;
 using Game.Events.Bus;
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class MainBehaviour : MonoBehaviour
 {
+    private static MainBehaviour _instance;
+
     public static Networking Networking { get; private set; }
     public static LocalPlayer LocalPlayer { get; private set; }
     public static EventBus<ServerPacket> ServerPackets { get; set; }
@@ -27,7 +31,22 @@ public class MainBehaviour : MonoBehaviour
         _stateMachine = new GameStateMachine();
     }
 
-    public static GameObject CreatePrefab(Object prefab)
+    public static void RunInCoroutine(Action a, float seconds)
+    {
+        RunCoroutine(Coroutine(a, seconds));
+    }
+    public static void RunCoroutine(IEnumerator coroutine)
+    {
+        _instance.StartCoroutine(coroutine);
+    }
+
+    private static IEnumerator Coroutine(Action a, float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        a();
+    }
+
+    public static GameObject CreatePrefab(UnityEngine.Object prefab)
     {
         return Instantiate(prefab) as GameObject;
     }
@@ -56,6 +75,7 @@ public class MainBehaviour : MonoBehaviour
 
     void Awake()
     {
+        _instance = this;
         Networking = new Networking();
         ServerPackets = new EventBus<ServerPacket>();
         ConfigureUnity();

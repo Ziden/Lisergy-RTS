@@ -1,5 +1,7 @@
+using Assets.Code.Assets.Code.Runtime.UIScreens;
 using Assets.Code.Assets.Code.Runtime.UIScreens.Parts;
 using Assets.Code.Assets.Code.UIScreens.Base;
+using Game;
 using Game.Battle;
 using Game.Events.Bus;
 using GameAssets;
@@ -14,26 +16,28 @@ namespace Assets.Code
         public Action<BattleHeader> OnCheckItemDeltas;
     }
 
-    public class BattleNotificationScreen : UITKScreen, IEventListener
+    public class BattleNotificationScreen : Notification, IEventListener
     {
         public override UIScreen ScreenAsset => UIScreen.BattleNotification;
 
-        public override void OnLoaded(VisualElement root) => Root.Q().style.top = -100;
-        public override void OnClose() => Root.Q().style.top = -100;
         public override void OnOpen()
         {
             var popup = Root.Q();
             popup.style.top = 0;
             var setup = GetSetup<BattleNotificationSetup>();
             var win = IsWin(setup.BattleHeader);
-            popup.Query(className: ".outcome-loose").ForEach(e => e.style.display = win ? DisplayStyle.None : DisplayStyle.Flex);
-            popup.Query(className: ".outcome-win").ForEach(e => e.style.display = win ? DisplayStyle.Flex : DisplayStyle.None);
+            popup.Query(className: "outcome-loose").ForEach(e => e.style.display = win ? DisplayStyle.None : DisplayStyle.Flex);
+            popup.Query(className: "outcome-win").ForEach(e => e.style.display = win ? DisplayStyle.Flex : DisplayStyle.None);
 
-            var attacker = popup.Q<PartyButton>("PartyButton-Mine");
-            attacker.DisplayLeader(setup.BattleHeader.Attacker.Leader.UnitReference);
+            var attacker = popup.Q<VisualElement>("PartyButton-Attacker");
+            var t = attacker.GetType();
+            var attackerLeader = setup.BattleHeader.Attacker.Leader.UnitReference;
+            PartyButton.DisplayLeader(attacker, attackerLeader);
 
-            var defender = popup.Q<PartyButton>("PartyButton-Enemy-1");
-            defender.DisplayLeader(setup.BattleHeader.Defender.Leader.UnitReference);
+
+            var defender = popup.Q<VisualElement>("PartyButton-Defender-1");
+            PartyButton.DisplayLeader(defender, setup.BattleHeader.Defender.Leader.UnitReference);
+            base.OnOpen();
         }
 
         private bool IsWin(BattleHeader header)

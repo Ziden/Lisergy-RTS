@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Assets.Code.Code.Utils;
 using UnityEngine;
 using Assets.Code.Assets.Code.Runtime.Movement;
+using Game;
 
 namespace Assets.Code.World
 {
@@ -45,7 +46,7 @@ namespace Assets.Code.World
             GameObject.transform.SetParent(Container.transform);
             GameObject.transform.position = Entity.Tile.Position(0.2f);
             GameObject.SetActive(true);
-            StackLog.Debug($"Created new party instance {this}");
+            Log.Debug($"Created new party instance {this}");
         }
 
         private static GameObject Container

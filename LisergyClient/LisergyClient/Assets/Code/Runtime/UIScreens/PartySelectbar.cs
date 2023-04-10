@@ -10,6 +10,7 @@ using Game.Party;
 using Game.Tile;
 using GameAssets;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -35,6 +36,7 @@ namespace Assets.Code
             {
                 o.SetActive(false);
                 _partyCursor = o;
+                PlaceCursorOnParty(ClientState.SelectedParty);
             });
         }
 
@@ -72,7 +74,8 @@ namespace Assets.Code
             if (ScreenService.IsOpen<ActionsBar>()) ScreenService.Close<ActionsBar>();
             if (ClientState.SelectedParty != null)
             {
-                ScreenService.Open<ActionsBar, ActionsBarSetup>(new ActionsBarSetup() { 
+                ScreenService.Open<ActionsBar, ActionsBarSetup>(new ActionsBarSetup()
+                {
                     Party = ClientState.SelectedParty,
                     Tile = tile,
                     OnChosenAction = OnActionChosen
@@ -88,7 +91,7 @@ namespace Assets.Code
 
         private void OnPartyUpdated(PartyView view)
         {
-            if(view.Entity.IsMine() && view.IsPartyDeployed)
+            if (view.Entity.IsMine() && view.IsPartyDeployed)
             {
                 UpdatePartyIcon(view);
                 if (ClientState.SelectedParty == null) SelectParty(view.Entity);
@@ -118,22 +121,32 @@ namespace Assets.Code
             var button = _partyButtons[party.PartyIndex];
             _cursor.style.display = DisplayStyle.Flex;
             _cursor.style.left = button.worldBound.xMin - _cursor.parent.worldBound.xMin - 9;
-           
-            if(party.IsInMap)
+
+            if (party.IsInMap)
             {
-                if(ClientState.SelectedParty == party)
+                if (ClientState.SelectedParty == party)
                     CameraBehaviour.FocusOnTile(party.Tile);
 
-                _partyCursor.SetActive(true);
-                var view = GameView.GetView(party);
-                if (view == null) return;
-                _partyCursor.transform.SetParent(view.GameObject.transform);
-                _partyCursor.transform.transform.localPosition = Vector3.zero;
-            } else
+                PlaceCursorOnParty(party);
+
+            }
+            else
             {
                 _partyCursor.SetActive(false);
             }
             ClientEvents.SelectParty(party);
+        }
+
+        private void PlaceCursorOnParty(PartyEntity party)
+        {
+            if (_partyCursor == null || party == null) return;
+
+            _partyCursor.SetActive(true);
+            var view = GameView.GetView(party);
+            if (view == null) return;
+            _partyCursor.transform.SetParent(view.GameObject.transform);
+            _partyCursor.transform.transform.localPosition = Vector3.zero;
+
         }
 
         private void HidePartyInfo()

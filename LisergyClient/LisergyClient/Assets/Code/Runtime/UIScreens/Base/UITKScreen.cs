@@ -1,5 +1,6 @@
 ﻿using Assets.Code.Assets.Code.UIScreens;
 using GameAssets;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Assets.Code.Assets.Code.UIScreens.Base
@@ -14,11 +15,14 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
     /// </summary>
     public abstract class UITKScreen
     {
+        internal IPanel _panel;
         internal UIScreenSetup _setup;
         internal IScreenService _screenService;
         internal VisualElement _root;
 
         public IScreenService ScreenService => _screenService;
+
+        public IPanel Panel;
 
         public VisualElement Root => _root;
         public abstract UIScreen ScreenAsset { get; }
@@ -31,6 +35,5 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         public void Show() => Root.style.visibility = Visibility.Visible;
         public bool IsHidden() => Root.style.visibility == Visibility.Hidden;
         public T GetSetup<T>() => (T)_setup;
-
     }
 }

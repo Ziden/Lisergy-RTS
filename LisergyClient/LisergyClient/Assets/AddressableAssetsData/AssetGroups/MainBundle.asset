@@ -112,8 +112,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4aa938c7957a86f4e89d02bfdd09d504
-    m_Address: Assets/Addressables/Sprites/Badges/Badge_assassin.PNG
+  - m_GUID: 33e68cf508fdadc449bfcb58791d6cba
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_assassin.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -123,7 +123,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 381e4462059564343a1cc7151c9ec212
-    m_Address: Assets/Addressables/Sprites/Badges/Badge_hunter.PNG
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_hunter.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -138,17 +138,17 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c3556bb7b79b85e4e969dde0a81b317c
-    m_Address: Assets/Addressables/Sprites/Badges/Badge_paladin.PNG
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_paladin.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 07b006f41c9969f42bfc49859951c94b
-    m_Address: Assets/Addressables/Sprites/Badges/Badge_priest.PNG
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_priest.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 984e0e0fdaded8e4ab5ae907bab99cd4
-    m_Address: Assets/Addressables/Sprites/Badges/Badge_rogue.PNG
+    m_Address: Assets/Addressables/Sprites/Badges/Badge_rogue.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -158,12 +158,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f8b63d6546434104da27224db83a102f
-    m_Address: Assets/Addressables/Sprites/Badges/blacksmith_craft.PNG
+    m_Address: Assets/Addressables/Sprites/Badges/blacksmith_craft.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 37892fbc7431cf64586f4fed33f2795e
-    m_Address: Assets/Addressables/Sprites/Badges/carpentry.PNG
+    m_Address: Assets/Addressables/Sprites/Badges/carpentry.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -178,12 +178,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd1e5cd791405ec468b510ef7b55047e
-    m_Address: Assets/Addressables/Sprites/Badges/hunting.PNG
+    m_Address: Assets/Addressables/Sprites/Badges/hunting.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 07a51cceb6acc664ea36df43d6e4c32f
-    m_Address: Assets/Addressables/Sprites/Badges/fishing.PNG
+    m_Address: Assets/Addressables/Sprites/Badges/fishing.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -193,7 +193,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5f28e2ab2bfdc1044be799c0fbe8a7bb
-    m_Address: Assets/Addressables/Sprites/Badges/diplomacy.PNG
+    m_Address: Assets/Addressables/Sprites/Badges/diplomacy.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -212,13 +212,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 74a2f0793cb29bd4cafd65a68762332b
-    m_Address: Assets/Addressables/UIScreens/Components/PartyButton.uxml
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c2d1057aebdfa034bb0943a31096f9c9
-    m_Address: Assets/Addressables/UIScreens/Components/RadialProgress.uxml
+  - m_GUID: 9af3c803aeea3fe43983be9aa4b6a64f
+    m_Address: Assets/Addressables/UISettings/PanelSettings.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -227,8 +222,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9af3c803aeea3fe43983be9aa4b6a64f
-    m_Address: Assets/Addressables/UISettings/PanelSettings.asset
+  - m_GUID: 903a090fb95dfe446b41ebed063f6e8b
+    m_Address: Assets/Addressables/Sprites/Faces.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74a2f0793cb29bd4cafd65a68762332b
+    m_Address: Assets/Addressables/UIScreens/Components/PartyButton.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2d1057aebdfa034bb0943a31096f9c9
+    m_Address: Assets/Addressables/UIScreens/Components/RadialProgress.uxml
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

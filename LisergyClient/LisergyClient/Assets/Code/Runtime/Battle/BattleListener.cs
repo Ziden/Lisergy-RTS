@@ -49,12 +49,10 @@ namespace Assets.Code.Battle
             }
 
             Log.Info("Battle result event");
-            /*
             ServiceContainer.Resolve<IScreenService>().Open<BattleNotificationScreen, BattleNotificationSetup>(new BattleNotificationSetup()
             {
                 BattleHeader = ev.BattleHeader
-            })
-            */
+            });
         }
 
         [EventMethod]

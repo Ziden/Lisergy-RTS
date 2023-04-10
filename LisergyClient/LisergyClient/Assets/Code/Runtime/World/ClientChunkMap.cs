@@ -20,13 +20,13 @@ namespace Assets.Code.World
         {
             if (!ValidCoords(tileX, tileY))
             {
-                StackLog.Debug($"Invalid coords {tileX}-{tileY}");
+                Log.Debug($"Invalid coords {tileX}-{tileY}");
                 return null;
             }
             var tile = base.GetTile(tileX, tileY);
             if (tile == null)
             {
-                StackLog.Debug($"Creating tile {tileX} {tileY}");
+                Log.Debug($"Creating tile {tileX} {tileY}");
                 var chunk = base.GetTileChunk(tileX, tileY);
                 tile = GenerateTile(ref chunk, tileX, tileY);
                 //tile = new Tile(chunk, CreateTileDataPointer(), tileX, tileY);
