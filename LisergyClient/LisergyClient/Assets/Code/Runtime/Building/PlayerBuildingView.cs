@@ -37,6 +37,7 @@ namespace Assets.Code.World
             var spec = Entity.GetSpec();
             _assets.CreatePrefab(spec.Art, Vector3.zero, Quaternion.Euler(0, 0, 0), o =>
             {
+                Debug.Log($"Instantiating building at {Entity.Tile}");
                 var tile = GameView.World.GetTile(Entity);
                 var tileView = GameView.GetOrCreateTileView(tile, true);
                 GameObject = o;

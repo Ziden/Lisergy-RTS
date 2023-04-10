@@ -1,7 +1,9 @@
 using Game;
+using Game.Building;
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
+using Game.Party;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
@@ -44,8 +46,14 @@ namespace Tests
             Game.HandleClientEvent(clientPlayer, joinEvent);
 
             var entityVisibleEvents = clientPlayer.ReceivedEventsOfType<EntityUpdatePacket>();
+            var partyEvent = entityVisibleEvents.FirstOrDefault(e => e.Entity.GetType() == typeof(PartyEntity));
+            var buildingEvent = entityVisibleEvents.FirstOrDefault(e => e.Entity.GetType() == typeof(PlayerBuildingEntity));
 
             Assert.AreEqual(2, entityVisibleEvents.Count, "Initial Party & Building should be visible");
+            Assert.AreNotEqual(partyEvent.Entity.X, 0);
+            Assert.AreNotEqual(partyEvent.Entity.Y, 0);
+            Assert.AreNotEqual(buildingEvent.Entity.X, 0);
+            Assert.AreNotEqual(buildingEvent.Entity.Y, 0);
         }
 
         [Test]

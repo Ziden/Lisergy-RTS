@@ -42,7 +42,7 @@ namespace Assets.Code.World
                 var view = GameView.GetView(Entity.Tile.Chunk);
                 o.transform.parent = view.GameObject.transform;
             });
-            Debug.Log("Instantiated dungeon");
+            Debug.Log($"Instantiated dungeon at {Entity.Tile}");
         }
     }
 }

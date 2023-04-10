@@ -51,7 +51,6 @@ namespace GameDataTest
 
         public static void Generate(ref GameSpec spec)
         {
-            var tuple = (Stat.ATK, 5);
             AddUnit(spec, new UnitSpec()
             {
                 Art = new ArtSpec() { Type = ArtType.PREFAB,Address = Addr("Mage") },
@@ -59,7 +58,7 @@ namespace GameDataTest
                 IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = AddrFace("Badge_thief"),
+                    Address = AddrFace("Badge_rogue"),
                 },
                 LOS = 2,
                 Stats = AddToBase(

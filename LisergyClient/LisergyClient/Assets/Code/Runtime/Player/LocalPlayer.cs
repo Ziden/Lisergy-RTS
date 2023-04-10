@@ -18,7 +18,6 @@ namespace Assets.Code
         public LocalPlayer(GameId id) : base()
         {
             UserID = id;
-            StackLog.Debug("Created new player");
         }
 
         private void OnPartyCreated(PartyView view)

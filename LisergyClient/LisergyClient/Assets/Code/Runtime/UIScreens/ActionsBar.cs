@@ -35,14 +35,14 @@ namespace Assets.Code.UI
 
         public override void OnLoaded(VisualElement root)
         {
-            var actionsRoot = root.Q<VisualElement>("ActionsRoot");
-            actionsRoot.style.scale = new Vector2(0.1f, 0.1f);
+            //var actionsRoot = root.Q("ActionsRoot");
+            //actionsRoot.style.scale = new Vector2(0.1f, 0.1f);
         }
 
         public override void OnClose()
         {
-            var root = Root.Q<VisualElement>("ActionsRoot");
-            root.style.scale = new Vector2(0.1f, 0.1f);
+            //var root = Root.Q<VisualElement>("ActionsRoot");
+            //root.style.scale = new Vector2(0.1f, 0.1f);
         }
 
         public override void OnOpen()
@@ -57,8 +57,8 @@ namespace Assets.Code.UI
             }
             var setup = GetSetup<ActionsBarSetup>();
             DisplayActionsFor(setup.Party, setup.Tile);
-            var root = Root.Q<VisualElement>("ActionsRoot");
-            root.style.scale = new Vector2(1, 1); // TODO: Animation of resize/rotate not working :( 
+            //var root = Root.Q<VisualElement>("ActionsRoot");
+            //root.style.scale = new Vector2(1, 1); // TODO: Animation of resize/rotate not working :( 
         }
 
         private List<EntityAction> EvaluateActions(PartyEntity party, TileEntity tile)
@@ -94,10 +94,8 @@ namespace Assets.Code.UI
         private void MoveTo(TileEntity tile)
         {
             var view = GameView.GetView(tile);
-            var root = Root.Q<VisualElement>();
-            var screenPosition = Camera.main.WorldToScreenPoint(view.GameObject.transform.position);
-            root.style.left = Math.Max(0, screenPosition.x);
-            root.style.top = Math.Max(0, Screen.height - screenPosition.y - 30);
+            var newPosition = RuntimePanelUtils.CameraTransformWorldToPanel(Root.panel, view.GameObject.transform.position, Camera.main);
+            Root.transform.position = newPosition;
         }
 
         private void DisplayActionsFor(PartyEntity party, TileEntity tile)

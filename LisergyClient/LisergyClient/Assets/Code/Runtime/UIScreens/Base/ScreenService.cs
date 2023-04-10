@@ -23,6 +23,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         T Open<T>() where T : UITKScreen;
         T Open<T, H>(H hooks) where T : UITKScreen where H : UIScreenSetup;
         void Close<T>() where T : UITKScreen;
+        void Close(UITKScreen screen);
         bool IsOpen<T>() where T : UITKScreen;
     }
 
@@ -78,6 +79,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
                 loadedScreen.Object.SetActive(true);
                 var uiDoc = loadedScreen.Object.GetComponent<UIDocument>();
                 loadedScreen.Screen._setup = setup;
+                loadedScreen.Screen._panel = uiDoc.rootVisualElement.panel;
                 loadedScreen.Screen._root = uiDoc.rootVisualElement;
                 SetupBasicListeners(uiDoc.rootVisualElement);
                 loadedScreen.Screen.OnOpen();
@@ -103,8 +105,8 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
                     uiDoc.visualTreeAsset = visualTree;
                     uiDoc.panelSettings = panel;
                     SetupBasicListeners(uiDoc.rootVisualElement);
-                    screen.OnLoaded(uiDoc.rootVisualElement);
                     screen._root = uiDoc.rootVisualElement;
+                    screen.OnLoaded(uiDoc.rootVisualElement);
                     loadedScreen.IsLoaded = true;
                     _inScene[typeof(T)] = loadedScreen;
                     screen.OnOpen();
@@ -118,13 +120,26 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
             return Open<T, GenericSetup>(_noSetup);
         }
 
-        public void Close<T>() where T : UITKScreen
+        public void Close(UITKScreen s)
         {
-            if (_inScene.TryGetValue(typeof(T), out var screen))
+            Close(s.GetType());
+        }
+
+        private void Close(Type t)
+        {
+            if (_inScene.TryGetValue(t, out var screen))
             {
-                screen.Screen.OnClose();
+                if(screen.IsLoaded)
+                {
+                    screen.Screen.OnClose();
+                }
                 screen.Object.SetActive(false);
             }
+        }
+
+        public void Close<T>() where T : UITKScreen
+        {
+            Close(typeof(T));
         }
     }
 }

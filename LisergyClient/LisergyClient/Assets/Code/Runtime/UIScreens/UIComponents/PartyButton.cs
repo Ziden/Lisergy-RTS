@@ -3,8 +3,9 @@ using Assets.Code.Assets.Code.Runtime.PartyUnit;
 using Game;
 using Game.Battler;
 using Game.Party;
-
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Assets.Code.Assets.Code.Runtime.UIScreens.Parts
@@ -13,17 +14,21 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens.Parts
     {
         public void DisplayParty(PartyEntity party)
         {
-            DisplayLeader(party.BattleGroupLogic.Leader);
+            //DisplayLeader(party.BattleGroupLogic.Leader);
         }
 
-        public void DisplayLeader(Unit leader)
+        public static void DisplayLeader(VisualElement root, Unit leader)
         {
-            var hpBar = this.Q("GreenBar");
-            var rarityCircle = this.Q("RarityCircle");
-            var classIcon = this.Q("RarityCircle");
-            hpBar.style.width = leader.GetHpRatio() * hpBar.style.maxWidth.value.value;
-            ServiceContainer.Resolve<IAssetService>().GetSprite(leader.GetSpec().IconArt, sprite =>
+            var hpBar = root.Q("GreenBar");
+            var rarityCircle = root.Q("RarityCircle");
+            var classIcon = root.Q("ClassIcon");
+            var hpRatio = leader.GetHpRatio();
+            hpBar.style.width = Length.Percent(hpRatio * 100);
+            var icon = leader.GetSpec().IconArt;
+            Debug.Log($"Setting {icon.Address}");
+            ServiceContainer.Resolve<IAssetService>().GetSprite(icon, sprite =>
             {
+                Debug.Log("Setting bg for "+ sprite?.name);
                 classIcon.style.backgroundImage = new StyleBackground(sprite);
             });
         }

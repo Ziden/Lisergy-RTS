@@ -14,6 +14,8 @@ public class AssetContainer<K, T> where K: IComparable, IFormattable, IConvertib
 
     public async Task LoadAsync(K key, Action<T> onComplete) 
     {
+        Debug.Log("Loading Asset " + key);
+
         if (!typeof(K).IsEnum)
             throw new Exception("Not enum parameter");
         
