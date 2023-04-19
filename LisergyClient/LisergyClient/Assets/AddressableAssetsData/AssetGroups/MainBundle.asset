@@ -222,11 +222,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 903a090fb95dfe446b41ebed063f6e8b
-    m_Address: Assets/Addressables/Sprites/Faces.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 74a2f0793cb29bd4cafd65a68762332b
     m_Address: Assets/Addressables/UIScreens/Components/PartyButton.uxml
     m_ReadOnly: 0
@@ -234,6 +229,21 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c2d1057aebdfa034bb0943a31096f9c9
     m_Address: Assets/Addressables/UIScreens/Components/RadialProgress.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 25da62f1c89f5194fb2487e2cec72d9c
+    m_Address: Assets/Addressables/Prefabs/Units/Rogue.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8341ebc62abf9440ab0a41087443ccc
+    m_Address: Assets/Addressables/Prefabs/Units/Knight.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d463a6b7fb9464b4bbe666e3244ee5bc
+    m_Address: Assets/Addressables/UIScreens/BattleScreen.uxml
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

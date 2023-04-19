@@ -31,8 +31,8 @@ namespace GameDataTest
                     { Stat.MDEF, 5 },
                     { Stat.ATK, 5 },
                     { Stat.MATK, 5 },
-                    { Stat.MHP, 100 },
-                    { Stat.MMP, 100 },
+                    { Stat.MHP, 20 },
+                    { Stat.MMP, 19 },
         });
 
         private static UnitStats AddToBase(params (Stat, short)[] stats)
@@ -53,8 +53,8 @@ namespace GameDataTest
         {
             AddUnit(spec, new UnitSpec()
             {
-                Art = new ArtSpec() { Type = ArtType.PREFAB,Address = Addr("Mage") },
-                Name = "Thief",
+                Art = new ArtSpec() { Type = ArtType.PREFAB,Address = Addr("Rogue") },
+                Name = "Rogue",
                 IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
@@ -71,7 +71,7 @@ namespace GameDataTest
             });
             AddUnit(spec, new UnitSpec()
             {
-                Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Mage") },
+                Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Knight") },
                 Name = "Knight",
                 LOS = 1,
                 IconArt = new ArtSpec()
@@ -106,8 +106,8 @@ namespace GameDataTest
                     (Stat.SPEED, -1),
                     (Stat.DEF, -2),
                     (Stat.ACCURACY, 2),
-                    (Stat.MHP, -20),
-                    (Stat.MMP, 20)
+                    (Stat.MHP, -5),
+                    (Stat.MMP, 10)
                 )
             });
         }

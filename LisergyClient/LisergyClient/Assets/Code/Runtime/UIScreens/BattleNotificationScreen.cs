@@ -12,8 +12,8 @@ namespace Assets.Code
 {
     public class BattleNotificationSetup : UIScreenSetup
     {
-        public BattleHeader BattleHeader;
-        public Action<BattleHeader> OnCheckItemDeltas;
+        public CompleteBattleHeader BattleHeader;
+        public Action<CompleteBattleHeader> OnCheckItemDeltas;
     }
 
     public class BattleNotificationScreen : Notification, IEventListener
@@ -40,7 +40,7 @@ namespace Assets.Code
             base.OnOpen();
         }
 
-        private bool IsWin(BattleHeader header)
+        private bool IsWin(CompleteBattleHeader header)
         {
             return (
                 header.Attacker.OwnerID == MainBehaviour.LocalPlayer.UserID && header.AttackerWins

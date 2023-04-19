@@ -7,7 +7,7 @@ namespace Game.Battle
     public class TurnLog
     {
         public byte RoundNumber;
-        public List<BattleAction> Actions = new List<BattleAction>();
+        public List<BattleEvent> Events = new List<BattleEvent>();
 
         public TurnLog(byte round)
         {
@@ -16,7 +16,7 @@ namespace Game.Battle
 
         public override string ToString()
         {
-            return string.Join(",", Actions.Select(a => a.ToString()).ToArray());
+            return string.Join(",", Events.Select(a => a.ToString()).ToArray());
         }
     }
 }

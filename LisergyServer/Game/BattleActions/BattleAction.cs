@@ -5,17 +5,16 @@ using System;
 namespace Game.BattleActions
 {
     [Serializable]
-    public class BattleAction
+    public class BattleAction : BattleEvent
     {
         public GameId UnitID;
+        private ActionResult _result;
 
         [NonSerialized]
         private BattleUnit _unit;
 
         [NonSerialized]
         public TurnBattle Battle;
-
-        private ActionResult _result;
 
         public BattleUnit Unit
         {

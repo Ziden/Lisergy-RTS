@@ -7,7 +7,6 @@ namespace Assets.Code
     public interface IGameService 
     {
         void OnSceneLoaded();
-    
     }
 
     public static class ServiceContainer

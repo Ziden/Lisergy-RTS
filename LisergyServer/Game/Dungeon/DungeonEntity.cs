@@ -56,7 +56,7 @@ namespace Game.Dungeon
                     var unitSpecID = battle.UnitSpecIDS[i];
                     var unitSpec = StrategyGame.Specs.Units[unitSpecID];
                     units[i] = new Unit(unitSpecID);
-                    units[i].SetSpecStats();
+                    units[i].SetBaseStats();
                     BattleGroupLogic.AddUnit(units[i]);
                 }
                 if (s < spec.BattleSpecs.Count - 1)

@@ -8,41 +8,46 @@ namespace Game.Battle
     {
 
         private readonly TurnBattle _battle;
+        private readonly GameRandom _random;
 
         public AutoRun(TurnBattle battle)
         {
             _battle = battle;
+            _random = new GameRandom(battle.ID);
         }
 
-        private TurnBattleResult Log => _battle.Result;
+        private TurnBattleRecord Log => _battle.Result;
 
         private SortedSet<BattleUnit> UnitQueue => _battle._actionQueue;
 
-        public TurnBattleResult RunAllRounds()
+        public TurnBattleRecord RunAllRounds()
         {
             while (!_battle.IsOver)
             {
-                _ = PlayOneTurn();
+                _ = RunOneTurn();
             }
             Log.Winner = _battle.Attacker.AllDead ? _battle.Defender : _battle.Attacker;
             return Log;
         }
 
-        public virtual List<BattleAction> PlayOneTurn()
+        public virtual List<BattleEvent> RunOneTurn()
         {
-            Log.NextTurn();
             BattleUnit actingUnit = UnitQueue.First();
             return TakeAction(actingUnit);
         }
 
-        protected virtual List<BattleAction> TakeAction(BattleUnit unit)
+        protected virtual List<BattleEvent> TakeAction(BattleUnit unit)
         {
             BattleTeam enemyTeam = _battle.GetOpposingTeam(unit);
-            BattleUnit enemy = enemyTeam.RandomUnit();
+            BattleUnit enemy = GetRandomTarget(enemyTeam);
             AttackAction action = new AttackAction(_battle, unit, enemy);
             return _battle.ReceiveAction(action);
         }
 
-
+        private BattleUnit GetRandomTarget(BattleTeam team)
+        {
+            var alive = team.Alive;
+            return alive[_random.Next(alive.Length)];
+        }
     }
 }

@@ -9,6 +9,7 @@ using Game.Events;
 using Game.Events.Bus;
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class MainBehaviour : MonoBehaviour
@@ -31,10 +32,12 @@ public class MainBehaviour : MonoBehaviour
         _stateMachine = new GameStateMachine();
     }
 
-    public static void RunInCoroutine(Action a, float seconds)
+    public static async Task RunAsync(Action a, float seconds)
     {
-        RunCoroutine(Coroutine(a, seconds));
+        await Task.Delay((int)(seconds * 1000));
+        a();
     }
+
     public static void RunCoroutine(IEnumerator coroutine)
     {
         _instance.StartCoroutine(coroutine);
@@ -62,7 +65,7 @@ public class MainBehaviour : MonoBehaviour
         player.SetupLocalPlayer();
     }
 
-    private void ConfigureUnity()
+    public static void ConfigureUnity()
     {
         Application.runInBackground = true;
         Telepathy.Logger.Log = Debug.Log;
@@ -71,6 +74,14 @@ public class MainBehaviour : MonoBehaviour
         Game.Log.Debug = Debug.Log;
         Game.Log.Error = Debug.LogError;
         Game.Log.Info = Debug.Log;
+        TrackAsyncErrors();
+    }
+
+    private static void TrackAsyncErrors()
+    {
+        TaskScheduler.UnobservedTaskException += (s, a) => Debug.LogException(a?.Exception);
+        AppDomain.CurrentDomain.FirstChanceException += (sender, args) => Debug.LogException(args.Exception);
+        AppDomain.CurrentDomain.UnhandledException += (sender, args) => Debug.LogException((Exception)args.ExceptionObject);
     }
 
     void Awake()
@@ -94,7 +105,7 @@ public class MainBehaviour : MonoBehaviour
         Networking?.Dispose();
     }
 
-    private void SetupServices()
+    public void SetupServices()
     {
         ServiceContainer.Register<IInputService, InputService>(CreateInputService());
         ServiceContainer.Register<IScreenService, ScreenService>(new ScreenService());
@@ -104,6 +115,6 @@ public class MainBehaviour : MonoBehaviour
 
     InputService CreateInputService()
     {
-        return gameObject.AddComponent<InputService>();
+        return gameObject?.AddComponent<InputService>();
     }
 }

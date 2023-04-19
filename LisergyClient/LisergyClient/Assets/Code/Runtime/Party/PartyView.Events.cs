@@ -30,7 +30,7 @@ namespace Assets.Code.World
         {
             foreach (var unit in _unitObjects.Values)
             {
-                unit.UnitMonoBehaviour.AnimWalking();
+                unit.UnitMonoBehaviour.PlayAnimation(UnitAnimation.Running);
             }
         }
 
@@ -38,7 +38,7 @@ namespace Assets.Code.World
         {
             foreach (var unit in _unitObjects.Values)
             {
-                unit.UnitMonoBehaviour.AnimIddle();
+                unit.UnitMonoBehaviour.PlayAnimation(UnitAnimation.Iddle);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Assets.Code.World
 
         private static void OnMoveIn(PartyView view, EntityMoveInEvent ev)
         {
-            if (!view.Instantiated) return;
+            if (view.NeedsInstantiate) return;
 
             if (view.Entity.IsMine())
             {

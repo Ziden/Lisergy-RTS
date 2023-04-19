@@ -9,7 +9,7 @@ namespace Game.World
     {
         static EnumerableHelper()
         {
-            WorldUtils._random = new Random();
+            WorldUtils._random = new GameRandom();
         }
 
         public static T RandomElement<T>(IEnumerable<T> input)
@@ -28,13 +28,13 @@ namespace Game.World
 
     public static class WorldUtils
     {
-        internal static Random _random = new Random();
+        internal static GameRandom _random = new GameRandom();
 
-        public static Random Random { get => _random; }
+        public static GameRandom Random { get => _random; }
 
         public static void SetRandomSeed(int seed)
         {
-            _random = new Random(seed);
+            _random = new GameRandom(seed);
         }
 
         public static void RemoveString(this string[] array, string obj)

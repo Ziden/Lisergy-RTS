@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Game.Battle
 {
-    public class TurnBattleResult
+    public class TurnBattleRecord
     {
         public List<TurnLog> Turns = new List<TurnLog>();
 
@@ -17,12 +17,10 @@ namespace Game.Battle
             Turns.Add(new TurnLog((byte)(Turns.Count + 1)));
         }
 
-        public void AddAction(BattleAction action)
+        public void RecordEvent(BattleEvent action)
         {
-            CurrentTurn.Actions.Add(action);
+            CurrentTurn.Events.Add(action);
         }
-
-        public BattleAction LastAction => CurrentTurn.Actions.First();
 
         public TurnLog CurrentTurn => Turns.Last();
 

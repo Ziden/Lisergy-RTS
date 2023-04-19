@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5189120835266345580}
   - {fileID: 1500289244224961702}
@@ -47,7 +48,7 @@ LODGroup:
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.06953747
+  - screenRelativeHeight: 0.9342926
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 5476330837984748904}
@@ -67,7 +68,6 @@ GameObject:
   - component: {fileID: 1500289244224961702}
   - component: {fileID: 4613980185070253987}
   - component: {fileID: 5715997209216934765}
-  - component: {fileID: 6467928333510538936}
   m_Layer: 0
   m_Name: P_cliff_rock_2 (1)
   m_TagString: Untagged
@@ -85,6 +85,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 683847481070200963}
   m_RootOrder: 1
@@ -108,6 +109,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -138,20 +140,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6467928333510538936
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2378179892193898477}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 094cb27e3a03dc64e85ace74b5018fad, type: 3}
 --- !u!1 &7963063691177059407
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,7 +151,6 @@ GameObject:
   - component: {fileID: 5189120835266345580}
   - component: {fileID: 8015852736593547052}
   - component: {fileID: 5476330837984748904}
-  - component: {fileID: 4721175269743211991}
   m_Layer: 0
   m_Name: P_cliff_rock_2
   m_TagString: Untagged
@@ -181,6 +168,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 683847481070200963}
   m_RootOrder: 0
@@ -204,6 +192,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -234,17 +223,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4721175269743211991
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7963063691177059407}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 094cb27e3a03dc64e85ace74b5018fad, type: 3}

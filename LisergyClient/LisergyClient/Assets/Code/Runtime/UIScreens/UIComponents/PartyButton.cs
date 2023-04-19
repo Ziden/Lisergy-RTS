@@ -17,6 +17,18 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens.Parts
             //DisplayLeader(party.BattleGroupLogic.Leader);
         }
 
+        public static void UpdateHealth(VisualElement healthBar, Unit unit)
+        {
+            var greenBar = healthBar.Q("GreenBar");
+            greenBar.style.width = Length.Percent(unit.GetHpRatio() * 100); 
+        }
+
+        public static void HideHealth(VisualElement root)
+        {
+            var hpBar = root.Q("GreenBar");
+            hpBar.style.display = DisplayStyle.None;
+        }
+
         public static void DisplayLeader(VisualElement root, Unit leader)
         {
             var hpBar = root.Q("GreenBar");
@@ -25,10 +37,8 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens.Parts
             var hpRatio = leader.GetHpRatio();
             hpBar.style.width = Length.Percent(hpRatio * 100);
             var icon = leader.GetSpec().IconArt;
-            Debug.Log($"Setting {icon.Address}");
             ServiceContainer.Resolve<IAssetService>().GetSprite(icon, sprite =>
             {
-                Debug.Log("Setting bg for "+ sprite?.name);
                 classIcon.style.backgroundImage = new StyleBackground(sprite);
             });
         }

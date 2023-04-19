@@ -1,9 +1,15 @@
 using Game;
+using Game.Battle;
+using Game.BattleActions;
+using Game.BattleEvents;
+using Game.Battler;
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
+using Game.Network.ServerPackets;
 using NUnit.Framework;
 using ServerTests;
+using System;
 using System.Linq;
 
 namespace Tests
@@ -100,6 +106,24 @@ namespace Tests
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);
+        }
+
+        [Test]
+        public void TestBattleLogSerialization()
+        {
+            Serialization.LoadSerializers();
+            var enemyTeam = new BattleTeam(new Unit(0).SetBaseStats(), new Unit(0).SetBaseStats());
+            var myTeam = new BattleTeam(new Unit(2).SetBaseStats(), new Unit(0).SetBaseStats());
+            var battle = new TurnBattle(Guid.NewGuid(), myTeam, enemyTeam);
+            var log = new BattleLogPacket(battle);
+            var autoRun = new AutoRun(battle);
+            var result = autoRun.RunAllRounds();
+            log.SetTurns(result);
+
+            var deserializedHeader = log.DeserializeStartingState();
+
+            Assert.AreEqual(deserializedHeader.Attacker.Units.First().UnitID, myTeam.Units.First().UnitID);
+            Assert.AreEqual(deserializedHeader.Defender.Units.First().UnitID, enemyTeam.Units.First().UnitID);
         }
     }
 }

@@ -39,7 +39,7 @@ Transform:
   - {fileID: 2300626328492463222}
   - {fileID: 2218321641494238719}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4592283307425957374
 MonoBehaviour:
@@ -803,6 +803,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3715016467780563043}
     m_Modifications:
+    - target: {fileID: 491383451122256611, guid: fdf332cb9bd89f34dbe9263e4bd26307,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1160008831130336861, guid: fdf332cb9bd89f34dbe9263e4bd26307,
         type: 3}
       propertyPath: m_RootOrder
@@ -862,6 +867,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tree
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434950615364512492, guid: fdf332cb9bd89f34dbe9263e4bd26307,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 126
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

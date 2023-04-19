@@ -12,9 +12,7 @@ namespace Assets.Code.Views
     public partial class TileView : EntityView<TileEntity>
     {
         public override TileEntity Entity { get; }
-        public override GameObject GameObject { get; set; }
         public bool Decorated { get; set; }
-        public override bool Instantiated => GameObject != null;
 
         private IAssetService _assets;
 
@@ -30,25 +28,17 @@ namespace Assets.Code.Views
         public void UpdateFromData(TileData data)
         {
             Entity.TileId = data.TileId;
-            if (!Instantiated)
+            if (NeedsInstantiate)
             {
                 Instantiate();
                 RegisterEvents();
             }
         }
 
-        public override void Instantiate()
+        protected override void InstantiationImplementation()
         {
-            if (Instantiated)
-            {
-                return;
-            }
             Entity.Components.Add(this);
             RegisterEvents();
-            if (GameObject != null)
-            {
-                return;
-            }
 
             var spec = Entity.GetSpec();
             var chunkView = GameView.GetView<ChunkView>(Entity.Chunk);
@@ -56,15 +46,16 @@ namespace Assets.Code.Views
 
             _assets.CreatePrefab(spec.Art, new Vector3(Entity.X, 0, Entity.Y), Quaternion.Euler(0, 0, 0), o =>
             {
-                GameObject = o;
-                GameObject.transform.parent = parent;
-                GameObject.name = $"Tile_{Entity.X}-{Entity.Y}";
-                var tileBhv = GameObject.GetComponent<TileMonoComponent>();
+                o.transform.parent = parent;
+                o.name = $"Tile_{Entity.X}-{Entity.Y}";
+                var tileBhv = o.GetComponent<TileMonoComponent>();
                 Entity.TileId = Entity.TileId;
+                SetGameObject(o);
                 tileBhv.CreateTileDecoration(this);
-                GameObject.isStatic = true;
-                StaticBatchingUtility.Combine(GameObject);
+                o.isStatic = true;
+                StaticBatchingUtility.Combine(o);
                 SetFogInTileView(false, false);
+             
             });
         }
 

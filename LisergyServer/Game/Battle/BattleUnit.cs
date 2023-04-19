@@ -9,7 +9,6 @@ namespace Game.Battle
     public class BattleUnit : IComparable<BattleUnit>
     {
         private Unit _unitReference;
-        public bool Controlled = false;
 
         [NonSerialized]
         private BattleTeam _team;
@@ -18,7 +17,7 @@ namespace Game.Battle
 
         public int RT { get; set; }
 
-        public bool Dead => _unitReference.HP == 0;
+        public bool Dead => _unitReference.HP <= 0;
         public GameId UnitID => UnitReference.Id;
         public Unit UnitReference { get => _unitReference; set => _unitReference = value; }
 

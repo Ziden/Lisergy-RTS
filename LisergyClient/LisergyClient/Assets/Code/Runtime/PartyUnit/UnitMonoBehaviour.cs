@@ -4,25 +4,42 @@ using UnityEngine;
 
 namespace Assets.Code
 {
+
+    // Refers to animation ID in unit Animator configuration
+    public enum UnitAnimation
+    {
+        Iddle = 0, 
+        Running = 1, 
+        Dange = 2, 
+        MeleeAttack = 3, 
+        BattleIddle = 4, 
+        Damaged = 5,
+        Jump = 6,
+        JumpBack = 7,
+        Death = 8
+    }
+
     public class UnitMonoBehaviour : MonoBehaviour
     {
         private Animator _anim;
+        private string _current;
 
         void Start()
         {
             _anim = GetComponent<Animator>();
         }
 
-        public void AnimIddle()
+        public void PlayAnimation(UnitAnimation anim, float speed = 1f)
         {
-            Log.Debug("Anim Iddle");
-            _anim.Play("Iddle");
+            _anim.speed = speed;
+            _anim.ResetTrigger(_current);
+            _current = anim.ToString();
+            _anim.SetTrigger(anim.ToString());
         }
 
-        public void AnimWalking()
+        public void SetAnimSpeed(float speed)
         {
-            Log.Debug("Anim Walk");
-            _anim.Play("Running");
+            _anim.speed = speed;
         }
     }
 }

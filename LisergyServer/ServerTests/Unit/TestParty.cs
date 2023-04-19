@@ -58,6 +58,20 @@ namespace Tests
             Assert.AreEqual(1, statusUpdates.Count());
         }
 
+
+        [Test]
+        public void TestPartyUnitsInitialHP()
+        {
+            var team = _player.GetParty(0).BattleGroupLogic.GetBattleTeam();
+
+            var unit = team.Units.First().UnitReference;
+
+            var mhp = unit.MaxHP;
+
+            Assert.That(unit.HP == unit.MaxHP && unit.HP > 0);
+        }
+
+
         [Test]
         public void TestBattleIDResetsAfterBattle()
         {
@@ -75,6 +89,14 @@ namespace Tests
 
             Assert.IsTrue(battle.IsOver);
             Assert.IsTrue(party.BattleGroupLogic.BattleID == GameId.ZERO);
+        }
+
+        [Test]
+        public void TestPartyOwner()
+        {
+            var party = _player.GetParty(0);
+
+            Assert.AreEqual(party.OwnerID, _player.UserID);
         }
 
         [Test]

@@ -1,5 +1,6 @@
 ﻿using Game.Battle;
 using Game.BattleActions;
+using Game.BattleEvents;
 using Game.Battler;
 using Game.Building;
 using Game.Dungeon;
@@ -34,6 +35,8 @@ namespace Game
             // Battle
             models.Add(typeof(AttackActionResult));
             models.Add(typeof(ActionResult));
+            models.Add(typeof(UnitDeadEvent));
+            models.Add(typeof(BattleEvent));
             models.Add(typeof(BattleAction));
             models.Add(typeof(AttackAction));
             models.Add(typeof(BattleUnit));
@@ -106,6 +109,18 @@ namespace Game
                 return stream.ToArray();
             }
         }
+
+
+        public static T ToAnyType<T>(byte[] message)
+        {
+            using (var stream = new MemoryStream(message))
+            {
+                T ev;
+                ev = (T)Serializer.Deserialize(stream);
+                return ev;
+            }
+        }
+
 
         public static T ToEvent<T>(byte[] message) where T : BaseEvent
         {

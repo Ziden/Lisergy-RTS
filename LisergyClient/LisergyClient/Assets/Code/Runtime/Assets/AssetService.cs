@@ -23,7 +23,7 @@ namespace Assets.Code.Assets.Code.Assets
     public class AssetService : IAssetService
     {
         private AssetContainer<UISetting, PanelSettings> _uiSettings = new();
-        private AssetContainer<UIScreen, VisualTreeAsset> _screens = new();
+        private AssetContainer<UIScreen, VisualTreeAsset> _ui = new();
         private AssetContainer<SpritePrefab, Sprite[]> _spriteSheets = new();
         private AssetContainer<SpritePrefab, Sprite> _sprites = new();
         private AssetContainer<SoundFX, AudioClip> _audios = new ();
@@ -63,7 +63,7 @@ namespace Assets.Code.Assets.Code.Assets
 
         public async Task GetScreen(UIScreen screen, Action<VisualTreeAsset> onComplete)
         {
-            await _screens.LoadAsync(screen, onComplete);
+            await _ui.LoadAsync(screen, onComplete);
         }
 
         public async Task GetSprite(ArtSpec spec, Action<Sprite> onComplete)
