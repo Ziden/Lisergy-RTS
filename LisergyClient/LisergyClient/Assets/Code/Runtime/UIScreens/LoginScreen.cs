@@ -20,12 +20,12 @@ namespace Assets.Code
 
         public override void OnBeforeOpen()
         {
-            //SceneManager.LoadSceneAsync("Login", LoadSceneMode.Additive);
+            SceneManager.LoadSceneAsync("Login", LoadSceneMode.Additive);
         }
 
         public override void OnClose()
         {
-            //SceneManager.UnloadSceneAsync("Login");
+            SceneManager.UnloadSceneAsync("Login");
         }
 
         public override void OnLoaded(VisualElement root)

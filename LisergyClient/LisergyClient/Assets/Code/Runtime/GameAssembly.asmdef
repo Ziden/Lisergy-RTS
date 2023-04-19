@@ -6,7 +6,8 @@
         "Unity.Mathematics",
         "Unity.Burst",
         "Unity.Addressables",
-        "Unity.ResourceManager"
+        "Unity.ResourceManager",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

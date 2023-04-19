@@ -16,7 +16,6 @@ namespace Assets.Code.World
 
         private Dictionary<Unit, UnitView> _unitObjects = new Dictionary<Unit, UnitView>();
         public override PartyEntity Entity { get; }
-        public override GameObject GameObject { get; set; }
 
         public bool IsPartyDeployed => Entity.PartyIndex >= 0;
 
@@ -28,24 +27,24 @@ namespace Assets.Code.World
             _interpolation = new MovementInterpolator(Entity);
         }
 
-        public override bool Instantiated => GameObject != null;
 
         public override void OnUpdate(PartyEntity partyFromNetwork, List<IComponent> syncedComponents)
         {
             Entity.Tile = GameView.World.GetTile(partyFromNetwork);
           
-            if (Instantiated) return;
+            if (!NeedsInstantiate) return;
             RegisterEvents();
             Instantiate();
             CreateUnitObjects();
         }
 
-        public override void Instantiate()
+        protected override void InstantiationImplementation()
         {
-            GameObject = new GameObject($"{Entity.OwnerID}-{Entity.Id}");
-            GameObject.transform.SetParent(Container.transform);
-            GameObject.transform.position = Entity.Tile.Position(0.2f);
-            GameObject.SetActive(true);
+            var o = new GameObject($"{Entity.OwnerID}-{Entity.Id}");
+            o.transform.SetParent(Container.transform);
+            o.transform.position = Entity.Tile.Position(0.2f);
+            SetGameObject(o);
+            o.SetActive(true);
             Log.Debug($"Created new party instance {this}");
         }
 

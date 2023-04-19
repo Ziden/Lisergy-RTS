@@ -60,10 +60,11 @@ namespace Game.Battler
             _statsData.AddStat(stat, value);
         }
 
-        public void SetSpecStats()
+        public Unit SetBaseStats()
         {
             _statsData.SetStats(StrategyGame.Specs.Units[SpecId].Stats);
             HealAll();
+            return this;
         }
 
         public void HealAll()

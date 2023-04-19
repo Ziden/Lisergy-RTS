@@ -8,44 +8,29 @@ namespace Game.Network.ServerPackets
 {
     /// <summary>
     /// Full battle result.
-    /// Only shall be sent the header directly
+    /// Only shall be sent the header directly, this is to be sent from battle server to map server.
     /// </summary>
     [Serializable]
     public class BattleResultPacket : ServerPacket
     {
-        public BattleHeader BattleHeader;
+        public CompleteBattleHeader FinalStateHeader;
 
-        public BattleTurnEvent[] Turns;
+        public BattleTurnLog[] Turns;
 
-        public BattleResultPacket(GameId battleID, TurnBattleResult result)
+        public BattleResultPacket(GameId battleID, TurnBattleRecord result)
         {
-            BattleHeader = new BattleHeader
+            FinalStateHeader = new CompleteBattleHeader
             {
                 BattleID = battleID,
                 Date = DateTime.UtcNow,
                 Attacker = result.Attacker,
                 Defender = result.Defender
             };
-            Turns = new BattleTurnEvent[result.Turns.Count];
-            BattleHeader.AttackerWins = BattleHeader.Attacker == result.Winner;
+            Turns = new BattleTurnLog[result.Turns.Count];
+            FinalStateHeader.AttackerWins = FinalStateHeader.Attacker == result.Winner;
             for (int x = 0; x < Turns.Length; x++)
             {
-                Turns[x] = new BattleTurnEvent(result.Turns[x]);
-            }
-        }
-    }
-
-    [Serializable]
-    public class BattleTurnEvent
-    {
-        public BattleAction[] Actions;
-
-        public BattleTurnEvent(TurnLog turnLog)
-        {
-            Actions = new BattleAction[turnLog.Actions.Count];
-            for (int x = 0; x < turnLog.Actions.Count; x++)
-            {
-                Actions[x] = turnLog.Actions[x];
+                Turns[x] = new BattleTurnLog(result.Turns[x]);
             }
         }
     }

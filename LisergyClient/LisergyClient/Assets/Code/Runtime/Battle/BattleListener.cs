@@ -58,8 +58,8 @@ namespace Assets.Code.Battle
         [EventMethod]
         public void BattleFinish(BattleResultPacket ev)
         {
-            Log.Info($"Battle Finish Received {ev.BattleHeader.BattleID}");
-            MainBehaviour.LocalPlayer.Battles.Add(ev);
+            Log.Info($"Battle Finish Received {ev.FinalStateHeader.BattleID}");
+            //MainBehaviour.LocalPlayer.Battles.Add(ev);
         }
 
         [EventMethod]

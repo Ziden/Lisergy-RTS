@@ -6,7 +6,7 @@ namespace Game.Battle
     [Serializable]
     public class SerializableResult
     {
-        public SerializableResult(TurnBattleResult result)
+        public SerializableResult(TurnBattleRecord result)
         {
             Attacker = result.Attacker;
             Defender = result.Defender;
@@ -27,14 +27,14 @@ namespace Game.Battle
     [Serializable]
     public class SerializableTurn
     {
-        public BattleAction[] Actions;
+        public BattleEvent[] Events;
 
         public SerializableTurn(TurnLog turnLog)
         {
-            Actions = new BattleAction[turnLog.Actions.Count];
-            for (int x = 0; x < turnLog.Actions.Count; x++)
+            Events = new BattleAction[turnLog.Events.Count];
+            for (int x = 0; x < turnLog.Events.Count; x++)
             {
-                Actions[x] = turnLog.Actions[x];
+                Events[x] = turnLog.Events[x];
             }
         }
     }

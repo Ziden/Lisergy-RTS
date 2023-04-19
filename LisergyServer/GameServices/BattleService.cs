@@ -6,6 +6,7 @@ using Game.Events;
 using Game.Events.Bus;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
 using Game.Player;
 using System;
@@ -14,6 +15,10 @@ using System.Linq;
 
 namespace Game.Services
 {
+    /// <summary>
+    /// Battle server. Currently runs same as map server.
+    /// Should proccess battles from a queue.
+    /// </summary>
     public class BattleService : IEventListener
     {
         public GameWorld World { get; private set; }
@@ -22,10 +27,10 @@ namespace Game.Services
         public BattleService(StrategyGame game)
         {
             World = game.World;
+            game.NetworkEvents.Register<BattleLogRequestPacket>(this, OnBattleRequest);
             game.NetworkEvents.Register<BattleStartPacket>(this, OnBattleStart);
             game.NetworkEvents.Register<BattleResultPacket>(this, OnBattleResult);
         }
-
 
         public void Wipe()
         {
@@ -35,6 +40,15 @@ namespace Game.Services
         public List<TurnBattle> GetBattles()
         {
             return _battlesHappening.Values.ToList();
+        }
+
+        [EventMethod]
+        public void OnBattleRequest(BattleLogRequestPacket p)
+        {
+            if(BattleHistory.TryGetLog(p.BattleId, out var log))
+            {
+                p.Sender.Send(log);
+            }
         }
 
         [EventMethod]
@@ -48,9 +62,14 @@ namespace Game.Services
             ev.Attacker.Entity.BattleGroupLogic.BattleID = ev.BattleID;
             ev.Defender.Entity.BattleGroupLogic.BattleID = ev.BattleID;
 
+            BattleHistory.Track(ev);
+
             _battlesHappening[battle.ID] = battle;
-            foreach (var onlinePlayer in GetOnlinePlayers(battle))
-                onlinePlayer.Send(ev);
+            foreach (var p in GetAllPlayers(battle))
+            {
+                if(p.Online()) 
+                    p.Send(ev);
+            }
 
             battle.Task = new BattleTask(World.Game, battle);
         }
@@ -59,27 +78,30 @@ namespace Game.Services
         public void OnBattleResult(BattleResultPacket fullResultPacket)
         {
             TurnBattle battle = null;
-            if (!_battlesHappening.TryGetValue(fullResultPacket.BattleHeader.BattleID, out battle))
+            if (!_battlesHappening.TryGetValue(fullResultPacket.FinalStateHeader.BattleID, out battle))
             {
                 fullResultPacket.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT, "Invalid battle"));
                 return;
             }
 
-            var summary = new BattleResultSummaryPacket(battle.ID, fullResultPacket.BattleHeader);
+            BattleHistory.Track(fullResultPacket);
+
+            var summary = new BattleResultSummaryPacket(fullResultPacket.FinalStateHeader);
 
             foreach (var pl in GetAllPlayers(battle))
             {
                 pl.Send(summary);
 
                 // TODO: Send to game logic service
-                pl.Battles.Add(fullResultPacket);
+                pl.BattleHeaders[fullResultPacket.FinalStateHeader.BattleID] = fullResultPacket.FinalStateHeader;
+
                 Log.Debug($"Player {pl} completed battle {battle.ID}");
             }
 
-            var atk = fullResultPacket.BattleHeader.Attacker.Entity;
-            var def = fullResultPacket.BattleHeader.Defender.Entity;
+            var atk = fullResultPacket.FinalStateHeader.Attacker.Entity;
+            var def = fullResultPacket.FinalStateHeader.Defender.Entity;
 
-            var finishEvent = new BattleFinishedEvent(battle, fullResultPacket.BattleHeader, fullResultPacket.Turns);
+            var finishEvent = new BattleFinishedEvent(battle, fullResultPacket.FinalStateHeader, fullResultPacket.Turns);
 
             if (atk is IEntity e)
             {
@@ -107,7 +129,7 @@ namespace Game.Services
                 def.Owner.Send(defPacket);
             }
 
-            _battlesHappening.Remove(fullResultPacket.BattleHeader.BattleID);
+            _battlesHappening.Remove(fullResultPacket.FinalStateHeader.BattleID);
         }
         #region Battle Controller
 
@@ -120,6 +142,7 @@ namespace Game.Services
         {
             return _battlesHappening.Count;
         }
+
         public IEnumerable<PlayerEntity> GetOnlinePlayers(TurnBattle battle)
         {
             PlayerEntity pl;

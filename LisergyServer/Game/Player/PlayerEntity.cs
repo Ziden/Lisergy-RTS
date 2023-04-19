@@ -1,4 +1,5 @@
-﻿using Game.Battler;
+﻿using Game.Battle;
+using Game.Battler;
 using Game.Building;
 using Game.DataTypes;
 using Game.ECS;
@@ -24,8 +25,7 @@ namespace Game.Player
 
         public PartyEntity[] Parties;
 
-        // TODO: Move to game logic service
-        public List<BattleResultPacket> Battles = new List<BattleResultPacket>();
+        public Dictionary<GameId, CompleteBattleHeader> BattleHeaders = new Dictionary<GameId, CompleteBattleHeader>();
 
         public IComponentSet Components => throw new NotImplementedException();
 
@@ -42,7 +42,7 @@ namespace Game.Player
         public PlayerEntity()
         {
             UserID = Guid.NewGuid();
-            Parties = new PartyEntity[4]
+            Parties = new PartyEntity[PartyEntity.SIZE]
             {
                 new PartyEntity(this, 0),new PartyEntity(this, 1),new PartyEntity(this, 2),new PartyEntity(this, 3),
             };
@@ -56,7 +56,7 @@ namespace Game.Player
         public Unit RecruitUnit(ushort unitSpecId)
         {
             var unit = new Unit(unitSpecId);
-            unit.SetSpecStats();
+            unit.SetBaseStats();
             Units.Add(unit);
             Log.Debug($"{UserID} recruited {unitSpecId}");
             return unit;

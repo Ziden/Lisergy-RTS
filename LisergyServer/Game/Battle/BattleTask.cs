@@ -1,6 +1,7 @@
 ﻿using Game.Network.ServerPackets;
 using Game.Scheduler;
 using System;
+using System.Linq;
 
 namespace Game.Battle
 {
@@ -19,7 +20,10 @@ namespace Game.Battle
         {
             Repeat = false;
             _battle.Task = null;
-            TurnBattleResult result = _battle.AutoRun.RunAllRounds();
+
+            var unitRef = _battle.Attacker.Units.First().UnitReference;
+
+            TurnBattleRecord result = _battle.AutoRun.RunAllRounds();
             BattleResultPacket resultEvent = new BattleResultPacket(_battle.ID, result);
             // for now just run callbacks
             // TODO: place on a message queue

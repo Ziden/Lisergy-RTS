@@ -26,7 +26,7 @@ namespace Assets.Code.Entity
         private static void MovementCallback(EntityMovementComponent c, EntityMoveInEvent ev)
         {
             var view = GameView.GetView(ev.Entity);
-            if (view == null || !view.Instantiated)
+            if (view == null || !view.NeedsInstantiate)
             {
                 return;
             }

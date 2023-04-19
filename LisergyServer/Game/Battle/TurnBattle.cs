@@ -1,4 +1,5 @@
 ﻿using Game.BattleActions;
+using Game.BattleEvents;
 using Game.Battler;
 using Game.DataTypes;
 using Game.Events;
@@ -12,7 +13,7 @@ namespace Game.Battle
     {
         public BattleTask Task;
         internal SortedSet<BattleUnit> _actionQueue = new SortedSet<BattleUnit>();
-        internal TurnBattleResult Result = new TurnBattleResult();
+        public TurnBattleRecord Result = new TurnBattleRecord();
 
         public BattleStartPacket StartEvent;
 
@@ -36,7 +37,13 @@ namespace Game.Battle
             _actionQueue.UnionWith(defender.Units);
         }
 
-        public List<BattleAction> ReceiveAction(BattleAction action)
+        public void Death(BattleUnit u)
+        {
+            Result.RecordEvent(new UnitDeadEvent() { UnitId = u.UnitID });
+            _actionQueue.Remove(u);
+        }
+
+        public List<BattleEvent> ReceiveAction(BattleAction action)
         {
             Result.NextTurn();
             BattleUnit unit = CurrentActingUnit;
@@ -52,10 +59,14 @@ namespace Game.Battle
             {
                 action.Result = attack.Unit.Attack(attack.Defender);
                 action.Result.Succeeded = true;
+                Result.RecordEvent(attack);
+                if (attack.Defender.Dead)
+                {
+                    Death(attack.Defender);
+                }
             }
             UpdateRT(unit);
-            Result.AddAction(action);
-            return Result.CurrentTurn.Actions;
+            return Result.CurrentTurn.Events;
         }
 
         public void UpdateRT(BattleUnit unit)

@@ -1,4 +1,5 @@
-﻿using Game.Battler;
+﻿using Game.Battle;
+using Game.Battler;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.GameEvents;
@@ -51,7 +52,18 @@ namespace Game.Services
             if (atk != null && def != null)
             {
                 var battleID = Guid.NewGuid();
-                _game.NetworkEvents.Call(new BattleStartPacket(battleID, atk, def));
+                var start = new BattleStartPacket(battleID, atk, def);
+
+                _game.NetworkEvents.Call(start);
+
+                if(atk.Owner.CanReceivePackets())
+                {
+                    atk.Owner.Send(start);
+                }
+                if(def.Owner.CanReceivePackets())
+                {
+                    def.Owner.Send(start);
+                }
             }
         }
     }

@@ -34,7 +34,7 @@ MonoBehaviour:
     m_Settings:
       method: 0
       fxaaSettings:
-        preset: 1
+        preset: 2
       taaSettings:
         jitterSpread: 1
         sharpen: 3
@@ -43,9 +43,9 @@ MonoBehaviour:
   ambientOcclusion:
     m_Enabled: 1
     m_Settings:
-      intensity: 0.82
+      intensity: 1
       radius: 0.6
-      sampleCount: 6
+      sampleCount: 3
       downsampling: 0
       forceForwardCompatibility: 0
       ambientOnly: 0
@@ -98,13 +98,13 @@ MonoBehaviour:
       logMin: -8
       logMax: 4
   bloom:
-    m_Enabled: 1
+    m_Enabled: 0
     m_Settings:
       bloom:
-        intensity: 0.05
-        threshold: 1.1
-        softKnee: 0.587
-        radius: 5.49
+        intensity: 0.2
+        threshold: 0.28
+        softKnee: 0.52
+        radius: 1.83
         antiFlicker: 1
       lensDirt:
         texture: {fileID: 0}
@@ -114,7 +114,7 @@ MonoBehaviour:
     m_Settings:
       tonemapping:
         tonemapper: 2
-        neutralBlackIn: 0
+        neutralBlackIn: -0.0015
         neutralWhiteIn: 11
         neutralBlackOut: -0
         neutralWhiteOut: 5
@@ -122,11 +122,11 @@ MonoBehaviour:
         neutralWhiteClip: 6
       basic:
         postExposure: 0
-        temperature: 0
-        tint: 0
+        temperature: -2.3
+        tint: -2.3
         hueShift: 0
-        saturation: 1
-        contrast: 1
+        saturation: 1.147
+        contrast: 1.04
       channelMixer:
         red: {x: 1.2, y: 0, z: 0}
         green: {x: 0, y: 1, z: 0}
@@ -311,10 +311,10 @@ MonoBehaviour:
       spectralTexture: {fileID: 0}
       intensity: 0.11
   grain:
-    m_Enabled: 1
+    m_Enabled: 0
     m_Settings:
       colored: 0
-      intensity: 0.096
+      intensity: 0.754
       size: 0.3
       luminanceContribution: 1
   vignette:
@@ -324,7 +324,7 @@ MonoBehaviour:
       color: {r: 0, g: 0, b: 0, a: 1}
       center: {x: 0.5, y: 0.5}
       intensity: 0.592
-      smoothness: 0.873
+      smoothness: 0.964
       roundness: 0.755
       mask: {fileID: 0}
       opacity: 1

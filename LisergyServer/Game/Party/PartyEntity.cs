@@ -11,6 +11,9 @@ namespace Game.Party
     [Serializable]
     public class PartyEntity : WorldEntity, IBattleableEntity
     {
+
+        public const int SIZE = 4;
+
         [NonSerialized]
         private BattleGroupComponentLogic _battleLogic;
 

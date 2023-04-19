@@ -5,6 +5,6 @@ namespace Game.BattleActions
     [Serializable]
     public class AttackActionResult : ActionResult
     {
-        public int Damage;
+        public ushort Damage;
     }
 }

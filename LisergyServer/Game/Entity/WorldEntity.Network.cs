@@ -35,7 +35,6 @@ namespace Game
                 trigger.Send(GetUpdatePacket(trigger));
             if (DeltaFlags.HasFlag(DeltaFlag.POSITION))
                 OnPositionChanged();
-
         }
 
         private void OnExistenceChanged()
@@ -53,7 +52,8 @@ namespace Game
             var newTile = _tile;
             var previousTile = _previousTile;
 
-            var movementComponent = this.Components.Get<EntityMovementComponent>();
+            var movementComponent = Components.Get<EntityMovementComponent>();
+            if(movementComponent == null) return;
             viewersCache.Clear();
             var allViewers = viewersCache;
             if (previousTile != newTile && previousTile != null)

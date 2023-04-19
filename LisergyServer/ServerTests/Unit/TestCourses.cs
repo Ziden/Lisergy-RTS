@@ -1,5 +1,6 @@
 using Game.Events;
 using Game.Events.ServerEvents;
+using Game.Movement;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
 using Game.Party;
@@ -93,6 +94,22 @@ namespace Tests
             Assert.AreEqual(1, moveEvents.Count);
             // should have explored some tiles
             Assert.GreaterOrEqual(tileDiscovery.Count, 1);
+        }
+
+        [Test]
+        public void TestCourseTask()
+        {
+            var tile = _party.Tile;
+            var next = tile.GetNeighbor(Direction.SOUTH);
+            var party = _player.GetParty(0);
+
+            _player.SendMoveRequest(party, next, MovementIntent.Offensive);
+            var course = party.Course;
+
+            course.Execute();
+            course.Execute();
+
+            Assert.AreEqual(party.Tile, next);
         }
 
         [Test]

@@ -6,10 +6,10 @@ namespace Game.Events.GameEvents
     public class BattleFinishedEvent : GameEvent
     {
         public TurnBattle Battle;
-        public BattleHeader Header;
-        public BattleTurnEvent[] Turns;
+        public CompleteBattleHeader Header;
+        public BattleTurnLog[] Turns;
 
-        public BattleFinishedEvent(TurnBattle battle, BattleHeader header, BattleTurnEvent[] turns)
+        public BattleFinishedEvent(TurnBattle battle, CompleteBattleHeader header, BattleTurnLog[] turns)
         {
             Battle = battle;
             Header = header;

@@ -1,4 +1,5 @@
 ﻿using Game.Battle;
+using Game.Battler;
 using System;
 using System.Linq;
 
@@ -10,6 +11,16 @@ namespace ServerTests
 
         public BattleUnit NextUnitToAct => _actionQueue.First();
 
-        public TurnBattleResult Log => Result;
+        public TurnBattleRecord Log => Result;
+
+        public static Unit MakeOverpower(Unit u)
+        {
+            u.Atk = 200;
+            u.Speed = 200;
+            u.Def = 200;
+            u.HP = 200;
+            u.MaxHP = 200;
+            return u;
+        }
     }
 }

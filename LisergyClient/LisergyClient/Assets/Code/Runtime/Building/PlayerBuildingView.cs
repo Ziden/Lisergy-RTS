@@ -10,10 +10,7 @@ namespace Assets.Code.World
 {
     public class PlayerBuildingView : EntityView<PlayerBuildingEntity>
     {
-
-        public override bool Instantiated => GameObject != null;
         public override PlayerBuildingEntity Entity { get; }
-        public override GameObject GameObject { get; set; }
 
         private IAssetService _assets;
 
@@ -26,13 +23,13 @@ namespace Assets.Code.World
         public override void OnUpdate(PlayerBuildingEntity serverEntity, List<IComponent> syncedComponents)
         {
             Entity.Tile = GameView.World.GetTile(serverEntity);
-            if (!Instantiated)
+            if (NeedsInstantiate)
             {
                 Instantiate();
             }   
         }
 
-        public override void Instantiate()
+        protected override void InstantiationImplementation()
         {
             var spec = Entity.GetSpec();
             _assets.CreatePrefab(spec.Art, Vector3.zero, Quaternion.Euler(0, 0, 0), o =>
@@ -40,16 +37,18 @@ namespace Assets.Code.World
                 Debug.Log($"Instantiating building at {Entity.Tile}");
                 var tile = GameView.World.GetTile(Entity);
                 var tileView = GameView.GetOrCreateTileView(tile, true);
-                GameObject = o;
-                GameObject.transform.parent = tileView.GameObject.transform;
-                GameObject.transform.localPosition = Vector3.zero;
-
-                foreach (var lod in GameObject.GetComponentsInChildren<LODGroup>())
+                tileView.OnInstantiate(tileObject =>
                 {
-                    lod.ForceLOD(2);
-                }
-                StaticBatchingUtility.Combine(GameObject);
-                this.GameObject.SetActive(true);
+                    o.SetActive(true);
+                    foreach (var lod in o.GetComponentsInChildren<LODGroup>())
+                    {
+                        lod.ForceLOD(2);
+                    }
+                    StaticBatchingUtility.Combine(o);
+                    o.transform.parent = tileView.GameObject.transform;
+                    o.transform.localPosition = Vector3.zero;
+                    SetGameObject(o);
+                });
             });
         }
     }

@@ -9,6 +9,6 @@ namespace Assets.Code
 {
     public interface IGameObject
     {
-        GameObject GameObject { get; set; }
+        GameObject GameObject { get; }
     }
 }

@@ -10,7 +10,7 @@ namespace Assets.Code.Views
     {
         private static GameObject _chunksNode;
 
-        public bool Instantiated => _chunksNode != null;
+        public bool NeedsInstantiate => _chunksNode != null;
 
         public Chunk Entity { get; }
         public GameObject GameObject { get; set; }
@@ -20,10 +20,10 @@ namespace Assets.Code.Views
         public ChunkView(ref Chunk c) : base()
         {
             Entity = c;
-            Instantiate();
+            InstantiationImplementation();
         }
 
-        public void Instantiate()
+        public void InstantiationImplementation()
         {
             if (_chunksNode == null)
             {

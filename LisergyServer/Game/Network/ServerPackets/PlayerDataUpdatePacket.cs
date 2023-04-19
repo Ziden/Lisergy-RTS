@@ -16,7 +16,7 @@ namespace Game.Events
     public class PlayerUpdatePacket : ServerPacket
     {
         public UpdateType Type;
-        public BattleHeader[] Battles;
+        public CompleteBattleHeader[] Battles;
         public TileEntity[] VisibleTiles;
     }
 

@@ -16,8 +16,6 @@ namespace ServerTests
 {
     public class TestServerPlayer : ServerPlayer, IEventListener
     {
-        public static GameId TEST_ID = GameId.Generate();
-
         public delegate void ReceiveEventHandler(BaseEvent ev);
         public event ReceiveEventHandler OnReceiveEvent;
         public List<BaseEvent> ReceivedEvents = new List<BaseEvent>();

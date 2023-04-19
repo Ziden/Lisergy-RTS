@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.DataTypes;
 using Game.Events;
 using Game.Network;
 using Game.Player;
@@ -17,6 +18,8 @@ namespace ServerTests
     public class TestGame : StrategyGame
     {
         private bool _registered = false;
+
+        private GameId _testPlayerId = GameId.Generate();
 
         public BattleService BattleService { get; private set; }
         public WorldService WorldService { get; private set; }
@@ -75,7 +78,7 @@ namespace ServerTests
         {
             var player = new TestServerPlayer();
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
-            player.UserID = TestServerPlayer.TEST_ID;
+            _testPlayerId = player.UserID;
             var tile = this.World.GetTile(x, y);
             this.World.PlaceNewPlayer(player, this.World.GetTile(x, y));
             DeltaTracker.SendDeltaPackets(player);
@@ -92,7 +95,7 @@ namespace ServerTests
         public TestServerPlayer GetTestPlayer()
         {
             PlayerEntity pl;
-            this.World.Players.GetPlayer(TestServerPlayer.TEST_ID, out pl);
+            this.World.Players.GetPlayer(_testPlayerId, out pl);
             return (TestServerPlayer)pl;
         }
 
