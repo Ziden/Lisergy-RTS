@@ -1,7 +1,8 @@
 using Game;
-using Game.Dungeon;
 using Game.ECS;
 using Game.Events.GameEvents;
+using Game.Systems.Dungeon;
+using Game.Systems.Tile;
 using Game.Tile;
 using NUnit.Framework;
 
@@ -26,14 +27,14 @@ namespace Tests
         [Test]
         public void TestEventsOnlyRegisteredOnce()
         {
-            ComponentSet._buses.Clear();
+           // ComponentSet._buses.Clear();
 
             tile1.Components.Add(new TileHabitants());
             tile2.Components.Add(new TileHabitants());
 
-            var tileBus = ComponentSet._buses[typeof(TileEntity)]._bus;
-
-            Assert.AreEqual(1, tileBus._listeners.Count);
+            //var tileBus = ComponentSet._buses[typeof(TileEntity)]._bus;
+            Assert.IsTrue(false);
+            //Assert.AreEqual(1, tileBus._listeners.Count);
         }
 
         [Test]
@@ -66,7 +67,7 @@ namespace Tests
             tile1.Components.Add(new TestView());
 
 
-            tile1._components.RegisterExternalComponentEvents<TestView, EntityMoveOutEvent>(TestView.Callback);
+            //tile1._components.RegisterExternalComponentEvents<TestView, EntityMoveOutEvent>(TestView.Callback);
 
             tile1.Components.CallEvent(new EntityMoveOutEvent() { Entity = new DungeonEntity() });
 

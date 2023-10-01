@@ -1,9 +1,9 @@
 using Game;
-using Game.Building;
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
-using Game.Party;
+using Game.Systems.Building;
+using Game.Systems.Party;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;

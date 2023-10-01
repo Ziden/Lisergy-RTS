@@ -2,76 +2,33 @@
 using Game.Events.Bus;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Tests")]
 namespace Game.ECS
 {
-
-    /// <summary>
-    /// To avoid boxing/unboxing and gain speed
-    /// </summary>
-    public class EntityContext<EntityType> where EntityType : IEntity
-    {
-        public EntityType Entity;
-
-        internal static EntityContext<EntityType> Context;
-    }
-
     /// <summary>
     /// Event bus that fires specific events for the specific component. Can wrap events knowing the sender and component instance.
     /// </summary>
-    public class EntityEventBus : IEventListener
+    public class SystemEventBus<EntityType, ComponentType> : IEventListener where EntityType : IEntity where ComponentType : IComponent
     {
         internal EventBus<BaseEvent> _bus = new EventBus<BaseEvent>();
-        internal HashSet<string> _registered = new HashSet<string>();
-
-        public virtual ComponentType GetComponent<ComponentType>(IEntity e) where ComponentType : IComponent
-        {
-            return e.Components.Get<ComponentType>();
-        }
-
-        public bool AlreadyRegistered<EventType, ComponentType>()
-        {
-            string key = $"{typeof(EventType).Name}/{typeof(ComponentType).Name}";
-            if (_registered.Contains(key))
-            {
-                return true;
-            }
-
-            _ = _registered.Add(key);
-            return false;
-        }
-
-        private IEntity _currentEntity;
-
-        public IEntity GetCurrentEntity()
-        {
-            return _currentEntity;
-        }
+        private EntityType _currentEntity;
 
         /// <summary>
-        /// Registers events that can be targeted to the entity. The components can pickup those events.
-        /// We only subscribe once per ComponentType/EventType combination so we can swap entities that are receiving the events.
+        /// Registers a new listener for the given system. The system is wrapped in a normal message bus/
         /// </summary>
-        public void RegisterComponentEvent<EntityType, EventType, ComponentType>(
-            Action<EntityType, ComponentType, EventType> callback)
-            where EventType : BaseEvent where ComponentType : IComponent where EntityType : IEntity
+        public void On<EventType>(Action<EntityType, ComponentType, EventType> callback) where EventType : BaseEvent
         {
-            if (AlreadyRegistered<EventType, ComponentType>())
+            void ComponentEventWrapper(EventType ev)
             {
-                return;
+                var component = _currentEntity.Components.Get<ComponentType>();
+                if (component == null) return;
+                callback(_currentEntity, component, ev);
             }
-            void componentEventCallback(EventType ev)
-            {
-                IEntity entity = GetCurrentEntity();
-                ComponentType component = GetComponent<ComponentType>(entity);
-                if (component != null)
-                {
-                    callback((EntityType)entity, component, ev);
-                }
-            }
-            _bus.Register(this, (Action<EventType>)componentEventCallback);
+
+            _bus.Register(this, (Action<EventType>)ComponentEventWrapper);
         }
 
         public void Clear()
@@ -79,12 +36,7 @@ namespace Game.ECS
             _bus.Clear();
         }
 
-        public void RegisterEvent<EventType>(EventType ev)
-        {
-
-        }
-
-        public void Call<EventType>(IEntity entity, EventType ev) where EventType : BaseEvent
+        public void CallEntityEvent<EventType>(EntityType entity, EventType ev) where EventType : BaseEvent
         {
             _currentEntity = entity;
             _bus.Call(ev);

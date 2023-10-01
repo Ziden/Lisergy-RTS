@@ -1,13 +1,13 @@
 ﻿using Game;
 using Game.Battle;
-using Game.BattleActions;
-using Game.BattleEvents;
-using Game.Battler;
+using Game.Battle.BattleActions;
+using Game.Battle.BattleEvents;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Network;
-using Game.Party;
 using Game.Player;
+using Game.Systems.Battler;
+using Game.Systems.Party;
 using NUnit.Framework;
 using ServerTests;
 using System;

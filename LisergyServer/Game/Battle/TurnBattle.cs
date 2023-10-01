@@ -1,9 +1,9 @@
-﻿using Game.BattleActions;
-using Game.BattleEvents;
-using Game.Battler;
+﻿using Game.Battle.BattleActions;
+using Game.Battle.BattleEvents;
 using Game.DataTypes;
 using Game.Events;
 using Game.Network.ServerPackets;
+using Game.Systems.Battler;
 using System.Collections.Generic;
 using System.Linq;
 

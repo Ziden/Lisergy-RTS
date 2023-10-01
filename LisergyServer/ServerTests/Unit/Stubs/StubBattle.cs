@@ -1,5 +1,5 @@
 ﻿using Game.Battle;
-using Game.Battler;
+using Game.Systems.Battler;
 using System;
 using System.Linq;
 

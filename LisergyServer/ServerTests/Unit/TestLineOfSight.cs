@@ -1,10 +1,10 @@
 using Game;
-using Game.Battler;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
-using Game.FogOfWar;
 using Game.Network;
-using Game.Tile;
+using Game.Systems.Battler;
+using Game.Systems.FogOfWar;
+using Game.Systems.Tile;
 using Game.World;
 using GameDataTest;
 using NUnit.Framework;

@@ -1,4 +1,4 @@
-﻿using Game.BattleActions;
+﻿using Game.Battle.BattleActions;
 using Game.Events;
 using System;
 

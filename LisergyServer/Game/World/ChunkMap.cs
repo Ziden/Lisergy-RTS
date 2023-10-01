@@ -1,5 +1,6 @@
-﻿using Game.FogOfWar;
-using Game.Pathfinder;
+﻿using Game.Pathfinder;
+using Game.Systems.FogOfWar;
+using Game.Systems.Tile;
 using Game.Tile;
 using Game.World;
 using System.Collections.Generic;

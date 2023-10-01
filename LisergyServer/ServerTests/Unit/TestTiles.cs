@@ -1,5 +1,5 @@
-using Game.Dungeon;
-using Game.Tile;
+using Game.Systems.Dungeon;
+using Game.Systems.Tile;
 using Game.World;
 using GameDataTest;
 using NUnit.Framework;

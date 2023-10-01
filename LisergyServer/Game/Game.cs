@@ -48,6 +48,7 @@ namespace Game
         {
             World = world;
             Specs = specs;
+            GameSystems.SetupSystems();
         }
 
         public void ClearEventListeners()

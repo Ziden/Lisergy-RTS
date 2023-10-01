@@ -2,10 +2,10 @@
 using Game.DataTypes;
 using Game.Events;
 using Game.Events.Bus;
-using Game.Movement;
 using Game.Network.ClientPackets;
-using Game.Party;
 using Game.Pathfinder;
+using Game.Systems.Movement;
+using Game.Systems.Party;
 using Game.Tile;
 using Game.World;
 using LisergyServer.Core;
@@ -49,7 +49,7 @@ namespace ServerTests
             var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new MapPosition(pa.X, pa.Y)).ToList();
             var ev = new MoveRequestPacket() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };
             ev.Sender = this;
-            t.Chunk.Map.World.Game.NetworkEvents.Call(ev);
+            StrategyGame.NetworkEvents.Call(ev);
         }
 
         public List<T> ReceivedEventsOfType<T>() where T : BaseEvent

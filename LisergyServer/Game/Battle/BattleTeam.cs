@@ -1,5 +1,5 @@
-﻿using Game.Battler;
-using Game.DataTypes;
+﻿using Game.DataTypes;
+using Game.Systems.Battler;
 using Game.World;
 using System;
 using System.Collections.Generic;

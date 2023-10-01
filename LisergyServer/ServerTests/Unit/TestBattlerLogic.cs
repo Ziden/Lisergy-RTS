@@ -1,10 +1,9 @@
-﻿using Game;
-using Game.Battler;
-using Game.DataTypes;
+﻿using Game.DataTypes;
 using Game.ECS;
 using Game.Network;
-using Game.Party;
 using Game.Player;
+using Game.Systems.Battler;
+using Game.Systems.Party;
 using NUnit.Framework;
 using ServerTests;
 using System.Collections.Generic;
@@ -20,7 +19,6 @@ namespace Tests
         {
             Game = new TestGame();
         }
-
 
         [Test]
         public void TestBattleComponentLogicSync()

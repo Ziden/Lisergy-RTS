@@ -1,11 +1,10 @@
 using Game;
-using Game.Battler;
-using Game.Dungeon;
 using Game.ECS;
 using Game.Events.GameEvents;
-using Game.FogOfWar;
 using Game.Network;
 using Game.Player;
+using Game.Systems.Dungeon;
+using Game.Systems.FogOfWar;
 using NUnit.Framework;
 using ServerTests;
 using System.Collections.Generic;
@@ -36,7 +35,7 @@ namespace Tests
         [Test]
         public void TestRegistrationByType()
         {
-            var components = new ComponentSet(new DungeonEntity());
+            var components = new ComponentSet<DungeonEntity>(new DungeonEntity());
             IComponent toAdd = new EntityVisionComponent();
             components.Add(typeof(EntityVisionComponent), toAdd);
 
@@ -46,7 +45,7 @@ namespace Tests
         [Test]
         public void TestGenericAdd()
         {
-            var components = new ComponentSet(new DungeonEntity());
+            var components = new ComponentSet<DungeonEntity>(new DungeonEntity());
             IComponent toAdd = new EntityVisionComponent();
             components.Add(toAdd);
 

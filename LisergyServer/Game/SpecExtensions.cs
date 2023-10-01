@@ -1,6 +1,6 @@
-﻿using Game.Battler;
-using Game.Building;
-using Game.Dungeon;
+﻿using Game.Systems.Battler;
+using Game.Systems.Building;
+using Game.Systems.Dungeon;
 using Game.Tile;
 using GameData;
 using GameData.Specs;

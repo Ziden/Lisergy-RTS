@@ -1,6 +1,6 @@
 ﻿using Game.Events;
-using Game.Movement;
 using Game.Pathfinder;
+using Game.Systems.Movement;
 using Game.World;
 using System;
 using System.Collections.Generic;

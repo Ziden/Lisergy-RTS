@@ -1,7 +1,8 @@
 ﻿using Game.DataTypes;
 using Game.Entity;
 using Game.Events;
-using Game.Party;
+using Game.Systems.Battler;
+using Game.Systems.Party;
 using GameData.Specs;
 using System;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace Game.Network.ServerPackets
         {
             PartyIndex = entity.PartyIndex;
             OwnerID = entity.OwnerID;
-            Battler.Unit[] units = entity.BattleGroupLogic.GetUnits().Where(u => u != null).ToArray(); ;
+            Unit[] units = entity.BattleGroupLogic.GetUnits().Where(u => u != null).ToArray(); ;
             Stats = new UnitStats[units.Length];
             for (int x = 0; x < units.Length; x++)
             {

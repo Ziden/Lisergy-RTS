@@ -1,13 +1,13 @@
 ﻿using Game;
-using Game.Battler;
 using Game.DataTypes;
-using Game.Dungeon;
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Network;
 using Game.Network.ServerPackets;
-using Game.Party;
 using Game.Scheduler;
+using Game.Systems.Battler;
+using Game.Systems.Dungeon;
+using Game.Systems.Party;
 using NUnit.Framework;
 using ServerTests;
 using System;
@@ -46,7 +46,7 @@ namespace Tests
             enemy.BattleGroupLogic.AddUnit(new Unit(0));
 
             var battleID = Guid.NewGuid();
-            _game.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
+            StrategyGame.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
 
             _player.ReceivedEvents.Clear();
             DeltaTracker.Clear();
@@ -82,7 +82,7 @@ namespace Tests
             enemy.BattleGroupLogic.AddUnit(new Unit(0));
 
             var battleID = Guid.NewGuid();
-            _game.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
+            StrategyGame.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
 
             var battle = _game.BattleService.GetBattle(battleID);
             battle.Task.Execute();

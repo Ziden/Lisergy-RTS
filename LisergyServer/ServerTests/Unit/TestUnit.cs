@@ -52,7 +52,6 @@ namespace Tests
             Assert.AreNotEqual(s1, s2);
         }
 
-
         [Test]
         public void TestUnitTileReference()
         {

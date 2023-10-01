@@ -1,7 +1,7 @@
 ﻿using Game.Battle;
-using Game.Battler;
 using Game.DataTypes;
 using Game.Events;
+using Game.Systems.Battler;
 using System;
 
 namespace Game.Network.ServerPackets

@@ -1,12 +1,12 @@
 ﻿using Game.Events;
 using Game.Events.ServerEvents;
-using Game.FogOfWar;
-using Game.Movement;
 using Game.Network.ServerPackets;
 using Game.Network;
 using Game.Player;
 using System;
 using System.Collections.Generic;
+using Game.Systems.Movement;
+using Game.Systems.FogOfWar;
 
 namespace Game
 {

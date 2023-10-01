@@ -1,7 +1,7 @@
 using Game;
-using Game.Building;
-using Game.FogOfWar;
-using Game.Tile;
+using Game.Systems.Building;
+using Game.Systems.FogOfWar;
+using Game.Systems.Tile;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;

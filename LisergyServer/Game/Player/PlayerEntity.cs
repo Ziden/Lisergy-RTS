@@ -1,12 +1,11 @@
 ﻿using Game.Battle;
-using Game.Battler;
-using Game.Building;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Events;
-using Game.FogOfWar;
-using Game.Network.ServerPackets;
-using Game.Party;
+using Game.Systems.Battler;
+using Game.Systems.Building;
+using Game.Systems.FogOfWar;
+using Game.Systems.Party;
 using Game.Tile;
 using System;
 using System.Collections.Generic;

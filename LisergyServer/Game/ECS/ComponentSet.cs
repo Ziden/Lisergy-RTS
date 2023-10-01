@@ -34,18 +34,16 @@ namespace Game.ECS
     /// <summary>
     /// Represents a list of components.
     /// </summary>
-    public class ComponentSet : IComponentSet
+    public class ComponentSet<EntityType> : IComponentSet where EntityType : IEntity
     {
         internal Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
         internal List<IComponent> _networkedPublic = new List<IComponent>();
         internal List<IComponent> _networkedSelf = new List<IComponent>();
 
-        internal IEntity _entity;
+        internal EntityType _entity;
         internal PlayerEntity _owner;
 
-        internal static IDictionary<Type, EntityEventBus> _buses = new DefaultValueDictionary<Type, EntityEventBus>();
-
-        public ComponentSet(IEntity entity, PlayerEntity owner = null)
+        public ComponentSet(EntityType entity, PlayerEntity owner = null)
         {
             _entity = entity;
             _owner = owner;
@@ -83,13 +81,7 @@ namespace Game.ECS
 
         public void CallEvent(BaseEvent ev)
         {
-            GetEventBus().Call(_entity, ev);
             StrategyGame.GlobalGameEvents.Call(ev);
-        }
-
-        public EntityEventBus GetEventBus()
-        {
-            return _buses[_entity.GetType()];
         }
 
         public IComponent Get(Type t)
@@ -100,8 +92,7 @@ namespace Game.ECS
         public T Add<T>(Type type, T component) where T : IComponent
         {
             _components[type] = component;
-            //SystemRegistry<T, EntityType>.OnAddComponent(_owner, GetEventBus());
-            UntypedSystemRegistry.OnAddComponent(_entity, type, GetEventBus());
+            TypedSystemRegistry<T, EntityType>.OnAddComponent(_entity);
             var sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
             if (sync != null)
             {
@@ -114,16 +105,9 @@ namespace Game.ECS
 
         public void RemoveComponent<T>() where T : IComponent
         {
-            UntypedSystemRegistry.OnRemovedComponent(_entity, typeof(T), GetEventBus());
+            TypedSystemRegistry<T, EntityType>.OnRemovedComponent(_entity);
         }
 
-        public void ClearListeners()
-        {
-            foreach (EntityEventBus bus in _buses.Values)
-            {
-                bus.Clear();
-            }
-        }
 
         public void RegisterExternalComponentEvents<ComponentType, EventType>(Action<ComponentType, EventType> cb)
 
@@ -135,7 +119,7 @@ namespace Game.ECS
                 throw new Exception("External callbacks registered in a shared event bus must be static");
             }
 
-            GetEventBus().RegisterComponentEvent((IEntity e, ComponentType c, EventType ev) => cb(c, ev));
+            //GetEventBus().RegisterComponentEvent((IEntity e, ComponentType c, EventType ev) => cb(c, ev));
         }
     }
 }

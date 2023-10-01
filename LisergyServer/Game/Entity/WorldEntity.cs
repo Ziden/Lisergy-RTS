@@ -2,12 +2,12 @@
 using Game.ECS;
 using Game.Entity;
 using Game.Events.GameEvents;
-using Game.FogOfWar;
 using Game.Network.ServerPackets;
 using Game.Network;
 using Game.Player;
 using Game.Tile;
 using System;
+using Game.Systems.FogOfWar;
 
 namespace Game
 {
@@ -25,7 +25,7 @@ namespace Game
         [NonSerialized]
         private PlayerEntity _owner;
         [field: NonSerialized]
-        public ComponentSet _components { get; private set; }
+        public ComponentSet<WorldEntity> _components { get; private set; }
         [NonSerialized]
         protected TileEntity _tile;
         [NonSerialized]
@@ -36,7 +36,7 @@ namespace Game
             Owner = owner;
             _id = Guid.NewGuid();
             DeltaFlags = new DeltaFlags(this);
-            _components = new ComponentSet(this, owner);
+            _components = new ComponentSet<WorldEntity>(this, owner);
         }
 
         public bool IsInMap => _tile != null;

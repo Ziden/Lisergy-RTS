@@ -1,12 +1,10 @@
 using Game;
 using Game.Battle;
-using Game.BattleActions;
-using Game.BattleEvents;
-using Game.Battler;
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
+using Game.Systems.Battler;
 using NUnit.Framework;
 using ServerTests;
 using System;

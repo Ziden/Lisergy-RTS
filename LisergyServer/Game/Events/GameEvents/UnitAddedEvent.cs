@@ -1,5 +1,5 @@
-﻿using Game.Battler;
-using Game.ECS;
+﻿using Game.ECS;
+using Game.Systems.Battler;
 
 namespace Game.Events.GameEvents
 {

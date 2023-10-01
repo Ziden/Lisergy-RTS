@@ -4,6 +4,7 @@ using Game.Events;
 using Game.Network;
 using Game.Player;
 using Game.Services;
+using Game.Systems.Tile;
 using Game.Tile;
 using Game.World;
 using GameData;
@@ -70,7 +71,9 @@ namespace ServerTests
 
         public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientPacket
         {
-            this.NetworkEvents.RunCallbacks(sender, Serialization.FromEventRaw(ev));
+            BaseEvent deserialized = Serialization.ToEventRaw(Serialization.FromEventRaw(ev));
+            deserialized.Sender = sender;
+            StrategyGame.NetworkEvents.Call(deserialized);
             DeltaTracker.SendDeltaPackets(sender);
         }
 

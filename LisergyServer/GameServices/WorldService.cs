@@ -1,12 +1,10 @@
-﻿using Game.Battle;
-using Game.Battler;
-using Game.Events;
-using Game.Events.Bus;
+﻿using Game.Events.Bus;
 using Game.Events.GameEvents;
 using Game.Network;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
 using Game.Player;
+using Game.Systems.Battler;
 using System;
 
 namespace Game.Services
