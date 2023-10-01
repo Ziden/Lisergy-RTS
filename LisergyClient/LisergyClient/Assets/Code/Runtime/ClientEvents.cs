@@ -1,5 +1,7 @@
 ﻿
 using Assets.Code.UI;
+using Game.Battle;
+using Game.DataTypes;
 using Game.Party;
 using Game.Tile;
 using System;
@@ -18,6 +20,8 @@ namespace Assets.Code
         public static event Action<PartyEntity> OnSelectParty;
         public static event Action<LocalPlayer> OnPlayerLogin;
         public static event Action<PartyEntity> OnCourseCancelled;
+        public static event Action<GameId, BattleTeam, BattleTeam> OnBattleStart;
+        public static event Action<CompleteBattleHeader> OnBattleFinish;
         public static event Action<PartyEntity, TileEntity, TileEntity> OnPartyFinishedMove;
         public static event Action<PartyEntity, List<TileEntity>> OnStartMovementRequest;
         public static event Action<PartyEntity, TileEntity, EntityAction> OnActionSelected;
@@ -25,6 +29,16 @@ namespace Assets.Code
         public static void CameraMove(Vector3 oldPosition, Vector3 newPosition)
         {
             OnCameraMove?.Invoke(oldPosition, newPosition);
+        }
+
+        public static void ReceivedServerBattleStart(GameId battleId, BattleTeam attacker, BattleTeam defender)
+        {
+            OnBattleStart?.Invoke(battleId, attacker, defender);
+        }
+
+        public static void ReceivedServerBattleFinish(CompleteBattleHeader header)
+        {
+            OnBattleFinish?.Invoke(header);
         }
 
         public static void CourseCancelled(PartyEntity party)

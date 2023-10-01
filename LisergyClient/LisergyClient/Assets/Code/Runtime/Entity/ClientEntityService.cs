@@ -18,7 +18,6 @@ namespace Assets.Code.World
 {
     public class EntityListener : IEventListener
     {
-
         public static event Action<PartyView> OnPartyViewUpdated;
         public static event Action<PlayerBuildingView> OnBuildingViewUpdated;
         public static event Action<DungeonView> OnDungeonViewUpdated;

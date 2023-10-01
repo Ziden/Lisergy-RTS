@@ -28,11 +28,14 @@ namespace Assets.Code
 
         private GameInputs _actions;
 
+        private Camera _cam;
+
         private void OnEnable()
         {
             _actions = new GameInputs();
             _actions.Enable();
             _actions.UI.Enable();
+            _cam = Camera.main;
         }
 
         private void Update()
@@ -60,7 +63,7 @@ namespace Assets.Code
             var a = _actions.Game.ClickOnScreen.ReadValue<Vector2>();
             Debug.Log(a.ToString());
 
-            var ray = Camera.main.ScreenPointToRay(new Vector3(a.x, a.y));
+            var ray = _cam.ScreenPointToRay(new Vector3(a.x, a.y));
             if (Physics.Raycast(ray, out var hit))
             {
                 if (hit.collider == null)

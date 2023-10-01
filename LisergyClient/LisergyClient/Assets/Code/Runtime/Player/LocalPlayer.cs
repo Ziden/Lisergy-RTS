@@ -15,6 +15,8 @@ namespace Assets.Code
     {
         public Dictionary<GameId, WorldEntity> KnownEntities = new Dictionary<GameId, WorldEntity>();
 
+        public bool ViewBattles = true;
+
         public LocalPlayer(GameId id) : base()
         {
             UserID = id;

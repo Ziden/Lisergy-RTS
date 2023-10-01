@@ -12,7 +12,6 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
     {
         public UITKScreen Screen;
         public GameObject Object;
-        public bool IsLoaded = false;
     }
 
     public class GenericSetup : UIScreenSetup { }
@@ -71,45 +70,45 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
 
         public T Open<T, H>(H setup) where T : UITKScreen where H : UIScreenSetup
         {
-            if (_inScene.TryGetValue(typeof(T), out var loadedScreen))
+            if (_inScene.TryGetValue(typeof(T), out var obj))
             {
-                if (!loadedScreen.IsLoaded) return loadedScreen.Screen as T;
-                if (loadedScreen.Object.activeSelf) return loadedScreen.Screen as T;
-                loadedScreen.Screen.OnBeforeOpen();
-                loadedScreen.Object.SetActive(true);
-                var uiDoc = loadedScreen.Object.GetComponent<UIDocument>();
-                loadedScreen.Screen._setup = setup;
-                loadedScreen.Screen._panel = uiDoc.rootVisualElement.panel;
-                loadedScreen.Screen._root = uiDoc.rootVisualElement;
+                if (!obj.Screen.Loaded) return obj.Screen as T;
+                if (obj.Object.activeSelf) return obj.Screen as T;
+                obj.Screen.OnBeforeOpen();
+                obj.Object.SetActive(true);
+                var uiDoc = obj.Object.GetComponent<UIDocument>();
+                obj.Screen._setup = setup;
+                obj.Screen._panel = uiDoc.rootVisualElement.panel;
+                obj.Screen._root = uiDoc.rootVisualElement;
                 SetupBasicListeners(uiDoc.rootVisualElement);
-                loadedScreen.Screen.OnOpen();
-                return loadedScreen.Screen as T;
+                obj.Screen.OnOpen();
+                return obj.Screen as T;
             }
             var screen = (T)InstanceFactory.CreateInstance(typeof(T));
             screen._setup = setup;
             screen._screenService = this;
             screen.OnBeforeOpen();
-            loadedScreen = new LoadedScreen()
+            obj = new LoadedScreen()
             {
                 Object = new GameObject(typeof(T).Name),
                 Screen = screen
             };
-            loadedScreen.Object.transform.parent = _screensContainer.transform;
-            loadedScreen.Object.transform.localPosition = Vector3.zero;
-            _inScene[typeof(T)] = loadedScreen;
+            obj.Object.transform.parent = _screensContainer.transform;
+            obj.Object.transform.localPosition = Vector3.zero;
+            _inScene[typeof(T)] = obj;
             _assets.GetUISetting(UISetting.PanelSettings, panel =>
             {
                 _assets.GetScreen(screen.ScreenAsset, visualTree =>
                 {
-                    var uiDoc = loadedScreen.Object.AddComponent<UIDocument>();
+                    var uiDoc = obj.Object.AddComponent<UIDocument>();
                     uiDoc.visualTreeAsset = visualTree;
                     uiDoc.panelSettings = panel;
                     SetupBasicListeners(uiDoc.rootVisualElement);
                     screen._root = uiDoc.rootVisualElement;
                     screen.OnLoaded(uiDoc.rootVisualElement);
-                    loadedScreen.IsLoaded = true;
-                    _inScene[typeof(T)] = loadedScreen;
+                    _inScene[typeof(T)] = obj;
                     screen.OnOpen();
+                    screen.Loaded = true;
                 });
             });
             return screen;
@@ -127,13 +126,13 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
 
         private void Close(Type t)
         {
-            if (_inScene.TryGetValue(t, out var screen))
+            if (_inScene.TryGetValue(t, out var obj))
             {
-                if(screen.IsLoaded)
+                if(obj.Screen.Loaded)
                 {
-                    screen.Screen.OnClose();
+                    obj.Screen.OnClose();
                 }
-                screen.Object.SetActive(false);
+                obj.Object.SetActive(false);
             }
         }
 

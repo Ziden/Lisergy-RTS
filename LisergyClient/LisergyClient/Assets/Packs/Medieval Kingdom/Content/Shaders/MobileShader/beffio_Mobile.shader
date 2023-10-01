@@ -52,7 +52,7 @@ Shader "beffio/Medieval_Kingdom/Mobile"
 
 		void surf( Input i , inout SurfaceOutputStandard o )
 		{
-			o.Normal = UnpackScaleNormal( tex2D( _Normal_map_input, i.uv_texcoord ) ,_Normal_intensity );
+			o.Normal = UnpackScaleNormal( tex2D( _Normal_map_input, i.uv_texcoord ) , _Normal_intensity);
 			fixed4 albedoMap = tex2D( _Albedo_smoothness_map_input, i.uv_texcoord );
 			float4 lerpResult46 = lerp(
 				( 
@@ -62,10 +62,9 @@ Shader "beffio/Medieval_Kingdom/Mobile"
 							( 1.0 - ( 1.0 - 2.0 * ( _Base_color - 0.5 ) ) * ( 1.0 - albedoMap ) ) 
 							: 
 							( 2.0 * _Base_color * albedoMap ) 
-							) 
-						)
-					) , _Detail_color , ( tex2D( _Detail_mask_1_map_input, i.uv_texcoord ) * _Detail_level ).r);
-
+						) 
+					)
+				) , _Detail_color , ( tex2D( _Detail_mask_1_map_input, i.uv_texcoord ) * _Detail_level ).r);
 			o.Albedo = lerpResult46.rgb;
 			o.Smoothness = ( albedoMap.a * _Smoothness_shift );
 			o.Alpha = 1;

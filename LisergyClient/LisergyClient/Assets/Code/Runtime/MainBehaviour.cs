@@ -2,6 +2,7 @@
 using Assets.Code.Assets.Code;
 using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Assets.Code.Audio;
+using Assets.Code.Assets.Code.Runtime;
 using Assets.Code.Assets.Code.UIScreens;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Game;
@@ -43,7 +44,7 @@ public class MainBehaviour : MonoBehaviour
         _instance.StartCoroutine(coroutine);
     }
 
-    private static IEnumerator Coroutine(Action a, float seconds)
+    public static IEnumerator Coroutine(Action a, float seconds)
     {
         yield return new WaitForSeconds(seconds);
         a();
@@ -110,6 +111,7 @@ public class MainBehaviour : MonoBehaviour
         ServiceContainer.Register<IInputService, InputService>(CreateInputService());
         ServiceContainer.Register<IScreenService, ScreenService>(new ScreenService());
         ServiceContainer.Register<IAudioService, AudioService>(new AudioService());
+        ServiceContainer.Register<INotificationService, NotificationService>(new NotificationService());
         ServiceContainer.Register<IAssetService, AssetService>(new AssetService());
     }
 

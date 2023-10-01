@@ -1,34 +1,49 @@
-﻿using Assets.Code.Assets.Code.UIScreens.Base;
-using Assets.Code.World;
+﻿using Assets.Code.Assets.Code.Runtime.UIScreens;
+using Assets.Code.Assets.Code.UIScreens.Base;
 using Game;
 using Game.DataTypes;
-using Game.Entity;
 using Game.Events;
 using Game.Events.Bus;
+using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
 using Game.Player;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.Code.Battle
 {
     public class BattleListener : IEventListener
     {
+        IScreenService _screens;
+
         public BattleListener(EventBus<ServerPacket> networkEvents)
         {
+            _screens = ServiceContainer.Resolve<IScreenService>();
+            networkEvents.Register<BattleLogPacket>(this, BattleLog);
             networkEvents.Register<BattleResultSummaryPacket>(this, BattleSummary);
-            networkEvents.Register<BattleResultPacket>(this, BattleFinish);
             networkEvents.Register<BattleStartPacket>(this, BattleStart);
+        }
+
+        [EventMethod]
+        public void BattleLog(BattleLogPacket ev)
+        {
+            var transition = _screens.Get<TransitionScreen>();
+            if(transition != null) transition.CloseTransition(() =>
+            {
+                var battleScreen = _screens.Get<BattleScreen>();
+                if (battleScreen != null)
+                {
+                    battleScreen.OnFinishedPlayback += () => ClientEvents.ReceivedServerBattleFinish(battleScreen.ResultHeader);
+                    battleScreen.PlayLog(ev);
+                }
+            });
         }
 
         [EventMethod]
         public void BattleSummary(BattleResultSummaryPacket ev)
         {
             Log.Info($"Battle Summary Received {ev.BattleHeader.BattleID}");
+
             var pl = MainBehaviour.LocalPlayer;
+
             var w = GameView.World;
             var def = w.GetOrCreateClientPlayer(ev.BattleHeader.Defender.OwnerID);
             var atk = w.GetOrCreateClientPlayer(ev.BattleHeader.Attacker.OwnerID);
@@ -48,27 +63,32 @@ namespace Assets.Code.Battle
                 party.BattleGroupLogic.BattleID = GameId.ZERO;
             }
 
-            Log.Info("Battle result event");
-            ServiceContainer.Resolve<IScreenService>().Open<BattleNotificationScreen, BattleNotificationSetup>(new BattleNotificationSetup()
+            if (pl.ViewBattles)
             {
-                BattleHeader = ev.BattleHeader
-            });
+                var battleScreen = _screens.Get<BattleScreen>();
+                if (battleScreen != null && battleScreen.BattleID == ev.BattleHeader.BattleID)
+                {
+                    battleScreen.SetResultHeader(ev.BattleHeader);
+                }
+                MainBehaviour.Networking.Send(new BattleLogRequestPacket()
+                {
+                    BattleId = ev.BattleHeader.BattleID
+                });
+            }
+            else
+            {
+                ClientEvents.ReceivedServerBattleFinish(ev.BattleHeader);
+            }
         }
 
-        [EventMethod]
-        public void BattleFinish(BattleResultPacket ev)
-        {
-            Log.Info($"Battle Finish Received {ev.FinalStateHeader.BattleID}");
-            //MainBehaviour.LocalPlayer.Battles.Add(ev);
-        }
-
+        // TODO: Not used
         [EventMethod]
         public void BattleStart(BattleStartPacket ev)
         {
-            Log.Debug("Received battle startr");
+            Log.Debug("Received battle start");
+            var pl = MainBehaviour.LocalPlayer;
 
             // TODO: Remove all this crap and use logic synchronizer
-            var pl = MainBehaviour.LocalPlayer;
             var w = GameView.World;
             var def = w.GetOrCreateClientPlayer(ev.Defender.OwnerID);
             var atk = w.GetOrCreateClientPlayer(ev.Attacker.OwnerID);
@@ -89,6 +109,8 @@ namespace Assets.Code.Battle
                 party.Tile = tile;
                 party.BattleGroupLogic.BattleID = ev.BattleID;
             }
+
+            ClientEvents.ReceivedServerBattleStart(ev.BattleID, ev.Attacker, ev.Defender);
         }
     }
 }

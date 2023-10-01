@@ -1,5 +1,4 @@
-﻿using Game;
-using Game.Battle;
+﻿using Game.Battle;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Events;

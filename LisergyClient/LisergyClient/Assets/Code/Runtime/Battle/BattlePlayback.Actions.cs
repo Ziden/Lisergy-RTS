@@ -5,33 +5,35 @@ using Game;
 using Game.Battle;
 using Game.BattleActions;
 using Game.BattleEvents;
-using Game.Battler;
-using Game.DataTypes;
-using Game.Network.ServerPackets;
+using GameAssets;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TMPro;
-using UnityEngine;
 
 namespace Assets.Code.Battle
 {
     public partial class BattlePlayback
     {
+        public event Action<AttackAction> OnAttacked;
+        public event Action<UnitDeadEvent> OnUnitDied;
+        public event Action<BattleUnit> OnUnitAct;
+        public event Action<BattleUnit> OnUnitFinishAct;
+        public event Action OnBattleFinish;
+
         private async Task PlayEvent(BattleEvent ev)
         {
             if (ev is UnitDeadEvent unitDead)
             {
-                var unitView = _units[unitDead.UnitId];
+                var unitView = Units[unitDead.UnitId];
                 unitView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.Death);
+                _audio.PlaySoundEffect(SoundFX.Ogre3);
             }
             else if (ev is AttackAction atk)
             {
                 atk.Battle = _battle;
                 var result = atk.Result as AttackActionResult;
-                var attackerView = _units[atk.Unit.UnitID];
-                var defenderView = _units[atk.Defender.UnitID];
+                var attackerView = Units[atk.Unit.UnitID];
+                var defenderView = Units[atk.Defender.UnitID];
 
                 var ogPosition = attackerView.GameObject.transform.position;
 
@@ -39,30 +41,35 @@ namespace Assets.Code.Battle
                 var sequence = DOTween.Sequence();
                 // Move in front of enemy
                 var dest = defenderView.GameObject.transform.position;
-                var n = (defenderView.GameObject.transform.position - attackerView.GameObject.transform.position).normalized / 2.5f;
+                var n = (defenderView.GameObject.transform.position - attackerView.GameObject.transform.position).normalized / 2.1f;
                 if (dest.x > attackerView.GameObject.transform.position.x) dest -= n;
                 else if (dest.x < attackerView.GameObject.transform.position.x) dest -= n;
 
-                _screen.ToggleBar(atk.UnitID, false);
+                OnUnitAct?.Invoke(atk.Unit);
 
                 sequence.Append(
-                    attackerView.GameObject.transform.DOMove(dest, 0.8f)
-                    .OnStart(() => attackerView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.Jump))
-                    .OnComplete(() => attackerView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.MeleeAttack)));
+                    attackerView.GameObject.transform.DOMove(dest, 0.5f)
+                    .OnStart(() => attackerView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.Running))
+                    .OnComplete(() => {
+                        _audio.PlaySoundEffect(SoundFX.Swing);
+                        attackerView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.MeleeAttack); 
+
+                    }));
                 sequence.AppendInterval(0.3f);
 
                 // Hit Effect and damage
                 sequence.AppendCallback(() =>
                 {
+                    _audio.PlaySoundEffect(SoundFX.Sword_unsheathe5);
                     defenderView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.Damaged, 0.7f);
                     ShowDamage(defenderView, result.Damage);
                     OnAttacked?.Invoke(atk);
                 });
-                sequence.AppendInterval(0.6f);
+                sequence.AppendInterval(0.55f);
 
                 // Go back
                 sequence.Append(
-                   attackerView.GameObject.transform.DOMove(ogPosition, 0.6f)
+                   attackerView.GameObject.transform.DOMove(ogPosition, 0.3f)
                    .OnStart(() =>
                    {
                        attackerView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.JumpBack);
@@ -70,7 +77,7 @@ namespace Assets.Code.Battle
                    }));
                 sequence.Play();
                 while (sequence.IsPlaying()) await Task.Delay(1);
-                _screen.ToggleBar(atk.UnitID, true);
+                OnUnitFinishAct?.Invoke(atk.Unit);
                 attackerView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.BattleIddle);
             }
         }

@@ -49,16 +49,12 @@ namespace Game.Battle
             BattleUnit unit = CurrentActingUnit;
             if (unit != action.Unit)
             {
-                action.Result = new ActionResult
-                {
-                    Succeeded = false
-                };
                 return null;
             }
             if (action is AttackAction attack)
             {
-                action.Result = attack.Unit.Attack(attack.Defender);
-                action.Result.Succeeded = true;
+                attack.Result = attack.Unit.Attack(attack.Defender);
+                attack.Result.Succeeded = true;
                 Result.RecordEvent(attack);
                 if (attack.Defender.Dead)
                 {

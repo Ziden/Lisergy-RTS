@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Code.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,13 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens.Base
 {
     public static class VisualElementExtensions
     {
+
+        public static void MoveToEntity(this VisualElement item, IPanel panel, IGameObject view, Camera cam)
+        {
+            var position = RuntimePanelUtils.CameraTransformWorldToPanel(panel, view.GameObject.transform.position, cam);
+            item.transform.position = new Vector2(position.x - 20, position.y);
+        }
+
         public static Rect GetRect(this VisualElement visual)
         {
             IPanel panel = visual.panel;

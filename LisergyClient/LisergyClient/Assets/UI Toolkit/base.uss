@@ -17,10 +17,10 @@ Button:active {
 }
 
 .radial-progress--background {
-    border-left-color: rgba(103, 10, 10, 255);
-    border-right-color: rgba(103, 10, 10, 255);
-    border-top-color: rgba(103, 10, 10, 255);
-    border-bottom-color: rgba(103, 10, 10, 255);
+    border-left-color: rgb(103, 10, 10);
+    border-right-color: rgb(103, 10, 10);
+    border-top-color: rgb(103, 10, 10);
+    border-bottom-color: rgb(103, 10, 10);
     border-left-width: 5px;
     border-right-width: 5px;
     border-top-width: 5px;
@@ -35,7 +35,7 @@ Button:active {
     min-width: 26px;
     min-height: 20px;
     --track-color: red;
-    --progress-color: #30D42D;
+    --progress-color: rgb(48, 212, 45);
     --percentage-color: white;
     margin-left: 5px;
     margin-right: 5px;
@@ -43,11 +43,37 @@ Button:active {
     margin-bottom: 5px;
     flex-direction: row;
     justify-content: center;
-    width: 100px; 
+    width: 100px;
     height: 100px;
 }
 
 .radial-progress__label {
     -unity-text-align: middle-left;
     color: var(--percentage-color);
+}
+
+.screen-transition {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+    flex-direction: row;
+    overflow: hidden;
+    width: 300%;
+    max-width: 300%;
+    min-width: 300%;
+    position: absolute;
+    height: 100%;
+    max-height: 100%;
+    min-height: 100%;
+    translate: -100% 0;
+    transition-duration: 2s;
+    transition-property: translate;
+    transition-timing-function: linear;
+}
+
+.screen-transition .transition-center {
+    translate: 0 0;
+}
+
+.screen-transition .transition-right {
+    translate: 0 0;
 }

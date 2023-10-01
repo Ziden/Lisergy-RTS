@@ -1,4 +1,6 @@
 using Assets.Code.Assets.Code.Assets;
+using Assets.Code.Assets.Code.Audio;
+using Assets.Code.Assets.Code.Runtime.UIScreens;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.Battle;
 using Game;
@@ -14,20 +16,19 @@ using UnityEngine;
 
 namespace Assets.Code
 {
+    // just for testing
     public class BattleMonoBehaviour : MonoBehaviour
     {
-        private BattlePlayback _playback;
-
-        
-
-        void Start()
+        private void TestBattle()
         {
             //// TEST ///
             StrategyGame game = new StrategyGame(TestSpecs.Generate(), null);
+          
             ServiceContainer.Register<IAssetService, AssetService>(new AssetService());
-            var screenService = new ScreenService();
-            ServiceContainer.Register<IScreenService, ScreenService>(screenService);
-            screenService.OnSceneLoaded();
+            ServiceContainer.Register<IAudioService, AudioService>(new AudioService());
+            ServiceContainer.Register<IScreenService, ScreenService>(new ScreenService());
+            ServiceContainer.OnSceneLoaded();
+
             Serialization.LoadSerializers();
             MainBehaviour.ConfigureUnity();
             //// END TEST ////
@@ -43,8 +44,19 @@ namespace Assets.Code
             var result = autoRun.RunAllRounds();
             log.SetTurns(result);
 
-            _playback = new BattlePlayback(log);
-            _playback.StartPlayback();
+            var header = log.DeserializeStartingState();
+            var screen = ServiceContainer.Resolve<IScreenService>().Open<BattleScreen, BattleScreenSetup>(new BattleScreenSetup()
+            {
+                Attacker = header.Attacker,
+                Defender = header.Defender,
+                BattleId = id,
+            });
+            screen.PlayLog(log);
+        }
+
+        void Start()
+        {
+            //TestBattle();
         }
     }
 }

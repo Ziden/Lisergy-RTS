@@ -1,4 +1,6 @@
-﻿using Assets.Code.Assets.Code.Runtime.Tools;
+﻿using Assets.Code.Assets.Code.Assets;
+using Assets.Code.Assets.Code.Audio;
+using Assets.Code.Assets.Code.Runtime.Tools;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.World;
 using DG.Tweening;
@@ -7,11 +9,13 @@ using Game.BattleActions;
 using Game.Battler;
 using Game.DataTypes;
 using Game.Network.ServerPackets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Code.Battle
 {
@@ -24,23 +28,25 @@ namespace Assets.Code.Battle
         private ActivationObjectPool _damageNumberPool = new ActivationObjectPool();
         private TurnBattle _battle;
         private BattleLogPacket _log;
+        private IAudioService _audio;
         private int _currentTurnNumber = 0;
         private BattleTurnLog _currentTurn;
-        private BattleScreen _screen;
+        public Camera Camera;
+        public bool Playing { get; private set; }
 
-        private Dictionary<GameId, UnitView> _units = new Dictionary<GameId, UnitView>();
+        public Dictionary<GameId, UnitView> Units = new Dictionary<GameId, UnitView>();
         private int _waitingUnits = 0;
 
-        public BattlePlayback(BattleLogPacket log)
+        public BattlePlayback(GameId battleId, BattleTeam attacker, BattleTeam defender)
         {
-            var header = log.DeserializeStartingState();
-            _battle = new TurnBattle(header.BattleID, header.Attacker, header.Defender);
-            _log = log;
+            _battle = new TurnBattle(battleId, attacker, defender);
+            _audio = ServiceContainer.Resolve<IAudioService>();
         }
 
-        public void StartPlayback()
+        public async Task SetupScene(Transform root, Action onLoaded)
         {
-            var attackersObject = GameObject.Find("Team1");
+            Debug.Log("Setting up Scene");
+            var attackersObject = root.Find("Team1").gameObject;
             var unitIndex = 0;
             foreach (var teamSlot in SLOT_ORDER)
             {
@@ -52,7 +58,7 @@ namespace Assets.Code.Battle
             }
 
             unitIndex = 0;
-            var defendersObject = GameObject.Find("Team2");
+            var defendersObject = root.Find("Team2").gameObject;
             foreach (var teamSlot in SLOT_ORDER)
             {
                 var battleUnit = unitIndex >= _battle.Defender.Units.Length ? null : _battle.Defender.Units[unitIndex];
@@ -62,24 +68,23 @@ namespace Assets.Code.Battle
                 if (battleUnit == null) continue;
                 AddUnit(battleUnit.UnitReference, defendersObject, teamSlot);
             }
-            _damageNumber = GameObject.Find("DamageNumber");
-            _damageNumberPool.AddNew(_damageNumber);
-            _damageNumberPool.Release(_damageNumber);
+            _damageNumber = root.Find("DamageNumber").gameObject;
+            await WaitUnitsLoaded();
+            onLoaded();
+        }
 
-            _screen = ServiceContainer.Resolve<IScreenService>().Open<BattleScreen, BattleScreenSetup>(new BattleScreenSetup()
-            {
-                Attacker = _battle.Attacker,
-                Defender = _battle.Defender,
-                Units = _units
-            });
-
+        public void PlayBattle(BattleLogPacket log)
+        {
+            Playing = true;
+            _log = log;
             _ = PlayTurns();
+            OnBattleFinish?.Invoke();
         }
 
         private async Task WaitUnitsLoaded()
         {
-            while (_waitingUnits > 0) await Task.Delay(100);
-            await Task.Delay(1000);
+            while (_waitingUnits > 0) await Task.Delay(1);
+            await Task.Delay(1);
         }
 
         private async Task PlayTurns()
@@ -104,19 +109,19 @@ namespace Assets.Code.Battle
 
         private void ShowDamage(UnitView view, ushort number)
         {
-            _screen.TakeDamage(view.Unit.Id, number);
             TextMeshPro text = null;
             var damageObject = _damageNumberPool.Obtain();
             if(damageObject == null)
             {
                 damageObject = MainBehaviour.Instantiate(_damageNumber);
+                damageObject.transform.localScale = new Vector3(0.02912701f, 0.02912701f, 0.02912701f);
                 _damageNumberPool.AddNew(damageObject);
             }
 
             text = damageObject.GetComponent<TextMeshPro>();
             text.text = number.ToString();
             text.transform.position = view.GameObject.transform.position + new Vector3(0, 0.5f, 0);
-            damageObject.transform.LookAt(Camera.main.transform);
+            damageObject.transform.LookAt(Camera.transform);
             damageObject.transform.Rotate(0, 180, 0);
             var iniScale = text.transform.localScale;
             var durationSeconds = 2;
@@ -135,7 +140,7 @@ namespace Assets.Code.Battle
                 gameObject.transform.SetParent(teamTransform.transform.GetChild(index).transform);
                 gameObject.transform.localPosition = Vector3.zero;
                 gameObject.transform.localRotation = Quaternion.identity;
-                _units[u.Id] = unitView;
+                Units[u.Id] = unitView;
                 _ = MainBehaviour.RunAsync(() => unitView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.BattleIddle), 0.1f);
             });
         }
