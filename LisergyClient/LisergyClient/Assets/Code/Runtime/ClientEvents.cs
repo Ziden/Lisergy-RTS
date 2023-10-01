@@ -1,5 +1,6 @@
 ﻿
 using Assets.Code.UI;
+using Assets.Code.World;
 using Game.Battle;
 using Game.DataTypes;
 using Game.Party;
@@ -11,7 +12,8 @@ using UnityEngine;
 namespace Assets.Code
 {
     /// <summary>
-    /// Events fired only internally in client
+    /// Events fired only internally in client. 
+    /// For the client to react to something that happens, these events are the ones that shall be listened to.
     /// </summary>
     public class ClientEvents
     {
@@ -25,6 +27,17 @@ namespace Assets.Code
         public static event Action<PartyEntity, TileEntity, TileEntity> OnPartyFinishedMove;
         public static event Action<PartyEntity, List<TileEntity>> OnStartMovementRequest;
         public static event Action<PartyEntity, TileEntity, EntityAction> OnActionSelected;
+
+        public static event Action<PartyView> OnPartyViewUpdated;
+        public static event Action<PlayerBuildingView> OnBuildingViewUpdated;
+        public static event Action<DungeonView> OnDungeonViewUpdated;
+        public static event Action<PartyView> OnPartyViewCreated;
+        public static event Action<PlayerBuildingView> OnBuildingViewCreated;
+        public static event Action<DungeonView> OnDungeonViewCreated;
+
+        public static void PartyViewUpdated(PartyView view) => OnPartyViewUpdated?.Invoke(view);
+        public static void BuildingViewUpdated(PlayerBuildingView view) => OnBuildingViewUpdated?.Invoke(view);
+        public static void DungeonViewUpdated(DungeonView view) => OnDungeonViewUpdated?.Invoke(view);
 
         public static void CameraMove(Vector3 oldPosition, Vector3 newPosition)
         {

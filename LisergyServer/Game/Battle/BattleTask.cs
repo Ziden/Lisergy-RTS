@@ -24,7 +24,7 @@ namespace Game.Battle
             BattleResultPacket resultEvent = new BattleResultPacket(_battle.ID, result);
             // for now just run callbacks
             // TODO: place on a message queue
-            _game.NetworkEvents.Call(resultEvent);
+            StrategyGame.NetworkEvents.Call(resultEvent);
         }
 
         public override string ToString()

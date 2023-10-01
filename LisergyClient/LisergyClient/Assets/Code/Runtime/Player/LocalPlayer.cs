@@ -8,6 +8,7 @@ using Game.ECS;
 using Game.Network;
 using Game.Player;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Code
 {
@@ -22,7 +23,7 @@ namespace Assets.Code
             UserID = id;
         }
 
-        private void OnPartyCreated(PartyView view)
+        private void OnPartyUpdated(PartyView view)
         {
             if (view.Entity.IsMine())
             {
@@ -30,9 +31,9 @@ namespace Assets.Code
             }
         }
 
-        private void OnBuildingViewCreated(PlayerBuildingView view)
+        private void OnBuildingViewUpdated(PlayerBuildingView view)
         {
-            if (view.Entity.IsMine())
+            if (view.Entity.IsMine() && !Buildings.Any(b => b.Id == view.Entity.Id))
             {
                 Buildings.Add(view.Entity);
                 if (view.Entity.SpecID == StrategyGame.Specs.InitialBuilding)
@@ -42,8 +43,8 @@ namespace Assets.Code
 
         public void SetupLocalPlayer()
         {
-            EntityListener.OnPartyViewCreated += OnPartyCreated;
-            EntityListener.OnBuildingViewCreated += OnBuildingViewCreated;
+            ClientEvents.OnPartyViewUpdated += OnPartyUpdated;
+            ClientEvents.OnBuildingViewUpdated += OnBuildingViewUpdated;
         }
      
         public WorldEntity GetKnownEntity(GameId id)

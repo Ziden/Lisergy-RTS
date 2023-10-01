@@ -9,8 +9,6 @@ using Game.Events.Bus;
 using Game.Party;
 using Game.Tile;
 using GameAssets;
-using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -52,13 +50,13 @@ namespace Assets.Code
                 _partyButtons[i].clicked += () => PartyButtonClick(index);
             }
             _cursor.style.display = DisplayStyle.None;
-            EntityListener.OnPartyViewUpdated += OnPartyUpdated;
+            ClientEvents.OnPartyViewUpdated += OnPartyUpdated;
             ClientEvents.OnCameraMove += OnCameraMove;
             ClientEvents.OnClickTile += OnClickTile;
         }
         public override void OnClose()
         {
-            EntityListener.OnPartyViewUpdated -= OnPartyUpdated;
+            ClientEvents.OnPartyViewUpdated -= OnPartyUpdated;
             ClientEvents.OnCameraMove -= OnCameraMove;
             ClientEvents.OnClickTile -= OnClickTile;
         }

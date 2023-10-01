@@ -66,7 +66,6 @@ namespace Game.ECS
             {
                 IEntity entity = GetCurrentEntity();
                 ComponentType component = GetComponent<ComponentType>(entity);
-                // TODO: Remove unboxing below for speed
                 if (component != null)
                 {
                     callback((EntityType)entity, component, ev);

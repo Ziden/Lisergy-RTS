@@ -27,6 +27,7 @@ public class MainBehaviour : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Starting Main Behaviour");
         DontDestroyOnLoad(this.gameObject);
         ServiceContainer.OnSceneLoaded();
         ClientEvents.OnPlayerLogin += OnPlayerLogin;

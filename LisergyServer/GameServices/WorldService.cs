@@ -20,7 +20,7 @@ namespace Game.Services
         {
             _game = game;
             _world = game.World;
-            _game.NetworkEvents.Register<JoinWorldPacket>(this, JoinWorld);
+            StrategyGame.NetworkEvents.Register<JoinWorldPacket>(this, JoinWorld);
             StrategyGame.GlobalGameEvents.Register<OffensiveMoveEvent>(this, OnOffensiveAction);
         }
 
@@ -54,7 +54,7 @@ namespace Game.Services
                 var battleID = Guid.NewGuid();
                 var start = new BattleStartPacket(battleID, atk, def);
 
-                _game.NetworkEvents.Call(start);
+                StrategyGame.NetworkEvents.Call(start);
 
                 if(atk.Owner.CanReceivePackets())
                 {

@@ -32,7 +32,7 @@ namespace MapServer
         {
         }
 
-        public override void RegisterCommands(StrategyGame game, CommandExecutor executor)
+        public override void RegisterCommands(StrategyGame game, ConsoleCommandExecutor executor)
         {
             executor.RegisterCommand(new TileCommand(game));
             executor.RegisterCommand(new TaskCommand(game));

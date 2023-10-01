@@ -9,6 +9,7 @@ namespace Game.Events.Bus
 
     public class EventBus<EventType>
     {
+        public event Action<BaseEvent> OnEventFired;
 
         internal Dictionary<Type, List<RegisteredListener>> _registeredListeners;
         internal HashSet<IEventListener> _listeners;
@@ -22,6 +23,8 @@ namespace Game.Events.Bus
 
         public virtual void Call(BaseEvent ev)
         {
+            OnEventFired?.Invoke(ev);
+            Log.Debug("Event Fired " + ev.GetType());
             if (!_registeredListeners.ContainsKey(ev.GetType()))
             {
                 if (!_registeredListeners.ContainsKey(ev.GetType().BaseType))
@@ -35,6 +38,7 @@ namespace Game.Events.Bus
             {
                 registeredEvent.Call(ev);
             }
+        
         }
 
         public EventBus()

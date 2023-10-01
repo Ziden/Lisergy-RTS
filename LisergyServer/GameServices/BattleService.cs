@@ -26,9 +26,9 @@ namespace Game.Services
         public BattleService(StrategyGame game)
         {
             World = game.World;
-            game.NetworkEvents.Register<BattleLogRequestPacket>(this, OnBattleRequest);
-            game.NetworkEvents.Register<BattleStartPacket>(this, OnBattleStart);
-            game.NetworkEvents.Register<BattleResultPacket>(this, OnBattleResult);
+            StrategyGame.NetworkEvents.Register<BattleLogRequestPacket>(this, OnBattleRequest);
+            StrategyGame.NetworkEvents.Register<BattleStartPacket>(this, OnBattleStart);
+            StrategyGame.NetworkEvents.Register<BattleResultPacket>(this, OnBattleResult);
         }
 
         public void Wipe()
@@ -53,7 +53,7 @@ namespace Game.Services
         [EventMethod]
         public void OnBattleStart(BattleStartPacket ev)
         {
-            Console.WriteLine($"Received {ev.Attacker} vs {ev.Defender}");
+            Log.Debug($"Received {ev.Attacker} vs {ev.Defender}");
 
             var battle = new TurnBattle(ev.BattleID, ev.Attacker, ev.Defender);
             battle.StartEvent = ev;

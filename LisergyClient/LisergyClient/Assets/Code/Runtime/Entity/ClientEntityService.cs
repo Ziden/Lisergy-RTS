@@ -18,13 +18,6 @@ namespace Assets.Code.World
 {
     public class EntityListener : IEventListener
     {
-        public static event Action<PartyView> OnPartyViewUpdated;
-        public static event Action<PlayerBuildingView> OnBuildingViewUpdated;
-        public static event Action<DungeonView> OnDungeonViewUpdated;
-
-        public static event Action<PartyView> OnPartyViewCreated;
-        public static event Action<PlayerBuildingView> OnBuildingViewCreated;
-        public static event Action<DungeonView> OnDungeonViewCreated;
 
         public EntityListener(EventBus<ServerPacket> networkEvents)
         {
@@ -74,9 +67,9 @@ namespace Assets.Code.World
                 var result = UpdateClientState<PartyEntity, PartyView>(serverParty, ev.SyncedComponents);
                 if(result.Created)
                 {
-                    OnPartyViewCreated?.Invoke(result.View);
+                    //OnPartyViewCreated?.Invoke(result.View);
                 }
-                OnPartyViewUpdated?.Invoke(result.View);
+                ClientEvents.PartyViewUpdated(result.View);
             }
 
             else if (serverEntity is PlayerBuildingEntity serverBuilding)
@@ -84,18 +77,18 @@ namespace Assets.Code.World
                 var result = UpdateClientState<PlayerBuildingEntity, PlayerBuildingView>(serverBuilding, ev.SyncedComponents);
                 if (result.Created)
                 {
-                    OnBuildingViewCreated?.Invoke(result.View);
+                    //OnBuildingViewCreated?.Invoke(result.View);
                 }
-                OnBuildingViewUpdated?.Invoke(result.View);
+                ClientEvents.BuildingViewUpdated(result.View);
             }
             else if (serverEntity is DungeonEntity serverDungeon)
             {
                 var result = UpdateClientState<DungeonEntity, DungeonView>(serverDungeon, ev.SyncedComponents);
                 if (result.Created)
                 {
-                    OnDungeonViewCreated?.Invoke(result.View);
+                   // OnDungeonViewCreated?.Invoke(result.View);
                 }
-                OnDungeonViewUpdated?.Invoke(result.View);
+                ClientEvents.DungeonViewUpdated(result.View);
             }
 
             else

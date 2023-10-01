@@ -18,7 +18,7 @@ namespace Game.Services
         public CourseService(StrategyGame _game)
         {
             this._world = _game.World;
-            _game.NetworkEvents.Register<MoveRequestPacket>(this, RequestMovement);
+            StrategyGame.NetworkEvents.Register<MoveRequestPacket>(this, RequestMovement);
         }
 
         [EventMethod]

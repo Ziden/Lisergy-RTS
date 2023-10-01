@@ -17,8 +17,8 @@ namespace Game
 
         public ref GameSpec GameSpec => ref _spec;
 
-        public EventBus<BaseEvent> NetworkEvents { get; private set; }
-        public static EventBus<GameEvent> GlobalGameEvents { get; private set; }
+        public static EventBus<BaseEvent> NetworkEvents { get; private set; } = new EventBus<BaseEvent>();
+        public static EventBus<GameEvent> GlobalGameEvents { get; private set; } = new EventBus<GameEvent>();
 
         public List<IGameSystem> Systems { get; private set; }
 
@@ -48,8 +48,6 @@ namespace Game
         {
             World = world;
             Specs = specs;
-            NetworkEvents = new EventBus<BaseEvent>();
-            GlobalGameEvents = new EventBus<GameEvent>();
         }
 
         public void ClearEventListeners()

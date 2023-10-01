@@ -11,16 +11,16 @@ namespace BaseServer.Core
     {
         private bool _running = false;
 
-        protected readonly Server _socketServer;
+        protected Server _socketServer;
         private Message _msg;
-        private readonly CommandExecutor _commandExecutor;
+        private ConsoleCommandExecutor _commandExecutor;
         protected StrategyGame _game;
         private readonly int _port;
 
         public SocketServer(int port)
         {
             _port = port;
-            _commandExecutor = new CommandExecutor();
+            _commandExecutor = new ConsoleCommandExecutor(null);
             _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
             _socketServer = new Server();
             Serialization.LoadSerializers();
@@ -29,7 +29,7 @@ namespace BaseServer.Core
             RegisterCommands(_game, _commandExecutor);
         }
 
-        public abstract void RegisterCommands(StrategyGame game, CommandExecutor executor);
+        public abstract void RegisterCommands(StrategyGame game, ConsoleCommandExecutor executor);
         protected abstract ServerPlayer Auth(BaseEvent ev, int connectionID);
         public abstract void Tick();
         public abstract void Disconnect(int connectionID);
@@ -52,6 +52,7 @@ namespace BaseServer.Core
 
         public void RunServer()
         {
+            Log.Info("Starting Server");
             _ = _socketServer.Start(_port);
             try
             {
@@ -60,8 +61,8 @@ namespace BaseServer.Core
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                Console.WriteLine("Press any key to die");
+                Log.Error(e.ToString());
+                Log.Error("Press any key to die");
             }
         }
 

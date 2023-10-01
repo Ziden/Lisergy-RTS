@@ -1,14 +1,16 @@
 ﻿using BaseServer.Core;
+using Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace BaseServer.Commands
 {
-    public class CommandExecutor
+
+    public class ConsoleCommandExecutor
     {
         private static ConsoleSender _cmdSender;
-        private static ConsoleReader _console;
+        private static ConsoleReader _reader;
         public static readonly char CMD_CHAR = '.';
 
         private readonly Dictionary<string, Command> _commands = new();
@@ -21,18 +23,16 @@ namespace BaseServer.Commands
             return _commands.Values.ToList();
         }
 
-        public CommandExecutor()
+        public ConsoleCommandExecutor(ConsoleReader reader)
         {
             _cmdSender = new ConsoleSender();
-            if (_console == null)
-            {
-                _console = new ConsoleReader();
-            }
+            _reader = reader;
         }
 
         public void HandleConsoleCommands()
         {
-            if (_console.TryReadConsoleText(out _consoleText))
+            if (_reader == null) return;
+            if (_reader.TryReadConsoleText(out _consoleText))
             {
                 if (_consoleText[0] != CMD_CHAR)
                 {
@@ -49,7 +49,7 @@ namespace BaseServer.Commands
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        Log.Error(e.ToString());
                     }
                 }
                 else
