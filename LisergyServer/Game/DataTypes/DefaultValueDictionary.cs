@@ -11,7 +11,7 @@ namespace Game.DataTypes
         {
             get
             {
-                if (!TryGetValue(key, out TValue val))
+                if (!TryGetValue(key, out TValue val)) 
                 {
                     this[key] = (TValue)InstanceFactory.CreateInstance(typeof(TValue));
                     return this[key];

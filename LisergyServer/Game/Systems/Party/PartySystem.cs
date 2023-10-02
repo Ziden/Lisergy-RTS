@@ -6,26 +6,28 @@ using Game.Systems.FogOfWar;
 
 namespace Game.Systems.Party
 {
-    public class PartySystem : GameSystem<PartyComponent, PartyEntity>
+    public class PartySystem : GameSystem<PartyComponent>
     {
         public override void OnEnabled()
         {
             SystemEvents.On<BattleFinishedEvent>(OnBattleFinished);
         }
 
-        internal override void OnComponentAdded(PartyEntity owner, PartyComponent component)
+        internal override void OnComponentAdded(IEntity owner, PartyComponent component)
         {
-            owner.BattleGroupLogic.OnUnitAdded += OnUnitAdded;
-            owner.BattleGroupLogic.OnUnitRemoved += OnUnitRemoved;
+            var p = (PartyEntity)owner;
+            p.BattleGroupLogic.OnUnitAdded += OnUnitAdded;
+            p.BattleGroupLogic.OnUnitRemoved += OnUnitRemoved;
         }
 
-        private static void OnBattleFinished(PartyEntity e, PartyComponent p, BattleFinishedEvent ev)
+        private static void OnBattleFinished(IEntity e, PartyComponent p, BattleFinishedEvent ev)
         {
+            var party = (PartyEntity)e;
             var battleable = (IBattleableEntity)e;
             battleable.BattleGroupLogic.BattleID = GameId.ZERO;
             if (battleable.BattleGroupLogic.IsDestroyed)
             {
-                e.Tile = e.Owner.GetCenter().Tile;
+                party.Tile = e.Owner.GetCenter().Tile;
                 foreach (var unit in battleable.BattleGroupLogic.GetUnits())
                     unit.HealAll();
             }

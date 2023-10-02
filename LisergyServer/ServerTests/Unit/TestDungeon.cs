@@ -101,7 +101,7 @@ namespace Tests
             _dungeon.Tile = dungeonTile;
 
             var tileBuilding = dungeonTile.Components.Get<TileHabitants>().Building;
-            Assert.That(tileBuilding.Id == _dungeon.Id);
+            Assert.That(tileBuilding.EntityId == _dungeon.Id);
             Assert.That(((IBattleableEntity)tileBuilding).BattleGroupLogic.GetUnits().Count() > 0);
         }
 

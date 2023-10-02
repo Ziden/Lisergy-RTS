@@ -34,16 +34,16 @@ namespace Game.ECS
     /// <summary>
     /// Represents a list of components.
     /// </summary>
-    public class ComponentSet<EntityType> : IComponentSet where EntityType : IEntity
+    public class ComponentSet : IComponentSet
     {
         internal Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
         internal List<IComponent> _networkedPublic = new List<IComponent>();
         internal List<IComponent> _networkedSelf = new List<IComponent>();
 
-        internal EntityType _entity;
+        internal IEntity _entity;
         internal PlayerEntity _owner;
 
-        public ComponentSet(EntityType entity, PlayerEntity owner = null)
+        public ComponentSet(IEntity entity, PlayerEntity owner = null)
         {
             _entity = entity;
             _owner = owner;
@@ -82,6 +82,11 @@ namespace Game.ECS
         public void CallEvent(BaseEvent ev)
         {
             StrategyGame.GlobalGameEvents.Call(ev);
+            foreach(var kp in _components)
+            {
+                UntypedRegistry.RunEventsForComponent(kp.Key, _entity, ev);
+            } 
+           
         }
 
         public IComponent Get(Type t)
@@ -92,7 +97,7 @@ namespace Game.ECS
         public T Add<T>(Type type, T component) where T : IComponent
         {
             _components[type] = component;
-            TypedSystemRegistry<T, EntityType>.OnAddComponent(_entity);
+            ComponentSystemRegistry<T>.OnAddComponent(_entity);
             var sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
             if (sync != null)
             {
@@ -105,7 +110,7 @@ namespace Game.ECS
 
         public void RemoveComponent<T>() where T : IComponent
         {
-            TypedSystemRegistry<T, EntityType>.OnRemovedComponent(_entity);
+            ComponentSystemRegistry<T>.OnRemovedComponent(_entity);
         }
 
 

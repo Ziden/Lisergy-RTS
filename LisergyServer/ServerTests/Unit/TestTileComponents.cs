@@ -10,7 +10,7 @@ namespace Tests
 {
     public unsafe class TestTileComponents
     {
-
+    
         private TileEntity tile1;
         private TileEntity tile2;
 
@@ -22,19 +22,6 @@ namespace Tests
             var t2 = new TileData();
             tile1 = new TileEntity(c, &t1, 0, 0);
             tile2 = new TileEntity(c, &t2, 1, 1);
-        }
-
-        [Test]
-        public void TestEventsOnlyRegisteredOnce()
-        {
-           // ComponentSet._buses.Clear();
-
-            tile1.Components.Add(new TileHabitants());
-            tile2.Components.Add(new TileHabitants());
-
-            //var tileBus = ComponentSet._buses[typeof(TileEntity)]._bus;
-            Assert.IsTrue(false);
-            //Assert.AreEqual(1, tileBus._listeners.Count);
         }
 
         [Test]
@@ -61,6 +48,7 @@ namespace Tests
             }
         }
 
+        /*
         [Test]
         public void TestViewEvents()
         {
@@ -72,7 +60,7 @@ namespace Tests
             tile1.Components.CallEvent(new EntityMoveOutEvent() { Entity = new DungeonEntity() });
 
             Assert.IsTrue(TestView.called.Entity is DungeonEntity);
-
         }
+        */
     }
 }

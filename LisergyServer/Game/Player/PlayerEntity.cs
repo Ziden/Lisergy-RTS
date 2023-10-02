@@ -85,6 +85,10 @@ namespace Game.Player
 
         public GameId EntityId => UserID;
 
+        public PlayerEntity Owner => this;
+
+        public GameId OwnerID => UserID;
+
         public abstract bool Online();
 
         public override string ToString()

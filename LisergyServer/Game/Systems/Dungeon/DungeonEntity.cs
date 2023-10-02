@@ -1,7 +1,9 @@
-﻿using Game.Events;
+﻿using Game.ECS;
+using Game.Events;
 using Game.Player;
 using Game.Systems.Battler;
 using Game.Systems.Building;
+using Game.Systems.Party;
 using System;
 using System.Linq;
 
@@ -13,19 +15,19 @@ namespace Game.Systems.Dungeon
         [NonSerialized]
         private BattleGroupComponentLogic _battleLogic;
 
-        public DungeonEntity(params Unit[] units) : base(Gaia)
+        public DungeonEntity(params Unit[] units) : base(Gaia.Instance)
         {
             InitComponents();
             _battleLogic.UpdateUnits(units.ToList());
         }
 
-        public DungeonEntity(ushort specId) : base(Gaia)
+        public DungeonEntity(ushort specId) : base(Gaia.Instance)
         {
             InitComponents();
             BuildFromSpec(specId);
         }
 
-        public DungeonEntity() : base(Gaia)
+        public DungeonEntity() : base(Gaia.Instance)
         {
             InitComponents();
         }

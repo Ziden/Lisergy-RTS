@@ -8,6 +8,6 @@ namespace Game.Systems.FogOfWar
     public class TileVisibility : IComponent
     {
         public HashSet<PlayerEntity> PlayersViewing = new HashSet<PlayerEntity>();
-        public HashSet<WorldEntity> EntitiesViewing = new HashSet<WorldEntity>();
+        public HashSet<IEntity> EntitiesViewing = new HashSet<IEntity>();
     }
 }

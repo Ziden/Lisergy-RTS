@@ -3,7 +3,7 @@ using Game.Events.GameEvents;
 
 namespace Game.Systems.Building
 {
-    public class PlayerBuildingSystem : GameSystem<PlayerBuildingComponent, WorldEntity>
+    public class PlayerBuildingSystem : GameSystem<PlayerBuildingComponent>
     {
       
     }

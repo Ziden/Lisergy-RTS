@@ -16,7 +16,7 @@ namespace Game.Events.Bus
         public virtual void Call(BaseEvent ev)
         {
             OnEventFired?.Invoke(ev);
-            Log.Debug("Event Fired " + ev.GetType());
+
             if (!_registeredListeners.ContainsKey(ev.GetType()))
             {
                 if (!_registeredListeners.ContainsKey(ev.GetType().BaseType))

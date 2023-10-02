@@ -11,12 +11,10 @@ using Game.Systems.FogOfWar;
 
 namespace Game
 {
-
     [Serializable]
     public partial class WorldEntity : IOwnable, IMapEntity
     {
-        protected static Gaia Gaia { get; private set; } = new Gaia();
-
+        // TODO: Move to component
         protected GameId _id;
         protected ushort _x;
         protected ushort _y;
@@ -25,7 +23,8 @@ namespace Game
         [NonSerialized]
         private PlayerEntity _owner;
         [field: NonSerialized]
-        public ComponentSet<WorldEntity> _components { get; private set; }
+        public IComponentSet _components { get; private set; } 
+
         [NonSerialized]
         protected TileEntity _tile;
         [NonSerialized]
@@ -36,7 +35,7 @@ namespace Game
             Owner = owner;
             _id = Guid.NewGuid();
             DeltaFlags = new DeltaFlags(this);
-            _components = new ComponentSet<WorldEntity>(this, owner);
+            _components = new ComponentSet(this, owner);
         }
 
         public bool IsInMap => _tile != null;

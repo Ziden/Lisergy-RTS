@@ -7,19 +7,19 @@ using System.Linq;
 
 namespace Game.Systems.FogOfWar
 {
-    public class EntityVisionSystem : GameSystem<EntityVisionComponent, WorldEntity>
+    public class EntityVisionSystem : GameSystem<EntityVisionComponent>
     {
         public override void OnEnabled()
         {
             SystemEvents.On<EntityMoveInEvent>(OnEntityStepOnTile);
         }
 
-        private static void OnEntityStepOnTile(WorldEntity e, EntityVisionComponent c, EntityMoveInEvent ev)
+        private static void OnEntityStepOnTile(IEntity e, EntityVisionComponent c, EntityMoveInEvent ev)
         {
             UpdateVisionRange(e, ev.FromTile, ev.ToTile);
         }
 
-        private static void UpdateVisionRange(WorldEntity explorer, TileEntity from, TileEntity to)
+        private static void UpdateVisionRange(IEntity explorer, TileEntity from, TileEntity to)
         {
             var los = explorer.Components.Get<EntityVisionComponent>().LineOfSight;
             if (los > 0)

@@ -2,7 +2,7 @@
 
 namespace Game.Systems.Battler
 {
-    public class BattleGroupSystem : GameSystem<BattleGroupComponent, WorldEntity>
+    public class BattleGroupSystem : GameSystem<BattleGroupComponent>
     {
     }
 }

@@ -20,8 +20,6 @@ namespace Game
         public static EventBus<BaseEvent> NetworkEvents { get; private set; } = new EventBus<BaseEvent>();
         public static EventBus<GameEvent> GlobalGameEvents { get; private set; } = new EventBus<GameEvent>();
 
-        public List<IGameSystem> Systems { get; private set; }
-
         private GameWorld _world;
 
         public void ReceiveInput(PlayerEntity sender, byte[] input)
@@ -48,7 +46,7 @@ namespace Game
         {
             World = world;
             Specs = specs;
-            GameSystems.SetupSystems();
+
         }
 
         public void ClearEventListeners()

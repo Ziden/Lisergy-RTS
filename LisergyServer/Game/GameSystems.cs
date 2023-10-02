@@ -10,10 +10,18 @@ using Game.Tile;
 
 namespace Game
 {
-    public class GameSystems
+    public static class GameSystems
     {
+        static GameSystems() {
+            if(!IsLoaded)
+            SetupSystems();
+        }
+
+        public static bool IsLoaded { get; private set; }
+
         public static void SetupSystems()
         {
+           
            AddSystem(new BuildingSystem());
            AddSystem(new BattleGroupSystem());
            AddSystem(new PlayerBuildingSystem());
@@ -23,11 +31,12 @@ namespace Game
            AddSystem(new TileVisibilitySystem());
            AddSystem(new PartySystem());
            AddSystem(new TileHabitantsSystem());
+           IsLoaded = true;
         }
 
-        private static void AddSystem<ComponentType, EntityType>(GameSystem<ComponentType, EntityType> system) where ComponentType : IComponent where EntityType : IEntity
+        private static void AddSystem<ComponentType>(GameSystem<ComponentType> system) where ComponentType : IComponent 
         {
-            TypedSystemRegistry<ComponentType, EntityType>.AddSystem(system);
+            ComponentSystemRegistry<ComponentType>.AddSystem(system);
         }
     }
 }

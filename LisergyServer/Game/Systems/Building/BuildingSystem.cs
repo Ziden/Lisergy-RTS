@@ -3,7 +3,7 @@ using Game.Events.GameEvents;
 
 namespace Game.Systems.Building
 {
-    public class BuildingSystem : GameSystem<BuildingComponent, WorldEntity>
+    public class BuildingSystem : GameSystem<BuildingComponent>
     {
         public override void OnEnabled()
         {
@@ -11,12 +11,12 @@ namespace Game.Systems.Building
             SystemEvents.On<EntityMoveOutEvent>(OnRemovedBuilding);
         }
 
-        private static void OnPlaceBuilding(WorldEntity e, BuildingComponent c, EntityMoveInEvent ev)
+        private static void OnPlaceBuilding(IEntity e, BuildingComponent c, EntityMoveInEvent ev)
         {
             ev.ToTile.Components.CallEvent(new BuildingPlacedEvent(e, ev.ToTile));
         }
 
-        private static void OnRemovedBuilding(WorldEntity e, BuildingComponent c, EntityMoveOutEvent ev)
+        private static void OnRemovedBuilding(IEntity e, BuildingComponent c, EntityMoveOutEvent ev)
         {
             ev.FromTile.Components.CallEvent(new BuildingRemovedEvent(e, ev.FromTile));
         }

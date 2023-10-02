@@ -2,11 +2,11 @@
 
 namespace Game.Systems.Movement
 {
-    public class EntityMovementSystem : GameSystem<EntityMovementComponent, WorldEntity>
+    public class EntityMovementSystem : GameSystem<EntityMovementComponent>
     {
-        public static CourseTask GetCourse(WorldEntity entity) => entity.Components.Get<EntityMovementComponent>().Course;
+        public static CourseTask GetCourse(IEntity entity) => entity.Components.Get<EntityMovementComponent>().Course;
 
-        public static void SetCourse(WorldEntity entity, CourseTask newCourse)
+        public static void SetCourse(IEntity entity, CourseTask newCourse)
         {
             var existingCourse = GetCourse(entity);
             if (existingCourse != null && !existingCourse.HasFinished)

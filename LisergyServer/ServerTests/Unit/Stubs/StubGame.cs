@@ -10,6 +10,7 @@ using Game.World;
 using GameData;
 using GameDataTest;
 using LisergyServer.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -61,6 +62,8 @@ namespace ServerTests
                 _registered = true;
             }
             Serialization.LoadSerializers();
+            GlobalGameEvents.Clear();
+            NetworkEvents.Clear();
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);

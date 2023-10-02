@@ -1,6 +1,7 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
 using Game.Pathfinder;
+using Game.Player;
 using Game.Tile;
 using Game.World;
 using System;
@@ -46,6 +47,10 @@ namespace Game
 
         public GameId EntityId => _id;
 
+        public PlayerEntity Owner => throw new NotImplementedException();
+
+        public GameId OwnerID => throw new NotImplementedException();
+
         public Chunk(ChunkMap w, int x, int y, TileEntity[,] tiles)
         {
             ;
@@ -71,7 +76,6 @@ namespace Game
             return tile;
         }
 
-
         public TileEntity GetTile(in int x, in int y)
         {
             return Tiles[x, y];
@@ -93,7 +97,5 @@ namespace Game
         {
             _data.Free();
         }
-
-
     }
 }

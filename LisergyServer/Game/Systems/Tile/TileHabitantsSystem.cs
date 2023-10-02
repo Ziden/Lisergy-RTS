@@ -6,7 +6,7 @@ using Game.Tile;
 
 namespace Game.Systems.Tile
 {
-    public class TileHabitantsSystem : GameSystem<TileHabitants, TileEntity>
+    public class TileHabitantsSystem : GameSystem<TileHabitants>
     {
         public override void OnEnabled()
         {
@@ -16,22 +16,22 @@ namespace Game.Systems.Tile
             SystemEvents.On<EntityMoveInEvent>(OnEntityMoveIn);
         }
 
-        private static void OnStaticEntityRemoved(TileEntity owner, TileHabitants component, BuildingRemovedEvent entity)
+        private static void OnStaticEntityRemoved(IEntity owner, TileHabitants component, BuildingRemovedEvent entity)
         {
             component.Building = null;
         }
 
-        private static void OnStaticEntityPlaced(TileEntity owner, TileHabitants component, BuildingPlacedEvent ev)
+        private static void OnStaticEntityPlaced(IEntity owner, TileHabitants component, BuildingPlacedEvent ev)
         {
             component.Building = ev.Entity;
         }
 
-        private static void OnEntityMoveOut(TileEntity owner, TileHabitants component, EntityMoveOutEvent ev)
+        private static void OnEntityMoveOut(IEntity owner, TileHabitants component, EntityMoveOutEvent ev)
         {
             component.EntitiesIn.Remove(ev.Entity);
         }
 
-        private static void OnEntityMoveIn(TileEntity owner, TileHabitants component, EntityMoveInEvent ev)
+        private static void OnEntityMoveIn(IEntity owner, TileHabitants component, EntityMoveInEvent ev)
         {
             var movement = ev.Entity.Components.Get<EntityMovementComponent>();
             if (movement == null)

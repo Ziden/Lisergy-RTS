@@ -24,7 +24,7 @@ namespace Game.Tile
         private GameId _id;
 
         [field: NonSerialized]
-        public ComponentSet<TileEntity> _components { get; private set; }
+        public ComponentSet _components { get; private set; }
 
         public TileEntity(Chunk c, TileData* tileData, int x, int y)
         {
@@ -33,7 +33,7 @@ namespace Game.Tile
             _tileData->X = (ushort)x;
             _tileData->Y = (ushort)y;
             _id = new GameId(_tileData->Position);
-            _components = new ComponentSet<TileEntity>(this);
+            _components = new ComponentSet(this);
             DeltaFlags = new DeltaFlags(this);
         }
 
@@ -41,7 +41,7 @@ namespace Game.Tile
         {
             DeltaFlags.SetFlag(flag);
             foreach (var e in EntitiesIn) e.DeltaFlags.SetFlag(flag);
-            if (_staticEntity != null) _staticEntity.DeltaFlags.SetFlag(flag);
+            if (_staticEntity is WorldEntity w) w.DeltaFlags.SetFlag(flag);
         }
 
         public ref Chunk Chunk => ref _chunk;
@@ -50,9 +50,9 @@ namespace Game.Tile
         public ushort Y { get => _tileData->Y; set => _tileData->Y = value; }
         public ushort X { get => _tileData->X; set => _tileData->X = value; }
         public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.Get<TileVisibility>().PlayersViewing;
-        public IReadOnlyCollection<WorldEntity> EntitiesViewing => _components.Get<TileVisibility>().EntitiesViewing;
+        public IReadOnlyCollection<IEntity> EntitiesViewing => _components.Get<TileVisibility>().EntitiesViewing;
         public IReadOnlyList<WorldEntity> EntitiesIn => _components.Get<TileHabitants>().EntitiesIn;
-        private WorldEntity _staticEntity => _components.Get<TileHabitants>().Building;
+        private IEntity _staticEntity => _components.Get<TileHabitants>().Building;
         public GameId EntityId => _id;
         public IComponentSet Components => _components;
         public StrategyGame Game => Chunk.Map.World.Game;
@@ -60,6 +60,10 @@ namespace Game.Tile
         {
             get => MovementFactor > 0;
         }
+
+        public PlayerEntity Owner => Gaia.Instance;
+
+        public GameId OwnerID => Owner.OwnerID;
 
         public override string ToString()
         {

@@ -11,7 +11,6 @@ namespace Game.Systems.Party
     [Serializable]
     public class PartyEntity : WorldEntity, IBattleableEntity
     {
-
         public const int SIZE = 4;
 
         [NonSerialized]

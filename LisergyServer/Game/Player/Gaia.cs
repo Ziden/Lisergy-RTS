@@ -16,6 +16,8 @@ namespace Game.Player
             UserID = GameId.ZERO;
         }
 
+        public static Gaia Instance { get; private set; } = new Gaia();
+
         public static bool IsGaia(GameId userId)
         {
             return userId == GameId.ZERO;

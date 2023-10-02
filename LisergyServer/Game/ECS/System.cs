@@ -1,29 +1,24 @@
 ﻿using Game.Events;
-using Game.Events.Bus;
-using System;
-using System.Diagnostics;
 
 namespace Game.ECS
 {
-
-    public interface IGameSystem : IEventListener
+    public interface IGameSystem
     {
+        void CallEvent<EventType>(IEntity entityType, EventType ev) where EventType : BaseEvent;
     }
 
-    public abstract class GameSystemBase : IGameSystem
+    public abstract class GameSystem<ComponentType> : IGameSystem where ComponentType : IComponent 
     {
-        public Type EntityType;
-        public Type ComponentType;
-    }
+        public SystemEventBus<ComponentType> SystemEvents = new SystemEventBus<ComponentType>();
 
-    public abstract class GameSystem<ComponentType, EntityType> : GameSystemBase where ComponentType : IComponent where EntityType : IEntity
-    {
-        public SystemEventBus<EntityType, ComponentType> SystemEvents = new SystemEventBus<EntityType, ComponentType>();
-
-        internal virtual void OnComponentAdded(EntityType owner, ComponentType component) { }
+        internal virtual void OnComponentAdded(IEntity owner, ComponentType component) { }
         public virtual void OnDisabled() { }
         public virtual void OnEnabled() { }
-        internal virtual void OnComponentRemoved(EntityType owner, ComponentType component) { }
+        internal virtual void OnComponentRemoved(IEntity owner, ComponentType component) { }
 
+        public void CallEvent<EventType>(IEntity entityType, EventType ev) where EventType : BaseEvent
+        {
+            SystemEvents.CallEntityEvent(entityType, ev);
+        }
     }
 }

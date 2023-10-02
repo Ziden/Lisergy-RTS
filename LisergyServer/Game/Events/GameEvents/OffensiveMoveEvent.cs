@@ -1,8 +1,10 @@
-﻿namespace Game.Events.GameEvents
+﻿using Game.ECS;
+
+namespace Game.Events.GameEvents
 {
     public class OffensiveMoveEvent : GameEvent
     {
-        public WorldEntity Attacker;
-        public WorldEntity Defender;
+        public IEntity Attacker;
+        public IEntity Defender;
     }
 }

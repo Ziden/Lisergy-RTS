@@ -1,4 +1,5 @@
-﻿using Game.Tile;
+﻿using Game.ECS;
+using Game.Tile;
 
 namespace Game.Events.GameEvents
 {
@@ -8,7 +9,7 @@ namespace Game.Events.GameEvents
     public class TileVisibilityChangedEvent : GameEvent
     {
         public TileEntity Tile;
-        public WorldEntity Explorer;
+        public IEntity Explorer;
         public bool Visible;
     }
 }
