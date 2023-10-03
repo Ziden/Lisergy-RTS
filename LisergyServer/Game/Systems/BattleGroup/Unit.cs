@@ -16,14 +16,15 @@ namespace Game.Systems.Battler
         [NonSerialized]
         private PartyEntity _party;
 
-        [field: NonSerialized]
-        public string Name { get; set; }
+        [NonSerialized]
+        public string Name;
+
         public GameId Id { get; protected set; }
         public ushort SpecId { get; private set; }
 
         private UnitStats _statsData;
 
-        public UnitStats Stats => _statsData;
+        public ref UnitStats Stats => ref _statsData;
 
         public Unit(ushort unitSpecId)
         {
@@ -62,7 +63,7 @@ namespace Game.Systems.Battler
 
         public Unit SetBaseStats()
         {
-            _statsData.SetStats(StrategyGame.Specs.Units[SpecId].Stats);
+            _statsData.SetStats(GameLogic.Specs.Units[SpecId].Stats);
             HealAll();
             return this;
         }

@@ -25,21 +25,17 @@ public enum Tab { LOGS, EVENTS }
 
 public class StandaloneServer : Window
 {
-    public ListView List;
-    public ScrollBarView ScrollView;
-    public TextView TextView;
-    private Thread _mapServer;
-    private int _line = 0;
-    private List<EventEntry> _events = new();
-    private List<LogEntry> _log = new();
+    private static ListView List;
+    private static ScrollBarView ScrollView;
+    private static TextView TextView;
+    private static List<EventEntry> _events = new();
+    private static List<LogEntry> _log = new();
     public static bool IsLoaded = false;
-    private object _lock = new object();
-    private Tab Tab = Tab.LOGS;
+    private static Tab Tab = Tab.LOGS;
 
     public StandaloneServer()
     {
         Title = "Lisergy Standalone Server";
-        StrategyGame.GlobalGameEvents.OnEventFired += OnReceiveEvent;
 
         var logsBtn = new Button()
         {
@@ -88,9 +84,9 @@ public class StandaloneServer : Window
             Height = Dim.Fill()
         };
 
-        Game.Log.Debug = m => OnReceiveLog(LogLevel.Debug, m);
-        Game.Log.Info = m => OnReceiveLog(LogLevel.Info, m);
-        Game.Log.Error = m => OnReceiveLog(LogLevel.Error, m);
+        Log.Debug = m => OnReceiveLog(LogLevel.Debug, m);
+        Log.Info = m => OnReceiveLog(LogLevel.Info, m);
+        Log.Error = m => OnReceiveLog(LogLevel.Error, m);
       
 
         logsBtn.Clicked += () => ViewLogs();
@@ -123,7 +119,7 @@ public class StandaloneServer : Window
         List.SetNeedsDisplay();
     }
 
-    private void UpdateEntryList(ICollection source)
+    private static void UpdateEntryList(ICollection source)
     {
         if (source.Count > List.Bounds.Height)
         {
@@ -133,7 +129,7 @@ public class StandaloneServer : Window
         List.SetNeedsDisplay();
     }
 
-    private void OnReceiveEvent(BaseEvent ev)
+    public static void OnReceiveEvent(BaseEvent ev)
     {
         Application.MainLoop.Invoke(() =>
         {

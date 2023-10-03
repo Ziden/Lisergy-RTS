@@ -6,7 +6,7 @@ namespace Game.Systems.Tile
 {
     public class TileHabitants : IComponent
     {
-        public List<WorldEntity> EntitiesIn = new List<WorldEntity>();
+        public List<BaseEntity> EntitiesIn = new List<BaseEntity>();
         public IEntity Building;
     }
 }

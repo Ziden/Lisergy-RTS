@@ -1,32 +1,20 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
-using Game.Events.ServerEvents;
 using Game.Network;
-using Game.Player;
 using Game.Systems.FogOfWar;
+using Game.Systems.Player;
 using Game.Systems.Tile;
-using System;
 using System.Collections.Generic;
 
 namespace Game.Tile
 {
-    [Serializable]
-    public unsafe partial class TileEntity : IEntity, IDeltaTrackable, IDeltaUpdateable<TileUpdatePacket>
+    public unsafe partial class TileEntity : IEntity
     {
-        [NonSerialized]
-        private TileData* _tileData;
-
-        [NonSerialized]
+        private TileMapData* _tileData;
         private Chunk _chunk;
-
-        // Only unique game id among tiles, non unique entity id
-        [NonSerialized]
         private GameId _id;
-
-        [field: NonSerialized]
         public ComponentSet _components { get; private set; }
-
-        public TileEntity(Chunk c, TileData* tileData, int x, int y)
+        public TileEntity(Chunk c, TileMapData* tileData, int x, int y)
         {
             _chunk = c;
             _tileData = tileData;
@@ -41,7 +29,7 @@ namespace Game.Tile
         {
             DeltaFlags.SetFlag(flag);
             foreach (var e in EntitiesIn) e.DeltaFlags.SetFlag(flag);
-            if (_staticEntity is WorldEntity w) w.DeltaFlags.SetFlag(flag);
+            if (_staticEntity is BaseEntity w) w.DeltaFlags.SetFlag(flag);
         }
 
         public ref Chunk Chunk => ref _chunk;
@@ -51,23 +39,24 @@ namespace Game.Tile
         public ushort X { get => _tileData->X; set => _tileData->X = value; }
         public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.Get<TileVisibility>().PlayersViewing;
         public IReadOnlyCollection<IEntity> EntitiesViewing => _components.Get<TileVisibility>().EntitiesViewing;
-        public IReadOnlyList<WorldEntity> EntitiesIn => _components.Get<TileHabitants>().EntitiesIn;
+        public IReadOnlyList<BaseEntity> EntitiesIn => _components.Get<TileHabitants>().EntitiesIn;
         private IEntity _staticEntity => _components.Get<TileHabitants>().Building;
         public GameId EntityId => _id;
         public IComponentSet Components => _components;
-        public StrategyGame Game => Chunk.Map.World.Game;
-        public bool Passable
-        {
-            get => MovementFactor > 0;
-        }
+        public bool Passable => MovementFactor > 0;
 
-        public PlayerEntity Owner => Gaia.Instance;
+        public PlayerEntity Owner => null;
 
-        public GameId OwnerID => Owner.OwnerID;
+        public GameId OwnerID => GameId.ZERO;
 
         public override string ToString()
         {
             return $"<Tile {X}-{Y} ID={TileId}>";
+        }
+
+        public T Get<T>() where T : IComponent
+        {
+           return _components.Get<T>();
         }
     }
 }

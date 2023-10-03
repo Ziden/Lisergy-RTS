@@ -6,14 +6,14 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class TileUpdatePacket : ServerPacket
     {
-        public TileUpdatePacket(in TileData data)
+        public TileUpdatePacket(in TileMapData data)
         {
             _data = data;
         }
 
-        private TileData _data;
+        private TileMapData _data;
 
-        public ref TileData Data => ref _data;
+        public ref TileMapData Data => ref _data;
 
         public override string ToString()
         {

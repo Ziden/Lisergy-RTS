@@ -1,4 +1,4 @@
-﻿using Game.Player;
+﻿using Game.Systems.Player;
 using System;
 
 namespace Game.Scheduler
@@ -41,7 +41,7 @@ namespace Game.Scheduler
             return Finish <= GameScheduler.Now;
         }
 
-        public abstract void Execute();
+        public abstract void Tick();
 
         public void Cancel()
         {

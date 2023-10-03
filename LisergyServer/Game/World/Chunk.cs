@@ -1,7 +1,10 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
+using Game.Events;
+using Game.Events.ServerEvents;
+using Game.Network;
 using Game.Pathfinder;
-using Game.Player;
+using Game.Systems.Player;
 using Game.Tile;
 using Game.World;
 using System;
@@ -18,13 +21,8 @@ namespace Game
 
     public unsafe class Chunk : IEntity, IDisposable
     {
-        [NonSerialized]
         private ChunkData _data;
-
-        [NonSerialized]
         private TileEntity[,] _tiles;
-
-        [NonSerialized]
         private GameId _id;
 
         public bool IsVoid()
@@ -96,6 +94,16 @@ namespace Game
         public void Dispose()
         {
             _data.Free();
+        }
+
+        public T Get<T>() where T : IComponent
+        {
+            throw new NotImplementedException();
+        }
+
+        ServerPacket IDeltaUpdateable.GetUpdatePacket(PlayerEntity receiver)
+        {
+            throw new NotImplementedException();
         }
     }
 }

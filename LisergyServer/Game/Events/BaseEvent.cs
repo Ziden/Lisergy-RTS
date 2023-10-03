@@ -1,4 +1,4 @@
-﻿using Game.Player;
+﻿using Game.Systems.Player;
 using System;
 
 namespace Game.Events

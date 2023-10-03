@@ -9,7 +9,7 @@ namespace LisergyServer.Commands
     {
         private BattleService _service;
 
-        public BattlesCommand(StrategyGame game, BattleService battle) : base(game)
+        public BattlesCommand(GameLogic game, BattleService battle) : base(game)
         {
             _service = battle;
         }

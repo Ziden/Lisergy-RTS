@@ -9,7 +9,7 @@ namespace Game.Network.ServerPackets
     [Serializable]
     public class EntityMovePacket : ServerPacket
     {
-        public EntityMovePacket(WorldEntity entity, EntityMovementComponent component, TileEntity tile)
+        public EntityMovePacket(BaseEntity entity, EntityMovementComponent component, TileEntity tile)
         {
             OwnerID = entity.OwnerID;
             EntityID = entity.Id;

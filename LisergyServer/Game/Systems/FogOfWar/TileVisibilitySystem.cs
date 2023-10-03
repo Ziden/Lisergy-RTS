@@ -9,9 +9,10 @@ namespace Game.Systems.FogOfWar
 {
     public class TileVisibilitySystem : GameSystem<TileVisibility>
     {
+        public TileVisibilitySystem(GameLogic game) : base(game) { }
         public override void OnEnabled()
         {
-            SystemEvents.On<TileExplorationStateChanged>(OnTileExplorationChanged);
+            EntityEvents.On<TileExplorationStateChanged>(OnTileExplorationChanged);
         }
 
         private static void OnTileExplorationChanged(IEntity tile, TileVisibility component, TileExplorationStateChanged ev)

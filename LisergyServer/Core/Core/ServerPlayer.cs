@@ -1,6 +1,6 @@
 ﻿using Game;
 using Game.Events;
-using Game.Player;
+using Game.Systems.Player;
 using System.Collections.Generic;
 using Telepathy;
 
@@ -11,7 +11,7 @@ namespace LisergyServer.Core
         protected Server _server { get; set; }
         public int ConnectionID { get; set; }
 
-        public ServerPlayer(Server server)
+        public ServerPlayer(Server server, GameLogic game) : base(game)  
         {
             this._server = server;
         }

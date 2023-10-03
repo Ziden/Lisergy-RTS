@@ -1,10 +1,11 @@
 using Game;
 using Game.ECS;
 using Game.Events.GameEvents;
+using Game.Events.ServerEvents;
 using Game.Network;
-using Game.Player;
 using Game.Systems.Dungeon;
 using Game.Systems.FogOfWar;
+using Game.Systems.Player;
 using NUnit.Framework;
 using ServerTests;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace Tests
         [Test]
         public void TestRegistrationByType()
         {
-            var components = new ComponentSet<DungeonEntity>(new DungeonEntity());
+            var components = new ComponentSet(new DungeonEntity());
             IComponent toAdd = new EntityVisionComponent();
             components.Add(typeof(EntityVisionComponent), toAdd);
 
@@ -45,7 +46,7 @@ namespace Tests
         [Test]
         public void TestGenericAdd()
         {
-            var components = new ComponentSet<DungeonEntity>(new DungeonEntity());
+            var components = new ComponentSet(new DungeonEntity());
             IComponent toAdd = new EntityVisionComponent();
             components.Add(toAdd);
 
@@ -55,7 +56,7 @@ namespace Tests
         [Test]
         public void TestComponentSync()
         {
-            var clientEntity = new WorldEntity(new Gaia());
+            var clientEntity = new BaseEntity(null);
 
             SimpleComponent fromServer = new SimpleComponent() { PublicField = 5, Property = 4 };
             SimpleComponent inClient = new SimpleComponent();
@@ -71,13 +72,13 @@ namespace Tests
         [Test]
         public void TestSyncOnlyMine()
         {
-            var player = new TestServerPlayer();
-            var clientEntity = new WorldEntity(player);
+            var player = new TestServerPlayer(null);
+            var clientEntity = new BaseEntity(player);
             var selfComponent = clientEntity.Components.Add<SelfSyncComponent>();
             var publicComponent = clientEntity.Components.Add<PublicSyncComponent>();
 
-            var selfPacket = clientEntity.GetUpdatePacket(player);
-            var publicPacket = clientEntity.GetUpdatePacket(null);
+            var selfPacket = clientEntity.GetUpdatePacket(player) as EntityUpdatePacket;
+            var publicPacket = clientEntity.GetUpdatePacket(null) as EntityUpdatePacket;
 
             Assert.IsTrue(selfPacket.SyncedComponents.Contains(selfComponent));
             Assert.IsTrue(selfPacket.SyncedComponents.Contains(publicComponent));

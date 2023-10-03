@@ -32,7 +32,7 @@ namespace MapServer
         {
         }
 
-        public override void RegisterCommands(StrategyGame game, ConsoleCommandExecutor executor)
+        public override void RegisterCommands(GameLogic game, ConsoleCommandExecutor executor)
         {
             executor.RegisterCommand(new TileCommand(game));
             executor.RegisterCommand(new TaskCommand(game));
@@ -64,34 +64,36 @@ namespace MapServer
             }
             if (caller == null)
             {
-                Game.Log.Error($"Connection {connectionID} failed auth to send event {ev}");
+                global::Game.Log.Error($"Connection {connectionID} failed auth to send event {ev}");
                 return null;
             }
             return caller;
         }
 
-        public override StrategyGame SetupGame()
+        public override GameLogic SetupGame()
         {
             var gameSpecs = TestSpecs.Generate();
-            _game = new StrategyGame(gameSpecs, null);
-
             var (sizeX, sizeY) = TestWorldGenerator.MeasureWorld(MAX_PLAYERS);
+            Game = new GameLogic(gameSpecs);
 
-            _game.World = new GameWorld(MAX_PLAYERS, sizeX, sizeY);
-            TestWorldGenerator.PopulateWorld(_game.World, WORLD_SEED,
+            var world = new GameWorld(MAX_PLAYERS, sizeX, sizeY);
+            Game.SetWorld(world);
+            world.CreateMap();
+            TestWorldGenerator.PopulateWorld(world, WORLD_SEED,
                 new NewbieChunkPopulator(),
                 new DungeonsPopulator()
             );
+
             DeltaTracker.Clear();
-            return _game;
+            return Game;
         }
 
         public override void SetupServices()
         {
-            _accountService = new AccountService(_game, _socketServer);
-            _battleService = new BattleService(_game);
-            _worldService = new WorldService(_game);
-            _courseService = new CourseService(_game);
+            _accountService = new AccountService(Game, _socketServer);
+            _battleService = new BattleService(Game);
+            _worldService = new WorldService(Game);
+            _courseService = new CourseService(Game);
         }
     }
 }

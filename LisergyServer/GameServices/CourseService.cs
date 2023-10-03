@@ -13,10 +13,10 @@ namespace Game.Services
     {
         private GameWorld _world;
 
-        public CourseService(StrategyGame _game)
+        public CourseService(GameLogic _game)
         {
             this._world = _game.World;
-            StrategyGame.NetworkEvents.Register<MoveRequestPacket>(this, RequestMovement);
+            _game.NetworkPackets.Register<MoveRequestPacket>(this, RequestMovement);
         }
 
         [EventMethod]

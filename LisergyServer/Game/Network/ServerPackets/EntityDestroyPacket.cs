@@ -7,7 +7,7 @@ namespace Game.Network.ServerPackets
     [Serializable]
     public class EntityDestroyPacket : ServerPacket
     {
-        public EntityDestroyPacket(WorldEntity entity)
+        public EntityDestroyPacket(BaseEntity entity)
         {
             OwnerID = entity.OwnerID;
             EntityID = entity.Id;

@@ -26,7 +26,7 @@ namespace Game.Network
         /// Sync data of components received from server to client.
         /// Some components, specifically the ones who have logic objects, might have their unique way of sync.
         /// </summary>
-        public static void SyncComponents(WorldEntity clientEntity, List<IComponent> syncedComponentsFromServer)
+        public static void SyncComponents(BaseEntity clientEntity, List<IComponent> syncedComponentsFromServer)
         {
             foreach (var serverComponent in syncedComponentsFromServer)
             {
@@ -34,36 +34,9 @@ namespace Game.Network
                 {
                     clientEntity.Components.Add(serverComponent);
                 }
-
-                if (TrySyncLogicalComponent(clientEntity, serverComponent))
-                    return;
-
                 serverComponent.CopyFieldsTo(clientEntity.Components.Get(serverComponent.GetType()));
                 serverComponent.CopyPropertiesTo(clientEntity.Components.Get(serverComponent.GetType()));
             }
-        }
-
-        private static IComponentEntityLogic GetLogic(IEntity entity, Type syncType)
-        {
-            foreach (var prop in entity.GetType().GetProperties())
-            {
-                if (syncType.IsAssignableFrom(prop.PropertyType))
-                    return prop.GetValue(entity) as IComponentEntityLogic;
-            }
-            return null;
-        }
-
-        private static bool TrySyncLogicalComponent(WorldEntity entity, IComponent serverComponent)
-        {
-            var syncType = serverComponent.GetType().GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
-            if (syncType == null || syncType.LogicPropSyncType == null) return false;
-            var logic = GetLogic(entity, syncType.LogicPropSyncType);
-            if (syncType.LogicPropSyncType.IsAssignableFrom(logic.GetType()))
-            {
-                serverComponent.CopyPropertiesTo(logic);
-                return true;
-            }
-            return false;
         }
 
         private static void CopyFieldsTo(this object fromObject, object toObject)

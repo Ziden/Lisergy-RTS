@@ -2,23 +2,25 @@
 using Game.ECS;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game.Systems.Battler
 {
-    [Serializable]
-    [SyncedComponent(typeof(IBattleComponentSyncedProperties))]
+    public interface IBattleGroupComponentData
+    {
+        public GameId BattleID { get; }
+        public IReadOnlyList<Unit> GroupUnits { get; }
+        public bool IsDestroyed { get; }
+    }
 
-    public class BattleGroupComponent : IComponent, IBattleComponentSyncedProperties
+    [Serializable]
+    [SyncedComponent()]
+
+    public class BattleGroupComponent : IComponent, IBattleGroupComponentData
     {
         public GameId BattleID { get; set; }
-        public List<List<Unit>> UnitLines { get; set; } = new List<List<Unit>>()
-        {
-            new List<Unit>()
-        };
-
-        public List<Unit> FrontLine()
-        {
-            return UnitLines[0];
-        }
+        public List<Unit> Units { get; set; } = new List<Unit>();
+        public bool IsDestroyed => Units.All(u => u == null || u.HP <= 0);
+        public IReadOnlyList<Unit> GroupUnits => Units;
     }
 }

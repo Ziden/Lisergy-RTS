@@ -1,43 +1,24 @@
 ﻿using Game.ECS;
 using Game.Events;
-using Game.Player;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Party;
+using Game.Systems.Player;
+using GameData.Specs;
 using System;
 using System.Linq;
 
 namespace Game.Systems.Dungeon
 {
     [Serializable]
-    public class DungeonEntity : WorldEntity, IBattleableEntity
+    public class DungeonEntity : BaseEntity, IBuildableEntity<DungeonSpec>
     {
-        [NonSerialized]
-        private BattleGroupComponentLogic _battleLogic;
-
-        public DungeonEntity(params Unit[] units) : base(Gaia.Instance)
+        public DungeonEntity() : base(null)
         {
-            InitComponents();
-            _battleLogic.UpdateUnits(units.ToList());
+            Components.Add(new DungeonComponent());
+            Components.Add(new BattleGroupComponent());
+            Components.Add(new BuildingComponent());
         }
-
-        public DungeonEntity(ushort specId) : base(Gaia.Instance)
-        {
-            InitComponents();
-            BuildFromSpec(specId);
-        }
-
-        public DungeonEntity() : base(Gaia.Instance)
-        {
-            InitComponents();
-        }
-
-        public DungeonEntity(PlayerEntity e) : base(e)
-        {
-            InitComponents();
-        }
-
-        public IBattleComponentsLogic BattleGroupLogic => _battleLogic;
 
         public ushort SpecID => Components.Get<DungeonComponent>().SpecId;
 
@@ -46,9 +27,11 @@ namespace Game.Systems.Dungeon
             return $"<Dungeon Spec={SpecID}/>";
         }
 
-        public void BuildFromSpec(ushort specID)
+        public ServerPacket GetStatusUpdatePacket() => GetUpdatePacket(null);
+
+        public void BuildFromSpec(DungeonSpec spec)
         {
-            var spec = StrategyGame.Specs.Dungeons[specID];
+            var battleGroup = Components.Get<BattleGroupComponent>();
             for (var s = 0; s < spec.BattleSpecs.Count; s++)
             {
                 var battle = spec.BattleSpecs[s];
@@ -56,26 +39,12 @@ namespace Game.Systems.Dungeon
                 for (var i = 0; i < battle.UnitSpecIDS.Length; i++)
                 {
                     var unitSpecID = battle.UnitSpecIDS[i];
-                    var unitSpec = StrategyGame.Specs.Units[unitSpecID];
                     units[i] = new Unit(unitSpecID);
                     units[i].SetBaseStats();
-                    BattleGroupLogic.AddUnit(units[i]);
-                }
-                if (s < spec.BattleSpecs.Count - 1)
-                {
-                    BattleGroupLogic.NewUnitLine();
+                    battleGroup.Units.Add(units[i]);
                 }
             }
-            Components.Get<DungeonComponent>().SpecId = specID;
+            Components.Get<DungeonComponent>().SpecId = spec.DungeonSpecID;
         }
-
-        private void InitComponents()
-        {
-            Components.Add(new DungeonComponent());
-            Components.Add(new BattleGroupComponent());
-            Components.Add(new BuildingComponent());
-            _battleLogic = new BattleGroupComponentLogic(this);
-        }
-        public ServerPacket GetStatusUpdatePacket() => GetUpdatePacket(null);
     }
 }

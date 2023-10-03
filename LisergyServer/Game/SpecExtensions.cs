@@ -11,22 +11,22 @@ namespace Game
     {
         public static UnitSpec GetSpec(this Unit o)
         {
-            return StrategyGame.Specs.Units[o.SpecId];
+            return GameLogic.Specs.Units[o.SpecId];
         }
 
         public static BuildingSpec GetSpec(this PlayerBuildingEntity o)
         {
-            return StrategyGame.Specs.Buildings[o.SpecID];
+            return GameLogic.Specs.Buildings[o.SpecID];
         }
 
         public static TileSpec GetSpec(this TileEntity o)
         {
-            return StrategyGame.Specs.Tiles[o.TileId];
+            return GameLogic.Specs.Tiles[o.TileId];
         }
 
         public static DungeonSpec GetSpec(this DungeonEntity o)
         {
-            return StrategyGame.Specs.Dungeons[o.SpecID];
+            return GameLogic.Specs.Dungeons[o.SpecID];
         }
     }
 

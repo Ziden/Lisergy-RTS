@@ -15,5 +15,6 @@ if(RUN_UI)
 
 
 var server = new MapSocketServer(1337);
+server.Game.Events.OnEventFired += StandaloneServer.OnReceiveEvent;
 server.RunServer();
 

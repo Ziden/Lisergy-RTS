@@ -14,11 +14,11 @@ namespace Game.World
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct ChunkData
     {
-        public TileData* _chunkTiles;
+        public TileMapData* _chunkTiles;
         public byte _flags;
         public MapPosition Position;
 
-        public TileData* GetTileData(int x, int y) => _chunkTiles + x + y * GameWorld.CHUNK_SIZE;
+        public TileMapData* GetTileData(int x, int y) => _chunkTiles + x + y * GameWorld.CHUNK_SIZE;
 
         public void SetFlag(byte flag)
         {
@@ -27,8 +27,8 @@ namespace Game.World
 
         public void Allocate()
         {
-            var bytes = GameWorld.TILES_IN_CHUNK * sizeof(TileData);
-            _chunkTiles = (TileData*)UnmanagedMemory.Alloc(bytes);
+            var bytes = GameWorld.TILES_IN_CHUNK * sizeof(TileMapData);
+            _chunkTiles = (TileMapData*)UnmanagedMemory.Alloc(bytes);
             UnmanagedMemory.SetZeros((IntPtr)_chunkTiles, bytes);
         }
 

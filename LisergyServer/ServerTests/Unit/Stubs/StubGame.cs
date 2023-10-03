@@ -2,8 +2,8 @@
 using Game.DataTypes;
 using Game.Events;
 using Game.Network;
-using Game.Player;
 using Game.Services;
+using Game.Systems.Player;
 using Game.Systems.Tile;
 using Game.Tile;
 using Game.World;
@@ -12,15 +12,12 @@ using GameDataTest;
 using LisergyServer.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace ServerTests
 {
-
-    public class TestGame : StrategyGame
+    public class TestGame : GameLogic
     {
-        private bool _registered = false;
-
         private GameId _testPlayerId = GameId.Generate();
 
         public BattleService BattleService { get; private set; }
@@ -29,7 +26,7 @@ namespace ServerTests
 
         private static GameWorld TestWorld;
 
-        private static GameWorld GetTestWorld(GameWorld source = null)
+        private GameWorld CreateTestWorld(GameWorld source = null)
         {
             WorldUtils.SetRandomSeed(666);
             DeltaTracker.Clear();
@@ -49,21 +46,18 @@ namespace ServerTests
             }
             return TestWorld;
             */
-            return new GameWorld(4, 20, 20);
+            var w = new GameWorld(4, 20, 20);
+            SetWorld(w);
+            w.CreateMap();
+            return w;
         }
 
-
-
-        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), GetTestWorld(world))
+        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs())
         {
-
-            if (!_registered)
-            {
-                _registered = true;
-            }
+            CreateTestWorld();
             Serialization.LoadSerializers();
-            GlobalGameEvents.Clear();
-            NetworkEvents.Clear();
+            Events.Clear();
+            NetworkPackets.Clear();
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);
@@ -76,13 +70,13 @@ namespace ServerTests
         {
             BaseEvent deserialized = Serialization.ToEventRaw(Serialization.FromEventRaw(ev));
             deserialized.Sender = sender;
-            StrategyGame.NetworkEvents.Call(deserialized);
+            NetworkPackets.Call(deserialized);
             DeltaTracker.SendDeltaPackets(sender);
         }
 
         public TestServerPlayer CreatePlayer(int x = 10, int y = 10)
         {
-            var player = new TestServerPlayer();
+            var player = new TestServerPlayer(this);
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
             _testPlayerId = player.UserID;
             var tile = this.World.GetTile(x, y);
@@ -112,7 +106,7 @@ namespace ServerTests
 
         public static BuildingSpec RandomBuildingSpec()
         {
-            return StrategyGame.Specs.Buildings.Values.RandomElement();
+            return GameLogic.Specs.Buildings.Values.RandomElement();
         }
 
 

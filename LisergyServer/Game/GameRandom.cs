@@ -13,8 +13,6 @@ namespace Game
 	public class GameRandom
 	{
 
-		public static readonly GameRandom Instance = new GameRandom();
-
 		const double REAL_UNIT_INT = 1.0 / ((double)int.MaxValue + 1.0);
 		const double REAL_UNIT_UINT = 1.0 / ((double)uint.MaxValue + 1.0);
 		const uint Y = 842502087, Z = 3579807591, W = 273326509;

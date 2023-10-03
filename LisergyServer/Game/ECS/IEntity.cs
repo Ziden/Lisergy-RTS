@@ -1,16 +1,16 @@
 ﻿using Game.DataTypes;
-using Game.Player;
+using Game.Network;
 
 namespace Game.ECS
 {
 
-    public interface IEntity : IOwnable
+    public interface IEntity : IOwnable, IDeltaUpdateable
     {
         public IComponentSet Components { get; }
 
-        public GameId EntityId { get; }
+        public T Get<T>() where T : IComponent;
 
-        //public PlayerEntity Owner { get; }
+        public GameId EntityId { get; }
     }
 
 

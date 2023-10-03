@@ -8,12 +8,13 @@ namespace Game.Systems.Tile
 {
     public class TileHabitantsSystem : GameSystem<TileHabitants>
     {
+        public TileHabitantsSystem(GameLogic game) : base(game) { }
         public override void OnEnabled()
         {
-            SystemEvents.On<BuildingPlacedEvent>(OnStaticEntityPlaced);
-            SystemEvents.On<BuildingRemovedEvent>(OnStaticEntityRemoved);
-            SystemEvents.On<EntityMoveOutEvent>(OnEntityMoveOut);
-            SystemEvents.On<EntityMoveInEvent>(OnEntityMoveIn);
+            EntityEvents.On<BuildingPlacedEvent>(OnStaticEntityPlaced);
+            EntityEvents.On<BuildingRemovedEvent>(OnStaticEntityRemoved);
+            EntityEvents.On<EntityMoveOutEvent>(OnEntityMoveOut);
+            EntityEvents.On<EntityMoveInEvent>(OnEntityMoveIn);
         }
 
         private static void OnStaticEntityRemoved(IEntity owner, TileHabitants component, BuildingRemovedEvent entity)
@@ -31,26 +32,28 @@ namespace Game.Systems.Tile
             component.EntitiesIn.Remove(ev.Entity);
         }
 
-        private static void OnEntityMoveIn(IEntity owner, TileHabitants component, EntityMoveInEvent ev)
+        private static void OnEntityMoveIn(IEntity owner, TileHabitants tileHabitants, EntityMoveInEvent ev)
         {
             var movement = ev.Entity.Components.Get<EntityMovementComponent>();
             if (movement == null)
             {
                 return;
             }
-
-            component.EntitiesIn.Add(ev.Entity);
-
-            if (ev.Entity is IBattleableEntity && component.Building != null && component.Building is IBattleableEntity)
+            tileHabitants.EntitiesIn.Add(ev.Entity);
+            var atkGroup = ev.Entity.Components.Get<BattleGroupComponent>();
+            if (atkGroup == null) return;
+            if (tileHabitants.Building == null) return;
+            var defGroup = tileHabitants.Building.Components.Get<BattleGroupComponent>();
+            if(defGroup == null) return;    
+            if (movement.Course != null && movement.Course.Intent == MovementIntent.Offensive && movement.Course.IsLastMovement())
             {
-                if (movement.Course != null && movement.Course.Intent == MovementIntent.Offensive && movement.Course.IsLastMovement())
+                ev.Entity.Components.CallEvent(new OffensiveActionEvent()
                 {
-                    StrategyGame.GlobalGameEvents.Call(new OffensiveMoveEvent()
-                    {
-                        Defender = component.Building,
-                        Attacker = ev.Entity
-                    });
-                }
+                    AttackerGroup = atkGroup,
+                    DefenderGroup = defGroup,
+                    Defender = tileHabitants.Building,
+                    Attacker = ev.Entity
+                });
             }
         }
     }

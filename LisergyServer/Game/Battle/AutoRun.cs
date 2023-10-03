@@ -20,9 +20,11 @@ namespace Game.Battle
 
         private SortedSet<BattleUnit> UnitQueue => _battle._actionQueue;
 
+        private bool IsOver =>_battle.Attacker.AllDead || _battle. Defender.AllDead;
+
         public TurnBattleRecord RunAllRounds()
         {
-            while (!_battle.IsOver)
+            while (!IsOver)
             {
                 _ = RunOneTurn();
             }

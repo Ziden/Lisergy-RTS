@@ -1,6 +1,6 @@
 ﻿using Game.DataTypes;
-using Game.Player;
 using Game.Systems.Battler;
+using Game.Systems.Player;
 using System;
 
 namespace Game.Battle

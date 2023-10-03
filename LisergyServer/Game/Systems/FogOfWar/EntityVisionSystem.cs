@@ -9,17 +9,31 @@ namespace Game.Systems.FogOfWar
 {
     public class EntityVisionSystem : GameSystem<EntityVisionComponent>
     {
+        public EntityVisionSystem(GameLogic game) : base(game) { }
         public override void OnEnabled()
         {
-            SystemEvents.On<EntityMoveInEvent>(OnEntityStepOnTile);
+            EntityEvents.On<EntityMoveInEvent>(OnEntityStepOnTile);
+            EntityEvents.On<UnitAddToGroupEvent>(OnUnitAdded);
+            EntityEvents.On<UnitRemovedEvent>(OnUnitRemoved);
         }
 
-        private static void OnEntityStepOnTile(IEntity e, EntityVisionComponent c, EntityMoveInEvent ev)
+        private void OnUnitAdded(IEntity e, EntityVisionComponent component, UnitAddToGroupEvent ev)
+        {
+            component.LineOfSight = ev.Units.Max(u => u.GetSpec().LOS);
+        }
+
+        private void OnUnitRemoved(IEntity e, EntityVisionComponent component, UnitRemovedEvent ev)
+        {
+            if (ev.Group.Units.Count == 0) component.LineOfSight = 0;
+            else component.LineOfSight = ev.Group.Units.Max(u => u.GetSpec().LOS);
+        }
+
+        private void OnEntityStepOnTile(IEntity e, EntityVisionComponent c, EntityMoveInEvent ev)
         {
             UpdateVisionRange(e, ev.FromTile, ev.ToTile);
         }
 
-        private static void UpdateVisionRange(IEntity explorer, TileEntity from, TileEntity to)
+        private void UpdateVisionRange(IEntity explorer, TileEntity from, TileEntity to)
         {
             var los = explorer.Components.Get<EntityVisionComponent>().LineOfSight;
             if (los > 0)

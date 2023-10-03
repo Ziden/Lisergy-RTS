@@ -1,13 +1,11 @@
-﻿using Game.ECS;
-using Game.Player;
-using Game.Systems.Party;
+﻿using Game.Systems.Player;
 using System;
 
 namespace Game.Systems.Building
 {
 
     [Serializable]
-    public class PlayerBuildingEntity : WorldEntity
+    public class PlayerBuildingEntity : BaseEntity
     {
         public ushort SpecID => Components.Get<PlayerBuildingComponent>().SpecId;
 

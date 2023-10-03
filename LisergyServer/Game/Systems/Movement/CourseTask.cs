@@ -8,7 +8,8 @@ namespace Game.Systems.Movement
     public class CourseTask : GameTask
     {
         public PartyEntity Party;
-        List<TileEntity> Path;
+        public List<TileEntity> Path;
+
         public MovementIntent Intent { get; private set; }
 
         public CourseTask(PartyEntity party, List<TileEntity> path, MovementIntent intent) : base(party.Components.Get<EntityMovementComponent>().MoveDelay, party.Owner)
@@ -18,7 +19,7 @@ namespace Game.Systems.Movement
             Intent = intent;
         }
 
-        public override void Execute()
+        public override void Tick()
         {
             var course = Party.Components.Get<EntityMovementComponent>().Course;
             if (course != this)

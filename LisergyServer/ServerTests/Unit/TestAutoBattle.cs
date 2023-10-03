@@ -5,9 +5,9 @@ using Game.Battle.BattleEvents;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Network;
-using Game.Player;
 using Game.Systems.Battler;
 using Game.Systems.Party;
+using Game.Systems.Player;
 using NUnit.Framework;
 using ServerTests;
 using System;
@@ -30,7 +30,7 @@ namespace Tests
         [Test]
         public void TestBattleComponentLogicSync()
         {
-            var clientEntity = new PartyEntity(new Gaia());
+            var clientEntity = new PartyEntity(null);
 
             var clientComponent = clientEntity.Components.Add<BattleGroupComponent>();
             var serverComponent = new BattleGroupComponent();

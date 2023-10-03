@@ -7,10 +7,10 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class EntityUpdatePacket : ServerPacket
     {
-        public WorldEntity Entity;
+        public BaseEntity Entity;
         public List<IComponent> SyncedComponents;
 
-        public EntityUpdatePacket(WorldEntity entity)
+        public EntityUpdatePacket(BaseEntity entity)
         {
             Entity = entity;
         }

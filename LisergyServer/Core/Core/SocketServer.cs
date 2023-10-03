@@ -14,7 +14,7 @@ namespace BaseServer.Core
         protected Server _socketServer;
         private Message _msg;
         private ConsoleCommandExecutor _commandExecutor;
-        protected StrategyGame _game;
+        public GameLogic Game { get; protected set; }
         private readonly int _port;
 
         public SocketServer(int port)
@@ -24,17 +24,17 @@ namespace BaseServer.Core
             _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
             _socketServer = new Server();
             Serialization.LoadSerializers();
-            _game = SetupGame();
+            Game = SetupGame();
             SetupServices();
-            RegisterCommands(_game, _commandExecutor);
+            RegisterCommands(Game, _commandExecutor);
         }
 
-        public abstract void RegisterCommands(StrategyGame game, ConsoleCommandExecutor executor);
+        public abstract void RegisterCommands(GameLogic game, ConsoleCommandExecutor executor);
         protected abstract ServerPlayer Auth(BaseEvent ev, int connectionID);
         public abstract void Tick();
         public abstract void Disconnect(int connectionID);
         public abstract ServerType GetServerType();
-        public abstract StrategyGame SetupGame();
+        public abstract GameLogic SetupGame();
 
         public abstract void SetupServices();
 
@@ -90,7 +90,7 @@ namespace BaseServer.Core
                         ServerPlayer caller = Auth(ev, _msg.connectionId);
                         if (caller != null)
                         {
-                            _game.ReceiveInput(caller, message);
+                            Game.ReceiveInput(caller, message);
                         }
                         break;
                     case EventType.Disconnected:

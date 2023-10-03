@@ -45,10 +45,9 @@ namespace Game
 
             // World
             models.Add(typeof(PlayerBuildingEntity));
-            models.Add(typeof(WorldEntity));
+            models.Add(typeof(BaseEntity));
             models.Add(typeof(PartyEntity));
-            models.Add(typeof(TileEntity));
-            models.Add(typeof(TileData));
+            models.Add(typeof(TileMapData));
             models.Add(typeof(DungeonEntity));
 
             // Game

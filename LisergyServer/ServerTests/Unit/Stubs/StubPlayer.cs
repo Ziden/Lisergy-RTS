@@ -22,7 +22,7 @@ namespace ServerTests
 
         public bool IsOnline { get; set; }
 
-        public TestServerPlayer() : base(null)
+        public TestServerPlayer(GameLogic game = null) : base(null, game)
         {
             IsOnline = true;
         }
@@ -38,7 +38,7 @@ namespace ServerTests
 
         public void ListenTo<EventType>() where EventType : GameEvent
         {
-            StrategyGame.GlobalGameEvents.Register<EventType>(this, ev =>
+            Game.Events.Register<EventType>(this, ev =>
             {
                 ReceivedEvents.Add(ev);
             });
@@ -49,7 +49,7 @@ namespace ServerTests
             var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new MapPosition(pa.X, pa.Y)).ToList();
             var ev = new MoveRequestPacket() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };
             ev.Sender = this;
-            StrategyGame.NetworkEvents.Call(ev);
+            Game.NetworkPackets.Call(ev);
         }
 
         public List<T> ReceivedEventsOfType<T>() where T : BaseEvent

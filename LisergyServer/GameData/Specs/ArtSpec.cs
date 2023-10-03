@@ -12,7 +12,6 @@ namespace GameData.Specs
     [Serializable]
     public struct ArtSpec
     {
-        public int Index; // TODO: Remove
         public string Address;
         public ArtType Type;
     }

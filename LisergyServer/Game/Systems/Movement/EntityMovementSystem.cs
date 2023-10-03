@@ -4,6 +4,7 @@ namespace Game.Systems.Movement
 {
     public class EntityMovementSystem : GameSystem<EntityMovementComponent>
     {
+        public EntityMovementSystem(GameLogic game) : base(game) { }
         public static CourseTask GetCourse(IEntity entity) => entity.Components.Get<EntityMovementComponent>().Course;
 
         public static void SetCourse(IEntity entity, CourseTask newCourse)

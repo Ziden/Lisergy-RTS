@@ -1,6 +1,6 @@
 ﻿using Game.DataTypes;
 using Game.Events;
-using Game.Player;
+using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +28,6 @@ namespace Game.ECS
 
         void CallEvent(BaseEvent e);
 
-        void RegisterExternalComponentEvents<ComponentType, EventType>(Action<ComponentType, EventType> cb) where EventType : GameEvent where ComponentType : IComponent;
     }
 
     /// <summary>
@@ -81,12 +80,11 @@ namespace Game.ECS
 
         public void CallEvent(BaseEvent ev)
         {
-            StrategyGame.GlobalGameEvents.Call(ev);
-            foreach(var kp in _components)
+            GameSystems.HACK_REMOVE_ME.Game.Events.Call(ev);
+            foreach (var kp in _components)
             {
-                UntypedRegistry.RunEventsForComponent(kp.Key, _entity, ev);
+                GameSystems.HACK_REMOVE_ME.CallEvent(kp.Key, _entity, ev);
             } 
-           
         }
 
         public IComponent Get(Type t)
@@ -97,7 +95,6 @@ namespace Game.ECS
         public T Add<T>(Type type, T component) where T : IComponent
         {
             _components[type] = component;
-            ComponentSystemRegistry<T>.OnAddComponent(_entity);
             var sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
             if (sync != null)
             {
@@ -110,21 +107,7 @@ namespace Game.ECS
 
         public void RemoveComponent<T>() where T : IComponent
         {
-            ComponentSystemRegistry<T>.OnRemovedComponent(_entity);
-        }
-
-
-        public void RegisterExternalComponentEvents<ComponentType, EventType>(Action<ComponentType, EventType> cb)
-
-            where ComponentType : IComponent
-            where EventType : GameEvent
-        {
-            if (!cb.GetMethodInfo().IsStatic)
-            {
-                throw new Exception("External callbacks registered in a shared event bus must be static");
-            }
-
-            //GetEventBus().RegisterComponentEvent((IEntity e, ComponentType c, EventType ev) => cb(c, ev));
+            throw new NotImplementedException();
         }
     }
 }

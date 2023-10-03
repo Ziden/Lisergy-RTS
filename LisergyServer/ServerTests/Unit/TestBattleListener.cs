@@ -1,10 +1,9 @@
+using Game;
 using Game.Battle;
-using Game.Events.ServerEvents;
-using Game.Network;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
-using Game.Pathfinder;
 using Game.Scheduler;
+using Game.Systems.Battler;
 using Game.Systems.Dungeon;
 using Game.Systems.Movement;
 using Game.Systems.Party;
@@ -32,7 +31,8 @@ namespace Tests
             _player = _game.GetTestPlayer();
             _path = new List<MapPosition>();
             _party = _player.GetParty(0);
-            _dungeon = new DungeonEntity(0);
+            _dungeon = new DungeonEntity();
+            _dungeon.BuildFromSpec(GameLogic.Specs.Dungeons[0]);
             _dungeon.Tile = _game.World.GetTile(8, 8);
             GameScheduler.Clear();
         }
@@ -42,7 +42,6 @@ namespace Tests
         {
             _game.ClearEventListeners();
         }
-    
 
         private TurnBattle SetupBattle()
         {
@@ -50,20 +49,20 @@ namespace Tests
             var partyTile = party.Tile;
             var dungeonTile = partyTile.GetNeighbor(Direction.EAST);
             _dungeon.Tile = dungeonTile;
-            party.BattleGroupLogic.GetUnits().First().Atk = 255;
+            party.Get<BattleGroupComponent>().Units.First().Atk = 255;
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
             var course = party.Course;
             Assert.AreEqual(0, _player.BattleHeaders.Count());
-            course.Execute();
-            course.Execute();
-            return _game.BattleService.GetBattle(party.BattleGroupLogic.BattleID);
+            course.Tick();
+            course.Tick();
+            return _game.BattleService.GetBattle(party.Get<BattleGroupComponent>().BattleID);
         }
 
         [Test]
         public void TestBattleTrack()
         {
             var battle = SetupBattle();
-            battle.Task.Execute();
+            battle.Task.Tick();
 
             var attackerPlayer = _game.World.Players.GetPlayer(battle.Attacker.OwnerID);
             BattleHistory.TryGetLog(battle.ID, out var log);
@@ -77,7 +76,7 @@ namespace Tests
         public void TestRequestinBattleLog()
         {
             var battle = SetupBattle();
-            battle.Task.Execute();
+            battle.Task.Tick();
 
             _game.HandleClientEvent(_player, new BattleLogRequestPacket() { BattleId = battle.ID });
 

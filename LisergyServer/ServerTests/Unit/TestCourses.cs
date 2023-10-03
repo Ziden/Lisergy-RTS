@@ -4,6 +4,7 @@ using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
 using Game.Pathfinder;
 using Game.Scheduler;
+using Game.Systems.Battler;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Systems.Tile;
@@ -106,8 +107,8 @@ namespace Tests
             _player.SendMoveRequest(party, next, MovementIntent.Offensive);
             var course = party.Course;
 
-            course.Execute();
-            course.Execute();
+            course.Tick();
+            course.Tick();
 
             Assert.AreEqual(party.Tile, next);
         }
@@ -139,7 +140,7 @@ namespace Tests
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new MapPosition(next.X, next.Y));
-            _party.BattleGroupLogic.BattleID = Guid.NewGuid();
+            _party.Get<BattleGroupComponent>().BattleID = Guid.NewGuid();
 
             _path.Add(new MapPosition(next.X + 1, next.Y));
             SendMoveRequest();

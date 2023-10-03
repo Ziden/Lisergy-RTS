@@ -23,7 +23,7 @@ namespace Tests
         {
             var player = Game.GetTestPlayer();
 
-            var initialBuildingSpec = StrategyGame.Specs.Buildings[StrategyGame.Specs.InitialBuilding];
+            var initialBuildingSpec = GameLogic.Specs.Buildings[GameLogic.Specs.InitialBuilding];
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile;
             Assert.IsTrue(player.Buildings.Count == 1);

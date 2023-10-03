@@ -2,6 +2,7 @@ using Game;
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
+using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Party;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var clientPlayer = new TestServerPlayer();
+            var clientPlayer = new TestServerPlayer(Game);
             Game.HandleClientEvent(clientPlayer, joinEvent);
 
             var createdPlayer = Game.World.Players.GetPlayer(clientPlayer.UserID);
@@ -42,7 +43,7 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var clientPlayer = new TestServerPlayer();
+            var clientPlayer = new TestServerPlayer(Game);
             Game.HandleClientEvent(clientPlayer, joinEvent);
 
             var entityVisibleEvents = clientPlayer.ReceivedEventsOfType<EntityUpdatePacket>();
@@ -61,7 +62,7 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var player = new TestServerPlayer();
+            var player = new TestServerPlayer(Game);
             Game.HandleClientEvent(player, joinEvent);
 
             var entityUpdates = player.ReceivedEventsOfType<EntityUpdatePacket>();
@@ -78,7 +79,7 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var player = new TestServerPlayer();
+            var player = new TestServerPlayer(Game);
             Game.HandleClientEvent(player, joinEvent);
 
             var entityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
@@ -91,7 +92,7 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var player = new TestServerPlayer();
+            var player = new TestServerPlayer(Game);
 
             Game.HandleClientEvent(player, joinEvent);
 
@@ -114,10 +115,10 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var player = new TestServerPlayer();
+            var player = new TestServerPlayer(Game);
             Game.HandleClientEvent(player, joinEvent);
             var party = player.GetParty(0);
-            var unit = party.BattleGroupLogic.GetUnits().First();
+            var unit = party.Get<BattleGroupComponent>().Units.First();
 
             Assert.That(unit.HP == unit.MaxHP);
         }

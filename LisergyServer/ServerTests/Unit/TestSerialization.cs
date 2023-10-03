@@ -48,7 +48,7 @@ namespace Tests
 
             Serialization.LoadSerializers(typeof(TileUpdatePacket));
 
-            var serialized = Serialization.FromEvent<TileUpdatePacket>(tile.GetUpdatePacket(null));
+            var serialized = Serialization.FromEvent<TileUpdatePacket>(tile.GetUpdatePacket(null) as TileUpdatePacket);
             var unserialized = Serialization.ToEvent<TileUpdatePacket>(serialized);
 
             Assert.AreEqual(tile.TileId, unserialized.Data.TileId);

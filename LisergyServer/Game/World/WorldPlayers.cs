@@ -1,5 +1,5 @@
 ﻿using Game.DataTypes;
-using Game.Player;
+using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
 

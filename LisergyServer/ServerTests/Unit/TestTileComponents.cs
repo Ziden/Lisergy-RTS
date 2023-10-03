@@ -18,8 +18,8 @@ namespace Tests
         public void Setup()
         {
             var c = new Chunk(null, 0, 0, new TileEntity[,] { });
-            var t1 = new TileData();
-            var t2 = new TileData();
+            var t1 = new TileMapData();
+            var t2 = new TileMapData();
             tile1 = new TileEntity(c, &t1, 0, 0);
             tile2 = new TileEntity(c, &t2, 1, 1);
         }
@@ -31,7 +31,7 @@ namespace Tests
             tile2.Components.Add(new TileHabitants());
 
             var dg = new DungeonEntity();
-
+            
             tile1.Components.CallEvent(new BuildingPlacedEvent(dg, tile1));
 
             Assert.IsTrue(tile1.Components.Get<TileHabitants>().Building == dg);

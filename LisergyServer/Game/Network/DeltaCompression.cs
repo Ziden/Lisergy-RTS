@@ -1,5 +1,5 @@
 ﻿using Game.Events;
-using Game.Player;
+using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
 
@@ -81,9 +81,9 @@ namespace Game.Network
         void ProccessDeltas(PlayerEntity trigger);
     }
 
-    public interface IDeltaUpdateable<T> where T : ServerPacket
+    public interface IDeltaUpdateable
     {
-        public T GetUpdatePacket(PlayerEntity receiver);
+        public ServerPacket GetUpdatePacket(PlayerEntity receiver);
     }
 
 }

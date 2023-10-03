@@ -1,4 +1,4 @@
-﻿using Game.Player;
+﻿using Game.Systems.Player;
 using Game.Systems.Tile;
 using Game.Tile;
 using Game.World;
@@ -7,7 +7,9 @@ using System.Collections.Generic;
 
 namespace Game
 {
-    public class GameWorld
+    public interface IGameWorld { }
+
+    public class GameWorld : IGameWorld
     {
         private string _id;
 
@@ -23,7 +25,7 @@ namespace Game
         // how many chunks are "player reserved chunks" per player
         public const int PLAYERS_CHUNKS = 2;
 
-        public StrategyGame Game { get; set; }
+        public GameLogic Game { get; set; }
         public WorldPlayers Players { get; set; }
         public ChunkMap Map { get; set; }
 
@@ -36,7 +38,6 @@ namespace Game
             SizeX = sizeX;
             SizeY = sizeY;
             Players = new WorldPlayers(maxPlayers);
-            CreateMap();
         }
 
         public void FreeMap()
@@ -80,10 +81,10 @@ namespace Game
         public virtual void PlaceNewPlayer(PlayerEntity player, TileEntity t)
         {
             Players.Add(player);
-            var castleID = StrategyGame.Specs.InitialBuilding;
+            var castleID = GameLogic.Specs.InitialBuilding;
             player.Build(castleID, t);
 
-            ushort initialUnit = StrategyGame.Specs.InitialUnit;
+            ushort initialUnit = GameLogic.Specs.InitialUnit;
             var unit = player.RecruitUnit(initialUnit);
             unit.Name = "Merlin";
             var party = player.GetParty(0);

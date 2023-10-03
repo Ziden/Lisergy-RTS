@@ -4,14 +4,14 @@ namespace Game.Events.GameEvents
 {
     public class PlayerVisibilityChangeEvent : GameEvent
     {
-        public PlayerVisibilityChangeEvent(WorldEntity viewer, TileEntity tile, bool v)
+        public PlayerVisibilityChangeEvent(BaseEntity viewer, TileEntity tile, bool v)
         {
             this.Viewer = viewer;
             this.Tile = tile;
             this.TileVisible = v;
         }
 
-        public WorldEntity Viewer;
+        public BaseEntity Viewer;
         public TileEntity Tile;
         public bool TileVisible;
     }

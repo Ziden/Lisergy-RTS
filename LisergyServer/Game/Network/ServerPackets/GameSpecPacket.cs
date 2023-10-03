@@ -10,9 +10,9 @@ namespace Game.Events.ServerEvents
         public int WorldX;
         public int WorldY;
 
-        public GameSpecPacket(StrategyGame game)
+        public GameSpecPacket(GameLogic game)
         {
-            this.Spec = game.GameSpec;
+            this.Spec = GameLogic.Specs;
             this.WorldX = game.World.SizeX;
             this.WorldY = game.World.SizeY;
         }

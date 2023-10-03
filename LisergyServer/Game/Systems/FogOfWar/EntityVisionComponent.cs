@@ -3,10 +3,15 @@ using System;
 
 namespace Game.Systems.FogOfWar
 {
+    public interface IEntityVisionData
+    {
+        public byte LineOfSight { get; }
+    }
+
     [Serializable]
     [SyncedComponent(OnlyMine = true)]
-    public class EntityVisionComponent : IComponent
+    public class EntityVisionComponent : IComponent, IEntityVisionData
     {
-        public byte LineOfSight;
+        public byte LineOfSight { get; internal set; }
     }
 }

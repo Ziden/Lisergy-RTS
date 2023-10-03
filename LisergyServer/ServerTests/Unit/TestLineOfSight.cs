@@ -27,7 +27,7 @@ namespace Tests
         public void TestLOSEvents()
         {
             Game.CreatePlayer();
-            var initialBuildingSpec = StrategyGame.Specs.Buildings[StrategyGame.Specs.InitialBuilding];
+            var initialBuildingSpec = GameLogic.Specs.Buildings[GameLogic.Specs.InitialBuilding];
             var player = Game.GetTestPlayer();
             var events = Game.ReceivedEvents
                 .Where(e => e is TileUpdatePacket)
@@ -45,12 +45,12 @@ namespace Tests
             var newbieChunk = Game.World.Map.GetUnnocupiedNewbieChunk();
             Game.World.Players.Add(player);
             var tile = newbieChunk.FindTileWithId(0);
-            var castleID = StrategyGame.Specs.InitialBuilding;
+            var castleID = GameLogic.Specs.InitialBuilding;
             player.Build(castleID, tile);
 
             DeltaTracker.SendDeltaPackets(player);
 
-            var los = StrategyGame.Specs.Buildings[castleID].LOS;
+            var los = GameLogic.Specs.Buildings[castleID].LOS;
             var losTiles = tile.GetAOE(los);
             var entityUpdates = player.ReceivedEventsOfType<EntityUpdatePacket>();
             var tileVisibleEvent = player.ReceivedEventsOfType<TileUpdatePacket>();
@@ -65,7 +65,7 @@ namespace Tests
             Game.CreatePlayer();
             var player = Game.GetTestPlayer();
 
-            var initialBuildingSpec = StrategyGame.Specs.Buildings[StrategyGame.Specs.InitialBuilding];
+            var initialBuildingSpec = GameLogic.Specs.Buildings[GameLogic.Specs.InitialBuilding];
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile;
             var areaTiles = tile.GetAOE(initialBuildingSpec.LOS).ToList();
@@ -86,7 +86,7 @@ namespace Tests
             Game.CreatePlayer();
             var player = Game.GetTestPlayer();
 
-            var initialBuildingSpec = StrategyGame.Specs.Buildings[StrategyGame.Specs.InitialBuilding];
+            var initialBuildingSpec = GameLogic.Specs.Buildings[GameLogic.Specs.InitialBuilding];
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile;
             var areaTiles = tile.GetAOE(initialBuildingSpec.LOS).ToList();
@@ -110,8 +110,8 @@ namespace Tests
 
             var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
 
-            Assert.AreEqual(los, party.BattleGroupLogic.GetUnits()[0].GetSpec().LOS);
-            Assert.AreEqual(los, party.BattleGroupLogic.CalculateLineOfSight());
+            Assert.AreEqual(los, party.Get<BattleGroupComponent>().Units[0].GetSpec().LOS);
+            Assert.AreEqual(los, party.Get<BattleGroupComponent>().Units.Max(u => u.GetSpec().LOS));
         }
 
         [Test]
@@ -121,7 +121,8 @@ namespace Tests
             var player = Game.GetTestPlayer();
             var party = player.Parties.First();
 
-            party.BattleGroupLogic.RemoveUnit(party.BattleGroupLogic.GetUnits()[0]);
+            var logic = Game.Systems.BattleGroup.GetLogic(party);
+            logic.RemoveUnit(logic.GetUnits()[0]);
 
             var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
 
@@ -135,11 +136,12 @@ namespace Tests
             var player = Game.GetTestPlayer();
             var party = player.Parties.First();
 
+            var logic = Game.Systems.BattleGroup.GetLogic(party);
 
-            party.BattleGroupLogic.RemoveUnit(party.BattleGroupLogic.GetUnits()[0]);
+            logic.RemoveUnit(logic.GetUnits()[0]);
 
             var unit = new Unit(0);
-            party.BattleGroupLogic.AddUnit(unit);
+            logic.AddUnit(unit);
 
             var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
 
@@ -175,7 +177,7 @@ namespace Tests
         [Test]
         public void TestSendingEventsWhenExploring()
         {
-            StrategyGame.Specs.InitialUnit = 2; // Mage with 3+ LOS
+            GameLogic.Specs.InitialUnit = 2; // Mage with 3+ LOS
             Game.CreatePlayer(0, 0); // placing new user in the corner
             var player = Game.GetTestPlayer();
             player.ListenTo<TileVisibilityChangedEvent>();
@@ -203,7 +205,7 @@ namespace Tests
         [Test]
         public void TestKeepingOneEntityExploring()
         {
-            StrategyGame.Specs.InitialUnit = TestUnitData.KNIGHT; // Thief with 1 los
+            GameLogic.Specs.InitialUnit = TestUnitData.KNIGHT; // Thief with 1 los
             Game.CreatePlayer(0, 0); // placing new user in the corner
             var player = Game.GetTestPlayer();
             player.ListenTo<TileVisibilityChangedEvent>();
@@ -242,14 +244,14 @@ namespace Tests
             var party = player.GetParty(0);
             var initialLos = party.GetLineOfSight();
 
-            var lowerLosUnit = Game.GameSpec.Units.Where(kp => kp.Value.LOS < initialLos).First();
-
-            party.BattleGroupLogic.RemoveUnit(party.BattleGroupLogic.GetUnits().First());
-            party.BattleGroupLogic.AddUnit(new Unit(lowerLosUnit.Key));
+            var lowerLosUnit = GameLogic.Specs.Units.Where(kp => kp.Value.LOS < initialLos).First();
+            var logic = Game.Systems.BattleGroup.GetLogic(party);
+            logic.RemoveUnit(logic.GetUnits().First());
+            logic.AddUnit(new Unit(lowerLosUnit.Key));
 
             var afterLos = party.GetLineOfSight();
 
-            Assert.AreEqual(Game.GameSpec.Units[Game.GameSpec.InitialUnit].LOS, initialLos);
+            Assert.AreEqual(GameLogic.Specs.Units[GameLogic.Specs.InitialUnit].LOS, initialLos);
             Assert.AreEqual(lowerLosUnit.Value.LOS, afterLos);
             Assert.IsTrue(afterLos < initialLos);
         }

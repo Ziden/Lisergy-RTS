@@ -23,7 +23,7 @@ namespace Game.Scheduler
         {
             while (task.Repeat)
             {
-                task.Execute();
+                task.Tick();
             }
             DeltaTracker.SendDeltaPackets(task.Creator);  // TODO: Maybe not best place
             _ = Queue.Remove(task);
@@ -54,7 +54,7 @@ namespace Game.Scheduler
         {
             _ = Queue.Remove(task);
             _ = _tasks.Remove(task.ID);
-            task.Execute();
+            task.Tick();
             DeltaTracker.SendDeltaPackets(task.Creator); // TODO: Maybe not best place
             if (task.Repeat)
             {

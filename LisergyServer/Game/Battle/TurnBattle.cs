@@ -24,7 +24,7 @@ namespace Game.Battle
 
         public BattleUnit CurrentActingUnit => _actionQueue.First();
 
-        public bool IsOver => Attacker.AllDead || Defender.AllDead;
+        public bool IsOver { get; set; }
 
         public TurnBattle(GameId id, BattleTeam attacker, BattleTeam defender)
         {
@@ -41,6 +41,7 @@ namespace Game.Battle
         {
             Result.RecordEvent(new UnitDeadEvent() { UnitId = u.UnitID });
             _actionQueue.Remove(u);
+            if (u.Team.AllDead) IsOver = true;
         }
 
         public List<BattleEvent> ReceiveAction(BattleAction action)
@@ -62,6 +63,7 @@ namespace Game.Battle
                 }
             }
             UpdateRT(unit);
+           
             return Result.CurrentTurn.Events;
         }
 

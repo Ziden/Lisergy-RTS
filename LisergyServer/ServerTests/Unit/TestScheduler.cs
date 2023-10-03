@@ -11,7 +11,7 @@ namespace Tests
         {
             public TestTask(TimeSpan delay) : base(delay, null) { }
             public bool Ran = false;
-            public override void Execute()
+            public override void Tick()
             {
                 if (Ran)
                     throw new Exception("Tryng to run task twice");

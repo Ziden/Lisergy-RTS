@@ -1,6 +1,5 @@
 ﻿using Game;
 using Game.DataTypes;
-using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Network;
 using Game.Network.ServerPackets;
@@ -43,16 +42,16 @@ namespace Tests
             party.Tile = _game.World.GetTile(0, 0);
             var enemy = new DungeonEntity();
             enemy.Tile = _game.World.GetTile(1, 1);
-            enemy.BattleGroupLogic.AddUnit(new Unit(0));
+            enemy.Get<BattleGroupComponent>().Units.Add(new Unit(0));
 
             var battleID = Guid.NewGuid();
-            StrategyGame.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
+            _game.NetworkPackets.Call(new BattleStartPacket(battleID, party, enemy));
 
             _player.ReceivedEvents.Clear();
             DeltaTracker.Clear();
 
             var battle = _game.BattleService.GetBattle(battleID);
-            battle.Task.Execute();
+            battle.Task.Tick();
 
             var statusUpdates = _player.ReceivedEventsOfType<EntityUpdatePacket>().Where(p => p.Entity.Id == party.Id);
             Assert.AreEqual(1, statusUpdates.Count());
@@ -62,9 +61,9 @@ namespace Tests
         [Test]
         public void TestPartyUnitsInitialHP()
         {
-            var team = _player.GetParty(0).BattleGroupLogic.GetBattleTeam();
+            var team = _player.GetParty(0).Get<BattleGroupComponent>().Units;
 
-            var unit = team.Units.First().UnitReference;
+            var unit = team.First();
 
             var mhp = unit.MaxHP;
 
@@ -79,16 +78,17 @@ namespace Tests
             party.Tile = _game.World.GetTile(0, 0);
             var enemy = new DungeonEntity();
             enemy.Tile = _game.World.GetTile(1, 1);
-            enemy.BattleGroupLogic.AddUnit(new Unit(0));
+            enemy.Get<BattleGroupComponent>().Units.Add(new Unit(0));
 
             var battleID = Guid.NewGuid();
-            StrategyGame.NetworkEvents.Call(new BattleStartPacket(battleID, party, enemy));
+            _game.NetworkPackets.Call(new BattleStartPacket(battleID, party, enemy));
 
             var battle = _game.BattleService.GetBattle(battleID);
-            battle.Task.Execute();
+            battle.Task.Tick();
 
+            Assert.IsTrue(party.Get<BattleGroupComponent>().BattleID == GameId.ZERO);
             Assert.IsTrue(battle.IsOver);
-            Assert.IsTrue(party.BattleGroupLogic.BattleID == GameId.ZERO);
+           
         }
 
         [Test]
@@ -107,31 +107,31 @@ namespace Tests
             var unit3 = new Unit(2);
 
             var party = new PartyEntity(_player);
-            party.BattleGroupLogic.AddUnit(unit1);
-            party.BattleGroupLogic.AddUnit(unit2);
+            var logic = _game.Systems.BattleGroup.GetLogic(party);
+            logic.AddUnit(unit1);
+            logic.AddUnit(unit2);
 
-            party.BattleGroupLogic.ReplaceUnit(unit1, unit3);
-
-            Assert.AreEqual(2, party.BattleGroupLogic.GetUnits().Count());
-            Assert.IsTrue(party.BattleGroupLogic.GetUnits().Contains(unit3));
-            Assert.IsTrue(party.BattleGroupLogic.GetUnits().Contains(unit2));
-            Assert.IsFalse(party.BattleGroupLogic.GetUnits().Contains(unit1));
+            logic.ReplaceUnit(unit1, unit3);
+   
+            Assert.AreEqual(2, logic.GetUnits().Count());
+            Assert.IsTrue(logic.GetUnits().Contains(unit3));
+            Assert.IsTrue(logic.GetUnits().Contains(unit2));
+            Assert.IsFalse(logic.GetUnits().Contains(unit1));
         }
 
         [Test]
-        public void TestReplaceAtIndex()
+        public void TestReplaceAtIndexLogic()
         {
             var unit1 = new Unit(0);
             var unit2 = new Unit(0);
             var unit3 = new Unit(2);
 
             var party = new PartyEntity(_player);
-            party.BattleGroupLogic.AddUnit(unit1);
-            party.BattleGroupLogic.AddUnit(unit2);
+            _game.Systems.BattleGroup.GetLogic(party).AddUnit(unit1);
+            _game.Systems.BattleGroup.GetLogic(party).AddUnit(unit2);
+            _game.Systems.BattleGroup.GetLogic(party).ReplaceUnit(unit2, unit3, 1);
 
-            party.BattleGroupLogic.ReplaceUnit(unit2, unit3, 1);
-
-            Assert.AreEqual(2, party.BattleGroupLogic.GetUnits().Count());
+            Assert.AreEqual(2, _game.Systems.BattleGroup.GetLogic(party).GetUnits().Count());
         }
 
         [Test]
@@ -142,20 +142,22 @@ namespace Tests
             var unit2 = new Unit(2);
 
             var party = new PartyEntity(_player);
-            party.BattleGroupLogic.AddUnit(unit0);
-            party.BattleGroupLogic.AddUnit(unit1);
-            party.BattleGroupLogic.AddUnit(unit0);
-            party.BattleGroupLogic.AddUnit(unit1);
+            var logic = _game.Systems.BattleGroup.GetLogic(party);
+            logic.AddUnit(unit0);
+            logic.AddUnit(unit1);
+            logic.AddUnit(unit0);
+            logic.AddUnit(unit1);
 
             var newUnits = new List<Unit>() { unit1, unit2, unit0 };
 
-            party.BattleGroupLogic.UpdateUnits(newUnits);
-            var units = party.BattleGroupLogic.GetUnits().ToList();
+            logic.UpdateUnits(newUnits);
+            var units = logic.GetUnits().ToList();
 
-            Assert.AreEqual(3, party.BattleGroupLogic.GetUnits().Count());
+            Assert.AreEqual(3, logic.GetUnits().Count());
             Assert.AreEqual(units[0], unit1);
             Assert.AreEqual(units[1], unit2);
             Assert.AreEqual(units[2], unit0);
+ 
         }
 
         [Test]
@@ -171,7 +173,7 @@ namespace Tests
             var unitsComponent = (BattleGroupComponent)deserialize.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(BattleGroupComponent));
 
             Assert.IsTrue(unitsComponent != null);
-            Assert.IsTrue(unitsComponent.FrontLine().SequenceEqual(party.BattleGroupLogic.GetUnits()));
+            Assert.IsTrue(unitsComponent.Units.SequenceEqual(party.Get<BattleGroupComponent>().Units));
         }
 
         [Test]

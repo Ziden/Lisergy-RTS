@@ -5,10 +5,12 @@ namespace Game.Systems.Building
 {
     public class BuildingSystem : GameSystem<BuildingComponent>
     {
+        public BuildingSystem(GameLogic game) : base(game) { }
+
         public override void OnEnabled()
         {
-            SystemEvents.On<EntityMoveInEvent>(OnPlaceBuilding);
-            SystemEvents.On<EntityMoveOutEvent>(OnRemovedBuilding);
+            EntityEvents.On<EntityMoveInEvent>(OnPlaceBuilding);
+            EntityEvents.On<EntityMoveOutEvent>(OnRemovedBuilding);
         }
 
         private static void OnPlaceBuilding(IEntity e, BuildingComponent c, EntityMoveInEvent ev)

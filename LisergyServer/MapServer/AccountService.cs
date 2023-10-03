@@ -20,11 +20,11 @@ namespace LisergyServer.Core
     public class AccountService
     {
         private Server _server { get; set; }
-        private StrategyGame _game { get; set; }
+        private GameLogic _game { get; set; }
         private Dictionary<int, ServerPlayer> Players = new Dictionary<int, ServerPlayer>();
         private Dictionary<string, Account> AccountsByLogin = new Dictionary<string, Account>();
 
-        public AccountService(StrategyGame game, Server server)
+        public AccountService(GameLogic game, Server server)
         {
             this._server = server;
             this._game = game;
@@ -66,7 +66,7 @@ namespace LisergyServer.Core
                 acc.Password = ev.Password;
                 AddAccount(acc);
                 Log.Info($"Registered new account {acc.Login}");
-                acc.Player = new ServerPlayer(_server);
+                acc.Player = new ServerPlayer(_server, _game);
                 acc.Player.ConnectionID = ev.ConnectionID;
                 Players[ev.ConnectionID] = acc.Player;
                 acc.Player.Send(new AuthResultPacket()
@@ -74,7 +74,7 @@ namespace LisergyServer.Core
                     PlayerID = acc.Player.UserID,
                     Success = true
                 });
-                if (ev.SpecVersion < StrategyGame.Specs.Version)
+                if (ev.SpecVersion < GameLogic.Specs.Version)
                 {
                     acc.Player.Send(new GameSpecPacket(_game));
 
@@ -96,7 +96,7 @@ namespace LisergyServer.Core
                 acc.Player.ConnectionID = ev.ConnectionID;
                 Players[ev.ConnectionID] = acc.Player;
                 Log.Info($"Account {ev.Login} connected");
-                if (ev.SpecVersion < StrategyGame.Specs.Version)
+                if (ev.SpecVersion < GameLogic.Specs.Version)
                 {
                     acc.Player.Send(new GameSpecPacket(_game));
                 }

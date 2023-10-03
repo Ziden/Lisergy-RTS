@@ -7,7 +7,8 @@ using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
-using Game.Player;
+using Game.Systems.Battler;
+using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,12 +24,12 @@ namespace Game.Services
         public GameWorld World { get; private set; }
         private Dictionary<GameId, TurnBattle> _battlesHappening = new Dictionary<GameId, TurnBattle>();
 
-        public BattleService(StrategyGame game)
+        public BattleService(GameLogic game)
         {
             World = game.World;
-            StrategyGame.NetworkEvents.Register<BattleLogRequestPacket>(this, OnBattleRequest);
-            StrategyGame.NetworkEvents.Register<BattleStartPacket>(this, OnBattleStart);
-            StrategyGame.NetworkEvents.Register<BattleResultPacket>(this, OnBattleResult);
+            game.NetworkPackets.Register<BattleLogRequestPacket>(this, OnBattleRequest);
+            game.NetworkPackets.Register<BattleStartPacket>(this, OnBattleStart);
+            game.NetworkPackets.Register<BattleResultPacket>(this, OnBattleResult);
         }
 
         public void Wipe()
@@ -58,8 +59,11 @@ namespace Game.Services
             var battle = new TurnBattle(ev.BattleID, ev.Attacker, ev.Defender);
             battle.StartEvent = ev;
 
-            ev.Attacker.Entity.BattleGroupLogic.BattleID = ev.BattleID;
-            ev.Defender.Entity.BattleGroupLogic.BattleID = ev.BattleID;
+            var atkGroup = ev.Attacker.Entity.Components.Get<BattleGroupComponent>();
+            var defGroup = ev.Defender.Entity.Components.Get<BattleGroupComponent>();
+
+            atkGroup.BattleID = ev.BattleID;
+            defGroup.BattleID = ev.BattleID;
 
             BattleHistory.Track(ev);
 
@@ -111,21 +115,21 @@ namespace Game.Services
                 e2.Components.CallEvent(finishEvent);
             }
 
-            var atkPacket = atk.GetStatusUpdatePacket();
-            var defPacket = def.GetStatusUpdatePacket();
+            var atkGroup = atk.Components.Get<BattleGroupComponent>();
+            var defGroup = def.Components.Get<BattleGroupComponent>();
 
-            if (atk.Owner.CanReceivePackets())
+            if (atk.Owner != null && atk.Owner.CanReceivePackets())
             {
-                atk.Owner.Send(atkPacket);
-                if (!def.BattleGroupLogic.IsDestroyed)
-                    atk.Owner.Send(defPacket);
+                atk.Owner.Send(atk.GetUpdatePacket(atk.Owner));
+                if (!defGroup.IsDestroyed)
+                    atk.Owner.Send(def.GetUpdatePacket(atk.Owner));
             }
 
-            if (def.Owner.CanReceivePackets())
+            if (def.Owner != null && def.Owner.CanReceivePackets())
             {
-                if (!atk.BattleGroupLogic.IsDestroyed)
-                    def.Owner.Send(atkPacket);
-                def.Owner.Send(defPacket);
+                if (!atkGroup.IsDestroyed)
+                    def.Owner.Send(atk.GetUpdatePacket(def.Owner));
+                def.Owner.Send(def.GetUpdatePacket(def.Owner));
             }
 
             _battlesHappening.Remove(fullResultPacket.FinalStateHeader.BattleID);
@@ -157,7 +161,7 @@ namespace Game.Services
             PlayerEntity pl;
             foreach (var userid in new GameId[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
             {
-                if (World.Players.GetPlayer(userid, out pl) && !Gaia.IsGaia(pl.UserID))
+                if (World.Players.GetPlayer(userid, out pl) && pl.UserID != GameId.ZERO)
                     yield return pl;
             }
         }

@@ -1,5 +1,7 @@
 ﻿using Game.DataTypes;
+using Game.ECS;
 using Game.Systems.Battler;
+using Game.Systems.Player;
 using Game.World;
 using System;
 using System.Collections.Generic;
@@ -15,11 +17,21 @@ namespace Game.Battle
         public bool IsAutoBattle = true;
 
         [NonSerialized]
-        private IBattleableEntity _entity;
+        private IEntity _entity;
 
-        public BattleTeam(IBattleableEntity entity, params Unit[] units)
+        public BattleTeam(IEntity entity, params Unit[] units)
         {
             Init(entity, units);
+        }
+
+        public BattleTeam(IEntity entity)
+        {
+            Init(entity, entity.Get<BattleGroupComponent>().Units.ToArray());
+        }
+
+        public BattleTeam(IEntity entity, BattleGroupComponent component)
+        {
+            Init(entity, component.Units.ToArray());
         }
 
         public BattleTeam(params Unit[] units)
@@ -29,10 +41,10 @@ namespace Game.Battle
 
         public BattleUnit Leader => Units[0];
 
-        private void Init(IBattleableEntity entity, params Unit[] units)
+        private void Init(IEntity entity, params Unit[] units)
         {
             _entity = entity;
-            Player.PlayerEntity owner = entity?.Owner;
+            PlayerEntity owner = entity?.Owner;
             List<Unit> filtered = units.Where(u => u != null).ToList();
             Units = new BattleUnit[filtered.Count()];
             for (int x = 0; x < filtered.Count(); x++)
@@ -48,7 +60,7 @@ namespace Game.Battle
         public BattleUnit[] Alive => Units.Where(u => !u.Dead).ToArray();
 
         public bool AllDead => !Units.Any(u => !u.Dead);
-        public IBattleableEntity Entity => _entity;
+        public IEntity Entity => _entity;
 
         public override string ToString()
         {

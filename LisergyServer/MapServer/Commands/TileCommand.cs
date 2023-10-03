@@ -6,7 +6,7 @@ namespace LisergyServer.Commands
 {
     public class TileCommand : Command
     {
-        public TileCommand(StrategyGame game) : base(game) { }
+        public TileCommand(GameLogic game) : base(game) { }
 
         public override void Execute(CommandSender sender, CommandArgs args)
         {
