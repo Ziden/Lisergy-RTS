@@ -1,6 +1,7 @@
 ﻿using Game.DataTypes;
 using Game.Entity;
 using Game.Systems.Party;
+using Game.Systems.Tile;
 using GameData.buffs;
 using System;
 using System.Collections.Generic;
@@ -21,32 +22,28 @@ namespace Game.Systems.Battler
 
         public GameId Id { get; protected set; }
         public ushort SpecId { get; private set; }
-
         private UnitStats _statsData;
-
-        public ref UnitStats Stats => ref _statsData;
 
         public Unit(ushort unitSpecId)
         {
             Name = "NoName";
             SpecId = unitSpecId;
             Id = Guid.NewGuid();
-            _statsData = UnitStats.DEFAULT;
+            _statsData.SetStats(UnitStats.DEFAULT);
         }
 
-        public byte Atk { get => _statsData.Atk; set => _statsData.Atk = value; }
-        public byte Def { get => _statsData.Def; set => _statsData.Def = value; }
-        public byte Matk { get => _statsData.Matk; set => _statsData.Matk = value; }
-        public byte Mdef { get => _statsData.Mdef; set => _statsData.Mdef = value; }
-        public byte Speed { get => _statsData.Speed; set => _statsData.Speed = value; }
-        public byte Accuracy { get => _statsData.Accuracy; set => _statsData.Accuracy = value; }
-        public byte Weight { get => _statsData.Weight; set => _statsData.Weight = value; }
-        public byte Move { get => _statsData.Weight; set => _statsData.Weight = value; }
-        public ushort HP { get => _statsData.HP; set => _statsData.HP = value; }
-        public ushort MaxHP { get => _statsData.MaxHP; set => _statsData.MaxHP = value; }
-        public ushort MP { get => _statsData.MP; set => _statsData.MP = value; }
-        public ushort MaxMP { get => _statsData.MaxMP; set => _statsData.MaxMP = value; }
-
+        public ref byte Atk { get => ref _statsData.Atk;  }
+        public ref byte Def { get => ref _statsData.Def; }
+        public ref byte Matk { get => ref _statsData.Matk;  }
+        public ref byte Mdef { get => ref _statsData.Mdef;  }
+        public ref byte Speed { get => ref _statsData.Speed;  }
+        public ref byte Accuracy { get => ref _statsData.Accuracy; }
+        public ref byte Weight { get => ref _statsData.Weight; }
+        public ref byte Move { get => ref _statsData.Weight; }
+        public ref ushort HP { get => ref _statsData.HP; }
+        public ref ushort MaxHP { get => ref _statsData.MaxHP; }
+        public ref ushort MP { get => ref _statsData.MP; }
+        public ref ushort MaxMP { get => ref _statsData.MaxMP; }
 
         public void ModifyStats(Dictionary<Stat, ushort> stats)
         {
@@ -56,7 +53,7 @@ namespace Game.Systems.Battler
             }
         }
 
-        public void ModifyStat(Stat stat, ushort value)
+        public void ModifyStat(Stat stat, in ushort value)
         {
             _statsData.AddStat(stat, value);
         }
@@ -103,7 +100,7 @@ namespace Game.Systems.Battler
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(SpecId, Stats, _partyId);
+            return HashCode.Combine(SpecId, _statsData, _partyId);
         }
 
         public int GetHashCode(Unit obj)

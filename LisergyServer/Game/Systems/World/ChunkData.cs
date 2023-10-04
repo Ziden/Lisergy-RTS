@@ -3,7 +3,7 @@ using Game.Systems.Tile;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Game.World
+namespace Game.Systems.World
 {
     /// <summary>
     /// Unmanaged memory to allocate map data.

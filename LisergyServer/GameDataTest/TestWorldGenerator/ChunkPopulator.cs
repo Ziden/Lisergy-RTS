@@ -1,4 +1,6 @@
-﻿namespace Game.Generator
+﻿using Game.Systems.World;
+
+namespace Game.Generator
 {
     public abstract class ChunkPopulator
     {

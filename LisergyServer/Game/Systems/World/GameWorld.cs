@@ -1,11 +1,10 @@
 ﻿using Game.Systems.Player;
 using Game.Systems.Tile;
 using Game.Tile;
-using Game.World;
 using System;
 using System.Collections.Generic;
 
-namespace Game
+namespace Game.Systems.World
 {
     public interface IGameWorld { }
 
@@ -50,6 +49,7 @@ namespace Game
                     Map.ClearTile(t);
                 }
             }
+            Players.Free();
         }
 
         public virtual void CreateMap()
@@ -61,7 +61,7 @@ namespace Game
 
         public virtual void GenerateTiles()
         {
-            this.Map.GenerateTiles(this.SizeX, this.SizeY);
+            Map.GenerateTiles(SizeX, SizeY);
         }
 
         /// <summary>

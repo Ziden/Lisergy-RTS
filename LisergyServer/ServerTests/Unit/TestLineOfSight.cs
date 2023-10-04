@@ -5,7 +5,7 @@ using Game.Network;
 using Game.Systems.Battler;
 using Game.Systems.FogOfWar;
 using Game.Systems.Tile;
-using Game.World;
+using Game.Systems.World;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;

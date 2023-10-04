@@ -1,4 +1,4 @@
-using Game;
+using Game.Systems.World;
 using NUnit.Framework;
 using ServerTests;
 

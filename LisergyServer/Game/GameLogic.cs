@@ -4,6 +4,7 @@ using Game.Events;
 using Game.Events.Bus;
 using Game.Network;
 using Game.Systems.Player;
+using Game.Systems.World;
 using GameData;
 
 namespace Game

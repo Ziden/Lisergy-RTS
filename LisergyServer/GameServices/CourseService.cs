@@ -3,8 +3,8 @@ using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Systems.Movement;
 using Game.Systems.Party;
+using Game.Systems.World;
 using Game.Tile;
-using Game.World;
 using System.Collections.Generic;
 
 namespace Game.Services

@@ -1,6 +1,6 @@
 ﻿
 using Game.Systems.Dungeon;
-using Game.World;
+using Game.Systems.World;
 using GameDataTest;
 
 namespace Game.Generator

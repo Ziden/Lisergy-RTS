@@ -1,6 +1,6 @@
 ﻿using Game.Tile;
 
-namespace Game.World
+namespace Game.Systems.World
 {
     /// <summary>
     /// Used for pathfinding.
@@ -12,7 +12,7 @@ namespace Game.World
 
         public CachedChunkMap(ChunkMap chunkMap)
         {
-            this._chunkMap = chunkMap;
+            _chunkMap = chunkMap;
             array = new TileEntity[SizeX, SizeY];
         }
 

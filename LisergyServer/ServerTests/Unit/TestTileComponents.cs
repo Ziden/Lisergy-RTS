@@ -3,6 +3,7 @@ using Game.ECS;
 using Game.Events.GameEvents;
 using Game.Systems.Dungeon;
 using Game.Systems.Tile;
+using Game.Systems.World;
 using Game.Tile;
 using NUnit.Framework;
 

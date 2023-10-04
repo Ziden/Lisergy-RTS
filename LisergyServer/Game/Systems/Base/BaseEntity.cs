@@ -60,8 +60,6 @@ namespace Game
             }
         }
 
-        public TileEntity PreviousTile => _previousTile;
-
         // TODO: Move all logic outside entity
         public virtual TileEntity Tile
         {

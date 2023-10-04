@@ -1,6 +1,7 @@
 ﻿using GameData.buffs;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace Game.Entity
@@ -9,7 +10,7 @@ namespace Game.Entity
     [Serializable]
     public unsafe struct UnitStats
     {
-        public static UnitStats DEFAULT = new UnitStats()
+        public readonly static UnitStats DEFAULT = new UnitStats()
         {
             Atk = 1,
             Def = 1,
@@ -33,8 +34,6 @@ namespace Game.Entity
         public byte Accuracy;
         public byte Weight;
         public byte Move;
-
-        // Vitals
         public ushort HP;
         public ushort MaxHP;
         public ushort MP;
@@ -67,12 +66,12 @@ namespace Game.Entity
             this[stat] = value;
         }
 
-        public void AddStat(Stat stat, ushort value)
+        public void AddStat(Stat stat, in ushort value)
         {
             this[stat] += value;
         }
 
-        public void SubStat(Stat stat, ushort value)
+        public void SubStat(Stat stat, in ushort value)
         {
             this[stat] -= value;
         }

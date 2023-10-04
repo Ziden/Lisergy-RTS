@@ -24,10 +24,10 @@ namespace Tests
         public void TestBasicSerialization()
         {
             var game = new TestGame();
-            //var serialized = Serialization.FromEventRaw(new GameSpecPacket(game));
-            //var deserialized = (GameSpecPacket)Serialization.ToEventRaw(serialized);
+            var serialized = Serialization.FromEventRaw(new GameSpecPacket(game));
+            var deserialized = (GameSpecPacket)Serialization.ToEventRaw(serialized);
 
-            var asd = 123;
+            Assert.AreEqual(GameLogic.Specs.Units.Values, deserialized.Spec.Units.Values);
         }
     }
 }

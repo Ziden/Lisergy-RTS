@@ -4,6 +4,7 @@ using Game.Network;
 using Game.Systems.FogOfWar;
 using Game.Systems.Player;
 using Game.Systems.Tile;
+using Game.Systems.World;
 using System.Collections.Generic;
 
 namespace Game.Tile

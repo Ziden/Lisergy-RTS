@@ -11,7 +11,7 @@ using Game.Systems.Dungeon;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Systems.Tile;
-using Game.World;
+using Game.Systems.World;
 using NUnit.Framework;
 using ServerTests;
 using System.Collections.Generic;
@@ -36,6 +36,7 @@ namespace Tests
             _party = _player.GetParty(0);
             _dungeon = new DungeonEntity();
             _dungeon.BuildFromSpec(GameLogic.Specs.Dungeons[0]);
+            Assert.That(_dungeon.Get<BattleGroupComponent>().Units.Count == 1);
             _dungeon.Tile = _game.World.GetTile(8, 8);
             GameScheduler.Clear();
         }
@@ -124,15 +125,17 @@ namespace Tests
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
 
-            var hp1 = party.Components.Get<BattleGroupComponent>().Units.First().HP;
+            var hp1 = _dungeon.Components.Get<BattleGroupComponent>().Units;
 
-            party.Components.Get<BattleGroupComponent>().Units.First().HP = 1000; // make sure it wins !
+            party.Components.Get<BattleGroupComponent>().Units.First().Atk = 25; // make sure it wins !
             _dungeon.Tile = dungeonTile;
 
             var hp2 = party.Components.Get<BattleGroupComponent>().Units.First().HP;
 
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
             _player.GetParty(0).Course.Tick();
+
+            var hp41 = _dungeon.Components.Get<BattleGroupComponent>().Units;
 
             var battle = _game.BattleService.GetBattle(party.Components.Get<BattleGroupComponent>().BattleID);
             battle.Task.Tick();

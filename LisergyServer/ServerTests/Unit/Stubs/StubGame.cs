@@ -5,8 +5,8 @@ using Game.Network;
 using Game.Services;
 using Game.Systems.Player;
 using Game.Systems.Tile;
+using Game.Systems.World;
 using Game.Tile;
-using Game.World;
 using GameData;
 using GameDataTest;
 using LisergyServer.Core;
@@ -26,30 +26,23 @@ namespace ServerTests
 
         private static GameWorld TestWorld;
 
-        private GameWorld CreateTestWorld(GameWorld source = null)
+        private GameWorld CreateTestWorld()
         {
             WorldUtils.SetRandomSeed(666);
             DeltaTracker.Clear();
-            if (source != null)
-            {
-                return source;
-            }
             UnmanagedMemory.FlagMemoryToBeReused();
-            /*
             if(TestWorld == null)
             {
                 TestWorld = new GameWorld(4, 20, 20);
+                SetWorld(TestWorld);
+                TestWorld.CreateMap();
             } else
             {
                 DeltaTracker.Clear();
                 TestWorld.FreeMap();
+                SetWorld(TestWorld);
             }
             return TestWorld;
-            */
-            var w = new GameWorld(4, 20, 20);
-            SetWorld(w);
-            w.CreateMap();
-            return w;
         }
 
         public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs())

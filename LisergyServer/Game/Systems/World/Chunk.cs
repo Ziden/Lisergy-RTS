@@ -6,11 +6,10 @@ using Game.Network;
 using Game.Pathfinder;
 using Game.Systems.Player;
 using Game.Tile;
-using Game.World;
 using System;
 using System.Collections.Generic;
 
-namespace Game
+namespace Game.Systems.World
 {
     [Flags]
     public enum ChunkFlag : byte
@@ -79,7 +78,7 @@ namespace Game
             return Tiles[x, y];
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return $"<Chunk x={X} y={Y}>";
         }

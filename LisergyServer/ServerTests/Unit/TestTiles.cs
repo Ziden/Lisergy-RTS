@@ -1,6 +1,6 @@
 using Game.Systems.Dungeon;
 using Game.Systems.Tile;
-using Game.World;
+using Game.Systems.World;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;

@@ -17,7 +17,7 @@ namespace Game
 		const double REAL_UNIT_UINT = 1.0 / ((double)uint.MaxValue + 1.0);
 		const uint Y = 842502087, Z = 3579807591, W = 273326509;
 
-		private static int s_extraSeed = 42;
+		private int s_extraSeed = 42;
 
 		uint x, y, z, w;
 
@@ -37,7 +37,7 @@ namespace Game
 			Reinitialise(seed);
 		}
 
-		public static int GetSeed(object forObject)
+		public int GetSeed(object forObject)
 		{
 
 			int seed = (int)Environment.TickCount;

@@ -2,10 +2,9 @@
 using Game.Systems.FogOfWar;
 using Game.Systems.Tile;
 using Game.Tile;
-using Game.World;
 using System.Collections.Generic;
 
-namespace Game
+namespace Game.Systems.World
 {
     public unsafe class ChunkMap
     {
@@ -27,7 +26,7 @@ namespace Game
             var sizeY = tilesAmtY / GameWorld.CHUNK_SIZE;
             _chunkMap = new Chunk[sizeX, sizeY];
             _cache = new CachedChunkMap(this);
-            this.World = world;
+            World = world;
             Log.Debug($"Initialized chunk map {sizeX}x{sizeY}");
         }
 
@@ -70,7 +69,7 @@ namespace Game
 
         public void SetFlag(int chunkX, int chunkY, ChunkFlag flag)
         {
-            var chunk = this._chunkMap[chunkX, chunkY];
+            var chunk = _chunkMap[chunkX, chunkY];
             chunk.SetFlag((byte)flag);
             if (!ByFlags.ContainsKey(flag))
                 ByFlags.Add(flag, new List<MapPosition>());
@@ -122,7 +121,7 @@ namespace Game
                             tiles[x, y] = GenerateTile(ref chunk, tileX, tileY);
                         }
                     }
-                    this.Add(ref chunk);
+                    Add(ref chunk);
                 }
             }
         }
@@ -134,7 +133,6 @@ namespace Game
             t.Components.Get<TileHabitants>().EntitiesIn.Clear();
             t.Components.Get<TileHabitants>().Building = null;
         }
-
 
         public virtual TileEntity GenerateTile(ref Chunk c, int tileX, int tileY)
         {

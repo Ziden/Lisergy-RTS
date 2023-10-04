@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Game.World
+namespace Game.Systems.World
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]

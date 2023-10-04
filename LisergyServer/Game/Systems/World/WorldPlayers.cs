@@ -3,8 +3,11 @@ using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
 
-namespace Game
+namespace Game.Systems.World
 {
+    /// <summary>
+    /// Represents the list of players of a given world
+    /// </summary>
     public class WorldPlayers
     {
         public int MaxPlayers { get; private set; }
@@ -14,6 +17,11 @@ namespace Game
         public WorldPlayers(int maxPlayers)
         {
             MaxPlayers = maxPlayers;
+        }
+
+        public void Free()
+        {
+            _players.Clear();
         }
 
         public void Add(PlayerEntity p)

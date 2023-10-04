@@ -8,7 +8,7 @@ using Game.Systems.Battler;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Systems.Tile;
-using Game.World;
+using Game.Systems.World;
 using NUnit.Framework;
 using ServerTests;
 using System;

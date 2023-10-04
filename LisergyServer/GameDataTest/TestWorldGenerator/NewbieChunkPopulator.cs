@@ -1,4 +1,4 @@
-﻿using Game.World;
+﻿using Game.Systems.World;
 
 namespace Game.Generator
 {

@@ -4,32 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.World
+namespace Game.Systems.World
 {
-    public static class EnumerableHelper<E>
-    {
-        static EnumerableHelper()
-        {
-            WorldUtils._random = new GameRandom();
-        }
-
-        public static T RandomElement<T>(IEnumerable<T> input)
-        {
-            return input.ElementAt(WorldUtils._random.Next(input.Count()));
-        }
-    }
-
-    public static class EnumerableExtensions
-    {
-        public static T RandomElement<T>(this IEnumerable<T> input)
-        {
-            return EnumerableHelper<T>.RandomElement(input);
-        }
-    }
-
     public static class WorldUtils
     {
         internal static GameRandom _random = new GameRandom();
+
+        public static T RandomElement<T>(this IEnumerable<T> input)
+        {
+            return input.ElementAt(_random.Next(input.Count()));
+        }
 
         public static GameRandom Random { get => _random; }
 
@@ -38,48 +22,11 @@ namespace Game.World
             _random = new GameRandom(seed);
         }
 
-        public static void RemoveString(this string[] array, string obj)
-        {
-            for (var i = 0; i < array.Length; i++)
-            {
-                if (array[i] == obj)
-                {
-                    array[i] = null;
-                    return;
-                }
-            }
-        }
-
-        public static int FilledSlots(this string[] array)
-        {
-            var amt = 0;
-            for (var i = 0; i < array.Length; i++)
-            {
-                if (array[i] != null)
-                {
-                    amt++;
-                }
-            }
-            return amt;
-        }
-
-        public static void AddString(this string[] array, string obj)
-        {
-            for (var i = 0; i < array.Length; i++)
-            {
-                if (array[i] == null)
-                {
-                    array[i] = obj;
-                    return;
-                }
-            }
-        }
-
         // Gets the amount of bits required to allocate a given number
         // This will be used to get the amount 
         public static int BitsRequired(this int num)
         {
-            const int mask = Int32.MinValue;
+            const int mask = int.MinValue;
             int leadingZeros = 0;
             for (; leadingZeros < 32; leadingZeros++)
             {
@@ -89,17 +36,7 @@ namespace Game.World
             }
             return 32 - leadingZeros;
         }
-
-        public static int ToChunkCoordinate(this int num)
-        {
-            return num >> GameWorld.CHUNK_SIZE_BITSHIFT;
-        }
-
-        public static int ToTileCoordinate(this int num)
-        {
-            return num << GameWorld.CHUNK_SIZE_BITSHIFT;
-        }
-
+     
         public static void AddFlag<T>(this ref byte value, T flag)
         {
             value.AddFlag((byte)(object)flag);
@@ -149,8 +86,8 @@ namespace Game.World
             var tries = 10;
             while (tries > 0)
             {
-                var rndX = WorldUtils._random.Next(0, tiles.GetLength(0));
-                var rndY = WorldUtils._random.Next(0, tiles.GetLength(1));
+                var rndX = _random.Next(0, tiles.GetLength(0));
+                var rndY = _random.Next(0, tiles.GetLength(1));
                 TileEntity tile = tiles[rndX, rndY];
                 if (tile.TileId == tileID)
                     return tile;
