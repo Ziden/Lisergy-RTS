@@ -21,8 +21,9 @@ namespace LisergyServer.Commands
 
         public override void Execute(CommandSender sender, CommandArgs args)
         {
-            sender.SendMessage($"Number of queues: {GameScheduler.AmountQueues}");
-            sender.SendMessage($"Tasks Pending: {GameScheduler.PendingTasks}");
+            var s = Game.Scheduler as GameScheduler;
+            sender.SendMessage($"Number of queues: {s.AmountQueues}");
+            sender.SendMessage($"Tasks Pending: {s.PendingTasks}");
         }
     }
 }

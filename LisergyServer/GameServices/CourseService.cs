@@ -19,7 +19,7 @@ namespace Game.Services
         {
             _game = game;
             this._world = game.World;
-            _game.NetworkPackets.Register<MoveRequestPacket>(this, RequestMovement);
+            _game.Network.IncomingPackets.Register<MoveRequestPacket>(this, RequestMovement);
         }
 
         [EventMethod]

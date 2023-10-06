@@ -31,13 +31,6 @@ namespace Tests
             _player = _game.GetTestPlayer();
             _path = new List<Position>();
             _party = _player.GetParty(0);
-            GameScheduler.Clear();
-        }
-
-        [TearDown]
-        public void Tear()
-        {
-            _game.ClearEventListeners();
         }
 
         private void SendMoveRequest()
@@ -56,7 +49,7 @@ namespace Tests
 
             SendMoveRequest();
 
-            Assert.AreEqual(1, GameScheduler.PendingTasks);
+            Assert.AreEqual(1, _game.GameScheduler.PendingTasks);
             Assert.IsTrue(_party.Course != null);
         }
 
@@ -64,7 +57,7 @@ namespace Tests
         public void TestCourseMovingParty()
         {
             var date = DateTime.MinValue;
-            GameScheduler.SetLogicalTime(date);
+            _game.GameScheduler.SetLogicalTime(date);
 
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
@@ -74,7 +67,7 @@ namespace Tests
 
             Assert.AreEqual(tile, _party.Tile);
 
-            GameScheduler.Tick(date + _party.Course.Delay);
+            _game.GameScheduler.Tick(date + _party.Course.Delay);
 
             Assert.AreEqual(next, _party.Tile);
         }
@@ -87,7 +80,7 @@ namespace Tests
             _path.Add(new Position(next.X, next.Y));
 
             SendMoveRequest();
-            GameScheduler.Tick(GameScheduler.Now + _party.Course.Delay);
+            _game.GameScheduler.Tick(_game.GameScheduler.Now + _party.Course.Delay);
 
             var moveEvents = _player.ReceivedEventsOfType<EntityMovePacket>();
             var tileDiscovery = _player.ReceivedEventsOfType<TileUpdatePacket>();
@@ -121,15 +114,15 @@ namespace Tests
             _path.Add(new Position(next.X, next.Y));
 
             SendMoveRequest();
-            var course1 = GameScheduler.Queue.First();
+            var course1 = _game.GameScheduler.Queue.First();
 
             _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();
-            var course2 = GameScheduler.Queue.First();
+            var course2 = _game.GameScheduler.Queue.First();
 
             Assert.AreNotEqual(course1, course2);
-            Assert.IsFalse(GameScheduler.Queue.Contains(course1));
-            Assert.IsTrue(GameScheduler.Queue.Contains(course2));
+            Assert.IsFalse(_game.GameScheduler.Queue.Contains(course1));
+            Assert.IsTrue(_game.GameScheduler.Queue.Contains(course2));
             Assert.IsTrue(course1.HasFinished);
             Assert.IsFalse(course2.HasFinished);
         }
@@ -152,7 +145,7 @@ namespace Tests
         public void TestMultipleMoves()
         {
             var date = DateTime.MinValue;
-            GameScheduler.SetLogicalTime(date);
+            _game.GameScheduler.SetLogicalTime(date);
 
             var tile = _party.Tile;
             var next1 = tile.GetNeighbor(Direction.SOUTH);
@@ -167,15 +160,15 @@ namespace Tests
             Assert.AreEqual(tile, _party.Tile);
 
             date += _party.Course.Delay;
-            GameScheduler.Tick(date);
+            _game.GameScheduler.Tick(date);
             Assert.AreEqual(next1, _party.Tile);
 
             date += _party.Course.Delay;
-            GameScheduler.Tick(date);
+            _game.GameScheduler.Tick(date);
             Assert.AreEqual(next2, _party.Tile);
 
             date += _party.Course.Delay;
-            GameScheduler.Tick(date);
+            _game.GameScheduler.Tick(date);
             Assert.AreEqual(next3, _party.Tile);
 
             var moveEvents = _player.ReceivedEventsOfType<EntityMovePacket>();

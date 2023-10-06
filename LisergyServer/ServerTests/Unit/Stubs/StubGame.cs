@@ -2,6 +2,7 @@
 using Game.DataTypes;
 using Game.Events;
 using Game.Network;
+using Game.Scheduler;
 using Game.Services;
 using Game.Systems.Player;
 using Game.Systems.Tile;
@@ -45,12 +46,12 @@ namespace ServerTests
             return TestWorld;
         }
 
+        public GameScheduler GameScheduler => this.Scheduler as GameScheduler;
+
         public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs())
         {
             CreateTestWorld();
             Serialization.LoadSerializers();
-            Events.Clear();
-            NetworkPackets.Clear();
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);
@@ -63,7 +64,7 @@ namespace ServerTests
         {
             BaseEvent deserialized = Serialization.ToEventRaw(Serialization.FromEventRaw(ev));
             deserialized.Sender = sender;
-            NetworkPackets.Call(deserialized);
+            Network.IncomingPackets.Call(deserialized);
             DeltaTracker.SendDeltaPackets(sender);
         }
 

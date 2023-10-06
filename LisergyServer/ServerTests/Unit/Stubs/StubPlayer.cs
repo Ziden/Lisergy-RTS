@@ -47,7 +47,7 @@ namespace ServerTests
             var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new Position(pa.X, pa.Y)).ToList();
             var ev = new MoveRequestPacket() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };
             ev.Sender = this;
-            Game.NetworkPackets.Call(ev);
+            Game.Network.IncomingPackets.Call(ev);
         }
 
         public List<T> ReceivedEventsOfType<T>() where T : BaseEvent

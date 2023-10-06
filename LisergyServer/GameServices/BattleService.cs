@@ -29,9 +29,9 @@ namespace Game.Services
         {
             _game = game;
             World = game.World;
-            game.NetworkPackets.Register<BattleLogRequestPacket>(this, OnBattleRequest);
-            game.NetworkPackets.Register<BattleStartPacket>(this, OnBattleStart);
-            game.NetworkPackets.Register<BattleResultPacket>(this, OnBattleResult);
+            game.Network.IncomingPackets.Register<BattleLogRequestPacket>(this, OnBattleRequest);
+            game.Network.IncomingPackets.Register<BattleStartPacket>(this, OnBattleStart);
+            game.Network.IncomingPackets.Register<BattleResultPacket>(this, OnBattleResult);
         }
 
         public void Wipe()

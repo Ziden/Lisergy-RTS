@@ -7,19 +7,30 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("ServerTests")]
 namespace Game.Scheduler
 {
-    public static class GameScheduler
+    /// <summary>
+    /// Responsible for controlling the game tasks.
+    /// </summary>
+    public interface IGameScheduler
     {
-        private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        private static Dictionary<Guid, GameTask> _tasks = new Dictionary<Guid, GameTask>();
+        public DateTime Now { get; }
+        public void Add(GameTask task);
 
-        public static DateTime Now { get; private set; }
-        internal static TimeSpan NowTimespan => Now - Epoch;
-        internal static GameTask NextTask { get; private set; }
-        public static int PendingTasks => _tasks.Values.Count();
-        public static int AmountQueues => Queue.Count;
-        internal static SortedSet<GameTask> Queue { get; private set; } = new SortedSet<GameTask>();
+        void Cancel(GameTask task);
+    }
 
-        internal static void ForceComplete(GameTask task)
+    public class GameScheduler : IGameScheduler
+    {
+        private readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private Dictionary<Guid, GameTask> _tasks = new Dictionary<Guid, GameTask>();
+
+        public DateTime Now { get; private set; }
+        internal TimeSpan NowTimespan => Now - Epoch;
+        internal GameTask NextTask { get; private set; }
+        public int PendingTasks => _tasks.Values.Count();
+        public int AmountQueues => Queue.Count;
+        internal SortedSet<GameTask> Queue { get; private set; } = new SortedSet<GameTask>();
+
+        internal void ForceComplete(GameTask task)
         {
             while (task.Repeat)
             {
@@ -30,7 +41,7 @@ namespace Game.Scheduler
             _ = _tasks.Remove(task.ID);
         }
 
-        internal static void Clear()
+        internal void Clear()
         {
             Now = DateTime.MinValue;
             _tasks = new Dictionary<Guid, GameTask>();
@@ -38,19 +49,19 @@ namespace Game.Scheduler
             NextTask = null;
         }
 
-        internal static void SetLogicalTime(DateTime time)
+        internal void SetLogicalTime(DateTime time)
         {
             Now = time;
         }
 
-        internal static void Cancel(GameTask task)
+        public void Cancel(GameTask task)
         {
             _ = _tasks.Remove(task.ID);
             _ = Queue.Remove(task);
             task.HasFinished = true;
         }
 
-        internal static void RunTask(GameTask task)
+        internal void RunTask(GameTask task)
         {
             _ = Queue.Remove(task);
             _ = _tasks.Remove(task.ID);
@@ -69,7 +80,7 @@ namespace Game.Scheduler
             NextTask = Queue.FirstOrDefault();
         }
 
-        public static void Tick(DateTime time)
+        public void Tick(DateTime time)
         {
             SetLogicalTime(time);
             _ = Now;
@@ -84,8 +95,9 @@ namespace Game.Scheduler
             }
         }
 
-        internal static void Add(GameTask task)
+        public void Add(GameTask task)
         {
+            task.Start = Now;
             _tasks[task.ID] = task;
             _ = Queue.Add(task);
             Log.Debug($"{Now} Registered new task {task}");

@@ -36,13 +36,6 @@ namespace Tests
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
             Assert.That(_dungeon.Get<BattleGroupComponent>().Units.Count == 1);
             _game.Logic.Map(_dungeon).SetPosition(_game.World.GetTile(8, 8));
-            GameScheduler.Clear();
-        }
-
-        [TearDown]
-        public void Tear()
-        {
-            _game.ClearEventListeners();
         }
 
         [Test]
@@ -60,7 +53,7 @@ namespace Tests
             var course = _player.GetParty(0).Course;
 
             // Complete the move intent
-            GameScheduler.ForceComplete(course);
+            _game.GameScheduler.ForceComplete(course);
 
             Assert.AreEqual(dungeonTile, party.Tile);
             Assert.IsTrue(party.Components.Get<BattleGroupComponent>().BattleID.IsZero());

@@ -6,17 +6,15 @@ namespace Game.Scheduler
     public abstract class GameTask : IComparable<GameTask>
     {
         private DateTime _start;
-        //private readonly DateTime _executionTime;
-        protected IGame Game;
+        protected IGame Game { get; private set; }
 
         public GameTask(IGame game, TimeSpan delay, PlayerEntity creator)
         {
             ID = Guid.NewGuid();
             Delay = delay;
             Creator = creator;
-            Start = GameScheduler.Now;
             Game = game;
-            GameScheduler.Add(this);
+            Game.Scheduler.Add(this);
         }
 
         internal bool HasFinished;
@@ -31,7 +29,8 @@ namespace Game.Scheduler
             get => _start;
             set
             {
-                _start = value; Finish = _start + Delay;
+                _start = value; 
+                Finish = _start + Delay;
             }
         }
 
@@ -40,14 +39,14 @@ namespace Game.Scheduler
 
         public bool IsDue()
         {
-            return Finish <= GameScheduler.Now;
+            return Finish <= Game.Scheduler.Now;
         }
 
         public abstract void Tick();
 
         public void Cancel()
         {
-            GameScheduler.Cancel(this);
+            Game.Scheduler.Cancel(this);
         }
 
         public int CompareTo(GameTask other)

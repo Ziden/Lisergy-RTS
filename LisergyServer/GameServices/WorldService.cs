@@ -15,7 +15,7 @@ namespace Game.Services
         {
             _game = game;
             _world = game.World;
-            game.NetworkPackets.Register<JoinWorldPacket>(this, JoinWorld);
+            game.Network.IncomingPackets.Register<JoinWorldPacket>(this, JoinWorld);
         }
 
         [EventMethod]

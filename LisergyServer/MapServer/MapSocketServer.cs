@@ -43,7 +43,7 @@ namespace MapServer
 
         public override void Tick()
         {
-            GameScheduler.Tick(DateTime.UtcNow);
+            Scheduler.Tick(DateTime.UtcNow);
         }
 
         public override void Disconnect(int connectionID)

@@ -25,13 +25,6 @@ namespace Tests
         {
             _game = new TestGame();
             _player = _game.GetTestPlayer();
-            GameScheduler.Clear();
-        }
-
-        [TearDown]
-        public void Tear()
-        {
-            _game.ClearEventListeners();
         }
 
         [Test]
@@ -47,7 +40,7 @@ namespace Tests
             enemy.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[0]));
 
             var battleID = Guid.NewGuid();
-            _game.NetworkPackets.Call(new BattleStartPacket(battleID, party, enemy));
+            _game.Network.IncomingPackets.Call(new BattleStartPacket(battleID, party, enemy));
 
             _player.ReceivedEvents.Clear();
             DeltaTracker.Clear();
@@ -85,7 +78,7 @@ namespace Tests
             enemy.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[0]));
 
             var battleID = Guid.NewGuid();
-            _game.NetworkPackets.Call(new BattleStartPacket(battleID, party, enemy));
+            _game.Network.IncomingPackets.Call(new BattleStartPacket(battleID, party, enemy));
 
             var battle = _game.BattleService.GetBattle(battleID);
             battle.Task.Tick();

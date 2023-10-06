@@ -22,9 +22,7 @@ namespace Game.Battle
 
             TurnBattleRecord result = _battle.AutoRun.RunAllRounds();
             BattleResultPacket resultEvent = new BattleResultPacket(_battle.ID, result);
-            // for now just run callbacks
-            // TODO: place on a message queue
-            _game.NetworkPackets.Call(resultEvent);
+            _game.Network.IncomingPackets.Call(resultEvent);
         }
 
         public override string ToString()

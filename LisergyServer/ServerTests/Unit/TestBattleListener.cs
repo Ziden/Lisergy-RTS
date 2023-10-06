@@ -34,13 +34,6 @@ namespace Tests
             _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
             _game.Systems.Map.GetEntityLogic(_dungeon).SetPosition(_game.World.GetTile(8, 8));
-            GameScheduler.Clear();
-        }
-
-        [TearDown]
-        public void Tear()
-        {
-            _game.ClearEventListeners();
         }
 
         private TurnBattle SetupBattle()

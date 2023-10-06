@@ -21,7 +21,6 @@ namespace Game.ECS
         public GameSystem(LisergyGame game) {
             Game = game;
         }
-
         internal virtual void OnComponentAdded(IEntity owner, ComponentType component) { }
         public virtual void OnDisabled() { }
         public virtual void OnEnabled() { }
@@ -47,6 +46,10 @@ namespace Game.ECS
         /// </summary>
         public LogicType GetEntityLogic(IEntity entity)
         {
+            if(!entity.Components.Has<ComponentType>())
+            {
+                throw new Exception($"Entity {entity} Trying to use logic {typeof(LogicType).Name} without having component {typeof(ComponentType).Name}");
+            }
             _logic.Entity = entity;
             return _logic;
         }

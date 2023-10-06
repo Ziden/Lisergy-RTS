@@ -19,7 +19,7 @@ namespace Game.Systems.Battler
         {
             var battleID = Guid.NewGuid();
             var start = new BattleStartPacket(battleID, ev.Attacker, ev.Defender);
-            Game.NetworkPackets.Call(start);
+            Game.Network.IncomingPackets.Call(start);
             Players.GetPlayer(attacker.OwnerID)?.Send(start);
             Players.GetPlayer(attacker.OwnerID)?.Send(start);  
         }

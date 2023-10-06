@@ -1,6 +1,7 @@
 ﻿using BaseServer.Commands;
 using Game;
 using Game.Events;
+using Game.Scheduler;
 using LisergyServer.Core;
 using System;
 using Telepathy;
@@ -15,6 +16,8 @@ namespace BaseServer.Core
         private Message _msg;
         private ConsoleCommandExecutor _commandExecutor;
         public LisergyGame Game { get; protected set; }
+        public GameScheduler Scheduler { get; protected set; }
+
         private readonly int _port;
 
         public SocketServer(int port)
@@ -25,6 +28,7 @@ namespace BaseServer.Core
             _socketServer = new Server();
             Serialization.LoadSerializers();
             Game = SetupGame();
+            Scheduler = Game.Scheduler as GameScheduler;
             SetupServices();
             RegisterCommands(Game, _commandExecutor);
         }
