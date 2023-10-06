@@ -1,5 +1,5 @@
 ﻿using Game.Pathfinder;
-using Game.Systems.World;
+using Game.World;
 using System;
 using System.Runtime.InteropServices;
 
@@ -10,7 +10,7 @@ namespace Game.Systems.Tile
     public struct TileMapData
     {
         public byte TileId;
-        public MapPosition Position;
+        public Position Position;
 
         public ushort X { get => Position.X; set => Position.X = value; }
         public ushort Y { get => Position.Y; set => Position.Y = value; }

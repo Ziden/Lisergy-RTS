@@ -3,6 +3,7 @@ using Game.DataTypes;
 using Game.ECS;
 using Game.Events;
 using Game.Systems.Battler;
+using Game.Systems.Map;
 using System;
 
 namespace Game.Network.ServerPackets
@@ -18,12 +19,12 @@ namespace Game.Network.ServerPackets
 
         public BattleStartPacket(GameId battleId, IEntity attacker, IEntity defender)
         {
-            var tile = (attacker as BaseEntity).Tile;
+            var pos = attacker.Get<MapPositionComponent>();
             BattleID = battleId;
             Attacker = new BattleTeam(attacker, attacker.Get<BattleGroupComponent>());
             Defender = new BattleTeam(defender, defender.Get<BattleGroupComponent>());
-            X = tile.X;
-            Y = tile.Y;
+            X = pos.X;
+            Y = pos.Y;
         }
 
         public BattleStartPacket(GameId battleId, ushort x, ushort y, BattleTeam atk, BattleTeam def)

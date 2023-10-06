@@ -3,7 +3,7 @@
 namespace GameData.Specs
 {
     [Serializable]
-    public struct ItemSpec
+    public class ItemSpec
     {
         public ushort Id;
         public ArtSpec Art;

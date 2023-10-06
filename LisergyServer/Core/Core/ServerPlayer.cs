@@ -11,7 +11,7 @@ namespace LisergyServer.Core
         protected Server _server { get; set; }
         public int ConnectionID { get; set; }
 
-        public ServerPlayer(Server server, GameLogic game) : base(game)  
+        public ServerPlayer(Server server, LisergyGame game) : base(game)  
         {
             this._server = server;
         }

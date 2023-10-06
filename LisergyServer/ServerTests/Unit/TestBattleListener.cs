@@ -8,7 +8,7 @@ using Game.Systems.Dungeon;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Systems.Tile;
-using Game.Systems.World;
+using Game.World;
 using NUnit.Framework;
 using ServerTests;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace Tests
     public class TestBattleListener
     {
         private TestGame _game;
-        private List<MapPosition> _path;
+        private List<Position> _path;
         private TestServerPlayer _player;
         private PartyEntity _party;
         private DungeonEntity _dungeon;
@@ -29,11 +29,11 @@ namespace Tests
         {
             _game = new TestGame();
             _player = _game.GetTestPlayer();
-            _path = new List<MapPosition>();
+            _path = new List<Position>();
             _party = _player.GetParty(0);
-            _dungeon = new DungeonEntity();
-            _dungeon.BuildFromSpec(GameLogic.Specs.Dungeons[0]);
-            _dungeon.Tile = _game.World.GetTile(8, 8);
+            _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
+            _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
+            _game.Systems.Map.GetEntityLogic(_dungeon).SetPosition(_game.World.GetTile(8, 8));
             GameScheduler.Clear();
         }
 
@@ -46,13 +46,13 @@ namespace Tests
         private TurnBattle SetupBattle()
         {
             var party = _player.GetParty(0);
-            var partyTile = party.Tile;
+            var partyTile = _game.Systems.Map.GetEntityLogic(party).GetPosition();
             var dungeonTile = partyTile.GetNeighbor(Direction.EAST);
-            _dungeon.Tile = dungeonTile;
+            _game.Systems.Map.GetEntityLogic(_dungeon).SetPosition(dungeonTile);
             party.Get<BattleGroupComponent>().Units.First().Atk = 255;
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
             var course = party.Course;
-            Assert.AreEqual(0, _player.BattleHeaders.Count());
+            Assert.AreEqual(0, _player.Data.BattleHeaders.Count());
             course.Tick();
             course.Tick();
             return _game.BattleService.GetBattle(party.Get<BattleGroupComponent>().BattleID);
@@ -68,7 +68,7 @@ namespace Tests
             BattleHistory.TryGetLog(battle.ID, out var log);
 
 
-            Assert.That(attackerPlayer.BattleHeaders.ContainsKey(battle.ID));
+            Assert.That(attackerPlayer.Data.BattleHeaders.ContainsKey(battle.ID));
             Assert.That(log.Turns.Count() == battle.Result.Turns.Count());
         }
 

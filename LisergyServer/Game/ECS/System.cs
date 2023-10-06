@@ -1,4 +1,5 @@
 ﻿using Game.Events;
+using Game.World;
 using System;
 
 namespace Game.ECS
@@ -11,9 +12,13 @@ namespace Game.ECS
     public abstract class GameSystem<ComponentType> : IGameSystem where ComponentType : IComponent
     {
         public SystemEventBus<ComponentType> EntityEvents = new SystemEventBus<ComponentType>();
-        public GameLogic Game { get; private set; }
+        public IGame Game { get; private set; }
+        public ISystems Systems => Game.Systems;
+        public IGameLogic GameLogic => Game.Logic;
+        public IGameWorld World => Game.GameWorld;
+        public IGamePlayers Players => World.Players;
 
-        public GameSystem(GameLogic game) {
+        public GameSystem(LisergyGame game) {
             Game = game;
         }
 
@@ -32,12 +37,15 @@ namespace Game.ECS
     {
         private LogicType _logic;
 
-        public LogicSystem(GameLogic game) : base(game)
+        public LogicSystem(LisergyGame game) : base(game)
         {
             _logic = Activator.CreateInstance<LogicType>();
         }
 
-        public LogicType GetLogic(IEntity entity)
+        /// <summary>
+        /// Gets given logic for given entity
+        /// </summary>
+        public LogicType GetEntityLogic(IEntity entity)
         {
             _logic.Entity = entity;
             return _logic;

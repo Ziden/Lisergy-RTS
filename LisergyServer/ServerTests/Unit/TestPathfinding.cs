@@ -1,4 +1,4 @@
-using Game.Systems.World;
+using Game.World;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
@@ -20,9 +20,9 @@ namespace Tests
         [Test]
         public void TestSimplePath()
         {
-            Game.World.GetTile(1, 0).TileId = TestTiles.MOUNTAIN.ID;
-            Game.World.GetTile(1, 1).TileId = TestTiles.MOUNTAIN.ID;
-            Game.World.GetTile(1, 2).TileId = TestTiles.MOUNTAIN.ID;
+            Game.World.GetTile(1, 0).SpecId = TestTiles.MOUNTAIN.ID;
+            Game.World.GetTile(1, 1).SpecId = TestTiles.MOUNTAIN.ID;
+            Game.World.GetTile(1, 2).SpecId = TestTiles.MOUNTAIN.ID;
 
             var asd = Game.World.GetTile(2, 3);
             var asd2 = Game.World.GetTile(3, 3);

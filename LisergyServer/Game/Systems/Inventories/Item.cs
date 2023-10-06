@@ -14,7 +14,5 @@ namespace Game.Systems.Inventories
             SpecID = specId;
             Amount = amount;
         }
-
-        public ItemSpec Spec => GameLogic.Specs.Items[SpecID];
     }
 }

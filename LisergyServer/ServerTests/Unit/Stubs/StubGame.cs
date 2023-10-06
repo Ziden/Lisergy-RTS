@@ -5,8 +5,8 @@ using Game.Network;
 using Game.Services;
 using Game.Systems.Player;
 using Game.Systems.Tile;
-using Game.Systems.World;
 using Game.Tile;
+using Game.World;
 using GameData;
 using GameDataTest;
 using LisergyServer.Core;
@@ -16,7 +16,7 @@ using System.Runtime.CompilerServices;
 
 namespace ServerTests
 {
-    public class TestGame : GameLogic
+    public class TestGame : LisergyGame
     {
         private GameId _testPlayerId = GameId.Generate();
 
@@ -67,13 +67,13 @@ namespace ServerTests
             DeltaTracker.SendDeltaPackets(sender);
         }
 
-        public TestServerPlayer CreatePlayer(int x = 10, int y = 10)
+        public TestServerPlayer CreatePlayer(in int x = 10, in int y = 10)
         {
             var player = new TestServerPlayer(this);
             player.OnReceiveEvent += ev => ReceiveEvent(ev);
-            _testPlayerId = player.UserID;
+            _testPlayerId = player.EntityId;
             var tile = this.World.GetTile(x, y);
-            this.World.PlaceNewPlayer(player, this.World.GetTile(x, y));
+            player.EntityLogic.Player.PlaceNewPlayer(this.World.GetTile(x, y));
             DeltaTracker.SendDeltaPackets(player);
             return player;
         }
@@ -97,9 +97,9 @@ namespace ServerTests
             return TestSpecs.Generate();
         }
 
-        public static BuildingSpec RandomBuildingSpec()
+        public BuildingSpec RandomBuildingSpec()
         {
-            return GameLogic.Specs.Buildings.Values.RandomElement();
+            return this.Specs.Buildings.Values.RandomElement();
         }
 
 

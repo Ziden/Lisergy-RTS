@@ -1,6 +1,6 @@
 ﻿
 using Game.Systems.Dungeon;
-using Game.Systems.World;
+using Game.World;
 using GameDataTest;
 
 namespace Game.Generator
@@ -12,10 +12,10 @@ namespace Game.Generator
             var place = c.FindTileWithId(0);
             if (place != null)
             {
-                var dungeon = new DungeonEntity();
-                var spec = GameLogic.Specs.Dungeons[TestDungeons.EASY.DungeonSpecID];
+                var dungeon = w.Game.Entities.CreateEntity<DungeonEntity>(null);
+                var spec = w.Game.Specs.Dungeons[TestDungeons.EASY.DungeonSpecID];
                 dungeon.BuildFromSpec(spec);
-                dungeon.Tile = place;
+                w.Game.Systems.Map.GetEntityLogic(dungeon).SetPosition(place);
             }
         }
     }

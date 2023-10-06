@@ -12,5 +12,10 @@ namespace Game.Events.GameEvents
         public TileEntity Tile;
         public IEntity Explorer;
         public bool Explored;
+
+        public override string ToString()
+        {
+            return $"<TileExplorationStateChanged {Tile} to {Explored}>";
+        }
     }
 }

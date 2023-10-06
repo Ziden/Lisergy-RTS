@@ -9,8 +9,7 @@ using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
 using Game.Systems.Battler;
 using Game.Systems.Player;
-using Game.Systems.World;
-using System;
+using Game.World;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,11 +21,13 @@ namespace Game.Services
     /// </summary>
     public class BattleService : IEventListener
     {
+        private IGame _game;
         public GameWorld World { get; private set; }
         private Dictionary<GameId, TurnBattle> _battlesHappening = new Dictionary<GameId, TurnBattle>();
 
-        public BattleService(GameLogic game)
+        public BattleService(LisergyGame game)
         {
+            _game = game;
             World = game.World;
             game.NetworkPackets.Register<BattleLogRequestPacket>(this, OnBattleRequest);
             game.NetworkPackets.Register<BattleStartPacket>(this, OnBattleStart);
@@ -95,10 +96,8 @@ namespace Game.Services
             foreach (var pl in GetAllPlayers(battle))
             {
                 pl.Send(summary);
-
                 // TODO: Send to game logic service
-                pl.BattleHeaders[fullResultPacket.FinalStateHeader.BattleID] = fullResultPacket.FinalStateHeader;
-
+                pl.Data.BattleHeaders[fullResultPacket.FinalStateHeader.BattleID] = fullResultPacket.FinalStateHeader;
                 Log.Debug($"Player {pl} completed battle {battle.ID}");
             }
 
@@ -119,18 +118,22 @@ namespace Game.Services
             var atkGroup = atk.Components.Get<BattleGroupComponent>();
             var defGroup = def.Components.Get<BattleGroupComponent>();
 
-            if (atk.Owner != null && atk.Owner.CanReceivePackets())
+            var atkPlayer = _game.Players.GetPlayer(atk.OwnerID);
+            var defPlayer = _game.Players.GetPlayer(def.OwnerID);
+
+            // remove all this updates
+            if (atkPlayer != null && atkPlayer.CanReceivePackets())
             {
-                atk.Owner.Send(atk.GetUpdatePacket(atk.Owner));
-                if (!defGroup.IsDestroyed)
-                    atk.Owner.Send(def.GetUpdatePacket(atk.Owner));
+                atkPlayer.Send(atk.GetUpdatePacket(atkPlayer));
+                if (!_game.Logic.BattleGroup(def).IsDestroyed)
+                    atkPlayer.Send(def.GetUpdatePacket(atkPlayer));
             }
 
-            if (def.Owner != null && def.Owner.CanReceivePackets())
+            if (defPlayer != null && defPlayer.CanReceivePackets())
             {
-                if (!atkGroup.IsDestroyed)
-                    def.Owner.Send(atk.GetUpdatePacket(def.Owner));
-                def.Owner.Send(def.GetUpdatePacket(def.Owner));
+                if (!_game.Logic.BattleGroup(def).IsDestroyed)
+                    defPlayer.Send(atk.GetUpdatePacket(defPlayer));
+                defPlayer.Send(def.GetUpdatePacket(defPlayer));
             }
 
             _battlesHappening.Remove(fullResultPacket.FinalStateHeader.BattleID);
@@ -162,7 +165,7 @@ namespace Game.Services
             PlayerEntity pl;
             foreach (var userid in new GameId[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
             {
-                if (World.Players.GetPlayer(userid, out pl) && pl.UserID != GameId.ZERO)
+                if (World.Players.GetPlayer(userid, out pl) && pl.EntityId != GameId.ZERO)
                     yield return pl;
             }
         }

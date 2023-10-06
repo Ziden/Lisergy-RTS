@@ -8,7 +8,7 @@ using Game.Systems.Battler;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Systems.Tile;
-using Game.Systems.World;
+using Game.World;
 using NUnit.Framework;
 using ServerTests;
 using System;
@@ -20,7 +20,7 @@ namespace Tests
     public class TestMovement
     {
         private TestGame _game;
-        private List<MapPosition> _path;
+        private List<Position> _path;
         private TestServerPlayer _player;
         private PartyEntity _party;
 
@@ -29,7 +29,7 @@ namespace Tests
         {
             _game = new TestGame();
             _player = _game.GetTestPlayer();
-            _path = new List<MapPosition>();
+            _path = new List<Position>();
             _party = _player.GetParty(0);
             GameScheduler.Clear();
         }
@@ -52,7 +52,7 @@ namespace Tests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next.X, next.Y));
+            _path.Add(new Position(next.X, next.Y));
 
             SendMoveRequest();
 
@@ -68,7 +68,7 @@ namespace Tests
 
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next.X, next.Y));
+            _path.Add(new Position(next.X, next.Y));
 
             SendMoveRequest();
 
@@ -84,7 +84,7 @@ namespace Tests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next.X, next.Y));
+            _path.Add(new Position(next.X, next.Y));
 
             SendMoveRequest();
             GameScheduler.Tick(GameScheduler.Now + _party.Course.Delay);
@@ -118,12 +118,12 @@ namespace Tests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next.X, next.Y));
+            _path.Add(new Position(next.X, next.Y));
 
             SendMoveRequest();
             var course1 = GameScheduler.Queue.First();
 
-            _path.Add(new MapPosition(next.X + 1, next.Y));
+            _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();
             var course2 = GameScheduler.Queue.First();
 
@@ -139,10 +139,10 @@ namespace Tests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next.X, next.Y));
+            _path.Add(new Position(next.X, next.Y));
             _party.Get<BattleGroupComponent>().BattleID = Guid.NewGuid();
 
-            _path.Add(new MapPosition(next.X + 1, next.Y));
+            _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();
 
             Assert.IsNull(_party.Course);
@@ -158,9 +158,9 @@ namespace Tests
             var next1 = tile.GetNeighbor(Direction.SOUTH);
             var next2 = next1.GetNeighbor(Direction.SOUTH);
             var next3 = next2.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next1.X, next1.Y));
-            _path.Add(new MapPosition(next2.X, next2.Y));
-            _path.Add(new MapPosition(next3.X, next3.Y));
+            _path.Add(new Position(next1.X, next1.Y));
+            _path.Add(new Position(next2.X, next2.Y));
+            _path.Add(new Position(next3.X, next3.Y));
 
             SendMoveRequest();
 

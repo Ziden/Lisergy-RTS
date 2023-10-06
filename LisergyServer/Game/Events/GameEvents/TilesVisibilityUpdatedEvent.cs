@@ -11,5 +11,10 @@ namespace Game.Events.GameEvents
         public TileEntity Tile;
         public IEntity Explorer;
         public bool Visible;
+
+        public override string ToString()
+        {
+            return $"<TileVisibilityChange {Tile} to {Visible}>";
+        }
     }
 }

@@ -11,8 +11,10 @@ namespace Game.ECS
 
     public class BaseComponentLogic<ComponentType> : IComponentLogic<ComponentType> where ComponentType : IComponent
     {
+        protected IGame Game => Entity.Game;
         public IEntity Entity { get; set; }
-
         public ComponentType Component => Entity.Get<ComponentType>();
+
+        public void FinishLogic() { }
     }
 }

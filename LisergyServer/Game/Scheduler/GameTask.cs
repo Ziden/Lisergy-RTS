@@ -7,13 +7,15 @@ namespace Game.Scheduler
     {
         private DateTime _start;
         //private readonly DateTime _executionTime;
+        protected IGame Game;
 
-        public GameTask(TimeSpan delay, PlayerEntity creator)
+        public GameTask(IGame game, TimeSpan delay, PlayerEntity creator)
         {
             ID = Guid.NewGuid();
             Delay = delay;
             Creator = creator;
             Start = GameScheduler.Now;
+            Game = game;
             GameScheduler.Add(this);
         }
 

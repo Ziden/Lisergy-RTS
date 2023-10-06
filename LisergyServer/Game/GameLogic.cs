@@ -1,62 +1,72 @@
-﻿
-using Game.ECS;
-using Game.Events;
-using Game.Events.Bus;
-using Game.Network;
+﻿using Game.ECS;
+using Game.Systems.Battler;
+using Game.Systems.Map;
+using Game.Systems.Movement;
 using Game.Systems.Player;
-using Game.Systems.World;
-using GameData;
 
 namespace Game
 {
-    public interface IGameLogic
+    /// <summary>
+    /// A logic container for all the entity logic available.
+    /// </summary>
+    public interface IEntityLogic
     {
-        public IGameWorld GameWorld { get; }
-        public ISystems Systems { get; }
-        public EventBus<BaseEvent> NetworkPackets { get; }
-        public EventBus<GameEvent> Events { get; }
+        public MapLogic Map { get; }
+        public BattleGroupLogic BattleGroup { get;}
+        public PlayerLogic Player { get; }
+        public EntityMovementLogic Movement { get; }
     }
 
-    public class GameLogic
+    /// <summary>
+    /// Wrapper around game logic to wrap for a specific entity
+    /// </summary>
+    public class EntityLogic : IEntityLogic
     {
-        public static ref GameSpec Specs => ref _spec;
-        private static GameSpec _spec;
-        public GameWorld World { get; private set; }
-        public IGameWorld GameWorld => World;
-        public ISystems Systems { get; private set; }
+        public MapLogic Map => _systems.Map.GetEntityLogic(_entity);
+        public BattleGroupLogic BattleGroup => _systems.BattleGroup.GetEntityLogic(_entity);
 
-        public EventBus<BaseEvent> NetworkPackets { get; private set; } = new EventBus<BaseEvent>();
-        public EventBus<GameEvent> Events { get; private set; } = new EventBus<GameEvent>();
+        public PlayerLogic Player => _systems.Players.GetEntityLogic(_entity);
+        public EntityMovementLogic Movement => _systems.EntityMovement.GetEntityLogic(_entity);
 
-        public void ReceiveInput(PlayerEntity sender, byte[] input)
+        private ISystems _systems;
+        private IEntity _entity;
+
+        public EntityLogic(ISystems systems) { _systems = systems; }
+        public IEntityLogic GetLogic(IEntity entity)
         {
-            BaseEvent ev = Serialization.ToEventRaw(input);
-            ev.Sender = sender;
-            NetworkPackets.Call(ev);
-            DeltaTracker.SendDeltaPackets(sender);
+            _entity = entity;
+            return this;
+        }
+    }
+
+    public interface IGameLogic
+    {
+        public IEntityLogic EntityLogic(IEntity e);
+
+        public MapLogic Map(IEntity e);
+
+        public BattleGroupLogic BattleGroup(IEntity e);
+    }
+
+    public class GameLogic : IGameLogic
+    {
+        private ISystems _systems;
+        public EntityLogic _entityLogic;
+
+        public GameLogic(ISystems systems)
+        {
+            _systems = systems;
+            _entityLogic = new EntityLogic(systems);
         }
 
-        public void SetWorld(GameWorld world)
-        {
-            world.Game = this;
-            World = world;
-            Systems = new GameSystems(this);
-        }
+        /// <summary>
+        /// Gets a reusable logic object for the given entity
+        /// </summary>
+        public IEntityLogic EntityLogic(IEntity e) => _entityLogic.GetLogic(e);
 
-        public GameLogic(in GameSpec specs)
-        {
-            _spec = specs;
-        }
+        //TODO: Remove below logic functions
+        public MapLogic Map(IEntity e) => EntityLogic(e).Map;
 
-        public GameLogic(in GameSpec specs, GameWorld world)
-        {
-            SetWorld(world);
-            _spec = specs;
-        }
-
-        public void ClearEventListeners()
-        {
-            NetworkPackets.Clear();
-        }
+        public BattleGroupLogic BattleGroup(IEntity e) => EntityLogic(e).BattleGroup;
     }
 }

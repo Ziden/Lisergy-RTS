@@ -7,7 +7,7 @@ using Game.Network;
 using Game.Network.ClientPackets;
 using Game.Scheduler;
 using Game.Services;
-using Game.Systems.World;
+using Game.World;
 using GameDataTest;
 using LisergyServer.Commands;
 using LisergyServer.Core;
@@ -33,7 +33,7 @@ namespace MapServer
         {
         }
 
-        public override void RegisterCommands(GameLogic game, ConsoleCommandExecutor executor)
+        public override void RegisterCommands(LisergyGame game, ConsoleCommandExecutor executor)
         {
             executor.RegisterCommand(new TileCommand(game));
             executor.RegisterCommand(new TaskCommand(game));
@@ -71,11 +71,11 @@ namespace MapServer
             return caller;
         }
 
-        public override GameLogic SetupGame()
+        public override LisergyGame SetupGame()
         {
             var gameSpecs = TestSpecs.Generate();
             var (sizeX, sizeY) = TestWorldGenerator.MeasureWorld(MAX_PLAYERS);
-            Game = new GameLogic(gameSpecs);
+            Game = new LisergyGame(gameSpecs);
 
             var world = new GameWorld(MAX_PLAYERS, sizeX, sizeY);
             Game.SetWorld(world);

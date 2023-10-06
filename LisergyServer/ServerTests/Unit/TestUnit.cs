@@ -1,5 +1,6 @@
 using Game.Entity;
 using Game.Events.ServerEvents;
+using Game.Systems.Battler;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
@@ -16,16 +17,16 @@ namespace Tests
             Game = new TestGame();
         }
 
-
         [Test]
         public void TestInitialUnit()
         {
             var player = Game.GetTestPlayer();
-            var unit = player.Units.First();
+            var unit = player.Data.Units.First();
+            var party = player.Data.Parties.First();
 
-            Assert.AreEqual(1, player.Units.Count);
-            Assert.AreEqual(TestGame.Specs.InitialUnit, unit.SpecId);
-            Assert.That(unit.Party.Tile.EntitiesIn.Contains(unit.Party));
+            Assert.AreEqual(1, player.Data.Units.Count);
+            Assert.AreEqual(Game.Specs.InitialUnitSpecId, unit.SpecId);
+            Assert.That(party.Tile.EntitiesIn.Contains(party));
         }
 
         [Test]
@@ -56,25 +57,40 @@ namespace Tests
         public void TestUnitTileReference()
         {
             var player = Game.GetTestPlayer();
-            var unit = player.Units.First();
+            var unit = player.Data.Units.First();
+            var party = player.Data.Parties.First();
 
-            var tile = Game.World.GetTile(unit.Party.Tile.X, unit.Party.Tile.Y);
+            var tile = Game.World.GetTile(party.Tile.X, party.Tile.Y);
 
-            Assert.AreEqual(tile, unit.Party.Tile);
+            Assert.AreEqual(tile, party.Tile);
+        }
+
+        [Test]
+        public void TestUnitStatSetter()
+        {
+            var unit = new Unit(Game.Specs.Units[0]);
+
+            unit.MaxHP = 500;
+            unit.Speed = 55;
+
+            Assert.AreEqual(500, unit.MaxHP);
+            Assert.AreEqual(55, unit.Speed);
         }
 
         [Test]
         public void TestUnitVisibleEvent()
         {
             var player = Game.GetTestPlayer();
-            var unit = player.Units.First();
-            var building = player.Buildings.First();
-            var tile = unit.Party.Tile;
+            var unit = player.Data.Units.First();
+            var building = player.Data.Buildings.First();
+            var party = player.Data.Parties.First();
 
-            var visibleEvent = Game.ReceivedEvents.Where(e => e is EntityUpdatePacket && ((EntityUpdatePacket)e).Entity.Id == unit.Party.Id).FirstOrDefault() as EntityUpdatePacket;
+            var tile = party.Tile;
+
+            var visibleEvent = Game.ReceivedEvents.Where(e => e is EntityUpdatePacket && ((EntityUpdatePacket)e).Entity.EntityId == party.EntityId).FirstOrDefault() as EntityUpdatePacket;
 
             Assert.That(visibleEvent != null);
-            Assert.AreEqual(unit.Party.Id, visibleEvent.Entity.Id);
+            Assert.AreEqual(party.EntityId, visibleEvent.Entity.EntityId);
         }
     }
 }

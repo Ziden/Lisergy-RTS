@@ -1,4 +1,4 @@
-﻿using Game.Systems.World;
+﻿using Game.World;
 
 namespace Game.Generator
 {
@@ -13,15 +13,15 @@ namespace Game.Generator
 
             for (var i = 0; i < GameWorld.CHUNK_SIZE; i++)
             {
-                c.GetTile(0, i).TileId = 1;
-                c.GetTile(i, 0).TileId = 2;
+                c.GetTile(0, i).SpecId = 1;
+                c.GetTile(i, 0).SpecId = 2;
             }
 
             if (ShouldPopulate(c))
             {
                 for (var i = 0; i < GameWorld.CHUNK_SIZE; i++)
                 {
-                    c.GetTile(i, i).TileId = 3;
+                    c.GetTile(i, i).SpecId = 3;
                 }
 
                 return;

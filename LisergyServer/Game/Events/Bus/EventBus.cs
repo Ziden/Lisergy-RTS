@@ -6,7 +6,12 @@ using System.Runtime.CompilerServices;
 namespace Game.Events.Bus
 {
 
-    public class EventBus<EventType>
+    public interface IEventBusRegistry<EventType>
+    {
+        void Register<EvType>(IEventListener listener, Action<EvType> callback);
+    }
+
+    public class EventBus<EventType> : IEventBusRegistry<EventType>
     {
         public event Action<BaseEvent> OnEventFired;
 

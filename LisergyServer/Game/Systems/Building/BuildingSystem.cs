@@ -5,7 +5,7 @@ namespace Game.Systems.Building
 {
     public class BuildingSystem : GameSystem<BuildingComponent>
     {
-        public BuildingSystem(GameLogic game) : base(game) { }
+        public BuildingSystem(LisergyGame game) : base(game) { }
 
         public override void OnEnabled()
         {

@@ -1,6 +1,6 @@
 using Game.Systems.Dungeon;
 using Game.Systems.Tile;
-using Game.Systems.World;
+using Game.World;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
@@ -50,11 +50,11 @@ namespace Tests
         public void TestAddingStaticEntity()
         {
             var player = Game.GetTestPlayer();
-            var building = player.Buildings.FirstOrDefault();
+            var building = player.Data.Buildings.FirstOrDefault();
             var tile = building.Tile.GetNeighbor(Direction.NORTH);
 
-            var dungeon = new DungeonEntity();
-            dungeon.Tile = tile;
+            var dungeon = Game.Entities.CreateEntity<DungeonEntity>(null);
+            Game.Systems.Map.GetEntityLogic(dungeon).SetPosition(tile);
 
             Assert.AreEqual(dungeon.Tile, tile);
         }
@@ -67,11 +67,11 @@ namespace Tests
 
             var tile = Game.World.GetTile(0, 0);
 
-            tile.TileId = TestTiles.GRASS.ID;
+            tile.SpecId = TestTiles.GRASS.ID;
             Assert.IsTrue(tile.Passable);
             Assert.AreEqual(tile.MovementFactor, TestTiles.GRASS.MovementFactor);
 
-            tile.TileId = TestTiles.MOUNTAIN.ID;
+            tile.SpecId = TestTiles.MOUNTAIN.ID;
             Assert.IsFalse(tile.Passable);
             Assert.AreEqual(tile.MovementFactor, TestTiles.MOUNTAIN.MovementFactor);
         }

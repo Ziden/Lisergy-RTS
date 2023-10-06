@@ -6,7 +6,12 @@ namespace Game.Systems.Tile
 {
     public class TileHabitants : IComponent
     {
-        public List<BaseEntity> EntitiesIn = new List<BaseEntity>();
+        public List<IEntity> EntitiesIn = new List<IEntity>();
         public IEntity Building;
+
+        public override string ToString()
+        {
+            return $"<TileHabitantsComponent EntitiesIn={EntitiesIn.Count} Building={Building.EntityId}>";
+        }
     }
 }

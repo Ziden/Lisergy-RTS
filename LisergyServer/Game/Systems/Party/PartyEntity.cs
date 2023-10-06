@@ -1,8 +1,8 @@
 ﻿using Game.DataTypes;
-using Game.ECS;
-using Game.Events;
 using Game.Systems.Battler;
 using Game.Systems.FogOfWar;
+using Game.Systems.Map;
+using Game.Systems.MapPosition;
 using Game.Systems.Movement;
 using Game.Systems.Player;
 using System;
@@ -14,18 +14,15 @@ namespace Game.Systems.Party
     {
         public const int SIZE = 4;
 
-        public PartyEntity(PlayerEntity owner, byte partyIndex = 0) : base(owner)
+        public PartyEntity(IGame game, PlayerEntity owner) : base(game, owner)
         {
+            Components.Add(new MapPositionComponent());
+            Components.Add(new MapReferenceComponent());
             Components.Add(new BattleGroupComponent());
-            Components.Add(new PartyComponent()
-            { 
-                PartyIndex = partyIndex
-            });
+            Components.Add(new PartyComponent());
             Components.Add(new EntityVisionComponent());
             Components.Add(new EntityMovementComponent() { MoveDelay = TimeSpan.FromSeconds(0.25) });
         }
-
-        //public BattleGroupComponentLogic BattleGroupLogic => _battleLogic;
 
         public bool CanMove()
         {
@@ -34,8 +31,8 @@ namespace Game.Systems.Party
 
         public CourseTask Course
         {
-            get => EntityMovementSystem.GetCourse(this);
-            set => EntityMovementSystem.SetCourse(this, value);
+            get => EntityLogic.Movement.GetCourse();
+            set => EntityLogic.Movement.SetCourse(value);
         }
 
         public byte PartyIndex { get => Components.Get<PartyComponent>().PartyIndex; }
@@ -44,7 +41,7 @@ namespace Game.Systems.Party
 
         public override string ToString()
         {
-            return $"<Party Id={Id} Index={PartyIndex} Owner={OwnerID}>";
+            return $"<Party Id={EntityId} Index={PartyIndex} Owner={OwnerID}>";
         }
     }
 }

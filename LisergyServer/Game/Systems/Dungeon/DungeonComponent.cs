@@ -14,5 +14,10 @@ namespace Game.Systems.Dungeon
 
         [NonSerialized]
         public Item[] Rewards;
+
+        public override string ToString()
+        {
+            return $"<DungeonComponent Spec={SpecId}>";
+        }
     }
 }

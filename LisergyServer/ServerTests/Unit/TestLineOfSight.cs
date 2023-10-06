@@ -5,7 +5,7 @@ using Game.Network;
 using Game.Systems.Battler;
 using Game.Systems.FogOfWar;
 using Game.Systems.Tile;
-using Game.Systems.World;
+using Game.World;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
@@ -27,7 +27,7 @@ namespace Tests
         public void TestLOSEvents()
         {
             Game.CreatePlayer();
-            var initialBuildingSpec = GameLogic.Specs.Buildings[GameLogic.Specs.InitialBuilding];
+            var initialBuildingSpec = Game.Specs.InitialBuilding;
             var player = Game.GetTestPlayer();
             var events = Game.ReceivedEvents
                 .Where(e => e is TileUpdatePacket)
@@ -41,16 +41,16 @@ namespace Tests
         [Test]
         public void TestCreatingExploringEntityLOS()
         {
-            var player = new TestServerPlayer();
+            var player = new TestServerPlayer(Game);
             var newbieChunk = Game.World.Map.GetUnnocupiedNewbieChunk();
-            Game.World.Players.Add(player);
+            Game.World._worldPlayers.Add(player);
             var tile = newbieChunk.FindTileWithId(0);
-            var castleID = GameLogic.Specs.InitialBuilding;
-            player.Build(castleID, tile);
+            var castleID = Game.Specs.InitialBuilding.Id;
+            player.EntityLogic.Player.Build(castleID, tile);
 
             DeltaTracker.SendDeltaPackets(player);
 
-            var los = GameLogic.Specs.Buildings[castleID].LOS;
+            var los = Game.Specs.InitialBuilding.LOS;
             var losTiles = tile.GetAOE(los);
             var entityUpdates = player.ReceivedEventsOfType<EntityUpdatePacket>();
             var tileVisibleEvent = player.ReceivedEventsOfType<TileUpdatePacket>();
@@ -65,18 +65,18 @@ namespace Tests
             Game.CreatePlayer();
             var player = Game.GetTestPlayer();
 
-            var initialBuildingSpec = GameLogic.Specs.Buildings[GameLogic.Specs.InitialBuilding];
-            var building = player.Buildings.FirstOrDefault();
+            var initialBuildingSpec = Game.Specs.InitialBuilding;
+            var building = player.Data.Buildings.FirstOrDefault();
             var tile = building.Tile;
             var areaTiles = tile.GetAOE(initialBuildingSpec.LOS).ToList();
 
-            Assert.AreEqual(player.VisibleTiles.Count, areaTiles.Count());
+            Assert.AreEqual(player.Data.VisibleTiles.Count, areaTiles.Count());
 
             foreach (var seenTile in areaTiles)
             {
                 Assert.True(seenTile.Components.Get<TileVisibility>().PlayersViewing.Contains(player));
                 Assert.True(seenTile.Components.Get<TileVisibility>().EntitiesViewing.Contains(building));
-                Assert.True(player.VisibleTiles.Contains(seenTile));
+                Assert.True(player.Data.VisibleTiles.Contains(seenTile));
             }
         }
 
@@ -86,18 +86,18 @@ namespace Tests
             Game.CreatePlayer();
             var player = Game.GetTestPlayer();
 
-            var initialBuildingSpec = GameLogic.Specs.Buildings[GameLogic.Specs.InitialBuilding];
-            var building = player.Buildings.FirstOrDefault();
+            var initialBuildingSpec = Game.Specs.InitialBuilding;
+            var building = player.Data.Buildings.FirstOrDefault();
             var tile = building.Tile;
             var areaTiles = tile.GetAOE(initialBuildingSpec.LOS).ToList();
 
-            Assert.AreEqual(player.VisibleTiles.Count, areaTiles.Count());
+            Assert.AreEqual(player.Data.VisibleTiles.Count, areaTiles.Count());
 
             foreach (var seenTile in areaTiles)
             {
                 Assert.True(seenTile.Components.Get<TileVisibility>().PlayersViewing.Contains(player));
                 Assert.True(seenTile.Components.Get<TileVisibility>().EntitiesViewing.Contains(building));
-                Assert.True(player.VisibleTiles.Contains(seenTile));
+                Assert.True(player.Data.VisibleTiles.Contains(seenTile));
             }
         }
 
@@ -106,12 +106,12 @@ namespace Tests
         {
             Game.CreatePlayer();
             var player = Game.GetTestPlayer();
-            var party = player.Parties.First();
+            var party = player.Data.Parties.First();
 
             var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
 
-            Assert.AreEqual(los, party.Get<BattleGroupComponent>().Units[0].GetSpec().LOS);
-            Assert.AreEqual(los, party.Get<BattleGroupComponent>().Units.Max(u => u.GetSpec().LOS));
+            Assert.AreEqual(los, Game.Specs.Units[party.Get<BattleGroupComponent>().Units[0].SpecId].LOS);
+            Assert.AreEqual(los, party.Get<BattleGroupComponent>().Units.Max(u => Game.Specs.Units[u.SpecId].LOS));
         }
 
         [Test]
@@ -119,9 +119,9 @@ namespace Tests
         {
             Game.CreatePlayer();
             var player = Game.GetTestPlayer();
-            var party = player.Parties.First();
+            var party = player.Data.Parties.First();
 
-            var logic = Game.Systems.BattleGroup.GetLogic(party);
+            var logic = Game.Systems.BattleGroup.GetEntityLogic(party);
             logic.RemoveUnit(logic.GetUnits()[0]);
 
             var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
@@ -134,18 +134,18 @@ namespace Tests
         {
             Game.CreatePlayer();
             var player = Game.GetTestPlayer();
-            var party = player.Parties.First();
+            var party = player.Data.Parties.First();
 
-            var logic = Game.Systems.BattleGroup.GetLogic(party);
+            var logic = Game.Systems.BattleGroup.GetEntityLogic(party);
 
             logic.RemoveUnit(logic.GetUnits()[0]);
 
-            var unit = new Unit(0);
+            var unit = new Unit(Game.Specs.Units[0]);
             logic.AddUnit(unit);
 
             var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
 
-            Assert.AreEqual(los, unit.GetSpec().LOS);
+            Assert.AreEqual(los, Game.Specs.Units[unit.SpecId].LOS);
         }
 
         [Test]
@@ -168,8 +168,7 @@ namespace Tests
             player.ReceivedEvents.Clear();
 
             var party = player.GetParty(0);
-
-            party.Tile = party.Tile;
+            Game.Logic.Map(party).SetPosition(party.Tile);
 
             Assert.AreEqual(0, player.ReceivedEvents.Count);
         }
@@ -177,7 +176,7 @@ namespace Tests
         [Test]
         public void TestSendingEventsWhenExploring()
         {
-            GameLogic.Specs.InitialUnit = 2; // Mage with 3+ LOS
+            Game.Specs.InitialUnitSpecId = TestUnitData.MAGE;
             Game.CreatePlayer(0, 0); // placing new user in the corner
             var player = Game.GetTestPlayer();
             player.ListenTo<TileVisibilityChangedEvent>();
@@ -185,7 +184,8 @@ namespace Tests
             player.ReceivedEvents.Clear();
             var party = player.GetParty(0);
 
-            party.Tile = party.Tile.GetNeighbor(Direction.EAST);
+            Game.EntityLogic(party).Map.SetPosition(party.Tile.GetNeighbor(Direction.EAST));
+ 
             DeltaTracker.SendDeltaPackets(player);
 
             /*          
@@ -205,17 +205,18 @@ namespace Tests
         [Test]
         public void TestKeepingOneEntityExploring()
         {
-            GameLogic.Specs.InitialUnit = TestUnitData.KNIGHT; // Thief with 1 los
+            Game.Specs.InitialUnitSpecId = TestUnitData.KNIGHT;
             Game.CreatePlayer(0, 0); // placing new user in the corner
             var player = Game.GetTestPlayer();
             player.ListenTo<TileVisibilityChangedEvent>();
             player.ReceivedEvents.Clear();
             var party = player.GetParty(0); // 0-1
-            var building = player.Buildings.First(); // 0-0
+            var building = player.Data.Buildings.First(); // 0-0
 
             Assert.AreEqual(party.GetLineOfSight(), 1);
 
-            party.Tile = party.Tile.GetNeighbor(Direction.EAST);
+            Game.Logic.Map(party).SetPosition(party.Tile.GetNeighbor(Direction.EAST));
+
             /*          
                                 o o o o o        o o o o o
                                 o o o o o        o o o o o
@@ -244,14 +245,14 @@ namespace Tests
             var party = player.GetParty(0);
             var initialLos = party.GetLineOfSight();
 
-            var lowerLosUnit = GameLogic.Specs.Units.Where(kp => kp.Value.LOS < initialLos).First();
-            var logic = Game.Systems.BattleGroup.GetLogic(party);
+            var lowerLosUnit = Game.Specs.Units.Where(kp => kp.Value.LOS < initialLos).First();
+            var logic = Game.Systems.BattleGroup.GetEntityLogic(party);
             logic.RemoveUnit(logic.GetUnits().First());
-            logic.AddUnit(new Unit(lowerLosUnit.Key));
+            logic.AddUnit(new Unit(Game.Specs.Units[lowerLosUnit.Key]));
 
             var afterLos = party.GetLineOfSight();
 
-            Assert.AreEqual(GameLogic.Specs.Units[GameLogic.Specs.InitialUnit].LOS, initialLos);
+            Assert.AreEqual(Game.Specs.InitialUnit.LOS, initialLos);
             Assert.AreEqual(lowerLosUnit.Value.LOS, afterLos);
             Assert.IsTrue(afterLos < initialLos);
         }
@@ -262,10 +263,11 @@ namespace Tests
             Game.CreatePlayer(0, 0);
             var player = Game.GetTestPlayer();
             var party = player.GetParty(0);
-            party.Tile = party.Tile.GetNeighbor(Direction.EAST);
+            Game.Logic.Map(party).SetPosition(party.Tile.GetNeighbor(Direction.EAST));
+
             player.ReceivedEvents.Clear();
 
-            party.Tile = party.Tile.GetNeighbor(Direction.WEST);
+            Game.Logic.Map(party).SetPosition(party.Tile.GetNeighbor(Direction.WEST));
 
             Assert.AreEqual(0, player.ReceivedEventsOfType<TileUpdatePacket>().Count);
         }

@@ -1,10 +1,11 @@
 ﻿using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
+using Game.Systems.MapPosition;
 using Game.Systems.Movement;
 using Game.Systems.Party;
-using Game.Systems.World;
 using Game.Tile;
+using Game.World;
 using System.Collections.Generic;
 
 namespace Game.Services
@@ -12,10 +13,12 @@ namespace Game.Services
     public class CourseService : IEventListener
     {
         private GameWorld _world;
+        private IGame _game;
 
-        public CourseService(GameLogic _game)
+        public CourseService(LisergyGame game)
         {
-            this._world = _game.World;
+            _game = game;
+            this._world = game.World;
             _game.NetworkPackets.Register<MoveRequestPacket>(this, RequestMovement);
         }
 
@@ -32,7 +35,7 @@ namespace Game.Services
             }
 
             var first = ev.Path[0];
-            if (_world.GetTile(first.X, first.Y).Distance(party.Tile) > 1)
+            if (_world.GetTile(first.X, first.Y).Distance(party.Get<MapReferenceComponent>().Tile) > 1)
             {
                 ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
                 return;
@@ -43,10 +46,10 @@ namespace Game.Services
                 ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
         }
 
-        private CourseTask StartCourse(PartyEntity party, List<MapPosition> sentPath, MovementIntent intent)
+        private CourseTask StartCourse(PartyEntity party, List<Position> sentPath, MovementIntent intent)
         {
             List<TileEntity> path = new List<TileEntity>();
-            var owner = party.Owner;
+            var owner = _game.Players.GetPlayer(party.OwnerID);
 
             foreach (var position in sentPath)
             {
@@ -59,7 +62,7 @@ namespace Game.Services
                 path.Add(tile);
             }
 
-            party.Course = new CourseTask(party, path, intent);
+            party.Course = new CourseTask(_game, party, path, intent);
             return party.Course;
         }
     }

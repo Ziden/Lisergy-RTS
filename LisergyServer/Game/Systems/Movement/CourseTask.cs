@@ -12,7 +12,7 @@ namespace Game.Systems.Movement
 
         public MovementIntent Intent { get; private set; }
 
-        public CourseTask(PartyEntity party, List<TileEntity> path, MovementIntent intent) : base(party.Components.Get<EntityMovementComponent>().MoveDelay, party.Owner)
+        public CourseTask(IGame game, PartyEntity party, List<TileEntity> path, MovementIntent intent) : base(game, party.Components.Get<EntityMovementComponent>().MoveDelay, game.Players.GetPlayer(party.OwnerID))
         {
             Party = party;
             Path = path;
@@ -28,7 +28,7 @@ namespace Game.Systems.Movement
                 Log.Error($"Party {Party} Had Course {course} but course {this} was trying to move the party");
                 return;
             }
-            Party.Tile = NextTile;
+            Game.Systems.Map.GetEntityLogic(Party).SetPosition(NextTile);
             Path.RemoveAt(0);
             Repeat = Path.Count > 0;
         }

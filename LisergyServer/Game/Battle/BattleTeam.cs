@@ -43,17 +43,13 @@ namespace Game.Battle
         private void Init(IEntity entity, params Unit[] units)
         {
             _entity = entity;
-            PlayerEntity owner = entity?.Owner;
             List<Unit> filtered = units.Where(u => u != null).ToList();
             Units = new BattleUnit[filtered.Count()];
             for (int x = 0; x < filtered.Count(); x++)
             {
-                Units[x] = new BattleUnit(owner, this, filtered[x]);
+                Units[x] = new BattleUnit(this, filtered[x]);
             }
-            if (owner != null)
-            {
-                OwnerID = owner.UserID;
-            }
+            OwnerID = entity != null ? entity.OwnerID : GameId.ZERO;
         }
 
         public BattleUnit[] Alive => Units.Where(u => !u.Dead).ToArray();

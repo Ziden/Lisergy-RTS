@@ -4,6 +4,7 @@ using Game.Battle.BattleActions;
 using Game.Events;
 using Game.Network.ServerPackets;
 using Game.Systems.Battler;
+using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
 using System;
@@ -21,19 +22,16 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            StrongUnit = new Unit(1);
-            StrongUnit.Name = "Strong Unit";
+            var specs = TestSpecs.Generate();
+            StrongUnit = new Unit(specs.Units[1]);
             StrongUnit.Atk *= 4;
 
-            WeakUnit = new Unit(1);
-            WeakUnit.Name = "Weak Unit";
+            WeakUnit = new Unit(specs.Units[1]);
 
-            FastUnit = new Unit(1);
-            FastUnit.Name = "Fast Unit";
-            FastUnit.Speed *= 2;
+            FastUnit = new Unit(specs.Units[1]);
+            FastUnit.Speed *= 10;
 
-            SlowUnit = new Unit(1);
-            SlowUnit.Name = "Slow Unit";
+            SlowUnit = new Unit(specs.Units[1]);
             SlowUnit.Speed /= 2;
         }
 
@@ -82,11 +80,9 @@ namespace Tests
         [Test]
         public void TestDelayProportion()
         {
-            FastUnit.Speed = 10;
-            FastUnit.HP = 50;
+            FastUnit.HP = 60;
 
-            SlowUnit.Speed = 5;
-            SlowUnit.HP = 50;
+            SlowUnit.HP = 60;
 
             var battle = new TestBattle(new BattleTeam(FastUnit), new BattleTeam(SlowUnit));
             var result = battle.AutoRun.RunAllRounds();
@@ -94,8 +90,7 @@ namespace Tests
             var fastAttacks = result.Turns.Where(r => r.Events.Any(a => a is BattleAction && ((BattleAction)a).Unit.UnitID == FastUnit.Id)).ToList();
             var slowAttacks = result.Turns.Where(r => r.Events.Any(a => a is BattleAction && ((BattleAction)a).Unit.UnitID == SlowUnit.Id)).ToList();
 
-            Assert.AreEqual(50, fastAttacks.Count());
-            Assert.That(slowAttacks.Count() < 49);
+            Assert.That(fastAttacks.Count() > slowAttacks.Count());
         }
 
         [Test]

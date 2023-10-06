@@ -1,30 +1,30 @@
-﻿using Game.ECS;
-using Game.Events;
+﻿using Game.Events;
 using Game.Systems.Battler;
 using Game.Systems.Building;
-using Game.Systems.Party;
-using Game.Systems.Player;
+using Game.Systems.Map;
+using Game.Systems.MapPosition;
 using GameData.Specs;
 using System;
-using System.Linq;
 
 namespace Game.Systems.Dungeon
 {
     [Serializable]
-    public class DungeonEntity : BaseEntity, IBuildableEntity<DungeonSpec>
+    public class DungeonEntity : BaseEntity
     {
-        public DungeonEntity() : base(null)
+        public DungeonEntity(IGame game) : base(game, null)
         {
+            Components.Add(new MapPositionComponent());
+            Components.Add(new MapReferenceComponent());
             Components.Add(new DungeonComponent());
             Components.Add(new BattleGroupComponent());
             Components.Add(new BuildingComponent());
         }
 
-        public ushort SpecID => Components.Get<DungeonComponent>().SpecId;
+        public ushort SpecId => Components.Get<DungeonComponent>().SpecId;
 
         public override string ToString()
         {
-            return $"<Dungeon Spec={SpecID}/>";
+            return $"<Dungeon Spec={SpecId}/>";
         }
 
         public ServerPacket GetStatusUpdatePacket() => GetUpdatePacket(null);
@@ -38,9 +38,7 @@ namespace Game.Systems.Dungeon
                 var units = new Unit[battle.UnitSpecIDS.Length];
                 for (var i = 0; i < battle.UnitSpecIDS.Length; i++)
                 {
-                    var unitSpecID = battle.UnitSpecIDS[i];
-                    units[i] = new Unit(unitSpecID);
-                    units[i].SetBaseStats();
+                    units[i] = new Unit(Game.Specs.Units[battle.UnitSpecIDS[i]]);
                     battleGroup.Units.Add(units[i]);
                 }
             }

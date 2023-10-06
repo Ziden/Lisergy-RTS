@@ -4,7 +4,7 @@ using Game.Network;
 using Game.Systems.FogOfWar;
 using Game.Systems.Player;
 using Game.Systems.Tile;
-using Game.Systems.World;
+using Game.World;
 using System.Collections.Generic;
 
 namespace Game.Tile
@@ -15,7 +15,7 @@ namespace Game.Tile
         private Chunk _chunk;
         private GameId _id;
         public ComponentSet _components { get; private set; }
-        public TileEntity(Chunk c, TileMapData* tileData, int x, int y)
+        public TileEntity(Chunk c, in TileMapData* tileData, in int x, in int y)
         {
             _chunk = c;
             _tileData = tileData;
@@ -34,13 +34,13 @@ namespace Game.Tile
         }
 
         public ref Chunk Chunk => ref _chunk;
-        public byte TileId { get => _tileData->TileId; set => _tileData->TileId = value; }
+        public byte SpecId { get => _tileData->TileId; set => _tileData->TileId = value; }
         public float MovementFactor { get => this.GetSpec().MovementFactor; }
         public ushort Y { get => _tileData->Y; set => _tileData->Y = value; }
         public ushort X { get => _tileData->X; set => _tileData->X = value; }
         public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.Get<TileVisibility>().PlayersViewing;
         public IReadOnlyCollection<IEntity> EntitiesViewing => _components.Get<TileVisibility>().EntitiesViewing;
-        public IReadOnlyList<BaseEntity> EntitiesIn => _components.Get<TileHabitants>().EntitiesIn;
+        public IReadOnlyList<IEntity> EntitiesIn => _components.Get<TileHabitants>().EntitiesIn;
         private IEntity _staticEntity => _components.Get<TileHabitants>().Building;
         public GameId EntityId => _id;
         public IComponentSet Components => _components;
@@ -50,9 +50,13 @@ namespace Game.Tile
 
         public GameId OwnerID => GameId.ZERO;
 
+        public IGame Game => this.Chunk.Map.World.Game;
+
+        public IEntityLogic EntityLogic => Game.Logic.EntityLogic(this);
+
         public override string ToString()
         {
-            return $"<Tile {X}-{Y} ID={TileId}>";
+            return $"<Tile {X}-{Y} ID={SpecId}>";
         }
 
         public T Get<T>() where T : IComponent

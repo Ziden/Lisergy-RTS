@@ -20,11 +20,11 @@ namespace LisergyServer.Core
     public class AccountService
     {
         private Server _server { get; set; }
-        private GameLogic _game { get; set; }
+        private LisergyGame _game { get; set; }
         private Dictionary<int, ServerPlayer> Players = new Dictionary<int, ServerPlayer>();
         private Dictionary<string, Account> AccountsByLogin = new Dictionary<string, Account>();
 
-        public AccountService(GameLogic game, Server server)
+        public AccountService(LisergyGame game, Server server)
         {
             this._server = server;
             this._game = game;
@@ -71,10 +71,10 @@ namespace LisergyServer.Core
                 Players[ev.ConnectionID] = acc.Player;
                 acc.Player.Send(new AuthResultPacket()
                 {
-                    PlayerID = acc.Player.UserID,
+                    PlayerID = acc.Player.EntityId,
                     Success = true
                 });
-                if (ev.SpecVersion < GameLogic.Specs.Version)
+                if (ev.SpecVersion < _game.Specs.Version)
                 {
                     acc.Player.Send(new GameSpecPacket(_game));
 
@@ -88,7 +88,7 @@ namespace LisergyServer.Core
                     Log.Error($"Account {ev.Login} entered bad password");
                     acc.Player.Send(new AuthResultPacket()
                     {
-                        PlayerID = acc.Player.UserID,
+                        PlayerID = acc.Player.EntityId,
                         Success = false
                     });
                     return null;
@@ -96,13 +96,13 @@ namespace LisergyServer.Core
                 acc.Player.ConnectionID = ev.ConnectionID;
                 Players[ev.ConnectionID] = acc.Player;
                 Log.Info($"Account {ev.Login} connected");
-                if (ev.SpecVersion < GameLogic.Specs.Version)
+                if (ev.SpecVersion < _game.Specs.Version)
                 {
                     acc.Player.Send(new GameSpecPacket(_game));
                 }
                 acc.Player.Send(new AuthResultPacket()
                 {
-                    PlayerID = acc.Player.UserID,
+                    PlayerID = acc.Player.EntityId,
                     Success = true
                 });
                 return acc.Player;

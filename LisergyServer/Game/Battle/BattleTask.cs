@@ -7,9 +7,9 @@ namespace Game.Battle
     public class BattleTask : GameTask
     {
         private readonly TurnBattle _battle;
-        private readonly GameLogic _game;
+        private readonly IGame _game;
 
-        public BattleTask(GameLogic game, TurnBattle battle) : base(TimeSpan.FromSeconds(3), null)
+        public BattleTask(IGame game, TurnBattle battle) : base(game, TimeSpan.FromSeconds(3), null)
         {
             _battle = battle;
             _game = game;

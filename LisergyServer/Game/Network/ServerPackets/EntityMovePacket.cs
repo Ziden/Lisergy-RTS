@@ -12,7 +12,7 @@ namespace Game.Network.ServerPackets
         public EntityMovePacket(BaseEntity entity, EntityMovementComponent component, TileEntity tile)
         {
             OwnerID = entity.OwnerID;
-            EntityID = entity.Id;
+            EntityID = entity.EntityId;
             Delay = component.MoveDelay;
             X = tile.X;
             Y = tile.Y;

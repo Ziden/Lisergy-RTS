@@ -21,7 +21,7 @@ namespace Game.Battle
         public GameId UnitID => UnitReference.Id;
         public Unit UnitReference { get => _unitReference; set => _unitReference = value; }
 
-        public BattleUnit(PlayerEntity owner, BattleTeam team, Unit unit)
+        public BattleUnit(BattleTeam team, Unit unit)
         {
             Team = team;
             UnitReference = unit;

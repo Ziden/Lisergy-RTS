@@ -14,7 +14,7 @@ namespace BaseServer.Core
         protected Server _socketServer;
         private Message _msg;
         private ConsoleCommandExecutor _commandExecutor;
-        public GameLogic Game { get; protected set; }
+        public LisergyGame Game { get; protected set; }
         private readonly int _port;
 
         public SocketServer(int port)
@@ -29,12 +29,12 @@ namespace BaseServer.Core
             RegisterCommands(Game, _commandExecutor);
         }
 
-        public abstract void RegisterCommands(GameLogic game, ConsoleCommandExecutor executor);
+        public abstract void RegisterCommands(LisergyGame game, ConsoleCommandExecutor executor);
         protected abstract ServerPlayer Auth(BaseEvent ev, int connectionID);
         public abstract void Tick();
         public abstract void Disconnect(int connectionID);
         public abstract ServerType GetServerType();
-        public abstract GameLogic SetupGame();
+        public abstract LisergyGame SetupGame();
 
         public abstract void SetupServices();
 

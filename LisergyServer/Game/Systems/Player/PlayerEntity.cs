@@ -1,105 +1,65 @@
-﻿using Game.Battle;
-using Game.DataTypes;
+﻿using Game.DataTypes;
 using Game.ECS;
 using Game.Events;
-using Game.Systems.Battler;
+using Game.Network;
 using Game.Systems.Building;
 using Game.Systems.FogOfWar;
 using Game.Systems.Party;
 using Game.Tile;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Game.Systems.Player
 {
-    public abstract class PlayerEntity 
+    public abstract class PlayerEntity : IEntity
     {
-        public GameId UserID;
+        public PlayerDataComponent Data => Get<PlayerDataComponent>();
 
-        public HashSet<Unit> Units = new HashSet<Unit>();
-        public HashSet<PlayerBuildingEntity> Buildings = new HashSet<PlayerBuildingEntity>();
-        public HashSet<TileEntity> VisibleTiles = new HashSet<TileEntity>();
-        public HashSet<TileEntity> OnceExplored = new HashSet<TileEntity>();
+        public const byte MAX_PARTIES = 4;
+        public GameId EntityId { get; }
+        public IGame Game { get; private set; }
+        public bool CanReceivePackets() => Online() && EntityId != GameId.ZERO;
 
-        public PartyEntity[] Parties;
-
-        public Dictionary<GameId, CompleteBattleHeader> BattleHeaders = new Dictionary<GameId, CompleteBattleHeader>();
-
-        public IComponentSet Components => throw new NotImplementedException();
-
-        public GameLogic Game { get; private set; }
-
-        public PartyEntity GetParty(byte partyIndex)
-        {
-            return Parties[partyIndex];
-        }
-
-        public bool CanReceivePackets()
-        {
-            return Online() && UserID != GameId.ZERO;
-        }
-
-        public PlayerEntity(GameLogic game)
+        public PlayerEntity(IGame game)
         {
             Game = game;
-            UserID = Guid.NewGuid();
-            Parties = new PartyEntity[PartyEntity.SIZE]
+            Components = new ComponentSet(this, this);
+            Components.Add<PlayerDataComponent>();
+            EntityId = Guid.NewGuid();
+            Data.Parties = new PartyEntity[MAX_PARTIES]
             {
-                new PartyEntity(this, 0), null, null, null
+                game.Entities.CreateEntity<PartyEntity>(this),  
+                game.Entities.CreateEntity<PartyEntity>(this), 
+                game.Entities.CreateEntity<PartyEntity>(this),  
+                game.Entities.CreateEntity<PartyEntity>(this)
             };
+            for (byte x = 0; x < MAX_PARTIES; x++) Data.Parties[x].Get<PartyComponent>().PartyIndex = x;
         }
+
+        public PartyEntity GetParty(byte partyIndex) => Data.Parties[partyIndex];
 
         public PlayerBuildingEntity GetCenter()
         {
-            return Buildings.First(b => b.SpecID == GameLogic.Specs.InitialBuilding);
-        }
-
-        public Unit RecruitUnit(ushort unitSpecId)
-        {
-            var unit = new Unit(unitSpecId);
-            unit.SetBaseStats();
-            Units.Add(unit);
-            Log.Debug($"{UserID} recruited {unitSpecId}");
-            return unit;
-        }
-
-        public void PlaceUnitInParty(Unit u, PartyEntity newParty)
-        {
-            if (u.Party != null)
-            {
-                Game.Systems.BattleGroup.GetLogic(u.Party).RemoveUnit(u);
-            }
-            u.Party = newParty;
-            Game.Systems.BattleGroup.GetLogic(u.Party).AddUnit(u);
-            Log.Debug($"{UserID} moved unit {u.SpecId} to party {newParty.PartyIndex}");
-        }
-
-        public void Build(ushort id, TileEntity t)
-        {
-            var building = new PlayerBuildingEntity(this);
-            building.Components.Add(new PlayerBuildingComponent() { SpecId = id });
-            var los = building.GetSpec().LOS;
-            building.Components.Add(new EntityVisionComponent() { LineOfSight = los });
-            Buildings.Add(building);
-            building.Tile = t;
-           
-            Log.Debug($"Player {UserID} built {id}");
+            return Data.Buildings.First(b => b.SpecId == Game.Specs.InitialBuilding.Id);
         }
 
         public abstract void Send<EventType>(EventType ev) where EventType : BaseEvent;
 
-        public GameId EntityId => UserID;
-
         public PlayerEntity Owner => this;
 
-        public GameId OwnerID => UserID;
+        public GameId OwnerID => EntityId;
+
+        public IComponentSet Components { get; private set; }
+
+        public IEntityLogic EntityLogic => Game.Logic.EntityLogic(this);
+
+        public ref DeltaFlags DeltaFlags => throw new NotImplementedException();
 
         public abstract bool Online();
 
         public override string ToString()
         {
-            return $"<Player id={UserID.ToString()}>";
+            return $"<Player id={EntityId.ToString()}>";
         }
 
         public ServerPacket GetUpdatePacket(PlayerEntity receiver)
@@ -107,9 +67,11 @@ namespace Game.Systems.Player
             throw new NotImplementedException();
         }
 
-        public T Get<T>() where T : IComponent
+        public T Get<T>() where T : IComponent => Components.Get<T>();
+
+        public void ProccessDeltas(PlayerEntity trigger)
         {
-            return default;
+            throw new NotImplementedException();
         }
     }
 }

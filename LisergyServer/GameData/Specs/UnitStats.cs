@@ -71,7 +71,7 @@ namespace Game.Entity
             this[stat] += value;
         }
 
-        public void SubStat(Stat stat, in ushort value)
+        public void SubStat(Stat stat, ushort value)
         {
             this[stat] -= value;
         }

@@ -7,5 +7,10 @@ namespace Game.Systems.Movement
     {
         public CourseTask Course;
         public TimeSpan MoveDelay;
+
+        public override string ToString()
+        {
+            return $"<EntityMovementComponent Course={Course?.ID} MoveDelay={MoveDelay.TotalSeconds}>";
+        }
     }
 }

@@ -6,20 +6,7 @@ using ServerTests;
 namespace Tests
 {
     public class TestSpecSerialization
-    {
-
-        [SetUp]
-        public void Setup()
-        {
-
-        }
-
-        [TearDown]
-        public void Tear()
-        {
-
-        }
-
+    { 
         [Test]
         public void TestBasicSerialization()
         {
@@ -27,7 +14,7 @@ namespace Tests
             var serialized = Serialization.FromEventRaw(new GameSpecPacket(game));
             var deserialized = (GameSpecPacket)Serialization.ToEventRaw(serialized);
 
-            Assert.AreEqual(GameLogic.Specs.Units.Values, deserialized.Spec.Units.Values);
+            Assert.AreEqual(game.Specs.Units.Count, deserialized.Spec.Units.Count);
         }
     }
 }

@@ -7,10 +7,13 @@ using System.Collections.Generic;
 using Game.Systems.Movement;
 using Game.Systems.FogOfWar;
 using Game.Systems.Player;
+using Game.Systems.MapPosition;
+using Game.ECS;
+using System.Linq;
 
 namespace Game
 {
-    public partial class BaseEntity : IDeltaTrackable
+    public partial class BaseEntity
     {
         /// <summary>
         /// Cache to re-use the same hashset for all viewers lookups
@@ -25,7 +28,7 @@ namespace Game
         public ServerPacket GetUpdatePacket(PlayerEntity receiver)
         {
             var packet = new EntityUpdatePacket(this);
-            packet.SyncedComponents = this.Components.GetSyncedComponents(receiver);
+            packet.SyncedComponents = Components.GetSyncedComponents(receiver).ToArray();
             return packet;
         }
 
@@ -41,9 +44,9 @@ namespace Game
 
         private void OnExistenceChanged()
         {
-            if (Tile == null) return; // was removed
-
-            foreach (var playerViewing in Tile.PlayersViewing)
+            var c = Get<MapReferenceComponent>();
+            if (c.Tile == null) return; // was removed
+            foreach (var playerViewing in c.Tile.PlayersViewing)
             {
                 playerViewing.Send(this.GetUpdatePacket(playerViewing));
             }
@@ -51,8 +54,9 @@ namespace Game
 
         private void OnPositionChanged()
         {
-            var newTile = _tile;
-            var previousTile = _previousTile;
+            var c = Get<MapReferenceComponent>();
+            var newTile = c.Tile;
+            var previousTile = c.PreviousTile;
 
             var movementComponent = Components.Get<EntityMovementComponent>();
             if(movementComponent == null) return;

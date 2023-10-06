@@ -3,7 +3,7 @@
 namespace GameData.Specs
 {
     [Serializable]
-    public struct BattleSpec
+    public class BattleSpec
     {
         public ushort[] UnitSpecIDS;
     }

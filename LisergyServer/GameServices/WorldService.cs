@@ -2,16 +2,16 @@
 using Game.Network;
 using Game.Network.ClientPackets;
 using Game.Systems.Player;
-using Game.Systems.World;
+using Game.World;
 
 namespace Game.Services
 {
     public class WorldService : IEventListener
     {
-        private GameLogic _game;
+        private LisergyGame _game;
         private GameWorld _world;
 
-        public WorldService(GameLogic game)
+        public WorldService(LisergyGame game)
         {
             _game = game;
             _world = game.World;
@@ -22,19 +22,18 @@ namespace Game.Services
         public void JoinWorld(JoinWorldPacket ev)
         {
             PlayerEntity player = null;
-            if (_world.Players.GetPlayer(ev.Sender.UserID, out player))
+            if (_world.Players.GetPlayer(ev.Sender.EntityId, out player))
             {
-                Log.Debug($"Existing player {player.UserID} joined");
-                foreach (var tile in player.VisibleTiles)
+                Log.Debug($"Existing player {player.EntityId} joined");
+                foreach (var tile in player.Data.VisibleTiles)
                 {
                     tile.SetFlagIncludingChildren(DeltaFlag.SELF_REVEALED);
                 }
             }
             else
             {
-                var startTile = _world.GetUnusedStartingTile();
-                _world.PlaceNewPlayer(ev.Sender, startTile);
-                Log.Debug($"New player {ev.Sender.UserID} joined the world");
+                ev.Sender.EntityLogic.Player.PlaceNewPlayer(_world.GetUnusedStartingTile());
+                Log.Debug($"New player {ev.Sender.EntityId} joined the world");
             }
         }
     }

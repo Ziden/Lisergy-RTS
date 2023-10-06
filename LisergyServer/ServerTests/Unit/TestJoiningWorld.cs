@@ -4,6 +4,7 @@ using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Systems.Battler;
 using Game.Systems.Building;
+using Game.Systems.Map;
 using Game.Systems.Party;
 using NUnit.Framework;
 using ServerTests;
@@ -30,11 +31,11 @@ namespace Tests
             var clientPlayer = new TestServerPlayer(Game);
             Game.HandleClientEvent(clientPlayer, joinEvent);
 
-            var createdPlayer = Game.World.Players.GetPlayer(clientPlayer.UserID);
+            var createdPlayer = Game.World.Players.GetPlayer(clientPlayer.EntityId);
 
             Assert.AreEqual(1, Game.World.Players.PlayerCount);
             Assert.AreEqual(clientPlayer, createdPlayer);
-            Assert.AreEqual(1, createdPlayer.Buildings.Count);  // initial building
+            Assert.AreEqual(1, createdPlayer.Data.Buildings.Count);  // initial building
             Assert.IsTrue(createdPlayer.GetParty(0) != null);    // initial party
         }
 
@@ -49,12 +50,14 @@ namespace Tests
             var entityVisibleEvents = clientPlayer.ReceivedEventsOfType<EntityUpdatePacket>();
             var partyEvent = entityVisibleEvents.FirstOrDefault(e => e.Entity.GetType() == typeof(PartyEntity));
             var buildingEvent = entityVisibleEvents.FirstOrDefault(e => e.Entity.GetType() == typeof(PlayerBuildingEntity));
+            var partyPosition = partyEvent.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(MapPositionComponent)) as MapPositionComponent;
+            var buildingPosition = buildingEvent.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(MapPositionComponent)) as MapPositionComponent;
 
             Assert.AreEqual(2, entityVisibleEvents.Count, "Initial Party & Building should be visible");
-            Assert.AreNotEqual(partyEvent.Entity.X, 0);
-            Assert.AreNotEqual(partyEvent.Entity.Y, 0);
-            Assert.AreNotEqual(buildingEvent.Entity.X, 0);
-            Assert.AreNotEqual(buildingEvent.Entity.Y, 0);
+            Assert.AreNotEqual(partyPosition.X, 0);
+            Assert.AreNotEqual(partyPosition.Y, 0);
+            Assert.AreNotEqual(buildingPosition.X, 0);
+            Assert.AreNotEqual(buildingPosition.Y, 0);
         }
 
         [Test]
@@ -70,8 +73,8 @@ namespace Tests
 
             Assert.IsTrue(tileUpdates.Count > 2);
             Assert.AreEqual(2, entityUpdates.Count);
-            Assert.IsTrue(entityUpdates.Where(e => e.Entity.Id == player.GetParty(0).Id).Any());
-            Assert.IsTrue(entityUpdates.Where(e => e.Entity.Id == player.Buildings.First().Id).Any());
+            Assert.IsTrue(entityUpdates.Where(e => e.Entity.EntityId == player.GetParty(0).EntityId).Any());
+            Assert.IsTrue(entityUpdates.Where(e => e.Entity.EntityId == player.Data.Buildings.First().EntityId).Any());
         }
 
         [Test]

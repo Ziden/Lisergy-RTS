@@ -7,7 +7,7 @@ namespace LisergyServer.Commands
 {
     public class TaskCommand : Command
     {
-        public TaskCommand(GameLogic game) : base(game) { }
+        public TaskCommand(LisergyGame game) : base(game) { }
 
         public override string GetCommand()
         {

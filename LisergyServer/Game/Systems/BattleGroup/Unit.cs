@@ -1,35 +1,24 @@
 ﻿using Game.DataTypes;
 using Game.Entity;
-using Game.Systems.Party;
-using Game.Systems.Tile;
-using GameData.buffs;
+using GameData.Specs;
 using System;
 using System.Collections.Generic;
 
 namespace Game.Systems.Battler
 {
     [Serializable]
-    public unsafe class Unit : IEquatable<Unit>, IEqualityComparer<Unit>
+    public class Unit : IEquatable<Unit>, IEqualityComparer<Unit>
     {
-        [NonSerialized]
-        private byte _partyId = byte.MaxValue;
-
-        [NonSerialized]
-        private PartyEntity _party;
-
-        [NonSerialized]
-        public string Name;
-
         public GameId Id { get; protected set; }
         public ushort SpecId { get; private set; }
         private UnitStats _statsData;
 
-        public Unit(ushort unitSpecId)
+        public Unit(UnitSpec spec)
         {
-            Name = "NoName";
-            SpecId = unitSpecId;
             Id = Guid.NewGuid();
-            _statsData.SetStats(UnitStats.DEFAULT);
+            SpecId = spec.UnitSpecID;
+            _statsData.SetStats(spec.Stats);
+            HealAll();
         }
 
         public ref byte Atk { get => ref _statsData.Atk;  }
@@ -45,52 +34,20 @@ namespace Game.Systems.Battler
         public ref ushort MP { get => ref _statsData.MP; }
         public ref ushort MaxMP { get => ref _statsData.MaxMP; }
 
-        public void ModifyStats(Dictionary<Stat, ushort> stats)
-        {
-            foreach (KeyValuePair<Stat, ushort> kp in stats)
-            {
-                _statsData.AddStat(kp.Key, kp.Value);
-            }
-        }
-
-        public void ModifyStat(Stat stat, in ushort value)
-        {
-            _statsData.AddStat(stat, value);
-        }
-
-        public Unit SetBaseStats()
-        {
-            _statsData.SetStats(GameLogic.Specs.Units[SpecId].Stats);
-            HealAll();
-            return this;
-        }
-
         public void HealAll()
         {
             HP = MaxHP;
             MP = MaxMP;
         }
 
-        public PartyEntity Party
-        {
-            get => _party;
-            set
-            {
-                _party = value;
-                _partyId = value != null ? value.PartyIndex : byte.MaxValue;
-            }
-        }
-
-        public byte PartyId => _partyId;
-
         public override string ToString()
         {
-            return $"<Unit name={Name} spec={SpecId}/>";
+            return $"<Unit Spec={SpecId}/>";
         }
 
         public bool Equals(Unit other)
         {
-            return other != null && _partyId == other._partyId && SpecId == other.SpecId && _statsData.Equals(other._statsData);
+            return other != null && SpecId == other.SpecId && _statsData.Equals(other._statsData);
         }
 
         public bool Equals(Unit x, Unit y)
@@ -100,7 +57,7 @@ namespace Game.Systems.Battler
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(SpecId, _statsData, _partyId);
+            return HashCode.Combine(SpecId, _statsData);
         }
 
         public int GetHashCode(Unit obj)

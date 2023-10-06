@@ -1,4 +1,4 @@
-﻿using Game.Systems.World;
+﻿using Game.World;
 using System;
 using System.Collections.Generic;
 
@@ -64,7 +64,7 @@ namespace Game.Pathfinder
             mGrid = grid ?? throw new Exception("Grid cannot be null");
         }
 
-        public List<PathFinderNode> FindPath(MapPosition start, MapPosition end)
+        public List<PathFinderNode> FindPath(Position start, Position end)
         {
             PathFinderNode parentNode;
             bool found = false;
@@ -201,7 +201,7 @@ namespace Game.Pathfinder
                             newNode.H = (int)(mHEstimate * (Math.Pow(newNode.X - end.X, 2) + Math.Pow(newNode.Y - end.Y, 2)));
                             break;
                         case HeuristicFormula.Custom1:
-                            MapPosition dxy = new MapPosition(Math.Abs(end.X - newNode.X), Math.Abs(end.Y - newNode.Y));
+                            Position dxy = new Position(Math.Abs(end.X - newNode.X), Math.Abs(end.Y - newNode.Y));
                             int Orthogonal = Math.Abs(dxy.X - dxy.Y);
                             int Diagonal = Math.Abs((dxy.X + dxy.Y - Orthogonal) / 2);
                             newNode.H = mHEstimate * (Diagonal + Orthogonal + dxy.X + dxy.Y);

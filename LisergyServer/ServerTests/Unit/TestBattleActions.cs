@@ -1,6 +1,7 @@
 using Game.Battle;
 using Game.Battle.BattleActions;
 using Game.Systems.Battler;
+using GameDataTest;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -16,12 +17,12 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            FastUnit = new Unit(1);
-            FastUnit.Name = "Fast Unit";
+            var specs = TestSpecs.Generate();
+
+            FastUnit = new Unit(specs.Units[1]);
             FastUnit.Speed *= 2;
 
-            SlowUnit = new Unit(1);
-            SlowUnit.Name = "Slow Unit";
+            SlowUnit = new Unit(specs.Units[1]);
             SlowUnit.Speed /= 2;
 
             Battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(FastUnit), new BattleTeam(SlowUnit));

@@ -1,4 +1,5 @@
 ﻿using Game.Entity;
+using Game.Systems.Battler;
 using GameData;
 using GameData.buffs;
 using GameData.Specs;
@@ -6,13 +7,13 @@ using System.Collections.Generic;
 
 namespace GameDataTest
 {
-    public class TestUnitData
+    public static class TestUnitData
     {
         public static string Addr(string name) => $"Assets/Addressables/Prefabs/Units/{name}.prefab";
 
         public static string AddrFace(string name) => $"Assets/Addressables/Sprites/Badges/{name}.png";
 
-        private static void AddUnit(GameSpec spec, UnitSpec unitSpec)
+        private static void AddUnit(ref GameSpec spec, UnitSpec unitSpec)
         {
             var id = (ushort)spec.Units.Count;
             unitSpec.UnitSpecID = id;
@@ -35,6 +36,14 @@ namespace GameDataTest
                     { Stat.MMP, 19 },
         });
 
+        public static UnitStats SetStats(this UnitStats u, Dictionary<Stat, ushort> stats)
+        {
+            foreach (var kp in stats)
+                u[kp.Key] = kp.Value;
+            return u;
+        }
+
+
         private static UnitStats AddToBase(params (Stat, short)[] stats)
         {
             var st = new UnitStats();
@@ -43,7 +52,7 @@ namespace GameDataTest
             {
                 var value = st.GetStat(item.Item1);
                 value += (ushort)item.Item2;
-                st.SetStat(item.Item1, value);
+                st[item.Item1] = value;
             }
 
             return st;
@@ -51,7 +60,7 @@ namespace GameDataTest
 
         public static void Generate(ref GameSpec spec)
         {
-            AddUnit(spec, new UnitSpec()
+            AddUnit(ref spec, new UnitSpec()
             {
                 Art = new ArtSpec() { Type = ArtType.PREFAB,Address = Addr("Rogue") },
                 Name = "Rogue",
@@ -69,7 +78,7 @@ namespace GameDataTest
                     (Stat.MATK, -2)
                 )
             });
-            AddUnit(spec, new UnitSpec()
+            AddUnit(ref spec, new UnitSpec()
             {
                 Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Knight") },
                 Name = "Knight",
@@ -89,7 +98,7 @@ namespace GameDataTest
                     (Stat.MHP, 10)
                 )
             });
-            AddUnit(spec, new UnitSpec()
+            AddUnit(ref spec, new UnitSpec()
             {
                 Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Mage") },
                 Name = "Mage",

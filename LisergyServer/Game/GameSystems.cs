@@ -6,10 +6,11 @@ using Game.Systems.FogOfWar;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Systems.Tile;
-using Game.Tile;
 using System.Collections.Generic;
 using System;
 using Game.Events;
+using Game.Systems.Map;
+using Game.Systems.Player;
 
 namespace Game
 {
@@ -21,23 +22,22 @@ namespace Game
         EntityVisionSystem EntityVision { get; }
         EntityMovementSystem EntityMovement { get; }
         TileVisibilitySystem TileVisibility { get; }
+        MapSystem Map { get; }
         PartySystem Party { get; }
         TileHabitantsSystem TileHabitants { get; }
-        void CallEvent<EventType>(Type componentType, IEntity entity, EventType ev) where EventType : BaseEvent;
+        PlayerSystem Players { get; }
+        void CallEvent(IEntity entity, BaseEvent ev);
     }
 
     public class GameSystems : ISystems
     {
         private readonly Dictionary<Type, IGameSystem> _systems = new Dictionary<Type, IGameSystem>();
 
-        public GameLogic Game { get; private set; }
+        private LisergyGame _game;
 
-        // Remove when logic is isolated in systems and no need to call events outside systems logic
-        public static GameSystems HACK_REMOVE_ME;
-
-        public GameSystems(GameLogic game) 
+        public GameSystems(LisergyGame game) 
         {
-            Game = game;
+            _game = game;
             AddSystem(Building = new BuildingSystem(game));
             AddSystem(BattleGroup = new BattleGroupSystem(game));
             AddSystem(PlayerBuilding = new PlayerBuildingSystem(game));
@@ -47,10 +47,11 @@ namespace Game
             AddSystem(TileVisibility = new TileVisibilitySystem(game));
             AddSystem(Party = new PartySystem(game));
             AddSystem(TileHabitants = new TileHabitantsSystem(game));
-
-            HACK_REMOVE_ME = this;
+            AddSystem(Map = new MapSystem(game));
+            AddSystem(Players = new PlayerSystem(game));
         }
 
+        public MapSystem Map { get; private set; }
         public BuildingSystem Building { get; private set; }
         public BattleGroupSystem BattleGroup { get; private set; }
         public PlayerBuildingSystem PlayerBuilding { get; private set; }
@@ -60,6 +61,7 @@ namespace Game
         public TileVisibilitySystem TileVisibility { get; private set; }
         public PartySystem Party { get; private set; }
         public TileHabitantsSystem TileHabitants { get; private set; }
+        public PlayerSystem Players { get; private set; }
 
         private void AddSystem<ComponentType>(GameSystem<ComponentType> system) where ComponentType : IComponent 
         {
@@ -67,7 +69,16 @@ namespace Game
             system.OnEnabled();
         }
 
-        public void CallEvent<EventType>(Type componentType, IEntity entity, EventType ev) where EventType : BaseEvent
+        public void CallEvent(IEntity entity, BaseEvent ev)
+        {
+            _game.Events.Call(ev);
+            foreach (var kp in entity.Components.All())
+            {
+                CallSystemEvent(kp.Key, entity, ev);
+            }
+        }
+
+        private void CallSystemEvent<EventType>(Type componentType, IEntity entity, EventType ev) where EventType : BaseEvent
         {
             if (_systems.TryGetValue(componentType, out var system)) system.CallEvent(entity, ev);
         }

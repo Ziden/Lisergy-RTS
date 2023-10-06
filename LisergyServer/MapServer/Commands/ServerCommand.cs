@@ -10,7 +10,7 @@ namespace LisergyServer.Commands
 {
     public class ServerCommand : Command
     {
-        public ServerCommand(GameLogic game) : base(game) { }
+        public ServerCommand(LisergyGame game) : base(game) { }
 
         public override string GetCommand()
         {

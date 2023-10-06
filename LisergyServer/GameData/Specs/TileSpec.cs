@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace GameData
 {
     [Serializable]
-    public struct TileSpec
+    public class TileSpec
     {
         public byte ID;
         public ArtSpec Art;

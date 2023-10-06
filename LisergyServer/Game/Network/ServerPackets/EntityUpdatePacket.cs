@@ -8,7 +8,7 @@ namespace Game.Events.ServerEvents
     public class EntityUpdatePacket : ServerPacket
     {
         public BaseEntity Entity;
-        public List<IComponent> SyncedComponents;
+        public IComponent [] SyncedComponents;
 
         public EntityUpdatePacket(BaseEntity entity)
         {

@@ -1,8 +1,6 @@
 ﻿using Game.Events;
 using Game.Events.Bus;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Tests")]
@@ -27,7 +25,6 @@ namespace Game.ECS
                 if (component == null) return;
                 callback(_currentEntity, component, ev);
             }
-
             _bus.Register(this, (Action<EventType>)ComponentEventWrapper);
         }
 

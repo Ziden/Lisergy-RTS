@@ -30,7 +30,7 @@ namespace Tests
         [Test]
         public void TestBattleComponentLogicSync()
         {
-            var clientEntity = new PartyEntity(null);
+            var clientEntity = new PartyEntity(null, null);
 
             var clientComponent = clientEntity.Components.Add<BattleGroupComponent>();
             var serverComponent = new BattleGroupComponent();
@@ -44,8 +44,8 @@ namespace Tests
         [Test]
         public void TestLogicTriggeringEvents()
         {
-            var enemyTeam = new BattleTeam(new Unit(0).SetBaseStats(), new Unit(0).SetBaseStats());
-            var myTeam = new BattleTeam(new Unit(2).SetBaseStats(), new Unit(0).SetBaseStats());
+            var enemyTeam = new BattleTeam(new Unit(Game.Specs.Units[0]), new Unit(Game.Specs.Units[0]));
+            var myTeam = new BattleTeam(new Unit(Game.Specs.Units[2]), new Unit(Game.Specs.Units[0]));
             var battle = new TurnBattle(Guid.NewGuid(), myTeam, enemyTeam);
             var autoRun = new AutoRun(battle);
             var result = autoRun.RunAllRounds();
@@ -57,11 +57,11 @@ namespace Tests
         [Test]
         public void TestDeadDontAct()
         {
-            var weak = new Unit(0).SetBaseStats();
-            var enemyTeam = new BattleTeam(weak, new Unit(0).SetBaseStats());
+            var weak = new Unit(Game.Specs.Units[0]);
+            var enemyTeam = new BattleTeam(weak, new Unit(Game.Specs.Units[0]));
 
-            var op = TestBattle.MakeOverpower(new Unit(0).SetBaseStats());
-            var myTeam = new BattleTeam(op, new Unit(0).SetBaseStats());
+            var op = TestBattle.MakeOverpower(new Unit(Game.Specs.Units[0]));
+            var myTeam = new BattleTeam(op, new Unit(Game.Specs.Units[0]));
 
             var battle = new TurnBattle(Guid.NewGuid(), myTeam, enemyTeam);
             var autoRun = new AutoRun(battle);

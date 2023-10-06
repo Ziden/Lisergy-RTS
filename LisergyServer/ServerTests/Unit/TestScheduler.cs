@@ -1,3 +1,4 @@
+using Game;
 using Game.Scheduler;
 using NUnit.Framework;
 using System;
@@ -9,7 +10,7 @@ namespace Tests
     {
         private class TestTask : GameTask
         {
-            public TestTask(TimeSpan delay) : base(delay, null) { }
+            public TestTask(IGame game, TimeSpan delay) : base(game, delay, null) { }
             public bool Ran = false;
             public override void Tick()
             {
@@ -31,9 +32,9 @@ namespace Tests
         {
             GameScheduler.SetLogicalTime(DateTime.UnixEpoch);
 
-            var t1 = new TestTask(TimeSpan.FromSeconds(1));
-            var t2 = new TestTask(TimeSpan.FromSeconds(2));
-            var t3 = new TestTask(TimeSpan.FromSeconds(3));
+            var t1 = new TestTask(null, TimeSpan.FromSeconds(1));
+            var t2 = new TestTask(null, TimeSpan.FromSeconds(2));
+            var t3 = new TestTask(null, TimeSpan.FromSeconds(3));
 
             var minute = (long)GameScheduler.NowTimespan.TotalMinutes;
             var queue = GameScheduler.Queue;
@@ -49,9 +50,9 @@ namespace Tests
             var time = DateTime.UnixEpoch;
             GameScheduler.SetLogicalTime(time);
 
-            var t1 = new TestTask(TimeSpan.FromSeconds(1));
-            var t2 = new TestTask(TimeSpan.FromSeconds(1 + 60));
-            var t3 = new TestTask(TimeSpan.FromSeconds(1 + 120));
+            var t1 = new TestTask(null, TimeSpan.FromSeconds(1));
+            var t2 = new TestTask(null, TimeSpan.FromSeconds(1 + 60));
+            var t3 = new TestTask(null, TimeSpan.FromSeconds(1 + 120));
 
             GameScheduler.Tick(time);
 
@@ -68,9 +69,9 @@ namespace Tests
             GameScheduler.SetLogicalTime(time);
             GameScheduler.Tick(time);
 
-            var t1 = new TestTask(TimeSpan.FromSeconds(1));
-            var t2 = new TestTask(TimeSpan.FromSeconds(1 + 60));
-            var t3 = new TestTask(TimeSpan.FromSeconds(1 + 120));
+            var t1 = new TestTask(null, TimeSpan.FromSeconds(1));
+            var t2 = new TestTask(null, TimeSpan.FromSeconds(1 + 60));
+            var t3 = new TestTask(null, TimeSpan.FromSeconds(1 + 120));
 
             GameScheduler.Tick(time + TimeSpan.FromMinutes(1));
 
@@ -87,9 +88,9 @@ namespace Tests
             var time = DateTime.UnixEpoch;
             GameScheduler.SetLogicalTime(time);
 
-            var t1 = new TestTask(TimeSpan.FromSeconds(1));
-            var t2 = new TestTask(TimeSpan.FromSeconds(5));
-            var t3 = new TestTask(TimeSpan.FromSeconds(7));
+            var t1 = new TestTask(null, TimeSpan.FromSeconds(1));
+            var t2 = new TestTask(null, TimeSpan.FromSeconds(5));
+            var t3 = new TestTask(null, TimeSpan.FromSeconds(7));
 
             GameScheduler.Tick(time + TimeSpan.FromSeconds(5));
 
@@ -106,9 +107,9 @@ namespace Tests
             var time = DateTime.UnixEpoch;
             GameScheduler.SetLogicalTime(time);
 
-            var t1 = new TestTask(TimeSpan.FromSeconds(1));
-            var t2 = new TestTask(TimeSpan.FromHours(12));
-            var t3 = new TestTask(TimeSpan.FromDays(2));
+            var t1 = new TestTask(null, TimeSpan.FromSeconds(1));
+            var t2 = new TestTask(null, TimeSpan.FromHours(12));
+            var t3 = new TestTask(null, TimeSpan.FromDays(2));
 
             GameScheduler.Tick(time + TimeSpan.FromDays(1));
 
@@ -124,7 +125,7 @@ namespace Tests
         {
             GameScheduler.SetLogicalTime(DateTime.UnixEpoch);
 
-            var t1 = new TestTask(TimeSpan.FromSeconds(10));
+            var t1 = new TestTask(null, TimeSpan.FromSeconds(10));
 
             GameScheduler.Tick(DateTime.UnixEpoch + TimeSpan.FromMilliseconds(1));
 

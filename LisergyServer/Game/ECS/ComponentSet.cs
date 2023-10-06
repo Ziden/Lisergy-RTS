@@ -1,9 +1,7 @@
-﻿using Game.DataTypes;
-using Game.Events;
+﻿using Game.Events;
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -12,20 +10,14 @@ namespace Game.ECS
 {
     public interface IComponentSet
     {
-        List<IComponent> GetSyncedComponents(PlayerEntity receiver);
-
+        IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver);
+        IReadOnlyDictionary<Type, IComponent> All();
         IComponent Get(Type t);
-
         T Get<T>() where T : IComponent;
-
         T Add<T>(T c) where T : IComponent;
-
         T Add<T>() where T : IComponent;
-
         bool Has<T>() where T : IComponent;
-
         bool Has(Type t);
-
         void CallEvent(BaseEvent e);
 
     }
@@ -48,10 +40,12 @@ namespace Game.ECS
             _owner = owner;
         }
 
-        public List<IComponent> GetSyncedComponents(PlayerEntity receiver)
+        public IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver)
         {
             return receiver != null && receiver == _owner ? _networkedSelf : _networkedPublic;
         }
+
+        public IReadOnlyDictionary<Type, IComponent> All() => _components;
 
         public T Get<T>() where T : IComponent
         {
@@ -80,11 +74,7 @@ namespace Game.ECS
 
         public void CallEvent(BaseEvent ev)
         {
-            GameSystems.HACK_REMOVE_ME.Game.Events.Call(ev);
-            foreach (var kp in _components)
-            {
-                GameSystems.HACK_REMOVE_ME.CallEvent(kp.Key, _entity, ev);
-            } 
+            _entity.Game.Systems.CallEvent(_entity, ev);
         }
 
         public IComponent Get(Type t)

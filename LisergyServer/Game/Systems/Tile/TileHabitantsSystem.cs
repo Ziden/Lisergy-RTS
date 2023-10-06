@@ -2,13 +2,12 @@
 using Game.Events.GameEvents;
 using Game.Systems.Battler;
 using Game.Systems.Movement;
-using Game.Tile;
 
 namespace Game.Systems.Tile
 {
     public class TileHabitantsSystem : GameSystem<TileHabitants>
     {
-        public TileHabitantsSystem(GameLogic game) : base(game) { }
+        public TileHabitantsSystem(LisergyGame game) : base(game) { }
         public override void OnEnabled()
         {
             EntityEvents.On<BuildingPlacedEvent>(OnStaticEntityPlaced);
