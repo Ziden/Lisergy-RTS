@@ -8,7 +8,6 @@ using System;
 
 namespace Game.Systems.Dungeon
 {
-    [Serializable]
     public class DungeonEntity : BaseEntity
     {
         public override EntityType EntityType => EntityType.Dungeon;

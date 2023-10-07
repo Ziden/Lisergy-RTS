@@ -8,7 +8,6 @@ using Game.Systems.MapPosition;
 
 namespace Game
 {
-    [Serializable] // TODO: Make it not serializable
     public abstract partial class BaseEntity : IEntity
     {
         public GameId EntityId { get; private set; }

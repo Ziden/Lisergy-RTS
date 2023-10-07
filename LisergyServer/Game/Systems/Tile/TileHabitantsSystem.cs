@@ -16,22 +16,22 @@ namespace Game.Systems.Tile
             EntityEvents.On<EntityMoveInEvent>(OnEntityMoveIn);
         }
 
-        private static void OnStaticEntityRemoved(IEntity owner, TileHabitants component, BuildingRemovedEvent entity)
+        private void OnStaticEntityRemoved(IEntity owner, TileHabitants component, BuildingRemovedEvent entity)
         {
             component.Building = null;
         }
 
-        private static void OnStaticEntityPlaced(IEntity owner, TileHabitants component, BuildingPlacedEvent ev)
+        private void OnStaticEntityPlaced(IEntity owner, TileHabitants component, BuildingPlacedEvent ev)
         {
             component.Building = ev.Entity;
         }
 
-        private static void OnEntityMoveOut(IEntity owner, TileHabitants component, EntityMoveOutEvent ev)
+        private void OnEntityMoveOut(IEntity owner, TileHabitants component, EntityMoveOutEvent ev)
         {
             component.EntitiesIn.Remove(ev.Entity);
         }
 
-        private static void OnEntityMoveIn(IEntity owner, TileHabitants tileHabitants, EntityMoveInEvent ev)
+        private void OnEntityMoveIn(IEntity owner, TileHabitants tileHabitants, EntityMoveInEvent ev)
         {
             var movement = ev.Entity.Components.Get<EntityMovementComponent>();
             if (movement == null)

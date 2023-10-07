@@ -32,9 +32,6 @@ namespace Game
             var models = GetDefaultSerializationTypes().ToList();
 
             models.Add(typeof(Unit));
-            //models.Add(typeof(GameId));
-
-            // Battle
             models.Add(typeof(AttackActionResult));
             models.Add(typeof(ActionResult));
             models.Add(typeof(UnitDeadEvent));
@@ -43,13 +40,7 @@ namespace Game
             models.Add(typeof(AttackAction));
             models.Add(typeof(BattleUnit));
             models.Add(typeof(BattleTeam));
-
-            // World
-            models.Add(typeof(PlayerBuildingEntity));
-            models.Add(typeof(BaseEntity));
-            models.Add(typeof(PartyEntity));
             models.Add(typeof(TileMapData));
-            models.Add(typeof(DungeonEntity));
 
             // Game
             models.Add(typeof(GameSpec));

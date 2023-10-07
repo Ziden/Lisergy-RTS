@@ -7,7 +7,6 @@ using System;
 
 namespace Game.Systems.Building
 {
-    [Serializable]
     public class PlayerBuildingEntity : BaseEntity
     {
         public override EntityType EntityType => EntityType.Building;

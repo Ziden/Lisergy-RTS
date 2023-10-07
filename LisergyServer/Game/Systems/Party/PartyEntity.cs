@@ -9,7 +9,6 @@ using System;
 
 namespace Game.Systems.Party
 {
-    [Serializable]
     public class PartyEntity : BaseEntity
     {
         public const int SIZE = 4;

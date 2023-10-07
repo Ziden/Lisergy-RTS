@@ -6,7 +6,7 @@ namespace Game.DataTypes
     ///  http://www.jstatsoft.org/v08/i14/xorshift.pdf
     ///
     ///  Notes.
-    ///  A further performance improvement can be obtained by declaring local variables as static, thus avoiding 
+    ///  A further performance improvement can be obtained by declaring local variables, thus avoiding 
     ///  re-allocation of variables on each call. However care should be taken if multiple instances of
     ///  GameRandom are in use or if being used in a multi-threaded environment.
     public class GameRandom
