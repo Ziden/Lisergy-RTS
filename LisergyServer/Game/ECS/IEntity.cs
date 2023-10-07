@@ -11,13 +11,8 @@ namespace Game.ECS
 
         public T Get<T>() where T : IComponent;
 
-        public GameId EntityId { get; }
-
-        /// <summary>
-        /// Gets the player owner of the entity.
-        /// Will have zero value for entities owned by server (NPCS)
-        /// </summary>
-        public GameId OwnerID { get; }
+        public ref readonly GameId EntityId { get; }
+        public ref readonly GameId OwnerID { get; }
 
         public IGame Game { get; }
 

@@ -47,14 +47,14 @@ namespace Tests
             var entityVisibleEvents = clientPlayer.ReceivedPacketsOfType<EntityUpdatePacket>();
             var partyEvent = entityVisibleEvents.FirstOrDefault(e => e.Type == EntityType.Party);
             var buildingEvent = entityVisibleEvents.FirstOrDefault(e => e.Type == EntityType.Building);
-            var partyPosition = partyEvent.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(MapPositionComponent)) as MapPositionComponent;
-            var buildingPosition = buildingEvent.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(MapPositionComponent)) as MapPositionComponent;
+            var partyPosition = partyEvent.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(MapPlacementComponent)) as MapPlacementComponent;
+            var buildingPosition = buildingEvent.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(MapPlacementComponent)) as MapPlacementComponent;
 
             Assert.AreEqual(2, entityVisibleEvents.Count, "Initial Party & Building should be visible");
-            Assert.AreNotEqual(partyPosition.X, 0);
-            Assert.AreNotEqual(partyPosition.Y, 0);
-            Assert.AreNotEqual(buildingPosition.X, 0);
-            Assert.AreNotEqual(buildingPosition.Y, 0);
+            Assert.AreNotEqual(partyPosition.Position.X, 0);
+            Assert.AreNotEqual(partyPosition.Position.Y, 0);
+            Assert.AreNotEqual(buildingPosition.Position.X, 0);
+            Assert.AreNotEqual(buildingPosition.Position.Y, 0);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace Tests
             Game.HandleClientEvent(player, joinEvent);
 
             var entityUpdates = player.ReceivedPacketsOfType<EntityUpdatePacket>();
-            var tileUpdates = player.ReceivedPacketsOfType<TileUpdatePacket>();
+            var tileUpdates = player.ReceivedPacketsOfType<TilePacket>();
 
             Assert.IsTrue(tileUpdates.Count > 2);
             Assert.AreEqual(2, entityUpdates.Count);
@@ -97,14 +97,14 @@ namespace Tests
             Game.HandleClientEvent(player, joinEvent);
 
             var firstEntityVisibleEvents = player.ReceivedPacketsOfType<EntityUpdatePacket>();
-            var firstTileVisibleEvents = player.ReceivedPacketsOfType<TileUpdatePacket>();
+            var firstTileVisibleEvents = player.ReceivedPacketsOfType<TilePacket>();
 
             player.ReceivedPackets.Clear();
 
             Game.HandleClientEvent(player, joinEvent);
 
             var secondEntityVisibleEvents = player.ReceivedPacketsOfType<EntityUpdatePacket>();
-            var secondTileVisibleEvents = player.ReceivedPacketsOfType<TileUpdatePacket>();
+            var secondTileVisibleEvents = player.ReceivedPacketsOfType<TilePacket>();
 
             Assert.AreEqual(firstEntityVisibleEvents.Count, secondEntityVisibleEvents.Count);
             Assert.AreEqual(firstTileVisibleEvents.Count, secondTileVisibleEvents.Count);

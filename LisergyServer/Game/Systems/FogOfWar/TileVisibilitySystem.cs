@@ -30,7 +30,7 @@ namespace Game.Systems.FogOfWar
                     owner.Data.OnceExplored.Add(tileObj);
                     owner.Data.VisibleTiles.Add(tileObj);
                     ev.Tile.Components.CallEvent(new TileVisibilityChangedEvent() { Explorer = ev.Explorer, Tile = ev.Tile, Visible = ev.Explored });
-                    tileObj.SetFlagIncludingChildren(DeltaFlag.SELF_REVEALED);
+                    tileObj.SetFlag(DeltaFlag.SELF_REVEALED);
                 }
             }
             else
@@ -43,7 +43,7 @@ namespace Game.Systems.FogOfWar
                     if (component.PlayersViewing.Remove(owner))
                     {
                         ev.Tile.Components.CallEvent(new TileVisibilityChangedEvent() { Explorer = ev.Explorer, Tile = ev.Tile, Visible = ev.Explored });
-                        tileObj.SetFlagIncludingChildren(DeltaFlag.SELF_CONCEALED);
+                        tileObj.SetFlag(DeltaFlag.SELF_CONCEALED);
                     }
                 }
             }

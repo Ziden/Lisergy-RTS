@@ -17,7 +17,7 @@ namespace Game.Systems.Party
 
         public PartyEntity(IGame game, PlayerEntity owner) : base(game, owner)
         {
-            Components.Add(new MapPositionComponent());
+            Components.Add(new MapPlacementComponent());
             Components.Add(new MapReferenceComponent());
             Components.Add(new BattleGroupComponent());
             Components.Add(new PartyComponent());

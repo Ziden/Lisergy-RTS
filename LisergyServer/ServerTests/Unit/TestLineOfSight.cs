@@ -31,8 +31,8 @@ namespace Tests
             var initialBuildingSpec = Game.Specs.InitialBuilding;
             var player = Game.GetTestPlayer();
             var events = Game.SentPackets
-                .Where(e => e is TileUpdatePacket)
-                .Select(e => (TileUpdatePacket)e)
+                .Where(e => e is TilePacket)
+                .Select(e => (TilePacket)e)
                 .ToList();
 
             var range = initialBuildingSpec.LOS * 2 + 1;
@@ -54,7 +54,7 @@ namespace Tests
             var los = Game.Specs.InitialBuilding.LOS;
             var losTiles = tile.GetAOE(los);
             var entityUpdates = player.ReceivedPacketsOfType<EntityUpdatePacket>();
-            var tileVisibleEvent = player.ReceivedPacketsOfType<TileUpdatePacket>();
+            var tileVisibleEvent = player.ReceivedPacketsOfType<TilePacket>();
 
             Assert.AreEqual(1, entityUpdates.Count);
             Assert.AreEqual(losTiles.Count(), tileVisibleEvent.Count);
@@ -198,7 +198,7 @@ namespace Tests
             */
 
             // Only send update to visible ones
-            Assert.AreEqual(party.GetLineOfSight() + 1, player.ReceivedPacketsOfType<TileUpdatePacket>().Count);
+            Assert.AreEqual(party.GetLineOfSight() + 1, player.ReceivedPacketsOfType<TilePacket>().Count);
             Assert.AreEqual(party.GetLineOfSight() + 1, player.TriggeredEventsOfType<TileVisibilityChangedEvent>().Count);
             Assert.AreEqual(party.GetLineOfSight() + 1, player.TriggeredEventsOfType<TileExplorationStateChanged>().Count);
         }
@@ -270,7 +270,7 @@ namespace Tests
 
             Game.Logic.Map(party).SetPosition(party.Tile.GetNeighbor(Direction.WEST));
 
-            Assert.AreEqual(0, player.ReceivedPacketsOfType<TileUpdatePacket>().Count);
+            Assert.AreEqual(0, player.ReceivedPacketsOfType<TilePacket>().Count);
         }
     }
 }

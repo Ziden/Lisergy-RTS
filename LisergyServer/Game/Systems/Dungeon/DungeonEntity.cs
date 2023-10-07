@@ -14,7 +14,7 @@ namespace Game.Systems.Dungeon
 
         public DungeonEntity(IGame game) : base(game, null)
         {
-            Components.Add(new MapPositionComponent());
+            Components.Add(new MapPlacementComponent());
             Components.Add(new MapReferenceComponent());
             Components.Add(new DungeonComponent());
             Components.Add(new BattleGroupComponent());

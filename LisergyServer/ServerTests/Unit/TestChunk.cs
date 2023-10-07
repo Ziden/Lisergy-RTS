@@ -16,8 +16,8 @@ namespace Tests
             var player = game.GetTestPlayer();
 
             var events = game.SentPackets
-                .Where(e => e is TileUpdatePacket)
-                .Select(e => (TileUpdatePacket)e)
+                .Where(e => e is TilePacket)
+                .Select(e => (TilePacket)e)
                 .ToList();
         }
     }

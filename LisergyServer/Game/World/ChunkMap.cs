@@ -102,7 +102,7 @@ namespace Game.World
             return GetTileChunk(tileX, tileY).GetTile(internalTileX, internalTileY);
         }
 
-        public virtual void GenerateTiles(in ushort sizeX, in ushort sizeY)
+        public virtual void AllocateMemory(in ushort sizeX, in ushort sizeY)
         {
             var maxChunkX = sizeX >> GameWorld.CHUNK_SIZE_BITSHIFT;
             var maxChunkY = sizeY >> GameWorld.CHUNK_SIZE_BITSHIFT;

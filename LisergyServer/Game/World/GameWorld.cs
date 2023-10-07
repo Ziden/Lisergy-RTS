@@ -9,6 +9,7 @@ namespace Game.World
     public interface IGameWorld {
         public IGamePlayers Players { get; }
         public TileEntity GetTile(in int x, in int y);
+        public TileEntity GetTile(in Position pos);
     }
 
     public class GameWorld : IGameWorld
@@ -53,7 +54,7 @@ namespace Game.World
         {
             _id = Guid.NewGuid().ToString();
             Map = new ChunkMap(this, SizeX, SizeY);
-            GenerateTiles();
+            Map.AllocateMemory(SizeX, SizeY);
         }
 
         public void Populate(int seed = 0, params ChunkPopulator[] populators)
@@ -66,11 +67,6 @@ namespace Game.World
             foreach (var chunk in Map.AllChunks())
                 foreach (var populator in populators)
                     populator.Populate(this, chunk);
-        }
-
-        public virtual void GenerateTiles()
-        {
-            Map.GenerateTiles(SizeX, SizeY);
         }
 
         public TileEntity GetUnusedStartingTile()
@@ -90,14 +86,10 @@ namespace Game.World
                     yield return tile;
         }
 
-        public Chunk GetTileChunk(in int tileX, in int tileY)
-        {
-            return Map.GetTileChunk(tileX, tileY);
-        }
+        public Chunk GetTileChunk(in int tileX, in int tileY) => Map.GetTileChunk(tileX, tileY);
 
-        public TileEntity GetTile(in int tileX, in int tileY)
-        {
-            return Map.GetTile(tileX, tileY);
-        }
+        public TileEntity GetTile(in Position pos) => Map.GetTile(pos.X, pos.Y);
+
+        public TileEntity GetTile(in int tileX, in int tileY) => Map.GetTile(tileX, tileY);
     }
 }

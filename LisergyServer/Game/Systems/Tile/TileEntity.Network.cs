@@ -10,8 +10,7 @@ namespace Game.Tile
     {
         private DeltaFlags _flags;
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
-        public void SetFlag(DeltaFlag flag) { }
-        public ServerPacket GetUpdatePacket(PlayerEntity receiver) => new TileUpdatePacket(*_tileData);
+        public ServerPacket GetUpdatePacket(PlayerEntity receiver) => new TilePacket(*_tileData);
         public void ProccessDeltas(PlayerEntity trigger)
         {
             if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))

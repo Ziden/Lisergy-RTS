@@ -23,8 +23,8 @@ namespace Game.Systems.Party
                 unit.HealAll();
 
             
-            var center = Players.GetPlayer(e.OwnerID).GetCenter().Get<MapPositionComponent>();
-            Systems.Map.GetLogic(e).SetPosition(Game.GameWorld.GetTile(center.X, center.Y));
+            var center = Players.GetPlayer(e.OwnerID).GetCenter().Get<MapPlacementComponent>();
+            Systems.Map.GetLogic(e).SetPosition(Game.GameWorld.GetTile(center.Position));
         }
     }
 }

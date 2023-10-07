@@ -15,7 +15,7 @@ namespace Game.Systems.Building
 
         public PlayerBuildingEntity(IGame game, PlayerEntity owner) : base(game, owner)
         {
-            Components.Add(new MapPositionComponent());
+            Components.Add(new MapPlacementComponent());
             Components.Add(new MapReferenceComponent());
             Components.Add(new BuildingComponent());
             Components.Add(new PlayerBuildingComponent());

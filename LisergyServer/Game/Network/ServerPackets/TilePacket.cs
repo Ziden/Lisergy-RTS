@@ -5,9 +5,9 @@ using System;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class TileUpdatePacket : ServerPacket
+    public class TilePacket : ServerPacket
     {
-        public TileUpdatePacket(in TileMapData data)
+        public TilePacket(in TileMapData data)
         {
             _data = data;
         }
@@ -18,7 +18,7 @@ namespace Game.Events.ServerEvents
 
         public override string ToString()
         {
-            return $"<TileUpdate {_data}>";
+            return $"<TilePacket {_data}>";
         }
     }
 }

@@ -46,10 +46,10 @@ namespace Tests
             var player = _game.GetTestPlayer();
             var tile = _game.World.GetTile(1, 1);
 
-            Serialization.LoadSerializers(typeof(TileUpdatePacket));
+            Serialization.LoadSerializers(typeof(TilePacket));
 
-            var serialized = Serialization.FromPacket<TileUpdatePacket>(tile.GetUpdatePacket(null) as TileUpdatePacket);
-            var unserialized = Serialization.ToPacket<TileUpdatePacket>(serialized);
+            var serialized = Serialization.FromPacket<TilePacket>(tile.GetUpdatePacket(null) as TilePacket);
+            var unserialized = Serialization.ToPacket<TilePacket>(serialized);
 
             Assert.AreEqual(tile.SpecId, unserialized.Data.TileId);
             Assert.AreEqual(tile.X, unserialized.Data.X);

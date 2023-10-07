@@ -29,7 +29,7 @@ namespace Game.Services
                 Log.Debug($"Existing player {player.EntityId} joined");
                 foreach (var tile in player.Data.VisibleTiles)
                 {
-                    tile.SetFlagIncludingChildren(DeltaFlag.SELF_REVEALED);
+                    tile.SetFlag(DeltaFlag.SELF_REVEALED);
                 }
             }
             else

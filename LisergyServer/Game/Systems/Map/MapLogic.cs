@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Game.Systems.Map
 {
-    public class MapLogic : BaseEntityLogic<MapPositionComponent>
+    public class MapLogic : BaseEntityLogic<MapPlacementComponent>
     {
         public TileEntity GetPosition()
         {
@@ -19,28 +19,28 @@ namespace Game.Systems.Map
         public void SetPosition(TileEntity value)
         {
             var component = Entity.Get<MapReferenceComponent>();
-            component.PreviousTile = component.Tile;
+            var previousTile = component.Tile;
+            component.PreviousTile = previousTile;
             component.Tile = value;
 
-            if (component.PreviousTile == null || component.Tile == null)
+            if (previousTile == null || component.Tile == null)
             {
                 Entity.DeltaFlags.SetFlag(DeltaFlag.EXISTENCE);
             }
-            else if (component.PreviousTile != component.Tile)
+            else if (previousTile != component.Tile)
             {
                 Entity.DeltaFlags.SetFlag(DeltaFlag.COMPONENTS);
             }
-
-            if (component.PreviousTile != null)
+            if (previousTile != null)
             {
                 var moveOut = new EntityMoveOutEvent()
                 {
                     Entity = Entity,
                     ToTile = value,
-                    FromTile = component.PreviousTile
+                    FromTile = previousTile
                 };
                 // TODO NOT CALL EVENTS ON TILE 
-                component.PreviousTile.Components.CallEvent(moveOut);
+                previousTile.Components.CallEvent(moveOut);
                 Entity.Components.CallEvent(moveOut);
             }
             if (value != null)
@@ -49,26 +49,24 @@ namespace Game.Systems.Map
                 {
                     Entity = Entity,
                     ToTile = component.Tile,
-                    FromTile = component.PreviousTile
+                    FromTile = previousTile
                 };
                 value.Components.CallEvent(moveIn);
                 Entity.Components.CallEvent(moveIn);
             }
 
-            var location = Entity.Get<MapPositionComponent>();
+            var placement = Entity.Get<MapPlacementComponent>();
             if (component.Tile != null)
             {
-                location.X = component.Tile.X;
-                location.Y = component.Tile.Y;
+                placement.Position = component.Tile.Position;
             }
             else
             {
-                location.X = 0;
-                location.Y = 0;
-                if (component.PreviousTile != null)
+                placement.Position = default;
+                if (previousTile != null)
                 {
                     // TODO: Move to system
-                    Game.Network.SendToPlayer(new EntityDestroyPacket(Entity), component.PreviousTile.Components.Get<TileVisibility>().PlayersViewing.ToArray());
+                    Game.Network.SendToPlayer(new EntityDestroyPacket(Entity), previousTile.Components.Get<TileVisibility>().PlayersViewing.ToArray());
                 }
             }
             Log.Info($"Moved {Entity} to {component.Tile}");

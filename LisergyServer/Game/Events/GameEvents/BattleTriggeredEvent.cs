@@ -4,6 +4,7 @@ using Game.ECS;
 using Game.Events;
 using Game.Systems.Battler;
 using Game.Systems.Map;
+using Game.World;
 
 namespace Game.Network.ServerPackets
 {
@@ -12,29 +13,18 @@ namespace Game.Network.ServerPackets
     /// </summary>
     public class BattleTriggeredEvent : GameEvent
     {
-        public ushort X;
-        public ushort Y;
+        public Position Position;
         public GameId BattleID;
         public BattleTeam Attacker;
         public BattleTeam Defender;
 
         public BattleTriggeredEvent(GameId battleId, IEntity attacker, IEntity defender)
         {
-            var pos = attacker.Get<MapPositionComponent>();
+            var pos = attacker.Get<MapPlacementComponent>();
             BattleID = battleId;
             Attacker = new BattleTeam(attacker, attacker.Get<BattleGroupComponent>());
             Defender = new BattleTeam(defender, defender.Get<BattleGroupComponent>());
-            X = pos.X;
-            Y = pos.Y;
-        }
-
-        public BattleTriggeredEvent(GameId battleId, ushort x, ushort y, BattleTeam atk, BattleTeam def)
-        {
-            BattleID = battleId;
-            Attacker = atk;
-            Defender = def;
-            X = x;
-            Y = y;
+            Position = pos.Position;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Game.Tile
             DeltaFlags = new DeltaFlags(this);
         }
 
-        public void SetFlagIncludingChildren(DeltaFlag flag)
+        public void SetFlag(DeltaFlag flag)
         {
             DeltaFlags.SetFlag(flag);
             foreach (var e in EntitiesIn) e.DeltaFlags.SetFlag(flag);
@@ -36,21 +36,22 @@ namespace Game.Tile
         }
 
         public ref Chunk Chunk => ref _chunk;
-        public byte SpecId { get => _tileData->TileId; set => _tileData->TileId = value; }
-        public float MovementFactor { get => this.GetSpec().MovementFactor; }
-        public ushort Y { get => _tileData->Y; set => _tileData->Y = value; }
-        public ushort X { get => _tileData->X; set => _tileData->X = value; }
+        public ref byte SpecId { get => ref _tileData->TileId; }
+        public ref readonly float MovementFactor { get => ref this.GetSpec().MovementFactor; }
+        public ref readonly Position Position => ref _tileData->Position;
+        public ref readonly ushort Y { get => ref Position.Y; }
+        public ref readonly ushort X { get => ref Position.X; }
         public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.Get<TileVisibility>().PlayersViewing;
         public IReadOnlyCollection<IEntity> EntitiesViewing => _components.Get<TileVisibility>().EntitiesViewing;
         public IReadOnlyList<IEntity> EntitiesIn => _components.Get<TileHabitants>().EntitiesIn;
         private IEntity _staticEntity => _components.Get<TileHabitants>().Building;
-        public GameId EntityId => _id;
+        public ref readonly GameId EntityId => ref _id;
         public IComponentSet Components => _components;
         public bool Passable => MovementFactor > 0;
 
         public PlayerEntity Owner => null;
 
-        public GameId OwnerID => GameId.ZERO;
+        public ref readonly GameId OwnerID => ref GameId.ZERO;
 
         public IGame Game => this.Chunk.Map.World.Game;
 

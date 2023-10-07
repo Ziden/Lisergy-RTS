@@ -40,20 +40,20 @@ namespace Game
                 Game.Network.SendToPlayer(GetUpdatePacket(trigger), trigger);
             }
             if (DeltaFlags.HasFlag(DeltaFlag.COMPONENTS))
-                OnPositionChanged();
+                SendUpdateToNewViewers();
         }
 
         private void OnExistenceChanged()
         {
             var c = Get<MapReferenceComponent>();
-            if (c.Tile == null) return; // was removed
+            if (c.Tile == null) return; 
             foreach (var playerViewing in c.Tile.PlayersViewing)
             {
                 Game.Network.SendToPlayer(this.GetUpdatePacket(playerViewing), playerViewing);
             }
         }
 
-        private void OnPositionChanged()
+        private void SendUpdateToNewViewers()
         {
             var c = Get<MapReferenceComponent>();
             var newTile = c.Tile;

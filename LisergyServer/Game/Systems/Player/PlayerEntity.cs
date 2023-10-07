@@ -14,16 +14,20 @@ namespace Game.Systems.Player
     {
         public const byte MAX_PARTIES = 4;
 
+        private GameId _playerId;
+
         public PlayerDataComponent Data => Get<PlayerDataComponent>();
 
-        public GameId EntityId { get; }
+        public ref readonly GameId EntityId => ref _playerId;
+        public ref readonly GameId OwnerID => ref _playerId;
+
         public IGame Game { get; private set; }
         public PlayerEntity(IGame game)
         {
             Game = game;
             Components = new ComponentSet(this, this);
             Components.Add<PlayerDataComponent>();
-            EntityId = Guid.NewGuid();
+            _playerId = Guid.NewGuid();
             Data.Parties = new PartyEntity[MAX_PARTIES]
             {
                 game.Entities.CreateEntity<PartyEntity>(this),  
@@ -46,33 +50,13 @@ namespace Game.Systems.Player
             Game.Network.SendToPlayer(new MessagePacket(MessageType.BAD_INPUT, msg), this);
         }
 
-        public PlayerEntity Owner => this;
-
-        public GameId OwnerID => EntityId;
-
         public IComponentSet Components { get; private set; }
-
         public IEntityLogic EntityLogic => Game.Logic.EntityLogic(this);
-
         public ref DeltaFlags DeltaFlags => throw new NotImplementedException();
-
         public EntityType EntityType => EntityType.Player;
-
-        public override string ToString()
-        {
-            return $"<Player id={EntityId.ToString()}>";
-        }
-
-        public ServerPacket GetUpdatePacket(PlayerEntity receiver)
-        {
-            throw new NotImplementedException();
-        }
-
+        public override string ToString() => $"<Player id={EntityId}>";
         public T Get<T>() where T : IComponent => Components.Get<T>();
-
-        public void ProccessDeltas(PlayerEntity trigger)
-        {
-            throw new NotImplementedException();
-        }
+        public ServerPacket GetUpdatePacket(PlayerEntity receiver) => throw new NotImplementedException();
+        public void ProccessDeltas(PlayerEntity trigger) => throw new NotImplementedException();
     }
 }
