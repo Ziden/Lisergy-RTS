@@ -2,20 +2,18 @@
 using Game.ECS;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Game.Systems.Battler
 {
+    [StructLayout(LayoutKind.Sequential)]
     [Serializable]
     [SyncedComponent]
-    public class BattleGroupComponent : IComponent
+    public unsafe struct BattleGroupComponent : IComponent
     {
-        public GameId BattleID { get; set; }
-        public List<Unit> Units { get; set; } = new List<Unit>();
+        public GameId BattleID;
+        public List<Unit> Units;
 
-        public override string ToString()
-        {
-            return $"<BattleGroup UnitCount={Units.Count} BattleId={BattleID}>";
-        }
+        public override string ToString() => $"<BattleGroup Units={Units.Count} BattleId={BattleID}>";
     }
 }

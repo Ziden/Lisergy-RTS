@@ -27,10 +27,10 @@ namespace Game
             Components = new ComponentSet(this, owner);
         }
 
-        // TODO: Remove this
         public TileEntity Tile => Get<MapReferenceComponent>().Tile;
         public IEntityLogic EntityLogic => Game.Logic.EntityLogic(this);
         public abstract EntityType EntityType { get; }
         public T Get<T>() where T : IComponent => Components.Get<T>();
+        public void Save<T>(T component) where T : IComponent => Components.Save<T>(component);
     }
 }

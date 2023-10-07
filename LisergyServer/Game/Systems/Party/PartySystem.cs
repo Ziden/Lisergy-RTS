@@ -17,12 +17,11 @@ namespace Game.Systems.Party
             EntityEvents.On<GroupDeadEvent>(OnGroupDead);
         }
 
-        private void OnGroupDead(IEntity e, PartyComponent component, GroupDeadEvent ev)
+        private void OnGroupDead(IEntity e, ref PartyComponent component, GroupDeadEvent ev)
         {
             foreach (var unit in ev.GroupComponent.Units)
                 unit.HealAll();
-
-            
+ 
             var center = Players.GetPlayer(e.OwnerID).GetCenter().Get<MapPlacementComponent>();
             Systems.Map.GetLogic(e).SetPosition(Game.GameWorld.GetTile(center.Position));
         }

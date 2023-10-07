@@ -10,7 +10,7 @@ namespace Game.Systems.Battler
     public class Unit : IEquatable<Unit>, IEqualityComparer<Unit>
     {
         public GameId Id { get; protected set; }
-        public ushort SpecId { get; private set; }
+        public ushort SpecId { get; internal set; }
         private UnitStats _statsData;
 
         public Unit(UnitSpec spec)

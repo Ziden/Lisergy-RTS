@@ -6,6 +6,7 @@ using Game.Systems.MapPosition;
 using Game.Systems.Movement;
 using Game.Systems.Player;
 using System;
+using System.Collections.Generic;
 
 namespace Game.Systems.Party
 {
@@ -19,7 +20,10 @@ namespace Game.Systems.Party
         {
             Components.Add(new MapPlacementComponent());
             Components.Add(new MapReferenceComponent());
-            Components.Add(new BattleGroupComponent());
+            Components.Add(new BattleGroupComponent()
+            {
+                Units = new List<Unit>(SIZE)
+            });
             Components.Add(new PartyComponent());
             Components.Add(new EntityVisionComponent());
             Components.Add(new EntityMovementComponent() { MoveDelay = TimeSpan.FromSeconds(0.25) });
@@ -38,7 +42,7 @@ namespace Game.Systems.Party
 
         public byte PartyIndex { get => Components.Get<PartyComponent>().PartyIndex; }
 
-        public byte GetLineOfSight() => Components.Get<EntityVisionComponent>()?.LineOfSight ?? 0;
+        public byte GetLineOfSight() => Components.Get<EntityVisionComponent>().LineOfSight;
 
         public override string ToString()
         {

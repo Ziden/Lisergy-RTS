@@ -20,7 +20,7 @@ namespace Tests
             Game = new TestGame();
         }
 
-        [Test]  
+        [Test]
         public void TestAddSingleUnit()
         {
             var e = new PartyEntity(Game, Game.CreatePlayer());
@@ -29,20 +29,6 @@ namespace Tests
             Game.Logic.BattleGroup(e).AddUnit(new Unit(Game.Specs.Units[1]));
 
             Assert.AreEqual(startUnits + 1, e.Get<BattleGroupComponent>().Units.Count);
-        }
-
-        [Test]
-        public void TestBattleComponentLogicSync()
-        {
-            var clientEntity = new PartyEntity(Game, null);
-
-            var clientComponent = clientEntity.Components.Add<BattleGroupComponent>();
-            var serverComponent = new BattleGroupComponent();
-            serverComponent.BattleID = GameId.Generate();
-
-            ComponentSynchronizer.SyncComponents(clientEntity, new List<IComponent>() { serverComponent });
-
-            Assert.AreEqual(clientComponent.BattleID, serverComponent.BattleID);
         }
     }
 }

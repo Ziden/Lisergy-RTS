@@ -16,7 +16,7 @@ namespace Game.Systems.FogOfWar
             EntityEvents.On<TileExplorationStateChanged>(OnTileExplorationChanged);
         }
 
-        private void OnTileExplorationChanged(IEntity tile, TileVisibility component, TileExplorationStateChanged ev)
+        private void OnTileExplorationChanged(IEntity tile, ref TileVisibility component, TileExplorationStateChanged ev)
         {
             var tileObj = (TileEntity)tile;
             var habitants = tile.Components.Get<TileHabitants>();

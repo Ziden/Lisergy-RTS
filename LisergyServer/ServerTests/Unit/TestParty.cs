@@ -169,15 +169,21 @@ namespace Tests
 
             var unitsComponent = (BattleGroupComponent)deserialize.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(BattleGroupComponent));
 
-            Assert.IsTrue(unitsComponent != null);
             Assert.IsTrue(unitsComponent.Units.SequenceEqual(party.Get<BattleGroupComponent>().Units));
+        }
+
+        private void UpdateParty(ref PartyComponent c)
+        {
+
         }
 
         [Test]
         public void TestPartyDoesNotReceiveDestroyPacket()
         {
-            var party = _player.GetParty(0);
-            party.Components.Get<PartyComponent>().PartyIndex = 2;
+            var party = _player.GetParty(1);
+            var component = party.Get<PartyComponent>();
+            component.PartyIndex = 2;
+            party.Save(component);
 
             var update = party.GetUpdatePacket(_player);
 
@@ -185,7 +191,7 @@ namespace Tests
             var deserialize = Serialization.ToPacket<EntityUpdatePacket>(serialize);
 
             Assert.IsTrue(deserialize.SyncedComponents.Any(c => c is PartyComponent));
-            Assert.IsTrue(((PartyComponent)deserialize.SyncedComponents.First(c => c is PartyComponent)).PartyIndex == 2);
+            Assert.AreEqual(2, ((PartyComponent)deserialize.SyncedComponents.First(c => c is PartyComponent)).PartyIndex);
 
         }
     }

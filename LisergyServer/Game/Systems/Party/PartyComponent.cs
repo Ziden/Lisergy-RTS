@@ -5,16 +5,13 @@ namespace Game.Systems.Party
 {
     [SyncedComponent]
     [Serializable]
-    public class PartyComponent : IComponent
+    public struct PartyComponent : IComponent
     {
         /// <summary>
         /// Party index on player party array
         /// </summary>
         public byte PartyIndex;
 
-        public override string ToString()
-        {
-            return $"<PartyComponent Index={PartyIndex}>";
-        }
+        public override string ToString() => $"<PartyComponent Index={PartyIndex}>";
     }
 }

@@ -11,7 +11,7 @@ namespace Game.Systems.Battler
 {
     public class BattleGroupLogic : BaseEntityLogic<BattleGroupComponent>
     {
-        public bool IsBattling => !Component.BattleID.IsZero();
+        public bool IsBattling => !Entity.Get<BattleGroupComponent>().BattleID.IsZero();
 
         public bool IsDestroyed => GetUnits().All(u => u == null || u.HP <= 0);
 
@@ -19,7 +19,8 @@ namespace Game.Systems.Battler
 
         public void UpdateUnits(List<Unit> newUnits)
         {
-            var units = Component.Units;
+            var component = Entity.Get<BattleGroupComponent>();
+            var units = component.Units;
             for (var x = 0; x < Math.Max(newUnits.Count, units.Count()); x++)
             {
                 if (x >= units.Count)
@@ -44,11 +45,12 @@ namespace Game.Systems.Battler
 
         public IEnumerable<Unit> GetValidUnits() => GetUnits().Where(u => u != null);
 
-        public IReadOnlyList<Unit> GetUnits() => Component.Units;
+        public IReadOnlyList<Unit> GetUnits() => Entity.Get<BattleGroupComponent>().Units;
 
         public virtual void ReplaceUnit(Unit oldUnit, Unit newUnit, int preferAtIndex = -1)
         {
-            var units = Component.Units;
+            var component = Entity.Get<BattleGroupComponent>();
+            var units = component.Units;
             if (preferAtIndex == -1)
             {
                 preferAtIndex = units.IndexOf(oldUnit);
@@ -64,21 +66,18 @@ namespace Game.Systems.Battler
 
         public virtual void AddUnit(Unit u, int preferAtIndex = -1)
         {
-            var units = Component.Units;
-            if (preferAtIndex >= 0)
-            {
-                units.Insert(preferAtIndex, u);
-            }
-            else
-            {
-                units.Add(u);
-            }
-            Entity.Components.CallEvent(new UnitAddToGroupEvent(Entity, Component, u));
+            var component = Entity.Get<BattleGroupComponent>();
+            var units = component.Units;
+            if (preferAtIndex >= 0) units.Insert(preferAtIndex, u);
+            else units.Add(u);
+            Entity.Components.Save(component);
+            Entity.Components.CallEvent(new UnitAddToGroupEvent(Entity, component, u));
         }
 
         public virtual void RemoveUnit(Unit u, int preferAtIndex = -1)
         {
-            var units = Component.Units;
+            var component = Entity.Get<BattleGroupComponent>();
+            var units = component.Units;
             if (!units.Contains(u))
             {
                 throw new Exception($"Trying to remove unit {u} to entity {Entity} but unit was not there");
@@ -95,15 +94,27 @@ namespace Game.Systems.Battler
             {
                 units.Remove(u);
             }
-            Entity.Components.CallEvent(new UnitRemovedEvent(Entity, Component, u));
+            Entity.Components.Save(component);
+            Entity.Components.CallEvent(new UnitRemovedEvent(Entity, component, u));
+        }
+
+        public void ClearBattleId()
+        {
+            var attackerComponent = Entity.Get<BattleGroupComponent>();
+            attackerComponent.BattleID = GameId.ZERO;
+            Entity.Components.Save(attackerComponent);
         }
 
         public GameId StartBattle(IEntity defender)
         {
             var battleID = Guid.NewGuid();
             var battleEvent = new BattleTriggeredEvent(battleID, Entity, defender);
-            Component.BattleID = battleID;
-            defender.Get<BattleGroupComponent>().BattleID = battleID;
+            var attackerComponent = Entity.Get<BattleGroupComponent>();
+            attackerComponent.BattleID = battleID;
+            Entity.Components.Save(attackerComponent);
+            var defenderComponent = defender.Get<BattleGroupComponent>();
+            defenderComponent.BattleID = battleID;
+            defender.Components.Save(defenderComponent);
             Game.Events.Call(battleEvent);
             return battleID;
         }

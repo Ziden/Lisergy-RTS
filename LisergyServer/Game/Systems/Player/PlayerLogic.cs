@@ -16,14 +16,18 @@ namespace Game.Systems.Player
         public Unit RecruitUnit(ushort unitSpecId)
         {
             var unit = new Unit(Game.Specs.Units[unitSpecId]);
-            Component.Units.Add(unit);
+
+            Entity.Get<PlayerDataComponent>().Units.Add(unit);
             Log.Debug($"{Entity.EntityId} recruited {unitSpecId}");
             return unit;
         }
 
         public PartyEntity FindParty(Unit u)
         {
-            foreach (PartyEntity p in Component.Parties) if (p.Get<BattleGroupComponent>().Units.Contains(u)) return p;
+            foreach (PartyEntity p in GetComponent().Parties)
+            {
+                if (p.Get<BattleGroupComponent>().Units.Contains(u)) return p;
+            }   
             return null;
         }
 
@@ -34,7 +38,7 @@ namespace Game.Systems.Player
             Build(castleID, t);
             ushort initialUnit = Game.Specs.InitialUnit.UnitSpecID;
             var unit = RecruitUnit(initialUnit);
-            var party = Component.Parties[0];
+            var party = GetComponent().Parties[0];
             PlaceUnitInParty(unit, party);
             Game.Systems.Map.GetLogic(party).SetPosition(t.GetNeighbor(Direction.EAST));
             Log.Debug($"Placed new player in {t}");
@@ -43,7 +47,7 @@ namespace Game.Systems.Player
 
         public void RecordHeader(BattleHeader header)
         {
-            Component.BattleHeaders[header.BattleID] = header;
+            GetComponent().BattleHeaders[header.BattleID] = header;
         }
 
         public void PlaceUnitInParty(Unit u, PartyEntity newParty)
@@ -61,7 +65,7 @@ namespace Game.Systems.Player
         {
             var building = Game.Entities.CreateEntity<PlayerBuildingEntity>(Game.Players.GetPlayer(Entity.OwnerID));
             building.BuildFromSpec(Game.Specs.Buildings[buildingSpecId]);
-            Component.Buildings.Add(building);
+            GetComponent().Buildings.Add(building);
             Game.Logic.Map(building).SetPosition(t);
             Log.Debug($"Player {Entity.OwnerID} built {buildingSpecId}");
         }

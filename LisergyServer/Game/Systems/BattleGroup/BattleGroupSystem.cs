@@ -18,7 +18,7 @@ namespace Game.Systems.Battler
             Game.Network.On<BattleResultPacket>(OnBattleResult);
         }
 
-        private void OnOffensiveAction(IEntity attacker, BattleGroupComponent atkGroup, OffensiveActionEvent ev)
+        private void OnOffensiveAction(IEntity attacker, ref BattleGroupComponent atkGroup, OffensiveActionEvent ev)
         {
             if(GetLogic(ev.Attacker).IsBattling || GetLogic(ev.Defender).IsBattling)
             {
@@ -35,6 +35,7 @@ namespace Game.Systems.Battler
             var defenderEntity = packet.Header.Defender.Entity;
 
             var finishEvent = new BattleFinishedEvent(packet.Header, packet.Turns);
+
             if (attackerEntity is IEntity e) e.Components.CallEvent(finishEvent);
             if (defenderEntity is IEntity e2) e2.Components.CallEvent(finishEvent);
 
@@ -57,10 +58,11 @@ namespace Game.Systems.Battler
             }
         }
 
-        private void OnBattleFinish(IEntity e, BattleGroupComponent component, BattleFinishedEvent ev)
+        private void OnBattleFinish(IEntity e, ref BattleGroupComponent component, BattleFinishedEvent ev)
         {
-            component.BattleID = GameId.ZERO;
-            if (GameLogic.EntityLogic(e).BattleGroup.IsDestroyed)
+            var logic = GetLogic(e);
+            logic.ClearBattleId();
+            if (logic.IsDestroyed)
             {
                 e.Components.CallEvent(new GroupDeadEvent()
                 {

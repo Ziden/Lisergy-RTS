@@ -26,7 +26,7 @@ namespace Game.Systems.Player
         {
             Game = game;
             Components = new ComponentSet(this, this);
-            Components.Add<PlayerDataComponent>();
+            Components.Add(new PlayerDataComponent());
             _playerId = Guid.NewGuid();
             Data.Parties = new PartyEntity[MAX_PARTIES]
             {
@@ -35,7 +35,14 @@ namespace Game.Systems.Player
                 game.Entities.CreateEntity<PartyEntity>(this),  
                 game.Entities.CreateEntity<PartyEntity>(this)
             };
-            for (byte x = 0; x < MAX_PARTIES; x++) Data.Parties[x].Get<PartyComponent>().PartyIndex = x;
+            for (byte x = 0; x < MAX_PARTIES; x++)
+            {
+                var entity = Data.Parties[x];
+                var party = entity.Get<PartyComponent>();
+                party.PartyIndex = x;
+                entity.Save(party);
+            }
+            
         }
 
         public PartyEntity GetParty(byte partyIndex) => Data.Parties[partyIndex];

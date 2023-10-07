@@ -133,7 +133,9 @@ namespace Tests
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
-            _party.Get<BattleGroupComponent>().BattleID = Guid.NewGuid();
+            var component = _party.Get<BattleGroupComponent>();
+            component.BattleID = Guid.NewGuid();
+            _party.Save(component);
 
             _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();

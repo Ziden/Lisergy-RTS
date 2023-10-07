@@ -7,7 +7,6 @@ namespace Game
 {
     public static class UnmanagedMemory
     {
-
         private static readonly Dictionary<IntPtr, int> _allocs = new Dictionary<IntPtr, int>();
 
         private static Dictionary<IntPtr, int> _available = new Dictionary<IntPtr, int>();

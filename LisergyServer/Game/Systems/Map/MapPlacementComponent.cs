@@ -6,7 +6,7 @@ namespace Game.Systems.Map
 {
     [Serializable]
     [SyncedComponent]
-    public class MapPlacementComponent : IComponent
+    public struct MapPlacementComponent : IComponent
     {
         public Position Position;
 

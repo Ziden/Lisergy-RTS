@@ -6,15 +6,13 @@ namespace Game.ECS
     {
         public IEntity Entity { get; set; }
 
-        public T Component { get; }
+        public T GetComponent();
     }
 
     public class BaseEntityLogic<ComponentType> : IComponentLogic<ComponentType> where ComponentType : IComponent
     {
         protected IGame Game => Entity.Game;
         public IEntity Entity { get; set; }
-        public ComponentType Component => Entity.Get<ComponentType>();
-
-        public void FinishLogic() { }
+        public ComponentType GetComponent() => Entity.Get<ComponentType>();
     }
 }

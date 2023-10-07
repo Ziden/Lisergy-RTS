@@ -5,7 +5,7 @@ namespace Game.Systems.Building
 {
     [Serializable]
     [SyncedComponent]
-    public class PlayerBuildingComponent : IComponent
+    public struct PlayerBuildingComponent : IComponent
     {
         public ushort SpecId;
     }

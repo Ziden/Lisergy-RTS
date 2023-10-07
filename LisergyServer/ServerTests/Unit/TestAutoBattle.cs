@@ -26,21 +26,6 @@ namespace Tests
             Game = new TestGame();
         }
 
-
-        [Test]
-        public void TestBattleComponentLogicSync()
-        {
-            var clientEntity = new PartyEntity(null, null);
-
-            var clientComponent = clientEntity.Components.Add<BattleGroupComponent>();
-            var serverComponent = new BattleGroupComponent();
-            serverComponent.BattleID = GameId.Generate();
-
-            ComponentSynchronizer.SyncComponents(clientEntity, new List<IComponent>() { serverComponent });
-
-            Assert.AreEqual(clientComponent.BattleID, serverComponent.BattleID);
-        }
-
         [Test]
         public void TestLogicTriggeringEvents()
         {

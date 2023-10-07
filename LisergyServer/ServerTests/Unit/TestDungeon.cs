@@ -1,10 +1,8 @@
 using Game;
 using Game.Battle;
 using Game.Events.ServerEvents;
-using Game.Network;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
-using Game.Scheduler;
 using Game.Systems.Battler;
 using Game.Systems.Dungeon;
 using Game.Systems.Movement;
@@ -69,8 +67,10 @@ namespace Tests
             var dungeonTile = partyTile.GetNeighbor(Direction.EAST);
 
             _game.Logic.Map(_dungeon).SetPosition(dungeonTile);
-  
-            party.Components.Get<BattleGroupComponent>().Units.First().Atk = 255;
+
+            var component = party.Components.Get<BattleGroupComponent>();
+            component.Units.First().Atk = 255;
+            party.Save(component);
 
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
             var course = party.Course;
@@ -118,7 +118,14 @@ namespace Tests
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
 
-            party.Components.Get<BattleGroupComponent>().Units.First().Atk = 25; // make sure it wins !
+            var component = party.Components.Get<BattleGroupComponent>();
+            component.Units.First().Atk = 25; // make sure it wins !
+            party.Save(component);
+
+            var component2 = _dungeon.Components.Get<BattleGroupComponent>();
+            component2.Units.First().SpecId = 666;
+            _dungeon.Save(component2);
+
             _game.Logic.Map(_dungeon).SetPosition(dungeonTile);
 
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
@@ -133,6 +140,7 @@ namespace Tests
             Assert.AreEqual(dungeonTile.Components.Get<TileHabitants>().Building, null);
             Assert.AreEqual(_player.ReceivedPacketsOfType<EntityDestroyPacket>().Count, 1);
         }
+
 
         [Test]
         public void TestRevealingDungeonReceivesPacket()

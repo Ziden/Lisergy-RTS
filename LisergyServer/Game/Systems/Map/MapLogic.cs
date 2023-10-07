@@ -69,6 +69,7 @@ namespace Game.Systems.Map
                     Game.Network.SendToPlayer(new EntityDestroyPacket(Entity), previousTile.Components.Get<TileVisibility>().PlayersViewing.ToArray());
                 }
             }
+            Entity.Components.Save(placement);
             Log.Info($"Moved {Entity} to {component.Tile}");
         }
     }

@@ -8,7 +8,7 @@ namespace Game.Systems.Dungeon
     [Serializable]
     [SyncedComponent]
     [RequiresComponent(typeof(BattleGroupComponent))]
-    public class DungeonComponent : IComponent
+    public struct DungeonComponent : IComponent
     {
         public ushort SpecId;
 

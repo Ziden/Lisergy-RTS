@@ -37,7 +37,8 @@ namespace Game.Services
 
         public override void Tick()
         {
-            _game.Events.Call(new BattleFinishedTaskEvent() { ResultPacket = new BattleResultPacket(Battle.ID, Battle.AutoRun.RunAllRounds()) });
+            var result = Battle.AutoRun.RunAllRounds();
+            _game.Events.Call(new BattleFinishedTaskEvent() { ResultPacket = new BattleResultPacket(Battle.ID, result) });
         }
 
         public override string ToString() => $"<BattleTask {ID} {Battle}>";

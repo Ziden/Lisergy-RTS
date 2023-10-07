@@ -20,12 +20,17 @@ namespace Game.Systems.Building
             Components.Add(new BuildingComponent());
             Components.Add(new PlayerBuildingComponent());
             Components.Add(new EntityVisionComponent());
+            Components.Add(new BuildingComponent());
         }
 
         public void BuildFromSpec(BuildingSpec spec)
         {
-            Components.Get<PlayerBuildingComponent>().SpecId = spec.Id;
-            Components.Get<EntityVisionComponent>().LineOfSight = spec.LOS;
+            var building = Components.Get<PlayerBuildingComponent>();
+            building.SpecId = spec.Id;
+            Components.Save(building);
+            var vision = Components.Get<EntityVisionComponent>();
+            vision.LineOfSight = spec.LOS;
+            Components.Save(vision);
         }
 
         public override string ToString()

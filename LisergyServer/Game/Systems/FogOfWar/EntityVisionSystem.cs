@@ -18,19 +18,20 @@ namespace Game.Systems.FogOfWar
             EntityEvents.On<UnitRemovedEvent>(OnUnitRemoved);
         }
 
-        private void OnUnitAdded(IEntity e, EntityVisionComponent component, UnitAddToGroupEvent ev)
+        private void OnUnitAdded(IEntity e, ref EntityVisionComponent component, UnitAddToGroupEvent ev)
         {
-         
             component.LineOfSight = ev.Units.Max(u => Game.Specs.Units[u.SpecId].LOS);
+            e.Components.Save(component);
         }
 
-        private void OnUnitRemoved(IEntity e, EntityVisionComponent component, UnitRemovedEvent ev)
+        private void OnUnitRemoved(IEntity e, ref EntityVisionComponent component, UnitRemovedEvent ev)
         {
             if (ev.Group.Units.Count == 0) component.LineOfSight = 0;
             else component.LineOfSight = ev.Group.Units.Max(u => Game.Specs.Units[u.SpecId].LOS);
+            e.Components.Save(component);
         }
 
-        private void OnEntityStepOnTile(IEntity e, EntityVisionComponent c, EntityMoveInEvent ev)
+        private void OnEntityStepOnTile(IEntity e, ref EntityVisionComponent c, EntityMoveInEvent ev)
         {
             UpdateVisionRange(e, ev.FromTile, ev.ToTile);
         }

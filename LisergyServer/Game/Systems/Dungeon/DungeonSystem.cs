@@ -14,7 +14,7 @@ namespace Game.Systems.Dungeon
             EntityEvents.On<GroupDeadEvent>(OnGroupDead);
         }
 
-        private void OnGroupDead(IEntity e, DungeonComponent component, GroupDeadEvent ev)
+        private void OnGroupDead(IEntity e, ref DungeonComponent component, GroupDeadEvent ev)
         {
             GameLogic.Map(e).SetPosition(null);
         }

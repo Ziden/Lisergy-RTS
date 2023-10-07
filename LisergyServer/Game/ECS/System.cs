@@ -11,13 +11,12 @@ namespace Game.ECS
 
     public abstract class GameSystem<ComponentType> : IGameSystem where ComponentType : IComponent
     {
-        public SystemEventBus<ComponentType> EntityEvents = new SystemEventBus<ComponentType>();
+        protected SystemEventBus<ComponentType> EntityEvents = new SystemEventBus<ComponentType>();
         public IGame Game { get; private set; }
         public ISystems Systems => Game.Systems;
         public IGameLogic GameLogic => Game.Logic;
         public IGameWorld World => Game.GameWorld;
         public IGamePlayers Players => World.Players;
-
         public GameSystem(LisergyGame game) {
             Game = game;
         }
