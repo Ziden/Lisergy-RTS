@@ -1,4 +1,4 @@
-﻿using Game.Events;
+﻿using Game.Network;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Map;
@@ -11,6 +11,8 @@ namespace Game.Systems.Dungeon
     [Serializable]
     public class DungeonEntity : BaseEntity
     {
+        public override EntityType EntityType => EntityType.Dungeon;
+
         public DungeonEntity(IGame game) : base(game, null)
         {
             Components.Add(new MapPositionComponent());

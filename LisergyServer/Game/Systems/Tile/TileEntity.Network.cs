@@ -1,5 +1,4 @@
 ﻿using Game.ECS;
-using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Network;
 using Game.Systems.Player;
@@ -7,7 +6,7 @@ using System;
 
 namespace Game.Tile
 {
-    public unsafe partial class TileEntity : IEntity, IDeltaTrackable, IDeltaUpdateable
+    public unsafe partial class TileEntity : IEntity, IEntityDeltaTrackable, IDeltaUpdateable
     {
         private DeltaFlags _flags;
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
@@ -17,7 +16,7 @@ namespace Game.Tile
         {
             if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
             {
-                trigger.Send(GetUpdatePacket(trigger));
+                Game.Network.SendToPlayer(GetUpdatePacket(trigger), trigger);
             }
         }
     }

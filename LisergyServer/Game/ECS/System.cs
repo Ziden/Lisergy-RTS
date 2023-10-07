@@ -44,13 +44,13 @@ namespace Game.ECS
         /// <summary>
         /// Gets given logic for given entity
         /// </summary>
-        public LogicType GetEntityLogic(IEntity entity)
+        public LogicType GetLogic(IEntity entity)
         {
             if(!entity.Components.Has<ComponentType>())
             {
                 throw new Exception($"Entity {entity} Trying to use logic {typeof(LogicType).Name} without having component {typeof(ComponentType).Name}");
             }
-            _logic.Entity = entity;
+            _logic.Entity = entity; // TODO: Maybe do a logic pool for transactional effects ?
             return _logic;
         }
     }

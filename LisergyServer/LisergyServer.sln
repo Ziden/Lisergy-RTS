@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerTests", "ServerTests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameDataTest", "GameDataTest\GameDataTest.csproj", "{C243FA12-2F86-4682-8FB9-BFE65D0C3337}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapServer", "MapServer\MapServer.csproj", "{AB9A7243-AF62-4AD6-983E-4D51A392B423}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serializer", "Serializer\Serializer.csproj", "{DFA11E56-22C3-4377-B7B7-32F8555874F0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameServices", "GameServices\GameServices.csproj", "{DD99D62B-9B5B-46A0-BB56-37668154E1DE}"
@@ -47,10 +45,6 @@ Global
 		{C243FA12-2F86-4682-8FB9-BFE65D0C3337}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C243FA12-2F86-4682-8FB9-BFE65D0C3337}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C243FA12-2F86-4682-8FB9-BFE65D0C3337}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB9A7243-AF62-4AD6-983E-4D51A392B423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB9A7243-AF62-4AD6-983E-4D51A392B423}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB9A7243-AF62-4AD6-983E-4D51A392B423}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB9A7243-AF62-4AD6-983E-4D51A392B423}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DFA11E56-22C3-4377-B7B7-32F8555874F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFA11E56-22C3-4377-B7B7-32F8555874F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFA11E56-22C3-4377-B7B7-32F8555874F0}.Release|Any CPU.ActiveCfg = Release|Any CPU

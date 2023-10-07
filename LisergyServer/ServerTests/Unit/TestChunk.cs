@@ -15,7 +15,7 @@ namespace Tests
             game = new TestGame();
             var player = game.GetTestPlayer();
 
-            var events = game.ReceivedEvents
+            var events = game.SentPackets
                 .Where(e => e is TileUpdatePacket)
                 .Select(e => (TileUpdatePacket)e)
                 .ToList();

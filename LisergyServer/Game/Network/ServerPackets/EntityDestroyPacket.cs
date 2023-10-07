@@ -1,6 +1,5 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
-using Game.Events;
 using System;
 
 namespace Game.Network.ServerPackets

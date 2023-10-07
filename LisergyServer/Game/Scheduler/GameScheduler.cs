@@ -36,7 +36,7 @@ namespace Game.Scheduler
             {
                 task.Tick();
             }
-            DeltaTracker.SendDeltaPackets(task.Creator);  // TODO: Maybe not best place
+            task.Game.Entities.DeltaCompression.SendDeltaPackets(task.Creator);  // TODO: Maybe not best place
             _ = Queue.Remove(task);
             _ = _tasks.Remove(task.ID);
         }
@@ -66,7 +66,7 @@ namespace Game.Scheduler
             _ = Queue.Remove(task);
             _ = _tasks.Remove(task.ID);
             task.Tick();
-            DeltaTracker.SendDeltaPackets(task.Creator); // TODO: Maybe not best place
+            task.Game.Entities.DeltaCompression.SendDeltaPackets(task.Creator); // TODO: Maybe not best place
             if (task.Repeat)
             {
                 task.Start = Now;

@@ -1,5 +1,4 @@
-﻿using Game.Events;
-using Game.Events.ServerEvents;
+﻿using Game.Events.ServerEvents;
 using Game.Network.ServerPackets;
 using Game.Network;
 using System;
@@ -37,8 +36,10 @@ namespace Game
             if (DeltaFlags.HasFlag(DeltaFlag.EXISTENCE))
                 OnExistenceChanged();
             else if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
-                trigger.Send(GetUpdatePacket(trigger));
-            if (DeltaFlags.HasFlag(DeltaFlag.POSITION))
+            {
+                Game.Network.SendToPlayer(GetUpdatePacket(trigger), trigger);
+            }
+            if (DeltaFlags.HasFlag(DeltaFlag.COMPONENTS))
                 OnPositionChanged();
         }
 
@@ -48,7 +49,7 @@ namespace Game
             if (c.Tile == null) return; // was removed
             foreach (var playerViewing in c.Tile.PlayersViewing)
             {
-                playerViewing.Send(this.GetUpdatePacket(playerViewing));
+                Game.Network.SendToPlayer(this.GetUpdatePacket(playerViewing), playerViewing);
             }
         }
 
@@ -69,8 +70,7 @@ namespace Game
                     allViewers.UnionWith(newTile.Components.Get<TileVisibility>().PlayersViewing);
 
                 var movePacket = new EntityMovePacket(this, movementComponent, newTile);
-                foreach (var viewer in allViewers)
-                    viewer.Send(movePacket);
+                Game.Network.SendToPlayer(movePacket, allViewers.ToArray());
             }
 
             var newPlayersViewing = new HashSet<PlayerEntity>(newTile.Components.Get<TileVisibility>().PlayersViewing);
@@ -78,7 +78,7 @@ namespace Game
                 newPlayersViewing.ExceptWith(previousTile.Components.Get<TileVisibility>().PlayersViewing);
 
             foreach (var viewer in newPlayersViewing)
-                viewer.Send(this.GetUpdatePacket(viewer));
+                Game.Network.SendToPlayer(this.GetUpdatePacket(viewer), viewer);
         }
     }
 }

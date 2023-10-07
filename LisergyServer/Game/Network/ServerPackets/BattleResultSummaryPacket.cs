@@ -1,5 +1,6 @@
 ﻿using Game.Battle;
 using Game.DataTypes;
+using Game.Network;
 using System;
 
 namespace Game.Events
@@ -10,9 +11,9 @@ namespace Game.Events
     [Serializable]
     public class BattleResultSummaryPacket : ServerPacket
     {
-        public CompleteBattleHeader BattleHeader;
+        public BattleHeader BattleHeader;
 
-        public BattleResultSummaryPacket(CompleteBattleHeader header)
+        public BattleResultSummaryPacket(BattleHeader header)
         {
             BattleHeader = header;
         }

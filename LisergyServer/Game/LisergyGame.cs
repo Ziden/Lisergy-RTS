@@ -20,7 +20,7 @@ namespace Game
         public IGameWorld GameWorld { get; }
         public ISystems Systems { get; }
         public IGameLogic Logic { get; }
-        public EventBus<GameEvent> Events { get; }
+        public EventBus<BaseEvent> Events { get; }
     }
 
     public class LisergyGame : IGame
@@ -35,7 +35,7 @@ namespace Game
         public IGameLogic Logic { get; private set; }
         public IEntityLogic EntityLogic(IEntity e) => Logic.EntityLogic(e);
         public IGameNetwork Network { get; private set; }
-        public EventBus<GameEvent> Events { get; private set; } = new EventBus<GameEvent>();
+        public EventBus<BaseEvent> Events { get; private set; } = new EventBus<BaseEvent>();
 
         public LisergyGame(GameSpec specs)
         {
@@ -44,21 +44,13 @@ namespace Game
 
         public void SetWorld(GameWorld world)
         {
-            world.Game = this;
-            World = world;
-            Network = new GameNetwork();
+            Network = new GameNetwork(this);
             Entities = new GameEntities(this);
             Systems = new GameSystems(this);
             Logic = new GameLogic(Systems);
             Scheduler = new GameScheduler();
-        }
-
-        public void ReceiveInput(PlayerEntity sender, byte[] input)
-        {
-            BaseEvent ev = Serialization.ToEventRaw(input);
-            ev.Sender = sender;
-            Network.IncomingPackets.Call(ev);
-            DeltaTracker.SendDeltaPackets(sender);
+            world.Game = this;
+            World = world;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Game.DataTypes;
-using Game.Events;
 using System;
 
 namespace Game.Network.ClientPackets
@@ -9,7 +8,7 @@ namespace Game.Network.ClientPackets
     /// simulate the battle on client side to display it
     /// </summary>
     [Serializable]
-    public class BattleLogRequestPacket : ClientPacket
+    public class BattleLogRequestPacket : InputPacket
     {
         public GameId BattleId;
     }

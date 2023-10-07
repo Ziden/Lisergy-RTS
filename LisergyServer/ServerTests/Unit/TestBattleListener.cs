@@ -1,8 +1,6 @@
-using Game;
 using Game.Battle;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
-using Game.Scheduler;
 using Game.Systems.Battler;
 using Game.Systems.Dungeon;
 using Game.Systems.Movement;
@@ -33,32 +31,32 @@ namespace Tests
             _party = _player.GetParty(0);
             _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
-            _game.Systems.Map.GetEntityLogic(_dungeon).SetPosition(_game.World.GetTile(8, 8));
+            _game.Systems.Map.GetLogic(_dungeon).SetPosition(_game.World.GetTile(8, 8));
         }
 
         private TurnBattle SetupBattle()
         {
             var party = _player.GetParty(0);
-            var partyTile = _game.Systems.Map.GetEntityLogic(party).GetPosition();
+            var partyTile = _game.Systems.Map.GetLogic(party).GetPosition();
             var dungeonTile = partyTile.GetNeighbor(Direction.EAST);
-            _game.Systems.Map.GetEntityLogic(_dungeon).SetPosition(dungeonTile);
+            _game.Systems.Map.GetLogic(_dungeon).SetPosition(dungeonTile);
             party.Get<BattleGroupComponent>().Units.First().Atk = 255;
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
             var course = party.Course;
             Assert.AreEqual(0, _player.Data.BattleHeaders.Count());
             course.Tick();
             course.Tick();
-            return _game.BattleService.GetBattle(party.Get<BattleGroupComponent>().BattleID);
+            return _game.BattleService.GetRunningBattle(party.Get<BattleGroupComponent>().BattleID);
         }
 
         [Test]
         public void TestBattleTrack()
         {
             var battle = SetupBattle();
-            battle.Task.Tick();
+            _game.BattleService.BattleTasks[battle.ID].Tick();
 
             var attackerPlayer = _game.World.Players.GetPlayer(battle.Attacker.OwnerID);
-            BattleHistory.TryGetLog(battle.ID, out var log);
+            _game.BattleService.AllBattles.TryGetValue(battle.ID, out var log);
 
 
             Assert.That(attackerPlayer.Data.BattleHeaders.ContainsKey(battle.ID));
@@ -69,11 +67,11 @@ namespace Tests
         public void TestRequestinBattleLog()
         {
             var battle = SetupBattle();
-            battle.Task.Tick();
+            _game.BattleService.BattleTasks[battle.ID].Tick();
 
             _game.HandleClientEvent(_player, new BattleLogRequestPacket() { BattleId = battle.ID });
 
-            var result = _player.ReceivedEventsOfType<BattleLogPacket>().FirstOrDefault();
+            var result = _player.ReceivedPacketsOfType<BattleLogPacket>().FirstOrDefault();
 
             Assert.NotNull(result);
             Assert.AreEqual(result.Turns.Count(), battle.Result.Turns.Count());

@@ -9,7 +9,7 @@ using Game.Systems.MapPosition;
 namespace Game
 {
     [Serializable] // TODO: Make it not serializable
-    public partial class BaseEntity : IEntity, IDeltaTrackable
+    public abstract partial class BaseEntity : IEntity
     {
         public GameId EntityId { get; private set; }
         public GameId OwnerID { get; private set; }
@@ -30,6 +30,8 @@ namespace Game
         public TileEntity Tile => Get<MapReferenceComponent>().Tile;
 
         public IEntityLogic EntityLogic => Game.Logic.EntityLogic(this);
+
+        public abstract EntityType EntityType { get; }
 
         public T Get<T>() where T : IComponent => Components.Get<T>();
     }

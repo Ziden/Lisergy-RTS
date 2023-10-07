@@ -1,23 +1,28 @@
-﻿using Game.ECS;
+﻿using Game.DataTypes;
+using Game.ECS;
+using Game.Network;
 using System;
-using System.Collections.Generic;
 
 namespace Game.Events.ServerEvents
 {
     [Serializable]
     public class EntityUpdatePacket : ServerPacket
     {
-        public BaseEntity Entity;
+        public EntityType Type;
+        public GameId EntityId;
+        public GameId OwnerId;
         public IComponent [] SyncedComponents;
 
         public EntityUpdatePacket(BaseEntity entity)
         {
-            Entity = entity;
+            Type = entity.EntityType;
+            EntityId = entity.EntityId;
+            OwnerId = entity.OwnerID;
         }
 
         public override string ToString()
         {
-            return $"<EntityUpdate {Entity}>";
+            return $"<EntityUpdate {EntityId}>";
         }
     }
 }

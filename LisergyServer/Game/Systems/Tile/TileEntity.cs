@@ -15,6 +15,8 @@ namespace Game.Tile
         private Chunk _chunk;
         private GameId _id;
         public ComponentSet _components { get; private set; }
+        public EntityType EntityType => EntityType.Tile;
+
         public TileEntity(Chunk c, in TileMapData* tileData, in int x, in int y)
         {
             _chunk = c;

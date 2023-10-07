@@ -3,6 +3,7 @@ using Game.Battle.BattleActions;
 using Game.Battle.BattleEvents;
 using Game.ECS;
 using Game.Events;
+using Game.Network;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Dungeon;
@@ -64,7 +65,7 @@ namespace Game
         {
             foreach (Type type in typeof(BaseEvent).Assembly.GetTypes())
             {
-                var validEvent = typeof(ClientPacket).IsAssignableFrom(type) && type != typeof(ClientPacket);
+                var validEvent = typeof(InputPacket).IsAssignableFrom(type) && type != typeof(InputPacket);
                 validEvent = validEvent || typeof(ServerPacket).IsAssignableFrom(type) && type != typeof(ServerPacket);
                 validEvent = validEvent || typeof(IComponent).IsAssignableFrom(type) && type != typeof(IComponent);
                 if (validEvent && type.IsSerializable && !type.IsInterface)
@@ -82,17 +83,30 @@ namespace Game
             }
         }
 
-        public static BaseEvent ToEventRaw(byte[] message)
+     
+        public static BasePacket ToPacketRaw(byte[] message)
         {
             using (var stream = new MemoryStream(message))
             {
-                BaseEvent ev;
-                ev = (BaseEvent)Serializer.Deserialize(stream);
+                BasePacket ev;
+                ev = (BasePacket)Serializer.Deserialize(stream);
                 return ev;
             }
         }
 
-        public static byte[] FromEventRaw(BaseEvent ev)
+        public static T ToPacketRaw<T>(byte[] message)
+        {
+            using (var stream = new MemoryStream(message))
+            {
+                T ev;
+                ev = (T)Serializer.Deserialize(stream);
+                return ev;
+            }
+        }
+
+
+
+        public static byte[] FromPacketRaw(BasePacket ev)
         {
             using (var stream = new MemoryStream())
             {
@@ -100,6 +114,7 @@ namespace Game
                 return stream.ToArray();
             }
         }
+
 
         public static byte[] FromAnyType<T>(T o)
         {
@@ -122,16 +137,15 @@ namespace Game
         }
 
 
-        public static T ToEvent<T>(byte[] message) where T : BaseEvent
+        public static T ToPacket<T>(byte[] message) where T : BasePacket
         {
-            return (T)ToEventRaw(message);
+            return (T)ToPacketRaw(message);
         }
 
-        public static byte[] FromEvent<T>(T ev) where T : BaseEvent
+        public static byte[] FromPacket<T>(T ev) where T : BasePacket
         {
-            return FromEventRaw(ev);
+            return FromPacketRaw(ev);
 
         }
-
     }
 }

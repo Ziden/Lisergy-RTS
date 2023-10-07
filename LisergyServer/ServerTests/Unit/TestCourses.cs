@@ -82,8 +82,8 @@ namespace Tests
             SendMoveRequest();
             _game.GameScheduler.Tick(_game.GameScheduler.Now + _party.Course.Delay);
 
-            var moveEvents = _player.ReceivedEventsOfType<EntityMovePacket>();
-            var tileDiscovery = _player.ReceivedEventsOfType<TileUpdatePacket>();
+            var moveEvents = _player.ReceivedPacketsOfType<EntityMovePacket>();
+            var tileDiscovery = _player.ReceivedPacketsOfType<TileUpdatePacket>();
             // should have received movement events
             Assert.AreEqual(1, moveEvents.Count);
             // should have explored some tiles
@@ -171,7 +171,7 @@ namespace Tests
             _game.GameScheduler.Tick(date);
             Assert.AreEqual(next3, _party.Tile);
 
-            var moveEvents = _player.ReceivedEventsOfType<EntityMovePacket>();
+            var moveEvents = _player.ReceivedPacketsOfType<EntityMovePacket>();
             Assert.AreEqual(3, moveEvents.Count);
         }
     }

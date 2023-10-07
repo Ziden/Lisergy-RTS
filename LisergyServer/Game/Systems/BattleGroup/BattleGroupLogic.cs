@@ -1,13 +1,15 @@
 ﻿using Game.Battle;
+using Game.DataTypes;
 using Game.ECS;
 using Game.Events.GameEvents;
+using Game.Network.ServerPackets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Game.Systems.Battler
 {
-    public class BattleGroupLogic : BaseComponentLogic<BattleGroupComponent>
+    public class BattleGroupLogic : BaseEntityLogic<BattleGroupComponent>
     {
         public bool IsBattling => !Component.BattleID.IsZero();
 
@@ -94,6 +96,16 @@ namespace Game.Systems.Battler
                 units.Remove(u);
             }
             Entity.Components.CallEvent(new UnitRemovedEvent(Entity, Component, u));
+        }
+
+        public GameId StartBattle(IEntity defender)
+        {
+            var battleID = Guid.NewGuid();
+            var battleEvent = new BattleTriggeredEvent(battleID, Entity, defender);
+            Component.BattleID = battleID;
+            defender.Get<BattleGroupComponent>().BattleID = battleID;
+            Game.Events.Call(battleEvent);
+            return battleID;
         }
 
         public BattleTeam GetBattleTeam() => new BattleTeam(Entity, GetUnits().ToArray());

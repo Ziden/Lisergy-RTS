@@ -22,11 +22,11 @@ namespace Game
     /// </summary>
     public class EntityLogic : IEntityLogic
     {
-        public MapLogic Map => _systems.Map.GetEntityLogic(_entity);
-        public BattleGroupLogic BattleGroup => _systems.BattleGroup.GetEntityLogic(_entity);
+        public MapLogic Map => _systems.Map.GetLogic(_entity);
+        public BattleGroupLogic BattleGroup => _systems.BattleGroup.GetLogic(_entity);
 
-        public PlayerLogic Player => _systems.Players.GetEntityLogic(_entity);
-        public EntityMovementLogic Movement => _systems.EntityMovement.GetEntityLogic(_entity);
+        public PlayerLogic Player => _systems.Players.GetLogic(_entity);
+        public EntityMovementLogic Movement => _systems.EntityMovement.GetLogic(_entity);
 
         private ISystems _systems;
         private IEntity _entity;

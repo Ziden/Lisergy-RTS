@@ -1,4 +1,7 @@
-﻿using Game.ECS;
+﻿using Game.Battle;
+using Game.DataTypes;
+using Game.ECS;
+using Game.Network.ServerPackets;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Party;
@@ -8,7 +11,7 @@ using Game.World;
 
 namespace Game.Systems.Player
 {
-    public class PlayerLogic : BaseComponentLogic<PlayerDataComponent>
+    public class PlayerLogic : BaseEntityLogic<PlayerDataComponent>
     {
         public Unit RecruitUnit(ushort unitSpecId)
         {
@@ -33,9 +36,14 @@ namespace Game.Systems.Player
             var unit = RecruitUnit(initialUnit);
             var party = Component.Parties[0];
             PlaceUnitInParty(unit, party);
-            Game.Systems.Map.GetEntityLogic(party).SetPosition(t.GetNeighbor(Direction.EAST));
+            Game.Systems.Map.GetLogic(party).SetPosition(t.GetNeighbor(Direction.EAST));
             Log.Debug($"Placed new player in {t}");
             return;
+        }
+
+        public void RecordHeader(BattleHeader header)
+        {
+            Component.BattleHeaders[header.BattleID] = header;
         }
 
         public void PlaceUnitInParty(Unit u, PartyEntity newParty)

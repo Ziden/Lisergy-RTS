@@ -10,6 +10,8 @@ namespace Game.Systems.Building
     [Serializable]
     public class PlayerBuildingEntity : BaseEntity
     {
+        public override EntityType EntityType => EntityType.Building;
+
         public ushort SpecId => Components.Get<PlayerBuildingComponent>().SpecId;
 
         public PlayerBuildingEntity(IGame game, PlayerEntity owner) : base(game, owner)

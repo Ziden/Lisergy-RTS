@@ -1,3 +1,4 @@
+using Game;
 using Game.Battle;
 using Game.Events.ServerEvents;
 using Game.Network;
@@ -79,8 +80,8 @@ namespace Tests
             course.Tick();
             course.Tick();
 
-            var battle = _game.BattleService.GetBattle(party.Components.Get<BattleGroupComponent>().BattleID);
-            battle.Task.Tick();
+            var battle = _game.BattleService.GetRunningBattle(party.Components.Get<BattleGroupComponent>().BattleID);
+            _game.BattleService.BattleTasks[battle.ID].Tick();
 
             Assert.AreEqual(dungeonTile, party.Tile);
             Assert.AreEqual(1, _player.Data.BattleHeaders.Count);
@@ -123,14 +124,14 @@ namespace Tests
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
             _player.GetParty(0).Course.Tick();
 
-            var battle = _game.BattleService.GetBattle(party.Components.Get<BattleGroupComponent>().BattleID);
-            battle.Task.Tick();
+            var battle = _game.BattleService.GetRunningBattle(party.Components.Get<BattleGroupComponent>().BattleID);
+            _game.BattleService.BattleTasks[battle.ID].Tick();
 
             Assert.IsTrue(_dungeon.Tile == null);
             Assert.IsTrue(_game.Logic.BattleGroup(_dungeon).IsDestroyed);
             Assert.AreEqual(_dungeon.Tile, null);
             Assert.AreEqual(dungeonTile.Components.Get<TileHabitants>().Building, null);
-            Assert.AreEqual(_player.ReceivedEventsOfType<EntityDestroyPacket>().Count, 1);
+            Assert.AreEqual(_player.ReceivedPacketsOfType<EntityDestroyPacket>().Count, 1);
         }
 
         [Test]
@@ -140,18 +141,18 @@ namespace Tests
             _dungeon.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[1]));
             _game.Logic.Map(_dungeon).SetPosition(_game.World.GetTile(_party.Tile.X + _party.GetLineOfSight() + 1, _party.Tile.Y));
 
-            DeltaTracker.Clear();
+            _game.Entities.DeltaCompression.ClearDeltas();
 
             var seenClose = _dungeon.Tile.GetNeighbor(Direction.WEST);
 
             Assert.That(seenClose.EntitiesViewing.Contains(_party));
             Assert.That(!_dungeon.Tile.EntitiesViewing.Contains(_party));
 
-            _player.ReceivedEvents.Clear();
+            _player.ReceivedPackets.Clear();
             _game.Logic.Map(_party).SetPosition(_party.Tile.GetNeighbor(Direction.EAST));
-            DeltaTracker.SendDeltaPackets(_player);
+            _game.Entities.DeltaCompression.SendDeltaPackets(_player);
 
-            Assert.That(_player.ReceivedEventsOfType<EntityUpdatePacket>().Any(p => p.Entity.GetType() == typeof(DungeonEntity)));
+            Assert.That(_player.ReceivedPacketsOfType<EntityUpdatePacket>().Any(p => p.Type == EntityType.Dungeon));
             Assert.That(_dungeon.Tile.EntitiesViewing.Contains(_party));
         }
 
@@ -170,16 +171,16 @@ namespace Tests
         {
             var joinEvent = new JoinWorldPacket();
             var clientPlayer = new TestServerPlayer(_game);
-            _player.ReceivedEvents.Clear();
+            _player.ReceivedPackets.Clear();
 
             var dg = _game.Entities.CreateEntity<DungeonEntity>(null);
             _game.Logic.Map(dg).SetPosition(_game.World.GetTile(4, 2));
 
             _game.HandleClientEvent(clientPlayer, joinEvent);
 
-            var entityVisibleEvents = clientPlayer.ReceivedEventsOfType<EntityUpdatePacket>();
+            var entityVisibleEvents = clientPlayer.ReceivedPacketsOfType<EntityUpdatePacket>();
 
-            Assert.That(entityVisibleEvents.Any(p => p.Entity.GetType() == typeof(DungeonEntity)));
+            Assert.That(entityVisibleEvents.Any(p => p.Type == EntityType.Dungeon));
             Assert.AreEqual(3, entityVisibleEvents.Count, "Initial Party & Building should be visible");
         }
 
@@ -196,8 +197,8 @@ namespace Tests
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);
             _player.GetParty(0).Course.Tick();
 
-            var b = _game.BattleService.GetBattle(party.Get<BattleGroupComponent>().BattleID);
-            b.Task.Tick();
+            var b = _game.BattleService.GetRunningBattle(party.Get<BattleGroupComponent>().BattleID);
+            _game.BattleService.BattleTasks[b.ID].Tick();
         }
     }
 }

@@ -18,8 +18,7 @@ namespace Game.World
         public static readonly int CHUNK_SIZE_BITSHIFT = CHUNK_SIZE.BitsRequired() - 1;
         public const int TILES_IN_CHUNK = CHUNK_SIZE * CHUNK_SIZE;
         public const int PLAYERS_CHUNKS = 2;
-
-        public IGame Game { get; set; }
+        public virtual IGame Game { get; set; }
 
         // TODO: Move out of world
         public WorldPlayers _worldPlayers { get; set; }
@@ -37,7 +36,7 @@ namespace Game.World
             _worldPlayers = new WorldPlayers(maxPlayers);
         }
 
-        public void FreeMap()
+        public void FreeMemory()
         {
             foreach (var c in Map.AllChunks())
             {
@@ -50,11 +49,23 @@ namespace Game.World
             _worldPlayers.Free();
         }
 
-        public virtual void CreateMap()
+        public virtual void AllocateMemory()
         {
             _id = Guid.NewGuid().ToString();
             Map = new ChunkMap(this, SizeX, SizeY);
             GenerateTiles();
+        }
+
+        public void Populate(int seed = 0, params ChunkPopulator[] populators)
+        {
+            if (seed == 0)
+                seed = WorldUtils.Random.Next(0, ushort.MaxValue);
+            WorldUtils.SetRandomSeed(seed);
+            Seed = (ushort)seed;
+            Log.Debug($"Generating world seed {seed} {SizeX}x{SizeY} for {Players.MaxPlayers} players");
+            foreach (var chunk in Map.AllChunks())
+                foreach (var populator in populators)
+                    populator.Populate(this, chunk);
         }
 
         public virtual void GenerateTiles()

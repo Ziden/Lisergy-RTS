@@ -13,11 +13,11 @@ namespace Game.Events.Bus
 
     public class EventBus<EventType> : IEventBusRegistry<EventType>
     {
-        public event Action<BaseEvent> OnEventFired;
+        public event Action<EventType> OnEventFired;
 
         internal Dictionary<Type, List<RegisteredListener>> _registeredListeners;
 
-        public virtual void Call(BaseEvent ev)
+        public virtual void Call(EventType ev)
         {
             OnEventFired?.Invoke(ev);
 

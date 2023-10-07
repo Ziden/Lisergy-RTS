@@ -15,10 +15,12 @@ namespace Game.Services
         {
             _game = game;
             _world = game.World;
-            game.Network.IncomingPackets.Register<JoinWorldPacket>(this, JoinWorld);
+            game.Network.On<JoinWorldPacket>(JoinWorld);
         }
 
-        [EventMethod]
+        /// <summary>
+        /// Whenever a player asks to join a game world
+        /// </summary>
         public void JoinWorld(JoinWorldPacket ev)
         {
             PlayerEntity player = null;

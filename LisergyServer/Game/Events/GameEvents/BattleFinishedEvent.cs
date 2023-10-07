@@ -1,17 +1,18 @@
 ﻿using Game.Battle;
+using Game.DataTypes;
 using Game.Network.ServerPackets;
 
 namespace Game.Events.GameEvents
 {
     public class BattleFinishedEvent : GameEvent
     {
-        public TurnBattle Battle;
-        public CompleteBattleHeader Header;
+        public GameId Battle;
+        public BattleHeader Header;
         public BattleTurnLog[] Turns;
 
-        public BattleFinishedEvent(TurnBattle battle, CompleteBattleHeader header, BattleTurnLog[] turns)
+        public BattleFinishedEvent(BattleHeader header, BattleTurnLog[] turns)
         {
-            Battle = battle;
+            Battle = header.BattleID;
             Header = header;
             Turns = turns;
         }

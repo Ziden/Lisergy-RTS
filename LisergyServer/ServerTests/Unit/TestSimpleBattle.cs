@@ -123,10 +123,10 @@ namespace Tests
 
             var ev = new BattleResultPacket(battle.ID, result);
 
-            var bytes = Serialization.FromEvent(ev);
-            ev = Serialization.ToEvent<BattleResultPacket>(bytes);
+            var bytes = Serialization.FromPacket(ev);
+            ev = Serialization.ToPacket<BattleResultPacket>(bytes);
 
-            Assert.AreEqual(ev.FinalStateHeader.Attacker.Units.First().UnitID, result.Attacker.Units.First().UnitID);
+            Assert.AreEqual(ev.Header.Attacker.Units.First().UnitID, result.Attacker.Units.First().UnitID);
         }
     }
 }

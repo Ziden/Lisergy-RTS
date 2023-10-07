@@ -1,6 +1,5 @@
 ﻿using Game.Battle;
 using Game.DataTypes;
-using Game.Events;
 using System;
 
 namespace Game.Network.ServerPackets
@@ -12,13 +11,13 @@ namespace Game.Network.ServerPackets
     [Serializable]
     public class BattleResultPacket : ServerPacket
     {
-        public CompleteBattleHeader FinalStateHeader;
+        public BattleHeader Header;
 
         public BattleTurnLog[] Turns;
 
         public BattleResultPacket(GameId battleID, TurnBattleRecord result)
         {
-            FinalStateHeader = new CompleteBattleHeader
+            Header = new BattleHeader
             {
                 BattleID = battleID,
                 Date = DateTime.UtcNow,
@@ -26,7 +25,7 @@ namespace Game.Network.ServerPackets
                 Defender = result.Defender
             };
             Turns = new BattleTurnLog[result.Turns.Count];
-            FinalStateHeader.AttackerWins = FinalStateHeader.Attacker == result.Winner;
+            Header.AttackerWins = Header.Attacker == result.Winner;
             for (int x = 0; x < Turns.Length; x++)
             {
                 Turns[x] = new BattleTurnLog(result.Turns[x]);

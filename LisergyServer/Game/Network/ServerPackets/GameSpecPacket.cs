@@ -1,4 +1,5 @@
-﻿using GameData;
+﻿using Game.Network;
+using GameData;
 using System;
 
 namespace Game.Events.ServerEvents

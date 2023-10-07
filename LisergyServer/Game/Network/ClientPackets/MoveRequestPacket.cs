@@ -1,5 +1,4 @@
-﻿using Game.Events;
-using Game.Pathfinder;
+﻿using Game.Pathfinder;
 using Game.Systems.Movement;
 using Game.World;
 using System;
@@ -8,7 +7,7 @@ using System.Collections.Generic;
 namespace Game.Network.ClientPackets
 {
     [Serializable]
-    public class MoveRequestPacket : ClientPacket
+    public class MoveRequestPacket : InputPacket
     {
         public MovementIntent Intent;
         public byte PartyIndex;

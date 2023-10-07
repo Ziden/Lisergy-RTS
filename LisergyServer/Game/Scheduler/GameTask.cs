@@ -6,7 +6,7 @@ namespace Game.Scheduler
     public abstract class GameTask : IComparable<GameTask>
     {
         private DateTime _start;
-        protected IGame Game { get; private set; }
+        public IGame Game { get; private set; }
 
         public GameTask(IGame game, TimeSpan delay, PlayerEntity creator)
         {

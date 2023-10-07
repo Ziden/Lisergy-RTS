@@ -1,7 +1,6 @@
 ﻿using Game.Battle;
 using Game.DataTypes;
 using Game.ECS;
-using Game.Events;
 using Game.Systems.Battler;
 using Game.Systems.Map;
 using System;

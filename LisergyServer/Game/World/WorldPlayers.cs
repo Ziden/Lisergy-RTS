@@ -12,6 +12,7 @@ namespace Game.World
         PlayerEntity GetPlayer(GameId id);
         public int MaxPlayers { get; }
         public int PlayerCount { get; }
+        public PlayerEntity this[GameId id] => GetPlayer(id); 
     }
 
     /// <summary>

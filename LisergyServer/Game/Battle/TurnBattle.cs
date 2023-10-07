@@ -1,8 +1,6 @@
 ﻿using Game.Battle.BattleActions;
 using Game.Battle.BattleEvents;
 using Game.DataTypes;
-using Game.Events;
-using Game.Network.ServerPackets;
 using Game.Systems.Battler;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +9,8 @@ namespace Game.Battle
 {
     public class TurnBattle
     {
-        public BattleTask Task;
         internal SortedSet<BattleUnit> _actionQueue = new SortedSet<BattleUnit>();
         public TurnBattleRecord Result = new TurnBattleRecord();
-
-        public BattleStartPacket StartEvent;
 
         public GameId ID { get; private set; }
         public BattleTeam Attacker { get; private set; }

@@ -1,158 +1,110 @@
-﻿using Game;
-using Game.Events;
-using MapServer;
-using NServiceBus.Logging;
-using System.Collections;
-using System.Text;
-using Terminal.Gui;
+﻿using BaseServer.Commands;
+using BaseServer.Core;
+using Game;
+using Game.DataTypes;
+using Game.Events.ServerEvents;
+using Game.Network;
+using Game.Network.ClientPackets;
+using Game.Scheduler;
+using Game.Services;
+using GameServices;
+using LisergyServer.Commands;
+using LisergyServer.Core;
 
-public class LogEntry
+namespace MapServer
 {
-    public string Log;
-
-    public override string ToString() => Log;
-}
-
-public class EventEntry
-{
-    public BaseEvent Event;
-
-     public override string ToString() => Event.ToString();
-
-}
-
-public enum Tab { LOGS, EVENTS }
-
-public class StandaloneServer : Window
-{
-    private static ListView List;
-    private static ScrollBarView ScrollView;
-    private static TextView TextView;
-    private static List<EventEntry> _events = new();
-    private static List<LogEntry> _log = new();
-    public static bool IsLoaded = false;
-    private static Tab Tab = Tab.LOGS;
-
-    public StandaloneServer()
+    /// <summary>
+    /// Unified one server for everything, for now
+    /// </summary>
+    public class StandaloneServer : SocketServer
     {
-        Title = "Lisergy Standalone Server";
+        private LisergyGame _game;
+        private GameScheduler _scheduler;
+        private GameNetwork _network;
+        private AccountService _accountService;
+        private BattleService _battleService;
+        private WorldService _worldService;
+        private CourseService _courseService;
+        private ConnectionService _connectionService;
 
-        var logsBtn = new Button()
-        {
-            Text = "Logs",
-            Y = 0,
-            X = 0,
-            IsDefault = true,
-        };
-        var eventsBtn = new Button()
-        {
-            Text = "Events",
-            Y = 0,
-            X = Pos.Right(logsBtn),
-            IsDefault = true,
-        };
-        var frame = new FrameView()
-        {
-            AutoSize = true,
-            Y = Pos.Bottom(logsBtn),
-            X = 0,
-            Width = Dim.Fill(),
-            Height = Dim.Fill(),
-        };
-        List = new ListView(_log)
-        {
-            AutoSize = true,
-            X = 0,
-            Y = 0,
-            Width = Dim.Fill(),
-            Height = Dim.Fill(),
-        };
-        List.DrawContent += (e) => {
-            ScrollView.Size = List.Source.Count - 1;
-            ScrollView.Position = List.TopItem;
-            ScrollView.Refresh();
-        };
-        frame.Add(List);
+        public override ServerType GetServerType() => ServerType.WORLD;
 
-        ScrollView = new ScrollBarView(List, true);
-
-        TextView = new TextView()
+        public StandaloneServer(LisergyGame game, int port) : base(port)
         {
-            Y = Pos.Bottom(logsBtn),
-            X = 0,
-            Width = Dim.Fill(),
-            Height = Dim.Fill()
-        };
-
-        Log.Debug = m => OnReceiveLog(LogLevel.Debug, m);
-        Log.Info = m => OnReceiveLog(LogLevel.Info, m);
-        Log.Error = m => OnReceiveLog(LogLevel.Error, m);
-      
-
-        logsBtn.Clicked += () => ViewLogs();
-        eventsBtn.Clicked += () => ViewEvents();
-
-        this.Loaded += () =>
-        {
-            IsLoaded = true;
-        };
-        Add(logsBtn, eventsBtn, frame);
-    }
-
-    private void ViewEvents()
-    {
-        Tab = Tab.EVENTS;
-        List.SetSource(_events);
-        if (_events.Count > List.Bounds.Height)
-        {
-            List.TopItem = _events.Count - List.Bounds.Height;
-            List.SelectedItem = List.TopItem;
+            _game = game;
+            _scheduler = game.Scheduler as GameScheduler;
+            _network = game.Network as GameNetwork;
+            _accountService = new AccountService();
+            _battleService = new BattleService(_game);
+            _worldService = new WorldService(_game);
+            _courseService = new CourseService(_game);
+            _connectionService = new ConnectionService();
+            _network.OnOutgoingPacket += HandleOutgoingPacket;
         }
-        List.SetNeedsDisplay();
-    }
 
-    private void ViewLogs()
-    {
-        Tab = Tab.LOGS;
-        List.SetSource(_log);
-        UpdateEntryList(_log);
-        List.SetNeedsDisplay();
-    }
-
-    private static void UpdateEntryList(ICollection source)
-    {
-        if (source.Count > List.Bounds.Height)
+        public override void RegisterConsoleCommands(ConsoleCommandExecutor executor)
         {
-            List.TopItem = source.Count - List.Bounds.Height;
-            List.SelectedItem = List.TopItem;
+            executor.RegisterCommand(new TileCommand(_game));
+            executor.RegisterCommand(new TaskCommand(_game));
+            executor.RegisterCommand(new BattlesCommand(_game, _battleService));
+            executor.RegisterCommand(new ServerCommand(_game));
         }
-        List.SetNeedsDisplay();
-    }
 
-    public static void OnReceiveEvent(BaseEvent ev)
-    {
-        Application.MainLoop.Invoke(() =>
+        public override void Tick()
         {
-            _events.Add(new EventEntry()
-            {
-                Event = ev,
-            });
-            if (_events.Count > 500) _events.RemoveAt(0);
-            if (Tab == Tab.EVENTS) UpdateEntryList(_events);
-        });
-    }
+            _scheduler.Tick(DateTime.UtcNow);
+        }
 
+        public override void Connect(int connectionID) { }
 
-    public void OnReceiveLog(LogLevel level, string msg)
-    {
-        Application.MainLoop.Invoke(() =>
+        public override void Disconnect(int connectionID)
         {
-            _log.Add(new LogEntry()
+            _accountService.Disconnect(connectionID);
+            _connectionService.Disconnect(connectionID);
+        }
+
+        /// <summary>
+        /// Handles whenever this server receives input from an authenticated connection
+        /// </summary>
+        public override void HandleInputPacket(int connectionId, InputPacket input)
+        {
+            var connectedPlayer = _connectionService.GetConnectedPlayer(connectionId);
+            _game.Network.ReceiveInput(connectedPlayer.PlayerId, input);
+        }
+
+        /// <summary>
+        /// Handles whenever this server wants to send an outgoing packet for a player
+        /// </summary>
+        private void HandleOutgoingPacket(GameId player, ServerPacket packet)
+        {
+            var connectedPlayer = _connectionService.GetConnectedPlayer(player);
+            connectedPlayer.Send(packet);
+        }
+
+        protected override bool IsAuthenticated(InputPacket ev, int connectionID)
+        {
+            Account? connectedAccount;
+            if (ev is AuthPacket auth)
             {
-                Log = msg
-            });
-            if (_log.Count > 500) _log.RemoveAt(0);
-            if(Tab == Tab.LOGS) UpdateEntryList(_log);
-        });
+                connectedAccount = _accountService.Authenticate(auth);
+                Send(connectionID, new AuthResultPacket()
+                {
+                    PlayerID = connectedAccount == null ? GameId.ZERO : connectedAccount.PlayerId,
+                    Success = connectedAccount != null
+                });
+                if (connectedAccount != null)
+                {
+                    _connectionService.RegisterConnection(connectedAccount.PlayerId, new ConnectedPlayer(_socketServer));
+                    if (auth.SpecVersion < _game.Specs.Version) Send(connectionID, new GameSpecPacket(_game));
+                }
+            }
+            else
+            {
+                connectedAccount = _accountService.GetAuthenticatedConnection(connectionID);
+            }
+            var hasAuth = connectedAccount != null;
+            if (!hasAuth) Log.Error($"Connection {connectionID} failed auth to send event {ev}");
+            return hasAuth;
+        }
     }
 }

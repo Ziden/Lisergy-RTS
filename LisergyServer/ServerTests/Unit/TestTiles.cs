@@ -54,7 +54,7 @@ namespace Tests
             var tile = building.Tile.GetNeighbor(Direction.NORTH);
 
             var dungeon = Game.Entities.CreateEntity<DungeonEntity>(null);
-            Game.Systems.Map.GetEntityLogic(dungeon).SetPosition(tile);
+            Game.Systems.Map.GetLogic(dungeon).SetPosition(tile);
 
             Assert.AreEqual(dungeon.Tile, tile);
         }

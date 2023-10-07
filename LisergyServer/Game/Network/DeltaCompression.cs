@@ -1,16 +1,41 @@
-﻿using Game.Events;
+﻿using Game.ECS;
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
 
 namespace Game.Network
 {
+    /// <summary>
+    /// Tracks entity deltas to send to update the client
+    /// </summary>
+    public interface IDeltaCompression {
 
-    public static class DeltaTracker
+        /// <summary>
+        /// Sends all tracked deltas
+        /// </summary>
+        void SendDeltaPackets(PlayerEntity trigger);
+
+        /// <summary>
+        /// Adds an entity as modified
+        /// </summary>
+        void Add(IEntityDeltaTrackable entity);
+
+        /// <summary>
+        /// Clears all tracked deltas
+        /// </summary>
+        void ClearDeltas();
+    }
+
+    public class DeltaCompression : IDeltaCompression
     {
-        internal static HashSet<IDeltaTrackable> _dirty = new HashSet<IDeltaTrackable>();
+        internal HashSet<IEntityDeltaTrackable> _dirty = new HashSet<IEntityDeltaTrackable>();
 
-        public static void Clear()
+        public void Add(IEntityDeltaTrackable entity)
+        {
+            _dirty.Add(entity);
+        }
+
+        public void ClearDeltas()
         {
             foreach (var tracked in _dirty)
             {
@@ -19,7 +44,7 @@ namespace Game.Network
             _dirty.Clear();
         }
 
-        public static void SendDeltaPackets(PlayerEntity trigger)
+        public void SendDeltaPackets(PlayerEntity trigger)
         {
             foreach (var tracked in _dirty)
             {
@@ -32,7 +57,7 @@ namespace Game.Network
 
     public enum DeltaFlag : byte
     {
-        POSITION = 1 << 1,    // entity moved
+        COMPONENTS = 1 << 1, // entity updated its components
         EXISTENCE = 1 << 2,   // entity is created or destroyed 
         SELF_REVEALED = 1 << 3,   // entity is revealed - should only sent to triggerer 
         SELF_CONCEALED = 1 << 4   // entity is concealed - should only sent to triggerer 
@@ -40,10 +65,10 @@ namespace Game.Network
 
     public struct DeltaFlags
     {
-        private IDeltaTrackable _owner;
+        private IEntity _owner;
         private DeltaFlag _flags;
 
-        public DeltaFlags(IDeltaTrackable owner)
+        public DeltaFlags(IEntity owner)
         {
             _flags = 0;
             _owner = owner;
@@ -53,14 +78,7 @@ namespace Game.Network
 
         public void SetFlag(DeltaFlag f)
         {
-            if (_owner == null)
-            {
-                throw new Exception("Cannot track without owner");
-            }
-            if (f > 0 && _flags == 0)
-            {
-                DeltaTracker._dirty.Add(_owner);
-            }
+            if (f > 0 && _flags == 0) _owner.Game.Entities.DeltaCompression.Add(_owner);
             _flags |= f;
         }
 
@@ -71,8 +89,11 @@ namespace Game.Network
     /// Tracks delta to sent updates to clients.
     /// Should only send updates and not run events or logic
     /// </summary>
-    public interface IDeltaTrackable
+    public interface IEntityDeltaTrackable : IDeltaUpdateable
     {
+        /// <summary>
+        /// Gets the delta flags of a given entity
+        /// </summary>
         ref DeltaFlags DeltaFlags { get; }
 
         /// <summary>

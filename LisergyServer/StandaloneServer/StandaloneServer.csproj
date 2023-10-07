@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MapServer\MapServer.csproj" />
+    <ProjectReference Include="..\Core\BaseServer.csproj" />
   </ItemGroup>
 
 </Project>

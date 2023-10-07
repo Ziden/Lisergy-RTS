@@ -1,11 +1,10 @@
 ﻿using Game.Battle.BattleActions;
-using Game.Events;
 using System;
 
 namespace Game.Network.ClientPackets
 {
     [Serializable]
-    public class BattleActionPacket : ClientPacket
+    public class BattleActionPacket : InputPacket
     {
         public BattleActionPacket(string BattleID, BattleAction action)
         {

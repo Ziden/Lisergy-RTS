@@ -1,25 +1,23 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
 using Game.Events;
+using Game.Events.ServerEvents;
 using Game.Network;
 using Game.Systems.Building;
-using Game.Systems.FogOfWar;
 using Game.Systems.Party;
-using Game.Tile;
 using System;
 using System.Linq;
 
 namespace Game.Systems.Player
 {
-    public abstract class PlayerEntity : IEntity
+    public class PlayerEntity : IEntity
     {
+        public const byte MAX_PARTIES = 4;
+
         public PlayerDataComponent Data => Get<PlayerDataComponent>();
 
-        public const byte MAX_PARTIES = 4;
         public GameId EntityId { get; }
         public IGame Game { get; private set; }
-        public bool CanReceivePackets() => Online() && EntityId != GameId.ZERO;
-
         public PlayerEntity(IGame game)
         {
             Game = game;
@@ -43,7 +41,10 @@ namespace Game.Systems.Player
             return Data.Buildings.First(b => b.SpecId == Game.Specs.InitialBuilding.Id);
         }
 
-        public abstract void Send<EventType>(EventType ev) where EventType : BaseEvent;
+        public void SendMessage(string msg, MessageType type = MessageType.RAW_TEXT)
+        {
+            Game.Network.SendToPlayer(new MessagePacket(MessageType.BAD_INPUT, msg), this);
+        }
 
         public PlayerEntity Owner => this;
 
@@ -55,7 +56,7 @@ namespace Game.Systems.Player
 
         public ref DeltaFlags DeltaFlags => throw new NotImplementedException();
 
-        public abstract bool Online();
+        public EntityType EntityType => EntityType.Player;
 
         public override string ToString()
         {

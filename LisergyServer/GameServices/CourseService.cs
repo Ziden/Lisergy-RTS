@@ -19,10 +19,9 @@ namespace Game.Services
         {
             _game = game;
             this._world = game.World;
-            _game.Network.IncomingPackets.Register<MoveRequestPacket>(this, RequestMovement);
+            _game.Network.On<MoveRequestPacket>(RequestMovement);
         }
 
-        [EventMethod]
         public void RequestMovement(MoveRequestPacket ev)
         {
             var party = ev.Sender.GetParty(ev.PartyIndex);
@@ -30,20 +29,20 @@ namespace Game.Services
 
             if (!party.CanMove())
             {
-                ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
+                ev.Sender.SendMessage("Bad move");
                 return;
             }
 
             var first = ev.Path[0];
             if (_world.GetTile(first.X, first.Y).Distance(party.Get<MapReferenceComponent>().Tile) > 1)
             {
-                ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
+                ev.Sender.SendMessage("Bad route");
                 return;
             }
 
             var course = StartCourse(party, ev.Path, ev.Intent);
             if (course == null)
-                ev.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT));
+                ev.Sender.SendMessage("Bad course");
         }
 
         private CourseTask StartCourse(PartyEntity party, List<Position> sentPath, MovementIntent intent)

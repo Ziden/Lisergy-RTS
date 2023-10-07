@@ -24,7 +24,7 @@ namespace Game.Systems.Party
 
             
             var center = Players.GetPlayer(e.OwnerID).GetCenter().Get<MapPositionComponent>();
-            Systems.Map.GetEntityLogic(e).SetPosition(Game.GameWorld.GetTile(center.X, center.Y));
+            Systems.Map.GetLogic(e).SetPosition(Game.GameWorld.GetTile(center.X, center.Y));
         }
     }
 }

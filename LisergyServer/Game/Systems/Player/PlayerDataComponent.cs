@@ -17,6 +17,6 @@ namespace Game.Systems.Player
 
         public HashSet<TileEntity> VisibleTiles = new HashSet<TileEntity>();
         public HashSet<TileEntity> OnceExplored = new HashSet<TileEntity>();
-        public Dictionary<GameId, CompleteBattleHeader> BattleHeaders = new Dictionary<GameId, CompleteBattleHeader>();
+        public Dictionary<GameId, BattleHeader> BattleHeaders = new Dictionary<GameId, BattleHeader>();
     }
 }

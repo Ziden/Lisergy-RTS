@@ -4,8 +4,9 @@ using Game.Network;
 namespace Game.ECS
 {
 
-    public interface IEntity : IDeltaUpdateable, IDeltaTrackable
+    public interface IEntity : IEntityDeltaTrackable
     {
+        public EntityType EntityType { get; }
         public IComponentSet Components { get; }
 
         public T Get<T>() where T : IComponent;

@@ -1,44 +1,49 @@
 ﻿using Game;
 using Game.Events;
 using Game.Events.Bus;
+using Game.Network;
 using Game.Network.ClientPackets;
 using Game.Systems.Movement;
 using Game.Systems.Party;
+using Game.Systems.Player;
 using Game.Tile;
 using Game.World;
 using LisergyServer.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ServerTests
 {
-    public class TestServerPlayer : ServerPlayer, IEventListener
+    public class TestServerPlayer : PlayerEntity, IEventListener
     {
-        public delegate void ReceiveEventHandler(BaseEvent ev);
-        public event ReceiveEventHandler OnReceiveEvent;
-        public List<BaseEvent> ReceivedEvents = new List<BaseEvent>();
+        public event Action<BasePacket> OnReceivedPacket;
+
+        public List<BasePacket> ReceivedPackets = new List<BasePacket>();
+        public List<BaseEvent> TriggeredEvents = new List<BaseEvent>();
 
         public bool IsOnline { get; set; }
+        private GameNetwork _network;
 
-        public TestServerPlayer(LisergyGame game) : base(null, game)
+        public TestServerPlayer(LisergyGame game) : base(game)
         {
             IsOnline = true;
+            _network = game.Network as GameNetwork;
         }
 
-        public override void Send<EventType>(EventType ev)
+        public void SendTestPacket<EventType>(EventType ev) where EventType : BasePacket
         {
-            ev.Sender = this;
-            var copy = Serialization.FromEventRaw(ev);
-            var reSerialized = Serialization.ToEventRaw(copy);
-            OnReceiveEvent?.Invoke(reSerialized);
-            ReceivedEvents.Add(reSerialized);
+            var copy = Serialization.FromPacketRaw(ev);
+            var reSerialized = Serialization.ToPacketRaw(copy);
+            OnReceivedPacket?.Invoke(reSerialized);
+            ReceivedPackets.Add(reSerialized);
         }
 
-        public void ListenTo<EventType>() where EventType : GameEvent
+        public void ListenTo<EventType>() where EventType : BaseEvent
         {
             Game.Events.Register<EventType>(this, ev =>
             {
-                ReceivedEvents.Add(ev);
+                TriggeredEvents.Add(ev);
             });
         }
 
@@ -47,17 +52,17 @@ namespace ServerTests
             var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new Position(pa.X, pa.Y)).ToList();
             var ev = new MoveRequestPacket() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };
             ev.Sender = this;
-            Game.Network.IncomingPackets.Call(ev);
+            _network.IncomingPackets.Call(ev);
         }
 
-        public List<T> ReceivedEventsOfType<T>() where T : BaseEvent
+        public List<T> ReceivedPacketsOfType<T>() where T : BasePacket
         {
-            return ReceivedEvents.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => e as T).ToList();
+            return ReceivedPackets.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => e as T).ToList();
         }
 
-        public override bool Online()
+        public List<T> TriggeredEventsOfType<T>() where T : BaseEvent
         {
-            return this.IsOnline;
+            return TriggeredEvents.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => e as T).ToList();
         }
 
         public override string ToString()

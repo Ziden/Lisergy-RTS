@@ -1,5 +1,4 @@
 ﻿using Game.DataTypes;
-using Game.Events;
 using Game.Systems.Movement;
 using Game.Tile;
 using System;

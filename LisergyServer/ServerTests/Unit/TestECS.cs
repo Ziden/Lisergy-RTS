@@ -5,6 +5,7 @@ using Game.Events.ServerEvents;
 using Game.Network;
 using Game.Systems.Dungeon;
 using Game.Systems.FogOfWar;
+using Game.Systems.Party;
 using Game.Systems.Player;
 using NUnit.Framework;
 using ServerTests;
@@ -57,7 +58,7 @@ namespace Tests
         [Test]
         public void TestComponentSync()
         {
-            var clientEntity = new BaseEntity(null, null);
+            var clientEntity = new DungeonEntity(null);
 
             SimpleComponent fromServer = new SimpleComponent() { PublicField = 5, Property = 4 };
             SimpleComponent inClient = new SimpleComponent();
@@ -74,15 +75,13 @@ namespace Tests
         public void TestSyncOnlyMine()
         {
             var player = new TestServerPlayer(new TestGame());
-            var clientEntity = new BaseEntity(null, player);
+            var clientEntity = new PartyEntity(player.Game, player);
             var selfComponent = clientEntity.Components.Add<SelfSyncComponent>();
             var publicComponent = clientEntity.Components.Add<PublicSyncComponent>();
 
             var selfPacket = clientEntity.GetUpdatePacket(player) as EntityUpdatePacket;
             var publicPacket = clientEntity.GetUpdatePacket(null) as EntityUpdatePacket;
 
-            var l = new List<int>();
-            l.Contains(1);
             Assert.IsTrue(selfPacket.SyncedComponents.Contains(selfComponent));
             Assert.IsTrue(selfPacket.SyncedComponents.Contains(publicComponent));
             Assert.IsTrue(!publicPacket.SyncedComponents.Contains(selfComponent));

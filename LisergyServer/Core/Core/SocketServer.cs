@@ -1,8 +1,6 @@
 ﻿using BaseServer.Commands;
 using Game;
-using Game.Events;
-using Game.Scheduler;
-using LisergyServer.Core;
+using Game.Network;
 using System;
 using Telepathy;
 
@@ -10,15 +8,11 @@ namespace BaseServer.Core
 {
     public abstract class SocketServer
     {
-        private bool _running = false;
-
-        protected Server _socketServer;
-        private Message _msg;
-        private ConsoleCommandExecutor _commandExecutor;
-        public LisergyGame Game { get; protected set; }
-        public GameScheduler Scheduler { get; protected set; }
-
         private readonly int _port;
+        private Message _pooledMessage;
+        private ConsoleCommandExecutor _commandExecutor;
+        protected Server _socketServer;
+        public Ticker Ticker { get; protected set; }
 
         public SocketServer(int port)
         {
@@ -26,32 +20,7 @@ namespace BaseServer.Core
             _commandExecutor = new ConsoleCommandExecutor(null);
             _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
             _socketServer = new Server();
-            Serialization.LoadSerializers();
-            Game = SetupGame();
-            Scheduler = Game.Scheduler as GameScheduler;
-            SetupServices();
-            RegisterCommands(Game, _commandExecutor);
-        }
-
-        public abstract void RegisterCommands(LisergyGame game, ConsoleCommandExecutor executor);
-        protected abstract ServerPlayer Auth(BaseEvent ev, int connectionID);
-        public abstract void Tick();
-        public abstract void Disconnect(int connectionID);
-        public abstract ServerType GetServerType();
-        public abstract LisergyGame SetupGame();
-
-        public abstract void SetupServices();
-
-        public static Ticker Ticker;
-
-        private static readonly int TICKS_PER_SECOND = 20;
-        private static readonly int TICK_DELAY_MS = 1000 / TICKS_PER_SECOND;
-        private readonly DateTime _lastTick = DateTime.MinValue;
-
-        public void Stop()
-        {
-            _socketServer.Stop();
-            _running = false;
+            RegisterConsoleCommands(_commandExecutor);
         }
 
         public void RunServer()
@@ -70,6 +39,12 @@ namespace BaseServer.Core
             }
         }
 
+        public void Send<PacketType>(int connection, PacketType ev) where PacketType : BasePacket
+        {
+            Log.Debug($"Sending {ev} to {connection}");
+            _socketServer.Send(connection, Serialization.FromPacket<PacketType>(ev));
+        }
+
         private void RunTick()
         {
             _commandExecutor.HandleConsoleCommands();
@@ -77,28 +52,36 @@ namespace BaseServer.Core
             ReadSocketMessages();
         }
 
+        public void Stop() => _socketServer.Stop();
+        public abstract void RegisterConsoleCommands(ConsoleCommandExecutor executor);
+        protected abstract bool IsAuthenticated(InputPacket ev, int connectionID);
+        public abstract void Tick();
+        public abstract void Disconnect(int connectionID);
+        public abstract void Connect(int connectionID);
+        public abstract ServerType GetServerType();
+        public abstract void HandleInputPacket(int connectionId, InputPacket input);
         private void ReadSocketMessages()
         {
-            while (_socketServer.GetNextMessage(out _msg))
+            while (_socketServer.GetNextMessage(out _pooledMessage))
             {
-                switch (_msg.eventType)
+                switch (_pooledMessage.eventType)
                 {
                     case EventType.Connected:
                         Console.WriteLine("New Connection Received");
+                        Connect(_pooledMessage.connectionId);
                         break;
                     case EventType.Data:
-                        byte[] message = _msg.data;
-
-                        BaseEvent ev = Serialization.ToEventRaw(message);
-                        Log.Debug($"Received {ev}");
-                        ServerPlayer caller = Auth(ev, _msg.connectionId);
-                        if (caller != null)
+                        byte[] message = _pooledMessage.data;
+                        var ev = Serialization.ToPacketRaw<InputPacket>(message);
+                        ev.ConnectionID = _pooledMessage.connectionId;
+                        Log.Debug($"Received {message.Length} bytes for {ev} from connection {_pooledMessage.connectionId}");
+                        if (IsAuthenticated(ev, _pooledMessage.connectionId))
                         {
-                            Game.ReceiveInput(caller, message);
+                            HandleInputPacket(_pooledMessage.connectionId, ev);
                         }
                         break;
                     case EventType.Disconnected:
-                        Disconnect(_msg.connectionId);
+                        Disconnect(_pooledMessage.connectionId);
                         break;
                 }
             }

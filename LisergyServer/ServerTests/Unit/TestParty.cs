@@ -32,23 +32,23 @@ namespace Tests
         {
             var playerCastleTile = _player.Data.Buildings.First().Tile;
             var party = _player.GetParty(0);
-            _game.Systems.Map.GetEntityLogic(party).SetPosition(_game.World.GetTile(0, 0));
+            _game.Systems.Map.GetLogic(party).SetPosition(_game.World.GetTile(0, 0));
 
             var enemy = _game.Entities.CreateEntity<DungeonEntity>(null);
-            _game.Systems.Map.GetEntityLogic(enemy).SetPosition(_game.World.GetTile(1, 1));
+            _game.Systems.Map.GetLogic(enemy).SetPosition(_game.World.GetTile(1, 1));
 
             enemy.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[0]));
 
             var battleID = Guid.NewGuid();
-            _game.Network.IncomingPackets.Call(new BattleStartPacket(battleID, party, enemy));
+            _game.Network.SendToServer(new BattleTriggeredPacket(battleID, party, enemy), ServerType.BATTLE);
 
-            _player.ReceivedEvents.Clear();
-            DeltaTracker.Clear();
+            _player.ReceivedPackets.Clear();
+            _game.Entities.DeltaCompression.ClearDeltas();
 
-            var battle = _game.BattleService.GetBattle(battleID);
-            battle.Task.Tick();
+            var battle = _game.BattleService.GetRunningBattle(battleID);
+            _game.BattleService.BattleTasks[battle.ID].Tick();
 
-            var statusUpdates = _player.ReceivedEventsOfType<EntityUpdatePacket>().Where(p => p.Entity.EntityId == party.EntityId);
+            var statusUpdates = _player.ReceivedPacketsOfType<EntityUpdatePacket>().Where(p => p.Type == EntityType.Party);
             Assert.AreEqual(1, statusUpdates.Count());
         }
 
@@ -78,10 +78,10 @@ namespace Tests
             enemy.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[0]));
 
             var battleID = Guid.NewGuid();
-            _game.Network.IncomingPackets.Call(new BattleStartPacket(battleID, party, enemy));
+            _game.Network.SendToServer(new BattleTriggeredPacket(battleID, party, enemy), ServerType.BATTLE);
 
-            var battle = _game.BattleService.GetBattle(battleID);
-            battle.Task.Tick();
+            var battle = _game.BattleService.GetRunningBattle(battleID);
+            _game.BattleService.BattleTasks[battle.ID].Tick();
 
             Assert.IsTrue(party.Get<BattleGroupComponent>().BattleID == GameId.ZERO);
             Assert.IsTrue(battle.IsOver);
@@ -164,8 +164,8 @@ namespace Tests
 
             var update = party.GetUpdatePacket(_player);
 
-            var serialize = Serialization.FromEventRaw(update);
-            var deserialize = Serialization.ToEvent<EntityUpdatePacket>(serialize);
+            var serialize = Serialization.FromPacketRaw(update);
+            var deserialize = Serialization.ToPacket<EntityUpdatePacket>(serialize);
 
             var unitsComponent = (BattleGroupComponent)deserialize.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(BattleGroupComponent));
 
@@ -181,8 +181,8 @@ namespace Tests
 
             var update = party.GetUpdatePacket(_player);
 
-            var serialize = Serialization.FromEventRaw(update);
-            var deserialize = Serialization.ToEvent<EntityUpdatePacket>(serialize);
+            var serialize = Serialization.FromPacketRaw(update);
+            var deserialize = Serialization.ToPacket<EntityUpdatePacket>(serialize);
 
             Assert.IsTrue(deserialize.SyncedComponents.Any(c => c is PartyComponent));
             Assert.IsTrue(((PartyComponent)deserialize.SyncedComponents.First(c => c is PartyComponent)).PartyIndex == 2);

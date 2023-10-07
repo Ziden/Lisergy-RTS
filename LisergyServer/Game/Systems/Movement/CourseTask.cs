@@ -28,7 +28,7 @@ namespace Game.Systems.Movement
                 Log.Error($"Party {Party} Had Course {course} but course {this} was trying to move the party");
                 return;
             }
-            Game.Systems.Map.GetEntityLogic(Party).SetPosition(NextTile);
+            Game.Systems.Map.GetLogic(Party).SetPosition(NextTile);
             Path.RemoveAt(0);
             Repeat = Path.Count > 0;
         }

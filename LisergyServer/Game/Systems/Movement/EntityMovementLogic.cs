@@ -2,7 +2,7 @@
 
 namespace Game.Systems.Movement
 {
-    public class EntityMovementLogic : BaseComponentLogic<EntityMovementComponent>
+    public class EntityMovementLogic : BaseEntityLogic<EntityMovementComponent>
     {
         public CourseTask GetCourse() => Entity.Components.Get<EntityMovementComponent>().Course;
 

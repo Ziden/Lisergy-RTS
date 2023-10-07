@@ -5,10 +5,11 @@ using Game.Network;
 using Game.Systems.FogOfWar;
 using Game.Systems.MapPosition;
 using Game.Tile;
+using System.Linq;
 
 namespace Game.Systems.Map
 {
-    public class MapLogic : BaseComponentLogic<MapPositionComponent>
+    public class MapLogic : BaseEntityLogic<MapPositionComponent>
     {
         public TileEntity GetPosition()
         {
@@ -27,7 +28,7 @@ namespace Game.Systems.Map
             }
             else if (component.PreviousTile != component.Tile)
             {
-                Entity.DeltaFlags.SetFlag(DeltaFlag.POSITION);
+                Entity.DeltaFlags.SetFlag(DeltaFlag.COMPONENTS);
             }
 
             if (component.PreviousTile != null)
@@ -66,8 +67,8 @@ namespace Game.Systems.Map
                 location.Y = 0;
                 if (component.PreviousTile != null)
                 {
-                    foreach (var viewer in component.PreviousTile.Components.Get<TileVisibility>().PlayersViewing)
-                        viewer.Send(new EntityDestroyPacket(Entity));
+                    // TODO: Move to system
+                    Game.Network.SendToPlayer(new EntityDestroyPacket(Entity), component.PreviousTile.Components.Get<TileVisibility>().PlayersViewing.ToArray());
                 }
             }
             Log.Info($"Moved {Entity} to {component.Tile}");

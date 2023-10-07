@@ -32,8 +32,8 @@ namespace Tests
                 Login = "wololo",
                 Password = "walala"
             };
-            var bytes = Serialization.FromEvent<AuthPacket>(authEvent);
-            var event2 = Serialization.ToEvent<AuthPacket>(bytes);
+            var bytes = Serialization.FromPacket<AuthPacket>(authEvent);
+            var event2 = Serialization.ToPacket<AuthPacket>(bytes);
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);
@@ -48,8 +48,8 @@ namespace Tests
 
             Serialization.LoadSerializers(typeof(TileUpdatePacket));
 
-            var serialized = Serialization.FromEvent<TileUpdatePacket>(tile.GetUpdatePacket(null) as TileUpdatePacket);
-            var unserialized = Serialization.ToEvent<TileUpdatePacket>(serialized);
+            var serialized = Serialization.FromPacket<TileUpdatePacket>(tile.GetUpdatePacket(null) as TileUpdatePacket);
+            var unserialized = Serialization.ToPacket<TileUpdatePacket>(serialized);
 
             Assert.AreEqual(tile.SpecId, unserialized.Data.TileId);
             Assert.AreEqual(tile.X, unserialized.Data.X);
@@ -66,12 +66,12 @@ namespace Tests
             var building = player.Data.Buildings.First();
             var tile = player.Data.Parties[0].Tile;
 
-            var visibleEvent = game.ReceivedEvents.Where(e => e is EntityUpdatePacket).FirstOrDefault() as EntityUpdatePacket;
+            var visibleEvent = game.SentPackets.Where(e => e is EntityUpdatePacket).FirstOrDefault() as EntityUpdatePacket;
 
-            var serialized = Serialization.FromEvent<EntityUpdatePacket>(visibleEvent);
-            var unserialized = Serialization.ToEvent<EntityUpdatePacket>(serialized);
+            var serialized = Serialization.FromPacket<EntityUpdatePacket>(visibleEvent);
+            var unserialized = Serialization.ToPacket<EntityUpdatePacket>(serialized);
 
-            Assert.AreEqual(visibleEvent.Entity.EntityId, unserialized.Entity.EntityId);
+            Assert.AreEqual(visibleEvent.EntityId, unserialized.EntityId);
         }
 
         [Test]
@@ -84,10 +84,10 @@ namespace Tests
 
             var entityUpdate = new EntityUpdatePacket(party);
 
-            var serialized = Serialization.FromEvent<EntityUpdatePacket>(entityUpdate);
-            var unserialized = Serialization.ToEvent<EntityUpdatePacket>(serialized);
+            var serialized = Serialization.FromPacket<EntityUpdatePacket>(entityUpdate);
+            var unserialized = Serialization.ToPacket<EntityUpdatePacket>(serialized);
 
-            Assert.AreEqual(unserialized.Entity.EntityId, party.EntityId);
+            Assert.AreEqual(unserialized.EntityId, party.EntityId);
         }
 
         [Test]
@@ -99,8 +99,8 @@ namespace Tests
                 Login = "wololo",
                 Password = "walala"
             };
-            var bytes = Serialization.FromEventRaw(authEvent);
-            var event2 = (AuthPacket)Serialization.ToEventRaw(bytes);
+            var bytes = Serialization.FromPacketRaw(authEvent);
+            var event2 = (AuthPacket)Serialization.ToPacketRaw(bytes);
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);
