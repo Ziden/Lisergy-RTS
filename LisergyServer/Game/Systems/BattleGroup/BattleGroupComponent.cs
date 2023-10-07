@@ -7,7 +7,7 @@ using System.Linq;
 namespace Game.Systems.Battler
 {
     [Serializable]
-    [SyncedComponent()]
+    [SyncedComponent]
     public class BattleGroupComponent : IComponent
     {
         public GameId BattleID { get; set; }

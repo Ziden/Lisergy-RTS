@@ -8,11 +8,8 @@ namespace Game.Systems.Map
     [SyncedComponent]
     public class MapPlacementComponent : IComponent
     {
-        private Position _position;
-        public ref Position Position => ref _position;
-        public override string ToString()
-        {
-            return $"<MapPositionComponent {_position}>";
-        }
+        public Position Position;
+
+        public override string ToString() => $"<MapPlacementComponent {Position}>";
     }
 }

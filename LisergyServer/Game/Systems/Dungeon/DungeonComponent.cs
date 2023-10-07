@@ -12,9 +12,6 @@ namespace Game.Systems.Dungeon
     {
         public ushort SpecId;
 
-        [NonSerialized]
-        public Item[] Rewards;
-
         public override string ToString()
         {
             return $"<DungeonComponent Spec={SpecId}>";

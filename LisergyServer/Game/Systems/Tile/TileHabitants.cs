@@ -1,5 +1,4 @@
 ﻿using Game.ECS;
-using Game.Tile;
 using System.Collections.Generic;
 
 namespace Game.Systems.Tile
