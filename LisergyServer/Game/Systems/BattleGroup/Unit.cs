@@ -1,38 +1,52 @@
-﻿using Game.DataTypes;
+﻿using Game.Battle;
+using Game.DataTypes;
 using Game.Entity;
 using GameData.Specs;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Game.Systems.Battler
 {
     [Serializable]
-    public class Unit : IEquatable<Unit>, IEqualityComparer<Unit>
+    [StructLayout(LayoutKind.Sequential)]
+    public unsafe struct Unit : IEquatable<Unit>, IEqualityComparer<Unit>
     {
-        public GameId Id { get; protected set; }
-        public ushort SpecId { get; internal set; }
-        private UnitStats _statsData;
+        public GameId Id;
+        public ushort SpecId;
+        public UnitStats Stats;
 
         public Unit(UnitSpec spec)
         {
             Id = Guid.NewGuid();
             SpecId = spec.UnitSpecID;
-            _statsData.SetStats(spec.Stats);
+            Stats = new UnitStats();
+            Stats.SetStats(spec.Stats);
             HealAll();
         }
 
-        public ref byte Atk { get => ref _statsData.Atk;  }
-        public ref byte Def { get => ref _statsData.Def; }
-        public ref byte Matk { get => ref _statsData.Matk;  }
-        public ref byte Mdef { get => ref _statsData.Mdef;  }
-        public ref byte Speed { get => ref _statsData.Speed;  }
-        public ref byte Accuracy { get => ref _statsData.Accuracy; }
-        public ref byte Weight { get => ref _statsData.Weight; }
-        public ref byte Move { get => ref _statsData.Weight; }
-        public ref ushort HP { get => ref _statsData.HP; }
-        public ref ushort MaxHP { get => ref _statsData.MaxHP; }
-        public ref ushort MP { get => ref _statsData.MP; }
-        public ref ushort MaxMP { get => ref _statsData.MaxMP; }
+        public byte Atk { get => Stats.Atk; set => Stats.Atk = value; }
+        public byte Def { get => Stats.Def; set => Stats.Def = value; }
+        public byte Matk { get => Stats.Matk; set => Stats.Matk = value; }
+        public byte Mdef { get => Stats.Mdef; set => Stats.Mdef = value; }
+        public byte Speed { get => Stats.Speed; set => Stats.Speed = value; }
+        public byte Accuracy { get => Stats.Accuracy; set => Stats.Accuracy = value; }
+        public byte Weight { get => Stats.Weight; set => Stats.Weight = value; }
+        public byte Move { get => Stats.Move; set => Stats.Move = value; }
+        public byte HP { get => Stats.HP; set => Stats.HP = value; }
+        public byte MaxHP { get => Stats.MaxHP; set => Stats.MaxHP = value; }
+        public byte MP { get => Stats.MP; set => Stats.MP = value; }
+        public byte MaxMP { get => Stats.MaxMP; set => Stats.MaxHP = value; }
+
+        public void CopyFrom(Unit u)
+        {
+            var size = sizeof(Unit);
+            var sourcePtr = &u;
+            fixed (Unit* thisPtr = &this)
+            {
+                Buffer.MemoryCopy(sourcePtr, thisPtr, size, size);
+            }
+        }
 
         public void HealAll()
         {
@@ -45,19 +59,31 @@ namespace Game.Systems.Battler
             return $"<Unit Spec={SpecId}/>";
         }
 
+        public bool Valid => Id != GameId.ZERO;
+
         public bool Equals(Unit other)
         {
-            return other != null && SpecId == other.SpecId && _statsData.Equals(other._statsData);
+            return other.Valid == Valid && SpecId == other.SpecId && Stats.Equals(other.Stats);
         }
 
         public bool Equals(Unit x, Unit y)
         {
-            return x != null && x.Equals(y);
+            return x.Valid == y.Valid && x.Equals(y);
+        }
+
+        public static bool operator ==(Unit c1, Unit c2)
+        {
+            return c1.Equals(c2);
+        }
+
+        public static bool operator !=(Unit c1, Unit c2)
+        {
+            return !c1.Equals(c2);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(SpecId, _statsData);
+            return HashCode.Combine(SpecId, Stats);
         }
 
         public int GetHashCode(Unit obj)

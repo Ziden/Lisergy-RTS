@@ -39,7 +39,6 @@ namespace Game
             models.Add(typeof(BattleAction));
             models.Add(typeof(AttackAction));
             models.Add(typeof(BattleUnit));
-            models.Add(typeof(BattleTeam));
             models.Add(typeof(TileMapData));
 
             // Game

@@ -1,7 +1,6 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
 using Game.Systems.Battler;
-using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +42,7 @@ namespace Game.Battle
         private void Init(IEntity entity, params Unit[] units)
         {
             _entity = entity;
-            List<Unit> filtered = units.Where(u => u != null).ToList();
+            List<Unit> filtered = units.Where(u => u.Valid).ToList();
             Units = new BattleUnit[filtered.Count()];
             for (int x = 0; x < filtered.Count(); x++)
             {

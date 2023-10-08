@@ -24,7 +24,7 @@ namespace GameDataTest
         public static readonly ushort KNIGHT = 1;
         public static readonly ushort MAGE = 2;
 
-        private static UnitStats BaseStats = new UnitStats().SetStats(new Dictionary<Stat, ushort>()
+        private static UnitStats BaseStats = new UnitStats().SetStats(new Dictionary<Stat, byte>()
             {
                     { Stat.SPEED, 5 },
                     { Stat.ACCURACY, 5 },
@@ -36,7 +36,7 @@ namespace GameDataTest
                     { Stat.MMP, 19 },
         });
 
-        public static UnitStats SetStats(this UnitStats u, Dictionary<Stat, ushort> stats)
+        public static UnitStats SetStats(this UnitStats u, Dictionary<Stat, byte> stats)
         {
             foreach (var kp in stats)
                 u[kp.Key] = kp.Value;
@@ -50,9 +50,9 @@ namespace GameDataTest
             st.SetStats(BaseStats);
             foreach (var item in stats)
             {
-                var value = st.GetStat(item.Item1);
-                value += (ushort)item.Item2;
-                st[item.Item1] = value;
+                short value = st.GetStat(item.Item1);
+                value += item.Item2;
+                st[item.Item1] = (byte)value;
             }
 
             return st;

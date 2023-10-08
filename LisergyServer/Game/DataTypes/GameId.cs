@@ -15,30 +15,45 @@ namespace Game.DataTypes
     {
         public static GameId ZERO = Guid.Empty;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        public byte[] _bytes;
+        private ulong leftside;
+        private ulong rightside;
+
+        public byte[] GetBytes() {
+            var bytes = new byte[16];
+            fixed (byte* pointer = bytes)
+            {
+                *(ulong*)pointer = leftside;
+                *(ulong*)(pointer + 8) = rightside;
+            }
+            return bytes;
+        }
 
         public static GameId Generate()
         {
-            return new GameId() { _bytes = Guid.NewGuid().ToByteArray() };
+            return Guid.NewGuid();
         }
 
         public static implicit operator GameId(Guid id)
         {
-            return new GameId()
+            var bytes = id.ToByteArray();
+            fixed (byte* pointer = bytes)
             {
-                _bytes = id == Guid.Empty ? new byte[16] : id.ToByteArray()
-            };
+                return new GameId()
+                {
+                    leftside = *(ulong*)pointer,
+                    rightside = *(ulong*)(pointer + 8)
+                };
+            }
         }
 
         public bool IsZero()
         {
-            return _bytes == null || this == ZERO;
+            return this == ZERO;
         }
 
         public static implicit operator Guid(GameId id)
         {
-            return new Guid(id._bytes);
+            return new Guid(id.GetBytes());
         }
 
 
@@ -85,47 +100,24 @@ namespace Game.DataTypes
 
         public unsafe bool IsEqualsTo(GameId id2)
         {
-            if (id2._bytes == null)
-            {
-                return this == ZERO;
-            }
-
-            if (_bytes == null)
-            {
-                return id2 == ZERO;
-            }
-
-            unchecked
-            {
-                fixed (byte* p1 = _bytes, p2 = id2._bytes)
-                {
-                    return *(long*)p1 == *(long*)p2 && *(long*)p1 + 8 == *(long*)p2 + 8;
-                }
-            }
+            return leftside == id2.leftside && rightside == id2.rightside;
         }
 
         public GameId(Position pos)
         {
-            _bytes = new byte[16];
-            fixed (byte* p1 = _bytes)
-            {
-                *(long*)p1 = pos.X;
-                *(long*)(p1 + 1) = pos.Y;
-            }
+            leftside = pos.X;
+            rightside = pos.Y;
+        }
+
+        public GameId(ulong l, ulong l2)
+        {
+            leftside = l;
+            rightside = l2;
         }
 
         public override unsafe int GetHashCode()
         {
-            unchecked
-            {
-                fixed (byte* p1 = _bytes)
-                {
-                    int hash = 0;
-                    hash ^= (*(long*)p1).GetHashCode();
-                    hash ^= (*(long*)p1 + 8).GetHashCode();
-                    return hash;
-                }
-            }
+            return HashCode.Combine(leftside, rightside);
         }
     }
 }

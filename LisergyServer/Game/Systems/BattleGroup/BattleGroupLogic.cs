@@ -1,6 +1,7 @@
 ﻿using Game.Battle;
 using Game.DataTypes;
 using Game.ECS;
+using Game.Entity;
 using Game.Events.GameEvents;
 using Game.Network.ServerPackets;
 using System;
@@ -13,7 +14,7 @@ namespace Game.Systems.Battler
     {
         public bool IsBattling => !Entity.Get<BattleGroupComponent>().BattleID.IsZero();
 
-        public bool IsDestroyed => GetUnits().All(u => u == null || u.HP <= 0);
+        public bool IsDestroyed => GetUnits().All(u => !u.Valid || u.HP <= 0);
 
         public Unit Leader => GetUnits().First();
 
@@ -43,7 +44,7 @@ namespace Game.Systems.Battler
             }
         }
 
-        public IEnumerable<Unit> GetValidUnits() => GetUnits().Where(u => u != null);
+        public IEnumerable<Unit> GetValidUnits() => GetUnits().Where(u => u.Valid);
 
         public IReadOnlyList<Unit> GetUnits() => Entity.Get<BattleGroupComponent>().Units;
 
@@ -63,6 +64,21 @@ namespace Game.Systems.Battler
                 AddUnit(newUnit, preferAtIndex);
             }
         }
+
+        /*
+        public unsafe void UpdateFrom(BattleTeam team)
+        {
+            for(var x = 0; x < team.Units.Length; x++)
+            {
+                var size = sizeof(Unit);
+                var sourcePtr = &stats;
+                fixed (UnitStats* thisPtr = &this)
+                {
+                    Buffer.MemoryCopy(sourcePtr, thisPtr, size, size);
+                }
+            }
+        }
+        */
 
         public virtual void AddUnit(Unit u, int preferAtIndex = -1)
         {

@@ -35,8 +35,8 @@ namespace Tests
             var s1 = UnitStats.DEFAULT;
             var s2 = UnitStats.DEFAULT;
 
-            s1.HP = 1234;
-            s2.HP = 1234;
+            s1.HP = 123;
+            s2.HP = 123;
 
             Assert.AreEqual(s1, s2);
         }
@@ -47,7 +47,7 @@ namespace Tests
             var s1 = UnitStats.DEFAULT;
             var s2 = UnitStats.DEFAULT;
 
-            s1.HP = 1234;
+            s1.HP = 12;
             s2.HP = 123;
 
             Assert.AreNotEqual(s1, s2);
@@ -70,10 +70,10 @@ namespace Tests
         {
             var unit = new Unit(Game.Specs.Units[0]);
 
-            unit.MaxHP = 500;
+            unit.MaxHP = 50;
             unit.Speed = 55;
 
-            Assert.AreEqual(500, unit.MaxHP);
+            Assert.AreEqual(50, unit.MaxHP);
             Assert.AreEqual(55, unit.Speed);
         }
 

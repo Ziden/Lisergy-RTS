@@ -110,7 +110,7 @@ namespace Tests
             var battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
             var result = battle.AutoRun.RunAllRounds();
 
-            var finalHP = StrongUnit.HP;
+            var finalHP = result.Attacker.Units[0].UnitReference.HP;
             Assert.AreNotEqual(initialHP, finalHP);
         }
 

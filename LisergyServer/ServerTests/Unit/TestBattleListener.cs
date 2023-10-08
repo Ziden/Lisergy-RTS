@@ -40,7 +40,11 @@ namespace Tests
             var partyTile = _game.Systems.Map.GetLogic(party).GetPosition();
             var dungeonTile = partyTile.GetNeighbor(Direction.EAST);
             _game.Systems.Map.GetLogic(_dungeon).SetPosition(dungeonTile);
-            party.Get<BattleGroupComponent>().Units.First().Atk = 255;
+            var component = party.Get<BattleGroupComponent>();
+            var unit = component.Units[0];
+            unit.Atk = 255;
+            component.Units[0] = unit;
+            party.Save(component);
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
             var course = party.Course;
             Assert.AreEqual(0, _player.Data.BattleHeaders.Count());

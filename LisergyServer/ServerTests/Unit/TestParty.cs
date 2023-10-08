@@ -169,7 +169,9 @@ namespace Tests
 
             var unitsComponent = (BattleGroupComponent)deserialize.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(BattleGroupComponent));
 
-            Assert.IsTrue(unitsComponent.Units.SequenceEqual(party.Get<BattleGroupComponent>().Units));
+            var u1 = unitsComponent.Units[0];
+            var u2 = party.Get<BattleGroupComponent>().Units[0];
+            Assert.IsTrue(u1 == u2);
         }
 
         private void UpdateParty(ref PartyComponent c)

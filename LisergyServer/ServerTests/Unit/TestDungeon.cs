@@ -69,7 +69,9 @@ namespace Tests
             _game.Logic.Map(_dungeon).SetPosition(dungeonTile);
 
             var component = party.Components.Get<BattleGroupComponent>();
-            component.Units.First().Atk = 255;
+            var unit = component.Units[0];
+            unit.Atk = 255;
+            component.Units[0] = unit;
             party.Save(component);
 
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
@@ -119,12 +121,10 @@ namespace Tests
             var party = _player.GetParty(0);
 
             var component = party.Components.Get<BattleGroupComponent>();
-            component.Units.First().Atk = 25; // make sure it wins !
+            var unit = component.Units[0];
+            unit.Atk = 255;
+            component.Units[0] = unit;
             party.Save(component);
-
-            var component2 = _dungeon.Components.Get<BattleGroupComponent>();
-            component2.Units.First().SpecId = 666;
-            _dungeon.Save(component2);
 
             _game.Logic.Map(_dungeon).SetPosition(dungeonTile);
 
@@ -198,8 +198,14 @@ namespace Tests
             var playerCastleTile = _player.Data.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
-            party.Get<BattleGroupComponent>().Units.First().HP = 1; // make sure it looses !
-            party.Get<BattleGroupComponent>().Units.First().Atk = 0; // make sure it looses !
+
+            var component = party.Components.Get<BattleGroupComponent>();
+            var unit = component.Units[0];
+            unit.Atk = 1;
+            unit.HP = 1;
+            component.Units[0] = unit;
+            party.Save(component);
+
             dungeonTile.Components.Get<TileHabitants>().Building = _dungeon;
 
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);

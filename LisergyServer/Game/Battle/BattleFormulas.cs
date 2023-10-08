@@ -10,7 +10,9 @@ namespace Game.Battle
             int damage = attacker.UnitReference.Atk - defender.UnitReference.Def / 2;
             if (damage < 0) damage = 0;
             int hp = defender.UnitReference.HP - damage;
-            defender.UnitReference.HP = (ushort)Math.Max(0, hp);
+            var u = defender.UnitReference;
+            u.HP = (byte)Math.Max(0, hp);
+            defender.UnitReference = u;
             return new AttackActionResult() { Damage = (ushort)damage };
         }
     }
