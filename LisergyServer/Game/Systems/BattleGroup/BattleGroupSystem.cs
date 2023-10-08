@@ -4,6 +4,7 @@ using Game.Events.GameEvents;
 using Game.Network.ServerPackets;
 using Game.Systems.Player;
 using System;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace Game.Systems.Battler
@@ -33,6 +34,15 @@ namespace Game.Systems.Battler
         {
             var attackerEntity = packet.Header.Attacker.Entity;
             var defenderEntity = packet.Header.Defender.Entity;
+
+            var attackerGroup = attackerEntity.Get<BattleGroupComponent>();
+            var defenderGroup = defenderEntity.Get<BattleGroupComponent>();
+
+            attackerGroup.Units = packet.Header.Attacker.Units.Select(u => u.UnitReference).ToList();
+            defenderGroup.Units = packet.Header.Defender.Units.Select(u => u.UnitReference).ToList();
+
+            attackerEntity.Components.Save(attackerGroup);
+            defenderEntity.Components.Save(defenderGroup);
 
             var finishEvent = new BattleFinishedEvent(packet.Header, packet.Turns);
 
