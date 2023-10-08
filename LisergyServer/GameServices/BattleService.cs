@@ -59,7 +59,7 @@ namespace Game.Services
         {
             _game = game;
             World = game.World;
-            game.Network.On<BattleTriggeredPacket>(OnBattleTrigger);
+            game.Network.On<BattleQueuedPacket>(OnBattleTrigger);
             game.Network.On<BattleLogRequestPacket>(OnBattleRequest);
             game.Events.Register<BattleFinishedTaskEvent>(this, OnBattleFinishedProcessing);
         }
@@ -75,15 +75,20 @@ namespace Game.Services
         /// <summary>
         /// Triggered when the service receives a new battle to be proccesed
         /// </summary>
-        public void OnBattleTrigger(BattleTriggeredPacket packet)
+        public void OnBattleTrigger(BattleQueuedPacket packet)
         {
             Log.Debug($"Received {packet.Attacker} vs {packet.Defender}");
             var battle = new TurnBattle(packet.BattleID, packet.Attacker, packet.Defender);
             AllBattles[packet.BattleID] = new BattleLogPacket(packet);
             BattleTasks[battle.ID] = new BattleTask(World.Game, battle);
-            _game.Network.SendToPlayer(new BattleStartPacket(packet.BattleID, packet.Attacker.Entity, packet.Defender.Entity), GetAllPlayers(battle).ToArray());
+            _game.Network.SendToPlayer(new BattleStartPacket(packet.BattleID, packet.Position, packet.Attacker, packet.Defender), GetAllPlayers(battle).ToArray());
         }
 
+        /// <summary>
+        /// A battle finished processing from the queue. 
+        /// Needs to 
+        /// </summary>
+        /// <param name="ev"></param>
         private void OnBattleFinishedProcessing(BattleFinishedTaskEvent ev)
         {
             var fullResultPacket = ev.ResultPacket;

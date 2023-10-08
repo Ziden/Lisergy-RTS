@@ -1,62 +1,44 @@
-﻿using Game.Systems.Player;
+﻿using Game.DataTypes;
+using Game.Systems.Player;
 using System;
 
 namespace Game.Scheduler
 {
     public abstract class GameTask : IComparable<GameTask>
     {
-        private DateTime _start;
+        private DateTime _startTime;
         public IGame Game { get; private set; }
+        public bool HasFinished { get; internal set; }
+        public GameId ID { get; private set; }
+        public TimeSpan Delay { get; private set; }
+        public DateTime Finish { get; private set; }
+        public PlayerEntity Creator { get; private set; }
+        public bool Repeat { get; set; }
 
         public GameTask(IGame game, TimeSpan delay, PlayerEntity creator)
         {
-            ID = Guid.NewGuid();
+            ID = GameId.Generate();
             Delay = delay;
             Creator = creator;
             Game = game;
             Game.Scheduler.Add(this);
         }
 
-        internal bool HasFinished;
-        public Guid ID { get; private set; }
-        public TimeSpan Delay { get; private set; }
-        public DateTime Finish { get; private set; }
-
-        public PlayerEntity Creator { get; private set; }
+        public abstract void Tick();
 
         public DateTime Start
         {
-            get => _start;
+            get => _startTime;
             set
             {
-                _start = value; 
-                Finish = _start + Delay;
+                _startTime = value; 
+                Finish = _startTime + Delay;
             }
         }
 
-
-        public bool Repeat;
-
-        public bool IsDue()
-        {
-            return Finish <= Game.Scheduler.Now;
-        }
-
-        public abstract void Tick();
-
-        public void Cancel()
-        {
-            Game.Scheduler.Cancel(this);
-        }
-
-        public int CompareTo(GameTask other)
-        {
-            return other.ID == ID ? 0 : other.Finish > Finish ? -1 : 1;
-        }
-
-        public override string ToString()
-        {
-            return $"<Task {ID} Start=<{Start}> End=<{Finish}>>";
-        }
+        public bool IsDue() => Finish <= Game.Scheduler.Now;
+        public void Cancel() => Game.Scheduler.Cancel(this);
+        public int CompareTo(GameTask other) => other.ID == ID ? 0 : other.Finish > Finish ? -1 : 1;
+        public override string ToString() => $"<Task {ID} Start={Start} End={Finish}>";
     }
 }

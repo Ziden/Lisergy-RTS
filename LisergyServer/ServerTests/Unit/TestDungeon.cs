@@ -1,5 +1,6 @@
 using Game;
 using Game.Battle;
+using Game.Battle.Data;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
@@ -33,7 +34,7 @@ namespace Tests
             _party = _player.GetParty(0);
             _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
-            Assert.That(_dungeon.Get<BattleGroupComponent>().Units.Count == 1);
+            Assert.That(_dungeon.Get<BattleGroupComponent>().Units.Valids == 1);
             _game.Logic.Map(_dungeon).SetPosition(_game.World.GetTile(8, 8));
         }
 
@@ -100,7 +101,7 @@ namespace Tests
 
             var tileBuilding = dungeonTile.Components.Get<TileHabitants>().Building;
             Assert.That(tileBuilding.EntityId == _dungeon.EntityId);
-            Assert.That(tileBuilding.Components.Get<BattleGroupComponent>().Units.Count > 0);
+            Assert.That(tileBuilding.Components.Get<BattleGroupComponent>().Units.Valids > 0);
         }
 
         [Test]
@@ -108,9 +109,16 @@ namespace Tests
         {
             var team = _dungeon.Components.Get<BattleGroupComponent>().Units;
 
-            var unit = team.First();
+            var unit = team[0];
 
             Assert.That(unit.HP == unit.MaxHP && unit.HP > 0);
+        }
+
+        [Test]
+        public void TestDungeonInitialization()
+        {
+            Assert.That(_dungeon.Tile != null);
+            Assert.That(_dungeon.Get<BattleGroupComponent>().Units.Valids > 0);
         }
 
         [Test]
@@ -139,6 +147,35 @@ namespace Tests
             Assert.AreEqual(_dungeon.Tile, null);
             Assert.AreEqual(dungeonTile.Components.Get<TileHabitants>().Building, null);
             Assert.AreEqual(_player.ReceivedPacketsOfType<EntityDestroyPacket>().Count, 1);
+        }
+
+        [Test]
+        public void TestPartyTeleportsBackAfterLoosingToDungeon()
+        {
+            var playerCastleTile = _player.Data.Buildings.First().Tile;
+            var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
+            var party = _player.GetParty(0);
+
+            var component = _dungeon.Components.Get<BattleGroupComponent>();
+            var unit = component.Units[0];
+            unit.Atk = 255;
+            unit.Speed = 255;
+            component.Units[0] = unit;
+            _dungeon.Save(component);
+
+            _game.Logic.Map(_dungeon).SetPosition(dungeonTile);
+
+            _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
+            _player.GetParty(0).Course.Tick();
+
+            var battle = _game.BattleService.GetRunningBattle(party.Components.Get<BattleGroupComponent>().BattleID);
+            _game.BattleService.BattleTasks[battle.ID].Tick();
+
+            Assert.IsTrue(party.Tile == playerCastleTile);
+            Assert.IsTrue(!_game.Logic.BattleGroup(party).IsDestroyed);
+            Assert.AreEqual(_dungeon.Tile, dungeonTile);
+            Assert.AreEqual(dungeonTile.Components.Get<TileHabitants>().Building, _dungeon);
+            Assert.AreEqual(_player.ReceivedPacketsOfType<EntityDestroyPacket>().Count, 0);
         }
 
 
@@ -170,7 +207,7 @@ namespace Tests
             _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
             _dungeon.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[1]));
 
-            var battleTeam = new BattleTeam(_dungeon, _dungeon.Get<BattleGroupComponent>().Units.ToArray());
+            var battleTeam = new BattleTeam(new BattleTeamData(_dungeon));
             Assert.AreNotEqual(battleTeam.Units.Length, 0);
         }
 

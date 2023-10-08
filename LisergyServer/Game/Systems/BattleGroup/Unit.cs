@@ -18,7 +18,7 @@ namespace Game.Systems.Battler
 
         public Unit(UnitSpec spec)
         {
-            Id = Guid.NewGuid();
+            Id = GameId.Generate();
             SpecId = spec.UnitSpecID;
             Stats = new UnitStats();
             Stats.SetStats(spec.Stats);
@@ -56,7 +56,7 @@ namespace Game.Systems.Battler
 
         public override string ToString()
         {
-            return $"<Unit Spec={SpecId}/>";
+            return !Valid ? "<Unit Null>" : $"<Unit Spec={SpecId}/>";
         }
 
         public bool Valid => Id != GameId.ZERO;

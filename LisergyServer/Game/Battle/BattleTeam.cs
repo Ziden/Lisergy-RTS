@@ -1,64 +1,53 @@
-﻿using Game.DataTypes;
-using Game.ECS;
+﻿using Game.Battle.Data;
+using Game.DataTypes;
 using Game.Systems.Battler;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Game.Battle
 {
-    [Serializable]
-    public class BattleTeam
+    /// <summary>
+    /// Represents a battle team which consists of an array of units.
+    /// Since units are structs, it will allocate unit pointers to be used inside the battle.
+    /// </summary>
+    public unsafe class BattleTeam
     {
-        public BattleUnit[] Units;
-        public GameId OwnerID;
-        public bool IsAutoBattle = true;
-
-        [NonSerialized]
-        private IEntity _entity;
-
-        public BattleTeam(IEntity entity, params Unit[] units)
+        /// <summary>
+        /// Struct representing the battle input.
+        /// Will be updated only in the end of the battle.
+        /// </summary>
+        public BattleTeamData TeamData;
+        private BattleTeamMemory _memory;
+        public ref readonly GameId OwnerID => ref TeamData.OwnerID;
+        public BattleUnit[] Units { get; private set; }
+        public BattleTeam(in BattleTeamData data)
         {
-            Init(entity, units);
+            TeamData = data;
+            _memory = new BattleTeamMemory(TeamData);
+            Units = new BattleUnit[] {
+                new BattleUnit(this, _memory.GetUnit(0), _memory.GetUnitState(0)),
+                new BattleUnit(this, _memory.GetUnit(1), _memory.GetUnitState(1)),
+                new BattleUnit(this, _memory.GetUnit(2), _memory.GetUnitState(2)),
+                new BattleUnit(this, _memory.GetUnit(3), _memory.GetUnitState(3))
+            };
         }
 
-        public BattleTeam(IEntity entity)
+        /// <summary>
+        /// Updates the team data with the result of the battle
+        /// </summary>
+        public ref BattleTeamData UpdateTeamData()
         {
-            Init(entity, entity.Get<BattleGroupComponent>().Units.ToArray());
-        }
-
-        public BattleTeam(IEntity entity, BattleGroupComponent component)
-        {
-            Init(entity, component.Units.ToArray());
-        }
-
-        public BattleTeam(params Unit[] units)
-        {
-            Init(null, units);
-        }
-
-        public BattleUnit Leader => Units[0];
-
-        private void Init(IEntity entity, params Unit[] units)
-        {
-            _entity = entity;
-            List<Unit> filtered = units.Where(u => u.Valid).ToList();
-            Units = new BattleUnit[filtered.Count()];
-            for (int x = 0; x < filtered.Count(); x++)
-            {
-                Units[x] = new BattleUnit(this, filtered[x]);
-            }
-            OwnerID = entity != null ? entity.OwnerID : GameId.ZERO;
+            if (_memory == null) throw new Exception("Can only copy data once");
+            _memory.FreeAndCopyResults(ref TeamData);
+            _memory = null;
+            return ref TeamData;
         }
 
         public BattleUnit[] Alive => Units.Where(u => !u.Dead).ToArray();
-
         public bool AllDead => !Units.Any(u => !u.Dead);
-        public IEntity Entity => _entity;
-
         public override string ToString()
         {
-            return $"<Team Owner={OwnerID} Units={string.Join(",", Units.Select(u => u.ToString()).ToArray())}";
+            return $"<Team Owner={TeamData.OwnerID} Units={string.Join(",", Units.Select(u => u.ToString()).ToArray())}";
         }
     }
 }

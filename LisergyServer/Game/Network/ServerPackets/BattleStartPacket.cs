@@ -1,4 +1,4 @@
-﻿using Game.Battle;
+﻿using Game.Battle.Data;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Systems.Battler;
@@ -8,21 +8,23 @@ using System;
 
 namespace Game.Network.ServerPackets
 {
+    /// <summary>
+    /// Packet sent to player whenever a battle started
+    /// </summary>
     [Serializable]
     public class BattleStartPacket : ServerPacket
     {
         public Position Position;
         public GameId BattleID;
-        public BattleTeam Attacker;
-        public BattleTeam Defender;
+        public BattleTeamData Attacker;
+        public BattleTeamData Defender;
 
-        public BattleStartPacket(GameId battleId, IEntity attacker, IEntity defender)
+        public BattleStartPacket(in GameId battleId, in Position position, in BattleTeamData attacker, in BattleTeamData defender)
         {
-            var pos = attacker.Get<MapPlacementComponent>();
             BattleID = battleId;
-            Attacker = new BattleTeam(attacker, attacker.Get<BattleGroupComponent>());
-            Defender = new BattleTeam(defender, defender.Get<BattleGroupComponent>());
-            Position = pos.Position;
+            Attacker = attacker;
+            Defender = defender;
+            Position = position;
         }
     }
 }

@@ -31,6 +31,7 @@ namespace ServerTests
 
         private GameWorld CreateTestWorld()
         {
+            GameId.DEBUG_MODE = 1;
             WorldUtils.SetRandomSeed(666);
             UnmanagedMemory.FlagMemoryToBeReused();
             TestWorld = new GameWorld(4, 20, 20);

@@ -5,7 +5,7 @@ using System.Text;
 namespace Game.DataTypes
 {
     /// <summary>
-    /// Fixed string size
+    /// Fixed implementation of a string
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]

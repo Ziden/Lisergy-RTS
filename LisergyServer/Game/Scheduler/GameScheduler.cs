@@ -14,7 +14,6 @@ namespace Game.Scheduler
     {
         public DateTime Now { get; }
         public void Add(GameTask task);
-
         void Cancel(GameTask task);
     }
 
@@ -26,10 +25,7 @@ namespace Game.Scheduler
         public DateTime Now { get; private set; }
         internal TimeSpan NowTimespan => Now - Epoch;
         internal GameTask NextTask { get; private set; }
-        public int PendingTasks => _tasks.Values.Count();
-        public int AmountQueues => Queue.Count;
         internal SortedSet<GameTask> Queue { get; private set; } = new SortedSet<GameTask>();
-
         internal void ForceComplete(GameTask task)
         {
             while (task.Repeat)
@@ -40,6 +36,9 @@ namespace Game.Scheduler
             _ = Queue.Remove(task);
             _ = _tasks.Remove(task.ID);
         }
+
+        public int PendingTasks => _tasks.Values.Count();
+        public int AmountQueues => Queue.Count;
 
         internal void Clear()
         {

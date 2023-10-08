@@ -9,18 +9,18 @@ namespace Game.World
 {
     public static class WorldUtils
     {
-        internal static GameRandom _random = new GameRandom();
+        internal static DeterministicRandom _random = new DeterministicRandom();
 
         public static T RandomElement<T>(this IEnumerable<T> input)
         {
             return input.ElementAt(_random.Next(input.Count()));
         }
 
-        public static GameRandom Random { get => _random; }
+        public static DeterministicRandom Random { get => _random; }
 
         public static void SetRandomSeed(int seed)
         {
-            _random = new GameRandom(seed);
+            _random = new DeterministicRandom(seed);
         }
 
         // Gets the amount of bits required to allocate a given number

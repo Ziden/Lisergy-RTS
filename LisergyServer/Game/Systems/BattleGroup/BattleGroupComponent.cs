@@ -1,5 +1,6 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
+using Game.Systems.BattleGroup;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -12,8 +13,8 @@ namespace Game.Systems.Battler
     public unsafe struct BattleGroupComponent : IComponent
     {
         public GameId BattleID;
-        public List<Unit> Units;
+        public UnitGroup Units;
 
-        public override string ToString() => $"<BattleGroup Units={Units.Count} BattleId={BattleID}>";
+        public override string ToString() => $"<BattleGroup Units={Units} BattleId={BattleID}>";
     }
 }

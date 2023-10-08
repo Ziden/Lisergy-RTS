@@ -59,7 +59,7 @@ namespace Game.Tile
 
         public override string ToString()
         {
-            return $"<Tile {X}-{Y} ID={SpecId}>";
+            return $"<Tile Type={SpecId} {Position}>";
         }
 
         public T Get<T>() where T : IComponent

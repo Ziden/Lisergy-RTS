@@ -112,7 +112,7 @@ namespace Tests
             var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
 
             Assert.AreEqual(los, Game.Specs.Units[party.Get<BattleGroupComponent>().Units[0].SpecId].LOS);
-            Assert.AreEqual(los, party.Get<BattleGroupComponent>().Units.Max(u => Game.Specs.Units[u.SpecId].LOS));
+            Assert.AreEqual(los, party.Get<BattleGroupComponent>().Units.Array.Max(u => Game.Specs.Units[u.SpecId].LOS));
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace Tests
             var party = player.Data.Parties.First();
 
             var logic = Game.Systems.BattleGroup.GetLogic(party);
-            logic.RemoveUnit(logic.GetUnits()[0]);
+            logic.RemoveUnit(party.Get<BattleGroupComponent>().Units[0]);
 
             var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
 
@@ -139,7 +139,7 @@ namespace Tests
 
             var logic = Game.Systems.BattleGroup.GetLogic(party);
 
-            logic.RemoveUnit(logic.GetUnits()[0]);
+            logic.RemoveUnit(party.Get<BattleGroupComponent>().Units[0]);
 
             var unit = new Unit(Game.Specs.Units[0]);
             logic.AddUnit(unit);
@@ -248,7 +248,7 @@ namespace Tests
 
             var lowerLosUnit = Game.Specs.Units.Where(kp => kp.Value.LOS < initialLos).First();
             var logic = Game.Systems.BattleGroup.GetLogic(party);
-            logic.RemoveUnit(logic.GetUnits().First());
+            logic.RemoveUnit(party.Get<BattleGroupComponent>().Units[0]);
             logic.AddUnit(new Unit(Game.Specs.Units[lowerLosUnit.Key]));
 
             var afterLos = party.GetLineOfSight();

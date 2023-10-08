@@ -1,16 +1,13 @@
 ﻿using Game;
 using Game.DataTypes;
 using Game.Events.ServerEvents;
-using Game.Network;
 using Game.Network.ServerPackets;
-using Game.Scheduler;
 using Game.Systems.Battler;
 using Game.Systems.Dungeon;
 using Game.Systems.Party;
 using NUnit.Framework;
 using ServerTests;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Tests
@@ -39,8 +36,8 @@ namespace Tests
 
             enemy.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[0]));
 
-            var battleID = Guid.NewGuid();
-            _game.Network.SendToServer(new BattleTriggeredPacket(battleID, party, enemy), ServerType.BATTLE);
+            var battleID = GameId.Generate();
+            _game.Network.SendToServer(new BattleQueuedPacket(battleID, party, enemy), ServerType.BATTLE);
 
             _player.ReceivedPackets.Clear();
             _game.Entities.DeltaCompression.ClearDeltas();
@@ -58,13 +55,11 @@ namespace Tests
         {
             var team = _player.GetParty(0).Get<BattleGroupComponent>().Units;
 
-            var unit = team.First();
-
+            var unit = team[0];
             var mhp = unit.MaxHP;
 
             Assert.That(unit.HP == unit.MaxHP && unit.HP > 0);
         }
-
 
         [Test]
         public void TestBattleIDResetsAfterBattle()
@@ -72,20 +67,22 @@ namespace Tests
             var party = _player.GetParty(0);
             _game.Logic.Map(party).SetPosition(_game.World.GetTile(0, 0));
 
+        
             var enemy = _game.Entities.CreateEntity<DungeonEntity>(null);
             _game.Logic.Map(enemy).SetPosition(_game.World.GetTile(0, 0));
 
-            enemy.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[0]));
+            var component = enemy.Get<BattleGroupComponent>();
+            component.Units.Add(new Unit(_game.Specs.Units[0]));
+            enemy.Save(component);
 
-            var battleID = Guid.NewGuid();
-            _game.Network.SendToServer(new BattleTriggeredPacket(battleID, party, enemy), ServerType.BATTLE);
+            var battleID = GameId.Generate();
+            _game.Network.SendToServer(new BattleQueuedPacket(battleID, party, enemy), ServerType.BATTLE);
 
             var battle = _game.BattleService.GetRunningBattle(battleID);
             _game.BattleService.BattleTasks[battle.ID].Tick();
 
             Assert.IsTrue(party.Get<BattleGroupComponent>().BattleID == GameId.ZERO);
             Assert.IsTrue(battle.IsOver);
-           
         }
 
         [Test]
@@ -110,10 +107,10 @@ namespace Tests
 
             logic.ReplaceUnit(unit1, unit3);
    
-            Assert.AreEqual(2, logic.GetUnits().Count());
-            Assert.IsTrue(logic.GetUnits().Contains(unit3));
-            Assert.IsTrue(logic.GetUnits().Contains(unit2));
-            Assert.IsFalse(logic.GetUnits().Contains(unit1));
+            Assert.AreEqual(2, party.Get<BattleGroupComponent>().Units.Valids);
+            Assert.IsTrue(party.Get<BattleGroupComponent>().Units.Contains(unit3));
+            Assert.IsTrue(party.Get<BattleGroupComponent>().Units.Contains(unit2));
+            Assert.IsFalse(party.Get<BattleGroupComponent>().Units.Contains(unit1));
         }
 
         [Test]
@@ -128,7 +125,7 @@ namespace Tests
             _game.EntityLogic(party).BattleGroup.AddUnit(unit2);
             _game.EntityLogic(party).BattleGroup.ReplaceUnit(unit2, unit3, 1);
 
-            Assert.AreEqual(2, _game.EntityLogic(party).BattleGroup.GetUnits().Count());
+            Assert.AreEqual(2, party.Get<BattleGroupComponent>().Units.Valids);
         }
 
         [Test]
@@ -145,15 +142,15 @@ namespace Tests
             logic.AddUnit(unit0);
             logic.AddUnit(unit1);
 
-            var newUnits = new List<Unit>() { unit1, unit2, unit0 };
+            var newUnits = new Unit [] { unit1, unit2, unit0, default };
 
             logic.UpdateUnits(newUnits);
-            var units = logic.GetUnits().ToList();
 
-            Assert.AreEqual(3, logic.GetUnits().Count());
-            Assert.AreEqual(units[0], unit1);
-            Assert.AreEqual(units[1], unit2);
-            Assert.AreEqual(units[2], unit0);
+            var unitGroup = party.Get<BattleGroupComponent>().Units;
+            Assert.AreEqual(3, unitGroup.Valids);
+            Assert.AreEqual(unitGroup[0], unit1);
+            Assert.AreEqual(unitGroup[1], unit2);
+            Assert.AreEqual(unitGroup[2], unit0);
  
         }
 

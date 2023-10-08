@@ -7,31 +7,44 @@ namespace Game.DataTypes
 {
     /// <summary>
     /// Simpler to serialize structure of Guids.
-    /// Guarantees uniqueness using Guids.
+    /// Guarantees uniqueness using Guids. It uses 16 bytes like guids
+    /// Main difference is that its an unmanaged data structure that's serialized as two ulongs
+    /// for faster serialization, reading and writing
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
     public unsafe struct GameId : IEquatable<GameId>
     {
+        /// <summary>
+        /// Just for testing. Makes generation incremental and ToString will print number instead of guid.
+        /// 0 = disabled.
+        /// This is just during initial development later can think a better solution for debugging
+        /// </summary>
+        internal static ulong DEBUG_MODE = 1; 
+
         public static GameId ZERO = Guid.Empty;
 
-        private ulong leftside;
-        private ulong rightside;
+        public ulong _leftside;
+        public ulong _rightside;
 
         public byte[] GetBytes() {
             var bytes = new byte[16];
             fixed (byte* pointer = bytes)
             {
-                *(ulong*)pointer = leftside;
-                *(ulong*)(pointer + 8) = rightside;
+                *(ulong*)pointer = _leftside;
+                *(ulong*)(pointer + 8) = _rightside;
             }
             return bytes;
         }
 
-        public static GameId Generate()
-        {
+        public static GameId Generate() {
+            if(DEBUG_MODE > 0)
+            {
+                DEBUG_MODE++;
+                return new GameId() { _leftside = 0, _rightside = DEBUG_MODE };
+            }
             return Guid.NewGuid();
-        }
+        } 
 
         public static implicit operator GameId(Guid id)
         {
@@ -40,8 +53,8 @@ namespace Game.DataTypes
             {
                 return new GameId()
                 {
-                    leftside = *(ulong*)pointer,
-                    rightside = *(ulong*)(pointer + 8)
+                    _leftside = *(ulong*)pointer,
+                    _rightside = *(ulong*)(pointer + 8)
                 };
             }
         }
@@ -89,6 +102,7 @@ namespace Game.DataTypes
 
         public override string ToString()
         {
+            if (DEBUG_MODE > 0) return _rightside.ToString();
             if (IsZero())
             {
                 return Guid.Empty.ToString();
@@ -100,24 +114,24 @@ namespace Game.DataTypes
 
         public unsafe bool IsEqualsTo(GameId id2)
         {
-            return leftside == id2.leftside && rightside == id2.rightside;
+            return _leftside == id2._leftside && _rightside == id2._rightside;
         }
 
         public GameId(Position pos)
         {
-            leftside = pos.X;
-            rightside = pos.Y;
+            _leftside = pos.X;
+            _rightside = pos.Y;
         }
 
         public GameId(ulong l, ulong l2)
         {
-            leftside = l;
-            rightside = l2;
+            _leftside = l;
+            _rightside = l2;
         }
 
         public override unsafe int GetHashCode()
         {
-            return HashCode.Combine(leftside, rightside);
+            return HashCode.Combine(_leftside, _rightside);
         }
     }
 }

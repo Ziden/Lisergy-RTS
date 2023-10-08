@@ -18,7 +18,7 @@ namespace Game
     {
         T CreateEntity<T>(PlayerEntity owner) where T : IEntity;
 
-        IEntity GetEntity(GameId id);
+        IEntity this[in GameId id] {get;}
 
         IDeltaCompression DeltaCompression { get; }
     }
@@ -51,6 +51,6 @@ namespace Game
             return null;
         }
 
-        public IEntity GetEntity(GameId id) => _entities[id];
+        public IEntity this[in GameId id] => _entities[id];
     }
 }

@@ -1,23 +1,27 @@
 ﻿using Game.Battle.BattleActions;
+using Game.Battle.Data;
 using Game.DataTypes;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Game.Battle
 {
+    /// <summary>
+    /// Battle auto-runner. 
+    /// Will take a battle and run AI on all rounds until completion.
+    /// </summary>
     public class AutoRun
     {
-
         private readonly TurnBattle _battle;
-        private readonly GameRandom _random;
+        private readonly DeterministicRandom _random;
 
         public AutoRun(TurnBattle battle)
         {
             _battle = battle;
-            _random = new GameRandom(battle.ID);
+            _random = new DeterministicRandom(battle.ID);
         }
 
-        private TurnBattleRecord Log => _battle.Result;
+        private TurnBattleRecord Log => _battle.Record;
 
         private SortedSet<BattleUnit> UnitQueue => _battle._actionQueue;
 

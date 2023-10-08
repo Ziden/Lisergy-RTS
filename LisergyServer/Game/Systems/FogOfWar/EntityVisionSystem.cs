@@ -26,8 +26,9 @@ namespace Game.Systems.FogOfWar
 
         private void OnUnitRemoved(IEntity e, ref EntityVisionComponent component, UnitRemovedEvent ev)
         {
-            if (ev.Group.Units.Count == 0) component.LineOfSight = 0;
-            else component.LineOfSight = ev.Group.Units.Max(u => Game.Specs.Units[u.SpecId].LOS);
+            var unitsArray = ev.Group.Units.Array;
+            if (unitsArray.All(u => !u.Valid)) component.LineOfSight = 0;
+            else component.LineOfSight = unitsArray.Max(u => Game.Specs.Units[u.SpecId].LOS);
             e.Components.Save(component);
         }
 

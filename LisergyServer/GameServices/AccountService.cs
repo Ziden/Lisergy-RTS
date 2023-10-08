@@ -38,7 +38,7 @@ namespace LisergyServer.Core
             if (!_accounts.TryGetValue(ev.Login, out acc))
             {
                 acc = new Account();
-                acc.PlayerId = Guid.NewGuid();
+                acc.PlayerId = GameId.Generate();
                 acc.Login = ev.Login;
                 acc.Password = ev.Password;
                 _accounts[acc.Login] = acc;

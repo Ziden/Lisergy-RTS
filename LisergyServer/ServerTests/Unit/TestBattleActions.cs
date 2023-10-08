@@ -1,5 +1,7 @@
 using Game.Battle;
 using Game.Battle.BattleActions;
+using Game.Battle.Data;
+using Game.DataTypes;
 using Game.Systems.Battler;
 using GameDataTest;
 using NUnit.Framework;
@@ -8,7 +10,7 @@ using System.Linq;
 
 namespace Tests
 {
-    public class TestBattleActions
+    public unsafe class TestBattleActions
     {
         private Unit FastUnit;
         private Unit SlowUnit;
@@ -25,7 +27,7 @@ namespace Tests
             SlowUnit = new Unit(specs.Units[1]);
             SlowUnit.Speed /= 2;
 
-            Battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(FastUnit), new BattleTeam(SlowUnit));
+            Battle = new TurnBattle(GameId.Generate(), new BattleTeamData(FastUnit), new BattleTeamData(SlowUnit));
         }
 
         [Test]
@@ -40,7 +42,7 @@ namespace Tests
             var result = action.Result as AttackActionResult;
 
             Assert.NotNull(result);
-            Assert.That(defender.UnitReference.HP == defender.UnitReference.MaxHP - result.Damage);
+            Assert.That(defender.UnitPtr->HP == defender.UnitPtr->MaxHP - result.Damage);
         }
     }
 }

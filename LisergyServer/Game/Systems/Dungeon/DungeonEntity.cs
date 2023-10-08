@@ -15,24 +15,19 @@ namespace Game.Systems.Dungeon
 
         public DungeonEntity(IGame game) : base(game, null)
         {
+            Components.Add(new DungeonComponent());
             Components.Add(new BuildingComponent());
             Components.Add(new MapPlacementComponent());
+            Components.Add(new BattleGroupComponent());
             Components.Add(new MapReferenceComponent());
-            Components.Add(new DungeonComponent());
-            Components.Add(new BattleGroupComponent()
-            {
-                Units = new List<Unit>()
-            });
         }
 
         public ushort SpecId => Components.Get<DungeonComponent>().SpecId;
 
         public override string ToString()
         {
-            return $"<Dungeon Spec={SpecId}/>";
+            return $"<Dungeon Entity={EntityId} Spec={SpecId} Units={Components.Get<BattleGroupComponent>().Units}/>";
         }
-
-        public ServerPacket GetStatusUpdatePacket() => GetUpdatePacket(null);
 
         public void BuildFromSpec(DungeonSpec spec)
         {
@@ -47,9 +42,10 @@ namespace Game.Systems.Dungeon
                     battleGroup.Units.Add(units[i]);
                 }
             }
-            var component = Components.Get<DungeonComponent>();
-            component.SpecId = spec.DungeonSpecID;
-            Components.Save(component);
+            var dungeonComponent = Components.Get<DungeonComponent>();
+            dungeonComponent.SpecId = spec.DungeonSpecID;
+            Components.Save(battleGroup);
+            Components.Save(dungeonComponent);
         }
     }
 }

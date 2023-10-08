@@ -19,11 +19,9 @@ namespace Game.Systems.Party
 
         private void OnGroupDead(IEntity e, ref PartyComponent component, GroupDeadEvent ev)
         {
-            foreach (var unit in ev.GroupComponent.Units)
-                unit.HealAll();
- 
+            e.EntityLogic.BattleGroup.Heal();
             var center = Players.GetPlayer(e.OwnerID).GetCenter().Get<MapPlacementComponent>();
-            Systems.Map.GetLogic(e).SetPosition(Game.GameWorld.GetTile(center.Position));
+            e.EntityLogic.Map.SetPosition(Game.GameWorld.GetTile(center.Position));
         }
     }
 }

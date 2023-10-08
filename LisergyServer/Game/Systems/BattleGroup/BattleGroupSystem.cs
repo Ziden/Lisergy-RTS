@@ -1,11 +1,7 @@
-﻿using Game.DataTypes;
-using Game.ECS;
+﻿using Game.ECS;
 using Game.Events.GameEvents;
 using Game.Network.ServerPackets;
-using Game.Systems.Player;
-using System;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace Game.Systems.Battler
 {
@@ -19,6 +15,9 @@ namespace Game.Systems.Battler
             Game.Network.On<BattleResultPacket>(OnBattleResult);
         }
 
+        /// <summary>
+        /// When a entity moved offensively towards another entity
+        /// </summary>
         private void OnOffensiveAction(IEntity attacker, ref BattleGroupComponent atkGroup, OffensiveActionEvent ev)
         {
             if(GetLogic(ev.Attacker).IsBattling || GetLogic(ev.Defender).IsBattling)
@@ -27,19 +26,22 @@ namespace Game.Systems.Battler
                 return;
             }
             var battleId = GetLogic(ev.Attacker).StartBattle(ev.Defender);
-            Game.Network.SendToServer(new BattleTriggeredPacket(battleId, ev.Attacker, ev.Defender), ServerType.BATTLE);
+            Game.Network.SendToServer(new BattleQueuedPacket(battleId, ev.Attacker, ev.Defender), ServerType.BATTLE);
         }
 
+        /// <summary>
+        /// When received a battle finished processing from battle service
+        /// </summary>
         private void OnBattleResult(BattleResultPacket packet)
         {
-            var attackerEntity = packet.Header.Attacker.Entity;
-            var defenderEntity = packet.Header.Defender.Entity;
+            var attackerEntity = Game.Entities[packet.Header.Attacker.EntityId];
+            var defenderEntity = Game.Entities[packet.Header.Defender.EntityId];
 
             var attackerGroup = attackerEntity.Get<BattleGroupComponent>();
             var defenderGroup = defenderEntity.Get<BattleGroupComponent>();
 
-            attackerGroup.Units = packet.Header.Attacker.Units.Select(u => u.UnitReference).ToList();
-            defenderGroup.Units = packet.Header.Defender.Units.Select(u => u.UnitReference).ToList();
+            attackerGroup.Units = packet.Header.Attacker.Units;
+            defenderGroup.Units = packet.Header.Defender.Units;
 
             attackerEntity.Components.Save(attackerGroup);
             defenderEntity.Components.Save(defenderGroup);
@@ -64,10 +66,12 @@ namespace Game.Systems.Battler
                 Game.Network.SendToPlayer(defenderEntity.GetUpdatePacket(defPlayer), defPlayer);
                 if (!Game.Logic.BattleGroup(defenderEntity).IsDestroyed)
                     Game.Network.SendToPlayer(attackerEntity.GetUpdatePacket(defPlayer), defPlayer);
-
             }
         }
 
+        /// <summary>
+        /// When a battle finished processing in game logic
+        /// </summary>
         private void OnBattleFinish(IEntity e, ref BattleGroupComponent component, BattleFinishedEvent ev)
         {
             var logic = GetLogic(e);

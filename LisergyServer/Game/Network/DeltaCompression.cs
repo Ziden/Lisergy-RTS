@@ -1,6 +1,5 @@
 ﻿using Game.ECS;
 using Game.Systems.Player;
-using System;
 using System.Collections.Generic;
 
 namespace Game.Network
@@ -28,30 +27,30 @@ namespace Game.Network
 
     public class DeltaCompression : IDeltaCompression
     {
-        internal HashSet<IEntityDeltaTrackable> _dirty = new HashSet<IEntityDeltaTrackable>();
+        internal HashSet<IEntityDeltaTrackable> _modifiedEntities = new HashSet<IEntityDeltaTrackable>();
 
         public void Add(IEntityDeltaTrackable entity)
         {
-            _dirty.Add(entity);
+            _modifiedEntities.Add(entity);
         }
 
         public void ClearDeltas()
         {
-            foreach (var tracked in _dirty)
+            foreach (var tracked in _modifiedEntities)
             {
                 tracked.DeltaFlags.Clear();
             }
-            _dirty.Clear();
+            _modifiedEntities.Clear();
         }
 
         public void SendDeltaPackets(PlayerEntity trigger)
         {
-            foreach (var tracked in _dirty)
+            foreach (var tracked in _modifiedEntities)
             {
                 tracked.ProccessDeltas(trigger);
                 tracked.DeltaFlags.Clear();
             }
-            _dirty.Clear();
+            _modifiedEntities.Clear();
         }
     }
 

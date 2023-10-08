@@ -1,5 +1,6 @@
 ﻿using Game.Battle.BattleActions;
 using Game.Battle.BattleEvents;
+using Game.Battle.Data;
 using Game.DataTypes;
 using Game.Systems.Battler;
 using System.Collections.Generic;
@@ -7,41 +8,46 @@ using System.Linq;
 
 namespace Game.Battle
 {
-    public class TurnBattle
+    public unsafe class TurnBattle
     {
         internal SortedSet<BattleUnit> _actionQueue = new SortedSet<BattleUnit>();
-        public TurnBattleRecord Result = new TurnBattleRecord();
+        public TurnBattleRecord Record = new TurnBattleRecord();
 
         public GameId ID { get; private set; }
         public BattleTeam Attacker { get; private set; }
         public BattleTeam Defender { get; private set; }
         public AutoRun AutoRun { get; set; }
-
         public BattleUnit CurrentActingUnit => _actionQueue.First();
-
         public bool IsOver { get; set; }
 
-        public TurnBattle(GameId id, BattleTeam attacker, BattleTeam defender)
+        public TurnBattle(GameId id, in BattleTeamData attacker, in BattleTeamData defender)
         {
             ID = id;
-            Attacker = Result.Attacker = attacker;
-            Defender = Result.Defender = defender;
+            Attacker = Record.Attacker = new BattleTeam(attacker);
+            Defender = Record.Defender = new BattleTeam(defender);
             AutoRun = new AutoRun(this);
 
-            _actionQueue.UnionWith(attacker.Units);
-            _actionQueue.UnionWith(defender.Units);
+            _actionQueue.UnionWith(Attacker.Units);
+            _actionQueue.UnionWith(Defender.Units);
+        }
+
+        private void FinishBattle()
+        {
+            IsOver = true;
+            Attacker.UpdateTeamData();
+            Defender.UpdateTeamData();
         }
 
         public void Death(BattleUnit u)
         {
-            Result.RecordEvent(new UnitDeadEvent() { UnitId = u.UnitID });
+            Record.RecordEvent(new UnitDeadEvent() { UnitId = u.UnitID });
             _actionQueue.Remove(u);
-            if (u.Team.AllDead) IsOver = true;
+            if (u.Team.AllDead) FinishBattle();
         }
 
         public List<BattleEvent> ReceiveAction(BattleAction action)
         {
-            Result.NextTurn();
+            Record.NextTurn();
             BattleUnit unit = CurrentActingUnit;
             if (unit != action.Unit)
             {
@@ -51,7 +57,7 @@ namespace Game.Battle
             {
                 attack.Result = attack.Unit.Attack(attack.Defender);
                 attack.Result.Succeeded = true;
-                Result.RecordEvent(attack);
+                Record.RecordEvent(attack);
                 if (attack.Defender.Dead)
                 {
                     Death(attack.Defender);
@@ -59,13 +65,13 @@ namespace Game.Battle
             }
             UpdateRT(unit);
            
-            return Result.CurrentTurn.Events;
+            return Record.CurrentTurn.Events;
         }
 
         public void UpdateRT(BattleUnit unit)
         {
             _ = _actionQueue.Remove(unit);
-            unit.RT += unit.GetMaxRT();
+            unit.RT += unit.MaxRT;
             _ = _actionQueue.Add(unit);
         }
 
@@ -79,7 +85,7 @@ namespace Game.Battle
             return $"<Battle ID={ID} Atk={Attacker} Def={Defender}/>";
         }
 
-        public Unit FindUnit(GameId id)
+        public Unit* FindUnit(GameId id)
         {
             BattleUnit unit = Attacker.Units.FirstOrDefault(u => u != null && u.UnitID == id);
             if (unit == null)
@@ -87,7 +93,7 @@ namespace Game.Battle
                 unit = Defender.Units.FirstOrDefault(u => u != null && u.UnitID == id);
             }
 
-            return unit.UnitReference;
+            return unit.UnitPtr;
         }
 
         public BattleUnit FindBattleUnit(GameId id)

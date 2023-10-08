@@ -1,3 +1,4 @@
+using Game.DataTypes;
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
@@ -134,7 +135,7 @@ namespace Tests
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
             var component = _party.Get<BattleGroupComponent>();
-            component.BattleID = Guid.NewGuid();
+            component.BattleID = GameId.Generate();
             _party.Save(component);
 
             _path.Add(new Position(next.X + 1, next.Y));

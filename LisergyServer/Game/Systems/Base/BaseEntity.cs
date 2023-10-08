@@ -22,7 +22,7 @@ namespace Game
         {
             Game = game;
             _ownerId = owner != null ? owner.OwnerID : GameId.ZERO;
-            _entityId = Guid.NewGuid();
+            _entityId = GameId.Generate();
             DeltaFlags = new DeltaFlags(this);
             Components = new ComponentSet(this, owner);
         }

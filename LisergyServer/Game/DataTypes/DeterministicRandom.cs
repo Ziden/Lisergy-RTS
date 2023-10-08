@@ -2,16 +2,15 @@
 
 namespace Game.DataTypes
 {
-    /// Rangom number generator based on Gorge Marsaglia and his yolo XORSHIFT
+    ///  Rangom number generator based on Gorge Marsaglia and his yolo XORSHIFT
     ///  http://www.jstatsoft.org/v08/i14/xorshift.pdf
     ///
     ///  Notes.
     ///  A further performance improvement can be obtained by declaring local variables, thus avoiding 
     ///  re-allocation of variables on each call. However care should be taken if multiple instances of
     ///  GameRandom are in use or if being used in a multi-threaded environment.
-    public class GameRandom
+    public class DeterministicRandom
     {
-
         const double REAL_UNIT_INT = 1.0 / (int.MaxValue + 1.0);
         const double REAL_UNIT_UINT = 1.0 / (uint.MaxValue + 1.0);
         const uint Y = 842502087, Z = 3579807591, W = 273326509;
@@ -21,17 +20,17 @@ namespace Game.DataTypes
         uint x, y, z, w;
 
 
-        public GameRandom()
+        public DeterministicRandom()
         {
             Reinitialise(GetSeed(this));
         }
 
-        public GameRandom(GameId id)
+        public DeterministicRandom(GameId id)
         {
             Reinitialise(GetSeed(id.GetHashCode()));
         }
 
-        public GameRandom(int seed)
+        public DeterministicRandom(int seed)
         {
             Reinitialise(seed);
         }

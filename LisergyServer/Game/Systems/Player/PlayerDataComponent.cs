@@ -1,4 +1,4 @@
-﻿using Game.Battle;
+﻿using Game.Battle.Data;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Systems.Battler;
@@ -17,6 +17,6 @@ namespace Game.Systems.Player
 
         public HashSet<TileEntity> VisibleTiles = new HashSet<TileEntity>();
         public HashSet<TileEntity> OnceExplored = new HashSet<TileEntity>();
-        public Dictionary<GameId, BattleHeader> BattleHeaders = new Dictionary<GameId, BattleHeader>();
+        public Dictionary<GameId, BattleHeaderData> BattleHeaders = new Dictionary<GameId, BattleHeaderData>();
     }
 }

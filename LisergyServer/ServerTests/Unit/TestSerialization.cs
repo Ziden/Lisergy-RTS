@@ -1,5 +1,7 @@
 using Game;
 using Game.Battle;
+using Game.Battle.Data;
+using Game.DataTypes;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
@@ -110,9 +112,9 @@ namespace Tests
         public void TestBattleLogSerialization()
         {
             Serialization.LoadSerializers();
-            var enemyTeam = new BattleTeam(new Unit(_game.Specs.Units[0]), new Unit(_game.Specs.Units[0]));
-            var myTeam = new BattleTeam(new Unit(_game.Specs.Units[2]), new Unit(_game.Specs.Units[0]));
-            var battle = new TurnBattle(Guid.NewGuid(), myTeam, enemyTeam);
+            var enemyTeam = new BattleTeamData(new Unit(_game.Specs.Units[0]), new Unit(_game.Specs.Units[0]));
+            var myTeam = new BattleTeamData(new Unit(_game.Specs.Units[2]), new Unit(_game.Specs.Units[0]));
+            var battle = new TurnBattle(GameId.Generate(), myTeam, enemyTeam);
             var log = new BattleLogPacket(battle);
             var autoRun = new AutoRun(battle);
             var result = autoRun.RunAllRounds();
@@ -120,8 +122,8 @@ namespace Tests
 
             var deserializedHeader = log.DeserializeStartingState();
 
-            Assert.AreEqual(deserializedHeader.Attacker.Units.First().UnitID, myTeam.Units.First().UnitID);
-            Assert.AreEqual(deserializedHeader.Defender.Units.First().UnitID, enemyTeam.Units.First().UnitID);
+            Assert.AreEqual(deserializedHeader.Attacker.Units[0].Id, myTeam.Units.First().Id);
+            Assert.AreEqual(deserializedHeader.Defender.Units[0].Id, enemyTeam.Units.First().Id);
         }
     }
 }

@@ -64,7 +64,7 @@ namespace Tests
 
 
             Assert.That(attackerPlayer.Data.BattleHeaders.ContainsKey(battle.ID));
-            Assert.That(log.Turns.Count() == battle.Result.Turns.Count());
+            Assert.That(log.Turns.Count() == battle.Record.Turns.Count());
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Tests
             var result = _player.ReceivedPacketsOfType<BattleLogPacket>().FirstOrDefault();
 
             Assert.NotNull(result);
-            Assert.AreEqual(result.Turns.Count(), battle.Result.Turns.Count());
+            Assert.AreEqual(result.Turns.Count(), battle.Record.Turns.Count());
         }
     }
 }

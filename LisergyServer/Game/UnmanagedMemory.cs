@@ -2,14 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+
+#if UNITY
+using Unity.Collections.LowLevel.Unsafe;
+#endif
 
 namespace Game
 {
     public static class UnmanagedMemory
     {
-        private static readonly Dictionary<IntPtr, int> _allocs = new Dictionary<IntPtr, int>();
+        internal static readonly Dictionary<IntPtr, int> _allocs = new Dictionary<IntPtr, int>();
 
-        private static Dictionary<IntPtr, int> _available = new Dictionary<IntPtr, int>();
+        internal static Dictionary<IntPtr, int> _available = new Dictionary<IntPtr, int>();
 
 #if WINDOWS
         [DllImport("kernel32.dll")]

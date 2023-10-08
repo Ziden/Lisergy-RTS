@@ -27,7 +27,7 @@ namespace Game.Systems.Player
             Game = game;
             Components = new ComponentSet(this, this);
             Components.Add(new PlayerDataComponent());
-            _playerId = Guid.NewGuid();
+            _playerId = GameId.Generate();
             Data.Parties = new PartyEntity[MAX_PARTIES]
             {
                 game.Entities.CreateEntity<PartyEntity>(this),  

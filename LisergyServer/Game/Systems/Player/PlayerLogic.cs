@@ -1,4 +1,4 @@
-﻿using Game.Battle;
+﻿using Game.Battle.Data;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Network.ServerPackets;
@@ -18,7 +18,7 @@ namespace Game.Systems.Player
             var unit = new Unit(Game.Specs.Units[unitSpecId]);
 
             Entity.Get<PlayerDataComponent>().Units.Add(unit);
-            Log.Debug($"{Entity.EntityId} recruited {unitSpecId}");
+            Log.Debug($"{Entity} recruited {unit}");
             return unit;
         }
 
@@ -41,11 +41,11 @@ namespace Game.Systems.Player
             var party = GetComponent().Parties[0];
             PlaceUnitInParty(unit, party);
             Game.Systems.Map.GetLogic(party).SetPosition(t.GetNeighbor(Direction.EAST));
-            Log.Debug($"Placed new player in {t}");
+            Log.Debug($"Placed new player {Entity} in {t}");
             return;
         }
 
-        public void RecordHeader(BattleHeader header)
+        public void RecordHeader(BattleHeaderData header)
         {
             GetComponent().BattleHeaders[header.BattleID] = header;
         }
@@ -58,7 +58,7 @@ namespace Game.Systems.Player
                 Game.Logic.EntityLogic(existingParty).BattleGroup.RemoveUnit(u);
             }
             Game.Logic.EntityLogic(newParty).BattleGroup.AddUnit(u);
-            Log.Debug($"{Entity.OwnerID} moved unit {u.SpecId} to party {newParty.PartyIndex}");
+            Log.Debug($"{Entity} moved unit {u} to party {newParty}");
         }
 
         public void Build(ushort buildingSpecId, TileEntity t)
@@ -67,7 +67,7 @@ namespace Game.Systems.Player
             building.BuildFromSpec(Game.Specs.Buildings[buildingSpecId]);
             GetComponent().Buildings.Add(building);
             Game.Logic.Map(building).SetPosition(t);
-            Log.Debug($"Player {Entity.OwnerID} built {buildingSpecId}");
+            Log.Debug($"Player {Entity} built {building}");
         }
     } 
 }

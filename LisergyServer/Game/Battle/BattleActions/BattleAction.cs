@@ -1,4 +1,4 @@
-﻿using Game.Battle;
+﻿using Game.Battle.Data;
 using Game.DataTypes;
 using System;
 

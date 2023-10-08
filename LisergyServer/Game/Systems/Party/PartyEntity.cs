@@ -20,10 +20,7 @@ namespace Game.Systems.Party
         {
             Components.Add(new MapPlacementComponent());
             Components.Add(new MapReferenceComponent());
-            Components.Add(new BattleGroupComponent()
-            {
-                Units = new List<Unit>(SIZE)
-            });
+            Components.Add(new BattleGroupComponent());
             Components.Add(new PartyComponent());
             Components.Add(new EntityVisionComponent());
             Components.Add(new EntityMovementComponent() { MoveDelay = TimeSpan.FromSeconds(0.25) });
@@ -46,7 +43,7 @@ namespace Game.Systems.Party
 
         public override string ToString()
         {
-            return $"<Party Id={EntityId} Index={PartyIndex} Owner={OwnerID}>";
+            return $"<Party Entity={EntityId} Index={PartyIndex} Owner={OwnerID}>";
         }
     }
 }

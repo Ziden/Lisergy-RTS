@@ -2,6 +2,7 @@
 using Game.Battle;
 using Game.Battle.BattleActions;
 using Game.Battle.BattleEvents;
+using Game.Battle.Data;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Network;
@@ -29,9 +30,9 @@ namespace Tests
         [Test]
         public void TestLogicTriggeringEvents()
         {
-            var enemyTeam = new BattleTeam(new Unit(Game.Specs.Units[0]), new Unit(Game.Specs.Units[0]));
-            var myTeam = new BattleTeam(new Unit(Game.Specs.Units[2]), new Unit(Game.Specs.Units[0]));
-            var battle = new TurnBattle(Guid.NewGuid(), myTeam, enemyTeam);
+            var enemyTeam = new BattleTeamData(new Unit(Game.Specs.Units[0]), new Unit(Game.Specs.Units[0]));
+            var myTeam = new BattleTeamData(new Unit(Game.Specs.Units[2]), new Unit(Game.Specs.Units[0]));
+            var battle = new TurnBattle(GameId.Generate(), myTeam, enemyTeam);
             var autoRun = new AutoRun(battle);
             var result = autoRun.RunAllRounds();
 
@@ -43,12 +44,13 @@ namespace Tests
         public void TestDeadDontAct()
         {
             var weak = new Unit(Game.Specs.Units[0]);
-            var enemyTeam = new BattleTeam(weak, new Unit(Game.Specs.Units[0]));
+            var enemyTeam = new BattleTeamData(weak, new Unit(Game.Specs.Units[0]));
 
-            var op = TestBattle.MakeOverpower(new Unit(Game.Specs.Units[0]));
-            var myTeam = new BattleTeam(op, new Unit(Game.Specs.Units[0]));
+            var unit = new Unit(Game.Specs.Units[0]);
+            var op = TestBattle.MakeOverpower(ref unit);
+            var myTeam = new BattleTeamData(op, new Unit(Game.Specs.Units[0]));
 
-            var battle = new TurnBattle(Guid.NewGuid(), myTeam, enemyTeam);
+            var battle = new TurnBattle(GameId.Generate(), myTeam, enemyTeam);
             var autoRun = new AutoRun(battle);
 
             List<BattleEvent> events = null;

@@ -1,4 +1,5 @@
-﻿using Game.Systems.Player;
+﻿using Game.DataTypes;
+using Game.Systems.Player;
 using Game.Systems.Tile;
 using Game.Tile;
 using System;
@@ -14,7 +15,7 @@ namespace Game.World
 
     public class GameWorld : IGameWorld
     {
-        private string _id;
+        private GameId _id;
         public const int CHUNK_SIZE = 8;
         public static readonly int CHUNK_SIZE_BITSHIFT = CHUNK_SIZE.BitsRequired() - 1;
         public const int TILES_IN_CHUNK = CHUNK_SIZE * CHUNK_SIZE;
@@ -52,7 +53,7 @@ namespace Game.World
 
         public virtual void AllocateMemory()
         {
-            _id = Guid.NewGuid().ToString();
+            _id = GameId.Generate();
             Map = new ChunkMap(this, SizeX, SizeY);
             Map.AllocateMemory(SizeX, SizeY);
         }

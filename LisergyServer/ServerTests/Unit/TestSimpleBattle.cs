@@ -1,6 +1,8 @@
 using Game;
 using Game.Battle;
 using Game.Battle.BattleActions;
+using Game.Battle.Data;
+using Game.DataTypes;
 using Game.Events;
 using Game.Network.ServerPackets;
 using Game.Systems.Battler;
@@ -12,7 +14,7 @@ using System.Linq;
 
 namespace Tests
 {
-    public class TestAutobattles
+    public unsafe class TestAutobattles
     {
         private Unit StrongUnit;
         private Unit WeakUnit;
@@ -38,37 +40,37 @@ namespace Tests
         [Test]
         public void TestUnitsOrderingSameSpeed()
         {
-            var battle = new TestBattle(new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
+            var battle = new TestBattle(new BattleTeamData(StrongUnit), new BattleTeamData(WeakUnit));
             var first = battle.NextUnitToAct;
 
-            Assert.AreEqual(first.RT, first.GetMaxRT());
+            Assert.AreEqual(first.RT, first.MaxRT);
 
             battle.AutoRun.RunOneTurn();
 
             var second = battle.NextUnitToAct;
 
             Assert.AreNotEqual(first, second);
-            Assert.AreEqual(first.GetMaxRT() * 2, first.RT);
-            Assert.AreEqual(second.GetMaxRT(), second.RT);
+            Assert.AreEqual(first.MaxRT * 2, first.RT);
+            Assert.AreEqual(second.MaxRT, second.RT);
         }
 
         [Test]
         public void TestFasterActFirst()
         {
-            var battle = new TestBattle(new BattleTeam(WeakUnit), new BattleTeam(FastUnit));
+            var battle = new TestBattle(new BattleTeamData(WeakUnit), new BattleTeamData(FastUnit));
 
             Assert.AreEqual(battle.NextUnitToAct.UnitID, FastUnit.Id);
 
             var lastAction = battle.AutoRun.RunOneTurn().Last() as BattleAction;
 
             Assert.AreEqual(lastAction.Unit.UnitID, FastUnit.Id);
-            Assert.AreEqual(lastAction.Unit.RT, lastAction.Unit.GetMaxRT() * 2);
+            Assert.AreEqual(lastAction.Unit.RT, lastAction.Unit.MaxRT * 2);
         }
 
         [Test]
         public void TestUnitDelay()
         {
-            var battle = new TestBattle(new BattleTeam(FastUnit), new BattleTeam(WeakUnit));
+            var battle = new TestBattle(new BattleTeamData(FastUnit), new BattleTeamData(WeakUnit));
             var result = battle.AutoRun.RunAllRounds();
 
             var fastAttacks = result.Turns.Where(r => r.Events.Any(a => a is BattleAction && ((BattleAction)a).Unit.UnitID == FastUnit.Id)).ToList();
@@ -84,7 +86,7 @@ namespace Tests
 
             SlowUnit.HP = 60;
 
-            var battle = new TestBattle(new BattleTeam(FastUnit), new BattleTeam(SlowUnit));
+            var battle = new TestBattle(new BattleTeamData(FastUnit), new BattleTeamData(SlowUnit));
             var result = battle.AutoRun.RunAllRounds();
 
             var fastAttacks = result.Turns.Where(r => r.Events.Any(a => a is BattleAction && ((BattleAction)a).Unit.UnitID == FastUnit.Id)).ToList();
@@ -96,7 +98,7 @@ namespace Tests
         [Test]
         public void TestWinner()
         {
-            var battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
+            var battle = new TurnBattle(GameId.Generate(), new BattleTeamData(StrongUnit), new BattleTeamData(WeakUnit));
             var result = battle.AutoRun.RunAllRounds();
 
             Assert.AreEqual(result.Winner, result.Attacker);
@@ -107,10 +109,10 @@ namespace Tests
         public void TestUnitsBeingUpdated()
         {
             var initialHP = StrongUnit.HP;
-            var battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
+            var battle = new TurnBattle(GameId.Generate(), new BattleTeamData(StrongUnit), new BattleTeamData(WeakUnit));
             var result = battle.AutoRun.RunAllRounds();
 
-            var finalHP = result.Attacker.Units[0].UnitReference.HP;
+            var finalHP = result.Attacker.Units[0].UnitPtr->HP;
             Assert.AreNotEqual(initialHP, finalHP);
         }
 
@@ -118,7 +120,7 @@ namespace Tests
         public void TestSerialization()
         {
             Serialization.LoadSerializers();
-            var battle = new TurnBattle(Guid.NewGuid(), new BattleTeam(StrongUnit), new BattleTeam(WeakUnit));
+            var battle = new TurnBattle(GameId.Generate(), new BattleTeamData(StrongUnit), new BattleTeamData(WeakUnit));
             var result = battle.AutoRun.RunAllRounds();
 
             var ev = new BattleResultPacket(battle.ID, result);
@@ -126,7 +128,7 @@ namespace Tests
             var bytes = Serialization.FromPacket(ev);
             ev = Serialization.ToPacket<BattleResultPacket>(bytes);
 
-            Assert.AreEqual(ev.Header.Attacker.Units.First().UnitID, result.Attacker.Units.First().UnitID);
+            Assert.AreEqual(ev.Header.Attacker.Units[0].Id, result.Attacker.Units.First().UnitID);
         }
     }
 }
