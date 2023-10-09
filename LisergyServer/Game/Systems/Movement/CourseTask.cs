@@ -1,4 +1,5 @@
-﻿using Game.Scheduler;
+﻿using Game.ECS;
+using Game.Scheduler;
 using Game.Systems.Party;
 using Game.Tile;
 using System.Collections.Generic;
@@ -7,12 +8,11 @@ namespace Game.Systems.Movement
 {
     public class CourseTask : GameTask
     {
-        public PartyEntity Party;
+        public IEntity Party;
         public List<TileEntity> Path;
-
         public MovementIntent Intent { get; private set; }
 
-        public CourseTask(IGame game, PartyEntity party, List<TileEntity> path, MovementIntent intent) : base(game, party.Components.Get<EntityMovementComponent>().MoveDelay, game.Players.GetPlayer(party.OwnerID))
+        public CourseTask(IGame game, IEntity party, List<TileEntity> path, MovementIntent intent) : base(game, party.Components.Get<EntityMovementComponent>().MoveDelay, game.Players.GetPlayer(party.OwnerID))
         {
             Party = party;
             Path = path;
@@ -21,16 +21,27 @@ namespace Game.Systems.Movement
 
         public override void Tick()
         {
-            var course = Party.Components.Get<EntityMovementComponent>().Course;
-            if (course != this)
+            var courseId = Party.Components.Get<EntityMovementComponent>().CourseId;
+            var currentCourse = Game.Scheduler.GetTask(courseId);
+            if (currentCourse != this)
             {
-                Repeat = false;
-                Log.Error($"Party {Party} Had Course {course} but course {this} was trying to move the party");
-                return;
+                if(currentCourse.Start <= Start)
+                {
+                    Game.Scheduler.Cancel(currentCourse);
+                } else
+                {
+                    Repeat = false;
+                    Log.Error($"Party {Party} Had Course {currentCourse} but course {this} was trying to move the party");
+                    return;
+                }
             }
             Game.Systems.Map.GetLogic(Party).SetPosition(NextTile);
             Path.RemoveAt(0);
             Repeat = Path.Count > 0;
+            if(!Repeat)
+            {
+                Game.Systems.EntityMovement.GetLogic(Party).FinishCourse();
+            }
         }
 
         public bool IsLastMovement()

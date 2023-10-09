@@ -31,9 +31,10 @@ namespace Game.Systems.Party
             return Get<BattleGroupComponent>().BattleID == GameId.ZERO;
         }
 
+        // TODO: Remove this
         public CourseTask Course
         {
-            get => EntityLogic.Movement.GetCourse();
+            get => (CourseTask)EntityLogic.Movement.GetCourse();
             set => EntityLogic.Movement.SetCourse(value);
         }
 

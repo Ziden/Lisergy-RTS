@@ -1,4 +1,5 @@
-﻿using Game.Network;
+﻿using Game.DataTypes;
+using Game.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Game.Scheduler
     public interface IGameScheduler
     {
         public DateTime Now { get; }
+        public GameTask GetTask(GameId id);
         public void Add(GameTask task);
         void Cancel(GameTask task);
     }
@@ -20,7 +22,7 @@ namespace Game.Scheduler
     public class GameScheduler : IGameScheduler
     {
         private readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        private Dictionary<Guid, GameTask> _tasks = new Dictionary<Guid, GameTask>();
+        private Dictionary<GameId, GameTask> _tasks = new Dictionary<GameId, GameTask>();
 
         public DateTime Now { get; private set; }
         internal TimeSpan NowTimespan => Now - Epoch;
@@ -37,13 +39,14 @@ namespace Game.Scheduler
             _ = _tasks.Remove(task.ID);
         }
 
+        public GameTask GetTask(GameId id) => _tasks[id];
         public int PendingTasks => _tasks.Values.Count();
         public int AmountQueues => Queue.Count;
 
         internal void Clear()
         {
             Now = DateTime.MinValue;
-            _tasks = new Dictionary<Guid, GameTask>();
+            _tasks = new Dictionary<GameId, GameTask>();
             Queue = new SortedSet<GameTask>();
             NextTask = null;
         }
@@ -62,9 +65,9 @@ namespace Game.Scheduler
 
         internal void RunTask(GameTask task)
         {
+            task.Tick();
             _ = Queue.Remove(task);
             _ = _tasks.Remove(task.ID);
-            task.Tick();
             task.Game.Entities.DeltaCompression.SendDeltaPackets(task.Creator); // TODO: Maybe not best place
             if (task.Repeat)
             {

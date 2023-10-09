@@ -141,7 +141,7 @@ namespace Tests
             _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();
 
-            Assert.IsNull(_party.Course);
+            Assert.AreEqual(GameId.ZERO, _party.Get<EntityMovementComponent>().CourseId);
         }
 
         [Test]

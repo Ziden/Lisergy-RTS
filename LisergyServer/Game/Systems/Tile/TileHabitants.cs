@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Game.Systems.Tile
 {
-    public class TileHabitants : IComponent
+    public class TileHabitants : IReferenceComponent
     {
         public List<IEntity> EntitiesIn = new List<IEntity>();
         public IEntity Building;

@@ -1,16 +1,18 @@
-﻿using Game.ECS;
+﻿using Game.DataTypes;
+using Game.ECS;
 using System;
 
 namespace Game.Systems.Movement
 {
-    public class EntityMovementComponent : IComponent
+    public struct EntityMovementComponent : IComponent
     {
-        public CourseTask Course;
+        public GameId CourseId;
         public TimeSpan MoveDelay;
+        public MovementIntent MovementIntent;
 
         public override string ToString()
         {
-            return $"<EntityMovementComponent Course={Course?.ID} MoveDelay={MoveDelay.TotalSeconds}>";
+            return $"<EntityMovementComponent Course={CourseId} MoveDelay={MoveDelay.TotalSeconds}>";
         }
     }
 }

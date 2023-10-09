@@ -33,6 +33,13 @@ namespace Game.Services
                 return;
             }
 
+            var existingCourse = party.EntityLogic.Movement.TryGetCourseTask();
+            if(existingCourse != null)
+            {
+                _game.Scheduler.Cancel(existingCourse);
+                Log.Info($"{party} cancelled previous course {existingCourse} with a new request");
+            }
+
             var first = ev.Path[0];
             if (_world.GetTile(first.X, first.Y).Distance(party.Get<MapReferenceComponent>().Tile) > 1)
             {
@@ -40,29 +47,14 @@ namespace Game.Services
                 return;
             }
 
-            var course = StartCourse(party, ev.Path, ev.Intent);
-            if (course == null)
-                ev.Sender.SendMessage("Bad course");
-        }
-
-        private CourseTask StartCourse(PartyEntity party, List<Position> sentPath, MovementIntent intent)
-        {
-            List<TileEntity> path = new List<TileEntity>();
-            var owner = _game.Players.GetPlayer(party.OwnerID);
-
-            foreach (var position in sentPath)
+            if (!party.EntityLogic.Movement.TryStartMovement(ev.Path, ev.Intent))
             {
-                var tile = _world.GetTile(position.X, position.Y);
-                if (!tile.Passable)
-                {
-                    Log.Error($"Impassable TileEntity {tile} in course path: {owner} moving party {party}");
-                    return null;
-                }
-                path.Add(tile);
+                ev.Sender.SendMessage("Bad course");
+            } else
+            {
+                var s = _game.Scheduler;
+                var asd = 123;
             }
-
-            party.Course = new CourseTask(_game, party, path, intent);
-            return party.Course;
         }
     }
 }

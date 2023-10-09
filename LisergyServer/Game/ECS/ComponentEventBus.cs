@@ -23,9 +23,10 @@ namespace Game.ECS
         {
             void ComponentEventWrapper(EventType ev)
             {
-                var component = _currentEntity.Components.Get<ComponentType>();
-                if (component == null) return;
-                callback(_currentEntity, ref component, ev);
+                if(_currentEntity.Components.TryGet<ComponentType>(out var component))
+                {
+                    callback(_currentEntity, ref component, ev);
+                }
             }
             _bus.Register(this, (Action<EventType>)ComponentEventWrapper);
         }

@@ -16,10 +16,18 @@ namespace Game.ECS
         IReadOnlyDictionary<Type, IComponent> All();
         IComponent Get(Type t);
         T Get<T>() where T : IComponent;
-        void Save<T>(in T c) where T : IComponent;
-        T Add<T>(in T c) where T : IComponent;
-        bool Has<T>() where T : IComponent;
+        T GetReference<T>() where T : IReferenceComponent;
+        bool TryGet<T>(out T component) where T : IComponent;
+        void Save<T>(in T c) where T :  IComponent;
+        T Add<T>(in T c) where T :  IComponent;
+        T AddReference<T>(in T c) where T : IReferenceComponent;
+        bool Has<T>() where T :  IComponent;
         void CallEvent(BaseEvent e);
+    }
+
+    public unsafe class ComponentContainer
+    {
+        void* Pointer;
     }
 
     /// <summary>
@@ -108,6 +116,27 @@ namespace Game.ECS
         public void Save<T>(in T c) where T : IComponent
         {
             _components[c.GetType()] = c;
+        }
+
+        public bool TryGet<T>(out T component) where T : IComponent
+        {
+            if(_components.TryGetValue(typeof(T), out var r))
+            {
+                component = (T)r;
+                return true;
+            }
+            component = default(T);
+            return false;
+        }
+
+        public T GetReference<T>() where T : IReferenceComponent
+        {
+            return Get<T>();
+        }
+
+        public T AddReference<T>(in T c) where T : IReferenceComponent
+        {
+            return Add(c);
         }
     }
 }

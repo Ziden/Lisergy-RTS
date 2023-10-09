@@ -6,7 +6,7 @@ namespace Game.Systems.FogOfWar
 {
     public class TileVisibility : IComponent
     {
-        public HashSet<Player.PlayerEntity> PlayersViewing { get; internal set; } = new HashSet<Player.PlayerEntity>();
+        public HashSet<PlayerEntity> PlayersViewing { get; internal set; } = new HashSet<PlayerEntity>();
         public HashSet<IEntity> EntitiesViewing { get; internal set; } = new HashSet<IEntity>();
 
         public override string ToString()

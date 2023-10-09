@@ -59,8 +59,7 @@ namespace Game
             var newTile = c.Tile;
             var previousTile = c.PreviousTile;
 
-            var movementComponent = Components.Get<EntityMovementComponent>();
-            if(movementComponent == null) return;
+            if (!Components.TryGet<EntityMovementComponent>(out var movementComponent)) return;
             ViewersCache.Clear();
             var allViewers = ViewersCache;
             if (previousTile != newTile && previousTile != null)

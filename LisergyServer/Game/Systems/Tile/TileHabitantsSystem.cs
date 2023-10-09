@@ -1,4 +1,5 @@
-﻿using Game.ECS;
+﻿using Game.DataTypes;
+using Game.ECS;
 using Game.Events.GameEvents;
 using Game.Systems.Battler;
 using Game.Systems.Movement;
@@ -33,30 +34,26 @@ namespace Game.Systems.Tile
 
         private void OnEntityMoveIn(IEntity owner, ref TileHabitants tileHabitants, EntityMoveInEvent ev)
         {
-            var movement = ev.Entity.Components.Get<EntityMovementComponent>();
-            if (movement == null)
-            {
-                return;
-            }
+            if (!ev.Entity.Components.TryGet<EntityMovementComponent>(out var movement)) return;
+
 
             // TODO: Move all this logic to battle logic
             tileHabitants.EntitiesIn.Add(ev.Entity);
-            if (movement.Course == null || movement.Course.Intent != MovementIntent.Offensive || !movement.Course.IsLastMovement()) return;
+            var course = ev.Entity.EntityLogic.Movement.TryGetCourseTask();
+     
+            if (course == null || course.Intent != MovementIntent.Offensive || !course.IsLastMovement()) return;
             if (tileHabitants.Building == null) return;
 
             if (!ev.Entity.Components.Has<BattleGroupComponent>() || !tileHabitants.Building.Components.Has<BattleGroupComponent>()) return;
             var atkGroup = ev.Entity.Components.Get<BattleGroupComponent>();
             var defGroup = tileHabitants.Building.Components.Get<BattleGroupComponent>();
-            if (movement.Course != null && movement.Course.Intent == MovementIntent.Offensive && movement.Course.IsLastMovement())
+            ev.Entity.Components.CallEvent(new OffensiveActionEvent()
             {
-                ev.Entity.Components.CallEvent(new OffensiveActionEvent()
-                {
-                    AttackerGroup = atkGroup,
-                    DefenderGroup = defGroup,
-                    Defender = tileHabitants.Building,
-                    Attacker = ev.Entity
-                });
-            }
+                AttackerGroup = atkGroup,
+                DefenderGroup = defGroup,
+                Defender = tileHabitants.Building,
+                Attacker = ev.Entity
+            });
         }
     }
 }
