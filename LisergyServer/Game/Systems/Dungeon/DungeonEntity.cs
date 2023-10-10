@@ -29,9 +29,9 @@ namespace Game.Systems.Dungeon
             return $"<Dungeon Entity={EntityId} Spec={SpecId} Units={Components.Get<BattleGroupComponent>().Units}/>";
         }
 
-        public void BuildFromSpec(DungeonSpec spec)
+        public unsafe void BuildFromSpec(DungeonSpec spec)
         {
-            var battleGroup = Components.Get<BattleGroupComponent>();
+            var group = Components.GetPointer<BattleGroupComponent>();
             for (var s = 0; s < spec.BattleSpecs.Count; s++)
             {
                 var battle = spec.BattleSpecs[s];
@@ -39,13 +39,10 @@ namespace Game.Systems.Dungeon
                 for (var i = 0; i < battle.UnitSpecIDS.Length; i++)
                 {
                     units[i] = new Unit(Game.Specs.Units[battle.UnitSpecIDS[i]]);
-                    battleGroup.Units.Add(units[i]);
+                    group->Units.Add(units[i]);
                 }
             }
-            var dungeonComponent = Components.Get<DungeonComponent>();
-            dungeonComponent.SpecId = spec.DungeonSpecID;
-            Components.Save(battleGroup);
-            Components.Save(dungeonComponent);
+            Components.GetPointer<DungeonComponent>()->SpecId = spec.DungeonSpecID;
         }
     }
 }

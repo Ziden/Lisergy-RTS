@@ -52,7 +52,15 @@ namespace Game.Systems.BattleGroup
             return -1;
         }
 
-        public int Valids => Array.Count(u => u.Valid);
+        /// <summary>
+        /// Gets amount of valid (non null) units in a group
+        /// </summary>
+        public int Valids => this.Count(u => u.Valid);
+
+        /// <summary>
+        /// Checks if a group has no units
+        /// </summary>
+        public bool Empty => this.All(u => !u.Valid);
 
         public Unit this[int x]
         {
@@ -96,10 +104,10 @@ namespace Game.Systems.BattleGroup
 
         public IEnumerator<Unit> GetEnumerator()
         {
-            yield return Leader;
-            yield return LeftFlank;
-            yield return RightFlank;
-            yield return Rear;
+            if (Leader.Valid) yield return Leader;
+            if (LeftFlank.Valid) yield return LeftFlank;
+            if (RightFlank.Valid) yield return RightFlank;
+            if (Rear.Valid) yield return Rear;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -120,7 +128,7 @@ namespace Game.Systems.BattleGroup
 
         public override string ToString()
         {
-            return $"{string.Join(" ", Array.Where(u => u.Valid))}";
+            return $"{string.Join(" ", this.Where(u => u.Valid))}";
         }
     }
 }

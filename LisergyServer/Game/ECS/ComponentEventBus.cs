@@ -14,7 +14,7 @@ namespace Game.ECS
         internal EventBus<BaseEvent> _bus = new EventBus<BaseEvent>();
         private IEntity _currentEntity;
 
-        public delegate void EntityEventCallback<EventType>(IEntity entity, ref ComponentType component, EventType ev) where EventType : BaseEvent;
+        public delegate void EntityEventCallback<EventType>(IEntity entity, EventType ev) where EventType : BaseEvent;
 
         /// <summary>
         /// Registers a new listener for the given system. The system is wrapped in a normal message bus/
@@ -23,8 +23,7 @@ namespace Game.ECS
         {
             void ComponentEventWrapper(EventType ev)
             {
-                var c = _currentEntity.Components.Get<ComponentType>();
-                callback(_currentEntity, ref c, ev);
+                callback(_currentEntity, ev);
             }
             _bus.Register(this, (Action<EventType>)ComponentEventWrapper);
         }

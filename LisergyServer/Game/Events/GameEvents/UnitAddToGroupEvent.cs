@@ -10,11 +10,9 @@ namespace Game.Events.GameEvents
     {
         public Unit[] Units;
         public IEntity Entity;
-        public BattleGroupComponent Component;
 
-        public UnitAddToGroupEvent(IEntity entity, in BattleGroupComponent group, params Unit[] units)
+        public UnitAddToGroupEvent(IEntity entity, params Unit[] units)
         {
-            Component = group;
             Units = units;
             Entity = entity;
         }

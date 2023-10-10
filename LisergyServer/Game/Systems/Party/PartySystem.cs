@@ -17,7 +17,7 @@ namespace Game.Systems.Party
             EntityEvents.On<GroupDeadEvent>(OnGroupDead);
         }
 
-        private void OnGroupDead(IEntity e, ref PartyComponent component, GroupDeadEvent ev)
+        private void OnGroupDead(IEntity e, GroupDeadEvent ev)
         {
             e.EntityLogic.BattleGroup.Heal();
             var center = Players.GetPlayer(e.OwnerID).GetCenter().Get<MapPlacementComponent>();

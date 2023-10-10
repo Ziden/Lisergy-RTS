@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Game.Systems.FogOfWar
 {
-    public class EntityVisionSystem : GameSystem<EntityVisionComponent>
+    public unsafe class EntityVisionSystem : LogicSystem<EntityVisionComponent, EntityVisionLogic>
     {
         public EntityVisionSystem(LisergyGame game) : base(game) { }
         public override void OnEnabled()
@@ -17,58 +17,19 @@ namespace Game.Systems.FogOfWar
             EntityEvents.On<UnitRemovedEvent>(OnUnitRemoved);
         }
 
-        private void OnUnitAdded(IEntity e, ref EntityVisionComponent component, UnitAddToGroupEvent ev)
+        private void OnUnitAdded(IEntity e, UnitAddToGroupEvent ev)
         {
-            component.LineOfSight = ev.Units.Max(u => Game.Specs.Units[u.SpecId].LOS);
-            e.Components.Save(component);
+            GetLogic(e).UpdateGroupLineOfSight();
         }
 
-        private void OnUnitRemoved(IEntity e, ref EntityVisionComponent component, UnitRemovedEvent ev)
+        private void OnUnitRemoved(IEntity e, UnitRemovedEvent ev)
         {
-            var unitsArray = ev.Group.Units.Array;
-            if (unitsArray.All(u => !u.Valid)) component.LineOfSight = 0;
-            else component.LineOfSight = unitsArray.Max(u => Game.Specs.Units[u.SpecId].LOS);
-            e.Components.Save(component);
+            GetLogic(e).UpdateGroupLineOfSight();
         }
 
-        private void OnEntityStepOnTile(IEntity e, ref EntityVisionComponent c, EntityMoveInEvent ev)
+        private void OnEntityStepOnTile(IEntity e, EntityMoveInEvent ev)
         {
-            UpdateVisionRange(e, ev.FromTile, ev.ToTile);
+            GetLogic(e).UpdateVisionRange(e, ev.FromTile, ev.ToTile);
         }
-
-        private void UpdateVisionRange(IEntity explorer, TileEntity from, TileEntity to)
-        {
-            var los = explorer.Components.Get<EntityVisionComponent>().LineOfSight;
-            if (los > 0)
-            {
-                HashSet<TileEntity> oldLos = new HashSet<TileEntity>();
-                if (from != null)
-                    oldLos.UnionWith(from.GetAOE(los));
-
-                HashSet<TileEntity> newLos = new HashSet<TileEntity>();
-                if (to != null)
-                    newLos.UnionWith(to.GetAOE(los));
-
-                var visEnabled = new TileExplorationStateChanged()
-                {
-                    Explorer = explorer,
-                    Explored = true
-                };
-
-                foreach (var tile in newLos.Except(oldLos))
-                {
-                    visEnabled.Tile = tile;
-                    tile.Components.CallEvent(visEnabled);
-                }
-
-                visEnabled.Explored = false;
-                foreach (var tile in oldLos.Except(newLos).ToList())
-                {
-                    visEnabled.Tile = tile;
-                    tile.Components.CallEvent(visEnabled);
-                }
-            }
-        }
-
     }
 }

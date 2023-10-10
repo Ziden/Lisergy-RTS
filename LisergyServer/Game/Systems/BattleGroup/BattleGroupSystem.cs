@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Game.Systems.Battler
 {
-    public class BattleGroupSystem : LogicSystem<BattleGroupComponent, BattleGroupLogic>
+    public unsafe class BattleGroupSystem : LogicSystem<BattleGroupComponent, BattleGroupLogic>
     {
         public BattleGroupSystem(LisergyGame game) : base(game) { }
         public override void OnEnabled()
@@ -18,7 +18,7 @@ namespace Game.Systems.Battler
         /// <summary>
         /// When a entity moved offensively towards another entity
         /// </summary>
-        private void OnOffensiveAction(IEntity attacker, ref BattleGroupComponent atkGroup, OffensiveActionEvent ev)
+        private void OnOffensiveAction(IEntity attacker, OffensiveActionEvent ev)
         {
             if(GetLogic(ev.Attacker).IsBattling || GetLogic(ev.Defender).IsBattling)
             {
@@ -37,14 +37,11 @@ namespace Game.Systems.Battler
             var attackerEntity = Game.Entities[packet.Header.Attacker.EntityId];
             var defenderEntity = Game.Entities[packet.Header.Defender.EntityId];
 
-            var attackerGroup = attackerEntity.Get<BattleGroupComponent>();
-            var defenderGroup = defenderEntity.Get<BattleGroupComponent>();
+            var attackerGroup = attackerEntity.Components.GetPointer<BattleGroupComponent>();
+            var defenderGroup = defenderEntity.Components.GetPointer<BattleGroupComponent>();
 
-            attackerGroup.Units = packet.Header.Attacker.Units;
-            defenderGroup.Units = packet.Header.Defender.Units;
-
-            attackerEntity.Components.Save(attackerGroup);
-            defenderEntity.Components.Save(defenderGroup);
+            attackerGroup->Units = packet.Header.Attacker.Units;
+            defenderGroup->Units = packet.Header.Defender.Units;
 
             var finishEvent = new BattleFinishedEvent(packet.Header, packet.Turns);
 
@@ -72,7 +69,7 @@ namespace Game.Systems.Battler
         /// <summary>
         /// When a battle finished processing in game logic
         /// </summary>
-        private void OnBattleFinish(IEntity e, ref BattleGroupComponent component, BattleFinishedEvent ev)
+        private void OnBattleFinish(IEntity e, BattleFinishedEvent ev)
         {
             var logic = GetLogic(e);
             logic.ClearBattleId();
@@ -80,7 +77,7 @@ namespace Game.Systems.Battler
             {
                 e.Components.CallEvent(new GroupDeadEvent()
                 {
-                    GroupComponent = component,
+                    GroupComponent = e.Get<BattleGroupComponent>(),
                     Entity = e
                 });
             }

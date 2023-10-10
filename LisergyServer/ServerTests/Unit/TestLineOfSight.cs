@@ -1,7 +1,5 @@
-using Game;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
-using Game.Network;
 using Game.Systems.Battler;
 using Game.Systems.FogOfWar;
 using Game.Systems.Tile;
@@ -10,7 +8,6 @@ using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace Tests
 {
@@ -112,7 +109,7 @@ namespace Tests
             var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
 
             Assert.AreEqual(los, Game.Specs.Units[party.Get<BattleGroupComponent>().Units[0].SpecId].LOS);
-            Assert.AreEqual(los, party.Get<BattleGroupComponent>().Units.Array.Max(u => Game.Specs.Units[u.SpecId].LOS));
+            Assert.AreEqual(los, party.Get<BattleGroupComponent>().Units.Max(u => Game.Specs.Units[u.SpecId].LOS));
         }
 
         [Test]
@@ -127,7 +124,7 @@ namespace Tests
 
             var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
 
-            Assert.AreEqual(los, 0);
+            Assert.AreEqual(0, los);
         }
 
         [Test]
@@ -181,7 +178,7 @@ namespace Tests
             Game.CreatePlayer(0, 0); // placing new user in the corner
             var player = Game.GetTestPlayer();
             player.ListenTo<TileVisibilityChangedEvent>();
-            player.ListenTo<TileExplorationStateChanged>();
+            player.ListenTo<EntityTileVisibilityUpdateEvent>();
             player.ReceivedPackets.Clear();
             var party = player.GetParty(0);
 
@@ -200,7 +197,7 @@ namespace Tests
             // Only send update to visible ones
             Assert.AreEqual(party.GetLineOfSight() + 1, player.ReceivedPacketsOfType<TilePacket>().Count);
             Assert.AreEqual(party.GetLineOfSight() + 1, player.TriggeredEventsOfType<TileVisibilityChangedEvent>().Count);
-            Assert.AreEqual(party.GetLineOfSight() + 1, player.TriggeredEventsOfType<TileExplorationStateChanged>().Count);
+            Assert.AreEqual(party.GetLineOfSight() + 1, player.TriggeredEventsOfType<EntityTileVisibilityUpdateEvent>().Count);
         }
 
         [Test]
@@ -214,7 +211,7 @@ namespace Tests
             var party = player.GetParty(0); // 0-1
             var building = player.Data.Buildings.First(); // 0-0
 
-            Assert.AreEqual(party.GetLineOfSight(), 1);
+            Assert.AreEqual(1, party.GetLineOfSight());
 
             Game.Logic.Map(party).SetPosition(party.Tile.GetNeighbor(Direction.EAST));
 

@@ -9,7 +9,6 @@ namespace Game.ECS
     public interface IComponentLogic<T> where T : unmanaged, IComponent 
     {
         public IEntity Entity { get; set; }
-
         public ref T GetComponent();
     }
 

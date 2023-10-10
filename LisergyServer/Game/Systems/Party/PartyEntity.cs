@@ -39,10 +39,8 @@ namespace Game.Systems.Party
             set => EntityLogic.Movement.SetCourse(value);
         }
 
-        public byte PartyIndex { get => Components.Get<PartyComponent>().PartyIndex; }
-
-        public byte GetLineOfSight() => Components.Get<EntityVisionComponent>().LineOfSight;
-
+        public ref readonly byte PartyIndex { get => ref Components.Get<PartyComponent>().PartyIndex; }
+        public ref readonly byte GetLineOfSight() => ref Components.Get<EntityVisionComponent>().LineOfSight;
         public override string ToString()
         {
             return $"<Party Entity={EntityId} Index={PartyIndex} Owner={OwnerID}>";

@@ -7,15 +7,17 @@ using System.Linq;
 
 namespace Game.Systems.FogOfWar
 {
+    // TODO: Remove
     public class TileVisibilitySystem : GameSystem<TileComponent>
     {
         public TileVisibilitySystem(LisergyGame game) : base(game) { }
         public override void OnEnabled()
         {
-            EntityEvents.On<TileExplorationStateChanged>(OnTileExplorationChanged);
+            EntityEvents.On<EntityTileVisibilityUpdateEvent>(OnTileExplorationChanged);
         }
 
-        private void OnTileExplorationChanged(IEntity tile, ref TileComponent c, TileExplorationStateChanged ev)
+        // Move player stuff to player system
+        private void OnTileExplorationChanged(IEntity tile, EntityTileVisibilityUpdateEvent ev)
         {
             var tileObj = (TileEntity)tile; // TODO: Remove cast
             var component = tile.Components.GetReference<TileVisibility>();

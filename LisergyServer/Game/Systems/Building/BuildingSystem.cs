@@ -13,12 +13,12 @@ namespace Game.Systems.Building
             EntityEvents.On<EntityMoveOutEvent>(OnRemovedBuilding);
         }
 
-        private void OnPlaceBuilding(IEntity e, ref BuildingComponent c, EntityMoveInEvent ev)
+        private void OnPlaceBuilding(IEntity e, EntityMoveInEvent ev)
         {
             ev.ToTile.Components.CallEvent(new BuildingPlacedEvent(e, ev.ToTile));
         }
 
-        private void OnRemovedBuilding(IEntity e, ref BuildingComponent c, EntityMoveOutEvent ev)
+        private void OnRemovedBuilding(IEntity e, EntityMoveOutEvent ev)
         {
             ev.FromTile.Components.CallEvent(new BuildingRemovedEvent(e, ev.FromTile));
         }

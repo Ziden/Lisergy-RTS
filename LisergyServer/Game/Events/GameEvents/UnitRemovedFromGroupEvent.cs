@@ -10,13 +10,11 @@ namespace Game.Events.GameEvents
     {
         public Unit[] UnitsRemoved;
         public IEntity Entity;
-        public BattleGroupComponent Group;
 
-        public UnitRemovedEvent(IEntity entity, in BattleGroupComponent group, params Unit[] units)
+        public UnitRemovedEvent(IEntity entity, params Unit[] units)
         {
             UnitsRemoved = units;
             Entity = entity;
-            Group = group;
         }
     }
 }

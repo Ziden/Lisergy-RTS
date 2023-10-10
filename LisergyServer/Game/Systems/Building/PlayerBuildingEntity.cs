@@ -7,7 +7,7 @@ using System;
 
 namespace Game.Systems.Building
 {
-    public class PlayerBuildingEntity : BaseEntity
+    public unsafe class PlayerBuildingEntity : BaseEntity
     {
         public override EntityType EntityType => EntityType.Building;
 
@@ -25,12 +25,8 @@ namespace Game.Systems.Building
 
         public void BuildFromSpec(BuildingSpec spec)
         {
-            var building = Components.Get<PlayerBuildingComponent>();
-            building.SpecId = spec.Id;
-            Components.Save(building);
-            var vision = Components.Get<EntityVisionComponent>();
-            vision.LineOfSight = spec.LOS;
-            Components.Save(vision);
+            Components.GetPointer<PlayerBuildingComponent>()->SpecId = spec.Id;
+            Components.GetPointer<EntityVisionComponent>()->LineOfSight = spec.LOS;
         }
 
         public override string ToString()

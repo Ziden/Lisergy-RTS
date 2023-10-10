@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Game.Systems.Battler
 {
-    public class BattleGroupLogic : BaseEntityLogic<BattleGroupComponent>
+    public unsafe class BattleGroupLogic : BaseEntityLogic<BattleGroupComponent>
     {
         public bool IsBattling => !Entity.Get<BattleGroupComponent>().BattleID.IsZero();
 
@@ -27,9 +27,8 @@ namespace Game.Systems.Battler
 
         public void Heal()
         {
-            var component = Entity.Get<BattleGroupComponent>();
-            component.Units.HealAll();
-            Entity.Components.Save(component);
+            var component = Entity.Components.GetPointer<BattleGroupComponent>();
+            component->Units.HealAll();
         }
 
         public virtual void ReplaceUnit(in Unit oldUnit, in Unit newUnit, in int preferAtIndex = -1)
@@ -55,53 +54,46 @@ namespace Game.Systems.Battler
 
         public virtual void AddUnit(in Unit u, in int preferAtIndex = -1)
         {
-            var component = Entity.Get<BattleGroupComponent>();
-            if (preferAtIndex >= 0) component.Units[preferAtIndex] = u;
-            else component.Units.Add(u);
-            Entity.Components.Save(component);
-            Entity.Components.CallEvent(new UnitAddToGroupEvent(Entity, component, u));
+            var component = Entity.Components.GetPointer<BattleGroupComponent>();
+            if (preferAtIndex >= 0) component->Units[preferAtIndex] = u;
+            else component->Units.Add(u);
+            Entity.Components.CallEvent(new UnitAddToGroupEvent(Entity, u));
         }
 
         public virtual void RemoveUnit(in Unit u, in int preferAtIndex = -1)
         {
-            var component = Entity.Get<BattleGroupComponent>();
-            if (!component.Units.Contains(u))
+            var component = Entity.Components.GetPointer<BattleGroupComponent>();
+            if (!component->Units.Contains(u))
             {
                 throw new Exception($"Trying to remove unit {u} to entity {Entity} but unit was not there");
             }
             if (preferAtIndex != -1)
             {
-                if (!component.Units[preferAtIndex].Equals(u))
+                if (!component->Units[preferAtIndex].Equals(u))
                 {
                     throw new Exception("Removing unit from wrong index");
                 }
-                component.Units[preferAtIndex] = default;
+                component->Units[preferAtIndex] = default;
             }
             else
             {
-                component.Units.Remove(u);
+                component->Units.Remove(u);
             }
-            Entity.Components.Save(component);
-            Entity.Components.CallEvent(new UnitRemovedEvent(Entity, component, u));
+            var component2 = Entity.Components.GetPointer<BattleGroupComponent>();
+            Entity.Components.CallEvent(new UnitRemovedEvent(Entity, u));
         }
 
         public void ClearBattleId()
         {
-            var attackerComponent = Entity.Get<BattleGroupComponent>();
-            attackerComponent.BattleID = GameId.ZERO;
-            Entity.Components.Save(attackerComponent);
+            Entity.Components.GetPointer<BattleGroupComponent>()->BattleID = GameId.ZERO;
         }
 
         public GameId StartBattle(IEntity defender)
         {
             GameId battleID = GameId.Generate();
             var battleEvent = new BattleTriggeredEvent(battleID, Entity, defender);
-            var attackerComponent = Entity.Get<BattleGroupComponent>();
-            attackerComponent.BattleID = battleID;
-            Entity.Components.Save(attackerComponent);
-            var defenderComponent = defender.Get<BattleGroupComponent>();
-            defenderComponent.BattleID = battleID;
-            defender.Components.Save(defenderComponent);
+            Entity.Components.GetPointer<BattleGroupComponent>()->BattleID = battleID;
+            defender.Components.GetPointer<BattleGroupComponent>()->BattleID = battleID;
             Game.Events.Call(battleEvent);
             return battleID;
         }
