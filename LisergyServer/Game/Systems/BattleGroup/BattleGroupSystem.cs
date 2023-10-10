@@ -1,4 +1,5 @@
 ﻿using Game.ECS;
+using Game.Events;
 using Game.Events.GameEvents;
 using Game.Network.ServerPackets;
 using System.Linq;
@@ -43,7 +44,10 @@ namespace Game.Systems.Battler
             attackerGroup->Units = packet.Header.Attacker.Units;
             defenderGroup->Units = packet.Header.Defender.Units;
 
-            var finishEvent = new BattleFinishedEvent(packet.Header, packet.Turns);
+            var finishEvent = EventPool<BattleFinishedEvent>.Get();
+            finishEvent.Battle = packet.Header.BattleID;
+            finishEvent.Header = packet.Header;
+            finishEvent.Turns = packet.Turns;
 
             if (attackerEntity is IEntity e) e.Components.CallEvent(finishEvent);
             if (defenderEntity is IEntity e2) e2.Components.CallEvent(finishEvent);
@@ -54,16 +58,18 @@ namespace Game.Systems.Battler
             if (atkPlayer != null)
             {
                 Game.Network.SendToPlayer(attackerEntity.GetUpdatePacket(atkPlayer), atkPlayer);
-                if (!Game.Logic.BattleGroup(defenderEntity).IsDestroyed)
+                if (!defenderEntity.EntityLogic.BattleGroup.IsDestroyed)
                     Game.Network.SendToPlayer(defenderEntity.GetUpdatePacket(atkPlayer), atkPlayer);
             }
 
             if (defPlayer != null)
             {
                 Game.Network.SendToPlayer(defenderEntity.GetUpdatePacket(defPlayer), defPlayer);
-                if (!Game.Logic.BattleGroup(defenderEntity).IsDestroyed)
+                if (!defenderEntity.EntityLogic.BattleGroup.IsDestroyed)
                     Game.Network.SendToPlayer(attackerEntity.GetUpdatePacket(defPlayer), defPlayer);
             }
+
+            EventPool<BattleFinishedEvent>.Return(finishEvent);
         }
 
         /// <summary>
@@ -75,11 +81,10 @@ namespace Game.Systems.Battler
             logic.ClearBattleId();
             if (logic.IsDestroyed)
             {
-                e.Components.CallEvent(new GroupDeadEvent()
-                {
-                    GroupComponent = e.Get<BattleGroupComponent>(),
-                    Entity = e
-                });
+                var groupDead = EventPool<GroupDeadEvent>.Get();
+                groupDead.Entity = e;
+                e.Components.CallEvent(groupDead);
+                EventPool<GroupDeadEvent>.Return(groupDead);
             }
         }
     }

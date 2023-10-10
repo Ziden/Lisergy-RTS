@@ -20,7 +20,7 @@ namespace ServerTests
         public event Action<BasePacket> OnReceivedPacket;
 
         public List<BasePacket> ReceivedPackets = new List<BasePacket>();
-        public List<BaseEvent> TriggeredEvents = new List<BaseEvent>();
+        public List<IBaseEvent> TriggeredEvents = new List<IBaseEvent>();
 
         public bool IsOnline { get; set; }
         private GameNetwork _network;
@@ -39,7 +39,7 @@ namespace ServerTests
             ReceivedPackets.Add(reSerialized);
         }
 
-        public void ListenTo<EventType>() where EventType : BaseEvent
+        public void ListenTo<EventType>() where EventType : IBaseEvent
         {
             Game.Events.Register<EventType>(this, ev =>
             {
@@ -60,9 +60,9 @@ namespace ServerTests
             return ReceivedPackets.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => e as T).ToList();
         }
 
-        public List<T> TriggeredEventsOfType<T>() where T : BaseEvent
+        public List<T> TriggeredEventsOfType<T>() where T : IBaseEvent
         {
-            return TriggeredEvents.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => e as T).ToList();
+            return TriggeredEvents.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => (T)e).ToList();
         }
 
         public override string ToString()

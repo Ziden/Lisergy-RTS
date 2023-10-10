@@ -5,7 +5,7 @@ using Game.Tile;
 
 namespace Game.Events.GameEvents
 {
-    public class BuildingPlacedEvent : GameEvent
+    public class BuildingPlacedEvent : IGameEvent
     {
         public IEntity Entity;
         public TileEntity Tile;

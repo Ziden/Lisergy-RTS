@@ -3,14 +3,14 @@ using Game.Tile;
 
 namespace Game.Events.GameEvents
 {
-    public class EntityMoveInEvent : GameEvent
+    public class EntityMoveInEvent : IGameEvent
     {
         public IEntity Entity;
         public TileEntity ToTile;
         public TileEntity FromTile;
     }
 
-    public class EntityMoveOutEvent : GameEvent
+    public class EntityMoveOutEvent : IGameEvent
     {
         public IEntity Entity;
         public TileEntity ToTile;

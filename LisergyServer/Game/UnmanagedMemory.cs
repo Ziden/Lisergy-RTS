@@ -13,6 +13,9 @@ using Unity.Collections.LowLevel.Unsafe;
 
 namespace Game
 {
+    /// <summary>
+    /// Main place to handle unmanaged memory. We use unmanaged memory to be reused while allowing garbage collector not need to worry about this memory.
+    /// </summary>
     public static class UnmanagedMemory
     {
         internal static readonly Dictionary<IntPtr, int> _allocs = new Dictionary<IntPtr, int>();

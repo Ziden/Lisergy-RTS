@@ -59,7 +59,7 @@ namespace Game.Tile
         public PlayerEntity Owner => null;
         public ref readonly GameId OwnerID => ref GameId.ZERO;
         public IGame Game => this.Chunk.Map.World.Game;
-        public IEntityLogic EntityLogic => Game.Logic.EntityLogic(this);
+        public IEntityLogic EntityLogic => Game.Logic.GetEntityLogic(this);
 
         public override string ToString() => $"<Tile Type={SpecId} {Position}>";
         public ref T Get<T>() where T : unmanaged, IComponent => ref _components.Get<T>();

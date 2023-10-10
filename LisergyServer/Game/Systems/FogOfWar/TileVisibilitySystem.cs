@@ -1,4 +1,5 @@
 ﻿using Game.ECS;
+using Game.Events;
 using Game.Events.GameEvents;
 using Game.Network;
 using Game.Systems.Tile;
@@ -30,7 +31,12 @@ namespace Game.Systems.FogOfWar
                 {
                     owner.Data.OnceExplored.Add(tileObj);
                     owner.Data.VisibleTiles.Add(tileObj);
-                    ev.Tile.Components.CallEvent(new TileVisibilityChangedEvent() { Explorer = ev.Explorer, Tile = ev.Tile, Visible = ev.Explored });
+                    var e = EventPool<TileVisibilityChangedEvent>.Get();
+                    e.Explorer = ev.Explorer;
+                    e.Tile = ev.Tile;
+                    e.Visible = ev.Explored;
+                    ev.Tile.Components.CallEvent(e);
+                    EventPool<TileVisibilityChangedEvent>.Return(e);
                     tileObj.SetFlag(DeltaFlag.SELF_REVEALED);
                 }
             }
@@ -43,7 +49,12 @@ namespace Game.Systems.FogOfWar
                     owner.Data.VisibleTiles.Remove(tileObj);
                     if (component.PlayersViewing.Remove(owner))
                     {
-                        ev.Tile.Components.CallEvent(new TileVisibilityChangedEvent() { Explorer = ev.Explorer, Tile = ev.Tile, Visible = ev.Explored });
+                        var e = EventPool<TileVisibilityChangedEvent>.Get();
+                        e.Explorer = ev.Explorer;
+                        e.Tile = ev.Tile;
+                        e.Visible = ev.Explored;
+                        ev.Tile.Components.CallEvent(e);
+                        EventPool<TileVisibilityChangedEvent>.Return(e);
                         tileObj.SetFlag(DeltaFlag.SELF_CONCEALED);
                     }
                 }

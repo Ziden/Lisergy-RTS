@@ -57,9 +57,9 @@ namespace Game.Systems.Player
             var existingParty = FindParty(u);
             if (existingParty != null)
             {
-                Game.Logic.EntityLogic(existingParty).BattleGroup.RemoveUnit(u);
+                Game.Logic.GetEntityLogic(existingParty).BattleGroup.RemoveUnit(u);
             }
-            Game.Logic.EntityLogic(newParty).BattleGroup.AddUnit(u);
+            Game.Logic.GetEntityLogic(newParty).BattleGroup.AddUnit(u);
             Log.Debug($"{Entity} moved unit {u} to party {newParty}");
         }
 
@@ -68,7 +68,7 @@ namespace Game.Systems.Player
             var building = Game.Entities.CreateEntity<PlayerBuildingEntity>(Game.Players.GetPlayer(Entity.OwnerID));
             building.BuildFromSpec(Game.Specs.Buildings[buildingSpecId]);
             Data.Buildings.Add(building);
-            Game.Logic.Map(building).SetPosition(t);
+            building.EntityLogic.Map.SetPosition(t);
             Log.Debug($"Player {Entity} built {building}");
         }
     } 

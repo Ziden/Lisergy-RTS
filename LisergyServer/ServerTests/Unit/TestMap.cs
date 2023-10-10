@@ -38,7 +38,7 @@ namespace Tests
             var party = _player.GetParty(0);
 
             //Assert.That(party.Tile == _game)
-            _game.Logic.Map(party).SetPosition(dungeonTile);
+            party.EntityLogic.Map.SetPosition(dungeonTile);
         }
     }
 }

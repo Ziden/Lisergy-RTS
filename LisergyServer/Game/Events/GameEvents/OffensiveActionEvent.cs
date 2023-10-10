@@ -3,7 +3,7 @@ using Game.Systems.Battler;
 
 namespace Game.Events.GameEvents
 {
-    public class OffensiveActionEvent : GameEvent
+    public class OffensiveActionEvent : IGameEvent
     {
         public IEntity Attacker;
         public BattleGroupComponent AttackerGroup;

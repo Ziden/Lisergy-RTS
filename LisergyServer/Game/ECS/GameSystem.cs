@@ -6,7 +6,7 @@ namespace Game.ECS
 {
     public interface IGameSystem
     {
-        void CallEvent<EventType>(IEntity entityType, EventType ev) where EventType : BaseEvent;
+        void CallEvent<EventType>(IEntity entityType, EventType ev) where EventType : IBaseEvent;
     }
 
     public abstract class GameSystem<ComponentType> : IGameSystem where ComponentType : unmanaged, IComponent
@@ -25,7 +25,7 @@ namespace Game.ECS
         public virtual void OnEnabled() { }
         internal virtual void OnComponentRemoved(IEntity owner, ComponentType component) { }
 
-        public void CallEvent<EventType>(IEntity entityType, EventType ev) where EventType : BaseEvent
+        public void CallEvent<EventType>(IEntity entityType, EventType ev) where EventType : IBaseEvent
         {
             EntityEvents.CallEntityEvent(entityType, ev);
         }

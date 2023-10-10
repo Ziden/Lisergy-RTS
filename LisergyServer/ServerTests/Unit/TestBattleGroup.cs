@@ -21,7 +21,7 @@ namespace Tests
             var e = new PartyEntity(Game, Game.CreatePlayer());
             var startUnits = e.Get<BattleGroupComponent>().Units.Valids;
 
-            Game.Logic.BattleGroup(e).AddUnit(new Unit(Game.Specs.Units[1]));
+            e.EntityLogic.BattleGroup.AddUnit(new Unit(Game.Specs.Units[1]));
 
             Assert.AreEqual(startUnits + 1, e.Get<BattleGroupComponent>().Units.Valids);
         }

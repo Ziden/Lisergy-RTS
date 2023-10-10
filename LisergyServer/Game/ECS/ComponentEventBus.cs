@@ -11,15 +11,15 @@ namespace Game.ECS
     /// </summary>
     public class SystemEventBus<ComponentType> : IEventListener where ComponentType : unmanaged, IComponent
     {
-        internal EventBus<BaseEvent> _bus = new EventBus<BaseEvent>();
+        internal EventBus<IBaseEvent> _bus = new EventBus<IBaseEvent>();
         private IEntity _currentEntity;
 
-        public delegate void EntityEventCallback<EventType>(IEntity entity, EventType ev) where EventType : BaseEvent;
+        public delegate void EntityEventCallback<EventType>(IEntity entity, EventType ev) where EventType : IBaseEvent;
 
         /// <summary>
         /// Registers a new listener for the given system. The system is wrapped in a normal message bus/
         /// </summary>
-        public void On<EventType>(EntityEventCallback<EventType> callback) where EventType : BaseEvent
+        public void On<EventType>(EntityEventCallback<EventType> callback) where EventType : IBaseEvent
         {
             void ComponentEventWrapper(EventType ev)
             {
@@ -33,7 +33,7 @@ namespace Game.ECS
             _bus.Clear();
         }
 
-        public void CallEntityEvent<EventType>(IEntity entity, EventType ev) where EventType : BaseEvent
+        public void CallEntityEvent<EventType>(IEntity entity, EventType ev) where EventType : IBaseEvent
         {
             var t = typeof(ComponentType);
             _currentEntity = entity;

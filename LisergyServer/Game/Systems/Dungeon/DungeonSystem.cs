@@ -16,7 +16,7 @@ namespace Game.Systems.Dungeon
 
         private void OnGroupDead(IEntity e, GroupDeadEvent ev)
         {
-            GameLogic.Map(e).SetPosition(null);
+            GameLogic.GetEntityLogic(e).Map.SetPosition(null);
         }
     }
 }

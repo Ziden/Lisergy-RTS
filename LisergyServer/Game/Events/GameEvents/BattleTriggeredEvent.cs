@@ -11,7 +11,7 @@ namespace Game.Network.ServerPackets
     /// <summary>
     /// Triggered when a battle is triggered in game logic
     /// </summary>
-    public class BattleTriggeredEvent : GameEvent
+    public class BattleTriggeredEvent : IGameEvent
     {
         public Position Position;
         public GameId BattleID;

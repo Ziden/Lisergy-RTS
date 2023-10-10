@@ -24,7 +24,6 @@ namespace Game
     {
         public MapLogic Map => _systems.Map.GetLogic(_entity);
         public BattleGroupLogic BattleGroup => _systems.BattleGroup.GetLogic(_entity);
-
         public PlayerLogic Player => _systems.Players.GetLogic(_entity);
         public EntityMovementLogic Movement => _systems.EntityMovement.GetLogic(_entity);
 
@@ -41,11 +40,7 @@ namespace Game
 
     public interface IGameLogic
     {
-        public IEntityLogic EntityLogic(IEntity e);
-
-        public MapLogic Map(IEntity e);
-
-        public BattleGroupLogic BattleGroup(IEntity e);
+        public IEntityLogic GetEntityLogic(IEntity e);
     }
 
     public class GameLogic : IGameLogic
@@ -62,11 +57,6 @@ namespace Game
         /// <summary>
         /// Gets a reusable logic object for the given entity
         /// </summary>
-        public IEntityLogic EntityLogic(IEntity e) => _entityLogic.GetLogic(e);
-
-        //TODO: Remove below logic functions
-        public MapLogic Map(IEntity e) => EntityLogic(e).Map;
-
-        public BattleGroupLogic BattleGroup(IEntity e) => EntityLogic(e).BattleGroup;
+        public IEntityLogic GetEntityLogic(IEntity e) => _entityLogic.GetLogic(e);
     }
 }

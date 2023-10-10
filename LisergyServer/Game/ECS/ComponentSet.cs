@@ -33,6 +33,7 @@ namespace Game.ECS
         /// </summary>
         public IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver)
         {
+            Log.Debug($"Sync component for entity {_entity} of {_owner}");
             _returnBuffer.Clear();
             if (receiver == _owner)
             {
@@ -72,7 +73,7 @@ namespace Game.ECS
             }
         }
 
-        public void CallEvent(BaseEvent ev) => _entity.Game.Systems.CallEvent(_entity, ev);
+        public void CallEvent(IBaseEvent ev) => _entity.Game.Systems.CallEvent(_entity, ev);
 
         public void RemoveComponent<T>() where T : IComponent => throw new NotImplementedException();
 

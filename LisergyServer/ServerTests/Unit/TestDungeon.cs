@@ -35,7 +35,7 @@ namespace Tests
             _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
             Assert.That(_dungeon.Get<BattleGroupComponent>().Units.Valids == 1);
-            _game.Logic.Map(_dungeon).SetPosition(_game.World.GetTile(8, 8));
+            _dungeon.EntityLogic.Map.SetPosition(_game.World.GetTile(8, 8));
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace Tests
             var partyTile = party.Tile;
             var dungeonTile = partyTile.GetNeighbor(Direction.EAST);
 
-            _game.Logic.Map(_dungeon).SetPosition(dungeonTile);
+            _dungeon.EntityLogic.Map.SetPosition(dungeonTile);
 
             var component = party.Components.Get<BattleGroupComponent>();
             var unit = component.Units[0];
@@ -97,7 +97,7 @@ namespace Tests
             var playerCastleTile = _player.Data.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
 
-            _game.Logic.Map(_dungeon).SetPosition(dungeonTile);
+            _dungeon.EntityLogic.Map.SetPosition(dungeonTile);
 
             var tileBuilding = dungeonTile.Components.GetReference<TileHabitants>().Building;
             Assert.That(tileBuilding.EntityId == _dungeon.EntityId);
@@ -134,7 +134,7 @@ namespace Tests
             component.Units[0] = unit;
             party.Save(component);
 
-            _game.Logic.Map(_dungeon).SetPosition(dungeonTile);
+            _dungeon.EntityLogic.Map.SetPosition(dungeonTile);
 
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
             _player.GetParty(0).Course.Tick();
@@ -143,7 +143,7 @@ namespace Tests
             _game.BattleService.BattleTasks[battle.ID].Tick();
 
             Assert.IsTrue(_dungeon.Tile == null);
-            Assert.IsTrue(_game.Logic.BattleGroup(_dungeon).IsDestroyed);
+            Assert.IsTrue(_dungeon.EntityLogic.BattleGroup.IsDestroyed);
             Assert.AreEqual(_dungeon.Tile, null);
             Assert.AreEqual(dungeonTile.Components.GetReference<TileHabitants>().Building, null);
             Assert.AreEqual(_player.ReceivedPacketsOfType<EntityDestroyPacket>().Count, 1);
@@ -163,7 +163,7 @@ namespace Tests
             component.Units[0] = unit;
             _dungeon.Save(component);
 
-            _game.Logic.Map(_dungeon).SetPosition(dungeonTile);
+            _dungeon.EntityLogic.Map.SetPosition(dungeonTile);
 
             _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
             _player.GetParty(0).Course.Tick();
@@ -172,7 +172,7 @@ namespace Tests
             _game.BattleService.BattleTasks[battle.ID].Tick();
 
             Assert.IsTrue(party.Tile == playerCastleTile);
-            Assert.IsTrue(!_game.Logic.BattleGroup(party).IsDestroyed);
+            Assert.IsTrue(!party.EntityLogic.BattleGroup.IsDestroyed);
             Assert.AreEqual(_dungeon.Tile, dungeonTile);
             Assert.AreEqual(dungeonTile.Components.GetReference<TileHabitants>().Building, _dungeon);
             Assert.AreEqual(_player.ReceivedPacketsOfType<EntityDestroyPacket>().Count, 0);
@@ -184,7 +184,7 @@ namespace Tests
         {
             _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
             _dungeon.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[1]));
-            _game.Logic.Map(_dungeon).SetPosition(_game.World.GetTile(_party.Tile.X + _party.GetLineOfSight() + 1, _party.Tile.Y));
+            _dungeon.EntityLogic.Map.SetPosition(_game.World.GetTile(_party.Tile.X + _party.GetLineOfSight() + 1, _party.Tile.Y));
 
             _game.Entities.DeltaCompression.ClearDeltas();
 
@@ -194,7 +194,7 @@ namespace Tests
             Assert.That(!_dungeon.Tile.EntitiesViewing.Contains(_party));
 
             _player.ReceivedPackets.Clear();
-            _game.Logic.Map(_party).SetPosition(_party.Tile.GetNeighbor(Direction.EAST));
+            _party.EntityLogic.Map.SetPosition(_party.Tile.GetNeighbor(Direction.EAST));
             _game.Entities.DeltaCompression.SendDeltaPackets(_player);
 
             Assert.That(_player.ReceivedPacketsOfType<EntityUpdatePacket>().Any(p => p.Type == EntityType.Dungeon));
@@ -219,7 +219,7 @@ namespace Tests
             _player.ReceivedPackets.Clear();
 
             var dg = _game.Entities.CreateEntity<DungeonEntity>(null);
-            _game.Logic.Map(dg).SetPosition(_game.World.GetTile(4, 2));
+            dg.EntityLogic.Map.SetPosition(_game.World.GetTile(4, 2));
 
             _game.HandleClientEvent(clientPlayer, joinEvent);
 

@@ -47,11 +47,6 @@ namespace Game.Events.Bus
             _registeredListeners = new Dictionary<Type, List<RegisteredListener>>();
         }
 
-        public void Clear(IEventListener listener)
-        {
-            // TODO
-        }
-
         public virtual void Register<EvType>(IEventListener listener, Action<EvType> callback)
         {
             var eventType = typeof(EvType);

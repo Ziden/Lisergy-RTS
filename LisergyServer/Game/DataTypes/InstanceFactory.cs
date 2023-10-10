@@ -8,7 +8,8 @@ using System.Reflection.Emit;
 namespace Game.DataTypes
 {
     /// <summary>
-    /// Fast instance factory 
+    /// Fast instance factory.
+    /// It pre-compiles generic contructors into bytecode so creating new instances is all about calling the pre-compiled bytecode.
     /// </summary>
     public static class InstanceFactory
     {

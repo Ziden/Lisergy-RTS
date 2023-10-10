@@ -2,7 +2,7 @@
 
 namespace Game.Events.GameEvents
 {
-    public class PlayerVisibilityChangeEvent : GameEvent
+    public class PlayerVisibilityChangeEvent : IGameEvent
     {
         public PlayerVisibilityChangeEvent(BaseEntity viewer, TileEntity tile, bool v)
         {

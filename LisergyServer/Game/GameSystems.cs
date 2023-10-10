@@ -27,7 +27,7 @@ namespace Game
         PartySystem Party { get; }
         TileHabitantsSystem TileHabitants { get; }
         PlayerSystem Players { get; }
-        void CallEvent(IEntity entity, BaseEvent ev);
+        void CallEvent(IEntity entity, IBaseEvent ev);
     }
 
     public class GameSystems : ISystems
@@ -70,7 +70,7 @@ namespace Game
             system.OnEnabled();
         }
 
-        public void CallEvent(IEntity entity, BaseEvent ev)
+        public void CallEvent(IEntity entity, IBaseEvent ev)
         {
             _game.Events.Call(ev);
             foreach (var componentType in entity.Components.All())
@@ -79,7 +79,7 @@ namespace Game
             }
         }
 
-        private void CallSystemEvent<EventType>(Type componentType, IEntity entity, EventType ev) where EventType : BaseEvent
+        private void CallSystemEvent<EventType>(Type componentType, IEntity entity, EventType ev) where EventType : IBaseEvent
         {
             if (_systems.TryGetValue(componentType, out var systems))
             {

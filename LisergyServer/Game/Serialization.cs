@@ -42,7 +42,7 @@ namespace Game
 
             // Game
             models.Add(typeof(GameSpec));
-            models.Add(typeof(BaseEvent));
+            models.Add(typeof(IBaseEvent));
             if (extras != null)
             {
                 models.AddRange(extras);
@@ -52,7 +52,7 @@ namespace Game
 
         public static IEnumerable<Type> GetDefaultSerializationTypes()
         {
-            foreach (Type type in typeof(BaseEvent).Assembly.GetTypes())
+            foreach (Type type in typeof(IBaseEvent).Assembly.GetTypes())
             {
                 var validEvent = typeof(InputPacket).IsAssignableFrom(type) && type != typeof(InputPacket);
                 validEvent = validEvent || typeof(ServerPacket).IsAssignableFrom(type) && type != typeof(ServerPacket);

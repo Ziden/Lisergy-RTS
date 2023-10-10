@@ -70,7 +70,7 @@ namespace Game.Systems.Map
                 }
             }
             Entity.Components.Save(placement);
-            Log.Info($"Moved {Entity} to {component.Tile}");
+            Log.Debug($"Moved {Entity} to {component.Tile}");
         }
     }
 }

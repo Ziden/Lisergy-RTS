@@ -6,7 +6,7 @@ namespace Game.Events.GameEvents
     /// <summary>
     /// Changes when a TileEntity visibility changes
     /// </summary>
-    public class TileVisibilityChangedEvent : GameEvent
+    public class TileVisibilityChangedEvent : IGameEvent
     {
         public TileEntity Tile;
         public IEntity Explorer;

@@ -16,7 +16,7 @@ namespace Game.Services
     /// <summary>
     /// Internal Service event to tell the battle service a battle finished processing
     /// </summary>
-    internal class BattleFinishedTaskEvent : GameEvent
+    internal class BattleFinishedTaskEvent : IGameEvent
     {
         public BattleResultPacket ResultPacket;
     }

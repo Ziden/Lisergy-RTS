@@ -28,7 +28,7 @@ namespace Game
         }
 
         public TileEntity Tile => Components.GetReference<MapReferenceComponent>().Tile;
-        public IEntityLogic EntityLogic => Game.Logic.EntityLogic(this);
+        public IEntityLogic EntityLogic => Game.Logic.GetEntityLogic(this);
         public abstract EntityType EntityType { get; }
         public ref T Get<T>() where T : unmanaged, IComponent => ref Components.Get<T>();
         public void Save<T>(in T component) where T : unmanaged, IComponent => Components.Save(component);

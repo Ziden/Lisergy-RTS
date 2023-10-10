@@ -50,7 +50,7 @@ namespace Game.ECS
         T GetReference<T>() where T : class, IReferenceComponent;
         bool TryGetReference<T>(out T component) where T : class, IReferenceComponent;
         bool Has<T>() where T : unmanaged, IComponent;
-        void CallEvent(BaseEvent e);
+        void CallEvent(IBaseEvent e);
     }
 
 }

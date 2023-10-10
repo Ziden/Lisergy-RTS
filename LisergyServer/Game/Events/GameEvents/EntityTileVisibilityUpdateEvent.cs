@@ -7,7 +7,7 @@ namespace Game.Events.GameEvents
     /// Triggered when an entity explores or unexplores a tile.
     // Not necessarily the TileEntity visibility changed
     /// </summary>
-    public class EntityTileVisibilityUpdateEvent : GameEvent
+    public class EntityTileVisibilityUpdateEvent : IGameEvent
     {
         public TileEntity Tile;
         public IEntity Explorer;

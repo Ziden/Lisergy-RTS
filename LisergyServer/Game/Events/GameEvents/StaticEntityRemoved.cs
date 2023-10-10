@@ -3,7 +3,7 @@ using Game.Tile;
 
 namespace Game.Events.GameEvents
 {
-    public class BuildingRemovedEvent : GameEvent
+    public class BuildingRemovedEvent : IGameEvent
     {
         public IEntity Entity;
         public TileEntity Tile;

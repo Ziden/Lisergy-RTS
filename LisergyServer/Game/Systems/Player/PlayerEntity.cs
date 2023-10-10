@@ -59,7 +59,7 @@ namespace Game.Systems.Player
         }
 
         public IComponentSet Components { get; private set; }
-        public IEntityLogic EntityLogic => Game.Logic.EntityLogic(this);
+        public IEntityLogic EntityLogic => Game.Logic.GetEntityLogic(this);
         public ref DeltaFlags DeltaFlags => throw new NotImplementedException();
         public EntityType EntityType => EntityType.Player;
         public override string ToString() => $"<Player id={EntityId}>";

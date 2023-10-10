@@ -14,7 +14,7 @@ namespace Game.Systems.Movement
     {
         public bool TryStartMovement(List<Position> sentPath, MovementIntent intent)
         {
-            List<TileEntity> path = new List<TileEntity>();
+            Log.Debug("Validating route");
             var owner = Game.Players.GetPlayer(Entity.OwnerID);
 
             foreach (var position in sentPath)
@@ -25,10 +25,9 @@ namespace Game.Systems.Movement
                     Log.Error($"Impassable TileEntity {tile} in course path: {owner} moving {Entity}");
                     return false;
                 }
-                path.Add(tile);
             }
             var movement = Entity.Get<EntityMovementComponent>();
-            var task = new CourseTask(Game, Entity, path, intent);
+            var task = new CourseTask(Game, Entity, sentPath, intent);
             movement.CourseId = task.ID;
             movement.MovementIntent = intent;
             Entity.Components.Save(movement);

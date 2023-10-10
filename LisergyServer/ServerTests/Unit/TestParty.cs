@@ -65,11 +65,11 @@ namespace Tests
         public void TestBattleIDResetsAfterBattle()
         {
             var party = _player.GetParty(0);
-            _game.Logic.Map(party).SetPosition(_game.World.GetTile(0, 0));
+            party.EntityLogic.Map.SetPosition(_game.World.GetTile(0, 0));
 
         
             var enemy = _game.Entities.CreateEntity<DungeonEntity>(null);
-            _game.Logic.Map(enemy).SetPosition(_game.World.GetTile(0, 0));
+            enemy.EntityLogic.Map.SetPosition(_game.World.GetTile(0, 0));
 
             var component = enemy.Get<BattleGroupComponent>();
             component.Units.Add(new Unit(_game.Specs.Units[0]));

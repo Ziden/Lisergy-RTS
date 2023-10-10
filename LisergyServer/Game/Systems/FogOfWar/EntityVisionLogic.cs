@@ -1,4 +1,5 @@
 ﻿using Game.ECS;
+using Game.Events;
 using Game.Events.GameEvents;
 using Game.Systems.Battler;
 using Game.Tile;
@@ -53,24 +54,24 @@ namespace Game.Systems.FogOfWar
                 if (to != null)
                     _newLineOfSight.UnionWith(to.GetAOE(los));
 
-                var visEnabled = new EntityTileVisibilityUpdateEvent()
-                {
-                    Explorer = explorer,
-                    Explored = true
-                };
+                var ev = EventPool<EntityTileVisibilityUpdateEvent>.Get();
+                ev.Explorer = explorer;
+                ev.Explored = true;
 
                 foreach (var newTileSeen in _newLineOfSight.Except(_oldLineOfSight))
                 {
-                    visEnabled.Tile = newTileSeen;
-                    newTileSeen.Components.CallEvent(visEnabled);
+                    ev.Tile = newTileSeen;
+                    newTileSeen.Components.CallEvent(ev);
                 }
 
-                visEnabled.Explored = false;
+                ev.Explored = false;
                 foreach (var oldTileUnseen in _oldLineOfSight.Except(_newLineOfSight))
                 {
-                    visEnabled.Tile = oldTileUnseen;
-                    oldTileUnseen.Components.CallEvent(visEnabled);
+                    ev.Tile = oldTileUnseen;
+                    oldTileUnseen.Components.CallEvent(ev);
                 }
+
+                EventPool<EntityTileVisibilityUpdateEvent>.Return(ev);
             }
         }
     }

@@ -166,7 +166,7 @@ namespace Tests
             player.ReceivedPackets.Clear();
 
             var party = player.GetParty(0);
-            Game.Logic.Map(party).SetPosition(party.Tile);
+            party.EntityLogic.Map.SetPosition(party.Tile);
 
             Assert.AreEqual(0, player.ReceivedPackets.Count);
         }
@@ -213,7 +213,7 @@ namespace Tests
 
             Assert.AreEqual(1, party.GetLineOfSight());
 
-            Game.Logic.Map(party).SetPosition(party.Tile.GetNeighbor(Direction.EAST));
+            party.EntityLogic.Map.SetPosition(party.Tile.GetNeighbor(Direction.EAST));
 
             /*          
                                 o o o o o        o o o o o
@@ -261,11 +261,11 @@ namespace Tests
             Game.CreatePlayer(0, 0);
             var player = Game.GetTestPlayer();
             var party = player.GetParty(0);
-            Game.Logic.Map(party).SetPosition(party.Tile.GetNeighbor(Direction.EAST));
+            party.EntityLogic.Map.SetPosition(party.Tile.GetNeighbor(Direction.EAST));
 
             player.ReceivedPackets.Clear();
 
-            Game.Logic.Map(party).SetPosition(party.Tile.GetNeighbor(Direction.WEST));
+            party.EntityLogic.Map.SetPosition(party.Tile.GetNeighbor(Direction.WEST));
 
             Assert.AreEqual(0, player.ReceivedPacketsOfType<TilePacket>().Count);
         }

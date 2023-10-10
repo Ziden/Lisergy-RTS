@@ -3,8 +3,7 @@ using System;
 
 namespace Game.Events
 {
-    [Serializable]
-    public abstract class BaseEvent
+    public interface IBaseEvent
     {
 
     }

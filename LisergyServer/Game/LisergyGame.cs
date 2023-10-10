@@ -20,7 +20,7 @@ namespace Game
         public IGameWorld GameWorld { get; }
         public ISystems Systems { get; }
         public IGameLogic Logic { get; }
-        public EventBus<BaseEvent> Events { get; }
+        public EventBus<IBaseEvent> Events { get; }
     }
 
     public class LisergyGame : IGame
@@ -33,9 +33,9 @@ namespace Game
         public ISystems Systems { get; private set; }
         public IGamePlayers Players => World.Players;
         public IGameLogic Logic { get; private set; }
-        public IEntityLogic EntityLogic(IEntity e) => Logic.EntityLogic(e);
+        public IEntityLogic EntityLogic(IEntity e) => Logic.GetEntityLogic(e);
         public IGameNetwork Network { get; private set; }
-        public EventBus<BaseEvent> Events { get; private set; } = new EventBus<BaseEvent>();
+        public EventBus<IBaseEvent> Events { get; private set; } = new EventBus<IBaseEvent>();
 
         public LisergyGame(GameSpec specs)
         {

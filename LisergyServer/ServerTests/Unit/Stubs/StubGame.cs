@@ -8,10 +8,19 @@ using Game.Tile;
 using Game.World;
 using GameData;
 using GameDataTest;
+using System;
 using System.Collections.Generic;
 
 namespace ServerTests
 {
+    public static class StaticSetup 
+    {
+        static StaticSetup()
+        {
+
+        }
+    }
+
     public class TestGame : LisergyGame
     {
         private GameId _testPlayerId = GameId.Generate();
@@ -21,8 +30,21 @@ namespace ServerTests
         public CourseService CourseService { get; private set; }
         public List<BasePacket> SentPackets { get; private set; } = new List<BasePacket>();
 
-
         private static GameWorld TestWorld;
+
+        private static long lastLog = 0;
+
+        static TestGame()
+        {
+            
+            Log.Debug = m =>
+            {
+                var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                if (lastLog != 0) m = $"[{now - lastLog}ms] " + m;
+                lastLog = now;
+                Console.WriteLine(m);
+            };
+        }
 
         private GameWorld CreateTestWorld()
         {

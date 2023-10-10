@@ -6,7 +6,7 @@ namespace Game.Events.GameEvents
     /// <summary>
     /// When a unit is removed from an entity. 
     /// </summary>
-    public class UnitRemovedEvent : GameEvent
+    public class UnitRemovedEvent : IGameEvent
     {
         public Unit[] UnitsRemoved;
         public IEntity Entity;

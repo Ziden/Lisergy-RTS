@@ -83,7 +83,7 @@ namespace Tests
 
         public class TestView : IComponent
         {
-            public static EntityMoveOutEvent called = null;
+            public static EntityMoveOutEvent called = default;
 
             public static void Callback(TestView view, EntityMoveOutEvent ev)
             {

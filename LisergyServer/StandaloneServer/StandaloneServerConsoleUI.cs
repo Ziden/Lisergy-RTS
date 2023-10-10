@@ -15,7 +15,7 @@ public class LogEntry
 
 public class EventEntry
 {
-    public BaseEvent Event;
+    public IBaseEvent Event;
 
      public override string ToString() => Event.ToString();
 
@@ -129,7 +129,7 @@ public class StandaloneServerConsoleUI : Window
         List.SetNeedsDisplay();
     }
 
-    public static void OnReceiveEvent(BaseEvent ev)
+    public static void OnReceiveEvent(IBaseEvent ev)
     {
         Application.MainLoop.Invoke(() =>
         {

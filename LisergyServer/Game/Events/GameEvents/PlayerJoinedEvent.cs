@@ -2,7 +2,7 @@
 
 namespace Game.Events.GameEvents
 {
-    public class PlayerJoinedEvent : GameEvent
+    public class PlayerJoinedEvent : IGameEvent
     {
         public PlayerEntity Player;
 

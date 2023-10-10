@@ -2,6 +2,7 @@
 using Game.Scheduler;
 using Game.Systems.Party;
 using Game.Tile;
+using Game.World;
 using System.Collections.Generic;
 
 namespace Game.Systems.Movement
@@ -9,10 +10,10 @@ namespace Game.Systems.Movement
     public class CourseTask : GameTask
     {
         public IEntity Party;
-        public List<TileEntity> Path;
+        public List<Position> Path;
         public MovementIntent Intent { get; private set; }
 
-        public CourseTask(IGame game, IEntity party, List<TileEntity> path, MovementIntent intent) : base(game, party.Components.Get<EntityMovementComponent>().MoveDelay, game.Players.GetPlayer(party.OwnerID))
+        public CourseTask(IGame game, IEntity party, List<Position> path, MovementIntent intent) : base(game, party.Components.Get<EntityMovementComponent>().MoveDelay, game.Players.GetPlayer(party.OwnerID))
         {
             Party = party;
             Path = path;
@@ -49,7 +50,7 @@ namespace Game.Systems.Movement
             return Path == null || Path.Count <= 1;
         }
 
-        private TileEntity NextTile { get => Path == null || Path.Count == 0 ? null : Path[0]; }
+        private TileEntity NextTile { get => Path == null || Path.Count == 0 ? null : Game.GameWorld.GetTile(Path[0]); }
 
         public override string ToString()
         {
