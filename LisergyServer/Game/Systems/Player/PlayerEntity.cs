@@ -16,7 +16,7 @@ namespace Game.Systems.Player
 
         private GameId _playerId;
 
-        public PlayerDataComponent Data => Get<PlayerDataComponent>();
+        public PlayerDataComponent Data => Components.GetReference<PlayerDataComponent>();
 
         public ref readonly GameId EntityId => ref _playerId;
         public ref readonly GameId OwnerID => ref _playerId;
@@ -26,7 +26,8 @@ namespace Game.Systems.Player
         {
             Game = game;
             Components = new ComponentSet(this, this);
-            Components.Add(new PlayerDataComponent());
+            Components.Add<PlayerComponent>();
+            Components.AddReference(new PlayerDataComponent());
             _playerId = GameId.Generate();
             Data.Parties = new PartyEntity[MAX_PARTIES]
             {
@@ -62,7 +63,7 @@ namespace Game.Systems.Player
         public ref DeltaFlags DeltaFlags => throw new NotImplementedException();
         public EntityType EntityType => EntityType.Player;
         public override string ToString() => $"<Player id={EntityId}>";
-        public T Get<T>() where T : IComponent => Components.Get<T>();
+        public ref T Get<T>() where T : unmanaged, IComponent => ref Components.Get<T>();
         public ServerPacket GetUpdatePacket(PlayerEntity receiver) => throw new NotImplementedException();
         public void ProccessDeltas(PlayerEntity trigger) => throw new NotImplementedException();
     }

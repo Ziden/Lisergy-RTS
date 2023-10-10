@@ -1,10 +1,4 @@
 ﻿using Game.DataTypes;
-using Game.ECS;
-using Game.Events;
-using Game.Events.ServerEvents;
-using Game.Network;
-using Game.Pathfinder;
-using Game.Systems.Player;
 using Game.Tile;
 using System;
 using System.Collections.Generic;
@@ -24,43 +18,27 @@ namespace Game.World
         private TileEntity[,] _tiles;
         private GameId _id;
 
-        public bool IsVoid()
-        {
-            return _tiles == null;
-        }
-
-        public ushort X => _data.Position.X;
-        public ushort Y => _data.Position.Y;
-        public Position Position => _data.Position;
-
         public ChunkMap Map { get; private set; }
-        public byte Flags { get => _data._flags; }
 
-        public void SetFlag(byte flag) => _data.SetFlag(flag);
-
-        public TileEntity[,] Tiles { get => _tiles; private set => _tiles = value; }
-
-        public GameId EntityId => _id;
-
-        public PlayerEntity Owner => throw new NotImplementedException();
-
-        public GameId OwnerID => throw new NotImplementedException();
-
-        public Chunk(ChunkMap w, in ushort x, in ushort y, TileEntity[,] tiles)
+        public Chunk(ChunkMap map, in ushort x, in ushort y, TileEntity[,] tiles)
         {
-            ;
             _id = GameId.Generate();
             _data = new ChunkData();
             _data.Position = new Position(x, y);
             _data.Allocate();
-            Map = w;
+            Map = map;
             _tiles = tiles;
         }
 
-        public void FreeMemoryForReuse()
-        {
-            _data.FlagToBeReused();
-        }
+        public bool IsVoid() => _tiles == null;
+        public ref readonly ushort X => ref _data.Position.X;
+        public ref readonly ushort Y => ref _data.Position.Y;
+        public ref readonly Position Position => ref _data.Position;
+        public ref readonly byte Flags { get => ref _data._flags; }
+        public void SetFlag(in byte flag) => _data.SetFlag(flag);
+        public TileEntity[,] Tiles { get => _tiles; private set => _tiles = value; }
+        public ref readonly GameId EntityId => ref _id;
+        public void FreeMemoryForReuse() => _data.FlagToBeReused();
 
         public TileEntity CreateTile(in int tileX, in int tileY)
         {
@@ -71,26 +49,14 @@ namespace Game.World
             return tile;
         }
 
-        public TileEntity GetTile(in int x, in int y)
-        {
-            return Tiles[x, y];
-        }
-
-        public override string ToString()
-        {
-            return $"<Chunk x={X} y={Y}>";
-        }
-
+        public TileEntity GetTile(in int x, in int y) => Tiles[x, y];
+        public override string ToString() => $"<Chunk x={X} y={Y}>";
         public IEnumerable<TileEntity> AllTiles()
         {
             for (var x = 0; x < _tiles.GetLength(0); x++)
                 for (var y = 0; y < _tiles.GetLength(1); y++)
                     yield return _tiles[x, y];
         }
-
-        public void Dispose()
-        {
-            _data.Free();
-        }
+        public void Dispose() => _data.Free();
     }
 }

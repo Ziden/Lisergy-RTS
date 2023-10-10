@@ -1,19 +1,14 @@
 ﻿using Game;
 using Game.DataTypes;
-using Game.Events;
 using Game.Network;
 using Game.Scheduler;
 using Game.Services;
 using Game.Systems.Player;
-using Game.Systems.Tile;
 using Game.Tile;
 using Game.World;
 using GameData;
 using GameDataTest;
-using LisergyServer.Core;
-using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace ServerTests
 {
@@ -103,7 +98,7 @@ namespace ServerTests
         {
             var tiles = World.AllTiles();
             foreach (var tile in tiles)
-                if (tile.Components.Get<TileHabitants>().Building == null)
+                if (tile.Building == null)
                     return tile;
             throw new System.Exception("No unbuilt tile");
         }

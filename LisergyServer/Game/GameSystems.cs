@@ -11,6 +11,7 @@ using System;
 using Game.Events;
 using Game.Systems.Map;
 using Game.Systems.Player;
+using Game.DataTypes;
 
 namespace Game
 {
@@ -31,7 +32,7 @@ namespace Game
 
     public class GameSystems : ISystems
     {
-        private readonly Dictionary<Type, IGameSystem> _systems = new Dictionary<Type, IGameSystem>();
+        private readonly DefaultValueDictionary<Type, List<IGameSystem>> _systems = new DefaultValueDictionary<Type, List<IGameSystem>>();
 
         private LisergyGame _game;
 
@@ -63,24 +64,28 @@ namespace Game
         public TileHabitantsSystem TileHabitants { get; private set; }
         public PlayerSystem Players { get; private set; }
 
-        private void AddSystem<ComponentType>(GameSystem<ComponentType> system) where ComponentType : IComponent 
+        private void AddSystem<ComponentType>(GameSystem<ComponentType> system) where ComponentType : unmanaged, IComponent 
         {
-            _systems[typeof(ComponentType)] = system;
+            _systems[typeof(ComponentType)].Add(system);
             system.OnEnabled();
         }
 
         public void CallEvent(IEntity entity, BaseEvent ev)
         {
             _game.Events.Call(ev);
-            foreach (var kp in entity.Components.All())
+            foreach (var componentType in entity.Components.All())
             {
-                CallSystemEvent(kp.Key, entity, ev);
+                CallSystemEvent(componentType, entity, ev);
             }
         }
 
         private void CallSystemEvent<EventType>(Type componentType, IEntity entity, EventType ev) where EventType : BaseEvent
         {
-            if (_systems.TryGetValue(componentType, out var system)) system.CallEvent(entity, ev);
+            if (_systems.TryGetValue(componentType, out var systems))
+            {
+                foreach(var system in systems) system.CallEvent(entity, ev);
+            }
+            
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Game.ECS
         void CallEvent<EventType>(IEntity entityType, EventType ev) where EventType : BaseEvent;
     }
 
-    public abstract class GameSystem<ComponentType> : IGameSystem where ComponentType : IComponent
+    public abstract class GameSystem<ComponentType> : IGameSystem where ComponentType : unmanaged, IComponent
     {
         protected SystemEventBus<ComponentType> EntityEvents = new SystemEventBus<ComponentType>();
         public IGame Game { get; private set; }
@@ -31,7 +31,7 @@ namespace Game.ECS
         }
     }
 
-    public class LogicSystem<ComponentType, LogicType> : GameSystem<ComponentType> where ComponentType : IComponent where LogicType : IComponentLogic<ComponentType>
+    public class LogicSystem<ComponentType, LogicType> : GameSystem<ComponentType> where ComponentType : unmanaged, IComponent where LogicType : IComponentLogic<ComponentType>
     {
         private LogicType _logic;
 
@@ -49,7 +49,7 @@ namespace Game.ECS
             {
                 throw new Exception($"Entity {entity} Trying to use logic {typeof(LogicType).Name} without having component {typeof(ComponentType).Name}");
             }
-            _logic.Entity = entity; // TODO: Maybe do a logic pool for transactional effects ?
+            _logic.Entity = entity; 
             return _logic;
         }
     }

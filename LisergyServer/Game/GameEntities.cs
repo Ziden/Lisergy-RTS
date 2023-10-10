@@ -5,6 +5,7 @@ using Game.Systems.Building;
 using Game.Systems.Dungeon;
 using Game.Systems.Party;
 using Game.Systems.Player;
+using System;
 using System.Collections.Generic;
 
 namespace Game
@@ -23,7 +24,7 @@ namespace Game
         IDeltaCompression DeltaCompression { get; }
     }
 
-    public class GameEntities : IGameEntities
+    public class GameEntities : IGameEntities, IDisposable
     {
         private IGame _game;
         private readonly Dictionary<GameId, IEntity> _entities = new Dictionary<GameId, IEntity>();
@@ -49,6 +50,11 @@ namespace Game
             if (typeof(T) == typeof(PartyEntity)) return new PartyEntity(_game, owner);
             if (typeof(T) == typeof(PlayerBuildingEntity)) return new PlayerBuildingEntity(_game, owner);
             return null;
+        }
+
+        public void Dispose()
+        {
+            foreach (var e in _entities.Values) e.Components.Dispose();
         }
 
         public IEntity this[in GameId id] => _entities[id];

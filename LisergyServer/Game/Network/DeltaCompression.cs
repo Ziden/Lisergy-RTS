@@ -88,7 +88,7 @@ namespace Game.Network
     /// Tracks delta to sent updates to clients.
     /// Should only send updates and not run events or logic
     /// </summary>
-    public interface IEntityDeltaTrackable : IDeltaUpdateable
+    public interface IEntityDeltaTrackable
     {
         /// <summary>
         /// Gets the delta flags of a given entity
@@ -99,11 +99,10 @@ namespace Game.Network
         /// Should only send updates to client and not run any events or logic
         /// </summary>
         void ProccessDeltas(PlayerEntity trigger);
-    }
-
-    public interface IDeltaUpdateable
-    {
+        
+        /// <summary>
+        /// Gets the update packet of a given delta updateable
+        /// </summary>
         public ServerPacket GetUpdatePacket(PlayerEntity receiver);
     }
-
 }

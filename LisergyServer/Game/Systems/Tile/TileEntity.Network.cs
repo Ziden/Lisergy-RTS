@@ -6,7 +6,7 @@ using System;
 
 namespace Game.Tile
 {
-    public unsafe partial class TileEntity : IEntity, IEntityDeltaTrackable, IDeltaUpdateable
+    public unsafe partial class TileEntity : IEntity, IEntityDeltaTrackable
     {
         private DeltaFlags _flags;
         public ref DeltaFlags DeltaFlags { get => ref _flags; }

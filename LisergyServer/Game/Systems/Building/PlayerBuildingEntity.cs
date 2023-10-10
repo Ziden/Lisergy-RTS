@@ -15,12 +15,12 @@ namespace Game.Systems.Building
 
         public PlayerBuildingEntity(IGame game, PlayerEntity owner) : base(game, owner)
         {
-            Components.Add(new MapPlacementComponent());
-            Components.Add(new MapReferenceComponent());
-            Components.Add(new BuildingComponent());
-            Components.Add(new PlayerBuildingComponent());
-            Components.Add(new EntityVisionComponent());
-            Components.Add(new BuildingComponent());
+            Components.Add<MapPlacementComponent>();
+            Components.Add<BuildingComponent>();
+            Components.Add<PlayerBuildingComponent>();
+            Components.Add<EntityVisionComponent>();
+            Components.Add<BuildingComponent>();
+            Components.AddReference(new MapReferenceComponent());
         }
 
         public void BuildFromSpec(BuildingSpec spec)

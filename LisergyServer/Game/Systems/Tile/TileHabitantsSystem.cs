@@ -6,7 +6,7 @@ using Game.Systems.Movement;
 
 namespace Game.Systems.Tile
 {
-    public class TileHabitantsSystem : GameSystem<TileHabitants>
+    public class TileHabitantsSystem : GameSystem<TileComponent>
     {
         public TileHabitantsSystem(LisergyGame game) : base(game) { }
         public override void OnEnabled()
@@ -17,26 +17,26 @@ namespace Game.Systems.Tile
             EntityEvents.On<EntityMoveInEvent>(OnEntityMoveIn);
         }
 
-        private void OnStaticEntityRemoved(IEntity owner, ref TileHabitants component, BuildingRemovedEvent entity)
+        private void OnStaticEntityRemoved(IEntity owner, ref TileComponent c, BuildingRemovedEvent entity)
         {
-            component.Building = null;
+            owner.Components.GetReference<TileHabitants>().Building = null;
         }
 
-        private void OnStaticEntityPlaced(IEntity owner, ref TileHabitants component, BuildingPlacedEvent ev)
+        private void OnStaticEntityPlaced(IEntity owner, ref TileComponent c, BuildingPlacedEvent ev)
         {
-            component.Building = ev.Entity;
+            owner.Components.GetReference<TileHabitants>().Building = ev.Entity;
         }
 
-        private void OnEntityMoveOut(IEntity owner, ref TileHabitants component, EntityMoveOutEvent ev)
+        private void OnEntityMoveOut(IEntity owner, ref TileComponent c, EntityMoveOutEvent ev)
         {
-            component.EntitiesIn.Remove(ev.Entity);
+            owner.Components.GetReference<TileHabitants>().EntitiesIn.Remove(ev.Entity);
         }
 
-        private void OnEntityMoveIn(IEntity owner, ref TileHabitants tileHabitants, EntityMoveInEvent ev)
+        private void OnEntityMoveIn(IEntity owner, ref TileComponent c, EntityMoveInEvent ev)
         {
-            if (!ev.Entity.Components.TryGet<EntityMovementComponent>(out var movement)) return;
+            if (!ev.Entity.Components.Has<EntityMovementComponent>()) return;
 
-
+            var tileHabitants = owner.Components.GetReference<TileHabitants>();
             // TODO: Move all this logic to battle logic
             tileHabitants.EntitiesIn.Add(ev.Entity);
             var course = ev.Entity.EntityLogic.Movement.TryGetCourseTask();

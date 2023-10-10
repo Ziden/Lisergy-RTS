@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Game.Systems.Player
 {
-    public class PlayerDataComponent : IComponent
+    public class PlayerDataComponent : IReferenceComponent
     {
         public PartyEntity[] Parties;
         public HashSet<Unit> Units = new HashSet<Unit>();

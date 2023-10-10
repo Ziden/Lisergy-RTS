@@ -9,7 +9,7 @@ namespace Game.ECS
     /// <summary>
     /// Event bus that fires specific events for the specific component. Can wrap events knowing the sender and component instance.
     /// </summary>
-    public class SystemEventBus<ComponentType> : IEventListener where ComponentType : IComponent
+    public class SystemEventBus<ComponentType> : IEventListener where ComponentType : unmanaged, IComponent
     {
         internal EventBus<BaseEvent> _bus = new EventBus<BaseEvent>();
         private IEntity _currentEntity;
@@ -23,10 +23,8 @@ namespace Game.ECS
         {
             void ComponentEventWrapper(EventType ev)
             {
-                if(_currentEntity.Components.TryGet<ComponentType>(out var component))
-                {
-                    callback(_currentEntity, ref component, ev);
-                }
+                var c = _currentEntity.Components.Get<ComponentType>();
+                callback(_currentEntity, ref c, ev);
             }
             _bus.Register(this, (Action<EventType>)ComponentEventWrapper);
         }
@@ -38,6 +36,7 @@ namespace Game.ECS
 
         public void CallEntityEvent<EventType>(IEntity entity, EventType ev) where EventType : BaseEvent
         {
+            var t = typeof(ComponentType);
             _currentEntity = entity;
             _bus.Call(ev);
         }

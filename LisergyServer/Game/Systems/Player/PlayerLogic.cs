@@ -11,20 +11,22 @@ using Game.World;
 
 namespace Game.Systems.Player
 {
-    public class PlayerLogic : BaseEntityLogic<PlayerDataComponent>
+    public class PlayerLogic : BaseEntityLogic<PlayerComponent>
     {
+        private PlayerDataComponent Data => Entity.Components.GetReference<PlayerDataComponent>();
+
         public Unit RecruitUnit(ushort unitSpecId)
         {
             var unit = new Unit(Game.Specs.Units[unitSpecId]);
 
-            Entity.Get<PlayerDataComponent>().Units.Add(unit);
+            Data.Units.Add(unit);
             Log.Debug($"{Entity} recruited {unit}");
             return unit;
         }
 
         public PartyEntity FindParty(Unit u)
         {
-            foreach (PartyEntity p in GetComponent().Parties)
+            foreach (PartyEntity p in Data.Parties)
             {
                 if (p.Get<BattleGroupComponent>().Units.Contains(u)) return p;
             }   
@@ -38,7 +40,7 @@ namespace Game.Systems.Player
             Build(castleID, t);
             ushort initialUnit = Game.Specs.InitialUnit.UnitSpecID;
             var unit = RecruitUnit(initialUnit);
-            var party = GetComponent().Parties[0];
+            var party = Data.Parties[0];
             PlaceUnitInParty(unit, party);
             Game.Systems.Map.GetLogic(party).SetPosition(t.GetNeighbor(Direction.EAST));
             Log.Debug($"Placed new player {Entity} in {t}");
@@ -47,7 +49,7 @@ namespace Game.Systems.Player
 
         public void RecordHeader(BattleHeaderData header)
         {
-            GetComponent().BattleHeaders[header.BattleID] = header;
+            Data.BattleHeaders[header.BattleID] = header;
         }
 
         public void PlaceUnitInParty(Unit u, PartyEntity newParty)
@@ -65,7 +67,7 @@ namespace Game.Systems.Player
         {
             var building = Game.Entities.CreateEntity<PlayerBuildingEntity>(Game.Players.GetPlayer(Entity.OwnerID));
             building.BuildFromSpec(Game.Specs.Buildings[buildingSpecId]);
-            GetComponent().Buildings.Add(building);
+            Data.Buildings.Add(building);
             Game.Logic.Map(building).SetPosition(t);
             Log.Debug($"Player {Entity} built {building}");
         }

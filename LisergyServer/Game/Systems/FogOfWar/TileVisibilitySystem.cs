@@ -3,12 +3,11 @@ using Game.Events.GameEvents;
 using Game.Network;
 using Game.Systems.Tile;
 using Game.Tile;
-using Game.World;
 using System.Linq;
 
 namespace Game.Systems.FogOfWar
 {
-    public class TileVisibilitySystem : GameSystem<TileVisibility>
+    public class TileVisibilitySystem : GameSystem<TileComponent>
     {
         public TileVisibilitySystem(LisergyGame game) : base(game) { }
         public override void OnEnabled()
@@ -16,14 +15,14 @@ namespace Game.Systems.FogOfWar
             EntityEvents.On<TileExplorationStateChanged>(OnTileExplorationChanged);
         }
 
-        private void OnTileExplorationChanged(IEntity tile, ref TileVisibility component, TileExplorationStateChanged ev)
+        private void OnTileExplorationChanged(IEntity tile, ref TileComponent c, TileExplorationStateChanged ev)
         {
-            var tileObj = (TileEntity)tile;
-            var habitants = tile.Components.Get<TileHabitants>();
+            var tileObj = (TileEntity)tile; // TODO: Remove cast
+            var component = tile.Components.GetReference<TileVisibility>();
+            var habitants = tile.Components.GetReference<TileHabitants>();
             if (ev.Explored)
             {
                 component.EntitiesViewing.Add(ev.Explorer);
-
                 var owner = Players.GetPlayer(ev.Explorer.OwnerID);
                 if (component.PlayersViewing.Add(owner))
                 {

@@ -45,7 +45,7 @@ namespace Game
 
         private void OnExistenceChanged()
         {
-            var c = Get<MapReferenceComponent>();
+            var c = Components.GetReference<MapReferenceComponent>();
             if (c.Tile == null) return; 
             foreach (var playerViewing in c.Tile.PlayersViewing)
             {
@@ -55,26 +55,27 @@ namespace Game
 
         private void SendUpdateToNewViewers()
         {
-            var c = Get<MapReferenceComponent>();
+            var c = Components.GetReference<MapReferenceComponent>();
             var newTile = c.Tile;
             var previousTile = c.PreviousTile;
 
-            if (!Components.TryGet<EntityMovementComponent>(out var movementComponent)) return;
+            if (!Components.Has<EntityMovementComponent>()) return;
+
             ViewersCache.Clear();
             var allViewers = ViewersCache;
             if (previousTile != newTile && previousTile != null)
             {
-                allViewers.UnionWith(previousTile.Components.Get<TileVisibility>().PlayersViewing);
+                allViewers.UnionWith(previousTile.PlayersViewing);
                 if (newTile != null)
-                    allViewers.UnionWith(newTile.Components.Get<TileVisibility>().PlayersViewing);
+                    allViewers.UnionWith(newTile.PlayersViewing);
 
-                var movePacket = new EntityMovePacket(this, movementComponent, newTile);
+                var movePacket = new EntityMovePacket(this, Components.Get<EntityMovementComponent>(), newTile);
                 Game.Network.SendToPlayer(movePacket, allViewers.ToArray());
             }
 
-            var newPlayersViewing = new HashSet<PlayerEntity>(newTile.Components.Get<TileVisibility>().PlayersViewing);
+            var newPlayersViewing = new HashSet<PlayerEntity>(newTile.PlayersViewing);
             if (previousTile != null)
-                newPlayersViewing.ExceptWith(previousTile.Components.Get<TileVisibility>().PlayersViewing);
+                newPlayersViewing.ExceptWith(previousTile.PlayersViewing);
 
             foreach (var viewer in newPlayersViewing)
                 Game.Network.SendToPlayer(this.GetUpdatePacket(viewer), viewer);

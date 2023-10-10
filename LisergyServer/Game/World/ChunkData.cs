@@ -18,9 +18,9 @@ namespace Game.World
         public byte _flags;
         public Position Position;
 
-        public TileMapData* GetTileData(int x, int y) => _chunkTiles + x + y * GameWorld.CHUNK_SIZE;
+        public TileMapData* GetTileData(in int x, in int y) => _chunkTiles + x + y * GameWorld.CHUNK_SIZE;
 
-        public void SetFlag(byte flag)
+        public void SetFlag(in byte flag)
         {
             _flags |= flag;
         }

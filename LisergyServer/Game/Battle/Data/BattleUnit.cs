@@ -8,6 +8,7 @@ namespace Game.Battle.Data
     /// <summary>
     /// Represents a unit inside a battle.
     /// Holds the pointer of a unit to perform manipulations on the unit data.
+    /// Holds also a pointer to battle specific states of the unit.
     /// </summary>
     public unsafe class BattleUnit : IComparable<BattleUnit>
     {

@@ -15,11 +15,11 @@ namespace Game.Systems.Dungeon
 
         public DungeonEntity(IGame game) : base(game, null)
         {
-            Components.Add(new DungeonComponent());
-            Components.Add(new BuildingComponent());
-            Components.Add(new MapPlacementComponent());
-            Components.Add(new BattleGroupComponent());
-            Components.Add(new MapReferenceComponent());
+            Components.Add<DungeonComponent>();
+            Components.Add<BuildingComponent>();
+            Components.Add<MapPlacementComponent>();
+            Components.Add<BattleGroupComponent>();
+            Components.AddReference(new MapReferenceComponent());
         }
 
         public ushort SpecId => Components.Get<DungeonComponent>().SpecId;

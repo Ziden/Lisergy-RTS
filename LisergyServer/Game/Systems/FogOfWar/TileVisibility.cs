@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 namespace Game.Systems.FogOfWar
 {
-    public class TileVisibility : IComponent
+    /// <summary>
+    /// Keeps track of who is viewing this tile for fast reference accessing
+    /// </summary>
+    public class TileVisibility : IReferenceComponent
     {
         public HashSet<PlayerEntity> PlayersViewing { get; internal set; } = new HashSet<PlayerEntity>();
         public HashSet<IEntity> EntitiesViewing { get; internal set; } = new HashSet<IEntity>();

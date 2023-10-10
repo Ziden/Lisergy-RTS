@@ -45,7 +45,7 @@ namespace Tests
         {
             var components = new ComponentSet(new DungeonEntity(null));
             IComponent toAdd = new EntityVisionComponent();
-            components.Add(typeof(EntityVisionComponent), toAdd);
+            components.Add<EntityVisionComponent>();
 
             Assert.AreEqual(toAdd, components.Get<EntityVisionComponent>());
         }
@@ -55,7 +55,7 @@ namespace Tests
         {
             var components = new ComponentSet(new DungeonEntity(null));
             IComponent toAdd = new EntityVisionComponent();
-            components.Add(toAdd);
+            components.Add<EntityVisionComponent>();
 
             Assert.AreEqual(toAdd, components.Get<EntityVisionComponent>());
         }
@@ -65,8 +65,11 @@ namespace Tests
         {
             var player = new TestServerPlayer(new TestGame());
             var clientEntity = new PartyEntity(player.Game, player);
-            var selfComponent = clientEntity.Components.Add(new SelfSyncComponent());
-            var publicComponent = clientEntity.Components.Add(new PublicSyncComponent());
+            clientEntity.Components.Add<SelfSyncComponent>();
+
+            var selfComponent = clientEntity.Components.Get<SelfSyncComponent>();
+            clientEntity.Components.Add<PublicSyncComponent>();
+            var publicComponent = clientEntity.Get<PublicSyncComponent>();
 
             var selfPacket = clientEntity.GetUpdatePacket(player) as EntityUpdatePacket;
             var publicPacket = clientEntity.GetUpdatePacket(null) as EntityUpdatePacket;
@@ -89,23 +92,38 @@ namespace Tests
         }
 
         [Test]
-        public void TestComponentWontModifyNoSave()
+        public void TestSimpleModify()
         {
             var player = new TestServerPlayer(new TestGame());
             var clientEntity = new PartyEntity(player.Game, player);
-            clientEntity.Components.Add(new SelfSyncComponent()
-            {
-                Property = 666
-            });
-
+            clientEntity.Components.Add<SelfSyncComponent>();
             var component1 = clientEntity.Get<SelfSyncComponent>();
-
-            component1.Property = 123;
+            component1.Property = 666;
+            clientEntity.Save(component1);
 
             var component2 = clientEntity.Get<SelfSyncComponent>();
-
-            Assert.AreEqual(123, component1.Property);
+           
             Assert.AreEqual(666, component2.Property);
+        }
+
+        [Test]
+        public void TestComponentNoModifyIfNoSave()
+        {
+            var player = new TestServerPlayer(new TestGame());
+            var clientEntity = new PartyEntity(player.Game, player);
+            clientEntity.Components.Add<SelfSyncComponent>();
+            var component1 = clientEntity.Get<SelfSyncComponent>();
+            component1.Property = 666;
+            clientEntity.Save(component1);
+
+            var component2 = clientEntity.Get<SelfSyncComponent>();
+            component2.Property = 123;
+
+            var component3 = clientEntity.Get<SelfSyncComponent>();
+
+
+            Assert.AreEqual(666, component3.Property);
+            Assert.AreEqual(123, component2.Property);
         }
 
         [Test]
@@ -113,20 +131,19 @@ namespace Tests
         {
             var player = new TestServerPlayer(new TestGame());
             var clientEntity = new PartyEntity(player.Game, player);
-            clientEntity.Components.Add(new SelfSyncComponent()
-            {
-                Property = 666
-            });
-
+            clientEntity.Components.Add<SelfSyncComponent>();
             var component1 = clientEntity.Get<SelfSyncComponent>();
-
-            component1.Property = 123;
+            component1.Property = 666;
             clientEntity.Save(component1);
 
             var component2 = clientEntity.Get<SelfSyncComponent>();
+            component2.Property = 123;
+            clientEntity.Save(component2);
 
-            Assert.AreEqual(123, component1.Property);
+            var component3 = clientEntity.Get<SelfSyncComponent>();
+
             Assert.AreEqual(123, component2.Property);
+            Assert.AreEqual(123, component3.Property);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -135,17 +152,6 @@ namespace Tests
         {
             private int _v;
             public int Property { get => _v; set => _v = value; }
-        }
-
-        [Test]
-        public void TestPointerRefs()
-        {
-            var player = new TestServerPlayer(new TestGame());
-            var clientEntity = new PartyEntity(player.Game, player);
-            clientEntity.Components.Add(new SelfSyncComponent()
-            {
-                Property = 666
-            });
         }
     }
 }

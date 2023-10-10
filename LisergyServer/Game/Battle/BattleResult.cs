@@ -4,6 +4,12 @@ using System.Linq;
 
 namespace Game.Battle
 {
+    /// <summary>
+    /// Represents a record of what happened in a given battle.
+    /// Will be filled while the battle runs.
+    /// Will hold all input events of a given battle, that means a given battle
+    /// can be replayed deterministically by the same given events.
+    /// </summary>
     public class TurnBattleRecord
     {
         public List<TurnLog> Turns = new List<TurnLog>();

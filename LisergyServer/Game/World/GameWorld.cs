@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Game.World
 {
-    public interface IGameWorld {
+    public interface IGameWorld : IDisposable {
         public IGamePlayers Players { get; }
         public TileEntity GetTile(in int x, in int y);
         public TileEntity GetTile(in Position pos);
@@ -40,15 +40,7 @@ namespace Game.World
 
         public void FreeMemory()
         {
-            foreach (var c in Map.AllChunks())
-            {
-                c.FreeMemoryForReuse();
-                foreach (var t in c.AllTiles())
-                {
-                    Map.ClearTile(t);
-                }
-            }
-            _worldPlayers.Free();
+            foreach (var c in Map.AllChunks()) c.FreeMemoryForReuse();
         }
 
         public virtual void AllocateMemory()
@@ -88,9 +80,8 @@ namespace Game.World
         }
 
         public Chunk GetTileChunk(in int tileX, in int tileY) => Map.GetTileChunk(tileX, tileY);
-
         public TileEntity GetTile(in Position pos) => Map.GetTile(pos.X, pos.Y);
-
         public TileEntity GetTile(in int tileX, in int tileY) => Map.GetTile(tileX, tileY);
+        public void Dispose() => FreeMemory();
     }
 }

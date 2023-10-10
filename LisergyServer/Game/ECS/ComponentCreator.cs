@@ -7,6 +7,7 @@ namespace Game.ECS
 {
     /// <summary>
     /// Fast way of creating components, because we create MANY of them !
+    /// This is only needed to create a component by its type. Its way faster than using Activator.
     /// </summary>
     public class ComponentCreator
     {

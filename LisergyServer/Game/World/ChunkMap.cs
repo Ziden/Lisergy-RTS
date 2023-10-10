@@ -128,17 +128,15 @@ namespace Game.World
 
         public virtual void ClearTile(TileEntity t)
         {
-            t.Components.Get<TileVisibility>().EntitiesViewing.Clear();
-            t.Components.Get<TileVisibility>().PlayersViewing.Clear();
-            t.Components.Get<TileHabitants>().EntitiesIn.Clear();
-            t.Components.Get<TileHabitants>().Building = null;
+            t.Components.GetReference<TileVisibility>().EntitiesViewing.Clear();
+            t.Components.GetReference<TileVisibility>().PlayersViewing.Clear();
+            t.Components.GetReference<TileHabitants>().EntitiesIn.Clear();
+            t.Components.GetReference<TileHabitants>().Building = null;
         }
 
         public virtual TileEntity GenerateTile(ref Chunk c, in int tileX, in int tileY)
         {
             var tile = c.CreateTile(tileX, tileY);
-            tile.Components.Add(new TileVisibility());
-            tile.Components.Add(new TileHabitants());
             return tile;
         }
     }

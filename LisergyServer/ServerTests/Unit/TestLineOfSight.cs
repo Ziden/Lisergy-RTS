@@ -75,8 +75,8 @@ namespace Tests
 
             foreach (var seenTile in areaTiles)
             {
-                Assert.True(seenTile.Components.Get<TileVisibility>().PlayersViewing.Contains(player));
-                Assert.True(seenTile.Components.Get<TileVisibility>().EntitiesViewing.Contains(building));
+                Assert.True(seenTile.PlayersViewing.Contains(player));
+                Assert.True(seenTile.EntitiesViewing.Contains(building));
                 Assert.True(player.Data.VisibleTiles.Contains(seenTile));
             }
         }
@@ -96,8 +96,8 @@ namespace Tests
 
             foreach (var seenTile in areaTiles)
             {
-                Assert.True(seenTile.Components.Get<TileVisibility>().PlayersViewing.Contains(player));
-                Assert.True(seenTile.Components.Get<TileVisibility>().EntitiesViewing.Contains(building));
+                Assert.True(seenTile.PlayersViewing.Contains(player));
+                Assert.True(seenTile.EntitiesViewing.Contains(building));
                 Assert.True(player.Data.VisibleTiles.Contains(seenTile));
             }
         }
@@ -233,8 +233,8 @@ namespace Tests
             var visChanges = player.TriggeredEventsOfType<TileVisibilityChangedEvent>();
 
             Assert.IsFalse(visChanges.Any(ev => !ev.Visible && ev.Tile == tileTopOfBuilding));
-            Assert.IsTrue(!tileTopOfBuilding.Components.Get<TileVisibility>().EntitiesViewing.Contains(party), "Party is not seeing the tile");
-            Assert.IsTrue(tileTopOfBuilding.Components.Get<TileVisibility>().EntitiesViewing.Contains(building), "Building still seeing the tile");
+            Assert.IsTrue(!tileTopOfBuilding.EntitiesViewing.Contains(party), "Party is not seeing the tile");
+            Assert.IsTrue(tileTopOfBuilding.EntitiesViewing.Contains(building), "Building still seeing the tile");
         }
 
 

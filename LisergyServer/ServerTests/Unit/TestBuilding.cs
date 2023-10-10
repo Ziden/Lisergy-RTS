@@ -26,11 +26,11 @@ namespace Tests
 
             var initialBuildingSpec = Game.Specs.InitialBuilding;
             var building = player.Data.Buildings.FirstOrDefault();
-            var tile = building.Get<MapReferenceComponent>().Tile;
+            var tile = building.Components.GetReference<MapReferenceComponent>().Tile;
             Assert.IsTrue(player.Data.Buildings.Count == 1);
             Assert.IsTrue(player.Data.Buildings.Any(b => b.SpecId == initialBuildingSpec.Id));
-            Assert.IsTrue(tile.Components.Get<TileHabitants>().Building == player.Data.Buildings.First());
-            Assert.IsTrue(((PlayerBuildingEntity)tile.Components.Get<TileHabitants>().Building).SpecId == initialBuildingSpec.Id);
+            Assert.IsTrue(tile.Components.GetReference<TileHabitants>().Building == player.Data.Buildings.First());
+            Assert.IsTrue(((PlayerBuildingEntity)tile.Components.GetReference<TileHabitants>().Building).SpecId == initialBuildingSpec.Id);
         }
 
         [Test]
@@ -51,10 +51,9 @@ namespace Tests
 
             Assert.IsTrue(player.Data.Buildings.Count == 2);
             Assert.IsTrue(player.Data.Buildings.Any(b => b.SpecId == buildingSpec.Id));
-            Assert.IsTrue(tile.Components.Get<TileHabitants>().Building == player.Data.Buildings.Last());
-            Assert.IsTrue(((PlayerBuildingEntity)tile.Components.Get<TileHabitants>().Building).SpecId == buildingSpec.Id);
-
-            Assert.That(tile.Components.Get<TileVisibility>().EntitiesViewing.Contains(tile.Components.Get<TileHabitants>().Building));
+            Assert.IsTrue(tile.Components.GetReference<TileHabitants>().Building == player.Data.Buildings.Last());
+            Assert.IsTrue(((PlayerBuildingEntity)tile.Building).SpecId == buildingSpec.Id);
+            Assert.That(tile.EntitiesViewing.Contains(tile.Building));
 
         }
     }

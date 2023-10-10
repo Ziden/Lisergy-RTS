@@ -2,40 +2,18 @@
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("Tests")]
 namespace Game.ECS
 {
-    public unsafe interface IComponentSet
+    public class ComponentSet : IComponentSet
     {
-        IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver);
-        IReadOnlyDictionary<Type, IComponent> All();
-        IComponent Get(Type t);
-        T Get<T>() where T : IComponent;
-        T GetReference<T>() where T : IReferenceComponent;
-        bool TryGet<T>(out T component) where T : IComponent;
-        void Save<T>(in T c) where T :  IComponent;
-        T Add<T>(in T c) where T :  IComponent;
-        T AddReference<T>(in T c) where T : IReferenceComponent;
-        bool Has<T>() where T :  IComponent;
-        void CallEvent(BaseEvent e);
-    }
+        internal Dictionary<Type, IComponent> _referenceComponents = new Dictionary<Type, IComponent>();
+        internal ComponentPointers _pointerComponents = new ComponentPointers();
 
-    public unsafe class ComponentContainer
-    {
-        void* Pointer;
-    }
-
-    /// <summary>
-    /// Represents a list of components.
-    /// </summary>
-    public unsafe class ComponentSet : IComponentSet
-    {
-        internal Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
         internal List<Type> _networkedPublic = new List<Type>();
         internal List<Type> _networkedSelf = new List<Type>();
 
@@ -50,77 +28,59 @@ namespace Game.ECS
             _owner = owner;
         }
 
+        /// <summary>
+        /// TODO: Use buffers for performance
+        /// </summary>
         public IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver)
         {
             _returnBuffer.Clear();
-            if(receiver == _owner)
+            if (receiver == _owner)
             {
-                foreach (var t in _networkedSelf) _returnBuffer.Add(_components[t]);
+                foreach (var t in _networkedSelf) _returnBuffer.Add(_pointerComponents.AsInterface(t));
             } else
             {
-                foreach (var t in _networkedPublic) _returnBuffer.Add(_components[t]);
+                foreach (var t in _networkedPublic) _returnBuffer.Add(_pointerComponents.AsInterface(t));
             }
             return _returnBuffer;
         }
 
-        public IReadOnlyDictionary<Type, IComponent> All() => _components;
-
-        public T Get<T>() where T : IComponent
+        public IReadOnlyCollection<Type> All() => _pointerComponents.Keys;
+        public ref T Get<T>() where T : unmanaged, IComponent => ref _pointerComponents.AsReference<T>();
+        public bool Has<T>() where T : unmanaged, IComponent => _pointerComponents.ContainsKey(typeof(T));
+        public bool HasReference<T>() where T : class, IComponent => _referenceComponents.ContainsKey(typeof(T));
+        public void Add<T>() where T : unmanaged, IComponent
         {
-            return (T)Get(typeof(T));
+            _pointerComponents.Alloc<T>();
+            TrackSync<T>();
         }
 
-        public bool Has<T>() where T : IComponent
+        public T AddReference<T>(in T c) where T : class, IReferenceComponent
         {
-            return _components.ContainsKey(typeof(T));
+            _referenceComponents[typeof(T)] = c;
+            return c;
         }
 
-        public T Add<T>() where T : IComponent
+        private void TrackSync<T>()
         {
-            return Has<T>() ? Get<T>() : Add<T>(typeof(T), ComponentCreator.Build<T>());
-        }
-
-        public T Add<T>(in T c) where T : IComponent
-        {
-            return Add<T>(c.GetType(), c);
-        }
-
-        public void CallEvent(BaseEvent ev)
-        {
-            _entity.Game.Systems.CallEvent(_entity, ev);
-        }
-
-        public IComponent Get(Type t)
-        {
-            return _components.TryGetValue(t, out IComponent component) ? component : null;
-        }
-
-        public T Add<T>(Type type, in T component) where T : IComponent
-        {
-            _components[type] = component;
+            var type = typeof(T);
             var sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
             if (sync != null)
             {
-                _networkedSelf.Add(component.GetType());
-                if(!sync.OnlyMine)
-                    _networkedPublic.Add(component.GetType());
+                _networkedSelf.Add(type);
+                if (!sync.OnlyMine)
+                    _networkedPublic.Add(type);
             }
-            return component;
         }
 
-        public void RemoveComponent<T>() where T : IComponent
-        {
-            throw new NotImplementedException();
-        }
+        public void CallEvent(BaseEvent ev) => _entity.Game.Systems.CallEvent(_entity, ev);
 
-        public void Save<T>(in T c) where T : IComponent
-        {
-            _components[c.GetType()] = c;
-        }
+        public void RemoveComponent<T>() where T : IComponent => throw new NotImplementedException();
 
-        public bool TryGet<T>(out T component) where T : IComponent
+        public void Save<T>(in T c) where T : unmanaged, IComponent => Marshal.StructureToPtr<T>(c, _pointerComponents[c.GetType()], true);
+
+        public bool TryGetReference<T>(out T component) where T : class, IReferenceComponent
         {
-            if(_components.TryGetValue(typeof(T), out var r))
+            if(_referenceComponents.TryGetValue(typeof(T), out var r))
             {
                 component = (T)r;
                 return true;
@@ -128,15 +88,12 @@ namespace Game.ECS
             component = default(T);
             return false;
         }
+        public T GetReference<T>() where T : class, IReferenceComponent => (T)_referenceComponents[typeof(T)];
+        public unsafe T* GetPointer<T>() where T : unmanaged, IComponent => _pointerComponents.AsPointer<T>();
 
-        public T GetReference<T>() where T : IReferenceComponent
-        {
-            return Get<T>();
-        }
-
-        public T AddReference<T>(in T c) where T : IReferenceComponent
-        {
-            return Add(c);
-        }
+        public void Dispose() => _pointerComponents.FreeAll();
     }
+
+  
+
 }

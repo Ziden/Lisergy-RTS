@@ -3,7 +3,7 @@ using Game.Network.ServerPackets;
 
 namespace Game.Systems.Player
 {
-    public class PlayerSystem : LogicSystem<PlayerDataComponent, PlayerLogic>
+    public class PlayerSystem : LogicSystem<PlayerComponent, PlayerLogic>
     {
         public PlayerSystem(LisergyGame game) : base(game)
         {

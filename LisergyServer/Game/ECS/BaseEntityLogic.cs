@@ -2,17 +2,22 @@
 
 namespace Game.ECS
 {
-    public interface IComponentLogic<T> where T : IComponent
+    /// <summary>
+    /// Base entity logic interface.
+    /// Entity logic is the main responsible for modifying entity components.
+    /// </summary>
+    public interface IComponentLogic<T> where T : unmanaged, IComponent 
     {
         public IEntity Entity { get; set; }
 
-        public T GetComponent();
+        public ref T GetComponent();
     }
 
-    public class BaseEntityLogic<ComponentType> : IComponentLogic<ComponentType> where ComponentType : IComponent
+    /// <inheritdoc/>
+    public class BaseEntityLogic<ComponentType> : IComponentLogic<ComponentType> where ComponentType : unmanaged, IComponent
     {
         protected IGame Game => Entity.Game;
         public IEntity Entity { get; set; }
-        public ComponentType GetComponent() => Entity.Get<ComponentType>();
+        public ref ComponentType GetComponent() => ref Entity.Get<ComponentType>();
     }
 }

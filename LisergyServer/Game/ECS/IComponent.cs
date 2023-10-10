@@ -3,22 +3,16 @@
 namespace Game.ECS
 {
     /// <summary>
-    /// Basic component interface
+    /// Basic component interface. Will likely implement component as an unmanaged struct with
+    /// only unmanaged types and no references.
+    /// Will be stored and read like a pointer.
+    /// If need to keep references, ideally should be using <see cref="IReferenceComponent"/>
     /// </summary>
     public interface IComponent { }
 
     /// <summary>
-    /// A reference component will likely not be a struct, not be serialized/saved and will be 
-    /// keeping references to things for ease of use.
+    /// A reference component that is stored as a class and can have references to other objects. 
+    /// This is to store dynamic data that holds references and not only struct data.
     /// </summary>
     public interface IReferenceComponent : IComponent { }
-
-    /// <summary>
-    /// Components only for server to hold server data.
-    /// Can hold references and non-serializable data.
-    /// </summary>
-    public interface IServerComponent : IComponent
-    {
-
-    }
 }

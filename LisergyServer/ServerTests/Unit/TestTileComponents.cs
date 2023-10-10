@@ -27,15 +27,15 @@ namespace Tests
         [Test]
         public void TestTileCallbacks()
         {
-            tile1.Components.Add(new TileHabitants());
-            tile2.Components.Add(new TileHabitants());
+            tile1.Components.AddReference(new TileHabitants());
+            tile2.Components.AddReference(new TileHabitants());
 
             var dg = _game.Entities.CreateEntity<DungeonEntity>(null);
 
             tile1.Components.CallEvent(new BuildingPlacedEvent(dg, tile1));
 
-            Assert.IsTrue(tile1.Components.Get<TileHabitants>().Building == dg);
-            Assert.IsTrue(tile2.Components.Get<TileHabitants>().Building == null);
+            Assert.IsTrue(tile1.Components.GetReference<TileHabitants>().Building == dg);
+            Assert.IsTrue(tile2.Components.GetReference<TileHabitants>().Building == null);
         }
 
         public class TestView : IComponent

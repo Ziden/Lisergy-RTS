@@ -41,7 +41,7 @@ namespace Game.Services
             }
 
             var first = ev.Path[0];
-            if (_world.GetTile(first.X, first.Y).Distance(party.Get<MapReferenceComponent>().Tile) > 1)
+            if (_world.GetTile(first.X, first.Y).Distance(party.Tile) > 1)
             {
                 ev.Sender.SendMessage("Bad route");
                 return;

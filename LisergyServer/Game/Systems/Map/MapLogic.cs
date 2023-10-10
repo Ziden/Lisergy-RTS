@@ -13,12 +13,12 @@ namespace Game.Systems.Map
     {
         public TileEntity GetPosition()
         {
-            return Entity.Get<MapReferenceComponent>().Tile;
+            return Entity.Components.GetReference<MapReferenceComponent>().Tile;
         }
 
         public void SetPosition(TileEntity value)
         {
-            var component = Entity.Get<MapReferenceComponent>();
+            var component = Entity.Components.GetReference<MapReferenceComponent>();
             var previousTile = component.Tile;
             component.PreviousTile = previousTile;
             component.Tile = value;
@@ -66,7 +66,7 @@ namespace Game.Systems.Map
                 if (previousTile != null)
                 {
                     // TODO: Move to system
-                    Game.Network.SendToPlayer(new EntityDestroyPacket(Entity), previousTile.Components.Get<TileVisibility>().PlayersViewing.ToArray());
+                    Game.Network.SendToPlayer(new EntityDestroyPacket(Entity), previousTile.PlayersViewing.ToArray());
                 }
             }
             Entity.Components.Save(placement);

@@ -18,12 +18,13 @@ namespace Game.Systems.Party
 
         public PartyEntity(IGame game, PlayerEntity owner) : base(game, owner)
         {
-            Components.Add(new MapPlacementComponent());
-            Components.Add(new MapReferenceComponent());
-            Components.Add(new BattleGroupComponent());
-            Components.Add(new PartyComponent());
-            Components.Add(new EntityVisionComponent());
-            Components.Add(new EntityMovementComponent() { MoveDelay = TimeSpan.FromSeconds(0.25) });
+            Components.Add<MapPlacementComponent>();
+            Components.Add<BattleGroupComponent>();
+            Components.Add<PartyComponent>();
+            Components.Add<EntityVisionComponent>();
+            Components.Add<EntityMovementComponent>();
+            Components.Get<EntityMovementComponent>().MoveDelay = TimeSpan.FromSeconds(0.25);
+            Components.AddReference(new MapReferenceComponent());
         }
 
         public bool CanMove()
