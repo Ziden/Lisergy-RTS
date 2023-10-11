@@ -8,6 +8,7 @@ using Assets.Code.Assets.Code.UIScreens.Base;
 using Game;
 using Game.Events;
 using Game.Events.Bus;
+using Game.Network;
 using System;
 using System.Collections;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ public class MainBehaviour : MonoBehaviour
 
     public static Networking Networking { get; private set; }
     public static LocalPlayer LocalPlayer { get; private set; }
-    public static EventBus<ServerPacket> ServerPackets { get; set; }
+    public static EventBus<BasePacket> ServerPackets { get; set; }
 
     private ServerListener _serverPacketListener;
 
@@ -90,7 +91,7 @@ public class MainBehaviour : MonoBehaviour
     {
         _instance = this;
         Networking = new Networking();
-        ServerPackets = new EventBus<ServerPacket>();
+        ServerPackets = new EventBus<BasePacket>();
         ConfigureUnity();
         SetupServices();
         Serialization.LoadSerializers();

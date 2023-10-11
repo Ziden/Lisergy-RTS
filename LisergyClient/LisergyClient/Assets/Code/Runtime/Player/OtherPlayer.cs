@@ -6,22 +6,17 @@ using Game;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Network;
-using Game.Player;
+using Game.Systems.Player;
 using System.Collections.Generic;
 
 namespace Assets.Code
 {
     public class OtherPlayer : PlayerEntity
     {
-        public OtherPlayer(GameId id) : base()
+        public OtherPlayer(GameId id) : base(null)
         {
-            UserID = id;
+           
         }
-        public override bool Online()
-        {
-            return false;
-        }
-
-        public override void Send<T>(T ev) { }
+      
     }
 }

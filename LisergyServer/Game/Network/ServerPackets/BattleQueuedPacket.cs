@@ -12,7 +12,7 @@ namespace Game.Network.ServerPackets
     /// Packet sent to other services whenever a battle started so its picked up and processed
     /// </summary>
     [Serializable]
-    public class BattleQueuedPacket : ServerPacket
+    public class BattleQueuedPacket : BasePacket, IServerPacket
     {
         public Position Position;
         public GameId BattleID;

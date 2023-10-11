@@ -28,11 +28,8 @@ namespace Game.ECS
             _bus.Register(this, (Action<EventType>)ComponentEventWrapper);
         }
 
-        public void Clear()
-        {
-            _bus.Clear();
-        }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void CallEntityEvent<EventType>(IEntity entity, EventType ev) where EventType : IBaseEvent
         {
             var t = typeof(ComponentType);

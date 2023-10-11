@@ -98,7 +98,7 @@ namespace Tests
             var next = tile.GetNeighbor(Direction.SOUTH);
             var party = _player.GetParty(0);
 
-            _player.SendMoveRequest(party, next, MovementIntent.Offensive);
+            _player.SendMoveRequest(party, next, CourseIntent.Offensive);
             var course = party.Course;
 
             course.Tick();
@@ -141,7 +141,7 @@ namespace Tests
             _path.Add(new Position(next.X + 1, next.Y));
             SendMoveRequest();
 
-            Assert.AreEqual(GameId.ZERO, _party.Get<EntityMovementComponent>().CourseId);
+            Assert.AreEqual(GameId.ZERO, _party.Get<CourseComponent>().CourseId);
         }
 
         [Test]

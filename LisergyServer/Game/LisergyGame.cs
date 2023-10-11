@@ -42,15 +42,16 @@ namespace Game
             Specs = specs;
         }
 
-        public void SetWorld(GameWorld world)
+        public void SetupGame(GameWorld world, GameServerNetwork network)
         {
-            Network = new GameNetwork(this);
+            Network = network;
             Entities = new GameEntities(this);
             Systems = new GameSystems(this);
             Logic = new GameLogic(Systems);
             Scheduler = new GameScheduler();
             world.Game = this;
             World = world;
+            Entities.DeltaCompression.ClearDeltas();
         }
     }
 }

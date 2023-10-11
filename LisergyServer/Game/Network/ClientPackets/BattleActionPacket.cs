@@ -4,7 +4,7 @@ using System;
 namespace Game.Network.ClientPackets
 {
     [Serializable]
-    public class BattleActionPacket : InputPacket
+    public class BattleActionPacket : BasePacket, IClientPacket
     {
         public BattleActionPacket(string BattleID, BattleAction action)
         {

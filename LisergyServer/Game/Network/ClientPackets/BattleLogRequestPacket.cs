@@ -8,7 +8,7 @@ namespace Game.Network.ClientPackets
     /// simulate the battle on client side to display it
     /// </summary>
     [Serializable]
-    public class BattleLogRequestPacket : InputPacket
+    public class BattleLogRequestPacket : BasePacket, IClientPacket
     {
         public GameId BattleId;
     }

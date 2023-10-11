@@ -2,7 +2,6 @@
 using Game.ECS;
 using Game.Events.Bus;
 using System.Collections.Generic;
-using Game.Events.GameEvents;
 using UnityEngine;
 using System;
 

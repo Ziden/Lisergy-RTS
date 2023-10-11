@@ -1,19 +1,20 @@
 ﻿using Game;
 using Game.DataTypes;
-using Game.Player;
+using Game.Systems.Player;
 using Game.Tile;
+using Game.World;
 
 namespace Assets.Code.World
 {
     public class ClientWorld : GameWorld
     {
-        public ClientWorld(int sizeX, int sizeY): base(int.MaxValue, sizeX, sizeY)
+        public ClientWorld(in ushort sizeX, in ushort sizeY): base(int.MaxValue, sizeX, sizeY)
         {
         }
 
-        public TileEntity GetTile(WorldEntity e)
+        public TileEntity GetTile(BaseEntity e)
         {
-            return Map.GetTile(e.X, e.Y);
+            return Map.GetTile(e.Tile.X, e.Tile.Y);
         }
 
         public PlayerEntity GetOrCreateClientPlayer(GameId uid)
@@ -21,7 +22,7 @@ namespace Assets.Code.World
             PlayerEntity pl;
             if (Players.GetPlayer(uid, out pl))
                 return pl;
-            if (uid == MainBehaviour.LocalPlayer.UserID)
+            if (uid == MainBehaviour.LocalPlayer.EntityId)
             {
                 Players.Add(MainBehaviour.LocalPlayer);
                 return MainBehaviour.LocalPlayer;
@@ -31,7 +32,7 @@ namespace Assets.Code.World
             return pl;
         }
 
-        public override void CreateMap()
+        public void CreateMap()
         {
             Map = new ClientChunkMap(this);
         }

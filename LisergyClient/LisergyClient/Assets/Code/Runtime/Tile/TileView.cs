@@ -1,11 +1,9 @@
-﻿using Assets.Code.Assets.Code.Tile;
-using Game;
-using Game.Tile;
+﻿using Game.Tile;
 using Game.World;
-using System.Collections.Generic;
 using Assets.Code.Assets.Code.Assets;
-using GameAssets;
-using UnityEngine;
+using Game.Systems.Tile;
+using UnityEngine.Tilemaps;
+using Game.ECS;
 
 namespace Assets.Code.Views
 {
@@ -25,18 +23,21 @@ namespace Assets.Code.Views
             this.InitializeFog();
         }
 
-        public void UpdateFromData(TileData data)
+        public void UpdateFromData(TileMapData data)
         {
+           /*
             Entity.TileId = data.TileId;
             if (NeedsInstantiate)
             {
                 Instantiate();
                 RegisterEvents();
             }
+           */
         }
 
         protected override void InstantiationImplementation()
         {
+            /*
             Entity.Components.Add(this);
             RegisterEvents();
 
@@ -57,9 +58,11 @@ namespace Assets.Code.Views
                 SetFogInTileView(false, false);
              
             });
+
+            */
         }
 
-        public WorldEntity Building => Entity.Components.Get<TileHabitants>().Building;
+        public IEntity Building => Entity.Components.GetReference<TileHabitants>().Building;
 
         public override string ToString()
         {

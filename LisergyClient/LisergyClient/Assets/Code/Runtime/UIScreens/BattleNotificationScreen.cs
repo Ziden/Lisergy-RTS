@@ -3,6 +3,7 @@ using Assets.Code.Assets.Code.Runtime.UIScreens.Parts;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Game;
 using Game.Battle;
+using Game.Battle.Data;
 using Game.Events.Bus;
 using GameAssets;
 using System;
@@ -12,8 +13,8 @@ namespace Assets.Code
 {
     public class BattleNotificationSetup : UIScreenSetup
     {
-        public CompleteBattleHeader BattleHeader;
-        public Action<CompleteBattleHeader> OnCheckItemDeltas;
+        public BattleHeaderData BattleHeader;
+        public Action<BattleHeaderData> OnCheckItemDeltas;
     }
 
     public class BattleNotificationScreen : Notification, IEventListener
@@ -31,21 +32,21 @@ namespace Assets.Code
 
             var attacker = popup.Q<VisualElement>("PartyButton-Attacker");
             var t = attacker.GetType();
-            var attackerLeader = setup.BattleHeader.Attacker.Leader.UnitReference;
+            var attackerLeader = setup.BattleHeader.Attacker.Units.Leader;
             PartyButton.DisplayLeader(attacker, attackerLeader);
 
 
             var defender = popup.Q<VisualElement>("PartyButton-Defender-1");
-            PartyButton.DisplayLeader(defender, setup.BattleHeader.Defender.Leader.UnitReference);
+            PartyButton.DisplayLeader(defender, setup.BattleHeader.Defender.Units.Leader);
             base.OnOpen();
         }
 
-        private bool IsWin(CompleteBattleHeader header)
+        private bool IsWin(BattleHeaderData header)
         {
             return (
-                header.Attacker.OwnerID == MainBehaviour.LocalPlayer.UserID && header.AttackerWins
+                header.Attacker.OwnerID == MainBehaviour.LocalPlayer.OwnerID && header.AttackerWins
                 ||
-                header.Defender.OwnerID == MainBehaviour.LocalPlayer.UserID && !header.AttackerWins
+                header.Defender.OwnerID == MainBehaviour.LocalPlayer.OwnerID && !header.AttackerWins
              );
         }
 

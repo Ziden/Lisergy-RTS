@@ -433,7 +433,7 @@ namespace NetSerializer
             }
             else if (serializer is IDynamicTypeSerializer)
             {
-                // TODO: make it possible for dyn serializers to not have Serializer param
+
                 writer = Helpers.GenerateDynamicSerializerStub(type);
             }
             else
@@ -529,7 +529,6 @@ namespace NetSerializer
             }
             else if (serializer is IDynamicTypeSerializer)
             {
-                // TODO: make it possible for dyn serializers to not have Serializer param
                 reader = Helpers.GenerateDynamicDeserializerStub(type);
             }
             else

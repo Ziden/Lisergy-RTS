@@ -31,6 +31,7 @@ namespace Game.ECS
         /// <summary>
         /// TODO: Use buffers for performance
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver)
         {
             Log.Debug($"Sync component for entity {_entity} of {_owner}");
@@ -45,22 +46,33 @@ namespace Game.ECS
             return _returnBuffer;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public IReadOnlyCollection<Type> All() => _pointerComponents.Keys;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref T Get<T>() where T : unmanaged, IComponent => ref _pointerComponents.AsReference<T>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Has<T>() where T : unmanaged, IComponent => _pointerComponents.ContainsKey(typeof(T));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool HasReference<T>() where T : class, IComponent => _referenceComponents.ContainsKey(typeof(T));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Add<T>() where T : unmanaged, IComponent
         {
             _pointerComponents.Alloc<T>();
             TrackSync<T>();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T AddReference<T>(in T c) where T : class, IReferenceComponent
         {
             _referenceComponents[typeof(T)] = c;
             return c;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void TrackSync<T>()
         {
             var type = typeof(T);
@@ -73,12 +85,16 @@ namespace Game.ECS
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void CallEvent(IBaseEvent ev) => _entity.Game.Systems.CallEvent(_entity, ev);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void RemoveComponent<T>() where T : IComponent => throw new NotImplementedException();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Save<T>(in T c) where T : unmanaged, IComponent => Marshal.StructureToPtr<T>(c, _pointerComponents[c.GetType()], true);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool TryGetReference<T>(out T component) where T : class, IReferenceComponent
         {
             if(_referenceComponents.TryGetValue(typeof(T), out var r))
@@ -89,9 +105,14 @@ namespace Game.ECS
             component = default(T);
             return false;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetReference<T>() where T : class, IReferenceComponent => (T)_referenceComponents[typeof(T)];
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe T* GetPointer<T>() where T : unmanaged, IComponent => _pointerComponents.AsPointer<T>();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Dispose() => _pointerComponents.FreeAll();
     }
 

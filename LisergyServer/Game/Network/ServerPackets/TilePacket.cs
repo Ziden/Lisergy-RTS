@@ -5,7 +5,7 @@ using System;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class TilePacket : ServerPacket
+    public class TilePacket : BasePacket, IServerPacket
     {
         public TilePacket(in TileMapData data)
         {
@@ -14,7 +14,7 @@ namespace Game.Events.ServerEvents
 
         private TileMapData _data;
 
-        public ref TileMapData Data => ref _data;
+        public ref readonly TileMapData Data => ref _data;
 
         public override string ToString()
         {

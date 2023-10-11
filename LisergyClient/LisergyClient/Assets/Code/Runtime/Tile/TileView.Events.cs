@@ -7,22 +7,22 @@ namespace Assets.Code.Views
     {
         public void RegisterEvents()
         {
-            Entity.Components.RegisterExternalComponentEvents<TileView, TileVisibilityChangedEvent>(OnVisibilityChange);
+            //Entity.Components.RegisterExternalComponentEvents<TileView, EntityTileVisibilityUpdateEvent>(OnVisibilityChange);
         }
 
-        private static void OnVisibilityChange(TileView view, TileVisibilityChangedEvent ev)
+        private static void OnVisibilityChange(TileView view, EntityTileVisibilityUpdateEvent ev)
         {
             if (!view.Instantiated)
                 return;
 
-            if (!ev.Visible)
+            if (!ev.Explored)
             {
                 view.SetFogInTileView(true, true);
             }
             else
             {
                 view.SetFogInTileView(false, true);
-                view.GameObject.SetActive(ev.Visible);
+                view.GameObject.SetActive(ev.Explored);
             }
         }
     }

@@ -7,9 +7,9 @@ using System.Collections.Generic;
 namespace Game.Network.ClientPackets
 {
     [Serializable]
-    public class MoveRequestPacket : InputPacket
+    public class MoveRequestPacket : BasePacket, IClientPacket
     {
-        public MovementIntent Intent;
+        public CourseIntent Intent;
         public byte PartyIndex;
         public List<Position> Path;
     }

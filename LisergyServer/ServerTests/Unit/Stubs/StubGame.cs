@@ -13,18 +13,10 @@ using System.Collections.Generic;
 
 namespace ServerTests
 {
-    public static class StaticSetup 
-    {
-        static StaticSetup()
-        {
-
-        }
-    }
-
     public class TestGame : LisergyGame
     {
         private GameId _testPlayerId = GameId.Generate();
-        public GameNetwork TestNetwork { get; private set; }
+        public GameServerNetwork TestNetwork { get; private set; }
         public BattleService BattleService { get; private set; }
         public WorldService WorldService { get; private set; }
         public CourseService CourseService { get; private set; }
@@ -51,8 +43,8 @@ namespace ServerTests
             GameId.DEBUG_MODE = 1;
             WorldUtils.SetRandomSeed(666);
             UnmanagedMemory.FlagMemoryToBeReused();
-            TestWorld = new GameWorld(4, 20, 20);
-            SetWorld(TestWorld);
+            TestWorld = new GameWorld(2, 16, 16);
+            SetupGame(TestWorld, new GameServerNetwork(this));
             Entities.DeltaCompression.ClearDeltas();
             TestWorld.AllocateMemory();
             return TestWorld;
@@ -68,15 +60,15 @@ namespace ServerTests
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);
             this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
-            TestNetwork = Network as GameNetwork;
+            TestNetwork = Network as GameServerNetwork;
             TestNetwork.OnOutgoingPacket += (player, packet) => ((TestServerPlayer)Players[player]).SendTestPacket(packet);
             if (createPlayer)
                 CreatePlayer();
         }
 
-        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : InputPacket
+        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : BasePacket
         {
-            var deserialized = Serialization.ToPacketRaw<InputPacket>(Serialization.FromPacketRaw(ev));
+            var deserialized = Serialization.ToPacketRaw<BasePacket>(Serialization.FromPacketRaw(ev));
             deserialized.Sender = sender;
             TestNetwork.IncomingPackets.Call(deserialized);
             Entities.DeltaCompression.SendDeltaPackets(sender);

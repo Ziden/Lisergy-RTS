@@ -3,6 +3,7 @@ using Game.Events.ServerEvents;
 using Game.Network;
 using Game.Systems.Player;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Game.Tile
 {
@@ -10,7 +11,9 @@ namespace Game.Tile
     {
         private DeltaFlags _flags;
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
-        public ServerPacket GetUpdatePacket(PlayerEntity receiver) => new TilePacket(*_tileData);
+        public BasePacket GetUpdatePacket(PlayerEntity receiver) => new TilePacket(*_tileData);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ProccessDeltas(PlayerEntity trigger)
         {
             if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))

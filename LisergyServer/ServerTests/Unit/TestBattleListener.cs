@@ -45,7 +45,7 @@ namespace Tests
             unit.Atk = 255;
             component.Units[0] = unit;
             party.Save(component);
-            _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
+            _player.SendMoveRequest(party, dungeonTile, CourseIntent.Offensive);
             var course = party.Course;
             Assert.AreEqual(0, _player.Data.BattleHeaders.Count());
             course.Tick();

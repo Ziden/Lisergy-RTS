@@ -22,8 +22,8 @@ namespace Game.Systems.Party
             Components.Add<BattleGroupComponent>();
             Components.Add<PartyComponent>();
             Components.Add<EntityVisionComponent>();
-            Components.Add<EntityMovementComponent>();
-            Components.Get<EntityMovementComponent>().MoveDelay = TimeSpan.FromSeconds(0.25);
+            Components.Add<CourseComponent>();
+            Components.Get<CourseComponent>().MoveDelay = TimeSpan.FromSeconds(0.25);
             Components.AddReference(new MapReferenceComponent());
         }
 

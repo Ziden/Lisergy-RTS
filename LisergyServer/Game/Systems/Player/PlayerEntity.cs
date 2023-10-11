@@ -14,7 +14,7 @@ namespace Game.Systems.Player
     {
         public const byte MAX_PARTIES = 4;
 
-        private GameId _playerId;
+        protected GameId _playerId;
 
         public PlayerDataComponent Data => Components.GetReference<PlayerDataComponent>();
 
@@ -64,7 +64,7 @@ namespace Game.Systems.Player
         public EntityType EntityType => EntityType.Player;
         public override string ToString() => $"<Player id={EntityId}>";
         public ref T Get<T>() where T : unmanaged, IComponent => ref Components.Get<T>();
-        public ServerPacket GetUpdatePacket(PlayerEntity receiver) => throw new NotImplementedException();
+        public BasePacket GetUpdatePacket(PlayerEntity receiver) => throw new NotImplementedException();
         public void ProccessDeltas(PlayerEntity trigger) => throw new NotImplementedException();
     }
 }

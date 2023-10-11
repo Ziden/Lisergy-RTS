@@ -1,8 +1,8 @@
 ﻿using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Views;
 using Game;
-using Game.Building;
 using Game.ECS;
+using Game.Systems.Building;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +22,7 @@ namespace Assets.Code.World
 
         public override void OnUpdate(PlayerBuildingEntity serverEntity, List<IComponent> syncedComponents)
         {
-            Entity.Tile = GameView.World.GetTile(serverEntity);
+            //Entity.Tile = GameView.World.GetTile(serverEntity);
             if (NeedsInstantiate)
             {
                 Instantiate();

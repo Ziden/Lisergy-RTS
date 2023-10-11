@@ -3,7 +3,7 @@ using Assets.UnitTests.Behaviours;
 using Assets.UnitTests.Stubs;
 using Game;
 using Game.Network.ClientPackets;
-using Game.Party;
+using Game.Systems.Tile;
 using Game.Tile;
 using Game.World;
 using System.Collections;
@@ -17,7 +17,7 @@ namespace Assets.UnitTests
         public PartyBehaviour PartyBehaviour = new PartyBehaviour();
         public LoginBehaviour LoginBehaviour = new LoginBehaviour();
 
-        public EntityType FindFirst<EntityType>() where EntityType : WorldEntity
+        public EntityType FindFirst<EntityType>() where EntityType : BaseEntity
         {
             return (EntityType)MainBehaviour.LocalPlayer.KnownEntities.Values.FirstOrDefault(e => e.GetType() == typeof(EntityType));
         }

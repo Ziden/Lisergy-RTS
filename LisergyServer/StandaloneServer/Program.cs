@@ -1,7 +1,4 @@
-﻿using Game.Generator;
-using Game.Network;
-using Game.World;
-using Game;
+﻿using Game;
 using GameDataTest;
 using MapServer;
 using Terminal.Gui;
@@ -21,7 +18,7 @@ if(RUN_UI)
 
 var gameSpecs = TestSpecs.Generate();
 var game = new LisergyGame(gameSpecs);
-game.SetWorld(new TestWorld());
+game.SetupGame(new TestWorld(), new GameServerNetwork(game));
 game.Entities.DeltaCompression.ClearDeltas();
 
 var server = new StandaloneServer(game, 1337);

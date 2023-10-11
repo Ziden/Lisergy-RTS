@@ -1,5 +1,6 @@
 ﻿using Game;
 using Game.Events;
+using Game.Network;
 using System;
 using System.Collections.Generic;
 using Telepathy;
@@ -27,9 +28,9 @@ public class Networking : IDisposable
         Serialization.LoadSerializers();
     }
 
-    public virtual void Send<T>(T ev) where T : BaseEvent
+    public virtual void Send<T>(T ev) where T : BasePacket
     {
-        _toSend.Add(Serialization.FromEventRaw(ev));
+        _toSend.Add(Serialization.FromPacketRaw(ev));
     }
 
     int READS_PER_TICK = 1;
@@ -67,7 +68,7 @@ public class Networking : IDisposable
                         Debug.Log("Connected To Server");
                         break;
                     case Telepathy.EventType.Data:
-                        MainBehaviour.ServerPackets.RunCallbacks(MainBehaviour.LocalPlayer, msg.data);
+                        MainBehaviour.ServerPackets.Call(Serialization.ToPacketRaw<BasePacket>(msg.data));
                         break;
                     case Telepathy.EventType.Disconnected:
                         Debug.Log("Disconnected from Server");

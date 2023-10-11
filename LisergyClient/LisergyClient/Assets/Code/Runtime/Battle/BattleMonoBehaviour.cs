@@ -5,8 +5,6 @@ using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.Battle;
 using Game;
 using Game.Battle;
-using Game.BattleEvents;
-using Game.Battler;
 using Game.DataTypes;
 using Game.Network.ServerPackets;
 using GameDataTest;
@@ -21,6 +19,7 @@ namespace Assets.Code
     {
         private void TestBattle()
         {
+            /*
             //// TEST ///
             StrategyGame game = new StrategyGame(TestSpecs.Generate(), null);
           
@@ -52,6 +51,7 @@ namespace Assets.Code
                 BattleId = id,
             });
             screen.PlayLog(log);
+            */
         }
 
         void Start()

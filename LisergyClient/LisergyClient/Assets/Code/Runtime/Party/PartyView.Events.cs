@@ -1,32 +1,23 @@
-﻿using System.Collections.Generic;
-using Assets.Code.Assets.Code.Runtime.Movement;
-using Assets.Code.Code.Utils;
-using Assets.Code.Entity;
-using Assets.Code.Views;
-using DG.Tweening;
-using Game.Battler;
-using Game.DataTypes;
-using Game.Events.GameEvents;
-using Game.Party;
-using Game.Tile;
-
-namespace Assets.Code.World
+﻿namespace Assets.Code.World
 {
     public partial class PartyView
     {
-        private MovementInterpolator _interpolation;
+        /*
+ private MovementInterpolator _interpolation;
 
-        public void RegisterEvents()
-        {
-            Entity.Components.RegisterExternalComponentEvents<PartyView, EntityMoveInEvent>(OnMoveIn);
-            Entity.BattleGroupLogic.OnBattleIdChanged += OnBattleIdChanged;
-            _interpolation.OnStart += OnMovementStart;
-            _interpolation.OnFinish += OnMovementStop;
-            _interpolation.OnPrepareMoveNext += OnMovementPrepareNext;
-            ClientEvents.OnStartMovementRequest += OnPartyMovementStarted;
-        }
+ public void RegisterEvents()
+ {
 
-        private void OnMovementStart()
+     Entity.Components.RegisterExternalComponentEvents<PartyView, EntityMoveInEvent>(OnMoveIn);
+     Entity.BattleGroupLogic.OnBattleIdChanged += OnBattleIdChanged;
+     _interpolation.OnStart += OnMovementStart;
+     _interpolation.OnFinish += OnMovementStop;
+     _interpolation.OnPrepareMoveNext += OnMovementPrepareNext;
+     ClientEvents.OnStartMovementRequest += OnPartyMovementStarted;
+
+    }
+
+    private void OnMovementStart()
         {
             foreach (var unit in _unitObjects.Values)
             {
@@ -79,5 +70,7 @@ namespace Assets.Code.World
                 view.GameObject.transform.position = ev.ToTile.Position(view.GameObject.transform.position.y);
             }
         }
+          */
     }
+
 }

@@ -14,7 +14,7 @@ namespace Game
         public MapLogic Map { get; }
         public BattleGroupLogic BattleGroup { get;}
         public PlayerLogic Player { get; }
-        public EntityMovementLogic Movement { get; }
+        public CourseLogic Movement { get; }
     }
 
     /// <summary>
@@ -25,7 +25,7 @@ namespace Game
         public MapLogic Map => _systems.Map.GetLogic(_entity);
         public BattleGroupLogic BattleGroup => _systems.BattleGroup.GetLogic(_entity);
         public PlayerLogic Player => _systems.Players.GetLogic(_entity);
-        public EntityMovementLogic Movement => _systems.EntityMovement.GetLogic(_entity);
+        public CourseLogic Movement => _systems.EntityMovement.GetLogic(_entity);
 
         private ISystems _systems;
         private IEntity _entity;

@@ -2,7 +2,7 @@
 using Assets.Code.Views;
 using DG.Tweening;
 using Game;
-using Game.Movement;
+using Game.Systems.Movement;
 using Game.Tile;
 using System;
 using System.Collections.Generic;
@@ -20,13 +20,13 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
         public event TweenCallback OnFinish;
         public event Action<TileView> OnPrepareMoveNext;
 
-        private WorldEntity _entity;
+        private BaseEntity _entity;
         private ClientMovementInterpolationComponent _component;
 
-        public MovementInterpolator(WorldEntity entity)
+        public MovementInterpolator(BaseEntity entity)
         {
             _entity = entity;
-            _component = entity.Components.Add(new ClientMovementInterpolationComponent());
+            _component = entity.Components.AddReference(new ClientMovementInterpolationComponent());
         }
 
         public bool Running => _component.InterpolingPath?.Count > 0;
@@ -84,7 +84,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
 
             var view = GameView.GetView(_entity);
             var gameObject = view.GameObject;
-            var moveComponent = _entity.Components.Get<EntityMovementComponent>();
+            var moveComponent = _entity.Components.Get<CourseComponent>();
             var duration = (moveComponent.MoveDelay.TotalSeconds + MainBehaviour.Networking.Delta) * tiles.Count;
             var y = gameObject.transform.position.y;
             _component.InterpolingPath = new List<TileEntity>(tiles);

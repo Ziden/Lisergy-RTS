@@ -34,26 +34,8 @@ namespace Game.Systems.Tile
 
         private void OnEntityMoveIn(IEntity owner, EntityMoveInEvent ev)
         {
-            if (!ev.Entity.Components.Has<EntityMovementComponent>()) return;
-
             var tileHabitants = owner.Components.GetReference<TileHabitants>();
-            // TODO: Move all this logic to battle logic
             tileHabitants.EntitiesIn.Add(ev.Entity);
-            var course = ev.Entity.EntityLogic.Movement.TryGetCourseTask();
-     
-            if (course == null || course.Intent != MovementIntent.Offensive || !course.IsLastMovement()) return;
-            if (tileHabitants.Building == null) return;
-
-            if (!ev.Entity.Components.Has<BattleGroupComponent>() || !tileHabitants.Building.Components.Has<BattleGroupComponent>()) return;
-            var atkGroup = ev.Entity.Components.Get<BattleGroupComponent>();
-            var defGroup = tileHabitants.Building.Components.Get<BattleGroupComponent>();
-            ev.Entity.Components.CallEvent(new OffensiveActionEvent()
-            {
-                AttackerGroup = atkGroup,
-                DefenderGroup = defGroup,
-                Defender = tileHabitants.Building,
-                Attacker = ev.Entity
-            });
         }
     }
 }

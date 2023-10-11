@@ -6,8 +6,8 @@ using Assets.Code.Battle;
 using Assets.Code.Views;
 using Assets.Code.World;
 using Game.Battle;
-using Game.BattleActions;
-using Game.Battler;
+using Game.Battle.BattleActions;
+using Game.Battle.Data;
 using Game.DataTypes;
 using Game.Events;
 using Game.Events.Bus;
@@ -45,7 +45,7 @@ namespace Assets.Code
         private BattlePlayback _battlePlayback;
         private BattleLogPacket _log;
         private Camera _battleCamera;
-        public CompleteBattleHeader ResultHeader { get; private set; }
+        public BattleHeaderData ResultHeader { get; private set; }
 
         private async Task AddHealthbar(UnitView view)
         {
@@ -86,7 +86,7 @@ namespace Assets.Code
             }
         }
 
-        public void SetResultHeader(CompleteBattleHeader header)
+        public void SetResultHeader(BattleHeaderData header)
         {
             ResultHeader = header;
         }
@@ -135,7 +135,7 @@ namespace Assets.Code
             if (unit.HP - result.Damage <= 0)
                 unit.HP = 0;
             else
-                unit.HP -= result.Damage;
+                unit.HP -= (byte)result.Damage;
             PartyButton.UpdateHealth(UnitHealthBars[unit.Id], unit);
         }
 

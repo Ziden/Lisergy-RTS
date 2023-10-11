@@ -1,4 +1,4 @@
-﻿using Game.Battler;
+﻿using Game.Systems.Battler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace Assets.Code.Assets.Code.Runtime.PartyUnit
         /// 1 = max hp
         /// 0 = empty
         /// </summary>
-        public static float GetHpRatio(this Unit u)
+        public static float GetHpRatio(this in Unit u)
         {
             return u.HP / (float)u.MaxHP;
         }

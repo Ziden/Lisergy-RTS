@@ -12,7 +12,7 @@ namespace Game.Network.ServerPackets
     /// Packet sent to player whenever a battle started
     /// </summary>
     [Serializable]
-    public class BattleStartPacket : ServerPacket
+    public class BattleStartPacket : BasePacket, IServerPacket
     {
         public Position Position;
         public GameId BattleID;

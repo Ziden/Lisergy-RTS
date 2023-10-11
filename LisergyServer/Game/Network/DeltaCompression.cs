@@ -103,6 +103,6 @@ namespace Game.Network
         /// <summary>
         /// Gets the update packet of a given delta updateable
         /// </summary>
-        public ServerPacket GetUpdatePacket(PlayerEntity receiver);
+        public BasePacket GetUpdatePacket(PlayerEntity receiver);
     }
 }

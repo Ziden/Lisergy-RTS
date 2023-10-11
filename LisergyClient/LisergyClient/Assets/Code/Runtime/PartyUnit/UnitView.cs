@@ -1,6 +1,5 @@
 ﻿using Assets.Code.Assets.Code.Assets;
-using Game;
-using Game.Battler;
+using Game.Systems.Battler;
 using System;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ namespace Assets.Code.World
         private IAssetService _assets;
 
 
-        public UnitView(Unit unit)
+        public UnitView(in Unit unit)
         {
             Unit = unit;
             _assets = ServiceContainer.Resolve<IAssetService>();
@@ -22,6 +21,7 @@ namespace Assets.Code.World
 
         public void AddToScene(Action<GameObject> onAdded)
         {
+            /*
             var prefabName = Unit.GetSpec().Art.Address;
             _assets.CreatePrefab(Unit.GetSpec().Art, Vector3.zero, Quaternion.Euler(0, 0, 0), o =>
             {
@@ -34,6 +34,7 @@ namespace Assets.Code.World
                 }
                 onAdded(o);
             });
+            */
         }
     }
 }

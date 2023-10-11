@@ -1,16 +1,13 @@
 ﻿using Assets.Code.Entity;
 using Assets.Code.Views;
 using Game;
-using Game.Building;
-using Game.Dungeon;
 using Game.ECS;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using Game.Network;
 using Game.Network.ServerPackets;
-using Game.Party;
-using Game.Player;
+using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
 
@@ -19,14 +16,13 @@ namespace Assets.Code.World
     public class EntityListener : IEventListener
     {
 
-        public EntityListener(EventBus<ServerPacket> networkEvents)
+        public EntityListener(EventBus<BasePacket> networkEvents)
         {
             networkEvents.Register<EntityDestroyPacket>(this, EntityDestroy);
             networkEvents.Register<EntityMovePacket>(this, EntityMove);
             networkEvents.Register<EntityUpdatePacket>(this, EntityUpdate);
         }
 
-        [EventMethod]
         public void EntityDestroy(EntityDestroyPacket ev)
         {
             Log.Debug("Received entity destroy");
@@ -34,12 +30,11 @@ namespace Assets.Code.World
             if (knownEntity == null)
                 throw new Exception($"Server sent destroy event for entity {ev.EntityID} from {ev.OwnerID} at however its not visible to client");
 
-            knownEntity.Tile = null;
+            knownEntity.EntityLogic.Map.SetPosition(null);
             var view = GameView.GetView(knownEntity);
             GameView.Destroy(view);
         }
 
-        [EventMethod]
         public void EntityMove(EntityMovePacket ev)
         {
             Log.Debug("Received entity move");
@@ -49,13 +44,13 @@ namespace Assets.Code.World
                 throw new Exception($"Server sent move event for entit3y {ev.EntityID} from {ev.OwnerID} at {ev.X}-{ev.Y} however its not visible to client");
 
             var newTile = GameView.World.GetTile(ev.X, ev.Y);
-            knownEntity.Tile = newTile;
+            knownEntity.EntityLogic.Map.SetPosition(newTile);
         }
 
-        [EventMethod]
         public void EntityUpdate(EntityUpdatePacket ev)
         {
-            Log.Debug($"Received entity update {ev.Entity.GetType().Name} ({ev.SyncedComponents.Count} components)");
+            /*
+            Log.Debug($"Received entity update {ev.EntityId.GetType().Name} ({ev.SyncedComponents.Count} components)");
             var serverEntity = ev.Entity;
             var serverOwner = serverEntity.OwnerID;
             var owner = GameView.World.GetOrCreateClientPlayer(serverEntity.OwnerID);
@@ -93,16 +88,19 @@ namespace Assets.Code.World
 
             else
                 throw new Exception($"Entity Factory does not know how to instantiate {serverEntity.GetType().Name}");
+            */
         }
 
-        public class EntityUpdateResult<ViewType, EntityType> where EntityType : WorldEntity where ViewType : EntityView<EntityType>
+        public class EntityUpdateResult<ViewType, EntityType> where EntityType : BaseEntity where ViewType : EntityView<EntityType>
         {
             public ViewType View;
             public bool Created;
         }
 
-        public EntityUpdateResult<ViewType, EntityType> UpdateClientState<EntityType, ViewType>(EntityType serverEntity, List<IComponent> components) where EntityType : WorldEntity where ViewType : EntityView<EntityType>
+        public EntityUpdateResult<ViewType, EntityType> UpdateClientState<EntityType, ViewType>(EntityType serverEntity, List<IComponent> components) where EntityType : BaseEntity where ViewType : EntityView<EntityType>
         {
+            return null;
+            /*
             var localPlayer = MainBehaviour.LocalPlayer;
             var clientEntity = (EntityType)localPlayer.GetKnownEntity(serverEntity.Id);
             if (clientEntity == null)
@@ -132,6 +130,7 @@ namespace Assets.Code.World
                     View = view
                 };
             }
+            */
         }
     }
 }

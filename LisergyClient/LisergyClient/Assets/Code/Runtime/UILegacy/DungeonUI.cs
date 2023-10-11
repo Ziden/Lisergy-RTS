@@ -2,8 +2,8 @@
 using Assets.Code.World;
 using Game;
 using Game.Battle;
-using Game.Battler;
-using Game.Dungeon;
+using Game.Systems.Battler;
+using Game.Systems.Dungeon;
 using Game.Tile;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +22,7 @@ public class DungeonUI : MonoBehaviour
     private int _viewingBattle = 0;
     private DungeonEntity _dungeon;
 
-    public IReadOnlyList<Unit> ViewingBattle => _dungeon.BattleGroupLogic.GetUnits();
+    public IReadOnlyList<Unit> ViewingBattle => _dungeon.Get<BattleGroupComponent>().Units.ToList();
 
     public DungeonUI()
     {

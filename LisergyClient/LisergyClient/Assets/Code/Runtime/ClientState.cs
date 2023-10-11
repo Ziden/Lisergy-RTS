@@ -1,4 +1,4 @@
-﻿using Game.Party;
+﻿using Game.Systems.Party;
 using Game.Tile;
 
 namespace Assets.Code.Assets.Code.Runtime

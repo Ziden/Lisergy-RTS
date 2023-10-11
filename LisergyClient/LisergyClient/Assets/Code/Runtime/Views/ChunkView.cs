@@ -1,11 +1,13 @@
 ﻿using Game;
 using Game.ECS;
 using Game.Events.GameEvents;
+using Game.World;
 using System;
 using UnityEngine;
 
 namespace Assets.Code.Views
 {
+    /*
     public class ChunkView : IEntityView
     {
         private static GameObject _chunksNode;
@@ -35,4 +37,5 @@ namespace Assets.Code.Views
             GameObject.transform.position = new Vector3(Entity.X * GameWorld.CHUNK_SIZE, Entity.Y * GameWorld.CHUNK_SIZE);
         }
     }
+    */
 }

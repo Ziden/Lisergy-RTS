@@ -49,7 +49,7 @@ namespace Tests
             dungeonTile.Components.GetReference<TileHabitants>().Building = _dungeon;
 
             // send intent to move player to the party
-            _player.SendMoveRequest(party, dungeonTile, MovementIntent.Defensive);
+            _player.SendMoveRequest(party, dungeonTile, CourseIntent.Defensive);
             var course = _player.GetParty(0).Course;
 
             // Complete the move intent
@@ -75,7 +75,7 @@ namespace Tests
             component.Units[0] = unit;
             party.Save(component);
 
-            _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
+            _player.SendMoveRequest(party, dungeonTile, CourseIntent.Offensive);
             var course = party.Course;
 
             Assert.AreEqual(0, _player.Data.BattleHeaders.Count());
@@ -136,7 +136,7 @@ namespace Tests
 
             _dungeon.EntityLogic.Map.SetPosition(dungeonTile);
 
-            _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
+            _player.SendMoveRequest(party, dungeonTile, CourseIntent.Offensive);
             _player.GetParty(0).Course.Tick();
 
             var battle = _game.BattleService.GetRunningBattle(party.Components.Get<BattleGroupComponent>().BattleID);
@@ -165,7 +165,7 @@ namespace Tests
 
             _dungeon.EntityLogic.Map.SetPosition(dungeonTile);
 
-            _player.SendMoveRequest(party, dungeonTile, MovementIntent.Offensive);
+            _player.SendMoveRequest(party, dungeonTile, CourseIntent.Offensive);
             _player.GetParty(0).Course.Tick();
 
             var battle = _game.BattleService.GetRunningBattle(party.Components.Get<BattleGroupComponent>().BattleID);
@@ -245,7 +245,7 @@ namespace Tests
 
             dungeonTile.Components.GetReference<TileHabitants>().Building = _dungeon;
 
-            _player.SendMoveRequest(_player.GetParty(0), dungeonTile, MovementIntent.Offensive);
+            _player.SendMoveRequest(_player.GetParty(0), dungeonTile, CourseIntent.Offensive);
             _player.GetParty(0).Course.Tick();
 
             var b = _game.BattleService.GetRunningBattle(party.Get<BattleGroupComponent>().BattleID);

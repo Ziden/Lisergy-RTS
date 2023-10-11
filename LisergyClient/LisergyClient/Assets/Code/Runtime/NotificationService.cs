@@ -1,5 +1,6 @@
 ﻿using Assets.Code.Assets.Code.UIScreens.Base;
 using Game.Battle;
+using Game.Battle.Data;
 
 namespace Assets.Code.Assets.Code.Runtime
 {
@@ -16,7 +17,7 @@ namespace Assets.Code.Assets.Code.Runtime
             ClientEvents.OnBattleFinish += OnBattleFinish;
         }
 
-        private void OnBattleFinish(CompleteBattleHeader h)
+        private void OnBattleFinish(BattleHeaderData h)
         {
             _screen.Open<BattleNotificationScreen, BattleNotificationSetup>(new BattleNotificationSetup()
             {

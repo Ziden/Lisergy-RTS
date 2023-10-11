@@ -3,6 +3,7 @@ using Assets.Code.World;
 using Game;
 using Game.ECS;
 using Game.Tile;
+using Game.World;
 using GameData;
 using System;
 
@@ -10,12 +11,15 @@ namespace Assets.Code
 {
     public class GameView
     {
-        private static StrategyGame _game;
+        
+        private static LisergyGame _game;
         private static GameView _instance;
         private static ViewController _controller;
 
         public static TileView GetOrCreateTileView(TileEntity tile, bool ensureInstantiated = false)
         {
+            return null;
+            /*
             var chunkView = GetView<ChunkView>(tile.Chunk);
             if (chunkView == null)
                 Controller.AddView(tile.Chunk, new ChunkView(ref tile.Chunk));
@@ -29,7 +33,9 @@ namespace Assets.Code
             {
                 tileView.Instantiate();
             }
+          
             return tileView;
+              */
         }
 
         public static void Destroy(IEntityView view)
@@ -54,7 +60,8 @@ namespace Assets.Code
             }
             _controller = new ViewController();
             _instance = this;
-            _game = new StrategyGame(specs, world);
+            _game = new LisergyGame(specs);
+            _game.SetupGame(world, new GameServerNetwork(_game));
         }
     }
 }

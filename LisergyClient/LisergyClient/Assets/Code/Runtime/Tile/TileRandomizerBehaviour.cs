@@ -40,7 +40,7 @@ public class TileMonoComponent : MonoBehaviour
         TileView east = eastTile == null ? null : GameView.GetOrCreateTileView(eastTile);
         TileView west = westTile == null ? null : GameView.GetOrCreateTileView(westTile);
 
-        if (comp.RemoveWhenConnectNorth.Count > 0 && (northTile != null && north.Entity.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectNorth.Count > 0 && (northTile != null && north.Entity.EntityId == tile.EntityId))
         {
             comp.RemoveWhenConnectNorth.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectNorth.Clear();
@@ -49,7 +49,7 @@ public class TileMonoComponent : MonoBehaviour
                 DecorateBoundaries(north);
             }
         }
-        if (comp.RemoveWhenConnectSouth.Count > 0 && (southTile != null && south.Entity.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectSouth.Count > 0 && (southTile != null && south.Entity.EntityId == tile.EntityId))
         {
             comp.RemoveWhenConnectSouth.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectSouth.Clear();
@@ -58,7 +58,7 @@ public class TileMonoComponent : MonoBehaviour
                 DecorateBoundaries(south);
             }
         }
-        if (comp.RemoveWhenConnectEast.Count > 0 && (eastTile != null && east.Entity.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectEast.Count > 0 && (eastTile != null && east.Entity.EntityId == tile.EntityId))
         {
             comp.RemoveWhenConnectEast.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectEast.Clear();
@@ -68,7 +68,7 @@ public class TileMonoComponent : MonoBehaviour
             }
         }
 
-        if (comp.RemoveWhenConnectWest.Count > 0 && (westTile != null && west.Entity.TileId == tile.TileId))
+        if (comp.RemoveWhenConnectWest.Count > 0 && (westTile != null && west.Entity.EntityId == tile.EntityId))
         {
             comp.RemoveWhenConnectWest.ForEach(e => Destroy(e));
             comp.RemoveWhenConnectWest.Clear();

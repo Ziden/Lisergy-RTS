@@ -3,7 +3,7 @@ using Assets.Code.Assets.Code.Runtime.Movement;
 using Assets.Code.Views;
 using Game;
 using Game.DataTypes;
-using Game.Party;
+using Game.Systems.Party;
 using Game.Tile;
 using Game.World;
 using GameAssets;
@@ -27,23 +27,23 @@ namespace Assets.Code.UI
 
         private void OnCourseChanged(PartyEntity p)
         {
-            if(_entityPaths.TryGetValue(p.Id, out var path))
+            if(_entityPaths.TryGetValue(p.EntityId, out var path))
             {
                 path.Clear();
-                _entityPaths.Remove(p.Id);
+                _entityPaths.Remove(p.EntityId);
             }
         }
 
         public void StartReqMove(PartyEntity party, List<TileEntity> path)
         {
-            if (_entityPaths.TryGetValue(party.Id, out var previousPath))
+            if (_entityPaths.TryGetValue(party.EntityId, out var previousPath))
             {
                 previousPath.Clear();
-                _entityPaths.Remove(party.Id);
+                _entityPaths.Remove(party.EntityId);
             }
 
             var clientPath = new MovementPath();
-            _entityPaths[party.Id] = clientPath;
+            _entityPaths[party.EntityId] = clientPath;
             for (var x = 0; x < path.Count; x++)
             {
                 var nodeTile = path[x];
@@ -67,15 +67,15 @@ namespace Assets.Code.UI
 
         public void OnFinishedMove(PartyEntity party, TileEntity oldTile, TileEntity newTile)
         {
-            if (_entityPaths.ContainsKey(party.Id))
+            if (_entityPaths.ContainsKey(party.EntityId))
             {
-                var partyPath = _entityPaths[party.Id];
+                var partyPath = _entityPaths[party.EntityId];
                 var pathsOnTile = partyPath.Pop(newTile);
                 if (pathsOnTile != null)
                     foreach (var path in pathsOnTile)
                         partyPath.RemovePathObject(path);
                 if (partyPath.Empty())
-                    _entityPaths.Remove(party.Id);
+                    _entityPaths.Remove(party.EntityId);
             }
         }
     }

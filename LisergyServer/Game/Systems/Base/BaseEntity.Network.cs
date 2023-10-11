@@ -1,13 +1,10 @@
 ﻿using Game.Events.ServerEvents;
 using Game.Network.ServerPackets;
 using Game.Network;
-using System;
 using System.Collections.Generic;
 using Game.Systems.Movement;
-using Game.Systems.FogOfWar;
 using Game.Systems.Player;
 using Game.Systems.MapPosition;
-using Game.ECS;
 using System.Linq;
 
 namespace Game
@@ -19,17 +16,9 @@ namespace Game
         /// </summary>
         private static HashSet<PlayerEntity> ViewersCache = new HashSet<PlayerEntity>();
 
-        [field: NonSerialized]
         private DeltaFlags _flags;
 
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
-
-        public ServerPacket GetUpdatePacket(PlayerEntity receiver)
-        {
-            var packet = new EntityUpdatePacket(this);
-            packet.SyncedComponents = Components.GetSyncedComponents(receiver).ToArray();
-            return packet;
-        }
 
         public void ProccessDeltas(PlayerEntity trigger)
         {
@@ -59,7 +48,7 @@ namespace Game
             var newTile = c.Tile;
             var previousTile = c.PreviousTile;
 
-            if (!Components.Has<EntityMovementComponent>()) return;
+            if (!Components.Has<CourseComponent>()) return;
 
             ViewersCache.Clear();
             var allViewers = ViewersCache;
@@ -69,7 +58,7 @@ namespace Game
                 if (newTile != null)
                     allViewers.UnionWith(newTile.PlayersViewing);
 
-                var movePacket = new EntityMovePacket(this, Components.Get<EntityMovementComponent>(), newTile);
+                var movePacket = new EntityMovePacket(this, Components.Get<CourseComponent>(), newTile);
                 Game.Network.SendToPlayer(movePacket, allViewers.ToArray());
             }
 
@@ -79,6 +68,13 @@ namespace Game
 
             foreach (var viewer in newPlayersViewing)
                 Game.Network.SendToPlayer(this.GetUpdatePacket(viewer), viewer);
+        }
+
+        public BasePacket GetUpdatePacket(PlayerEntity receiver)
+        {
+            var packet = new EntityUpdatePacket(this);
+            packet.SyncedComponents = Components.GetSyncedComponents(receiver).ToArray();
+            return packet;
         }
     }
 }

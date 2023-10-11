@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ClientSDK\ClientSDK.csproj" />
     <ProjectReference Include="..\Core\BaseServer.csproj" />
     <ProjectReference Include="..\GameDataTest\GameDataTest.csproj" />
   </ItemGroup>

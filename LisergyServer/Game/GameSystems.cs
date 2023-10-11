@@ -21,7 +21,7 @@ namespace Game
         PlayerBuildingSystem PlayerBuilding { get; }
         DungeonSystem Dungeons { get; }
         EntityVisionSystem EntityVision { get; }
-        EntityMovementSystem EntityMovement { get; }
+        CourseSystem EntityMovement { get; }
         TileVisibilitySystem TileVisibility { get; }
         MapSystem Map { get; }
         PartySystem Party { get; }
@@ -44,7 +44,7 @@ namespace Game
             AddSystem(PlayerBuilding = new PlayerBuildingSystem(game));
             AddSystem(Dungeons = new DungeonSystem(game));
             AddSystem(EntityVision = new EntityVisionSystem(game));
-            AddSystem(EntityMovement = new EntityMovementSystem(game));
+            AddSystem(EntityMovement = new CourseSystem(game));
             AddSystem(TileVisibility = new TileVisibilitySystem(game));
             AddSystem(Party = new PartySystem(game));
             AddSystem(TileHabitants = new TileHabitantsSystem(game));
@@ -58,7 +58,7 @@ namespace Game
         public PlayerBuildingSystem PlayerBuilding { get; private set; }
         public DungeonSystem Dungeons { get; private set; }
         public EntityVisionSystem EntityVision { get; private set; }
-        public EntityMovementSystem EntityMovement { get; private set; }
+        public CourseSystem EntityMovement { get; private set; }
         public TileVisibilitySystem TileVisibility { get; private set; }
         public PartySystem Party { get; private set; }
         public TileHabitantsSystem TileHabitants { get; private set; }

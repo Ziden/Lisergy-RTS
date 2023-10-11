@@ -6,7 +6,7 @@ using System;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class EntityUpdatePacket : ServerPacket
+    public class EntityUpdatePacket : BasePacket, IServerPacket
     {
         public EntityType Type;
         public GameId EntityId;

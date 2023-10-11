@@ -5,7 +5,7 @@ using System;
 namespace Game.Network.ServerPackets
 {
     [Serializable]
-    public class EntityDestroyPacket : ServerPacket
+    public class EntityDestroyPacket : BasePacket, IServerPacket
     {
         public EntityDestroyPacket(IEntity entity)
         {

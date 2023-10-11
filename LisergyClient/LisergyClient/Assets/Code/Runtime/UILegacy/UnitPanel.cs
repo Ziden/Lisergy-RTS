@@ -1,7 +1,7 @@
 ﻿using Assets.Code;
 using Assets.Code.World;
 using Game;
-using Game.Battler;
+using Game.Systems.Battler;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +30,7 @@ public class UnitPanel : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    public void ShowUnit(Unit unit)
+    public void ShowUnit(in Unit unit)
     {
         this.gameObject.SetActive(true);
 

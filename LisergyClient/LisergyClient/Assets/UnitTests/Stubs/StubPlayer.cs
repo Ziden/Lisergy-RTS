@@ -1,6 +1,6 @@
 ﻿
 using Game;
-using Game.Player;
+using Game.Systems.Player;
 using System.Collections.Concurrent;
 
 namespace Assets.UnitTests.Stubs
@@ -13,19 +13,10 @@ namespace Assets.UnitTests.Stubs
 
     public class StubPlayer : PlayerEntity
     {
-        public override bool Online()
+        public StubPlayer() : base(null)
         {
-            return true;
         }
 
-        public override void Send<EventType>(EventType ev)
-        {
-            Log.Debug($"Sending {ev.GetType().Name} from server to client");
-            StubServer.OutputStream.Enqueue(new StubPacket()
-            {
-                Sender = this,
-                Data = Serialization.FromEvent(ev)
-            });
-        }
+      
     }
 }

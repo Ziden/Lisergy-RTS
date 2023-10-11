@@ -3,9 +3,9 @@ using Assets.Code.Assets.Code.Runtime.Tools;
 using Assets.Code.World;
 using DG.Tweening;
 using Game.Battle;
-using Game.Battler;
 using Game.DataTypes;
 using Game.Network.ServerPackets;
+using Game.Systems.Battler;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -34,7 +34,7 @@ namespace Assets.Code.Battle
 
         public BattlePlayback(GameId battleId, BattleTeam attacker, BattleTeam defender)
         {
-            _battle = new TurnBattle(battleId, attacker, defender);
+            //_battle = new TurnBattle(battleId, attacker, defender);
             _audio = ServiceContainer.Resolve<IAudioService>();
         }
 
@@ -49,7 +49,7 @@ namespace Assets.Code.Battle
                 MainBehaviour.Destroy(attackersObject.transform.GetChild(teamSlot).GetChild(0).gameObject);
                 unitIndex++;
                 if (battleUnit == null) continue;
-                AddUnit(battleUnit.UnitReference, attackersObject, teamSlot);
+                //AddUnit(battleUnit.UnitReference, attackersObject, teamSlot);
             }
 
             unitIndex = 0;
@@ -61,7 +61,7 @@ namespace Assets.Code.Battle
                 MainBehaviour.Destroy(container.GetChild(0).gameObject);
                 unitIndex++;
                 if (battleUnit == null) continue;
-                AddUnit(battleUnit.UnitReference, defendersObject, teamSlot);
+               // AddUnit(battleUnit.UnitReference, defendersObject, teamSlot);
             }
             _damageNumber = root.Find("DamageNumber").gameObject;
             await WaitUnitsLoaded();

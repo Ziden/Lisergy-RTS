@@ -9,7 +9,6 @@ namespace Game.World
     /// Unmanaged memory to allocate map data.
     /// Allocates a chunk of tiles.
     /// </summary>
-    // TODO: REMOVE CHUNKS
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct ChunkData

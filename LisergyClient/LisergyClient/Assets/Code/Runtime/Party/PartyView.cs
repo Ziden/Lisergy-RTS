@@ -1,12 +1,12 @@
 ﻿using Assets.Code.Views;
-using Game.Battler;
 using Game.ECS;
-using Game.Party;
 using System.Collections.Generic;
 using Assets.Code.Code.Utils;
 using UnityEngine;
 using Assets.Code.Assets.Code.Runtime.Movement;
 using Game;
+using Game.Systems.Party;
+using Game.Systems.Battler;
 
 namespace Assets.Code.World
 {
@@ -24,23 +24,23 @@ namespace Assets.Code.World
         public PartyView(PartyEntity party)
         {
             Entity = party;
-            _interpolation = new MovementInterpolator(Entity);
+            //_interpolation = new MovementInterpolator(Entity);
         }
 
 
         public override void OnUpdate(PartyEntity partyFromNetwork, List<IComponent> syncedComponents)
         {
-            Entity.Tile = GameView.World.GetTile(partyFromNetwork);
+            //Entity.Tile = GameView.World.GetTile(partyFromNetwork);
           
             if (!NeedsInstantiate) return;
-            RegisterEvents();
+            //RegisterEvents();
             Instantiate();
             CreateUnitObjects();
         }
 
         protected override void InstantiationImplementation()
         {
-            var o = new GameObject($"{Entity.OwnerID}-{Entity.Id}");
+            var o = new GameObject($"{Entity.OwnerID}-{Entity.EntityId}");
             o.transform.SetParent(Container.transform);
             o.transform.position = Entity.Tile.Position(0.2f);
             SetGameObject(o);
@@ -58,9 +58,9 @@ namespace Assets.Code.World
             }
         }
 
-        public void CreateUnitObjects()
+        public void CreateUnitObjects() 
         {
-            foreach (var unit in Entity.BattleGroupLogic.GetValidUnits())
+            foreach (var unit in Entity.Get<BattleGroupComponent>().Units)
             {
                 var unitObject = new UnitView(unit);
                 unitObject.AddToScene(o =>

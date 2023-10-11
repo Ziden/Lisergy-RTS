@@ -4,9 +4,9 @@ using Game;
 using Game.DataTypes;
 using Game.Events;
 using Game.Events.Bus;
+using Game.Network;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
-using Game.Player;
 
 namespace Assets.Code.Battle
 {
@@ -14,7 +14,7 @@ namespace Assets.Code.Battle
     {
         IScreenService _screens;
 
-        public BattleListener(EventBus<ServerPacket> networkEvents)
+        public BattleListener(EventBus<BasePacket> networkEvents)
         {
             _screens = ServiceContainer.Resolve<IScreenService>();
             networkEvents.Register<BattleLogPacket>(this, BattleLog);
@@ -22,7 +22,6 @@ namespace Assets.Code.Battle
             networkEvents.Register<BattleStartPacket>(this, BattleStart);
         }
 
-        [EventMethod]
         public void BattleLog(BattleLogPacket ev)
         {
             var transition = _screens.Get<TransitionScreen>();
@@ -37,9 +36,9 @@ namespace Assets.Code.Battle
             });
         }
 
-        [EventMethod]
         public void BattleSummary(BattleResultSummaryPacket ev)
         {
+            /*
             Log.Info($"Battle Summary Received {ev.BattleHeader.BattleID}");
 
             var pl = MainBehaviour.LocalPlayer;
@@ -49,7 +48,7 @@ namespace Assets.Code.Battle
             var atk = w.GetOrCreateClientPlayer(ev.BattleHeader.Attacker.OwnerID);
 
             // TODO: Remove all this crap and use logic synchronizer
-            if (def != null && !Gaia.IsGaia(def.UserID))
+            if (def != null && def.OwnerID != GameId.ZERO)
             {
                 var partyID = ev.BattleHeader.Defender.Units[0].UnitReference.PartyId;
                 var party = def.GetParty(partyID);
@@ -79,12 +78,13 @@ namespace Assets.Code.Battle
             {
                 ClientEvents.ReceivedServerBattleFinish(ev.BattleHeader);
             }
+            */
         }
 
         // TODO: Not used
-        [EventMethod]
         public void BattleStart(BattleStartPacket ev)
         {
+            /*
             Log.Debug("Received battle start");
             var pl = MainBehaviour.LocalPlayer;
 
@@ -111,6 +111,7 @@ namespace Assets.Code.Battle
             }
 
             ClientEvents.ReceivedServerBattleStart(ev.BattleID, ev.Attacker, ev.Defender);
+            */
         }
     }
 }

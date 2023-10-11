@@ -7,6 +7,7 @@ using Game.Network;
 using Game.Network.ClientPackets;
 using Game.Scheduler;
 using Game.Services;
+using Game.World;
 using GameDataTest;
 using System;
 using System.Collections.Concurrent;
@@ -22,7 +23,7 @@ namespace Assets.UnitTests
         WorldService _worldService;
         BattleService _battleService;
         CourseService _courseService;
-        StrategyGame _game;
+        LisergyGame _game;
 
         public StubServer()
         {
@@ -44,6 +45,7 @@ namespace Assets.UnitTests
 
         public void Tick()
         {
+            /*
             GameScheduler.Tick(DateTime.UtcNow);
             while(InputStream.TryDequeue(out var packet)) {
 
@@ -58,21 +60,26 @@ namespace Assets.UnitTests
                     _game.ReceiveInput(packet.Sender, packet.Data);
                 }
             }
+            */
         }
 
-        private StrategyGame SetupGame()
+        private LisergyGame SetupGame()
         {
             var gameSpecs = TestSpecs.Generate();
-            _game = new StrategyGame(gameSpecs, null);
+            _game = new LisergyGame(gameSpecs);
 
             (int, int) mapSize = TestWorldGenerator.MeasureWorld(20);
 
-            _game.World = new GameWorld(20, mapSize.Item1, mapSize.Item2);
+           // _game.SetWorld(new GameWorld(20, mapSize.Item1, mapSize.Item2);
+
+            /*
             TestWorldGenerator.PopulateWorld(_game.World, 1234,
                 new NewbieChunkPopulator(),
                 new DungeonsPopulator()
             );
-            DeltaTracker.Clear();
+           
+             */
+           // DeltaTracker.Clear();
             return _game;
         }
 
@@ -81,12 +88,12 @@ namespace Assets.UnitTests
             Debug.Log("Server received auth, returning to client");
             OutputStream.Enqueue(new StubPacket()
             {
-                Data = Serialization.FromEventRaw(new GameSpecPacket(_game)),
+                Data = Serialization.FromPacketRaw(new GameSpecPacket(_game)),
             });
 
             OutputStream.Enqueue(new StubPacket()
             {
-                Data = Serialization.FromEventRaw(new AuthResultPacket()
+                Data = Serialization.FromPacketRaw(new AuthResultPacket()
                 {
                     PlayerID = GameId.Generate(),
                     Success = true

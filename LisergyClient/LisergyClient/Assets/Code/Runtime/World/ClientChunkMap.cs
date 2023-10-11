@@ -1,10 +1,6 @@
 ﻿using Game;
 using Game.Tile;
 using Game.World;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 namespace Assets.Code.World
 {
@@ -16,7 +12,7 @@ namespace Assets.Code.World
     {
         public ClientChunkMap(ClientWorld world) : base(world, world.SizeX, world.SizeY) { } 
 
-        public override TileEntity GetTile(int tileX, int tileY)
+        public override TileEntity GetTile(in int tileX, in int tileY)
         {
             if (!ValidCoords(tileX, tileY))
             {
@@ -35,13 +31,13 @@ namespace Assets.Code.World
             return tile;
         }
 
-        public override ref Chunk GetTileChunk(int tileX, int tileY)
+        public override ref Chunk GetTileChunk(in int tileX, in int tileY)
         {
             var chunk = base.GetTileChunk(tileX, tileY);
             if (chunk == null)
             {
-                int chunkX = tileX.ToChunkCoordinate();
-                var chunkY = tileY.ToChunkCoordinate();
+                ushort chunkX = (ushort)(tileX >> GameWorld.CHUNK_SIZE_BITSHIFT);
+                ushort chunkY = (ushort)(tileY >> GameWorld.CHUNK_SIZE_BITSHIFT);
                 var newChunk = new Chunk(this, chunkX, chunkY, new TileEntity[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE]);
                 Log.Debug($"Allocating Chunk {newChunk}");
                 this.Add(ref newChunk);

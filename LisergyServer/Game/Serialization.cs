@@ -1,15 +1,11 @@
-﻿using Game.Battle;
+﻿
 using Game.Battle.BattleActions;
 using Game.Battle.BattleEvents;
 using Game.ECS;
 using Game.Events;
 using Game.Network;
 using Game.Systems.Battler;
-using Game.Systems.Building;
-using Game.Systems.Dungeon;
-using Game.Systems.Party;
 using Game.Systems.Tile;
-using Game.Tile;
 using GameData;
 using NetSerializer;
 using System;
@@ -54,8 +50,7 @@ namespace Game
         {
             foreach (Type type in typeof(IBaseEvent).Assembly.GetTypes())
             {
-                var validEvent = typeof(InputPacket).IsAssignableFrom(type) && type != typeof(InputPacket);
-                validEvent = validEvent || typeof(ServerPacket).IsAssignableFrom(type) && type != typeof(ServerPacket);
+                var validEvent = typeof(BasePacket).IsAssignableFrom(type) && type != typeof(BasePacket);
                 validEvent = validEvent || typeof(IComponent).IsAssignableFrom(type) && type != typeof(IComponent);
                 if (validEvent && type.IsSerializable && !type.IsInterface)
                 {

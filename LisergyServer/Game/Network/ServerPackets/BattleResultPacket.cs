@@ -10,7 +10,7 @@ namespace Game.Network.ServerPackets
     /// Only shall be sent the header directly, this is to be sent from battle server to map server.
     /// </summary>
     [Serializable]
-    public class BattleResultPacket : ServerPacket
+    public class BattleResultPacket : BasePacket, IServerPacket
     {
         public BattleHeaderData Header;
 

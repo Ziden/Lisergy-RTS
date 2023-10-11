@@ -23,20 +23,19 @@ namespace ServerTests
         public List<IBaseEvent> TriggeredEvents = new List<IBaseEvent>();
 
         public bool IsOnline { get; set; }
-        private GameNetwork _network;
+        private GameServerNetwork _network;
 
         public TestServerPlayer(LisergyGame game) : base(game)
         {
             IsOnline = true;
-            _network = game.Network as GameNetwork;
+            _network = game.Network as GameServerNetwork;
         }
 
         public void SendTestPacket<EventType>(EventType ev) where EventType : BasePacket
         {
-            var copy = Serialization.FromPacketRaw(ev);
-            var reSerialized = Serialization.ToPacketRaw(copy);
-            OnReceivedPacket?.Invoke(reSerialized);
-            ReceivedPackets.Add(reSerialized);
+            var reSerialized = Serialization.ToPacketRaw(Serialization.FromPacketRaw(ev));
+            OnReceivedPacket?.Invoke(ev);
+            ReceivedPackets.Add(ev);
         }
 
         public void ListenTo<EventType>() where EventType : IBaseEvent
@@ -47,7 +46,7 @@ namespace ServerTests
             });
         }
 
-        public void SendMoveRequest(PartyEntity p, TileEntity t, MovementIntent intent)
+        public void SendMoveRequest(PartyEntity p, TileEntity t, CourseIntent intent)
         {
             var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new Position(pa.X, pa.Y)).ToList();
             var ev = new MoveRequestPacket() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };

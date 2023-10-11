@@ -1,7 +1,5 @@
 ﻿using Game.ECS;
 using Game.Events.GameEvents;
-using Game.Systems.Map;
-using Game.Systems.Party;
 
 namespace Game.Systems.Dungeon
 {

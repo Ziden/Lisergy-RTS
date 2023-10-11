@@ -9,7 +9,7 @@ namespace Game.Network.ServerPackets
     /// Full battle log so it can be replayed.
     /// </summary>
     [Serializable]
-    public class BattleLogPacket : ServerPacket
+    public class BattleLogPacket : BasePacket, IServerPacket
     {
         public byte [] BattleStartHeaderData;
 

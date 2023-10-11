@@ -2,8 +2,8 @@
 using Assets.Code.Entity;
 using Assets.Code.Views;
 using Game;
-using Game.Dungeon;
 using Game.ECS;
+using Game.Systems.Dungeon;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +22,7 @@ namespace Assets.Code.World
 
         public override void OnUpdate(DungeonEntity serverEntity, List<IComponent> syncedComponents)
         {
-            Entity.Tile = GameView.World.GetTile(serverEntity);
+            //Entity.Tile = GameView.World.GetTile(serverEntity);
             if (NeedsInstantiate)
             {
                 Instantiate();
@@ -31,6 +31,7 @@ namespace Assets.Code.World
 
         protected override void InstantiationImplementation()
         {
+            /*
             var dgs = StrategyGame.Specs.Dungeons;
             var id = Entity.SpecID;
             var spec = Entity.GetSpec();
@@ -44,6 +45,7 @@ namespace Assets.Code.World
                 });
             });
             Debug.Log($"Instantiated dungeon at {Entity.Tile}");
+            */
         }
     }
 }

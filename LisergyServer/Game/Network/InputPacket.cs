@@ -7,10 +7,8 @@ namespace Game.Network
     /// <summary>
     /// Networking events sent from client
     /// </summary>
-    [Serializable]
-    public abstract class InputPacket : BasePacket
+    public interface IClientPacket
     {
-        [NonSerialized]
-        public PlayerEntity Sender;
+        
     }
 }

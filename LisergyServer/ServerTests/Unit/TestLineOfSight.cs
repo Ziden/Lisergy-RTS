@@ -177,7 +177,7 @@ namespace Tests
             Game.Specs.InitialUnitSpecId = TestUnitData.MAGE;
             Game.CreatePlayer(0, 0); // placing new user in the corner
             var player = Game.GetTestPlayer();
-            player.ListenTo<TileVisibilityChangedEvent>();
+            player.ListenTo<TileVisibilityChangedForPlayerEvent>();
             player.ListenTo<EntityTileVisibilityUpdateEvent>();
             player.ReceivedPackets.Clear();
             var party = player.GetParty(0);
@@ -196,7 +196,7 @@ namespace Tests
 
             // Only send update to visible ones
             Assert.AreEqual(party.GetLineOfSight() + 1, player.ReceivedPacketsOfType<TilePacket>().Count);
-            Assert.AreEqual(party.GetLineOfSight() + 1, player.TriggeredEventsOfType<TileVisibilityChangedEvent>().Count);
+            Assert.AreEqual(party.GetLineOfSight() + 1, player.TriggeredEventsOfType<TileVisibilityChangedForPlayerEvent>().Count);
             Assert.AreEqual(party.GetLineOfSight() + 1, player.TriggeredEventsOfType<EntityTileVisibilityUpdateEvent>().Count);
         }
 
@@ -206,7 +206,7 @@ namespace Tests
             Game.Specs.InitialUnitSpecId = TestUnitData.KNIGHT;
             Game.CreatePlayer(0, 0); // placing new user in the corner
             var player = Game.GetTestPlayer();
-            player.ListenTo<TileVisibilityChangedEvent>();
+            player.ListenTo<TileVisibilityChangedForPlayerEvent>();
             player.ReceivedPackets.Clear();
             var party = player.GetParty(0); // 0-1
             var building = player.Data.Buildings.First(); // 0-0
@@ -227,7 +227,7 @@ namespace Tests
 
             var tileTopOfBuilding = building.Tile.GetNeighbor(Direction.NORTH);
 
-            var visChanges = player.TriggeredEventsOfType<TileVisibilityChangedEvent>();
+            var visChanges = player.TriggeredEventsOfType<TileVisibilityChangedForPlayerEvent>();
 
             Assert.IsFalse(visChanges.Any(ev => !ev.Visible && ev.Tile == tileTopOfBuilding));
             Assert.IsTrue(!tileTopOfBuilding.EntitiesViewing.Contains(party), "Party is not seeing the tile");

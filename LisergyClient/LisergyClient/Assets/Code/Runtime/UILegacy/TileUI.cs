@@ -1,7 +1,7 @@
 ﻿
 using Assets.Code.Assets.Code.Assets;
 using Game;
-using Game.Party;
+using Game.Systems.Party;
 using Game.Tile;
 using GameAssets;
 using System.Collections.Generic;

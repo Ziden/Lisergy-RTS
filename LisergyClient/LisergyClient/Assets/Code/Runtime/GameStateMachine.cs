@@ -89,7 +89,7 @@ namespace Assets.Code.Assets.Code
         {
             Debug.Log("Battle start event received on state machine");
             var pl = MainBehaviour.LocalPlayer;
-            if (pl.ViewBattles && attacker.OwnerID == pl.UserID)
+            if (pl.ViewBattles && attacker.OwnerID == pl.EntityId)
             {
                 _stateMachine.Fire(Trigger.LocalBattleStart);
                 var transition = _screens.Open<TransitionScreen>();

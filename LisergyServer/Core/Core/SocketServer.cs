@@ -52,14 +52,18 @@ namespace BaseServer.Core
             ReadSocketMessages();
         }
 
-        public void Stop() => _socketServer.Stop();
+        public void Stop()
+        {
+            Ticker.Stop();
+            _socketServer.Stop();
+        }
         public abstract void RegisterConsoleCommands(ConsoleCommandExecutor executor);
-        protected abstract bool IsAuthenticated(InputPacket ev, int connectionID);
+        protected abstract bool IsAuthenticated(BasePacket ev, int connectionID);
         public abstract void Tick();
         public abstract void Disconnect(int connectionID);
         public abstract void Connect(int connectionID);
         public abstract ServerType GetServerType();
-        public abstract void HandleInputPacket(int connectionId, InputPacket input);
+        public abstract void HandleInputPacket(int connectionId, BasePacket input);
         private void ReadSocketMessages()
         {
             while (_socketServer.GetNextMessage(out _pooledMessage))
@@ -72,7 +76,7 @@ namespace BaseServer.Core
                         break;
                     case EventType.Data:
                         byte[] message = _pooledMessage.data;
-                        var ev = Serialization.ToPacketRaw<InputPacket>(message);
+                        var ev = Serialization.ToPacketRaw<BasePacket>(message);
                         ev.ConnectionID = _pooledMessage.connectionId;
                         Log.Debug($"Received {message.Length} bytes for {ev} from connection {_pooledMessage.connectionId}");
                         if (IsAuthenticated(ev, _pooledMessage.connectionId))

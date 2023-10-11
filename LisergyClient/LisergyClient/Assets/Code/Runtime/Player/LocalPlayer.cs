@@ -6,7 +6,8 @@ using Game;
 using Game.DataTypes;
 using Game.ECS;
 using Game.Network;
-using Game.Player;
+using Game.Systems.Party;
+using Game.Systems.Player;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,30 +15,31 @@ namespace Assets.Code
 {
     public class LocalPlayer : PlayerEntity
     {
-        public Dictionary<GameId, WorldEntity> KnownEntities = new Dictionary<GameId, WorldEntity>();
+        public Dictionary<GameId, BaseEntity> KnownEntities = new Dictionary<GameId, BaseEntity>();
+
 
         public bool ViewBattles = true;
 
-        public LocalPlayer(GameId id) : base()
+        public LocalPlayer(GameId id) : base(null)
         {
-            UserID = id;
+            
         }
 
         private void OnPartyUpdated(PartyView view)
         {
             if (view.Entity.IsMine())
             {
-                Parties[view.Entity.PartyIndex] = view.Entity;
+                //GetParty(view.Entity.PartyIndex) = view.Entity;
             }
         }
 
         private void OnBuildingViewUpdated(PlayerBuildingView view)
         {
-            if (view.Entity.IsMine() && !Buildings.Any(b => b.Id == view.Entity.Id))
+            if (view.Entity.IsMine() && !Data.Buildings.Any(b => b.EntityId == view.Entity.EntityId))
             {
-                Buildings.Add(view.Entity);
-                if (view.Entity.SpecID == StrategyGame.Specs.InitialBuilding)
-                    CameraBehaviour.FocusOnTile(view.Entity.Tile);
+                Data.Buildings.Add(view.Entity);
+                //if (view.Entity.SpecID == Game.Specs.InitialBuilding)
+                //    CameraBehaviour.FocusOnTile(view.Entity.Tile);
             }
         }
 
@@ -47,23 +49,16 @@ namespace Assets.Code
             ClientEvents.OnBuildingViewUpdated += OnBuildingViewUpdated;
         }
      
-        public WorldEntity GetKnownEntity(GameId id)
+        public BaseEntity GetKnownEntity(GameId id)
         {
-            WorldEntity e;
+            BaseEntity e;
             KnownEntities.TryGetValue(id, out e);
             return e;
         }
 
-        public void KnowAbout(WorldEntity e)
+        public void KnowAbout(BaseEntity e)
         {
-            KnownEntities[e.Id] = e;
+            KnownEntities[e.EntityId] = e;
         }
-
-        public override bool Online()
-        {
-            return true;
-        }
-
-        public override void Send<T>(T ev) { }
     }
 }

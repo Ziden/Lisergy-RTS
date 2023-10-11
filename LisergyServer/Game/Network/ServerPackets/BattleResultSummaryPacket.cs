@@ -9,7 +9,7 @@ namespace Game.Events
     /// Summary of the battle result
     /// </summary>
     [Serializable]
-    public class BattleResultSummaryPacket : ServerPacket
+    public class BattleResultSummaryPacket : BasePacket, IServerPacket
     {
         public BattleHeaderData BattleHeader;
 

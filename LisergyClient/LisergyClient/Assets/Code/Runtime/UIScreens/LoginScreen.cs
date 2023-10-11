@@ -51,7 +51,6 @@ namespace Assets.Code
             MainBehaviour.Networking.Send(ev);
         }
 
-        [EventMethod]
         public void OnPlayerAuth(AuthResultPacket ev)
         {
             if (ev.Success)

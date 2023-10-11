@@ -70,7 +70,7 @@ namespace Assets.Code.Assets.Code.Assets
         {
             if(spec.Type == ArtType.SPRITE_SHEET)
             {
-                await _spriteSheets.LoadAsync(spec.Address, sprites => onComplete(sprites[spec.Index]));
+               // await _spriteSheets.LoadAsync(spec.Address, sprites => onComplete(sprites[spec.Index]));
             } else
             {
                 await _sprites.LoadAsync(spec.Address, sprite => onComplete(sprite));

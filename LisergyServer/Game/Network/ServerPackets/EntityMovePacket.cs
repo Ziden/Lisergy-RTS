@@ -6,9 +6,9 @@ using System;
 namespace Game.Network.ServerPackets
 {
     [Serializable]
-    public class EntityMovePacket : ServerPacket
+    public class EntityMovePacket : BasePacket, IServerPacket
     {
-        public EntityMovePacket(BaseEntity entity, EntityMovementComponent component, TileEntity tile)
+        public EntityMovePacket(BaseEntity entity, CourseComponent component, TileEntity tile)
         {
             OwnerID = entity.OwnerID;
             EntityID = entity.EntityId;

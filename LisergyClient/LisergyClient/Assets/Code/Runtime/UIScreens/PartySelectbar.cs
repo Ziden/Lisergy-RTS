@@ -6,7 +6,8 @@ using Assets.Code.UI;
 using Assets.Code.World;
 using Game;
 using Game.Events.Bus;
-using Game.Party;
+using Game.Systems.Battler;
+using Game.Systems.Party;
 using Game.Tile;
 using GameAssets;
 using UnityEngine;
@@ -89,29 +90,35 @@ namespace Assets.Code
 
         private void OnPartyUpdated(PartyView view)
         {
+            /*
             if (view.Entity.IsMine() && view.IsPartyDeployed)
             {
                 UpdatePartyIcon(view);
                 if (ClientState.SelectedParty == null) SelectParty(view.Entity);
             }
+            */
         }
 
         public void UpdatePartyIcon(PartyView view)
         {
             var party = view.Entity;
-            var leader = party.BattleGroupLogic.Leader;
+            var leader = party.Get<BattleGroupComponent>().Units.Leader;
+            /*
             ServiceContainer.Resolve<IAssetService>().GetSprite(leader.GetSpec().IconArt, sprite =>
             {
                 _partyButtons[party.PartyIndex].style.backgroundImage = new StyleBackground(sprite);
             });
+            */
         }
 
         private void PartyButtonClick(int partyIndex)
         {
+            /*
             if (partyIndex >= MainBehaviour.LocalPlayer.Parties.Length) return;
             var party = MainBehaviour.LocalPlayer.Parties[partyIndex];
             if (party == null) return;
             SelectParty(party);
+            */
         }
 
         private void SelectParty(PartyEntity party)
@@ -120,13 +127,12 @@ namespace Assets.Code
             _cursor.style.display = DisplayStyle.Flex;
             _cursor.style.left = button.worldBound.xMin - _cursor.parent.worldBound.xMin - 9;
 
-            if (party.IsInMap)
+            if (party.Tile != null)
             {
                 if (ClientState.SelectedParty == party)
                     CameraBehaviour.FocusOnTile(party.Tile);
 
                 PlaceCursorOnParty(party);
-
             }
             else
             {

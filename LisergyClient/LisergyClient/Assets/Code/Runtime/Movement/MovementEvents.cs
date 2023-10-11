@@ -1,10 +1,9 @@
 ﻿using Game;
 using Game.ECS;
 using Game.Events.GameEvents;
-using Game.Movement;
-using Assets.Code.Views;
 using Assets.Code.Assets.Code.Runtime.Movement;
 using UnityEngine;
+using Game.Systems.Movement;
 
 namespace Assets.Code.Entity
 {
@@ -17,14 +16,15 @@ namespace Assets.Code.Entity
         /// </summary>
         public static void HookMovementEvents(IEntity entity)
         {
-            if (entity.Components.Has<EntityMovementComponent>())
+            if (entity.Components.Has<CourseComponent>())
             {
-                entity.Components.RegisterExternalComponentEvents<EntityMovementComponent, EntityMoveInEvent>(MovementCallback);
+                //entity.Components.RegisterExternalComponentEvents<EntityMovementComponent, EntityMoveInEvent>(MovementCallback);
             }
         }
 
-        private static void MovementCallback(EntityMovementComponent c, EntityMoveInEvent ev)
+        private static void MovementCallback(CourseComponent c, EntityMoveInEvent ev)
         {
+            /*
             var view = GameView.GetView(ev.Entity);
             if (view == null || !view.NeedsInstantiate)
             {
@@ -35,6 +35,7 @@ namespace Assets.Code.Entity
             {
                 view.GameObject.transform.position = new Vector3(ev.ToTile.X, view.GameObject.transform.position.y, ev.ToTile.Y);
             }
+            */
         }
     }
 }

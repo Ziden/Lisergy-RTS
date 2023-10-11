@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace GameData
 {
-    // TODO: Make all immutable
     [Serializable]
     public class GameSpec
     {

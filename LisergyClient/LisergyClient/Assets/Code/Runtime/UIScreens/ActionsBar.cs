@@ -2,9 +2,9 @@ using Assets.Code.Assets.Code.Runtime.UIScreens.Layout;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.Views;
 using Game;
-using Game.Dungeon;
 using Game.Events.Bus;
-using Game.Party;
+using Game.Systems.Dungeon;
+using Game.Systems.Party;
 using Game.Tile;
 using GameAssets;
 using System;
@@ -63,7 +63,7 @@ namespace Assets.Code.UI
 
         private List<EntityAction> EvaluateActions(PartyEntity party, TileEntity tile)
         {
-            if(!party.IsInMap)
+            if(party.Tile == null)
             {
                 return NoPartyActions;
             }

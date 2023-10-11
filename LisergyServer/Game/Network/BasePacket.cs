@@ -9,5 +9,8 @@ namespace Game.Network
     {
         [NonSerialized]
         public int ConnectionID;
+
+        [NonSerialized]
+        public PlayerEntity Sender;
     }
 }

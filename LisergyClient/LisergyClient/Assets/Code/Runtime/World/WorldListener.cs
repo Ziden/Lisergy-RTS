@@ -1,28 +1,19 @@
-﻿using Assets.Code.Views;
-using Game;
-using Game.Events;
-using Game.Events.Bus;
+﻿using Game.Events.Bus;
 using Game.Events.ServerEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Game.Network;
 
 namespace Assets.Code.World
 {
     public class WorldListener : IEventListener
     {
-
-        public WorldListener(EventBus<ServerPacket> networkEvents)
+        public WorldListener(EventBus<BasePacket> networkEvents)
         {
-            networkEvents.Register<TileUpdatePacket>(this, TileUpdate);
+            networkEvents.Register<TilePacket>(this, TileUpdate);
         }
 
-        [EventMethod]
-        public void TileUpdate(TileUpdatePacket ev)
+        public void TileUpdate(TilePacket ev)
         {
-            var tile = GameView.World.GetTile(ev.Data.X, ev.Data.Y);
+            var tile = GameView.World.GetTile(ev.Data.Position);
             GameView.GetOrCreateTileView(tile).UpdateFromData(ev.Data);
         }
     }

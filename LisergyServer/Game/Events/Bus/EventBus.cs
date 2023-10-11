@@ -15,8 +15,9 @@ namespace Game.Events.Bus
     {
         public event Action<EventType> OnEventFired;
 
-        internal Dictionary<Type, List<RegisteredListener>> _registeredListeners;
+        internal Dictionary<Type, List<RegisteredListener>> _registeredListeners = new Dictionary<Type, List<RegisteredListener>>();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual void Call(EventType ev)
         {
             OnEventFired?.Invoke(ev);
@@ -37,16 +38,7 @@ namespace Game.Events.Bus
         
         }
 
-        public EventBus()
-        {
-            Clear();
-        }
-
-        public void Clear()
-        {
-            _registeredListeners = new Dictionary<Type, List<RegisteredListener>>();
-        }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual void Register<EvType>(IEventListener listener, Action<EvType> callback)
         {
             var eventType = typeof(EvType);

@@ -6,6 +6,7 @@ using Game.Tile;
 using Game.World;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Game.Systems.FogOfWar
 {
@@ -21,6 +22,7 @@ namespace Game.Systems.FogOfWar
         /// Calculates an entity line of sight based on the entity group component.
         /// The entity line of sight is the max group line of sight
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateGroupLineOfSight()
         {
             var group = Entity.Get<BattleGroupComponent>();
@@ -39,6 +41,7 @@ namespace Game.Systems.FogOfWar
         /// Updates the tile visibility of nearby tiles according to an entity movement.
         /// Will unsee some tiles and see new tiles depending the from/to the entity moved
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateVisionRange(IEntity explorer, TileEntity from, TileEntity to)
         {
             var los = explorer.Components.Get<EntityVisionComponent>().LineOfSight;

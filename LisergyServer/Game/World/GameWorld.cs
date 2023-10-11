@@ -21,8 +21,6 @@ namespace Game.World
         public const int TILES_IN_CHUNK = CHUNK_SIZE * CHUNK_SIZE;
         public const int PLAYERS_CHUNKS = 2;
         public virtual IGame Game { get; set; }
-
-        // TODO: Move out of world
         public WorldPlayers _worldPlayers { get; set; }
         public ChunkMap Map { get; set; }
         public ushort Seed { get; set; }
@@ -81,7 +79,7 @@ namespace Game.World
 
         public Chunk GetTileChunk(in int tileX, in int tileY) => Map.GetTileChunk(tileX, tileY);
         public TileEntity GetTile(in Position pos) => Map.GetTile(pos.X, pos.Y);
-        public TileEntity GetTile(in int tileX, in int tileY) => Map.GetTile(tileX, tileY);
+        public virtual TileEntity GetTile(in int tileX, in int tileY) => Map.GetTile(tileX, tileY);
         public void Dispose() => FreeMemory();
     }
 }

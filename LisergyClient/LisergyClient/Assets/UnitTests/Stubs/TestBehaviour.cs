@@ -8,7 +8,7 @@ public class TestBehaviour : MonoBehaviour
         while(StubServer.OutputStream.TryDequeue(out var packet))
         {
             Debug.Log("Running packet in client");
-            MainBehaviour.ServerPackets.RunCallbacks(MainBehaviour.LocalPlayer, packet.Data);
+            //MainBehaviour.ServerPackets.Call(MainBehaviour.LocalPlayer, packet.Data);
         }
     }
 }

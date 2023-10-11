@@ -2,8 +2,9 @@
 using Assets.Code.UI;
 using Assets.Code.World;
 using Game.Battle;
+using Game.Battle.Data;
 using Game.DataTypes;
-using Game.Party;
+using Game.Systems.Party;
 using Game.Tile;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Assets.Code
         public static event Action<LocalPlayer> OnPlayerLogin;
         public static event Action<PartyEntity> OnCourseCancelled;
         public static event Action<GameId, BattleTeam, BattleTeam> OnBattleStart;
-        public static event Action<CompleteBattleHeader> OnBattleFinish;
+        public static event Action<BattleHeaderData> OnBattleFinish;
         public static event Action<PartyEntity, TileEntity, TileEntity> OnPartyFinishedMove;
         public static event Action<PartyEntity, List<TileEntity>> OnStartMovementRequest;
         public static event Action<PartyEntity, TileEntity, EntityAction> OnActionSelected;
@@ -49,7 +50,7 @@ namespace Assets.Code
             OnBattleStart?.Invoke(battleId, attacker, defender);
         }
 
-        public static void ReceivedServerBattleFinish(CompleteBattleHeader header)
+        public static void ReceivedServerBattleFinish(BattleHeaderData header)
         {
             OnBattleFinish?.Invoke(header);
         }

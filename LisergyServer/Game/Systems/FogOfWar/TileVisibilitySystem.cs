@@ -5,6 +5,7 @@ using Game.Network;
 using Game.Systems.Tile;
 using Game.Tile;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Game.Systems.FogOfWar
 {
@@ -17,44 +18,41 @@ namespace Game.Systems.FogOfWar
             EntityEvents.On<EntityTileVisibilityUpdateEvent>(OnTileExplorationChanged);
         }
 
-        // Move player stuff to player system
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void OnTileExplorationChanged(IEntity tile, EntityTileVisibilityUpdateEvent ev)
         {
-            var tileObj = (TileEntity)tile; // TODO: Remove cast
+            var tileObj = ev.Tile;
             var component = tile.Components.GetReference<TileVisibility>();
             var habitants = tile.Components.GetReference<TileHabitants>();
+            var owner = Players.GetPlayer(ev.Explorer.OwnerID);
             if (ev.Explored)
             {
                 component.EntitiesViewing.Add(ev.Explorer);
-                var owner = Players.GetPlayer(ev.Explorer.OwnerID);
+               
                 if (component.PlayersViewing.Add(owner))
                 {
-                    owner.Data.OnceExplored.Add(tileObj);
-                    owner.Data.VisibleTiles.Add(tileObj);
-                    var e = EventPool<TileVisibilityChangedEvent>.Get();
+                    var e = EventPool<TileVisibilityChangedForPlayerEvent>.Get();
                     e.Explorer = ev.Explorer;
                     e.Tile = ev.Tile;
                     e.Visible = ev.Explored;
-                    ev.Tile.Components.CallEvent(e);
-                    EventPool<TileVisibilityChangedEvent>.Return(e);
+                    owner.Components.CallEvent(e);
+                    EventPool<TileVisibilityChangedForPlayerEvent>.Return(e);
                     tileObj.SetFlag(DeltaFlag.SELF_REVEALED);
                 }
             }
             else
             {
-                var owner = Players.GetPlayer(ev.Explorer.OwnerID);
                 component.EntitiesViewing.Remove(ev.Explorer);
                 if (!component.EntitiesViewing.Any(e => e.OwnerID == ev.Explorer.OwnerID))
                 {
-                    owner.Data.VisibleTiles.Remove(tileObj);
                     if (component.PlayersViewing.Remove(owner))
                     {
-                        var e = EventPool<TileVisibilityChangedEvent>.Get();
+                        var e = EventPool<TileVisibilityChangedForPlayerEvent>.Get();
                         e.Explorer = ev.Explorer;
                         e.Tile = ev.Tile;
                         e.Visible = ev.Explored;
-                        ev.Tile.Components.CallEvent(e);
-                        EventPool<TileVisibilityChangedEvent>.Return(e);
+                        owner.Components.CallEvent(e);
+                        EventPool<TileVisibilityChangedForPlayerEvent>.Return(e);
                         tileObj.SetFlag(DeltaFlag.SELF_CONCEALED);
                     }
                 }

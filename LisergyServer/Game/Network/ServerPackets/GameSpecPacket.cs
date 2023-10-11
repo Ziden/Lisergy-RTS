@@ -5,7 +5,7 @@ using System;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class GameSpecPacket : ServerPacket
+    public class GameSpecPacket : BasePacket, IServerPacket
     {
         public GameSpec Spec;
         public int WorldX;
