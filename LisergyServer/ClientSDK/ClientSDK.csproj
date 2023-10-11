@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Game\Game.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Systems\" />
+  </ItemGroup>
+
 </Project>

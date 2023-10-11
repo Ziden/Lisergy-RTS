@@ -1,10 +1,8 @@
 ﻿using Game;
-using Game.DataTypes;
 using Game.Events.ServerEvents;
 
 namespace ClientSDK.Services
 {
-
     public interface IGameService : IClientService { }
 
     public class GameService : IPlayerService

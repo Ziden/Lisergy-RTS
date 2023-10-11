@@ -6,7 +6,44 @@ using System.Collections.Generic;
 
 namespace Game.World
 {
-    public unsafe class ChunkMap
+    /// <summary>
+    /// Represents a map that is divided by chunks.
+    /// </summary>
+    public interface IChunkMap
+    {
+        /// <summary>
+        /// Gets the world this chunk map belongs to
+        /// </summary>
+        IGameWorld World { get; }
+
+        /// <summary>
+        /// Checks if a given tile coordinates is valid 
+        /// </summary>
+        bool ValidCoords(in int tileX, in int tileY);
+
+        /// <summary>
+        /// Gets a given chunk by its X Y coords
+        /// </summary>
+        ref Chunk GetChunk(in int chunkX, in int chunkY);
+
+        /// <summary>
+        /// Finds a path between source and destination.
+        /// Can return an empty list if no path is found.
+        /// </summary>
+        List<PathFinderNode> FindPath(TileEntity from, TileEntity to);
+
+        /// <summary>
+        /// Creates the chunk map instance and allocate needed memory
+        /// </summary>
+        void CreateMap(in ushort sizeX, in ushort sizeY);
+
+        /// <summary>
+        /// Generates an individual tile
+        /// </summary>
+        TileEntity GenerateTile(ref Chunk c, in int tileX, in int tileY);
+    }
+
+    public unsafe class ChunkMap : IChunkMap
     {
         private Chunk[,] _chunkMap;
         private CachedChunkMap _cache;
@@ -18,7 +55,7 @@ namespace Game.World
         public int QtdTilesX { get => QtdChunksX * GameWorld.CHUNK_SIZE; }
         public int QtdTilesY { get => QtdChunksY * GameWorld.CHUNK_SIZE; }
 
-        public GameWorld World { get; private set; }
+        public IGameWorld World { get; private set; }
 
         public ChunkMap(GameWorld world, int tilesAmtX, int tilesAmtY)
         {
@@ -30,19 +67,14 @@ namespace Game.World
             Log.Debug($"Initialized chunk map {sizeX}x{sizeY}");
         }
 
-        public bool ValidCoords(int tileX, int tileY)
+        public bool ValidCoords(in int tileX, in int tileY)
         {
             return tileX >= 0 && tileX < QtdTilesX && tileY >= 0 && tileY < QtdTilesY;
         }
 
-        public ref Chunk GetChunk(int chunkX, int chunkY)
+        public ref Chunk GetChunk(in int chunkX, in int chunkY)
         {
             return ref _chunkMap[chunkX, chunkY];
-        }
-
-        public ref Chunk GetChunk(in Position pos)
-        {
-            return ref _chunkMap[pos.X, pos.Y];
         }
 
         public List<PathFinderNode> FindPath(TileEntity from, TileEntity to)
@@ -62,10 +94,6 @@ namespace Game.World
             return null;
         }
 
-        public void Add(ref Chunk c)
-        {
-            _chunkMap[c.X, c.Y] = c;
-        }
 
         public void SetFlag(int chunkX, int chunkY, ChunkFlag flag)
         {
@@ -102,7 +130,7 @@ namespace Game.World
             return GetTileChunk(tileX, tileY).GetTile(internalTileX, internalTileY);
         }
 
-        public virtual void AllocateMemory(in ushort sizeX, in ushort sizeY)
+        public virtual void CreateMap(in ushort sizeX, in ushort sizeY)
         {
             var maxChunkX = sizeX >> GameWorld.CHUNK_SIZE_BITSHIFT;
             var maxChunkY = sizeY >> GameWorld.CHUNK_SIZE_BITSHIFT;
@@ -121,17 +149,9 @@ namespace Game.World
                             tiles[x, y] = GenerateTile(ref chunk, tileX, tileY);
                         }
                     }
-                    Add(ref chunk);
+                    _chunkMap[chunk.X, chunk.Y] = chunk;
                 }
             }
-        }
-
-        public virtual void ClearTile(TileEntity t)
-        {
-            t.Components.GetReference<TileVisibility>().EntitiesViewing.Clear();
-            t.Components.GetReference<TileVisibility>().PlayersViewing.Clear();
-            t.Components.GetReference<TileHabitants>().EntitiesIn.Clear();
-            t.Components.GetReference<TileHabitants>().Building = null;
         }
 
         public virtual TileEntity GenerateTile(ref Chunk c, in int tileX, in int tileY)

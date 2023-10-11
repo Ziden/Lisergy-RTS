@@ -41,11 +41,11 @@ namespace Game.World
             foreach (var c in Map.AllChunks()) c.FreeMemoryForReuse();
         }
 
-        public virtual void AllocateMemory()
+        public virtual void CreateMap()
         {
             _id = GameId.Generate();
             Map = new ChunkMap(this, SizeX, SizeY);
-            Map.AllocateMemory(SizeX, SizeY);
+            Map.CreateMap(SizeX, SizeY);
         }
 
         public void Populate(int seed = 0, params ChunkPopulator[] populators)

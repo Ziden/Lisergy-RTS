@@ -46,7 +46,7 @@ namespace ServerTests
             TestWorld = new GameWorld(2, 16, 16);
             SetupGame(TestWorld, new GameServerNetwork(this));
             Entities.DeltaCompression.ClearDeltas();
-            TestWorld.AllocateMemory();
+            TestWorld.CreateMap();
             return TestWorld;
         }
 
