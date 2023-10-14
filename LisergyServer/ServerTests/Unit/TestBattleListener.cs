@@ -31,7 +31,7 @@ namespace Tests
             _party = _player.GetParty(0);
             _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
-            _game.Systems.Map.GetLogic(_dungeon).SetPosition(_game.World.GetTile(8, 8));
+            _game.Systems.Map.GetLogic(_dungeon).SetPosition(_game.World.Map.GetTile(8, 8));
         }
 
         private TurnBattle SetupBattle()

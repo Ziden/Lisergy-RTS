@@ -91,6 +91,7 @@ namespace Assets.Code
             ResultHeader = header;
         }
 
+
         private async Task PrepareBattleSceneAsync()
         {
             if (!SceneManager.GetAllScenes().Any(s => s.name == "Battle"))

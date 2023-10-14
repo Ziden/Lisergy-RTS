@@ -1,6 +1,7 @@
 ﻿using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Entity;
 using Assets.Code.Views;
+using ClientSDK.Data;
 using Game;
 using Game.ECS;
 using Game.Systems.Dungeon;
@@ -11,25 +12,7 @@ namespace Assets.Code.World
 {
     public class DungeonView : EntityView<DungeonEntity>
     {
-        public override DungeonEntity Entity { get; }
-        private IAssetService _assets;
-
-        public DungeonView(DungeonEntity e)
-        {
-            Entity = e;
-            _assets = ServiceContainer.Resolve<IAssetService>();
-        }
-
-        public override void OnUpdate(DungeonEntity serverEntity, List<IComponent> syncedComponents)
-        {
-            //Entity.Tile = GameView.World.GetTile(serverEntity);
-            if (NeedsInstantiate)
-            {
-                Instantiate();
-            }
-        }
-
-        protected override void InstantiationImplementation()
+        protected void InstantiationImplementation()
         {
             /*
             var dgs = StrategyGame.Specs.Dungeons;

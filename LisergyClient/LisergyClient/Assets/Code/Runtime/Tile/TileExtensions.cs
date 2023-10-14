@@ -12,7 +12,7 @@ namespace Assets.Code.Assets.Code.Tile
     {
         public static bool IsVisible(this TileEntity tile)
         {
-            return tile.EntitiesViewing.Any(e => e.EntityId == MainBehaviour.LocalPlayer.EntityId);
+            return tile.EntitiesViewing.Any(e => e.EntityId == Main.LocalPlayer.EntityId);
         }
     }
 }

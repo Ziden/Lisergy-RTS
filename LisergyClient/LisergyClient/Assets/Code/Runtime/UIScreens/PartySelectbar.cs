@@ -146,7 +146,7 @@ namespace Assets.Code
             if (_partyCursor == null || party == null) return;
 
             _partyCursor.SetActive(true);
-            var view = GameView.GetView(party);
+            var view = GameClient.Modules.Views.GetView<PartyView>(party);
             if (view == null) return;
             _partyCursor.transform.SetParent(view.GameObject.transform);
             _partyCursor.transform.transform.localPosition = Vector3.zero;

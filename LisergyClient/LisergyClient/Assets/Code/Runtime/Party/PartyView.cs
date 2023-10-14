@@ -3,41 +3,23 @@ using Game.ECS;
 using System.Collections.Generic;
 using Assets.Code.Code.Utils;
 using UnityEngine;
-using Assets.Code.Assets.Code.Runtime.Movement;
-using Game;
 using Game.Systems.Party;
 using Game.Systems.Battler;
+using Assets.Code.Assets.Code.Assets;
 
 namespace Assets.Code.World
 {
-    public partial class PartyView : EntityView<PartyEntity>
+    public partial class PartyView : UnityEntityView<PartyEntity>
     {
         private static GameObject _container;
 
-        private Dictionary<Unit, UnitView> _unitObjects = new Dictionary<Unit, UnitView>();
-        public override PartyEntity Entity { get; }
+        private IAssetService _assets;
 
-        public bool IsPartyDeployed => Entity.PartyIndex >= 0;
+        private Dictionary<Unit, UnitView> _unitObjects = new Dictionary<Unit, UnitView>();
 
         public IReadOnlyDictionary<Unit, UnitView> UnitObjects => _unitObjects;
 
-        public PartyView(PartyEntity party)
-        {
-            Entity = party;
-            //_interpolation = new MovementInterpolator(Entity);
-        }
-
-
-        public override void OnUpdate(PartyEntity partyFromNetwork, List<IComponent> syncedComponents)
-        {
-            //Entity.Tile = GameView.World.GetTile(partyFromNetwork);
-          
-            if (!NeedsInstantiate) return;
-            //RegisterEvents();
-            Instantiate();
-            CreateUnitObjects();
-        }
-
+        /*
         protected override void InstantiationImplementation()
         {
             var o = new GameObject($"{Entity.OwnerID}-{Entity.EntityId}");
@@ -47,17 +29,11 @@ namespace Assets.Code.World
             o.SetActive(true);
             Log.Debug($"Created new party instance {this}");
         }
+        */
 
-        private static GameObject Container
-        {
-            get
-            {
-                if (_container == null)
-                    _container = new GameObject("Parties");
-                return _container;
-            }
-        }
+        private static GameObject Container => _container = _container ?? new GameObject("Parties");
 
+        /*
         public void CreateUnitObjects() 
         {
             foreach (var unit in Entity.Get<BattleGroupComponent>().Units)
@@ -71,5 +47,6 @@ namespace Assets.Code.World
                 });
             }
         }    
+        */
     }
 }

@@ -4,6 +4,9 @@ using System;
 
 namespace Game.Systems.Movement
 {
+    /// <summary>
+    /// Defines that this entity is able to set courses to move
+    /// </summary>
     public struct CourseComponent : IComponent
     {
         public GameId CourseId;

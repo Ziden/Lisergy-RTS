@@ -14,7 +14,7 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens
     {
         public override void OnOpen()
         {
-            MainBehaviour.RunCoroutine(NotificationCoroutine());
+            //MainBehaviour.RunCoroutine(NotificationCoroutine());
         }
 
         private IEnumerator NotificationCoroutine()

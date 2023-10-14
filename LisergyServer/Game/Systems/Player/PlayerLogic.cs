@@ -15,6 +15,9 @@ namespace Game.Systems.Player
     {
         private PlayerDataComponent Data => Entity.Components.GetReference<PlayerDataComponent>();
 
+        /// <summary>
+        /// Recruits a new unit for the player
+        /// </summary>
         public Unit RecruitUnit(ushort unitSpecId)
         {
             var unit = new Unit(Game.Specs.Units[unitSpecId]);
@@ -24,6 +27,9 @@ namespace Game.Systems.Player
             return unit;
         }
 
+        /// <summary>
+        /// Finds the party of a given unit
+        /// </summary>
         public PartyEntity FindParty(Unit u)
         {
             foreach (PartyEntity p in Data.Parties)
@@ -33,9 +39,13 @@ namespace Game.Systems.Player
             return null;
         }
 
+        /// <summary>
+        /// Adds a new player to the given tile with the initial things a new player should have
+        /// </summary>
         public void PlaceNewPlayer(TileEntity t)
         {
-            Game.GameWorld.Players.Add(Entity as PlayerEntity);
+            var p = Entity as PlayerEntity;
+            Game.Players.Add(p);
             var castleID = Game.Specs.InitialBuilding.Id;
             Build(castleID, t);
             ushort initialUnit = Game.Specs.InitialUnit.UnitSpecID;
@@ -47,11 +57,17 @@ namespace Game.Systems.Player
             return;
         }
 
-        public void RecordHeader(BattleHeaderData header)
+        /// <summary>
+        /// Record a battle header of a battle that happened for this player
+        /// </summary>
+        public void RecordBattleHeader(BattleHeaderData header)
         {
             Data.BattleHeaders[header.BattleID] = header;
         }
 
+        /// <summary>
+        /// Moves a unit to a given party
+        /// </summary>
         public void PlaceUnitInParty(Unit u, PartyEntity newParty)
         {
             var existingParty = FindParty(u);
@@ -63,6 +79,9 @@ namespace Game.Systems.Player
             Log.Debug($"{Entity} moved unit {u} to party {newParty}");
         }
 
+        /// <summary>
+        /// Builds a new building on the given tile
+        /// </summary>
         public void Build(ushort buildingSpecId, TileEntity t)
         {
             var building = Game.Entities.CreateEntity<PlayerBuildingEntity>(Game.Players.GetPlayer(Entity.OwnerID));

@@ -11,7 +11,6 @@ namespace Game.Systems.FogOfWar
     {
         public HashSet<PlayerEntity> PlayersViewing { get; internal set; } = new HashSet<PlayerEntity>();
         public HashSet<IEntity> EntitiesViewing { get; internal set; } = new HashSet<IEntity>();
-
         public override string ToString()
         {
             return $"<TileVisibility PlayersViewing={PlayersViewing.Count} EntitiesViewing={EntitiesViewing.Count}>";

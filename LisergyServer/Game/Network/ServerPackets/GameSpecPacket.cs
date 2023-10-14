@@ -8,14 +8,13 @@ namespace Game.Events.ServerEvents
     public class GameSpecPacket : BasePacket, IServerPacket
     {
         public GameSpec Spec;
-        public int WorldX;
-        public int WorldY;
+        public int MapSizeX;
+        public int MapSizeY;
 
         public GameSpecPacket(LisergyGame game)
         {
             this.Spec = game.Specs;
-            this.WorldX = game.World.SizeX;
-            this.WorldY = game.World.SizeY;
+            (MapSizeX, MapSizeY) = game.World.Map.TilemapDimensions;
         }
     }
 }

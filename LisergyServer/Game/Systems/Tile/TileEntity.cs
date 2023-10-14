@@ -43,6 +43,7 @@ namespace Game.Tile
             Building?.DeltaFlags.SetFlag(flag);
         }
 
+        public void UpdateData(in TileMapData newData) => *_tileData = newData;
         public ref Chunk Chunk => ref _chunk;
         public ref byte SpecId { get => ref _tileData->TileId; }
         public ref readonly float MovementFactor { get => ref this.GetSpec().MovementFactor; }

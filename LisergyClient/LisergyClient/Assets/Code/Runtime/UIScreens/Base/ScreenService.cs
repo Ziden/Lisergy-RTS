@@ -5,6 +5,8 @@ using GameAssets;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Assets.Code.Assets.Code.Assets;
+using ClientSDK;
+using ClientSDK.Data;
 
 namespace Assets.Code.Assets.Code.UIScreens.Base
 {
@@ -33,6 +35,12 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         private GameObject _screensContainer;
         private IAssetService _assets;
         private GenericSetup _noSetup;
+        private IGameClient _client;
+
+        public ScreenService(IGameClient client)
+        {
+            _client = client;
+        }
 
         public void OnSceneLoaded()
         {
@@ -86,6 +94,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
             }
             var screen = (T)InstanceFactory.CreateInstance(typeof(T));
             screen._setup = setup;
+            screen.GameClient = _client;
             screen._screenService = this;
             screen.OnBeforeOpen();
             obj = new LoadedScreen()

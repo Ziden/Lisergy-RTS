@@ -60,7 +60,7 @@ namespace Game
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReceiveInput(GameId sender, BasePacket input)
         {
-            input.Sender = _game.Players[sender] ?? new PlayerEntity(_game);
+            input.Sender = _game.Players[sender] ?? new PlayerEntity(sender, _game);
             IncomingPackets.Call(input);
             _game.Entities.DeltaCompression.SendDeltaPackets(input.Sender);
         }

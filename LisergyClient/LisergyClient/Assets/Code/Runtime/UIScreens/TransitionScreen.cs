@@ -39,14 +39,16 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens
             a();
         }
 
+        private async Task Close()
+        {
+            await Task.Delay(2000);
+            _screenService.Close(this);
+        }
+
         public void CloseTransition(Action callback = null)
         {
             FadeAway();
-            _ = MainBehaviour.RunAsync(() =>
-            {
-                _screenService.Close(this);
-                callback?.Invoke();
-            }, 2);
+            _ = Close();
         }
 
         public override void OnClose()

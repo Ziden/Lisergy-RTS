@@ -51,14 +51,12 @@ namespace Game.Services
     public class BattleService : IEventListener
     {
         private IGame _game;
-        public GameWorld World { get; private set; }
         public Dictionary<GameId, BattleTask> BattleTasks { get; private set; } = new Dictionary<GameId, BattleTask>();
         public Dictionary<GameId, BattleLogPacket> AllBattles { get; private set; } = new Dictionary<GameId, BattleLogPacket>();
 
         public BattleService(LisergyGame game)
         {
             _game = game;
-            World = game.World;
             game.Network.On<BattleQueuedPacket>(OnBattleTrigger);
             game.Network.On<BattleLogRequestPacket>(OnBattleRequest);
             game.Events.Register<BattleFinishedTaskEvent>(this, OnBattleFinishedProcessing);
@@ -80,7 +78,7 @@ namespace Game.Services
             Log.Debug($"Received {packet.Attacker} vs {packet.Defender}");
             var battle = new TurnBattle(packet.BattleID, packet.Attacker, packet.Defender);
             AllBattles[packet.BattleID] = new BattleLogPacket(packet);
-            BattleTasks[battle.ID] = new BattleTask(World.Game, battle);
+            BattleTasks[battle.ID] = new BattleTask(_game, battle);
             _game.Network.SendToPlayer(new BattleStartPacket(packet.BattleID, packet.Position, packet.Attacker, packet.Defender), GetAllPlayers(battle).ToArray());
         }
 
@@ -117,7 +115,7 @@ namespace Game.Services
             PlayerEntity pl;
             foreach (var userid in new GameId[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
             {
-                if (World.Players.GetPlayer(userid, out pl) && pl.EntityId != GameId.ZERO)
+                if (_game.Players.GetPlayer(userid, out pl) && pl.EntityId != GameId.ZERO)
                     yield return pl;
             }
         }

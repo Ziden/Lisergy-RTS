@@ -1,11 +1,12 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
 using Game.Events.GameEvents;
-using Game.Systems.Battler;
-using Game.Systems.Movement;
 
 namespace Game.Systems.Tile
 {
+    /// <summary>
+    /// System that keeps track of references of which entities and which buildings are on which tiles
+    /// </summary>
     public class TileHabitantsSystem : GameSystem<TileComponent>
     {
         public TileHabitantsSystem(LisergyGame game) : base(game) { }

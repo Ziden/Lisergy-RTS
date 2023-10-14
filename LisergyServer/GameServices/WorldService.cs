@@ -8,13 +8,11 @@ namespace Game.Services
 {
     public class WorldService : IEventListener
     {
-        private LisergyGame _game;
         private GameWorld _world;
 
         public WorldService(LisergyGame game)
         {
-            _game = game;
-            _world = game.World;
+            _world = (GameWorld)game.World;
             game.Network.On<JoinWorldPacket>(JoinWorld);
         }
 

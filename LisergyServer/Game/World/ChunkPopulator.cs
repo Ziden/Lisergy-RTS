@@ -2,6 +2,6 @@
 {
     public abstract class ChunkPopulator
     {
-        public abstract void Populate(GameWorld w, Chunk c);
+        public abstract void Populate(GameWorld w, PreAllocatedChunkMap map, Chunk c);
     }
 }

@@ -19,7 +19,7 @@ namespace Game.Systems.Movement
 
             foreach (var position in sentPath)
             {
-                var tile = Game.GameWorld.GetTile(position.X, position.Y);
+                var tile = Game.World.Map.GetTile(position.X, position.Y);
                 if (!tile.Passable)
                 {
                     Log.Error($"Impassable TileEntity {tile} in course path: {owner} moving {Entity}");

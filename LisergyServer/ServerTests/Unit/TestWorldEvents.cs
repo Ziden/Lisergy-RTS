@@ -20,13 +20,13 @@ namespace Tests
             // get a TileEntity from a chunk in the middle
             var chunkX = 1;
             var tileX = 2;
-            var tile = Game.World.GetTile(chunkX * GameWorld.CHUNK_SIZE + tileX, chunkX * GameWorld.CHUNK_SIZE + tileX);
+            var tile = Game.World.Map.GetTile(chunkX * GameWorld.CHUNK_SIZE + tileX, chunkX * GameWorld.CHUNK_SIZE + tileX);
 
             Assert.AreEqual(chunkX, tile.Chunk.X);
             Assert.AreEqual(chunkX, tile.Chunk.Y);
 
-            Assert.AreEqual(chunkX * GameWorld.CHUNK_SIZE + tileX, tile.X);
-            Assert.AreEqual(chunkX * GameWorld.CHUNK_SIZE + tileX, tile.Y);
+            Assert.AreEqual(chunkX * GameWorld.CHUNK_SIZE + tileX, (object)tile.X);
+            Assert.AreEqual(chunkX * GameWorld.CHUNK_SIZE + tileX, (object)tile.Y);
         }
 
 
@@ -42,9 +42,9 @@ namespace Tests
         [Test]
         public void TestGetStartingChunk()
         {
-            var newbieChunk = Game.World.Map.GetUnnocupiedNewbieChunk();
-            var flags = newbieChunk.Flags;
-            Assert.IsFalse(newbieChunk.IsVoid());
+            var newbieChunk = ((PreAllocatedChunkMap)Game.World.Map).GetUnnocupiedNewbieChunk();
+
+            Assert.IsFalse(newbieChunk == null);
         }
     }
 }

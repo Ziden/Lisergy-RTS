@@ -5,6 +5,10 @@ using System.Runtime.InteropServices;
 
 namespace Game.Systems.Tile
 {
+    /// <summary>
+    /// Main struct data used for tiles.
+    /// This struct represents a single tile. It's size should be as low as possible.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
     public struct TileMapData
@@ -15,10 +19,6 @@ namespace Game.Systems.Tile
         public ushort X { get => Position.X; set => Position.X = value; }
         public ushort Y { get => Position.Y; set => Position.Y = value; }
 
-        public override string ToString()
-        {
-            return $"<TileData {X}-{Y} ID={TileId}>";
-
-        }
+        public override string ToString() => $"<TileData {X}-{Y} ID={TileId}>";
     }
 }

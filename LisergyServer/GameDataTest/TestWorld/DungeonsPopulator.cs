@@ -7,7 +7,7 @@ namespace Game.Generator
 {
     public class DungeonsPopulator : ChunkPopulator
     {
-        public override void Populate(GameWorld w, Chunk c)
+        public override void Populate(GameWorld w, PreAllocatedChunkMap map, Chunk c)
         {
             var place = c.FindTileWithId(0);
             if (place != null)

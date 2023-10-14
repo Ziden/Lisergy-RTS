@@ -13,8 +13,9 @@
     <ProjectReference Include="..\Game\Game.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Systems\" />
-  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/ClientSDK.dll" />
+    <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="xcopy /y /s /f $(TargetPath) $(SolutionDir)\..\LisergyClient\LisergyClient\Assets\Plugins\ClientSDK.dll*" />
+  </Target>
 
 </Project>

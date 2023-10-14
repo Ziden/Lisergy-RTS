@@ -22,21 +22,8 @@ namespace ServerTests
         public CourseService CourseService { get; private set; }
         public List<BasePacket> SentPackets { get; private set; } = new List<BasePacket>();
 
-        private static GameWorld TestWorld;
-
-        private static long lastLog = 0;
-
-        static TestGame()
-        {
-            
-            Log.Debug = m =>
-            {
-                var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                if (lastLog != 0) m = $"[{now - lastLog}ms] " + m;
-                lastLog = now;
-                Console.WriteLine(m);
-            };
-        }
+        public GameWorld TestWorld { get; private set; }
+        public PreAllocatedChunkMap TestMap { get; private set; }
 
         private GameWorld CreateTestWorld()
         {
@@ -47,6 +34,7 @@ namespace ServerTests
             SetupGame(TestWorld, new GameServerNetwork(this));
             Entities.DeltaCompression.ClearDeltas();
             TestWorld.CreateMap();
+            TestMap = TestWorld.Map as PreAllocatedChunkMap;
             return TestWorld;
         }
 
@@ -59,7 +47,7 @@ namespace ServerTests
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);
-            this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
+            TestMap.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
             TestNetwork = Network as GameServerNetwork;
             TestNetwork.OnOutgoingPacket += (player, packet) => ((TestServerPlayer)Players[player]).SendTestPacket(packet);
             if (createPlayer)
@@ -79,8 +67,8 @@ namespace ServerTests
             var player = new TestServerPlayer(this);
             player.OnReceivedPacket += ev => ReceivePacket(ev);
             _testPlayerId = player.EntityId;
-            var tile = this.World.GetTile(x, y);
-            player.EntityLogic.Player.PlaceNewPlayer(this.World.GetTile(x, y));
+            var tile = World.Map.GetTile(x, y);
+            player.EntityLogic.Player.PlaceNewPlayer(World.Map.GetTile(x, y));
             Entities.DeltaCompression.SendDeltaPackets(player);
             return player;
         }
@@ -110,11 +98,24 @@ namespace ServerTests
 
         public TileEntity RandomNotBuiltTile()
         {
-            var tiles = World.AllTiles();
+            var tiles = TestWorld.AllTiles();
             foreach (var tile in tiles)
                 if (tile.Building == null)
                     return tile;
             throw new System.Exception("No unbuilt tile");
+        }
+
+        private static long lastLog = 0;
+
+        static TestGame()
+        {
+            Log.Debug = m =>
+            {
+                var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                if (lastLog != 0) m = $"[{now - lastLog}ms] " + m;
+                lastLog = now;
+                Console.WriteLine(m);
+            };
         }
     }
 

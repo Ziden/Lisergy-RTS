@@ -29,10 +29,10 @@ namespace Tests
         {
             var playerCastleTile = _player.Data.Buildings.First().Tile;
             var party = _player.GetParty(0);
-            _game.Systems.Map.GetLogic(party).SetPosition(_game.World.GetTile(0, 0));
+            _game.Systems.Map.GetLogic(party).SetPosition(_game.World.Map.GetTile(0, 0));
 
             var enemy = _game.Entities.CreateEntity<DungeonEntity>(null);
-            _game.Systems.Map.GetLogic(enemy).SetPosition(_game.World.GetTile(1, 1));
+            _game.Systems.Map.GetLogic(enemy).SetPosition(_game.World.Map.GetTile(1, 1));
 
             enemy.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[0]));
 
@@ -65,11 +65,11 @@ namespace Tests
         public void TestBattleIDResetsAfterBattle()
         {
             var party = _player.GetParty(0);
-            party.EntityLogic.Map.SetPosition(_game.World.GetTile(0, 0));
+            party.EntityLogic.Map.SetPosition(_game.World.Map.GetTile(0, 0));
 
         
             var enemy = _game.Entities.CreateEntity<DungeonEntity>(null);
-            enemy.EntityLogic.Map.SetPosition(_game.World.GetTile(0, 0));
+            enemy.EntityLogic.Map.SetPosition(_game.World.Map.GetTile(0, 0));
 
             var component = enemy.Get<BattleGroupComponent>();
             component.Units.Add(new Unit(_game.Specs.Units[0]));

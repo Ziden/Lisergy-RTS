@@ -20,7 +20,7 @@ namespace Assets.Code
 
         public bool ViewBattles = true;
 
-        public LocalPlayer(GameId id) : base(null)
+        public LocalPlayer(GameId id) : base(id, null)
         {
             
         }

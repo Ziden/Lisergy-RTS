@@ -71,9 +71,9 @@ namespace Assets.Code.UI
             {
                 return NoPartyActions;
             }
-            var tileView = GameView.GetView<TileView>(tile);
+            var tileView = GameClient.Modules.Views.GetView<TileView>(tile);
             var actions = new List<EntityAction>();
-            if (tileView.Building is DungeonEntity)
+            if (tileView.Entity.Building is DungeonEntity)
             {
                 actions.Add(EntityAction.CHECK);
                 actions.Add(EntityAction.ATTACK);
@@ -93,7 +93,7 @@ namespace Assets.Code.UI
 
         private void MoveTo(TileEntity tile)
         {
-            var view = GameView.GetView(tile);
+            var view = GameClient.Modules.Views.GetView<TileView>(tile);
             var newPosition = RuntimePanelUtils.CameraTransformWorldToPanel(Root.panel, view.GameObject.transform.position, Camera.main);
             Root.transform.position = newPosition;
         }

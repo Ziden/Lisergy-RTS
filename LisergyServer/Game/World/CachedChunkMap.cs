@@ -8,9 +8,9 @@ namespace Game.World
     public class CachedChunkMap
     {
         public TileEntity[,] array;
-        private ChunkMap _chunkMap;
+        private IChunkMap _chunkMap;
 
-        public CachedChunkMap(ChunkMap chunkMap)
+        public CachedChunkMap(IChunkMap chunkMap)
         {
             _chunkMap = chunkMap;
             array = new TileEntity[SizeX, SizeY];
@@ -32,7 +32,7 @@ namespace Game.World
             get => GetTile(x, y);
         }
 
-        public int SizeX { get => _chunkMap.QtdChunksX * GameWorld.CHUNK_SIZE; }
-        public int SizeY { get => _chunkMap.QtdChunksY * GameWorld.CHUNK_SIZE; }
+        public int SizeX { get => _chunkMap.TilemapDimensions.x; }
+        public int SizeY { get => _chunkMap.TilemapDimensions.y; }
     }
 }

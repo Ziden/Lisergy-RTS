@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ClientSDK.Data;
 using GameAssets;
 using GameData.Specs;
 using UnityEngine;

@@ -10,6 +10,10 @@ using System.Linq;
 
 namespace Game.Systems.Player
 {
+    /// <summary>
+    /// Represents a player in the world.
+    /// A player is basically an owner of entities, and its an entity itself but its an entity that is not placed in the world.
+    /// </summary>
     public class PlayerEntity : IEntity
     {
         public const byte MAX_PARTIES = 4;
@@ -22,13 +26,13 @@ namespace Game.Systems.Player
         public ref readonly GameId OwnerID => ref _playerId;
 
         public IGame Game { get; private set; }
-        public PlayerEntity(IGame game)
+        public PlayerEntity(GameId id, IGame game)
         {
             Game = game;
             Components = new ComponentSet(this, this);
             Components.Add<PlayerComponent>();
             Components.AddReference(new PlayerDataComponent());
-            _playerId = GameId.Generate();
+            _playerId = id;
             Data.Parties = new PartyEntity[MAX_PARTIES]
             {
                 game.Entities.CreateEntity<PartyEntity>(this),  
@@ -43,16 +47,23 @@ namespace Game.Systems.Player
                 party.PartyIndex = x;
                 entity.Save(party);
             }
-            
         }
 
+        /// <summary>
+        /// Gets a party of a given party slot for this player
+        /// </summary>
         public PartyEntity GetParty(byte partyIndex) => Data.Parties[partyIndex];
 
+        /// <summary>
+        /// Gets the main building (center) of this player
         public PlayerBuildingEntity GetCenter()
         {
             return Data.Buildings.First(b => b.SpecId == Game.Specs.InitialBuilding.Id);
         }
 
+        /// <summary>
+        /// Sends a message packet to display for this player client
+        /// </summary>
         public void SendMessage(string msg, MessageType type = MessageType.RAW_TEXT)
         {
             Game.Network.SendToPlayer(new MessagePacket(MessageType.BAD_INPUT, msg), this);

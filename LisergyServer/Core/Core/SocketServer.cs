@@ -42,7 +42,7 @@ namespace BaseServer.Core
         public void Send<PacketType>(int connection, PacketType ev) where PacketType : BasePacket
         {
             Log.Debug($"Sending {ev} to {connection}");
-            _socketServer.Send(connection, Serialization.FromPacket<PacketType>(ev));
+            _socketServer.Send(connection, Serialization.FromPacket(ev));
         }
 
         private void RunTick()
@@ -71,7 +71,6 @@ namespace BaseServer.Core
                 switch (_pooledMessage.eventType)
                 {
                     case EventType.Connected:
-                        Console.WriteLine("New Connection Received");
                         Connect(_pooledMessage.connectionId);
                         break;
                     case EventType.Data:

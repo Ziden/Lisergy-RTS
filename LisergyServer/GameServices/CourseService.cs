@@ -12,13 +12,11 @@ namespace Game.Services
 {
     public class CourseService : IEventListener
     {
-        private GameWorld _world;
         private IGame _game;
 
         public CourseService(LisergyGame game)
         {
             _game = game;
-            this._world = game.World;
             _game.Network.On<MoveRequestPacket>(RequestMovement);
         }
 
@@ -41,7 +39,7 @@ namespace Game.Services
             }
 
             var first = ev.Path[0];
-            if (_world.GetTile(first.X, first.Y).Distance(party.Tile) > 1)
+            if (_game.World.Map.GetTile(first.X, first.Y).Distance(party.Tile) > 1)
             {
                 ev.Sender.SendMessage("Bad route");
                 return;

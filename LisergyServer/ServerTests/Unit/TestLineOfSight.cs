@@ -40,8 +40,8 @@ namespace Tests
         public void TestCreatingExploringEntityLOS()
         {
             var player = new TestServerPlayer(Game);
-            var newbieChunk = Game.World.Map.GetUnnocupiedNewbieChunk();
-            Game.World._worldPlayers.Add(player);
+            var newbieChunk = ((PreAllocatedChunkMap)Game.World.Map).GetUnnocupiedNewbieChunk();
+            Game.World.Players.Add(player);
             var tile = newbieChunk.FindTileWithId(0);
             var castleID = Game.Specs.InitialBuilding.Id;
             player.EntityLogic.Player.Build(castleID, tile);
@@ -149,7 +149,7 @@ namespace Tests
         [Test]
         public void TestTileAOE()
         {
-            var tile = Game.World.GetTile(5, 5);
+            var tile = Game.World.Map.GetTile(5, 5);
 
             ushort aoe = 4;
             var range = aoe * 2 + 1;

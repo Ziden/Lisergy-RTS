@@ -35,7 +35,7 @@ namespace Tests
             _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
             Assert.That(_dungeon.Get<BattleGroupComponent>().Units.Valids == 1);
-            _dungeon.EntityLogic.Map.SetPosition(_game.World.GetTile(8, 8));
+            _dungeon.EntityLogic.Map.SetPosition(_game.World.Map.GetTile(8, 8));
         }
 
         [Test]
@@ -184,7 +184,7 @@ namespace Tests
         {
             _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
             _dungeon.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[1]));
-            _dungeon.EntityLogic.Map.SetPosition(_game.World.GetTile(_party.Tile.X + _party.GetLineOfSight() + 1, _party.Tile.Y));
+            _dungeon.EntityLogic.Map.SetPosition(_game.World.Map.GetTile(_party.Tile.X + _party.GetLineOfSight() + 1, _party.Tile.Y));
 
             _game.Entities.DeltaCompression.ClearDeltas();
 
@@ -219,7 +219,7 @@ namespace Tests
             _player.ReceivedPackets.Clear();
 
             var dg = _game.Entities.CreateEntity<DungeonEntity>(null);
-            dg.EntityLogic.Map.SetPosition(_game.World.GetTile(4, 2));
+            dg.EntityLogic.Map.SetPosition(_game.World.Map.GetTile(4, 2));
 
             _game.HandleClientEvent(clientPlayer, joinEvent);
 

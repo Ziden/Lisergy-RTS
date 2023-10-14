@@ -20,8 +20,8 @@ namespace Tests
         public void Setup()
         {
             _game = new TestGame();
-            tile1 = _game.GameWorld.GetTile(0, 0);
-            tile2 = _game.GameWorld.GetTile(1, 1);
+            tile1 = _game.World.Map.GetTile(0, 0);
+            tile2 = _game.World.Map.GetTile(1, 1);
         }
 
         [Test]

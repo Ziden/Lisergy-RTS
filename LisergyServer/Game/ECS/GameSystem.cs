@@ -6,6 +6,7 @@ namespace Game.ECS
 {
     public interface IGameSystem
     {
+        void On<EventType>(Action<IEntity, EventType> cb) where EventType : IBaseEvent;
         void CallEvent<EventType>(IEntity entityType, EventType ev) where EventType : IBaseEvent;
     }
 
@@ -15,7 +16,7 @@ namespace Game.ECS
         public IGame Game { get; private set; }
         public ISystems Systems => Game.Systems;
         public IGameLogic GameLogic => Game.Logic;
-        public IGameWorld World => Game.GameWorld;
+        public IGameWorld World => Game.World;
         public IGamePlayers Players => World.Players;
         public GameSystem(LisergyGame game) {
             Game = game;
@@ -24,6 +25,11 @@ namespace Game.ECS
         public virtual void OnDisabled() { }
         public virtual void OnEnabled() { }
         internal virtual void OnComponentRemoved(IEntity owner, ComponentType component) { }
+
+        public void On<EventType>(Action<IEntity, EventType> cb) where EventType : IBaseEvent
+        {
+            EntityEvents.On(cb);
+        }
 
         public void CallEvent<EventType>(IEntity entityType, EventType ev) where EventType : IBaseEvent
         {

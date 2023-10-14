@@ -1,6 +1,9 @@
-﻿using Game.DataTypes;
+﻿using Game;
+using Game.DataTypes;
+using Game.Events.ServerEvents;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Tests
@@ -25,6 +28,22 @@ namespace Tests
             var arr1 = id1.GetBytes();
             var arr2 = id2.ToByteArray();
             Assert.True(arr1.SequenceEqual(arr2));
+        }
+
+        [Test]
+        public void TestReserializationAsIndex()
+        {
+            Serialization.LoadSerializers();
+
+            var p = new AuthResultPacket() { PlayerID = GameId.Generate() };
+
+            var d = new Dictionary<GameId, int>();
+
+            d[p.PlayerID] = 123;
+
+            var p2 = Serialization.ToPacketRaw<AuthResultPacket>(Serialization.FromPacketRaw(p));
+
+            Assert.AreEqual(123, d[p2.PlayerID]);
         }
 
         [Test]

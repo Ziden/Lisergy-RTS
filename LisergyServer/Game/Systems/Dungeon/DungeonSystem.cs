@@ -12,6 +12,9 @@ namespace Game.Systems.Dungeon
             EntityEvents.On<GroupDeadEvent>(OnGroupDead);
         }
 
+        /// <summary>
+        /// Dungeons should disappear when destroyed
+        /// </summary>
         private void OnGroupDead(IEntity e, GroupDeadEvent ev)
         {
             GameLogic.GetEntityLogic(e).Map.SetPosition(null);

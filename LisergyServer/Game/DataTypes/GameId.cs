@@ -1,6 +1,7 @@
 ﻿using Game.Pathfinder;
 using Game.World;
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Game.DataTypes
@@ -13,14 +14,14 @@ namespace Game.DataTypes
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
-    public unsafe struct GameId : IEquatable<GameId>
+    public unsafe struct GameId : IEquatable<GameId>, IEqualityComparer<GameId>
     {
         /// <summary>
         /// Just for testing. Makes generation incremental and ToString will print number instead of guid.
         /// 0 = disabled.
         /// This is just during initial development later can think a better solution for debugging
         /// </summary>
-        internal static ulong DEBUG_MODE = 1; 
+        internal static ulong DEBUG_MODE = 0; 
 
         public static GameId ZERO = Guid.Empty;
 
@@ -132,6 +133,16 @@ namespace Game.DataTypes
         public override unsafe int GetHashCode()
         {
             return HashCode.Combine(_leftside, _rightside);
+        }
+
+        public bool Equals(GameId x, GameId y)
+        {
+            return x.Equals(y);
+        }
+
+        public int GetHashCode(GameId obj)
+        {
+            return obj.GetHashCode();
         }
     }
 }

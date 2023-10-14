@@ -31,8 +31,8 @@ namespace Game.Systems.Player
             var atkPlayer = Game.Players[packet.Header.Attacker.OwnerID];
             var defPlayer = Game.Players[packet.Header.Defender.OwnerID];
 
-            if (atkPlayer != null) GetLogic(atkPlayer).RecordHeader(packet.Header);
-            if (defPlayer != null) GetLogic(defPlayer).RecordHeader(packet.Header);
+            if (atkPlayer != null) GetLogic(atkPlayer).RecordBattleHeader(packet.Header);
+            if (defPlayer != null) GetLogic(defPlayer).RecordBattleHeader(packet.Header);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

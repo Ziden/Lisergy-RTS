@@ -1,4 +1,5 @@
 ﻿using Assets.Code.Assets.Code.UIScreens;
+using ClientSDK;
 using GameAssets;
 using System;
 using UnityEngine;
@@ -23,6 +24,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         internal IScreenService _screenService;
         internal VisualElement _root;
         internal event Action OnLoad;
+        internal IGameClient GameClient;
 
 
         internal bool Loaded { get => _loaded; set

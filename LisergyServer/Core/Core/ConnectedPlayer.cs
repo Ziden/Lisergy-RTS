@@ -22,7 +22,6 @@ namespace LisergyServer.Core
 
         public void Send<PacketType>(PacketType ev) where PacketType : BasePacket
         {
-            Log.Debug($"Sending {ev} to {this}");
             this._server.Send(this.ConnectionID, Serialization.FromPacket<PacketType>(ev));
         }
 

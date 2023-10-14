@@ -1,15 +1,5 @@
-﻿using Assets.Code.Entity;
-using Assets.Code.Views;
-using Game;
-using Game.ECS;
-using Game.Events;
-using Game.Events.Bus;
-using Game.Events.ServerEvents;
+﻿using Game.Events.Bus;
 using Game.Network;
-using Game.Network.ServerPackets;
-using Game.Systems.Player;
-using System;
-using System.Collections.Generic;
 
 namespace Assets.Code.World
 {
@@ -18,11 +8,12 @@ namespace Assets.Code.World
 
         public EntityListener(EventBus<BasePacket> networkEvents)
         {
-            networkEvents.Register<EntityDestroyPacket>(this, EntityDestroy);
-            networkEvents.Register<EntityMovePacket>(this, EntityMove);
-            networkEvents.Register<EntityUpdatePacket>(this, EntityUpdate);
+            //networkEvents.Register<EntityDestroyPacket>(this, EntityDestroy);
+           // networkEvents.Register<EntityMovePacket>(this, EntityMove);
+           // networkEvents.Register<EntityUpdatePacket>(this, EntityUpdate);
         }
 
+        /*
         public void EntityDestroy(EntityDestroyPacket ev)
         {
             Log.Debug("Received entity destroy");
@@ -49,7 +40,7 @@ namespace Assets.Code.World
 
         public void EntityUpdate(EntityUpdatePacket ev)
         {
-            /*
+    
             Log.Debug($"Received entity update {ev.EntityId.GetType().Name} ({ev.SyncedComponents.Count} components)");
             var serverEntity = ev.Entity;
             var serverOwner = serverEntity.OwnerID;
@@ -88,7 +79,7 @@ namespace Assets.Code.World
 
             else
                 throw new Exception($"Entity Factory does not know how to instantiate {serverEntity.GetType().Name}");
-            */
+        
         }
 
         public class EntityUpdateResult<ViewType, EntityType> where EntityType : BaseEntity where ViewType : EntityView<EntityType>
@@ -130,7 +121,8 @@ namespace Assets.Code.World
                     View = view
                 };
             }
-            */
+          
         }
+          */
     }
 }

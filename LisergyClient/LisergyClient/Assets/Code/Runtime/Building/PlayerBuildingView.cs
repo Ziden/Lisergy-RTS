@@ -1,16 +1,11 @@
 ﻿using Assets.Code.Assets.Code.Assets;
-using Assets.Code.Views;
-using Game;
-using Game.ECS;
+using ClientSDK.Data;
 using Game.Systems.Building;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace Assets.Code.World
 {
     public class PlayerBuildingView : EntityView<PlayerBuildingEntity>
     {
-        public override PlayerBuildingEntity Entity { get; }
 
         private IAssetService _assets;
 
@@ -20,17 +15,10 @@ namespace Assets.Code.World
             _assets = ServiceContainer.Resolve<IAssetService>();
         }
 
-        public override void OnUpdate(PlayerBuildingEntity serverEntity, List<IComponent> syncedComponents)
-        {
-            //Entity.Tile = GameView.World.GetTile(serverEntity);
-            if (NeedsInstantiate)
-            {
-                Instantiate();
-            }   
-        }
 
-        protected override void InstantiationImplementation()
+        protected void InstantiationImplementation()
         {
+            /*
             var spec = Entity.GetSpec();
             _assets.CreatePrefab(spec.Art, Vector3.zero, Quaternion.Euler(0, 0, 0), o =>
             {
@@ -50,6 +38,7 @@ namespace Assets.Code.World
                     SetGameObject(o);
                 });
             });
+            */
         }
     }
 }

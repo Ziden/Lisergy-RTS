@@ -11,21 +11,27 @@ namespace ClientSDK
     public interface IGameClient 
     {
         public IGame Game { get; }
-        public IClientServices Services { get; }
+        public IServerModules Modules { get; }
+        public IGameNetwork Network { get; }
     }
 
     public class GameClient : IGameClient
     {
-        public IGameNetwork ClientNetwork { get; private set; } = new ClientNetwork();
+        public IGameNetwork Network { get; private set; } = new ClientNetwork();
         public IGame Game { get; private set; }    
-        public IClientServices Services { get; private set; }
+        public IServerModules Modules { get; private set; }
 
-        public GameClient() 
+        public GameClient()
         {
             Serialization.LoadSerializers();
-            var s = new ClientServices(this);
-            Services = s;
+            var s = new ServerModules(this);
+            Modules = s;
             s.Register();
+        }
+
+        public void InitializeGame(LisergyGame game)
+        {
+            Game = game;
         }
     }
 }

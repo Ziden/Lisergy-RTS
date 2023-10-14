@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.Code.Views
 {
-    public partial class TileView : EntityView<TileEntity>
+    public partial class TileView : UnityEntityView<TileEntity>
     {
         private static GameObject _fogContainer;
         private bool? _withFog = null;
@@ -18,6 +18,7 @@ namespace Assets.Code.Views
         private void InitializeFog()
         {
             SetFogInTileView(true, false);
+            var s = Entity.GetNeighbor(Direction.SOUTH);
             if (Entity.GetNeighbor(Direction.SOUTH) == null) AddMapBorderFog(Entity.X, Entity.Y - 1);
             if (Entity.GetNeighbor(Direction.NORTH) == null) AddMapBorderFog(Entity.X, Entity.Y + 1);
             if (Entity.GetNeighbor(Direction.EAST) == null) AddMapBorderFog(Entity.X + 1, Entity.Y);
@@ -37,7 +38,7 @@ namespace Assets.Code.Views
             {
                 if (_withFog.HasValue && !_withFog.Value)
                 {
-                    Object.Destroy(o);
+                    GameObject.Destroy(o);
                     return;
                 }
                 o.transform.parent = _fogContainer.transform;
@@ -45,20 +46,21 @@ namespace Assets.Code.Views
             });
         }
 
-        public void SetFogInTileView(bool fog, bool halfAlpha)
+        public void SetFogInTileView(bool unexplored, bool seenBefore)
         {
-            _withFog = fog;
-            if (fog)
+            if(unexplored && !seenBefore) this.GameObject.SetActive(false);
+            _withFog = unexplored;
+            if (unexplored)
             {
                 if (_fogContainer == null) _fogContainer = new GameObject("FogContainer");
-                var prefab = halfAlpha ? TilePrefab.Fog50 : TilePrefab.FogBlack;
+                var prefab = seenBefore ? TilePrefab.Fog50 : TilePrefab.FogBlack;
                 AddFogPrefabToTile(prefab);
             }
             else if (_fogs.Count > 0)
             {
                 foreach (var f in _fogs)
                 {
-                    Object.Destroy(f);
+                    GameObject.Destroy(f);
                 }
                 _fogs.Clear();
             }

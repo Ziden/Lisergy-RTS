@@ -1,13 +1,9 @@
+using ClientSDK.Data;
 using System;
 using System.Collections.Generic;
 
 namespace Assets.Code
 {
-
-    public interface IGameService 
-    {
-        void OnSceneLoaded();
-    }
 
     public static class ServiceContainer
     {
@@ -22,7 +18,6 @@ namespace Assets.Code
 
             throw new ArgumentException("Dependency not found " + typeof(T).FullName);
         }
-
 
         public static void Register<T,V>(V value) 
             where T: IGameService 

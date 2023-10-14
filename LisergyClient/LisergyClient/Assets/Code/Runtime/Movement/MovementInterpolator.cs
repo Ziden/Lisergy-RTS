@@ -76,6 +76,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
 
         public void Start(List<TileEntity> tiles)
         {
+            /*
             if (Running)
             {
                 _component.TweenPath.Kill();
@@ -105,6 +106,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
             };
             _component.TweenPath.SetAutoKill(true);
             _component.TweenPath.OnKill(OnFinish);
+            */
         }
     }
 }

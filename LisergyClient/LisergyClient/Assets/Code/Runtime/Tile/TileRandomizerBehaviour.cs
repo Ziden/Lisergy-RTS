@@ -1,14 +1,26 @@
 ﻿using Assets.Code;
 using Assets.Code.Views;
-using Assets.Code.World;
-using Game;
+using ClientSDK;
 using Game.Tile;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
 
+/// <summary>
+/// Responsible for getting a tile and randomizing its decoration
+/// Every tile is randomized based on its position as a random seed so the same tile will always look
+/// on the client.
+/// This is a 
+/// </summary>
 public class TileMonoComponent : MonoBehaviour
 {
     private TileEntity _tile;
+
+    /// <summary>
+    /// Indicates if this tile was already decorated
+    /// </summary>
+    private bool _decorated;
 
     public List<GameObject> ChooseOne;
     public List<GameObject> Remove50;
@@ -26,56 +38,59 @@ public class TileMonoComponent : MonoBehaviour
 
     public TileEntity Tile { get => _tile; private set => _tile = value; }
 
-    private static void DecorateBoundaries(TileView view)
+    /// <summary>
+    /// Whenever two tiles of the same type are placed one near another they might need to connect and remove borders
+    /// For instance when water connects with water they would remove the cliffs 
+    /// </summary>
+    private void ConnectToSameTileType(TileView thisTile, TileView otherTile, List<GameObject> toRemove)
     {
-        var tile = view.Entity;
-        var comp = view.GameObject.GetComponent<TileMonoComponent>();
-        var map = view.Entity.Chunk.Map;
+        if (otherTile.GameObject == null) return;
+        var decorationComponent = thisTile.GameObject.GetComponent<TileMonoComponent>();
+        var otherTileDecoration = otherTile.GameObject.GetComponent<TileMonoComponent>();
+        toRemove.ForEach(e => Destroy(e));
+        toRemove.Clear();
+        if (!decorationComponent._decorated && otherTileDecoration._decorated)
+        {
+            DecorateBoundaries(otherTile);
+        }
+    }
+
+    /// <summary>
+    /// Decorate the borders of other tiles, connecting them 
+    /// E.g when a water tile connects to another water tile and removes the cliffs from the
+    /// borders of the tile
+    /// </summary>
+    private void DecorateBoundaries(TileView currentTileView)
+    {
+        var modules = ServiceContainer.Resolve<IServerModules> ();
+        var tile = currentTileView.Entity;
+        var decorationComponent = currentTileView.GameObject.GetComponent<TileMonoComponent>();
+        var map = currentTileView.Entity.Chunk.Map;
         var northTile = map.GetTile(tile.X, tile.Y - 1);
         var southTile = map.GetTile(tile.X, tile.Y + 1);
         var eastTile = map.GetTile(tile.X + 1, tile.Y);
         var westTile = map.GetTile(tile.X - 1, tile.Y);
-        TileView north = northTile == null ? null : GameView.GetOrCreateTileView(northTile);
-        TileView south = southTile == null ? null : GameView.GetOrCreateTileView(southTile);
-        TileView east = eastTile == null ? null : GameView.GetOrCreateTileView(eastTile);
-        TileView west = westTile == null ? null : GameView.GetOrCreateTileView(westTile);
+        TileView north = northTile == null ? null : (TileView)modules.Views.GetOrCreateView(northTile);
+        TileView south = southTile == null ? null : (TileView)modules.Views.GetOrCreateView(southTile);
+        TileView east = eastTile == null ? null : (TileView)modules.Views.GetOrCreateView(eastTile);
+        TileView west = westTile == null ? null : (TileView)modules.Views.GetOrCreateView(westTile);
 
-        if (comp.RemoveWhenConnectNorth.Count > 0 && (northTile != null && north.Entity.EntityId == tile.EntityId))
+        if (decorationComponent.RemoveWhenConnectNorth.Count > 0 && (northTile != null && north.Entity.SpecId == tile.SpecId))
         {
-            comp.RemoveWhenConnectNorth.ForEach(e => Destroy(e));
-            comp.RemoveWhenConnectNorth.Clear();
-            if (!view.Decorated && north.Decorated)
-            {
-                DecorateBoundaries(north);
-            }
+            ConnectToSameTileType(currentTileView, north, decorationComponent.RemoveWhenConnectNorth);
         }
-        if (comp.RemoveWhenConnectSouth.Count > 0 && (southTile != null && south.Entity.EntityId == tile.EntityId))
+        if (decorationComponent.RemoveWhenConnectSouth.Count > 0 && (southTile != null && south.Entity.SpecId == tile.SpecId))
         {
-            comp.RemoveWhenConnectSouth.ForEach(e => Destroy(e));
-            comp.RemoveWhenConnectSouth.Clear();
-            if (south != null && !view.Decorated && south.Decorated)
-            {
-                DecorateBoundaries(south);
-            }
+            ConnectToSameTileType(currentTileView, south, decorationComponent.RemoveWhenConnectSouth);
         }
-        if (comp.RemoveWhenConnectEast.Count > 0 && (eastTile != null && east.Entity.EntityId == tile.EntityId))
+        if (decorationComponent.RemoveWhenConnectEast.Count > 0 && (eastTile != null && east.Entity.SpecId == tile.SpecId))
         {
-            comp.RemoveWhenConnectEast.ForEach(e => Destroy(e));
-            comp.RemoveWhenConnectEast.Clear();
-            if (east != null && !view.Decorated && east.Decorated)
-            {
-                DecorateBoundaries(east);
-            }
+            ConnectToSameTileType(currentTileView, east, decorationComponent.RemoveWhenConnectEast);
         }
 
-        if (comp.RemoveWhenConnectWest.Count > 0 && (westTile != null && west.Entity.EntityId == tile.EntityId))
+        if (decorationComponent.RemoveWhenConnectWest.Count > 0 && (westTile != null && west.Entity.SpecId == tile.SpecId))
         {
-            comp.RemoveWhenConnectWest.ForEach(e => Destroy(e));
-            comp.RemoveWhenConnectWest.Clear();
-            if (west != null && !view.Decorated && west.Decorated)
-            {
-                DecorateBoundaries(west);
-            }
+            ConnectToSameTileType(currentTileView, west, decorationComponent.RemoveWhenConnectWest);
         }
     }
 
@@ -119,7 +134,7 @@ public class TileMonoComponent : MonoBehaviour
         _tile = tile.Entity;
         DecorateBoundaries(tile);
 
-        tile.Decorated = true;
+        _decorated = true;
 
         var removed = new List<GameObject>();
         foreach (var o in Remove50)

@@ -1,9 +1,7 @@
 ﻿using Assets.Code.Assets.Code.Assets;
-using Assets.Code.Views;
-using Game;
+using ClientSDK;
 using Game.DataTypes;
 using Game.ECS;
-using Game.Tile;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,7 +27,7 @@ namespace Assets.Code.World
         {
             foreach (var e in GetRunning().Effects[t.EntityId])
             {
-                MainBehaviour.Destroy(e);
+                Main.Destroy(e);
                 GetRunning().Indexes.Remove(e.GetInstanceID());
             }
             GetRunning().Effects[t.EntityId].Clear();
@@ -43,7 +41,8 @@ namespace Assets.Code.World
         public static void BattleEffect(EntityType t)
         {
             var assets = ServiceContainer.Resolve<IAssetService>();
-            var view = GameView.Controller.GetView(t);
+            var modules = ServiceContainer.Resolve<IServerModules>();
+            var view = (UnityEntityView<EntityType>)modules.Views.GetOrCreateView(t);
             assets.CreateMapFX(GameAssets.MapFX.BattleEffect, view.GameObject.transform.position, Quaternion.identity, o =>
             {
                 o.transform.parent = view.GameObject.transform;

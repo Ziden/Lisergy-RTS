@@ -46,7 +46,7 @@ namespace Assets.Code.Battle
             foreach (var teamSlot in SLOT_ORDER)
             {
                 var battleUnit = unitIndex >= _battle.Attacker.Units.Length ? null : _battle.Attacker.Units[unitIndex];
-                MainBehaviour.Destroy(attackersObject.transform.GetChild(teamSlot).GetChild(0).gameObject);
+                Main.Destroy(attackersObject.transform.GetChild(teamSlot).GetChild(0).gameObject);
                 unitIndex++;
                 if (battleUnit == null) continue;
                 //AddUnit(battleUnit.UnitReference, attackersObject, teamSlot);
@@ -58,7 +58,7 @@ namespace Assets.Code.Battle
             {
                 var battleUnit = unitIndex >= _battle.Defender.Units.Length ? null : _battle.Defender.Units[unitIndex];
                 var container = defendersObject.transform.GetChild(teamSlot);
-                MainBehaviour.Destroy(container.GetChild(0).gameObject);
+                Main.Destroy(container.GetChild(0).gameObject);
                 unitIndex++;
                 if (battleUnit == null) continue;
                // AddUnit(battleUnit.UnitReference, defendersObject, teamSlot);
@@ -108,7 +108,7 @@ namespace Assets.Code.Battle
             var damageObject = _damageNumberPool.Obtain();
             if(damageObject == null)
             {
-                damageObject = MainBehaviour.Instantiate(_damageNumber);
+                damageObject = Main.Instantiate(_damageNumber);
                 damageObject.transform.localScale = new Vector3(0.02912701f, 0.02912701f, 0.02912701f);
                 _damageNumberPool.AddNew(damageObject);
             }
@@ -136,7 +136,7 @@ namespace Assets.Code.Battle
                 gameObject.transform.localPosition = Vector3.zero;
                 gameObject.transform.localRotation = Quaternion.identity;
                 Units[u.Id] = unitView;
-                _ = MainBehaviour.RunAsync(() => unitView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.BattleIddle), 0.1f);
+                //_ = MainBehaviour.RunAsync(() => unitView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.BattleIddle), 0.1f);
             });
         }
     }

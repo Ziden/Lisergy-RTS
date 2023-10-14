@@ -21,7 +21,7 @@ namespace Game.Systems.Party
         {
             e.EntityLogic.BattleGroup.Heal();
             var center = Players.GetPlayer(e.OwnerID).GetCenter().Get<MapPlacementComponent>();
-            e.EntityLogic.Map.SetPosition(Game.GameWorld.GetTile(center.Position));
+            e.EntityLogic.Map.SetPosition(Game.World.Map.GetTile(center.Position.X, center.Position.Y));
         }
     }
 }

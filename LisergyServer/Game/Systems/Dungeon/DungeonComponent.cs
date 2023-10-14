@@ -1,6 +1,5 @@
 ﻿using Game.ECS;
 using Game.Systems.Battler;
-using Game.Systems.Inventories;
 using System;
 
 namespace Game.Systems.Dungeon
@@ -12,9 +11,6 @@ namespace Game.Systems.Dungeon
     {
         public ushort SpecId;
 
-        public override string ToString()
-        {
-            return $"<DungeonComponent Spec={SpecId}>";
-        }
+        public override string ToString() => $"<DungeonComponent Spec={SpecId}>";
     }
 }

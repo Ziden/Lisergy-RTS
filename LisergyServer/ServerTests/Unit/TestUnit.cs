@@ -60,7 +60,7 @@ namespace Tests
             var unit = player.Data.Units.First();
             var party = player.Data.Parties.First();
 
-            var tile = Game.World.GetTile(party.Tile.X, party.Tile.Y);
+            var tile = Game.World.Map.GetTile(party.Tile.X, party.Tile.Y);
 
             Assert.AreEqual(tile, party.Tile);
         }

@@ -2,71 +2,56 @@
 using Game.World;
 using Assets.Code.Assets.Code.Assets;
 using Game.Systems.Tile;
-using UnityEngine.Tilemaps;
-using Game.ECS;
+using ClientSDK.Data;
+using UnityEngine;
+using Game;
+using System.Collections.Generic;
+using Game.DataTypes;
 
 namespace Assets.Code.Views
 {
-    public partial class TileView : EntityView<TileEntity>
+    public partial class TileView : UnityEntityView<TileEntity>
     {
-        public override TileEntity Entity { get; }
         public bool Decorated { get; set; }
+
+        private static Dictionary<GameId, GameObject> _chunks = new Dictionary<GameId, GameObject>();
+
+        public IEntityView GetNeighbor(Direction d) => Client.Modules.Views.GetOrCreate<TileEntity>(Entity.GetNeighbor(d));
 
         private IAssetService _assets;
 
-        public TileView GetNeighbor(Direction d) => GameView.GetView<TileView>(Entity.GetNeighbor(d));
-
-        public TileView(TileEntity entity)
+        protected override void CreateView()
         {
-            Entity = entity;
             _assets = ServiceContainer.Resolve<IAssetService>();
-            this.InitializeFog();
-        }
 
-        public void UpdateFromData(TileMapData data)
-        {
-           /*
-            Entity.TileId = data.TileId;
-            if (NeedsInstantiate)
-            {
-                Instantiate();
-                RegisterEvents();
-            }
-           */
-        }
-
-        protected override void InstantiationImplementation()
-        {
-            /*
-            Entity.Components.Add(this);
-            RegisterEvents();
-
-            var spec = Entity.GetSpec();
-            var chunkView = GameView.GetView<ChunkView>(Entity.Chunk);
-            var parent = chunkView.GameObject.transform;
+            var spec = Client.Game.Specs.Tiles[Entity.SpecId];
+          
 
             _assets.CreatePrefab(spec.Art, new Vector3(Entity.X, 0, Entity.Y), Quaternion.Euler(0, 0, 0), o =>
             {
-                o.transform.parent = parent;
+                var chunk = Entity.Chunk;
+                if(!_chunks.TryGetValue(chunk.EntityId, out var chunkObject))
+                {
+                    Log.Debug($"Registered chunk {chunk.EntityId}");
+                    chunkObject = new GameObject($"Chunk {chunk.X}-{chunk.Y}");
+                    _chunks[chunk.EntityId] = chunkObject;
+                    chunkObject.transform.parent = ViewContainer.transform;
+                    chunkObject.isStatic = true;
+                }
+              
+                o.transform.parent = chunkObject.transform;
                 o.name = $"Tile_{Entity.X}-{Entity.Y}";
+                GameObject = o;
+                InitializeFog();
                 var tileBhv = o.GetComponent<TileMonoComponent>();
-                Entity.TileId = Entity.TileId;
-                SetGameObject(o);
                 tileBhv.CreateTileDecoration(this);
                 o.isStatic = true;
-                StaticBatchingUtility.Combine(o);
-                SetFogInTileView(false, false);
-             
+                //StaticBatchingUtility.Combine(chunkObject);
+                State = EntityViewState.RENDERED;
+                Log.Debug($"Tile {Entity.X}-{Entity.Y} instantiated");
             });
-
-            */
         }
 
-        public IEntity Building => Entity.Components.GetReference<TileHabitants>().Building;
-
-        public override string ToString()
-        {
-            return $"<TileView {Entity}>";
-        }
+        public override string ToString() => $"<TileView {Entity}>";
     }
 }

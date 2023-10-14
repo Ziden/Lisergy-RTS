@@ -50,7 +50,7 @@ namespace Game.Systems.Movement
             return Path == null || Path.Count <= 1;
         }
 
-        private TileEntity NextTile { get => Path == null || Path.Count == 0 ? null : Game.GameWorld.GetTile(Path[0]); }
+        private TileEntity NextTile { get => Path == null || Path.Count == 0 ? null : Game.World.Map.GetTile(Path[0].X, Path[0].Y); }
 
         public override string ToString()
         {

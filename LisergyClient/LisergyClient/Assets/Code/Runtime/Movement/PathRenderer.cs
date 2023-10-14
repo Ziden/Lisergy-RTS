@@ -1,16 +1,13 @@
-﻿using Assets.Code.Assets.Code.Assets;
-using Assets.Code.Assets.Code.Runtime.Movement;
+﻿using Assets.Code.Assets.Code.Runtime.Movement;
 using Assets.Code.Views;
-using Game;
+using ClientSDK;
+
 using Game.DataTypes;
 using Game.Systems.Party;
 using Game.Tile;
 using Game.World;
-using GameAssets;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+
 
 namespace Assets.Code.UI
 {
@@ -36,6 +33,7 @@ namespace Assets.Code.UI
 
         public void StartReqMove(PartyEntity party, List<TileEntity> path)
         {
+            var server = ServiceContainer.Resolve<IServerModules>();
             if (_entityPaths.TryGetValue(party.EntityId, out var previousPath))
             {
                 previousPath.Clear();
@@ -47,20 +45,20 @@ namespace Assets.Code.UI
             for (var x = 0; x < path.Count; x++)
             {
                 var nodeTile = path[x];
-                var view = GameView.GetView<TileView>(nodeTile);
+                var view = server.Views.GetView<TileView>(nodeTile);
                 var hasNext = x < path.Count - 1;
                 var hasPrevious = x > 0;
                 if (hasNext)
                 {
                     var next = path[x + 1];
                     var direction = nodeTile.GetDirection(next);
-                    clientPath.AddPath(GameView.GetView<TileView>(next), view.GameObject.transform.position, direction);
+                    clientPath.AddPath(server.Views.GetView<TileView>(next), view.GameObject.transform.position, direction);
                 }
                 if (hasPrevious)
                 {
                     var previous = path[x - 1];
                     var direction = nodeTile.GetDirection(previous);
-                    clientPath.AddPath(GameView.GetView<TileView>(nodeTile), view.GameObject.transform.position, direction);
+                    clientPath.AddPath(server.Views.GetView<TileView>(nodeTile), view.GameObject.transform.position, direction);
                 }
             }
         }

@@ -32,6 +32,7 @@ namespace MapServer
 
         public StandaloneServer(LisergyGame game, int port) : base(port)
         {
+            Serialization.LoadSerializers();
             _game = game;
             _scheduler = game.Scheduler as GameScheduler;
             _network = game.Network as GameServerNetwork;
@@ -95,7 +96,11 @@ namespace MapServer
                 });
                 if (connectedAccount != null)
                 {
-                    _connectionService.RegisterConnection(connectedAccount.PlayerId, new ConnectedPlayer(_socketServer));
+                    _connectionService.RegisterConnection(connectedAccount.PlayerId, new ConnectedPlayer(_socketServer)
+                    {
+                        PlayerId = connectedAccount.PlayerId,
+                        ConnectionID = connectionID
+                    });
                     if (auth.SpecVersion < _game.Specs.Version) Send(connectionID, new GameSpecPacket(_game));
                 }
             }

@@ -46,7 +46,7 @@ namespace Tests
         {
 
             var player = _game.GetTestPlayer();
-            var tile = _game.World.GetTile(1, 1);
+            var tile = _game.World.Map.GetTile(1, 1);
 
             Serialization.LoadSerializers(typeof(TilePacket));
 

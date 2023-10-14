@@ -2,9 +2,7 @@
 using Game.ECS;
 using Game.Events;
 using Game.Events.Bus;
-using Game.Network;
 using Game.Scheduler;
-using Game.Systems.Player;
 using Game.World;
 using GameData;
 
@@ -17,7 +15,7 @@ namespace Game
         public IGameScheduler Scheduler { get; }
         public IGameEntities Entities { get; }
         public IGamePlayers Players { get; }
-        public IGameWorld GameWorld { get; }
+        public IGameWorld World { get; }
         public ISystems Systems { get; }
         public IGameLogic Logic { get; }
         public EventBus<IBaseEvent> Events { get; }
@@ -26,10 +24,9 @@ namespace Game
     public class LisergyGame : IGame
     {
         public GameSpec Specs { get; private set; }
-        public GameWorld World { get; private set; }
+        public IGameWorld World { get; private set; }
         public IGameScheduler Scheduler { get; private set; }
         public IGameEntities Entities { get; private set; }
-        public IGameWorld GameWorld => World;
         public ISystems Systems { get; private set; }
         public IGamePlayers Players => World.Players;
         public IGameLogic Logic { get; private set; }
@@ -42,7 +39,7 @@ namespace Game
             Specs = specs;
         }
 
-        public void SetupGame(GameWorld world, GameServerNetwork network)
+        public void SetupGame(GameWorld world, IGameNetwork network)
         {
             Network = network;
             Entities = new GameEntities(this);

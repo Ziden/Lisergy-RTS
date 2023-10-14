@@ -44,9 +44,9 @@ namespace Assets.Code
         private bool IsWin(BattleHeaderData header)
         {
             return (
-                header.Attacker.OwnerID == MainBehaviour.LocalPlayer.OwnerID && header.AttackerWins
+                header.Attacker.OwnerID == Main.LocalPlayer.OwnerID && header.AttackerWins
                 ||
-                header.Defender.OwnerID == MainBehaviour.LocalPlayer.OwnerID && !header.AttackerWins
+                header.Defender.OwnerID == Main.LocalPlayer.OwnerID && !header.AttackerWins
              );
         }
 

@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.DataTypes;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Network;
@@ -25,7 +26,7 @@ namespace ServerTests
         public bool IsOnline { get; set; }
         private GameServerNetwork _network;
 
-        public TestServerPlayer(LisergyGame game) : base(game)
+        public TestServerPlayer(LisergyGame game) : base(GameId.Generate(), game)
         {
             IsOnline = true;
             _network = game.Network as GameServerNetwork;

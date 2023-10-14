@@ -20,16 +20,12 @@ namespace Tests
         [Test]
         public void TestSimplePath()
         {
-            Game.World.GetTile(1, 0).SpecId = TestTiles.MOUNTAIN.ID;
-            Game.World.GetTile(1, 1).SpecId = TestTiles.MOUNTAIN.ID;
-            Game.World.GetTile(1, 2).SpecId = TestTiles.MOUNTAIN.ID;
+            Game.World.Map.GetTile(1, 0).SpecId = TestTiles.MOUNTAIN.ID;
+            Game.World.Map.GetTile(1, 1).SpecId = TestTiles.MOUNTAIN.ID;
+            Game.World.Map.GetTile(1, 2).SpecId = TestTiles.MOUNTAIN.ID;
 
-            var asd = Game.World.GetTile(2, 3);
-            var asd2 = Game.World.GetTile(3, 3);
-            var asd3 = Game.World.GetTile(3, 3);
-
-            var from = Game.World.GetTile(0, 0);
-            var to = Game.World.GetTile(2, 0);
+            var from = Game.World.Map.GetTile(0, 0);
+            var to = Game.World.Map.GetTile(2, 0);
             var path = Game.World.Map.FindPath(from, to);
 
             Assert.NotNull(path);

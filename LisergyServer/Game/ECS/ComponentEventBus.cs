@@ -14,12 +14,10 @@ namespace Game.ECS
         internal EventBus<IBaseEvent> _bus = new EventBus<IBaseEvent>();
         private IEntity _currentEntity;
 
-        public delegate void EntityEventCallback<EventType>(IEntity entity, EventType ev) where EventType : IBaseEvent;
-
         /// <summary>
         /// Registers a new listener for the given system. The system is wrapped in a normal message bus/
         /// </summary>
-        public void On<EventType>(EntityEventCallback<EventType> callback) where EventType : IBaseEvent
+        public void On<EventType>(Action<IEntity, EventType> callback) where EventType : IBaseEvent
         {
             void ComponentEventWrapper(EventType ev)
             {

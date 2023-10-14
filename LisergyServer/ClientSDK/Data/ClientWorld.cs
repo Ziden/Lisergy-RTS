@@ -18,8 +18,7 @@ namespace ClientSDK.Data
 
         public override void CreateMap()
         {
-            Map = new LazyLoadChunkMap(this, SizeX, SizeY);
+           Map = new LazyLoadChunkMap(this, SizeX, SizeY);
         }
-
     }
 }
