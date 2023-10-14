@@ -3,7 +3,7 @@ using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
 
-namespace Tests
+namespace UnitTests
 {
     public class TestPathfinding
     {

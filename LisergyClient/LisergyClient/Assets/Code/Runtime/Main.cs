@@ -8,6 +8,7 @@ using Assets.Code.Views;
 using Assets.Code.World;
 using ClientSDK;
 using Game;
+using Game.Systems.Building;
 using Game.Systems.Dungeon;
 using Game.Systems.Party;
 using Game.Tile;
@@ -48,9 +49,9 @@ public class Main : MonoBehaviour
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
-        Log.Debug = Debug.Log;
-        Log.Error = Debug.LogError;
-        Log.Info = Debug.Log;
+        Log._Debug = Debug.Log;
+        Log._Error = Debug.LogError;
+        Log._Info = Debug.Log;
         TrackAsyncErrors();
     }
 
@@ -76,6 +77,7 @@ public class Main : MonoBehaviour
         _client.Modules.Views.RegisterView<PartyEntity, PartyView>();
         _client.Modules.Views.RegisterView<DungeonEntity, DungeonView>();
         _client.Modules.Views.RegisterView<TileEntity, TileView>();
+        _client.Modules.Views.RegisterView<PlayerBuildingEntity, PlayerBuildingView>();
     }
 
     public void SetupServices()

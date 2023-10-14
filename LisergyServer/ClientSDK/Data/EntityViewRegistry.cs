@@ -16,21 +16,18 @@ namespace ClientSDK.Data
         private Dictionary<Type, Func<IEntityView>> _buildFunctions = new Dictionary<Type, Func<IEntityView>>();
         public void RegisterView<EntityType, ViewType>() where EntityType : IEntity where ViewType : EntityView<EntityType>
         {
+            var buildFunction = Expression.Lambda<Func<EntityView<EntityType>>>(Expression.New(typeof(ViewType))).Compile();
+            _buildFunctions[typeof(EntityType)] = buildFunction;
             _viewTypes[typeof(EntityType)] = typeof(ViewType);
             Log.Debug($"Registered view {typeof(ViewType).Name} for entity {typeof(EntityType).Name}");
         }
 
-        public IEntityView CreateView<EntityType>() where EntityType : IEntity
+        public IEntityView CreateView(Type entityType)
         {
-            var viewType = _viewTypes[typeof(EntityType)];
-            if(_buildFunctions.TryGetValue(viewType, out var function)) {
-                return function();
-            }
-            var buildFunction = Expression.Lambda<Func<EntityView<EntityType>>>(Expression.New(viewType)).Compile();
-            _buildFunctions[viewType] = buildFunction;
-            return buildFunction();
+            if (!_buildFunctions.TryGetValue(entityType, out var func)) 
+                throw new SDKMissconfiguredException($"Entity type {entityType.Name} was not registered to have a game view");
+            return func();
         }
-
     }
 
 }

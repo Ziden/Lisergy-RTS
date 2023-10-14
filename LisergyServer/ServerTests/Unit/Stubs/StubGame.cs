@@ -28,7 +28,6 @@ namespace ServerTests
         {
             GameId.DEBUG_MODE = 1;
             WorldUtils.SetRandomSeed(666);
-            UnmanagedMemory.FlagMemoryToBeReused();
             TestWorld = new GameWorld(2, 16, 16);
             SetupGame(TestWorld, new GameServerNetwork(this));
             Entities.DeltaCompression.ClearDeltas();
@@ -40,6 +39,7 @@ namespace ServerTests
 
         public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs())
         {
+            UnmanagedMemory.FlagMemoryToBeReused();
             CreateTestWorld();
             Serialization.LoadSerializers();
             BattleService = new BattleService(this);

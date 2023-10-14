@@ -9,7 +9,7 @@ using Game.World;
 using NUnit.Framework;
 using ServerTests;
 
-namespace Tests
+namespace UnitTests
 {
     public unsafe class TestTileComponents
     {

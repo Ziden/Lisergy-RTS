@@ -2,6 +2,7 @@
 using ClientSDK.Data;
 using Game;
 using Game.Network;
+using Game.Systems.Building;
 using Game.Systems.Dungeon;
 using Game.Systems.Party;
 using Game.Tile;
@@ -23,15 +24,11 @@ namespace ServerTests.Integration.Stubs
         {
             _network = Network as ClientNetwork;
             _network.OnReceiveGenericPacket += OnReceivePacket;
-
-            Modules.Views.RegisterView<TileEntity, EntityView<TileEntity>>();
-            Modules.Views.RegisterView<PartyEntity, EntityView<PartyEntity>>();
-            Modules.Views.RegisterView<DungeonEntity, EntityView<DungeonEntity>>();
         }
 
         private void OnReceivePacket(BasePacket packet)
         {
-            Log.Debug("Received Packet from server " + packet.GetType());
+            Log.Debug($"Received {packet} from server ");
             ReceivedPackets.Add(packet);
         }
 
@@ -40,7 +37,7 @@ namespace ServerTests.Integration.Stubs
             return (T)ReceivedPackets.First(p => p.GetType() == typeof(T));
         }
 
-        public async Task<T> WaitFor<T>() where T : BasePacket
+        public async Task<T> WaitFor<T>(Func<T, bool> validate = null) where T : BasePacket
         {
             var timeout = 10;
             _network.Tick();
@@ -50,7 +47,7 @@ namespace ServerTests.Integration.Stubs
                 timeout--;
                 await Task.Delay(100);
                 _network.Tick();
-                p = ReceivedPackets.FirstOrDefault(p => p.GetType() == typeof(T));
+                p = ReceivedPackets.FirstOrDefault(p => p.GetType() == typeof(T) && (validate==null || validate((T)p)));
             }
             _network.Tick();
             return (T)p;

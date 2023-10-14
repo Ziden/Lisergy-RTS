@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 using Assets.Code.Assets.Code.Assets;
 using ClientSDK;
 using ClientSDK.Data;
+using Game.DataTypes;
 
 namespace Assets.Code.Assets.Code.UIScreens.Base
 {

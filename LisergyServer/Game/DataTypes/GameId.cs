@@ -17,14 +17,22 @@ namespace Game.DataTypes
     public unsafe struct GameId : IEquatable<GameId>, IEqualityComparer<GameId>
     {
         /// <summary>
-        /// Just for testing. Makes generation incremental and ToString will print number instead of guid.
+        /// Hack Just for testing. Makes generation incremental and ToString will print number instead of guid.
         /// 0 = disabled.
         /// This is just during initial development later can think a better solution for debugging
         /// </summary>
-        internal static ulong DEBUG_MODE = 0; 
+        internal static ulong DEBUG_MODE = 0;
+
+        /// <summary>
+        /// Sets whats to be the next generated game id
+        /// </summary>
+        public static GameId NextGeneration;
 
         public static GameId ZERO = Guid.Empty;
 
+        /// <summary>
+        /// Actual data of the game id is 2 ulongs (16 bytes)
+        /// </summary>
         public ulong _leftside;
         public ulong _rightside;
 
@@ -39,6 +47,14 @@ namespace Game.DataTypes
         }
 
         public static GameId Generate() {
+            
+            if(NextGeneration != ZERO)
+            {
+                var val = NextGeneration;
+                NextGeneration = ZERO;
+                return val;
+            }
+            
             if(DEBUG_MODE > 0)
             {
                 DEBUG_MODE++;

@@ -3,7 +3,7 @@ using Game.Systems.Party;
 using NUnit.Framework;
 using ServerTests;
 
-namespace Tests
+namespace UnitTests
 {
     public class TestBattleGroup
     {

@@ -19,6 +19,11 @@ namespace ClientSDK.Data
         IEntity BaseEntity { get; }
 
         /// <summary>
+        /// Gets the reference of the game client
+        /// </summary>
+        IGameClient Client { get; }
+
+        /// <summary>
         /// Current client state of this view
         /// </summary>
         EntityViewState State { get; }
@@ -29,12 +34,25 @@ namespace ClientSDK.Data
         internal void RenderView();
     }
 
-    public class EntityView<EntityType> : IEntityView where EntityType : IEntity
+    public interface IClientEntityView : IEntityView
+    {
+        void Create(IGameClient gameClient, IEntity entity);
+    }
+
+    public class EntityView<EntityType> : IClientEntityView, IEntityView where EntityType : IEntity
     {
         public EntityType Entity { get; set; }
         public IEntity BaseEntity => Entity;
         public IGameClient Client { get; set; }
+
         public EntityViewState State { get; protected set; } = EntityViewState.NOT_RENDERED;
+
+        public void Create(IGameClient gameClient, IEntity entity)
+        {
+            Client = gameClient;
+            Entity = (EntityType)entity;
+        }
+
         protected virtual void CreateView() { }
 
         void IEntityView.RenderView()

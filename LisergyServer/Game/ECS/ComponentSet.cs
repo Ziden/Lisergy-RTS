@@ -1,9 +1,7 @@
 ﻿using Game.Events;
-using Game.Network;
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -103,7 +101,7 @@ namespace Game.ECS
         public void RemoveComponent<T>() where T : IComponent => throw new NotImplementedException();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Save<T>(in T c) where T : unmanaged, IComponent
+        public void Save<T>(in T c) where T : IComponent
         {
             Marshal.StructureToPtr<T>(c, _pointerComponents[c.GetType()], true);
             _modifiedComponents.Add(typeof(T));
@@ -133,6 +131,8 @@ namespace Game.ECS
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Dispose() => _pointerComponents.FreeAll();
+
+        public IComponent GetByType(Type t) => _pointerComponents.AsInterface(t);
     }
 
 

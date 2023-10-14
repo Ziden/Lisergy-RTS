@@ -3,7 +3,7 @@ using Game.Battle;
 using Game.Systems.BattleGroup;
 using Game.Battle.Data;
 
-namespace ServerTests.UnitTests
+namespace UnitTests
 {
     public unsafe class TestBattleMemory
     {

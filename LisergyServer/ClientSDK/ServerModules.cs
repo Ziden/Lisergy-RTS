@@ -1,4 +1,5 @@
 ﻿using ClientSDK.Data;
+using ClientSDK.Modules;
 using ClientSDK.Services;
 
 namespace ClientSDK
@@ -17,6 +18,8 @@ namespace ClientSDK
         public IPlayerModule Player { get; }
         public IWorldModule World { get; }
         public IGameView Views { get; }
+        public IEntityModule Entities { get; }
+        public IComponentsModule Components { get; }
     }
 
     public class ServerModules : IServerModules
@@ -25,6 +28,9 @@ namespace ClientSDK
         public IPlayerModule Player { get; }
         public IWorldModule World { get; }
         public IGameView Views { get; }
+        public IEntityModule Entities { get; }
+
+        public IComponentsModule Components { get; }
 
         public ServerModules(GameClient client)
         {
@@ -32,6 +38,8 @@ namespace ClientSDK
             Player = new PlayerModule(client);
             World = new WorldModule(client);
             Views = new GameViewModule(client);
+            Entities = new EntityModule(client);
+            Components = new ComponentsModule();
         }
 
         public void Register()
@@ -40,6 +48,8 @@ namespace ClientSDK
             Player.Register();
             World.Register();
             Views.Register();
+            Entities.Register();
+            Components.Register();
         }
 
         public void OnSceneLoaded() {  }

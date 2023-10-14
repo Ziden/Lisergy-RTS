@@ -64,6 +64,7 @@ namespace Game
         /// </summary>
         public static void FlagMemoryToBeReused()
         {
+            Log.Info("Flagging all memory for reuse");
             _available = new Dictionary<IntPtr, int>(_allocs);
             _allocs.Clear();
         }
@@ -92,6 +93,7 @@ namespace Game
                 Marshal.FreeHGlobal(p);
             }
             _allocs.Clear();
+            _available.Clear();
         }
 
         public static string[] GetMetrics()

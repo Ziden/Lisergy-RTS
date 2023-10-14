@@ -1,5 +1,6 @@
 ﻿using ClientSDK.Data;
 using Game.ECS;
+using System;
 
 namespace ClientSDK.Services
 {
@@ -8,18 +9,18 @@ namespace ClientSDK.Services
         /// <summary>
         /// Gets or creates a given entity view
         /// </summary>
-        IEntityView GetOrCreate<T>(IEntity entity) where T : IEntity;
-
-        /// <summary>
-        /// Gets or creates a view for a given entity typed by call
-        /// </summary>
-        IEntityView GetOrCreateView<T>(T entity) where T : IEntity;
+        IEntityView GetOrCreateView(IEntity entity);
 
         /// <summary>
         /// Gets an entity view and casts to the given type.
         /// Will throw if not existant or wrong type
         /// </summary>
         T GetView<T>(IEntity entity) where T : IEntityView;
+
+        /// <summary>
+        /// Gets an uncasted entity view
+        /// </summary>
+        IEntityView GetEntityView(IEntity entity) ;
 
         /// <summary>
         /// Registers a view type. Whenever the client receives an entity of the given type it will instantiate the view of that type.
@@ -43,22 +44,16 @@ namespace ClientSDK.Services
             _viewRegistry.RegisterView<EntityType, ViewType>();
         }
 
-        public IEntityView GetOrCreateView<EntityType>(EntityType entity) where EntityType : IEntity
-        {
-            return GetOrCreate<EntityType>(entity);
-        }
-
-        public IEntityView GetOrCreate<EntityType>(IEntity entity) where EntityType : IEntity
+        public IEntityView GetOrCreateView(IEntity entity)
         {
             var existingView = _views.GetView(entity);
             if (existingView == null)
             {
-                existingView = _viewRegistry.CreateView<EntityType>();
+                existingView = _viewRegistry.CreateView(entity.GetType());
                 _views.AddView(entity, existingView);
-                var casted = (EntityView<EntityType>)existingView;
-                casted.Entity = (EntityType)entity;
-                casted.Client = _client;
-                return casted;
+                var client = (IClientEntityView)existingView;
+                client.Create(_client, entity);
+                return existingView;
             }
             return existingView;
         }
@@ -69,5 +64,7 @@ namespace ClientSDK.Services
         {
             
         }
+
+        public IEntityView GetEntityView(IEntity entity) => _views.GetView(entity);
     }
 }

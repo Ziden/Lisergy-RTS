@@ -27,7 +27,7 @@ namespace Game.ECS
         /// <summary>
         /// Saves a component that was modified by reference
         /// </summary>
-        void Save<T>(in T c) where T : unmanaged, IComponent;
+        void Save<T>(in T c) where T : IComponent;
 
         /// <summary>
         /// Adds a new component to the entity
@@ -40,6 +40,11 @@ namespace Game.ECS
         /// another variable or passed down by parameter without REF or IN keywords it will create a copy.
         /// </summary>
         ref T Get<T>() where T : unmanaged, IComponent;
+
+        /// <summary>
+        /// Gets a pointer component by type
+        /// </summary>
+        IComponent GetByType(Type t);
 
         /// <summary>
         /// Gets a pointer for a component.

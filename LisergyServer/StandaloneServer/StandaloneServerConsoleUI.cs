@@ -84,9 +84,9 @@ public class StandaloneServerConsoleUI : Window
             Height = Dim.Fill()
         };
 
-        Log.Debug = m => OnReceiveLog(LogLevel.Debug, m);
-        Log.Info = m => OnReceiveLog(LogLevel.Info, m);
-        Log.Error = m => OnReceiveLog(LogLevel.Error, m);
+        Log._Debug = m => OnReceiveLog(LogLevel.Debug, m);
+        Log._Info = m => OnReceiveLog(LogLevel.Info, m);
+        Log._Error = m => OnReceiveLog(LogLevel.Error, m);
       
 
         logsBtn.Clicked += () => ViewLogs();

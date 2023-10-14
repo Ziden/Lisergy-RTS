@@ -29,7 +29,7 @@ namespace ClientSDK.Services
         {
             var tileEntity = _client.Game.World.Map.GetTile(tile.Data.X, tile.Data.Y);
             tileEntity.UpdateData(tile.Data);
-            var tileView = _client.Modules.Views.GetOrCreateView<TileEntity>(tileEntity);
+            var tileView = _client.Modules.Views.GetOrCreateView(tileEntity);
             if(tileView.State == EntityViewState.NOT_RENDERED) tileView.RenderView();
         }
     }

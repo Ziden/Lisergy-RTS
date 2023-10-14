@@ -7,7 +7,7 @@ using NUnit.Framework;
 using ServerTests;
 using System.Linq;
 
-namespace Tests
+namespace UnitTests
 {
     public class TestBuilding
     {

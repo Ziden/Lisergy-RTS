@@ -5,7 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace Tests
+namespace UnitTests
 {
     public class TestUtils
     { 

@@ -14,7 +14,7 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace Tests
+namespace UnitTests
 {
     public unsafe class TestECS
     {

@@ -10,7 +10,7 @@ using ServerTests;
 using System;
 using System.Linq;
 
-namespace Tests
+namespace UnitTests
 {
     public class TestParty
     {

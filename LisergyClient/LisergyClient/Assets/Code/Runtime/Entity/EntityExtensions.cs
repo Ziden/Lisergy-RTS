@@ -1,14 +1,10 @@
-﻿using Game;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ClientSDK;
+using Game.ECS;
 
 namespace Assets.Code.Entity
 {
     public static class EntityExtensions
     {
-        public static bool IsMine(this BaseEntity entity) => entity.OwnerID == Main.LocalPlayer.OwnerID;
+        public static bool IsMine(this IEntity entity) => entity.OwnerID == ServiceContainer.Resolve<IServerModules>().Account.LocalPlayer.EntityId;
     }
 }

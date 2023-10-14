@@ -3,7 +3,6 @@ using Game;
 using Game.Events.ServerEvents;
 using System;
 using Game.DataTypes;
-using Telepathy;
 using ClientSDK.Data;
 using Game.Systems.Player;
 
@@ -17,6 +16,10 @@ namespace ClientSDK.Services
     {
         event Action<GameId> OnAuthenticated;
         event Action<IGame> OnSpecsReceived;
+
+        /// <summary>
+        /// Sends a request to authenticate to server
+        /// </summary>
         void SendAuthenticationPacket(string username, string password);
 
         /// <summary>

@@ -8,7 +8,7 @@ using NUnit.Framework;
 using System;
 using System.Linq;
 
-namespace Tests
+namespace UnitTests
 {
     public unsafe class TestBattleActions
     {

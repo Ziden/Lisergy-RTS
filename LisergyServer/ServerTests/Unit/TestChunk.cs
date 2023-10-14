@@ -1,10 +1,27 @@
+using Game;
 using Game.Events.ServerEvents;
 using NUnit.Framework;
 using ServerTests;
+using System;
 using System.Linq;
 
-namespace Tests
+namespace UnitTests
 {
+
+    [SetUpFixture]
+    public class TestFixture : IDisposable
+    {
+        public TestFixture()
+        {
+            // runs before all tests
+        }
+
+        public void Dispose()
+        {
+            UnmanagedMemory.FlagMemoryToBeReused();
+        }
+    }
+
     public class TestWorldEvents
     {
         private TestGame game;

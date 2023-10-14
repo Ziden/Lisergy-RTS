@@ -62,8 +62,6 @@ namespace Assets.Code
             if (EventSystem.current.IsPointerOverGameObject()) return;
 
             var a = _actions.Game.ClickOnScreen.ReadValue<Vector2>();
-            Debug.Log(a.ToString());
-
             var ray = _cam.ScreenPointToRay(new Vector3(a.x, a.y));
             if (Physics.Raycast(ray, out var hit))
             {
@@ -71,9 +69,6 @@ namespace Assets.Code
                 {
                     return;
                 }
-
-                Debug.Log("Hit", hit.collider);
-
                 var tileComponent = hit.collider.GetComponentInParent<TileMonoComponent>();
                 if (tileComponent == null) return;
                 var tile = tileComponent.Tile;
