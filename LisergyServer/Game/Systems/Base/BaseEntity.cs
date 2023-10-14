@@ -18,13 +18,13 @@ namespace Game
         public IComponentSet Components { get; private set; }
         public IGame Game { get; private set; }
 
-        public BaseEntity(IGame game, PlayerEntity owner)
+        public BaseEntity(IGame game, GameId ownerId)
         {
             Game = game;
-            _ownerId = owner != null ? owner.OwnerID : GameId.ZERO;
+            _ownerId = ownerId;
             _entityId = GameId.Generate();
             DeltaFlags = new DeltaFlags(this);
-            Components = new ComponentSet(this, owner);
+            Components = new ComponentSet(this);
         }
 
         public TileEntity Tile => Components.GetReference<MapReferenceComponent>().Tile;

@@ -1,11 +1,20 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Game
 {
     public class Log
     {
-        public static Action<string> Debug = Console.WriteLine;
-        public static Action<string> Info = Console.WriteLine;
-        public static Action<string> Error = Console.Error.WriteLine;
+        public static void Debug(string msg)
+        {
+            _Debug(msg);
+        }
+
+        public static void Info(string msg) { _Info(msg); }
+        public static void Error(string msg) { _Error(msg); }
+
+        public static Action<string> _Debug = Console.WriteLine;
+        public static Action<string> _Info = Console.WriteLine;
+        public static Action<string> _Error = Console.Error.WriteLine;
     }
 }

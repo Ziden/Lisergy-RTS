@@ -13,6 +13,7 @@ namespace Game.ECS
         public EntityType EntityType { get; }
         public IComponentSet Components { get; }
         public ref T Get<T>() where T : unmanaged, IComponent;
+        public void Save<T>(in T c) where T : unmanaged, IComponent;
         public ref readonly GameId EntityId { get; }
         public ref readonly GameId OwnerID { get; }
         public IGame Game { get; }

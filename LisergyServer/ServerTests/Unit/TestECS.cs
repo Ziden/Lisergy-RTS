@@ -61,10 +61,25 @@ namespace Tests
         }
 
         [Test]
+        public void TestDeltaTrackedOnAdd()
+        {
+            var player = new TestServerPlayer(new TestGame());
+            var clientEntity = new PartyEntity(player.Game, player.EntityId);
+            clientEntity.Components.Add<SelfSyncComponent>();
+            var componentSet = clientEntity.Components as ComponentSet;
+
+            Assert.IsTrue(clientEntity.Components.GetSyncedComponents(player).Contains(clientEntity.Components.Get<SelfSyncComponent>()));
+
+            var selfPacket = clientEntity.GetUpdatePacket(player) as EntityUpdatePacket;
+
+            Assert.IsTrue(selfPacket.SyncedComponents.Contains(clientEntity.Components.Get<SelfSyncComponent>()));
+        }
+
+        [Test]
         public void TestSyncOnlyMine()
         {
             var player = new TestServerPlayer(new TestGame());
-            var clientEntity = new PartyEntity(player.Game, player);
+            var clientEntity = new PartyEntity(player.Game, player.EntityId);
             clientEntity.Components.Add<SelfSyncComponent>();
 
             var selfComponent = clientEntity.Components.Get<SelfSyncComponent>();
@@ -72,13 +87,26 @@ namespace Tests
             var publicComponent = clientEntity.Get<PublicSyncComponent>();
 
             var selfPacket = clientEntity.GetUpdatePacket(player) as EntityUpdatePacket;
-            var publicPacket = clientEntity.GetUpdatePacket(null) as EntityUpdatePacket;
 
             Assert.IsTrue(selfPacket.SyncedComponents.Contains(selfComponent));
             Assert.IsTrue(selfPacket.SyncedComponents.Contains(publicComponent));
+        }
+
+        [Test]
+        public void TestSyncOnlyPublic()
+        {
+            var player = new TestServerPlayer(new TestGame());
+            var clientEntity = new PartyEntity(player.Game, player.EntityId);
+            clientEntity.Components.Add<SelfSyncComponent>();
+
+            var selfComponent = clientEntity.Components.Get<SelfSyncComponent>();
+            clientEntity.Components.Add<PublicSyncComponent>();
+            var publicComponent = clientEntity.Get<PublicSyncComponent>();
+
+            var publicPacket = clientEntity.GetUpdatePacket(null) as EntityUpdatePacket;
+
             Assert.IsTrue(!publicPacket.SyncedComponents.Contains(selfComponent));
             Assert.IsTrue(publicPacket.SyncedComponents.Contains(publicComponent));
-
         }
 
         public class TestView : IComponent
@@ -95,7 +123,7 @@ namespace Tests
         public void TestSimpleModify()
         {
             var player = new TestServerPlayer(new TestGame());
-            var clientEntity = new PartyEntity(player.Game, player);
+            var clientEntity = new PartyEntity(player.Game, player.EntityId);
             clientEntity.Components.Add<SelfSyncComponent>();
             var component1 = clientEntity.Get<SelfSyncComponent>();
             component1.Property = 666;
@@ -110,7 +138,7 @@ namespace Tests
         public void TestComponentNoModifyIfNoSave()
         {
             var player = new TestServerPlayer(new TestGame());
-            var clientEntity = new PartyEntity(player.Game, player);
+            var clientEntity = new PartyEntity(player.Game, player.EntityId);
             clientEntity.Components.Add<SelfSyncComponent>();
             var component1 = clientEntity.Get<SelfSyncComponent>();
             component1.Property = 666;
@@ -130,7 +158,7 @@ namespace Tests
         public void TestComponentModifiesAfterSave()
         {
             var player = new TestServerPlayer(new TestGame());
-            var clientEntity = new PartyEntity(player.Game, player);
+            var clientEntity = new PartyEntity(player.Game, player.EntityId);
             clientEntity.Components.Add<SelfSyncComponent>();
             var component1 = clientEntity.Get<SelfSyncComponent>();
             component1.Property = 666;

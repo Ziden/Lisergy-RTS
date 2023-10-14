@@ -1,4 +1,5 @@
-﻿using Game.Network;
+﻿using Game.DataTypes;
+using Game.Network;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Map;
@@ -13,7 +14,7 @@ namespace Game.Systems.Dungeon
     {
         public override EntityType EntityType => EntityType.Dungeon;
 
-        public DungeonEntity(IGame game) : base(game, null)
+        public DungeonEntity(IGame game) : base(game, GameId.ZERO)
         {
             Components.Add<DungeonComponent>();
             Components.Add<BuildingComponent>();

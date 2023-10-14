@@ -1,4 +1,5 @@
 using Game;
+using Game.DataTypes;
 using Game.ECS;
 using Game.Events.GameEvents;
 using Game.Systems.Dungeon;
@@ -30,7 +31,7 @@ namespace Tests
             tile1.Components.AddReference(new TileHabitants());
             tile2.Components.AddReference(new TileHabitants());
 
-            var dg = _game.Entities.CreateEntity<DungeonEntity>(null);
+            var dg = (DungeonEntity)_game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
 
             tile1.Components.CallEvent(new BuildingPlacedEvent(dg, tile1));
 

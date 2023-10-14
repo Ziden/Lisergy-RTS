@@ -1,7 +1,9 @@
 ﻿using Game.Events;
+using Game.Network;
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -14,37 +16,45 @@ namespace Game.ECS
         internal Dictionary<Type, IComponent> _referenceComponents = new Dictionary<Type, IComponent>();
         internal ComponentPointers _pointerComponents = new ComponentPointers();
 
+        internal HashSet<Type> _modifiedComponents = new HashSet<Type>();
         internal List<Type> _networkedPublic = new List<Type>();
         internal List<Type> _networkedSelf = new List<Type>();
 
         internal IEntity _entity;
-        internal PlayerEntity _owner;
 
         private List<IComponent> _returnBuffer = new List<IComponent>();
 
-        public ComponentSet(IEntity entity, PlayerEntity owner = null)
+        public ComponentSet(IEntity entity)
         {
             _entity = entity;
-            _owner = owner;
         }
 
         /// <summary>
         /// TODO: Use buffers for performance
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver)
+        public IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver, bool deltaCompression = true)
         {
-            Log.Debug($"Sync component for entity {_entity} of {_owner}");
-            _returnBuffer.Clear();
-            if (receiver == _owner)
+            Log.Debug($"Sync component for entity {_entity}");
+            if (receiver != null && receiver.OwnerID == _entity.OwnerID)
             {
-                foreach (var t in _networkedSelf) _returnBuffer.Add(_pointerComponents.AsInterface(t));
-            } else
+                foreach (var t in _networkedSelf)
+                {
+                    if (!deltaCompression || _modifiedComponents.Contains(t)) _returnBuffer.Add(_pointerComponents.AsInterface(t));
+                }
+            }
+            else
             {
-                foreach (var t in _networkedPublic) _returnBuffer.Add(_pointerComponents.AsInterface(t));
+                foreach (var t in _networkedPublic)
+                {
+                    if (!deltaCompression || _modifiedComponents.Contains(t))
+                        _returnBuffer.Add(_pointerComponents.AsInterface(t));
+                }
             }
             return _returnBuffer;
         }
+
+        public void ClearDeltas() => _modifiedComponents.Clear();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public IReadOnlyCollection<Type> All() => _pointerComponents.Keys;
@@ -61,6 +71,7 @@ namespace Game.ECS
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Add<T>() where T : unmanaged, IComponent
         {
+            _modifiedComponents.Add(typeof(T));
             _pointerComponents.Alloc<T>();
             TrackSync<T>();
         }
@@ -92,12 +103,16 @@ namespace Game.ECS
         public void RemoveComponent<T>() where T : IComponent => throw new NotImplementedException();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Save<T>(in T c) where T : unmanaged, IComponent => Marshal.StructureToPtr<T>(c, _pointerComponents[c.GetType()], true);
+        public void Save<T>(in T c) where T : unmanaged, IComponent
+        {
+            Marshal.StructureToPtr<T>(c, _pointerComponents[c.GetType()], true);
+            _modifiedComponents.Add(typeof(T));
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool TryGetReference<T>(out T component) where T : class, IReferenceComponent
         {
-            if(_referenceComponents.TryGetValue(typeof(T), out var r))
+            if (_referenceComponents.TryGetValue(typeof(T), out var r))
             {
                 component = (T)r;
                 return true;
@@ -110,12 +125,16 @@ namespace Game.ECS
         public T GetReference<T>() where T : class, IReferenceComponent => (T)_referenceComponents[typeof(T)];
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public unsafe T* GetPointer<T>() where T : unmanaged, IComponent => _pointerComponents.AsPointer<T>();
+        public unsafe T* GetPointer<T>() where T : unmanaged, IComponent
+        {
+            _modifiedComponents.Add(typeof(T));
+            return _pointerComponents.AsPointer<T>();
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Dispose() => _pointerComponents.FreeAll();
     }
 
-  
+
 
 }

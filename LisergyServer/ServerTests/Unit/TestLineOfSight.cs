@@ -33,7 +33,7 @@ namespace Tests
                 .ToList();
 
             var range = initialBuildingSpec.LOS * 2 + 1;
-            Assert.That(events.Count == range * range);
+            Assert.AreEqual(range * range, events.Count);
         }
 
         [Test]

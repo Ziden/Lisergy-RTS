@@ -1,4 +1,5 @@
 ﻿
+using Game.DataTypes;
 using Game.Systems.Dungeon;
 using Game.World;
 using GameDataTest;
@@ -12,7 +13,7 @@ namespace Game.Generator
             var place = c.FindTileWithId(0);
             if (place != null)
             {
-                var dungeon = w.Game.Entities.CreateEntity<DungeonEntity>(null);
+                var dungeon = (DungeonEntity)w.Game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
                 var spec = w.Game.Specs.Dungeons[TestDungeons.EASY.DungeonSpecID];
                 dungeon.BuildFromSpec(spec);
                 w.Game.Systems.Map.GetLogic(dungeon).SetPosition(place);

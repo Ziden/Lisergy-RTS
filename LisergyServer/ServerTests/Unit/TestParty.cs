@@ -31,7 +31,7 @@ namespace Tests
             var party = _player.GetParty(0);
             _game.Systems.Map.GetLogic(party).SetPosition(_game.World.Map.GetTile(0, 0));
 
-            var enemy = _game.Entities.CreateEntity<DungeonEntity>(null);
+            var enemy = _game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
             _game.Systems.Map.GetLogic(enemy).SetPosition(_game.World.Map.GetTile(1, 1));
 
             enemy.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[0]));
@@ -68,7 +68,7 @@ namespace Tests
             party.EntityLogic.Map.SetPosition(_game.World.Map.GetTile(0, 0));
 
         
-            var enemy = _game.Entities.CreateEntity<DungeonEntity>(null);
+            var enemy = _game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
             enemy.EntityLogic.Map.SetPosition(_game.World.Map.GetTile(0, 0));
 
             var component = enemy.Get<BattleGroupComponent>();
@@ -100,7 +100,7 @@ namespace Tests
             var unit2 = new Unit(_game.Specs.Units[1]);
             var unit3 = new Unit(_game.Specs.Units[2]);
 
-            var party = _game.Entities.CreateEntity<PartyEntity>(_player);
+            var party = _game.Entities.CreateEntity(_player.EntityId, EntityType.Party);
             var logic = _game.EntityLogic(party).BattleGroup;
             logic.AddUnit(unit1);
             logic.AddUnit(unit2);
@@ -120,7 +120,7 @@ namespace Tests
             var unit2 = new Unit(_game.Specs.Units[0]);
             var unit3 = new Unit(_game.Specs.Units[2]);
 
-            var party = _game.Entities.CreateEntity<PartyEntity>(_player);
+            var party = _game.Entities.CreateEntity(_player.EntityId, EntityType.Dungeon);
             _game.EntityLogic(party).BattleGroup.AddUnit(unit1);
             _game.EntityLogic(party).BattleGroup.AddUnit(unit2);
             _game.EntityLogic(party).BattleGroup.ReplaceUnit(unit2, unit3, 1);
@@ -135,7 +135,7 @@ namespace Tests
             var unit1 = new Unit(_game.Specs.Units[1]);
             var unit2 = new Unit(_game.Specs.Units[2]);
 
-            var party = _game.Entities.CreateEntity<PartyEntity>(_player);
+            var party = _game.Entities.CreateEntity(_player.EntityId, EntityType.Party);
             var logic = _game.EntityLogic(party).BattleGroup;
             logic.AddUnit(unit0);
             logic.AddUnit(unit1);
@@ -158,6 +158,9 @@ namespace Tests
         public void TestPartyBattleUnitsSerialized()
         {
             var party = _player.GetParty(0);
+
+            // Trigger a delta
+            party.Components.Save(party.Components.Get<BattleGroupComponent>());
 
             var update = party.GetUpdatePacket(_player);
 

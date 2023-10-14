@@ -5,7 +5,6 @@ using Game.Network;
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Telepathy;
 
 namespace ClientSDK

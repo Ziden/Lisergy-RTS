@@ -17,7 +17,7 @@ namespace Game.ECS
         /// <summary>
         /// Gets all components a given player needs to have in sync for this given entity
         /// </summary>
-        IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver);
+        IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver, bool deltaCompression = true);
 
         /// <summary>
         /// Gets all pointer components this entity have
@@ -50,6 +50,7 @@ namespace Game.ECS
         T GetReference<T>() where T : class, IReferenceComponent;
         bool TryGetReference<T>(out T component) where T : class, IReferenceComponent;
         bool Has<T>() where T : unmanaged, IComponent;
+        void ClearDeltas();
         void CallEvent(IBaseEvent e);
     }
 

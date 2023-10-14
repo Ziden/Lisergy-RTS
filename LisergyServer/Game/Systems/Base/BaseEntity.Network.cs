@@ -6,6 +6,7 @@ using Game.Systems.Movement;
 using Game.Systems.Player;
 using Game.Systems.MapPosition;
 using System.Linq;
+using System;
 
 namespace Game
 {
@@ -25,9 +26,7 @@ namespace Game
             if (DeltaFlags.HasFlag(DeltaFlag.EXISTENCE))
                 OnExistenceChanged();
             else if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
-            {
-                Game.Network.SendToPlayer(GetUpdatePacket(trigger), trigger);
-            }
+                Game.Network.SendToPlayer(GetUpdatePacket(trigger, onlyDeltas: false), trigger);
             if (DeltaFlags.HasFlag(DeltaFlag.COMPONENTS))
                 SendUpdateToNewViewers();
         }
@@ -38,7 +37,7 @@ namespace Game
             if (c.Tile == null) return; 
             foreach (var playerViewing in c.Tile.PlayersViewing)
             {
-                Game.Network.SendToPlayer(this.GetUpdatePacket(playerViewing), playerViewing);
+                Game.Network.SendToPlayer(GetUpdatePacket(playerViewing, onlyDeltas: false), playerViewing);
             }
         }
 
@@ -67,13 +66,15 @@ namespace Game
                 newPlayersViewing.ExceptWith(previousTile.PlayersViewing);
 
             foreach (var viewer in newPlayersViewing)
-                Game.Network.SendToPlayer(this.GetUpdatePacket(viewer), viewer);
+                Game.Network.SendToPlayer(GetUpdatePacket(viewer), viewer);
         }
 
-        public BasePacket GetUpdatePacket(PlayerEntity receiver)
+        public BasePacket GetUpdatePacket(PlayerEntity receiver, bool onlyDeltas = true)
         {
             var packet = new EntityUpdatePacket(this);
-            packet.SyncedComponents = Components.GetSyncedComponents(receiver).ToArray();
+            packet.SyncedComponents = Components.GetSyncedComponents(receiver, onlyDeltas).ToArray();
+            //if (packet.SyncedComponents.Length == 0) throw new Exception("Trying to sync entity without modifying any component");
+            Components.ClearDeltas();
             return packet;
         }
     }

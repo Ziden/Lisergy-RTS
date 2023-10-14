@@ -29,16 +29,16 @@ namespace Game.Systems.Player
         public PlayerEntity(GameId id, IGame game)
         {
             Game = game;
-            Components = new ComponentSet(this, this);
+            Components = new ComponentSet(this);
             Components.Add<PlayerComponent>();
             Components.AddReference(new PlayerDataComponent());
             _playerId = id;
             Data.Parties = new PartyEntity[MAX_PARTIES]
             {
-                game.Entities.CreateEntity<PartyEntity>(this),  
-                game.Entities.CreateEntity<PartyEntity>(this), 
-                game.Entities.CreateEntity<PartyEntity>(this),  
-                game.Entities.CreateEntity<PartyEntity>(this)
+                (PartyEntity)game.Entities.CreateEntity(_playerId , EntityType.Party),
+                (PartyEntity)game.Entities.CreateEntity(_playerId , EntityType.Party),
+                (PartyEntity)game.Entities.CreateEntity(_playerId , EntityType.Party),
+                (PartyEntity)game.Entities.CreateEntity(_playerId , EntityType.Party)
             };
             for (byte x = 0; x < MAX_PARTIES; x++)
             {
@@ -75,7 +75,8 @@ namespace Game.Systems.Player
         public EntityType EntityType => EntityType.Player;
         public override string ToString() => $"<Player id={EntityId}>";
         public ref T Get<T>() where T : unmanaged, IComponent => ref Components.Get<T>();
-        public BasePacket GetUpdatePacket(PlayerEntity receiver) => throw new NotImplementedException();
+        public BasePacket GetUpdatePacket(PlayerEntity receiver, bool o) => throw new NotImplementedException();
         public void ProccessDeltas(PlayerEntity trigger) => throw new NotImplementedException();
+        public void Save<T>(in T c) where T : unmanaged, IComponent => throw new NotImplementedException("Player for now cannot save components");
     }
 }

@@ -7,6 +7,7 @@ using Game.Systems.Party;
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 
 namespace Game
 {
@@ -15,12 +16,24 @@ namespace Game
         Player, Party, Dungeon, Building, Tile
     }
 
+    /// <summary>
+    /// Represents the entities that are currently in the game
+    /// </summary>
     public interface IGameEntities
     {
-        T CreateEntity<T>(PlayerEntity owner) where T : IEntity;
+        /// <summary>
+        /// Creates a new entity based on a type
+        /// </summary>
+        IEntity CreateEntity(GameId owner, EntityType type);
 
+        /// <summary>
+        /// Gets an entity by its given ID. Can return null if entity do not exists.
+        /// </summary>
         IEntity this[in GameId id] {get;}
 
+        /// <summary>
+        /// Holds all modified entitie deltas for the current input cycle
+        /// </summary>
         IDeltaCompression DeltaCompression { get; }
     }
 
@@ -37,19 +50,15 @@ namespace Game
             _game = game;
         }
 
-        public T CreateEntity<T>(PlayerEntity owner) where T : IEntity
+        public IEntity CreateEntity(GameId owner, EntityType type)
         {
-            var instance = CreateEntityInstance<T>(owner);
-            if(instance != null) _entities[instance.EntityId] = instance;
-            return (T)instance;
-        }
-
-        public IEntity CreateEntityInstance<T>(PlayerEntity owner) where T : IEntity
-        {
-            if (typeof(T) == typeof(DungeonEntity)) return new DungeonEntity(_game);
-            if (typeof(T) == typeof(PartyEntity)) return new PartyEntity(_game, owner);
-            if (typeof(T) == typeof(PlayerBuildingEntity)) return new PlayerBuildingEntity(_game, owner);
-            return null;
+            IEntity e = null;
+            if (type == EntityType.Dungeon) e = new DungeonEntity(_game);
+            else if (type == EntityType.Party) e = new PartyEntity(_game, owner);
+            else if (type == EntityType.Building) e = new PlayerBuildingEntity(_game, owner);
+            else throw new Exception($"Entity type {type} is not createable");
+            _entities[e.EntityId] = e;
+            return e;
         }
 
         public void Dispose()
@@ -57,6 +66,12 @@ namespace Game
             foreach (var e in _entities.Values) e.Components.Dispose();
         }
 
-        public IEntity this[in GameId id] => _entities[id];
+        public IEntity this[in GameId id] {
+            get
+            {
+                _entities.TryGetValue(id, out var entity);
+                return entity;
+            }
+        }
     }
 }

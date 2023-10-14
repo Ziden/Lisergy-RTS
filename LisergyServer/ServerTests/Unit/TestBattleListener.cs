@@ -1,4 +1,6 @@
+using Game;
 using Game.Battle;
+using Game.DataTypes;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
 using Game.Systems.Battler;
@@ -29,7 +31,7 @@ namespace Tests
             _player = _game.GetTestPlayer();
             _path = new List<Position>();
             _party = _player.GetParty(0);
-            _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
+            _dungeon = (DungeonEntity)_game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
             _game.Systems.Map.GetLogic(_dungeon).SetPosition(_game.World.Map.GetTile(8, 8));
         }

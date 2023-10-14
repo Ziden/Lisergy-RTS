@@ -1,3 +1,4 @@
+using Game;
 using Game.DataTypes;
 using Game.Systems.Dungeon;
 using Game.Systems.Tile;
@@ -5,7 +6,6 @@ using Game.World;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace Tests
@@ -55,7 +55,7 @@ namespace Tests
             var building = player.Data.Buildings.FirstOrDefault();
             var tile = building.Tile.GetNeighbor(Direction.NORTH);
 
-            var dungeon = Game.Entities.CreateEntity<DungeonEntity>(null);
+            var dungeon = (DungeonEntity)Game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
             Game.Systems.Map.GetLogic(dungeon).SetPosition(tile);
 
             Assert.AreEqual(dungeon.Tile, tile);

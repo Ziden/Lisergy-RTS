@@ -16,7 +16,7 @@ namespace Game.Systems.Party
 
         public override EntityType EntityType => EntityType.Party;
 
-        public PartyEntity(IGame game, PlayerEntity owner) : base(game, owner)
+        public PartyEntity(IGame game, GameId owner) : base(game, owner)
         {
             Components.Add<MapPlacementComponent>();
             Components.Add<BattleGroupComponent>();

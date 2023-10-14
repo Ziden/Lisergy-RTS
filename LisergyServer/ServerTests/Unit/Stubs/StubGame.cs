@@ -21,7 +21,6 @@ namespace ServerTests
         public WorldService WorldService { get; private set; }
         public CourseService CourseService { get; private set; }
         public List<BasePacket> SentPackets { get; private set; } = new List<BasePacket>();
-
         public GameWorld TestWorld { get; private set; }
         public PreAllocatedChunkMap TestMap { get; private set; }
 
@@ -33,7 +32,6 @@ namespace ServerTests
             TestWorld = new GameWorld(2, 16, 16);
             SetupGame(TestWorld, new GameServerNetwork(this));
             Entities.DeltaCompression.ClearDeltas();
-            TestWorld.CreateMap();
             TestMap = TestWorld.Map as PreAllocatedChunkMap;
             return TestWorld;
         }
@@ -109,7 +107,7 @@ namespace ServerTests
 
         static TestGame()
         {
-            Log.Debug = m =>
+            Log._Debug = m =>
             {
                 var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 if (lastLog != 0) m = $"[{now - lastLog}ms] " + m;

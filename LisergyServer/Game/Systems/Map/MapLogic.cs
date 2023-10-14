@@ -23,7 +23,6 @@ namespace Game.Systems.Map
             var previousTile = component.Tile;
             component.PreviousTile = previousTile;
             component.Tile = value;
-
             if (previousTile == null || component.Tile == null)
             {
                 Entity.DeltaFlags.SetFlag(DeltaFlag.EXISTENCE);

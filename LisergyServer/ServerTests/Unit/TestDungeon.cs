@@ -1,6 +1,7 @@
 using Game;
 using Game.Battle;
 using Game.Battle.Data;
+using Game.DataTypes;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
@@ -32,7 +33,7 @@ namespace Tests
             _player = _game.GetTestPlayer();
             _path = new List<Position>();
             _party = _player.GetParty(0);
-            _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
+            _dungeon = (DungeonEntity)_game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
             Assert.That(_dungeon.Get<BattleGroupComponent>().Units.Valids == 1);
             _dungeon.EntityLogic.Map.SetPosition(_game.World.Map.GetTile(8, 8));
@@ -182,7 +183,7 @@ namespace Tests
         [Test]
         public void TestRevealingDungeonReceivesPacket()
         {
-            _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
+            _dungeon = (DungeonEntity)_game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
             _dungeon.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[1]));
             _dungeon.EntityLogic.Map.SetPosition(_game.World.Map.GetTile(_party.Tile.X + _party.GetLineOfSight() + 1, _party.Tile.Y));
 
@@ -204,7 +205,7 @@ namespace Tests
         [Test]
         public void TestDungeonBattleTeamHasUnits()
         {
-            _dungeon = _game.Entities.CreateEntity<DungeonEntity>(null);
+            _dungeon = (DungeonEntity)_game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
             _dungeon.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[1]));
 
             var battleTeam = new BattleTeam(new BattleTeamData(_dungeon));
@@ -218,7 +219,7 @@ namespace Tests
             var clientPlayer = new TestServerPlayer(_game);
             _player.ReceivedPackets.Clear();
 
-            var dg = _game.Entities.CreateEntity<DungeonEntity>(null);
+            var dg = _game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
             dg.EntityLogic.Map.SetPosition(_game.World.Map.GetTile(4, 2));
 
             _game.HandleClientEvent(clientPlayer, joinEvent);

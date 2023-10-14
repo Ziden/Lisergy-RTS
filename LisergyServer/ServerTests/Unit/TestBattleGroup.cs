@@ -18,7 +18,7 @@ namespace Tests
         [Test]
         public void TestAddSingleUnit()
         {
-            var e = new PartyEntity(Game, Game.CreatePlayer());
+            var e = new PartyEntity(Game, Game.CreatePlayer().EntityId);
             var startUnits = e.Get<BattleGroupComponent>().Units.Valids;
 
             e.EntityLogic.BattleGroup.AddUnit(new Unit(Game.Specs.Units[1]));

@@ -1,4 +1,5 @@
-﻿using Game.Systems.FogOfWar;
+﻿using Game.DataTypes;
+using Game.Systems.FogOfWar;
 using Game.Systems.Map;
 using Game.Systems.MapPosition;
 using Game.Systems.Player;
@@ -13,7 +14,7 @@ namespace Game.Systems.Building
 
         public ushort SpecId => Components.Get<PlayerBuildingComponent>().SpecId;
 
-        public PlayerBuildingEntity(IGame game, PlayerEntity owner) : base(game, owner)
+        public PlayerBuildingEntity(IGame game, GameId owner) : base(game, owner)
         {
             Components.Add<MapPlacementComponent>();
             Components.Add<BuildingComponent>();

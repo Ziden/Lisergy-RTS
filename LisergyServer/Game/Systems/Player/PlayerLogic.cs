@@ -84,7 +84,7 @@ namespace Game.Systems.Player
         /// </summary>
         public void Build(ushort buildingSpecId, TileEntity t)
         {
-            var building = Game.Entities.CreateEntity<PlayerBuildingEntity>(Game.Players.GetPlayer(Entity.OwnerID));
+            var building = (PlayerBuildingEntity)Game.Entities.CreateEntity(Entity.OwnerID, EntityType.Building);
             building.BuildFromSpec(Game.Specs.Buildings[buildingSpecId]);
             Data.Buildings.Add(building);
             building.EntityLogic.Map.SetPosition(t);
