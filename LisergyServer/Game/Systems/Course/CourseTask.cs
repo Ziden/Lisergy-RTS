@@ -13,7 +13,7 @@ namespace Game.Systems.Movement
         public List<Position> Path;
         public CourseIntent Intent { get; private set; }
 
-        public CourseTask(IGame game, IEntity party, List<Position> path, CourseIntent intent) : base(game, party.Components.Get<CourseComponent>().MoveDelay, game.Players.GetPlayer(party.OwnerID))
+        public CourseTask(IGame game, IEntity party, List<Position> path, CourseIntent intent) : base(game, party.Components.Get<MovespeedComponent>().MoveDelay, game.Players.GetPlayer(party.OwnerID))
         {
             Party = party;
             Path = path;

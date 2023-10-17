@@ -44,8 +44,6 @@ public class LogWindow : EditorWindow
 
     private List<StackedLog> logs;
     private StackedLog selectedLog;
-
-    private int previousTabSize = 0;
     public static LogWindow Window;
 
     [MenuItem("Window/Lisergy/Logs")]
@@ -82,7 +80,6 @@ public class LogWindow : EditorWindow
 
         logs = new List<StackedLog>();
         selectedLog = null;
-        previousTabSize = 0;
         Window = this;
         //Application.logMessageReceived += LogMessageReceived;
     }
@@ -162,7 +159,6 @@ public class LogWindow : EditorWindow
                 tab = tab + 1;
                 RenderLogs(log.Children, tab);
             }
-           
         });
     }
 
@@ -172,13 +168,8 @@ public class LogWindow : EditorWindow
 
         GUILayout.BeginArea(upperPanel);
         upperPanelScroll = GUILayout.BeginScrollView(upperPanelScroll);
-
-        var gray = false;
-
         var tab = 0;
-
         RenderLogs(logs, tab);
-
         GUILayout.EndScrollView();
         GUILayout.EndArea();
     }

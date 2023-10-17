@@ -1,11 +1,15 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
+using Game.Events.ServerEvents;
+using Game.Events;
 using Game.Network;
 using Game.Systems.FogOfWar;
 using Game.Systems.Player;
 using Game.Systems.Tile;
 using Game.World;
+using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Game.Tile
 {
@@ -14,6 +18,7 @@ namespace Game.Tile
         private TileMapData* _tileData;
         private Chunk _chunk;
         private GameId _id;
+        private DeltaFlags _flags;
         public ComponentSet _components { get; private set; }
         public EntityType EntityType => EntityType.Tile;
 
@@ -29,6 +34,19 @@ namespace Game.Tile
             SetupComponents();
         }
 
+        /// <summary>
+        /// Sets flag for the given tile
+        /// Also sets the same flag for every entity & building on the tile
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetDeltaFlag(DeltaFlag flag)
+        {
+            DeltaFlags.SetFlag(flag);
+            foreach (var e in EntitiesIn) e.DeltaFlags.SetFlag(flag);
+            Building?.DeltaFlags.SetFlag(flag);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetupComponents()
         {
             Components.Add<TileComponent>();
@@ -36,17 +54,26 @@ namespace Game.Tile
             Components.AddReference(new TileHabitants());
         }
 
-        public void SetFlag(DeltaFlag flag)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public BasePacket GetUpdatePacket(PlayerEntity receiver, bool onlyDeltas = true)
         {
-            DeltaFlags.SetFlag(flag);
-            foreach (var e in EntitiesIn) e.DeltaFlags.SetFlag(flag);
-            Building?.DeltaFlags.SetFlag(flag);
+            var packet = PacketPool.Get<TilePacket>();
+            packet.Data = *_tileData;
+            return packet;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void ProccessDeltas(PlayerEntity trigger)
+        {
+            if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
+                Game.Network.SendToPlayer(GetUpdatePacket(trigger, false), trigger);
+        }
+
+        public ref DeltaFlags DeltaFlags { get => ref _flags; }
         public void UpdateData(in TileMapData newData) => *_tileData = newData;
         public ref Chunk Chunk => ref _chunk;
         public ref byte SpecId { get => ref _tileData->TileId; }
-        public ref readonly float MovementFactor { get => ref this.GetSpec().MovementFactor; }
+        public float MovementFactor { get => this.GetSpec().MovementFactor; }
         public ref readonly Position Position => ref _tileData->Position;
         public ref readonly ushort Y { get => ref Position.Y; }
         public ref readonly ushort X { get => ref Position.X; }
@@ -61,8 +88,9 @@ namespace Game.Tile
         public ref readonly GameId OwnerID => ref GameId.ZERO;
         public IGame Game => this.Chunk.Map.World.Game;
         public IEntityLogic EntityLogic => Game.Logic.GetEntityLogic(this);
-
         public override string ToString() => $"<Tile Type={SpecId} {Position}>";
         public ref T Get<T>() where T : unmanaged, IComponent => ref _components.Get<T>();
+        public void Save<T>(in T c) where T : unmanaged, IComponent => throw new NotImplementedException("Tiles cannot save components atm, just have references");
+
     }
 }

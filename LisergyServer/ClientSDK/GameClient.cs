@@ -1,4 +1,6 @@
-﻿using Game;
+﻿using ClientSDK.Data;
+using Game;
+using Game.Events.Bus;
 using Game.Network;
 using System;
 
@@ -8,7 +10,7 @@ namespace ClientSDK
     /// Main client SDK. Should be imported by the game client and consumed to run and display the game
     /// Contains all base functionality to run parts of the game client-side more easily.
     /// </summary>
-    public interface IGameClient 
+    public interface IGameClient
     {
         /// <summary>
         /// Main game instance, where entities, networking and the world data are handled
@@ -24,13 +26,19 @@ namespace ClientSDK
         /// Exposed network to be used. References to Game.Network
         /// </summary>
         public IGameNetwork Network { get; }
+
+        /// <summary>
+        /// Client specific triggered event bus
+        /// </summary>
+        public EventBus<IClientEvent> ClientEvents { get; }
     }
 
     public class GameClient : IGameClient
     {
         public IGameNetwork Network { get; private set; } = new ClientNetwork();
-        public IGame Game { get; private set; }    
+        public IGame Game { get; private set; } = null!;
         public IServerModules Modules { get; private set; }
+        public EventBus<IClientEvent> ClientEvents { get; private set; } = new EventBus<IClientEvent>();
 
         public GameClient()
         {

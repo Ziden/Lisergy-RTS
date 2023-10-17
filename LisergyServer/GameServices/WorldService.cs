@@ -27,7 +27,7 @@ namespace Game.Services
                 Log.Debug($"Existing player {player.EntityId} joined");
                 foreach (var tile in player.Data.VisibleTiles)
                 {
-                    tile.SetFlag(DeltaFlag.SELF_REVEALED);
+                    tile.SetDeltaFlag(DeltaFlag.SELF_REVEALED);
                 }
             }
             else

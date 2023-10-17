@@ -54,6 +54,7 @@ namespace Game.ECS
         T AddReference<T>(in T c) where T : class, IReferenceComponent;
         T GetReference<T>() where T : class, IReferenceComponent;
         bool TryGetReference<T>(out T component) where T : class, IReferenceComponent;
+        bool TryGet<T>(out T component) where T : unmanaged, IComponent;
         bool Has<T>() where T : unmanaged, IComponent;
         void ClearDeltas();
         void CallEvent(IBaseEvent e);

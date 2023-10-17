@@ -15,6 +15,20 @@ namespace Game.ECS
     [DebuggerTypeProxy(typeof(ComponentPointersDebugView))]
     public unsafe class ComponentPointers : Dictionary<Type, IntPtr>
     {
+        /// <summary>
+        /// Try to get a pointer component as a struct
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool TryGet<T>(out T outPtr) where T : unmanaged, IComponent
+        {
+            if (!TryGetValue(typeof(T), out var ptr))
+            {
+                outPtr = default(T);
+                return false;
+            }
+            outPtr = *(T*)ptr;
+            return true;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private IntPtr Pointer<T>() => this[typeof(T)];

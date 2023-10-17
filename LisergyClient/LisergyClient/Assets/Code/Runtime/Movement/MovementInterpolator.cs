@@ -16,7 +16,6 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
     public class MovementInterpolator
     {
         public event TweenCallback OnStart;
-        public event TweenCallback OnFinish;
         public event Action<TileView> OnPrepareMoveNext;
 
         private BaseEntity _entity;

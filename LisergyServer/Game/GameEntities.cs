@@ -58,6 +58,7 @@ namespace Game
             else if (type == EntityType.Building) e = new PlayerBuildingEntity(_game, owner);
             else throw new Exception($"Entity type {type} is not createable");
             _entities[e.EntityId] = e;
+            e.DeltaFlags.SetFlag(DeltaFlag.CREATED);
             return e;
         }
 

@@ -1,0 +1,261 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ClientSDK</name>
+    </assembly>
+    <members>
+        <member name="T:ClientSDK.Data.IClientWorld">
+            <summary>
+            Implementation of the game world for the client SDK.
+            Instead of requiring to have all tiles generated, it will lazy generate tiles.
+            </summary>
+        </member>
+        <member name="F:ClientSDK.Data.EntityViewState.NOT_RENDERED">
+            <summary>
+            When an view is created but not yet rendered
+            </summary>
+        </member>
+        <member name="F:ClientSDK.Data.EntityViewState.RENDERING">
+            <summary>
+            When a view is rendering at this moment
+            </summary>
+        </member>
+        <member name="F:ClientSDK.Data.EntityViewState.RENDERED">
+            <summary>
+            When a view is completely rendered
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Data.IEntityView">
+            <summary>
+            Represents a graphical representation of game entity that the client is aware of
+            </summary>
+        </member>
+        <member name="P:ClientSDK.Data.IEntityView.BaseEntity">
+            <summary>
+            Gets the base entity of this view
+            </summary>
+        </member>
+        <member name="P:ClientSDK.Data.IEntityView.Client">
+            <summary>
+            Gets the reference of the game client
+            </summary>
+        </member>
+        <member name="P:ClientSDK.Data.IEntityView.State">
+            <summary>
+            Current client state of this view
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Data.IEntityView.RenderView">
+            <summary>
+            Create the new graphical part of this view
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Data.EntityViewRegistry">
+            <summary>
+            Handles client registration of entity view types so the sdk knows the available view objects
+            Will use them for instantiation
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Data.IClientEvent">
+            <summary>
+            To mark a game event as a only client SDK event
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Data.IGameService">
+            <summary>
+            Can be used as a entry point for client related services
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Data.LazyLoadChunkMap">
+            <summary>
+            Chunk map that can lazy load tiles and chunk into memory
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Data.LazyLoadedPlayers">
+            <summary>
+            Will create players as players are requests but not available
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Data.OtherPlayer">
+            <summary>
+            Represents another player thats not the local player
+            </summary>
+        </member>
+        <member name="T:ClientSDK.IGameClient">
+            <summary>
+            Main client SDK. Should be imported by the game client and consumed to run and display the game
+            Contains all base functionality to run parts of the game client-side more easily.
+            </summary>
+        </member>
+        <member name="P:ClientSDK.IGameClient.Game">
+            <summary>
+            Main game instance, where entities, networking and the world data are handled
+            </summary>
+        </member>
+        <member name="P:ClientSDK.IGameClient.Modules">
+            <summary>
+            Client SDK modules that can perform server specific interactions
+            </summary>
+        </member>
+        <member name="P:ClientSDK.IGameClient.Network">
+            <summary>
+            Exposed network to be used. References to Game.Network
+            </summary>
+        </member>
+        <member name="P:ClientSDK.IGameClient.ClientEvents">
+            <summary>
+            Client specific triggered event bus
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Services.IAccountModule">
+            <summary>
+            Service responsible for handling authentication and specific account and profile information.
+            Will perform the initial login flow until world is joined.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Services.IAccountModule.SendAuthenticationPacket(System.String,System.String)">
+            <summary>
+            Sends a request to authenticate to server
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Services.IActionModule">
+            <summary>
+            Module for player input actions. This module encapsulates all potential actions the player can do on the game using network
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Services.IActionModule.MoveParty(Game.Systems.Party.PartyEntity,Game.Tile.TileEntity,Game.Systems.Movement.CourseIntent)">
+            <summary>
+            Tries to move the given entity to the target destination.
+            Will return true or false if the entity is able to move there or not.
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Services.IEntityModule">
+            <summary>
+            Service that controls entities that the game client is aware of.
+            Expose basic entity control functionality like moving or taking entity actions.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Services.IGameView.GetOrCreateView(Game.ECS.IEntity)">
+            <summary>
+            Gets or creates a given entity view
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Services.IGameView.GetView``1(Game.ECS.IEntity)">
+            <summary>
+            Gets an entity view and casts to the given type.
+            Will throw if not existant or wrong type
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Services.IGameView.GetEntityView(Game.ECS.IEntity)">
+            <summary>
+            Gets an uncasted entity view
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Services.IGameView.RegisterView``2">
+            <summary>
+            Registers a view type. Whenever the client receives an entity of the given type it will instantiate the view of that type.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:ClientSDK.Services.IPlayerModule" -->
+        <member name="P:ClientSDK.Services.IPlayerModule.PlayerId">
+            <summary>
+            Gets the local player user id
+            </summary>
+        </member>
+        <member name="P:ClientSDK.Services.IPlayerModule.LocalPlayer">
+            <summary>
+            Gets the local player reference.
+            Shall contain all data the client is aware of
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Services.IWorldModule">
+            <summary>
+            Service responsible for handling authentication and specific account and profile information
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Modules.IComponentsModule">
+            <summary>
+            Enables the game to more specifically control how to update components.
+            Components can be synced automatically (just copy data) or have manual syncs to handle things manually.
+            This module is able to implement callbacks from when a given component is synced so the client can react to it.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Modules.IComponentsModule.OnComponentUpdate``1(System.Action{Game.ECS.IEntity,``0,``0})">
+            <summary>
+            Registers a component sync. 
+            Whenever the given entity type has the given component type updated, instead of the values simply being copied
+            the sync code will be called.
+            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Modules.ComponentsModule.UpdateComponents(Game.ECS.IEntity,Game.ECS.IComponent[])">
+            <summary>
+            Updates the components of the given entity.
+            Will copy all new values to old values
+            Any registered component sync callbacks will be called after all updates are done
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Modules.ILogicModule">
+            <summary>
+            Module responsible for handling base component logic to keep the client logic "up to date"
+            This module single responsibility is to try to keep the client game in sync with server game as most as it can
+            The only thing this won't keep track is the player data which is handled in <see cref="T:ClientSDK.Services.IPlayerModule"/>
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Modules.LogicModule.OnUpdatePlacement(Game.ECS.IEntity,Game.Systems.Map.MapPlacementComponent,Game.Systems.Map.MapPlacementComponent)">
+            <summary>
+            Whenever map placement updates are sent to the client we re-position the entity on the client logic.
+            This will trigger all exploration events
+            </summary>
+        </member>
+        <member name="T:ClientSDK.SDKEvents.ClientAwareOfEntityEvent">
+            <summary>
+            Triggered when the client gets aware of a new entity.
+            This is only called when the entity is created for the first time
+            So if player sees an entity, this entity goes to the fog and comes back this is not called twice
+            This is not applied to tiles or players
+            </summary>
+        </member>
+        <member name="T:ClientSDK.SDKEvents.EntityMovementRequestStarted">
+            <summary>
+            Event triggered whenever a player attempts to move an entity and the request is sent to server.
+            Server can still stop the movement, this is a client sided event.
+            After this is sent the client should start to receive component updates regarding the movement.
+            </summary>
+        </member>
+        <member name="T:ClientSDK.SDKEvents.GameStartedEvent">
+            <summary>
+            Triggered when the client created the game instance and its ready to start receiving data from server
+            This is triggered right after game specs are received and the game instance is setup
+            </summary>
+        </member>
+        <member name="T:ClientSDK.SDKEvents.OwnEntityInfoReceived`1">
+            <summary>
+            Whenever the local player receives info of his own entities
+            This event can be used to display own entity updates on the UI 
+            When this event fires the entity should have all its components synced.
+            </summary>
+        </member>
+        <member name="T:ClientSDK.SDKEvents.TileViewCreated">
+            <summary>
+            Called whenever a tile view is created for the first time.
+            This event is called before starting to render the tile view.
+            </summary>
+        </member>
+        <member name="T:ClientSDK.IClientModule">
+            <summary>
+            A client SDK module that helps to integrate with the game and server data
+            </summary>
+        </member>
+        <member name="M:ClientSDK.IClientModule.Register">
+            <summary>
+            Registers the module after all modules are initialized
+            </summary>
+        </member>
+        <member name="T:ClientSDK.IServerModules">
+            <summary>
+            Handles server communication and event backs.
+            </summary>
+        </member>
+    </members>
+</doc>

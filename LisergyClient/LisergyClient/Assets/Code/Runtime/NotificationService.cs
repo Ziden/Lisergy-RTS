@@ -20,9 +20,9 @@ namespace Assets.Code.Assets.Code.Runtime
 
         public void OnSceneLoaded()
         {
-            _screen = ServiceContainer.Resolve<IScreenService>();
+            _screen = ClientServices.Resolve<IScreenService>();
 
-            ClientEvents.OnBattleFinish += OnBattleFinish;
+            UIEvents.OnBattleFinish += OnBattleFinish;
         }
 
         private void OnBattleFinish(BattleHeaderData h)

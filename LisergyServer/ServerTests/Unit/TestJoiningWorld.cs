@@ -44,13 +44,13 @@ namespace UnitTests
             var clientPlayer = new TestServerPlayer(Game);
             Game.HandleClientEvent(clientPlayer, joinEvent);
 
-            var entityVisibleEvents = clientPlayer.ReceivedPacketsOfType<EntityUpdatePacket>();
-            var partyEvent = entityVisibleEvents.FirstOrDefault(e => e.Type == EntityType.Party);
-            var buildingEvent = entityVisibleEvents.FirstOrDefault(e => e.Type == EntityType.Building);
+            var updateEvents = clientPlayer.ReceivedPacketsOfType<EntityUpdatePacket>();
+            var partyEvent = updateEvents.FirstOrDefault(e => e.Type == EntityType.Party);
+            var buildingEvent = updateEvents.FirstOrDefault(e => e.Type == EntityType.Building);
             var partyPosition = (MapPlacementComponent)partyEvent.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(MapPlacementComponent));
             var buildingPosition = (MapPlacementComponent)buildingEvent.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(MapPlacementComponent));
 
-            Assert.AreEqual(2, entityVisibleEvents.Count, "Initial Party & Building should be visible");
+            Assert.AreEqual(2, updateEvents.Count, "Initial Party & Building should be visible");
             Assert.AreNotEqual(partyPosition.Position.X, 0);
             Assert.AreNotEqual(partyPosition.Position.Y, 0);
             Assert.AreNotEqual(buildingPosition.Position.X, 0);

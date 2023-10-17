@@ -30,11 +30,11 @@ MonoBehaviour:
     m_Settings:
       excludeSkybox: 0
   antialiasing:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       method: 0
       fxaaSettings:
-        preset: 2
+        preset: 1
       taaSettings:
         jitterSpread: 1
         sharpen: 3
@@ -49,7 +49,7 @@ MonoBehaviour:
       downsampling: 0
       forceForwardCompatibility: 0
       ambientOnly: 0
-      highPrecision: 1
+      highPrecision: 0
   screenSpaceReflection:
     m_Enabled: 0
     m_Settings:
@@ -81,7 +81,7 @@ MonoBehaviour:
     m_Enabled: 0
     m_Settings:
       shutterAngle: 270
-      sampleCount: 10
+      sampleCount: 18
       frameBlending: 0
   eyeAdaptation:
     m_Enabled: 0
@@ -98,7 +98,7 @@ MonoBehaviour:
       logMin: -8
       logMax: 4
   bloom:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       bloom:
         intensity: 0.2
@@ -110,7 +110,7 @@ MonoBehaviour:
         texture: {fileID: 0}
         intensity: 3
   colorGrading:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       tonemapping:
         tonemapper: 2

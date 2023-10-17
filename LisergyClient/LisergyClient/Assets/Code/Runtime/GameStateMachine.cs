@@ -3,8 +3,10 @@ using Assets.Code.Assets.Code.UIScreens;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.UI;
 using ClientSDK;
+using ClientSDK.SDKEvents;
 using Game.Battle;
 using Game.DataTypes;
+using Game.Events.Bus;
 using Stateless;
 using UnityEngine;
 
@@ -14,7 +16,7 @@ namespace Assets.Code.Assets.Code
     /// Game state machine. 
     /// Should only be used for UI transitions and not logic.
     /// </summary>
-    public class GameStateMachine
+    public class GameStateMachine : IEventListener
     {
         private enum State { Login, MapView, Battle };
         private enum Trigger { LoggedIn, LocalBattleStart, LocalBattleFinish };
@@ -26,7 +28,7 @@ namespace Assets.Code.Assets.Code
         public GameStateMachine(IGameClient client)
         {
             _client = client;
-            _screens = ServiceContainer.Resolve<IScreenService>();
+            _screens = ClientServices.Resolve<IScreenService>();
 
             _stateMachine = new StateMachine<State, Trigger>(State.Login);
             _stateMachine.Configure(State.Login)
@@ -50,7 +52,7 @@ namespace Assets.Code.Assets.Code
 
         private void AddListeners()
         {
-            _client.Modules.Account.OnSpecsReceived += _ => _stateMachine.Fire(Trigger.LoggedIn);
+            _client.ClientEvents.Register<GameStartedEvent>(this, e => _stateMachine.Fire(Trigger.LoggedIn));
         }
 
         private void OnEnterMapState()
@@ -79,8 +81,7 @@ namespace Assets.Code.Assets.Code
         private void OnBattleStartEvent(GameId battleId, BattleTeam attacker, BattleTeam defender)
         {
             Debug.Log("Battle start event received on state machine");
-            var pl = Main.LocalPlayer;
-            if (pl.ViewBattles && attacker.OwnerID == pl.EntityId)
+            if(attacker.OwnerID.IsMine())
             {
                 _stateMachine.Fire(Trigger.LocalBattleStart);
                 var transition = _screens.Open<TransitionScreen>();

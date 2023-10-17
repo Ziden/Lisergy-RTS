@@ -27,7 +27,7 @@ namespace UnitTests
             Game.CreatePlayer();
             var initialBuildingSpec = Game.Specs.InitialBuilding;
             var player = Game.GetTestPlayer();
-            var events = Game.SentPackets
+            var events = Game.SentServerPackets
                 .Where(e => e is TilePacket)
                 .Select(e => (TilePacket)e)
                 .ToList();

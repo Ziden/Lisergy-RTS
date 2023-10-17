@@ -51,8 +51,8 @@ namespace ClientSDK.Services
             {
                 existingView = _viewRegistry.CreateView(entity.GetType());
                 _views.AddView(entity, existingView);
-                var client = (IClientEntityView)existingView;
-                client.Create(_client, entity);
+                var clientView = (IClientEntityView)existingView;
+                clientView.Attach(_client, entity);
                 return existingView;
             }
             return existingView;

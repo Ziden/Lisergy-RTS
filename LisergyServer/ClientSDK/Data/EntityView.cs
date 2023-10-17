@@ -1,11 +1,25 @@
 ﻿using Game;
 using Game.ECS;
+using System;
 
 namespace ClientSDK.Data
 {
     public enum EntityViewState
     {
-        NOT_RENDERED, RENDERING, RENDERED
+        /// <summary>
+        /// When an view is created but not yet rendered
+        /// </summary>
+        NOT_RENDERED, 
+
+        /// <summary>
+        /// When a view is rendering at this moment
+        /// </summary>
+        RENDERING, 
+
+        /// <summary>
+        /// When a view is completely rendered
+        /// </summary>
+        RENDERED
     }
 
     /// <summary>
@@ -36,7 +50,7 @@ namespace ClientSDK.Data
 
     public interface IClientEntityView : IEntityView
     {
-        void Create(IGameClient gameClient, IEntity entity);
+        void Attach(IGameClient gameClient, IEntity entity);
     }
 
     public class EntityView<EntityType> : IClientEntityView, IEntityView where EntityType : IEntity
@@ -47,7 +61,7 @@ namespace ClientSDK.Data
 
         public EntityViewState State { get; protected set; } = EntityViewState.NOT_RENDERED;
 
-        public void Create(IGameClient gameClient, IEntity entity)
+        public void Attach(IGameClient gameClient, IEntity entity)
         {
             Client = gameClient;
             Entity = (EntityType)entity;

@@ -8,6 +8,7 @@ using Assets.Code.Assets.Code.Assets;
 using ClientSDK;
 using ClientSDK.Data;
 using Game.DataTypes;
+using UnityEditor;
 
 namespace Assets.Code.Assets.Code.UIScreens.Base
 {
@@ -27,6 +28,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         void Close<T>() where T : UITKScreen;
         void Close(UITKScreen screen);
         bool IsOpen<T>() where T : UITKScreen;
+        bool IsOpen(UITKScreen screen);
     }
 
     public class ScreenService : IScreenService
@@ -45,7 +47,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
 
         public void OnSceneLoaded()
         {
-            _assets = ServiceContainer.Resolve<IAssetService>();
+            _assets = ClientServices.Resolve<IAssetService>();
             _screensContainer = new GameObject("Game Screens Container");
             _noSetup = new GenericSetup();
         }
@@ -54,8 +56,17 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         {
             foreach (var button in element.Query(null, BUTTON_CLASS).Build())
             {
-                button.RegisterCallback<PointerDownEvent>(ev => ServiceContainer.Resolve<IAudioService>().PlaySoundEffect(SoundFX.Button_click), TrickleDown.TrickleDown);
+                button.RegisterCallback<PointerDownEvent>(ev => ClientServices.Resolve<IAudioService>().PlaySoundEffect(SoundFX.Button_click), TrickleDown.TrickleDown);
             }
+        }
+
+        public bool IsOpen(UITKScreen s)
+        {
+            if (_inScene.TryGetValue(s.GetType(), out var screen))
+            {
+                return screen.Object.activeSelf;
+            }
+            return false;
         }
 
         public bool IsOpen<T>() where T : UITKScreen

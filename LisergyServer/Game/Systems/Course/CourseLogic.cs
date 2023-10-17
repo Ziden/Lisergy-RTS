@@ -1,12 +1,9 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
 using Game.Scheduler;
-using Game.Systems.Party;
-using Game.Tile;
+using Game.Systems.Map;
 using Game.World;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml.Linq;
 
 namespace Game.Systems.Movement
 {
@@ -14,9 +11,7 @@ namespace Game.Systems.Movement
     {
         public bool TryStartMovement(List<Position> sentPath, CourseIntent intent)
         {
-            Log.Debug("Validating route");
             var owner = Game.Players.GetPlayer(Entity.OwnerID);
-
             foreach (var position in sentPath)
             {
                 var tile = Game.World.Map.GetTile(position.X, position.Y);
@@ -35,17 +30,17 @@ namespace Game.Systems.Movement
 
         public void FinishCourse()
         {
-            var movement = Entity.Get<CourseComponent>();
-            movement.CourseId = GameId.ZERO;
-            Entity.Components.Save(movement);
+            var movement = Entity.Components.GetPointer<CourseComponent>();
+            movement->CourseId = GameId.ZERO;
         }
 
         public GameTask GetCourse() => Game.Scheduler.GetTask(Entity.Components.Get<CourseComponent>().CourseId);
 
         public CourseTask? TryGetCourseTask()
         {
-            if(Entity.Components.Get<CourseComponent>().CourseId == GameId.ZERO) return null;
-            return (CourseTask)Game.Scheduler.GetTask(Entity.Components.Get<CourseComponent>().CourseId);
+            var courseId = Entity.Components.Get<CourseComponent>().CourseId;
+            if (courseId == GameId.ZERO) return null;
+            return Game.Scheduler.GetTask(courseId) as CourseTask;
         }
 
         public void SetCourse(CourseTask newCourse)

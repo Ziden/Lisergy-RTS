@@ -1,4 +1,7 @@
-﻿using Game.World;
+﻿using Game;
+using Game.DataTypes;
+using Game.Systems.Player;
+using Game.World;
 
 
 namespace ClientSDK.Data
@@ -12,8 +15,9 @@ namespace ClientSDK.Data
 
     public class ClientWorld : GameWorld, IClientWorld
     {
-        public ClientWorld(int maxPlayers, in ushort sizeX, in ushort sizeY) : base(maxPlayers, sizeX, sizeY)
+        public ClientWorld(IGame game, int maxPlayers, in ushort sizeX, in ushort sizeY) : base(maxPlayers, sizeX, sizeY)
         {
+            Players = new LazyLoadedPlayers(game, maxPlayers);
         }
 
         public override void CreateMap()

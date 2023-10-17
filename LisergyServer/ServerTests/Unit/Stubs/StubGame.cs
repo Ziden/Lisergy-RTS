@@ -20,7 +20,7 @@ namespace ServerTests
         public BattleService BattleService { get; private set; }
         public WorldService WorldService { get; private set; }
         public CourseService CourseService { get; private set; }
-        public List<BasePacket> SentPackets { get; private set; } = new List<BasePacket>();
+        public List<BasePacket> SentServerPackets { get; private set; } = new List<BasePacket>();
         public GameWorld TestWorld { get; private set; }
         public PreAllocatedChunkMap TestMap { get; private set; }
 
@@ -73,7 +73,7 @@ namespace ServerTests
 
         public void ReceivePacket(BasePacket ev)
         {
-            SentPackets.Add(ev);
+            SentServerPackets.Add(ev);
         }
 
         public TestServerPlayer GetTestPlayer()

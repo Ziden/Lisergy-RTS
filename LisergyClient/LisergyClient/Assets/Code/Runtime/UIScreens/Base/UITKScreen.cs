@@ -43,6 +43,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
             if (Loaded) cb(); else OnLoad = cb;
         }
 
+        public bool IsOpen => _screenService.IsOpen(this);
         public VisualElement Root => _root;
         public abstract UIScreen ScreenAsset { get; }
         public virtual void OnLoaded(VisualElement root) { }

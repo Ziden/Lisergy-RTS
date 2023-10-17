@@ -35,7 +35,7 @@ namespace Assets.Code.Battle
         public BattlePlayback(GameId battleId, BattleTeam attacker, BattleTeam defender)
         {
             //_battle = new TurnBattle(battleId, attacker, defender);
-            _audio = ServiceContainer.Resolve<IAudioService>();
+            _audio = ClientServices.Resolve<IAudioService>();
         }
 
         public async Task SetupScene(Transform root, Action onLoaded)
@@ -128,7 +128,7 @@ namespace Assets.Code.Battle
         private void AddUnit(Unit u, GameObject teamTransform, int index)
         {
             _waitingUnits++;
-            var unitView = new UnitView(u);
+            var unitView = new UnitView(null, u); // TODO ADD GAME CLIENT
             unitView.AddToScene(gameObject =>
             {
                 _waitingUnits--;

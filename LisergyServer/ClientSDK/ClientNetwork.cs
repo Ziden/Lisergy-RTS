@@ -5,21 +5,21 @@ using Game.Network;
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Telepathy;
 
+[assembly: InternalsVisibleTo("ServerTests")]
 namespace ClientSDK
 {
-
     public class ClientNetwork : IGameNetwork, IEventListener
     {
         public event Action<BasePacket>? OnReceiveGenericPacket;
 
-        private const int READS_PER_TICK = 20;
-        private Message _msg;
-        private Client _socket = new Client();
-        private List<byte[]> _toSend = new List<byte[]>();
-
-        private EventBus<BasePacket> _receivedFromServer = new EventBus<BasePacket>();
+        internal const int READS_PER_TICK = 20;
+        internal Message _msg;
+        internal Client _socket = new Client();
+        internal List<byte[]> _toSend = new List<byte[]>();
+        internal EventBus<BasePacket> _receivedFromServer = new EventBus<BasePacket>();
 
         public void On<T>(Action<T> listener) where T : BasePacket
         {
@@ -32,7 +32,7 @@ namespace ClientSDK
             OnReceiveGenericPacket?.Invoke(input);
         }
 
-        public void SendToPlayer(BasePacket p, params PlayerEntity[] players) 
+        public void SendToPlayer<PacketType>(PacketType p, params PlayerEntity[] players) where PacketType : BasePacket
         {
             throw new Exception("P2P Not Enabled - yet");
         }

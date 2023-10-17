@@ -19,7 +19,7 @@ namespace Game.Systems.Movement
             var tileHabitants = ev.ToTile.Components.GetReference<TileHabitants>();
             var course = ev.Entity.EntityLogic.Movement.TryGetCourseTask();
 
-            if (course == null || course.Intent != CourseIntent.Offensive || !course.IsLastMovement()) return;
+            if (course == null || course.Intent != CourseIntent.OffensiveTarget || !course.IsLastMovement()) return;
             if (tileHabitants.Building == null) return;
 
             if (!ev.Entity.Components.Has<BattleGroupComponent>() || !tileHabitants.Building.Components.Has<BattleGroupComponent>()) return;

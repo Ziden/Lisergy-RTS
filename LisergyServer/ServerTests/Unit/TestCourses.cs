@@ -6,6 +6,8 @@ using Game.Network.ServerPackets;
 using Game.Pathfinder;
 using Game.Scheduler;
 using Game.Systems.Battler;
+using Game.Systems.FogOfWar;
+using Game.Systems.Map;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Systems.Tile;
@@ -73,6 +75,37 @@ namespace UnitTests
             Assert.AreEqual(next, _party.Tile);
         }
 
+        /// <summary>
+        /// When moving outside of a player vision, the player should still receive an entity update
+        /// so he is aware this entity moved out. He would be aware by noticing the position component
+        /// </summary>
+        [Test]
+        public void TestMoveOutsidePlayerVision()
+        {
+            var tile = _party.Tile;
+            var visibleTiles = _party.Tile.GetAOE(_party.Get<EntityVisionComponent>().LineOfSight);
+            var next = tile.GetNeighbor(Direction.SOUTH);
+
+            var player2 = _game.CreatePlayer(5, 7);
+            var player2Party = player2.GetParty(0); // placed in 8 - 7
+
+            Assert.That(player2Party.Tile.PlayersViewing.Contains(_player));
+
+            _game.Entities.DeltaCompression.ClearDeltas();
+            _player.ReceivedPackets.Clear();
+
+            // Moving player2 to 5 7 which is slightly outside p1 vision
+            _path.Add(new Position(5, 7));
+            _game.HandleClientEvent(player2, new MoveRequestPacket() { Path = _path, PartyIndex = player2Party.PartyIndex });
+            _game.GameScheduler.Tick(_game.GameScheduler.Now + player2Party.Course.Delay);
+
+            // p1 should still have received p2 component update even tho the entity is outside his vision because it was inside vision
+            var moveEvents = _player.ReceivedPacketsOfType<EntityUpdatePacket>().Where(p => p.EntityId == player2Party.EntityId && p.SyncedComponents.Any(c => c is MapPlacementComponent));
+
+            // should have received movement events
+            Assert.AreEqual(1, moveEvents.Count());
+        }
+
         [Test]
         public void TestMoveEvents()
         {
@@ -80,15 +113,17 @@ namespace UnitTests
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new Position(next.X, next.Y));
 
+            _game.Entities.DeltaCompression.ClearDeltas();
+            _player.ReceivedPackets.Clear();
+
             SendMoveRequest();
             _game.GameScheduler.Tick(_game.GameScheduler.Now + _party.Course.Delay);
 
-            var moveEvents = _player.ReceivedPacketsOfType<EntityMovePacket>();
+            var moveEvents = _player.ReceivedPacketsOfType<EntityUpdatePacket>().Where(p => p.EntityId == _party.EntityId && p.SyncedComponents.Any(c => c is MapPlacementComponent));
             var tileDiscovery = _player.ReceivedPacketsOfType<TilePacket>();
+
             // should have received movement events
-            Assert.AreEqual(1, moveEvents.Count);
-            // should have explored some tiles
-            Assert.GreaterOrEqual(tileDiscovery.Count, 1);
+            Assert.AreEqual(1, moveEvents.Count());
         }
 
         [Test]
@@ -98,7 +133,7 @@ namespace UnitTests
             var next = tile.GetNeighbor(Direction.SOUTH);
             var party = _player.GetParty(0);
 
-            _player.SendMoveRequest(party, next, CourseIntent.Offensive);
+            _player.SendMoveRequest(party, next, CourseIntent.OffensiveTarget);
             var course = party.Course;
 
             course.Tick();
@@ -158,6 +193,9 @@ namespace UnitTests
             _path.Add(new Position(next2.X, next2.Y));
             _path.Add(new Position(next3.X, next3.Y));
 
+            _game.Entities.DeltaCompression.ClearDeltas();
+            _player.ReceivedPackets.Clear();
+
             SendMoveRequest();
 
             Assert.AreEqual(tile, _party.Tile);
@@ -174,8 +212,8 @@ namespace UnitTests
             _game.GameScheduler.Tick(date);
             Assert.AreEqual(next3, _party.Tile);
 
-            var moveEvents = _player.ReceivedPacketsOfType<EntityMovePacket>();
-            Assert.AreEqual(3, moveEvents.Count);
+            var moveEvents = _player.ReceivedPacketsOfType<EntityUpdatePacket>().Where(p => p.EntityId == _party.EntityId && p.SyncedComponents.Any(c => c is MapPlacementComponent));
+            Assert.AreEqual(3, moveEvents.Count());
         }
     }
 }

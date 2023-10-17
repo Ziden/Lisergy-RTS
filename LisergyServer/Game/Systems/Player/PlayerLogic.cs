@@ -52,7 +52,11 @@ namespace Game.Systems.Player
             var unit = RecruitUnit(initialUnit);
             var party = Data.Parties[0];
             PlaceUnitInParty(unit, party);
-            Game.Systems.Map.GetLogic(party).SetPosition(t.GetNeighbor(Direction.EAST));
+            var partyTile = t.GetNeighbor(Direction.EAST);
+            if(!partyTile.Passable) partyTile = t.GetNeighbor(Direction.WEST);
+            if (!partyTile.Passable) partyTile = t.GetNeighbor(Direction.SOUTH);
+            if (!partyTile.Passable) partyTile = t.GetNeighbor(Direction.NORTH);
+            Game.Systems.Map.GetLogic(party).SetPosition(partyTile);
             Log.Debug($"Placed new player {Entity} in {t}");
             return;
         }
@@ -82,13 +86,14 @@ namespace Game.Systems.Player
         /// <summary>
         /// Builds a new building on the given tile
         /// </summary>
-        public void Build(ushort buildingSpecId, TileEntity t)
+        public PlayerBuildingEntity Build(ushort buildingSpecId, TileEntity t)
         {
             var building = (PlayerBuildingEntity)Game.Entities.CreateEntity(Entity.OwnerID, EntityType.Building);
             building.BuildFromSpec(Game.Specs.Buildings[buildingSpecId]);
             Data.Buildings.Add(building);
             building.EntityLogic.Map.SetPosition(t);
             Log.Debug($"Player {Entity} built {building}");
+            return building;
         }
     } 
 }

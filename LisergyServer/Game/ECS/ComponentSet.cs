@@ -2,6 +2,7 @@
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -33,7 +34,7 @@ namespace Game.ECS
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver, bool deltaCompression = true)
         {
-            Log.Debug($"Sync component for entity {_entity}");
+            _returnBuffer.Clear();
             if (receiver != null && receiver.OwnerID == _entity.OwnerID)
             {
                 foreach (var t in _networkedSelf)
@@ -49,6 +50,7 @@ namespace Game.ECS
                         _returnBuffer.Add(_pointerComponents.AsInterface(t));
                 }
             }
+            Log.Debug($"Sync components [{string.Join(",",_returnBuffer.Select(c => c.GetType().Name))}] for entity {_entity}");
             return _returnBuffer;
         }
 
@@ -93,6 +95,9 @@ namespace Game.ECS
                     _networkedPublic.Add(type);
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool TryGet<T>(out T comp) where T : unmanaged, IComponent => _pointerComponents.TryGet<T>(out comp);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void CallEvent(IBaseEvent ev) => _entity.Game.Systems.CallEvent(_entity, ev);

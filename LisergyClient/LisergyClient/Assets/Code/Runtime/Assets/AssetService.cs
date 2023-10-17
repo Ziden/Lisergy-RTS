@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Assets.Code.Assets.Code.Assets
-{
+{ 
     public interface IAssetService : IGameService
     {
         Task GetAudio(SoundFX effect, Action<AudioClip> onComplete);

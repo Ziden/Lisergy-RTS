@@ -1,11 +1,8 @@
 ﻿using Assets.Code.Assets.Code.Runtime.UIScreens;
 using Assets.Code.Assets.Code.UIScreens.Base;
-using Game;
-using Game.DataTypes;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Network;
-using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
 
 namespace Assets.Code.Battle
@@ -16,7 +13,7 @@ namespace Assets.Code.Battle
 
         public BattleListener(EventBus<BasePacket> networkEvents)
         {
-            _screens = ServiceContainer.Resolve<IScreenService>();
+            _screens = ClientServices.Resolve<IScreenService>();
             networkEvents.Register<BattleLogPacket>(this, BattleLog);
             networkEvents.Register<BattleResultSummaryPacket>(this, BattleSummary);
             networkEvents.Register<BattleStartPacket>(this, BattleStart);
@@ -30,7 +27,7 @@ namespace Assets.Code.Battle
                 var battleScreen = _screens.Get<BattleScreen>();
                 if (battleScreen != null)
                 {
-                    battleScreen.OnFinishedPlayback += () => ClientEvents.ReceivedServerBattleFinish(battleScreen.ResultHeader);
+                    battleScreen.OnFinishedPlayback += () => UIEvents.ReceivedServerBattleFinish(battleScreen.ResultHeader);
                     battleScreen.PlayLog(ev);
                 }
             });

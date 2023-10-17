@@ -10,7 +10,7 @@ namespace GameServices
     public interface IConnectedPlayer
     {
         public GameId PlayerId { get; set; }
-        void Send<PacketType>(PacketType ev) where PacketType : BasePacket;
+        void Send<PacketType>(PacketType ev) where PacketType : BasePacket, new();
         int ConnectionID { get; }
     }
 

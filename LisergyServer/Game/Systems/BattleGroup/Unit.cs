@@ -38,6 +38,11 @@ namespace Game.Systems.Battler
         public byte MP { get => Stats.MP; set => Stats.MP = value; }
         public byte MaxMP { get => Stats.MaxMP; set => Stats.MaxHP = value; }
 
+        /// <summary>
+        /// Gets the unit HP ratio from 1 (100%) to 0 (no HP)
+        /// </summary>
+        public float HpRatio => HP / (float)MaxHP;
+
         public void CopyFrom(Unit u)
         {
             var size = sizeof(Unit);

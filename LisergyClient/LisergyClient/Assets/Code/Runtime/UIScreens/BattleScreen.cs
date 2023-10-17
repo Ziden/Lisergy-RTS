@@ -63,7 +63,7 @@ namespace Assets.Code
         {
             var setup = GetSetup<BattleScreenSetup>();
             OnFinishedPlayback += setup.OnFinish;
-            _assets = ServiceContainer.Resolve<IAssetService>();
+            _assets = ClientServices.Resolve<IAssetService>();
             for (var i = 0; i < 4; i++)
             {
                 if (i < setup.Attacker.Units.Length) await AddHealthbar(Units[setup.Attacker.Units[i].UnitID]);
@@ -106,7 +106,7 @@ namespace Assets.Code
             var setup = GetSetup<BattleScreenSetup>();
             BattleID = setup.BattleId;
             _battlePlayback = new BattlePlayback(setup.BattleId, setup.Attacker, setup.Defender);
-            _ = _battlePlayback.SetupScene(scenario.transform, () => OnSceneLoaded());
+            await _battlePlayback.SetupScene(scenario.transform, () => _ = OnSceneLoaded());
         }
 
         public override void OnOpen()

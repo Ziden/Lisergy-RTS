@@ -14,7 +14,7 @@ namespace Game.Pathfinder
         public int H;  // f = gone + heuristic
         public int PX; // Parent
         public int PY;
-
+        public Position Position => new Position(X, Y);
         public override string ToString()
         {
             return $"<Node {X}-{Y}>";

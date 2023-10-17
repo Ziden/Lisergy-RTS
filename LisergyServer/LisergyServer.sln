@@ -19,7 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerServices", "GameServi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DebugServerUI", "StandaloneServer\DebugServerUI.csproj", "{491EB80F-BFC6-48B9-A9E7-D84E41D6E7A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientSDK", "ClientSDK\ClientSDK.csproj", "{409F85B9-CD4F-43D3-8A4A-9CE23F25BDBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSDK", "ClientSDK\ClientSDK.csproj", "{409F85B9-CD4F-43D3-8A4A-9CE23F25BDBD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{195A9534-0588-4274-913A-72F715ED332B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

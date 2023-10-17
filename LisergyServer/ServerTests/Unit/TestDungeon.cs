@@ -76,7 +76,7 @@ namespace UnitTests
             component.Units[0] = unit;
             party.Save(component);
 
-            _player.SendMoveRequest(party, dungeonTile, CourseIntent.Offensive);
+            _player.SendMoveRequest(party, dungeonTile, CourseIntent.OffensiveTarget);
             var course = party.Course;
 
             Assert.AreEqual(0, _player.Data.BattleHeaders.Count());
@@ -137,7 +137,7 @@ namespace UnitTests
 
             _dungeon.EntityLogic.Map.SetPosition(dungeonTile);
 
-            _player.SendMoveRequest(party, dungeonTile, CourseIntent.Offensive);
+            _player.SendMoveRequest(party, dungeonTile, CourseIntent.OffensiveTarget);
             _player.GetParty(0).Course.Tick();
 
             var battle = _game.BattleService.GetRunningBattle(party.Components.Get<BattleGroupComponent>().BattleID);
@@ -166,7 +166,7 @@ namespace UnitTests
 
             _dungeon.EntityLogic.Map.SetPosition(dungeonTile);
 
-            _player.SendMoveRequest(party, dungeonTile, CourseIntent.Offensive);
+            _player.SendMoveRequest(party, dungeonTile, CourseIntent.OffensiveTarget);
             _player.GetParty(0).Course.Tick();
 
             var battle = _game.BattleService.GetRunningBattle(party.Components.Get<BattleGroupComponent>().BattleID);
@@ -246,7 +246,7 @@ namespace UnitTests
 
             dungeonTile.Components.GetReference<TileHabitants>().Building = _dungeon;
 
-            _player.SendMoveRequest(_player.GetParty(0), dungeonTile, CourseIntent.Offensive);
+            _player.SendMoveRequest(_player.GetParty(0), dungeonTile, CourseIntent.OffensiveTarget);
             _player.GetParty(0).Course.Tick();
 
             var b = _game.BattleService.GetRunningBattle(party.Get<BattleGroupComponent>().BattleID);

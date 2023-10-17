@@ -30,7 +30,7 @@ namespace Assets.Code
 
         public override void OnLoaded(VisualElement root)
         {
-            var service = ServiceContainer.Resolve<IScreenService>();
+            var service = ClientServices.Resolve<IScreenService>();
             Login = root.Q<TextField>("Login");
             Password = root.Q<TextField>("Password");
             Submit = root.Q<Button>("LoginButton");

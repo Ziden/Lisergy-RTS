@@ -22,7 +22,7 @@ namespace Assets.Code.Assets.Code.Runtime.Tools
             }
         }
 
-        public GameObject? Obtain()
+        public GameObject Obtain()
         {
             if(_inactive.Count > 0)
             {

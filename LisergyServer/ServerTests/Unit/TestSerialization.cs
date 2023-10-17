@@ -68,7 +68,7 @@ namespace UnitTests
             var building = player.Data.Buildings.First();
             var tile = player.Data.Parties[0].Tile;
 
-            var visibleEvent = game.SentPackets.Where(e => e is EntityUpdatePacket).FirstOrDefault() as EntityUpdatePacket;
+            var visibleEvent = game.SentServerPackets.Where(e => e is EntityUpdatePacket).FirstOrDefault() as EntityUpdatePacket;
 
             var serialized = Serialization.FromPacket<EntityUpdatePacket>(visibleEvent);
             var unserialized = Serialization.ToPacket<EntityUpdatePacket>(serialized);

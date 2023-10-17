@@ -22,7 +22,7 @@ namespace Game.World
     {
         public int MaxPlayers { get; private set; }
 
-        private Dictionary<GameId, PlayerEntity> _players = new Dictionary<GameId, PlayerEntity>();
+        protected Dictionary<GameId, PlayerEntity> _players = new Dictionary<GameId, PlayerEntity>();
 
         public WorldPlayers(int maxPlayers)
         {
@@ -48,7 +48,7 @@ namespace Game.World
 
         public int PlayerCount { get => _players.Count; }
 
-        public bool GetPlayer(GameId id, out PlayerEntity player)
+        public virtual bool GetPlayer(GameId id, out PlayerEntity player)
         {
             if (id == GameId.ZERO)
             {
@@ -58,7 +58,7 @@ namespace Game.World
             return _players.TryGetValue(id, out player);
         }
 
-        public PlayerEntity GetPlayer(GameId id)
+        public virtual PlayerEntity GetPlayer(GameId id)
         {
             _players.TryGetValue(id, out var player);
             return player;

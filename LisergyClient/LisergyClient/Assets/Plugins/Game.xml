@@ -1,0 +1,847 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Game</name>
+    </assembly>
+    <members>
+        <member name="T:Game.Battle.AutoRun">
+            <summary>
+            Battle auto-runner. 
+            Will take a battle and run AI on all rounds until completion.
+            </summary>
+        </member>
+        <member name="T:Game.Battle.TurnBattleRecord">
+            <summary>
+            Represents a record of what happened in a given battle.
+            Will be filled while the battle runs.
+            Will hold all input events of a given battle, that means a given battle
+            can be replayed deterministically by the same given events.
+            </summary>
+        </member>
+        <member name="T:Game.Battle.BattleTeam">
+            <summary>
+            Represents a battle team which consists of an array of units.
+            Since units are structs, it will allocate unit pointers to be used inside the battle.
+            </summary>
+        </member>
+        <member name="F:Game.Battle.BattleTeam.TeamData">
+            <summary>
+            Struct representing the battle input.
+            Will be updated only in the end of the battle.
+            </summary>
+        </member>
+        <member name="M:Game.Battle.BattleTeam.UpdateTeamData">
+            <summary>
+            Updates the team data with the result of the battle
+            </summary>
+        </member>
+        <member name="T:Game.Battle.Data.BattleHeaderData">
+            <summary>
+            Represents a minimal header of the battle.
+            Contains the final state of the attacker and defender teams
+            </summary>
+        </member>
+        <member name="T:Game.Battle.Data.BattleTeamData">
+            <summary>
+            Represents static battle team data.
+            Its the main input to start off battles.
+            Will be present as an updated output from battles as well.
+            </summary>
+        </member>
+        <member name="T:Game.Battle.Data.BattleTeamMemory">
+            <summary>
+            Controls battle memory for faster data manipulation.
+            Will allocate and free for every battle, and will re-use previously allocated memory 
+            if it was free'd before thus not requiring extra allocation.
+            All battle memory is allocated on the stack.
+            </summary>
+        </member>
+        <member name="T:Game.Battle.Data.BattleUnit">
+            <summary>
+            Represents a unit inside a battle.
+            Holds the pointer of a unit to perform manipulations on the unit data.
+            Holds also a pointer to battle specific states of the unit.
+            </summary>
+        </member>
+        <member name="M:Game.Battle.Data.BattleUnit.CompareTo(Game.Battle.Data.BattleUnit)">
+            <summary>
+            Sorting method based on RT.
+            This is to be used in sorted sets to decide which battle unit acts first
+            </summary>
+        </member>
+        <member name="T:Game.Battle.Data.BattleUnitState">
+            <summary>
+            Struct for specific data that is only needed inside battles
+            </summary>
+        </member>
+        <member name="T:Game.DataTypes.DeterministicRandom">
+              Rangom number generator based on Gorge Marsaglia and his yolo XORSHIFT
+              http://www.jstatsoft.org/v08/i14/xorshift.pdf
+            
+              Notes.
+              A further performance improvement can be obtained by declaring local variables, thus avoiding 
+              re-allocation of variables on each call. However care should be taken if multiple instances of
+              GameRandom are in use or if being used in a multi-threaded environment.
+        </member>
+        <member name="M:Game.DataTypes.DeterministicRandom.Next">
+            <summary>
+            Generates a random int over the range 0 to int.MaxValue-1.
+            </summary>
+        </member>
+        <member name="M:Game.DataTypes.DeterministicRandom.Next(System.Int32)">
+            <summary>
+            Generates a random int over the range 0 to upperBound-1, and not including upperBound.
+            </summary>
+        </member>
+        <member name="M:Game.DataTypes.DeterministicRandom.Next(System.Int32,System.Int32)">
+            <summary>
+            Generates a random int over the range lowerBound to upperBound-1, and not including upperBound.
+            upperBound must be >= lowerBound. lowerBound may be negative.
+            </summary>
+        </member>
+        <member name="M:Game.DataTypes.DeterministicRandom.NextDouble">
+            <summary>
+            Generates a random double. Values returned are from 0.0 up to but not including 1.0.
+            </summary>
+        </member>
+        <member name="M:Game.DataTypes.DeterministicRandom.NextSingle">
+            <summary>
+            Generates a random single. Values returned are from 0.0 up to but not including 1.0.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Game.DataTypes.DeterministicRandom.NextBytes(System.Byte[])" -->
+        <member name="T:Game.DataTypes.FastNew`1">
+            <summary>
+            Pre compiled constructors for quickly creating new instances of a class
+            This is for only when there's no parameters on constructors.
+            If there is please use <see cref="T:Game.DataTypes.InstanceFactory"/>
+            </summary>
+        </member>
+        <member name="T:Game.DataTypes.FixedString">
+            <summary>
+            Fixed implementation of a string
+            </summary>
+        </member>
+        <member name="T:Game.DataTypes.GameId">
+            <summary>
+            Simpler to serialize structure of Guids.
+            Guarantees uniqueness using Guids. It uses 16 bytes like guids
+            Main difference is that its an unmanaged data structure that's serialized as two ulongs
+            for faster serialization, reading and writing
+            </summary>
+        </member>
+        <member name="F:Game.DataTypes.GameId.DEBUG_MODE">
+            <summary>
+            Hack Just for testing. Makes generation incremental and ToString will print number instead of guid.
+            0 = disabled.
+            This is just during initial development later can think a better solution for debugging
+            </summary>
+        </member>
+        <member name="F:Game.DataTypes.GameId.NextGeneration">
+            <summary>
+            Sets whats to be the next generated game id
+            </summary>
+        </member>
+        <member name="F:Game.DataTypes.GameId._leftside">
+            <summary>
+            Actual data of the game id is 2 ulongs (16 bytes)
+            </summary>
+        </member>
+        <member name="T:Game.DataTypes.InstanceFactory">
+            <summary>
+            Fast instance factory.
+            It pre-compiles generic contructors into bytecode so creating new instances is all about calling the pre-compiled bytecode.
+            </summary>
+        </member>
+        <member name="T:Game.DataTypes.InstancePool">
+            <summary>
+            For fast object creation because Activator.CreateInstance is slow
+            </summary>
+        </member>
+        <member name="M:Game.DataTypes.InstancePool.Compile``1(System.Type)">
+            <summary>
+            Searches an instanceType constructor with delegateType-matching signature and constructs delegate of delegateType creating new instance of instanceType.
+            Instance is casted to delegateTypes's return type. 
+            Delegate's return type must be assignable from instanceType.
+            </summary>
+        </member>
+        <member name="T:Game.ECS.IComponentLogic`1">
+            <summary>
+            Base entity logic interface.
+            Entity logic is the main responsible for modifying entity components.
+            </summary>
+        </member>
+        <member name="T:Game.ECS.BaseEntityLogic`1">
+            <inheritdoc/>
+        </member>
+        <member name="T:Game.ECS.SyncedComponent">
+            <summary>
+            Sends component to client whenever it sends the attached entity to client.
+            Will serialize the whole component data.
+            </summary>
+        </member>
+        <member name="F:Game.ECS.SyncedComponent.OnlyMine">
+            <summary>
+            Only syncs for the player who is the owner of the component
+            </summary>
+        </member>
+        <member name="T:Game.ECS.RequiresComponent">
+            <summary>
+            Validates the entity must have both components
+            TODO: not implemented yet
+            </summary>
+        </member>
+        <member name="T:Game.ECS.ComponentCreator">
+            <summary>
+            Fast way of creating components, because we create MANY of them !
+            This is only needed to create a component by its type. Its way faster than using Activator.
+            </summary>
+        </member>
+        <member name="T:Game.ECS.ComponentDeltaCompression">
+            <summary>
+            Efficient way to track component delta compressions
+            TODO: Finish to increase performance
+            </summary>
+        </member>
+        <member name="T:Game.ECS.SystemEventBus`1">
+            <summary>
+            Event bus that fires specific events for the specific component. Can wrap events knowing the sender and component instance.
+            </summary>
+        </member>
+        <member name="M:Game.ECS.SystemEventBus`1.On``1(System.Action{Game.ECS.IEntity,``0})">
+            <summary>
+            Registers a new listener for the given system. The system is wrapped in a normal message bus/
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Game.ECS.ComponentPointers" -->
+        <member name="M:Game.ECS.ComponentPointers.TryGet``1(``0@)">
+            <summary>
+            Try to get a pointer component as a struct
+            </summary>
+        </member>
+        <member name="M:Game.ECS.ComponentPointers.AsReference``1">
+            <summary>
+            Gets the component as a reference.
+            Any modifications to the component using the reference variable will be done on
+            the actual memory-space of the component.
+            
+            If the component is assigned to another variable tho, it will copy its data.
+            </summary>
+        </member>
+        <member name="M:Game.ECS.ComponentPointers.AsPointer``1">
+            <summary>
+            Gets a hard pointer to the component. Any modifications or passing down as parameters will still modify the component memory space.
+            This is a faster operation than using the component by reference
+            </summary>
+        </member>
+        <member name="M:Game.ECS.ComponentPointers.AsInterface(System.Type)">
+            <summary>
+            Reads the given component as IComponent base interface
+            </summary>
+        </member>
+        <member name="M:Game.ECS.ComponentPointers.Alloc``1">
+            <summary>
+            Allocates unmanaged memory for the given component to exist.
+            Will attempt to reuse any free memory if available.
+            </summary>
+        </member>
+        <member name="M:Game.ECS.ComponentPointers.Free``1">
+            <summary>
+            Free's allocated memory for the given component
+            </summary>
+        </member>
+        <member name="M:Game.ECS.ComponentPointers.FreeAll">
+            <summary>
+            Free's all memory used by this entity components
+            </summary>
+        </member>
+        <member name="T:Game.ECS.ComponentPointers.ComponentPointersDebugView">
+            <summary>
+            Debug panel to be able to visualize the pointers in debugger windows
+            </summary>
+        </member>
+        <member name="M:Game.ECS.ComponentSet.GetSyncedComponents(Game.Systems.Player.PlayerEntity,System.Boolean)">
+            <summary>
+            TODO: Use buffers for performance
+            </summary>
+        </member>
+        <member name="M:Game.ECS.LogicSystem`2.GetLogic(Game.ECS.IEntity)">
+            <summary>
+            Gets given logic for given entity
+            </summary>
+        </member>
+        <member name="T:Game.ECS.IComponent">
+            <summary>
+            Basic component interface. Will likely implement component as an unmanaged struct with
+            only unmanaged types and no references.
+            Will be stored and read like a pointer.
+            If need to keep references, ideally should be using <see cref="T:Game.ECS.IReferenceComponent"/>
+            </summary>
+        </member>
+        <member name="T:Game.ECS.IReferenceComponent">
+            <summary>
+            A reference component that is stored as a class and can have references to other objects. 
+            This is to store dynamic data that holds references and not only struct data.
+            </summary>
+        </member>
+        <member name="T:Game.ECS.IComponentSet">
+            <summary>
+            Holds the components of a given entity.
+            Can have two type of component, pointers and references.
+            Pointers are the real data components where reference components act like a "cache" of references
+            to other objects.
+            </summary>
+        </member>
+        <member name="M:Game.ECS.IComponentSet.GetSyncedComponents(Game.Systems.Player.PlayerEntity,System.Boolean)">
+            <summary>
+            Gets all components a given player needs to have in sync for this given entity
+            </summary>
+        </member>
+        <member name="M:Game.ECS.IComponentSet.All">
+            <summary>
+            Gets all pointer components this entity have
+            </summary>
+        </member>
+        <member name="M:Game.ECS.IComponentSet.Save``1(``0@)">
+            <summary>
+            Saves a component that was modified by reference
+            </summary>
+        </member>
+        <member name="M:Game.ECS.IComponentSet.Add``1">
+            <summary>
+            Adds a new component to the entity
+            </summary>
+        </member>
+        <member name="M:Game.ECS.IComponentSet.Get``1">
+            <summary>
+            Gets a component from the entity.
+            Will get the reference of the component, but if the component is assigned to
+            another variable or passed down by parameter without REF or IN keywords it will create a copy.
+            </summary>
+        </member>
+        <member name="M:Game.ECS.IComponentSet.GetByType(System.Type)">
+            <summary>
+            Gets a pointer component by type
+            </summary>
+        </member>
+        <member name="M:Game.ECS.IComponentSet.GetPointer``1">
+            <summary>
+            Gets a pointer for a component.
+            This allows component data to be modified more easily.
+            </summary>
+        </member>
+        <member name="T:Game.ECS.IEntity">
+            <summary>
+            Represents an Entity in the game.
+            An entity is something that has a set of components which dictates its behaviour, an owner and
+            logic that can be used to modify the components states.
+            </summary>
+        </member>
+        <member name="T:Game.Events.IGameEvent">
+            <summary>
+            Game Logic Events
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Game.Events.GameEvents.EntityTileVisibilityUpdateEvent" -->
+        <member name="T:Game.Events.GameEvents.GroupDeadEvent">
+            <summary>
+            Fired when a entity with BattleGroupComponent finishes a battle and dies
+            </summary>
+        </member>
+        <member name="T:Game.Events.GameEvents.TileVisibilityChangedForPlayerEvent">
+            <summary>
+            Changes when a TileEntity visibility changes
+            </summary>
+        </member>
+        <member name="T:Game.Events.GameEvents.UnitAddToGroupEvent">
+            <summary>
+            When a unit is added to an entity. 
+            </summary>
+        </member>
+        <member name="T:Game.Events.GameEvents.UnitRemovedEvent">
+            <summary>
+            When a unit is removed from an entity. 
+            </summary>
+        </member>
+        <member name="T:Game.Events.IPooledPacket">
+            <summary>
+            Packets that are sent alot and are better pooled
+            </summary>
+        </member>
+        <member name="T:Game.Events.BattleResultSummaryPacket">
+            <summary>
+            Summary of the battle result
+            </summary>
+        </member>
+        <member name="T:Game.Network.ServerPackets.BattleTriggeredEvent">
+            <summary>
+            Triggered when a battle is triggered in game logic
+            </summary>
+        </member>
+        <member name="T:Game.Network.ServerPackets.BattleLogPacket">
+            <summary>
+            Full battle log so it can be replayed.
+            </summary>
+        </member>
+        <member name="T:Game.Network.ServerPackets.BattleQueuedPacket">
+            <summary>
+            Packet sent to other services whenever a battle started so its picked up and processed
+            </summary>
+        </member>
+        <member name="T:Game.Network.ServerPackets.BattleResultPacket">
+            <summary>
+            Full battle result.
+            Only shall be sent the header directly, this is to be sent from battle server to map server.
+            </summary>
+        </member>
+        <member name="T:Game.Network.ServerPackets.BattleStartPacket">
+            <summary>
+            Packet sent to player whenever a battle started
+            </summary>
+        </member>
+        <member name="T:Game.Network.ClientPackets.BattleLogRequestPacket">
+            <summary>
+            When client requests a full log to either view the battle log or 
+            simulate the battle on client side to display it
+            </summary>
+        </member>
+        <member name="T:Game.Network.IDeltaCompression">
+            <summary>
+            Tracks entity deltas to send to update the client
+            </summary>
+        </member>
+        <member name="M:Game.Network.IDeltaCompression.SendDeltaPackets(Game.Systems.Player.PlayerEntity)">
+            <summary>
+            Sends all tracked deltas
+            </summary>
+        </member>
+        <member name="M:Game.Network.IDeltaCompression.Add(Game.ECS.IEntity)">
+            <summary>
+            Adds an entity as modified
+            </summary>
+        </member>
+        <member name="M:Game.Network.IDeltaCompression.ClearDeltas">
+            <summary>
+            Clears all tracked deltas
+            </summary>
+        </member>
+        <member name="T:Game.Network.IEntityDeltaTrackable">
+            <summary>
+            Tracks delta to sent updates to clients.
+            Should only send updates and not run events or logic
+            </summary>
+        </member>
+        <member name="P:Game.Network.IEntityDeltaTrackable.DeltaFlags">
+            <summary>
+            Gets the delta flags of a given entity
+            </summary>
+        </member>
+        <member name="M:Game.Network.IEntityDeltaTrackable.ProccessDeltas(Game.Systems.Player.PlayerEntity)">
+            <summary>
+            Should only send updates to client and not run any events or logic
+            </summary>
+        </member>
+        <member name="M:Game.Network.IEntityDeltaTrackable.GetUpdatePacket(Game.Systems.Player.PlayerEntity,System.Boolean)">
+            <summary>
+            Gets the update packet of a given delta updateable
+            </summary>
+        </member>
+        <member name="T:Game.Network.IClientPacket">
+            <summary>
+            Networking events sent from client
+            </summary>
+        </member>
+        <member name="T:Game.Network.IServerPacket">
+            <summary>
+            Networking events sent from the server
+            </summary>
+        </member>
+        <member name="T:Game.IGameEntities">
+            <summary>
+            Represents the entities that are currently in the game
+            </summary>
+        </member>
+        <member name="M:Game.IGameEntities.CreateEntity(Game.DataTypes.GameId,Game.EntityType)">
+            <summary>
+            Creates a new entity based on a type
+            </summary>
+        </member>
+        <member name="P:Game.IGameEntities.Item(Game.DataTypes.GameId@)">
+            <summary>
+            Gets an entity by its given ID. Can return null if entity do not exists.
+            </summary>
+        </member>
+        <member name="P:Game.IGameEntities.DeltaCompression">
+            <summary>
+            Holds all modified entitie deltas for the current input cycle
+            </summary>
+        </member>
+        <member name="T:Game.IEntityLogic">
+            <summary>
+            A logic container for all the entity logic available.
+            </summary>
+        </member>
+        <member name="T:Game.EntityLogic">
+            <summary>
+            Wrapper around game logic to wrap for a specific entity
+            </summary>
+        </member>
+        <member name="M:Game.GameLogic.GetEntityLogic(Game.ECS.IEntity)">
+            <summary>
+            Gets a reusable logic object for the given entity
+            </summary>
+        </member>
+        <member name="M:Game.IGameNetwork.ReceiveInput(Game.DataTypes.GameId,Game.Network.BasePacket)">
+            <summary>
+            Receive and proccess an input packet
+            </summary>
+        </member>
+        <member name="M:Game.IGameNetwork.On``1(System.Action{``0})">
+            <summary>
+            Listens for packets being received
+            </summary>
+        </member>
+        <member name="M:Game.IGameNetwork.SendToPlayer``1(``0,Game.Systems.Player.PlayerEntity[])">
+            <summary>
+            Sends a packet to player
+            </summary>
+        </member>
+        <member name="M:Game.IGameNetwork.SendToServer(Game.Network.BasePacket,Game.ServerType)">
+            <summary>
+            Sends a packet to server.
+            </summary>
+        </member>
+        <member name="T:Game.Scheduler.IGameScheduler">
+            <summary>
+            Responsible for controlling the game tasks.
+            </summary>
+        </member>
+        <member name="T:Game.BaseEntity">
+            <summary>
+            Networking code for entities.
+            Entity modifications are tracked by delta flags.
+            Then after a "server tick" we dispatch all packets needed according to entity deltas
+            </summary>
+        </member>
+        <member name="F:Game.BaseEntity._stoppedSeeingEntity">
+            <summary>
+            Cache to re-use the same hashset for all viewers lookups
+            </summary>
+        </member>
+        <member name="M:Game.BaseEntity.OnExistenceChanged">
+            <summary>
+            Sends the whole enity to whoever can see it whenever entity is created
+            </summary>
+        </member>
+        <member name="M:Game.BaseEntity.OnRevealed(Game.Systems.Player.PlayerEntity)">
+            <summary>
+            When entity is revealed send a full update only to the player that triggered the delta
+            </summary>
+        </member>
+        <member name="M:Game.BaseEntity.SendUpdateToNewViewers">
+            <summary>
+            We send component updates to all viwers
+            But if the map position has updated then we also need to send the update
+            for the old viwers so they can see the entity moving our of their view
+            </summary>
+        </member>
+        <member name="M:Game.BaseEntity.GetUpdatePacket(Game.Systems.Player.PlayerEntity,System.Boolean)">
+            <summary>
+            Gets the base update packet of the given entity.
+            Will add only updated components if onlyDeltas is toggled
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Battler.BattleGroupComponent">
+            <summary>
+            Refers to an entity that is a container of Units and can battle
+            with those units.
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Battler.BattleGroupSystem.OnOffensiveAction(Game.ECS.IEntity,Game.Events.GameEvents.OffensiveActionEvent)">
+            <summary>
+            When a entity moved offensively towards another entity
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Battler.BattleGroupSystem.OnBattleResult(Game.Network.ServerPackets.BattleResultPacket)">
+            <summary>
+            When received a battle finished processing from battle service
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Battler.BattleGroupSystem.OnBattleFinish(Game.ECS.IEntity,Game.Events.GameEvents.BattleFinishedEvent)">
+            <summary>
+            When a battle finished processing in game logic
+            </summary>
+        </member>
+        <member name="P:Game.Systems.Battler.Unit.HpRatio">
+            <summary>
+            Gets the unit HP ratio from 1 (100%) to 0 (no HP)
+            </summary>
+        </member>
+        <member name="T:Game.Systems.BattleGroup.UnitGroup">
+            <summary>
+            Unmanaged reference of a unit group
+            </summary>
+        </member>
+        <member name="P:Game.Systems.BattleGroup.UnitGroup.Valids">
+            <summary>
+            Gets amount of valid (non null) units in a group
+            </summary>
+        </member>
+        <member name="P:Game.Systems.BattleGroup.UnitGroup.Empty">
+            <summary>
+            Checks if a group has no units
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Building.BuildingComponent">
+            <summary>
+            Represents something that can be placed statically in the map
+            Only one static can be in a given tile at a time.
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Movement.CourseComponent">
+            <summary>
+            Defines that this entity is able to set courses to move
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Movement.CourseIntent">
+            <summary>
+            When moving an entity, defines what's the intention of the move.
+            Intention will dictates the behaviour that will adopted when the entity finds other entities
+            </summary>
+        </member>
+        <member name="F:Game.Systems.Movement.CourseIntent.Defensive">
+            <summary>
+            Defensive means the entity will avoid combat at all costs and will only engage
+            if attacked by another entity.
+            </summary>
+        </member>
+        <member name="F:Game.Systems.Movement.CourseIntent.OffensiveTarget">
+            <summary>
+            Offensive means the entity will engage in combat with the target entity on the target last
+            part of the course.
+            Entities along the way will be ignored unless this entity is attacked.
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Movement.MovespeedComponent">
+            <summary>
+            Defines the entity movement speed
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Dungeon.DungeonSystem.OnGroupDead(Game.ECS.IEntity,Game.Events.GameEvents.GroupDeadEvent)">
+            <summary>
+            Dungeons should disappear when destroyed
+            </summary>
+        </member>
+        <member name="T:Game.Systems.FogOfWar.EntityVisionComponent">
+            <summary>
+            Defines that this entity is able to see things on the map
+            Its line of sight will reveal tiles around this entity for its owner
+            </summary>
+        </member>
+        <member name="F:Game.Systems.FogOfWar.EntityVisionLogic._oldLineOfSight">
+            <summary>
+            Line of sight hashsets cached so no need to keep instantiating
+            </summary>
+        </member>
+        <member name="M:Game.Systems.FogOfWar.EntityVisionLogic.UpdateGroupLineOfSight">
+            <summary>
+            Calculates an entity line of sight based on the entity group component.
+            The entity line of sight is the max group line of sight
+            </summary>
+        </member>
+        <member name="M:Game.Systems.FogOfWar.EntityVisionLogic.UpdateVisionRange(Game.ECS.IEntity,Game.Tile.TileEntity,Game.Tile.TileEntity)">
+            <summary>
+            Updates the tile visibility of nearby tiles according to an entity movement.
+            Will unsee some tiles and see new tiles depending the from/to the entity moved
+            </summary>
+        </member>
+        <member name="T:Game.Systems.FogOfWar.TileVisibility">
+            <summary>
+            Keeps track of who is viewing this tile for fast reference accessing
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Map.MapPlacementComponent">
+            <summary>
+            Refers to an entity that is placed in the map
+            </summary>
+        </member>
+        <member name="T:Game.Systems.MapPosition.MapReferenceComponent">
+            <summary>
+            Holds basic tile references to the entity like which tiles the entity is.
+            This is just to speedup lookups to read which tile the entity is - so we just keep a reference "cached"
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Party.PartyComponent">
+            <summary>
+            Refers to an entity that stays in the party slots of its owner
+            </summary>
+        </member>
+        <member name="F:Game.Systems.Party.PartyComponent.PartyIndex">
+            <summary>
+            Party index on player party array
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Player.PlayerEntity">
+            <summary>
+            Represents a player in the world.
+            A player is basically an owner of entities, and its an entity itself but its an entity that is not placed in the world.
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Player.PlayerEntity.GetParty(System.Byte)">
+            <summary>
+            Gets a party of a given party slot for this player
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Game.Systems.Player.PlayerEntity.GetCenter" -->
+        <member name="M:Game.Systems.Player.PlayerEntity.SendMessage(System.String,Game.Events.ServerEvents.MessageType)">
+            <summary>
+            Sends a message packet to display for this player client
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Player.PlayerLogic.RecruitUnit(System.UInt16)">
+            <summary>
+            Recruits a new unit for the player
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Player.PlayerLogic.FindParty(Game.Systems.Battler.Unit)">
+            <summary>
+            Finds the party of a given unit
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Player.PlayerLogic.PlaceNewPlayer(Game.Tile.TileEntity)">
+            <summary>
+            Adds a new player to the given tile with the initial things a new player should have
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Player.PlayerLogic.RecordBattleHeader(Game.Battle.Data.BattleHeaderData)">
+            <summary>
+            Record a battle header of a battle that happened for this player
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Player.PlayerLogic.PlaceUnitInParty(Game.Systems.Battler.Unit,Game.Systems.Party.PartyEntity)">
+            <summary>
+            Moves a unit to a given party
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Player.PlayerLogic.Build(System.UInt16,Game.Tile.TileEntity)">
+            <summary>
+            Builds a new building on the given tile
+            </summary>
+        </member>
+        <member name="M:Game.Systems.Player.PlayerSystem.OnBattleResultPacket(Game.Network.ServerPackets.BattleResultPacket)">
+            <summary>
+            Received from battle server
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Tile.TileComponent">
+            <summary>
+            Represents a tile. That's a square in the map grid.
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Tile.TileHabitantsSystem">
+            <summary>
+            System that keeps track of references of which entities and which buildings are on which tiles
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Tile.TileMapData">
+            <summary>
+            Main struct data used for tiles.
+            This struct represents a single tile. It's size should be as low as possible.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Game.Tile.TileEntity.SetDeltaFlag(Game.Network.DeltaFlag)" -->
+        <member name="T:Game.UnmanagedMemory">
+            <summary>
+            Main place to handle unmanaged memory. We use unmanaged memory to be reused while allowing garbage collector not need to worry about this memory.
+            </summary>
+        </member>
+        <member name="M:Game.UnmanagedMemory.FlagMemoryToBeReused">
+            <summary>
+            Flag memory to be reused. Mainly for tests or reuse map server to spawn different map;
+            </summary>
+        </member>
+        <member name="T:Game.World.CachedChunkMap">
+            <summary>
+            Used for pathfinding.
+            </summary>
+        </member>
+        <member name="T:Game.World.Chunk">
+            <summary>
+            A chunk represents a small portion of the map tiles (e.g a 8x8 tile)
+            All tile data of a given chunk is stored in the same memory pointer.
+            </summary>
+        </member>
+        <member name="T:Game.World.ChunkData">
+            <summary>
+            Unmanaged memory to allocate map data.
+            Allocates a chunk of tiles.
+            </summary>
+        </member>
+        <member name="P:Game.World.IGameWorld.Game">
+            <summary>
+            Gets the game this world belongs to
+            </summary>
+        </member>
+        <member name="P:Game.World.IGameWorld.Players">
+            <summary>
+            Gets the players that reside in this world
+            </summary>
+        </member>
+        <member name="P:Game.World.IGameWorld.Map">
+            <summary>
+            Gets the world map
+            </summary>
+        </member>
+        <member name="T:Game.World.IChunkMap">
+            <summary>
+            Represents a map that is divided by chunks.
+            </summary>
+        </member>
+        <member name="P:Game.World.IChunkMap.World">
+            <summary>
+            Gets the world this chunk map belongs to
+            </summary>
+        </member>
+        <member name="M:Game.World.IChunkMap.ValidCoords(System.Int32@,System.Int32@)">
+            <summary>
+            Checks if a given tile coordinates is valid 
+            </summary>
+        </member>
+        <member name="M:Game.World.IChunkMap.GetChunk(System.Int32@,System.Int32@)">
+            <summary>
+            Gets a given chunk by its X Y coords
+            </summary>
+        </member>
+        <member name="M:Game.World.IChunkMap.FindPath(Game.Tile.TileEntity,Game.Tile.TileEntity)">
+            <summary>
+            Finds a path between source and destination.
+            Can return an empty list if no path is found.
+            </summary>
+        </member>
+        <member name="M:Game.World.IChunkMap.CreateMap(System.UInt16@,System.UInt16@)">
+            <summary>
+            Creates the chunk map instance and allocate needed memory
+            </summary>
+        </member>
+        <member name="M:Game.World.IChunkMap.GetTile(System.Int32@,System.Int32@)">
+            <summary>
+            Gets a given tile instance
+            </summary>
+        </member>
+        <member name="P:Game.World.IChunkMap.TilemapDimensions">
+            <summary>
+            Gets the dimensions of the map
+            </summary>
+        </member>
+        <member name="T:Game.World.PreAllocatedChunkMap">
+            <summary>
+            Preallocate all chunks for faster acessing
+            </summary>
+        </member>
+        <member name="T:Game.World.WorldPlayers">
+            <summary>
+            Represents the list of players of a given world
+            </summary>
+        </member>
+    </members>
+</doc>

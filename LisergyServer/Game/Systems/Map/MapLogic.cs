@@ -25,7 +25,7 @@ namespace Game.Systems.Map
             component.Tile = value;
             if (previousTile == null || component.Tile == null)
             {
-                Entity.DeltaFlags.SetFlag(DeltaFlag.EXISTENCE);
+                Entity.DeltaFlags.SetFlag(DeltaFlag.CREATED);
             }
             else if (previousTile != component.Tile)
             {

@@ -1,5 +1,5 @@
 ﻿using Assets.Code.Assets.Code.Assets;
-using Assets.Code.Assets.Code.Runtime.PartyUnit;
+
 using Game;
 using Game.Systems.Battler;
 using Game.Systems.Party;
@@ -20,7 +20,7 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens.Parts
         public static void UpdateHealth(VisualElement healthBar, Unit unit)
         {
             var greenBar = healthBar.Q("GreenBar");
-            greenBar.style.width = Length.Percent(unit.GetHpRatio() * 100); 
+            greenBar.style.width = Length.Percent(unit.HpRatio * 100); 
         }
 
         public static void HideHealth(VisualElement root)
@@ -34,7 +34,7 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens.Parts
             var hpBar = root.Q("GreenBar");
             var rarityCircle = root.Q("RarityCircle");
             var classIcon = root.Q("ClassIcon");
-            var hpRatio = leader.GetHpRatio();
+            var hpRatio = leader.HpRatio;
             hpBar.style.width = Length.Percent(hpRatio * 100);
           
             /*

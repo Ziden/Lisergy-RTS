@@ -17,8 +17,8 @@ namespace Assets.Code.Assets.Code.Runtime
 
         static ClientState()
         {
-            ClientEvents.OnSelectParty += p => SelectedParty = p;
-            ClientEvents.OnClickTile += t => SelectedTile = t;
+            UIEvents.OnSelectParty += p => SelectedParty = p;
+            UIEvents.OnClickTile += t => SelectedTile = t;
         }
     }
 }

@@ -18,12 +18,12 @@ namespace ClientSDK.Data
 
         public T GetView<T>(IEntity e) where T : IEntityView
         {
-            if (e == null) return default;
+            if (e == null) return default!;
             if (GetViews(e.EntityType).TryGetValue(e.EntityId, out var v))
             {
                 return (T)v;
             }
-            return default(T);
+            return default(T)!;
         }
 
         public IEntityView GetView(IEntity e)

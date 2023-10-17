@@ -34,20 +34,18 @@ namespace Game.World
         public const int PLAYERS_CHUNKS = 2;
 
         public virtual IGame Game { get; set; }
-        public WorldPlayers _worldPlayers { get; set; }
         protected PreAllocatedChunkMap _preallocatedMap { get; set; }
         public ushort Seed { get; set; }
         public ushort SizeX { get; private set; }
         public ushort SizeY { get; private set; }
-
-        public IGamePlayers Players => _worldPlayers;
+        public IGamePlayers Players { get; protected set; }
         public IChunkMap Map { get; protected set; }
 
         public GameWorld(int maxPlayers, in ushort sizeX, in ushort sizeY)
         {
             SizeX = sizeX;
             SizeY = sizeY;
-            _worldPlayers = new WorldPlayers(maxPlayers);
+            Players = new WorldPlayers(maxPlayers);
             CreateMap();
         }
 

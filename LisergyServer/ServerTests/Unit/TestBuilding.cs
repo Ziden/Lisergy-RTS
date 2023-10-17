@@ -1,10 +1,10 @@
-using Game;
+using Game.Events.ServerEvents;
 using Game.Systems.Building;
-using Game.Systems.FogOfWar;
 using Game.Systems.MapPosition;
 using Game.Systems.Tile;
 using NUnit.Framework;
 using ServerTests;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace UnitTests
@@ -54,6 +54,24 @@ namespace UnitTests
             Assert.IsTrue(tile.Components.GetReference<TileHabitants>().Building == player.Data.Buildings.Last());
             Assert.IsTrue(((PlayerBuildingEntity)tile.Building).SpecId == buildingSpec.Id);
             Assert.That(tile.EntitiesViewing.Contains(tile.Building));
+
+        }
+
+        [Test]
+        public void TestPlacingBuildingSendingUpdateEvents()
+        {
+            var player = Game.GetTestPlayer();
+            var initialBuildingSpec = Game.RandomBuildingSpec();
+            var tile = Game.RandomNotBuiltTile();
+            var buildingSpec = Game.RandomBuildingSpec();
+            Game.Entities.DeltaCompression.ClearDeltas();
+            Game.SentServerPackets.Clear();
+
+            var building = player.EntityLogic.Player.Build(buildingSpec.Id, tile);
+            Game.Entities.DeltaCompression.SendDeltaPackets(player);
+            var buildingPacket = Game.SentServerPackets.First(o => o is EntityUpdatePacket p && p.EntityId == building.EntityId);
+
+            Assert.NotNull(buildingPacket);
 
         }
     }

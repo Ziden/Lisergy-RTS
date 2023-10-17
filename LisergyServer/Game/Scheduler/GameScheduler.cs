@@ -39,7 +39,12 @@ namespace Game.Scheduler
             _ = _tasks.Remove(task.ID);
         }
 
-        public GameTask GetTask(GameId id) => _tasks[id];
+        public GameTask GetTask(GameId id)
+        {
+            _tasks.TryGetValue(id, out var task);
+            return task;
+        }
+
         public int PendingTasks => _tasks.Values.Count();
         public int AmountQueues => Queue.Count;
 

@@ -5,6 +5,7 @@ using System;
 using Game.DataTypes;
 using ClientSDK.Data;
 using Game.Systems.Player;
+using ClientSDK.SDKEvents;
 
 namespace ClientSDK.Services
 {
@@ -14,26 +15,14 @@ namespace ClientSDK.Services
     /// </summary>
     public interface IAccountModule : IClientModule
     {
-        event Action<GameId> OnAuthenticated;
-        event Action<IGame> OnSpecsReceived;
-
         /// <summary>
         /// Sends a request to authenticate to server
         /// </summary>
         void SendAuthenticationPacket(string username, string password);
-
-        /// <summary>
-        /// Gets the local player
-        /// </summary>
-        PlayerEntity LocalPlayer { get; }
     }
 
     public class AccountModule : IAccountModule
     {
-        public event Action<GameId> OnAuthenticated;
-        public event Action<IGame> OnSpecsReceived;
-
-        public PlayerEntity LocalPlayer { get; private set; }
         private GameId _playerId;
         private GameClient _client;
 
@@ -62,7 +51,6 @@ namespace ClientSDK.Services
             if (packet.Success)
             {
                 _playerId = packet.PlayerID;
-                OnAuthenticated?.Invoke(packet.PlayerID);
             }
         }
 
@@ -70,11 +58,10 @@ namespace ClientSDK.Services
         {
             Log.Debug("Initialized Specs");
             var game = new LisergyGame(ev.Spec);
-            var world = new ClientWorld(int.MaxValue, (ushort)ev.MapSizeX, (ushort)ev.MapSizeY);
+            var world = new ClientWorld(game, int.MaxValue, (ushort)ev.MapSizeX, (ushort)ev.MapSizeY);
             game.SetupGame(world, _client.Network);
             _client.InitializeGame(game);
-            OnSpecsReceived?.Invoke(game);
-            LocalPlayer = new PlayerEntity(_playerId, game);
+            _client.ClientEvents.Call(new GameStartedEvent(game, new PlayerEntity(_playerId, game)));
             _client.Network.SendToServer(new JoinWorldPacket());
         }
     }

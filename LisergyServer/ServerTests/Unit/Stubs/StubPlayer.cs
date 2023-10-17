@@ -2,6 +2,7 @@
 using Game.DataTypes;
 using Game.Events;
 using Game.Events.Bus;
+using Game.Events.ServerEvents;
 using Game.Network;
 using Game.Network.ClientPackets;
 using Game.Systems.Movement;
@@ -32,11 +33,16 @@ namespace ServerTests
             _network = game.Network as GameServerNetwork;
         }
 
-        public void SendTestPacket<EventType>(EventType ev) where EventType : BasePacket
+        public void SendTestPacket<EventType>(EventType ev) where EventType : BasePacket, new()
         {
+            if (ev.GetType() != typeof(TilePacket)) // avoid flood
+            {
+                Log.Debug($"Server Sent Packet {ev.GetType().Name} to Player {this}");
+            }
             var reSerialized = Serialization.ToPacketRaw(Serialization.FromPacketRaw(ev));
-            OnReceivedPacket?.Invoke(ev);
-            ReceivedPackets.Add(ev);
+            PacketPool.Return(ev);
+            OnReceivedPacket?.Invoke(reSerialized);
+            ReceivedPackets.Add(reSerialized);
         }
 
         public void ListenTo<EventType>() where EventType : IBaseEvent

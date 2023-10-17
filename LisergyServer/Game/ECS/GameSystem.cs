@@ -18,9 +18,7 @@ namespace Game.ECS
         public IGameLogic GameLogic => Game.Logic;
         public IGameWorld World => Game.World;
         public IGamePlayers Players => World.Players;
-        public GameSystem(LisergyGame game) {
-            Game = game;
-        }
+        public GameSystem(LisergyGame game) { Game = game; }
         internal virtual void OnComponentAdded(IEntity owner, ComponentType component) { }
         public virtual void OnDisabled() { }
         public virtual void OnEnabled() { }

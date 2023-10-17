@@ -1,6 +1,8 @@
 ﻿using Game.ECS;
 using Game.Systems.Player;
+using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Game.Network
 {
@@ -17,7 +19,7 @@ namespace Game.Network
         /// <summary>
         /// Adds an entity as modified
         /// </summary>
-        void Add(IEntityDeltaTrackable entity);
+        void Add(IEntity entity);
 
         /// <summary>
         /// Clears all tracked deltas
@@ -27,9 +29,9 @@ namespace Game.Network
 
     public class DeltaCompression : IDeltaCompression
     {
-        internal HashSet<IEntityDeltaTrackable> _modifiedEntities = new HashSet<IEntityDeltaTrackable>();
+        internal HashSet<IEntity> _modifiedEntities = new HashSet<IEntity>();
 
-        public void Add(IEntityDeltaTrackable entity)
+        public void Add(IEntity entity)
         {
             _modifiedEntities.Add(entity);
         }
@@ -43,12 +45,14 @@ namespace Game.Network
             _modifiedEntities.Clear();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SendDeltaPackets(PlayerEntity trigger)
         {
             foreach (var tracked in _modifiedEntities)
             {
                 tracked.ProccessDeltas(trigger);
                 tracked.DeltaFlags.Clear();
+                tracked.Components.ClearDeltas();
             }
             _modifiedEntities.Clear();
         }
@@ -57,7 +61,7 @@ namespace Game.Network
     public enum DeltaFlag : byte
     {
         COMPONENTS = 1 << 1, // entity updated its components
-        EXISTENCE = 1 << 2,   // entity is created or destroyed 
+        CREATED = 1 << 2,   // entity is created or destroyed 
         SELF_REVEALED = 1 << 3,   // entity is revealed - should only sent to triggerer 
         SELF_CONCEALED = 1 << 4   // entity is concealed - should only sent to triggerer 
     }
@@ -81,7 +85,11 @@ namespace Game.Network
             _flags |= f;
         }
 
+        public bool HasFlags() => _flags != 0;
+
         public void Clear() { _flags = 0; }
+
+        public override string ToString() => Convert.ToString((byte)_flags, 2).PadLeft(8, '0');
     }
 
     /// <summary>
@@ -98,11 +106,13 @@ namespace Game.Network
         /// <summary>
         /// Should only send updates to client and not run any events or logic
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         void ProccessDeltas(PlayerEntity trigger);
-        
+
         /// <summary>
         /// Gets the update packet of a given delta updateable
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public BasePacket GetUpdatePacket(PlayerEntity receiver, bool onlyDeltas = true);
     }
 }

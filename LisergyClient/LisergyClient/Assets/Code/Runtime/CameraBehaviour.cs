@@ -57,14 +57,12 @@ public class CameraBehaviour : MonoBehaviour
     private void Start()
     {
         _instance = this;
-        ServiceContainer.InputManager().OnCameraMove += OnCameraMovement;
         Debug.Log("Camera Initialized");
     }
 
-    void OnCameraMovement(Vector2 velocity)
-
+    public void MoveCamera(Vector2 velocity)
     {
-        if (lerping) return;
+        if (lerping || velocity == Vector2.zero) return;
         // Local variable to hold the camera target's position during each frame
         Vector3 pos = transform.position;
         var old = pos;
@@ -73,72 +71,7 @@ public class CameraBehaviour : MonoBehaviour
         if (old != pos)
         {
             transform.position = pos;
-            ClientEvents.CameraMove(transform.position, pos);
+            UIEvents.CameraMoved(pos);
         }
     }
-
-
-    void Rotation()
-
-    {
-        // If Mouse Button 1 is pressed, (the secondary (usually right) mouse button)
-
-        if (Input.GetMouseButton(1))
-
-        {
-            // Our mouseX variable gets set to the X position of the mouse multiplied by the rotation speed added to it.
-
-            mouseX += Input.GetAxis("Mouse X") * rotSpeed;
-
-            // Our mouseX variable gets set to the Y position of the mouse multiplied by the rotation speed added to it.
-
-            mouseY -= Input.GetAxis("Mouse Y") * rotSpeed;
-
-            // Clamp the minimum and maximum angle of how far the camera can look up and down.
-
-            mouseY = Mathf.Clamp(mouseY, -30, 45);
-
-            // Set the rotation of the camera target along the X axis (pitch) to mouseY (up & down) & Y axis (yaw) to mouseX (left & right), the Z axis (roll) is always set to 0 as we do not want the camera to roll.
-
-            transform.rotation = Quaternion.Euler(mouseY, mouseX, 0);
-        }
-    }
-
-
-    void Zoom()
-
-    {
-        // Local variable to temporarily store our camera's position
-
-        Vector3 camPos = Camera.transform.position;
-
-        // Local variable to store the distance of the camera from the camera_target
-
-        float distance = Vector3.Distance(transform.position, Camera.transform.position);
-
-
-        // When we scroll our mouse wheel up, zoom in if the camera is not within the minimum distance (set by our zoomMin variable)
-
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f && distance > zoomMin)
-
-        {
-            camPos += Camera.transform.forward * zoomSpeed * Time.deltaTime;
-        }
-
-
-        // When we scroll our mouse wheel down, zoom out if the camera is not outside of the maximum distance (set by our zoomMax variable)
-
-        if (Input.GetAxis("Mouse ScrollWheel") < 0f && distance < zoomMax)
-
-        {
-            camPos -= Camera.transform.forward * zoomSpeed * Time.deltaTime;
-        }
-
-
-        // Set the camera's position to the position of the temporary variable
-
-        Camera.transform.position = camPos;
-    }
-
-    // End of file
 }

@@ -1,6 +1,7 @@
 ﻿using Game.Events.ServerEvents;
 using ClientSDK.Data;
 using Game.Tile;
+using ClientSDK.SDKEvents;
 
 namespace ClientSDK.Services
 {
@@ -30,7 +31,15 @@ namespace ClientSDK.Services
             var tileEntity = _client.Game.World.Map.GetTile(tile.Data.X, tile.Data.Y);
             tileEntity.UpdateData(tile.Data);
             var tileView = _client.Modules.Views.GetOrCreateView(tileEntity);
-            if(tileView.State == EntityViewState.NOT_RENDERED) tileView.RenderView();
+            if (tileView.State == EntityViewState.NOT_RENDERED)
+            {
+                _client.ClientEvents.Call(new TileViewCreated()
+                {
+                    View = tileView,
+                    Tile = tileEntity
+                });
+                tileView.RenderView();
+            }
         }
     }
 }

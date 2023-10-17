@@ -37,7 +37,7 @@ namespace Game.Systems.FogOfWar
                     e.Visible = ev.Explored;
                     owner.Components.CallEvent(e);
                     EventPool<TileVisibilityChangedForPlayerEvent>.Return(e);
-                    tileObj.SetFlag(DeltaFlag.SELF_REVEALED);
+                    tileObj.SetDeltaFlag(DeltaFlag.SELF_REVEALED);
                 }
             }
             else
@@ -53,7 +53,7 @@ namespace Game.Systems.FogOfWar
                         e.Visible = ev.Explored;
                         owner.Components.CallEvent(e);
                         EventPool<TileVisibilityChangedForPlayerEvent>.Return(e);
-                        tileObj.SetFlag(DeltaFlag.SELF_CONCEALED);
+                        tileObj.SetDeltaFlag(DeltaFlag.SELF_CONCEALED);
                     }
                 }
             }

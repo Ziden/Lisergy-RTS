@@ -1,34 +1,40 @@
 ﻿using ClientSDK;
-using ClientSDK.Data;
+using ClientSDK.SDKEvents;
 using Game;
+using Game.Events;
+using Game.Events.Bus;
+using Game.Events.ServerEvents;
 using Game.Network;
-using Game.Systems.Building;
-using Game.Systems.Dungeon;
-using Game.Systems.Party;
-using Game.Tile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ServerTests.Integration.Stubs
 {
-    internal class TestGameClient : GameClient , IDisposable
+    internal class TestGameClient : GameClient , IDisposable, IEventListener
     {
-        private ClientNetwork _network;
-
+        public new ClientNetwork Network { get; private set; }
         public List<BasePacket> ReceivedPackets { get; private set; } = new List<BasePacket>();
-
+        public List<IBaseEvent> EventsInClientLogic { get; private set; } = new List<IBaseEvent>();
         public TestGameClient() : base()
         {
-            _network = Network as ClientNetwork;
-            _network.OnReceiveGenericPacket += OnReceivePacket;
+            Network = base.Network as ClientNetwork;
+            Network.OnReceiveGenericPacket += OnReceivePacket;
+            this.ClientEvents.Register<GameStartedEvent>(this, OnGameStart);
+        }
+
+        /// <summary>
+        /// When game starts we hook to game events for testing purposes
+        /// </summary>
+        private void OnGameStart(GameStartedEvent ev)
+        {
+            ev.Game.Events.OnEventFired += ev => EventsInClientLogic.Add(ev);
         }
 
         private void OnReceivePacket(BasePacket packet)
         {
-            Log.Debug($"Received {packet} from server ");
+            if(!(packet is TilePacket)) Log.Debug($"Received {packet} from server ");
             ReceivedPackets.Add(packet);
         }
 
@@ -40,22 +46,22 @@ namespace ServerTests.Integration.Stubs
         public async Task<T> WaitFor<T>(Func<T, bool> validate = null) where T : BasePacket
         {
             var timeout = 10;
-            _network.Tick();
+            Network.Tick();
             var p = ReceivedPackets.FirstOrDefault(p => p.GetType() == typeof(T));
             while (p == null && timeout >= 0)
             {
                 timeout--;
                 await Task.Delay(100);
-                _network.Tick();
+                Network.Tick();
                 p = ReceivedPackets.FirstOrDefault(p => p.GetType() == typeof(T) && (validate==null || validate((T)p)));
             }
-            _network.Tick();
+            Network.Tick();
             return (T)p;
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            UnmanagedMemory.FreeAll();
         }
     }
 }

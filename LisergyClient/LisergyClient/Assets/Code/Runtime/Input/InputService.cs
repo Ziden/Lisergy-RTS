@@ -1,35 +1,21 @@
-using System;
-using Assets.Code.Code;
-using Assets.Code.World;
 using ClientSDK.Data;
 using Game.Tile;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 namespace Assets.Code
 {
     public interface IInputService : IGameService
     {
-        public delegate void OnClickTileHandler(TileEntity tile);
-        public delegate void OnCameraMoveHandler(Vector2 velocity);
-        public delegate void OnCameraZoomHandler(float velocity);
-
-        public OnClickTileHandler OnClickTile { get; set; }
-        public OnCameraMoveHandler OnCameraMove { get; set; }
-        
-        public  OnCameraZoomHandler OnCameraZoom { get; set; }
     }
 
     public class InputService : MonoBehaviour, IInputService
     {
-        public IInputService.OnClickTileHandler OnClickTile { get; set; }
-        public IInputService.OnCameraMoveHandler OnCameraMove { get; set; }
-        public IInputService.OnCameraZoomHandler OnCameraZoom { get; set; }
-
         private GameInputs _actions;
-
         private Camera _cam;
+        private CameraBehaviour _gameCamera;
+
 
         private void OnEnable()
         {
@@ -37,6 +23,7 @@ namespace Assets.Code
             _actions.Enable();
             _actions.UI.Enable();
             _cam = Camera.main;
+            _gameCamera = _cam.GetComponent<CameraBehaviour>(); 
         }
 
         private void Update()
@@ -46,33 +33,19 @@ namespace Assets.Code
             OnCameraZoomUpdate();
         }
 
-        public void OnSceneLoaded()
-        {
-
-        }
-
-        public void OnCameraZoomUpdate()
-        {
-            // SCROLL IS BROKEN AT THE CURRENT VERSION :P
-        }
         private void OnClickUpdate()
         {
-            var act = _actions.Game.ClickOnScreen;
-            if (!act.WasPerformedThisFrame()) return;
+            if (!_actions.Game.ClickOnScreen.WasPerformedThisFrame()) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
-
             var a = _actions.Game.ClickOnScreen.ReadValue<Vector2>();
             var ray = _cam.ScreenPointToRay(new Vector3(a.x, a.y));
             if (Physics.Raycast(ray, out var hit))
             {
-                if (hit.collider == null)
-                {
-                    return;
-                }
+                if (hit.collider == null) return;
                 var tileComponent = hit.collider.GetComponentInParent<TileMonoComponent>();
                 if (tileComponent == null) return;
                 var tile = tileComponent.Tile;
-                OnClickTile?.Invoke(tile);
+                UIEvents.ClickTile(tile);
             }
         }
 
@@ -80,24 +53,14 @@ namespace Assets.Code
         {
             var camera = _actions.Game.CameraMovement;
             var velocity = camera.ReadValue<Vector2>();
-
-            if (_actions.Game.CameraSpeedDown.IsPressed())
-            {
-                velocity *= 0.5f;
-            }
-            else if (_actions.Game.CameraSpeedUp.IsPressed())
-            {
-                velocity *= 1.5f;
-            }
-
+            if (_actions.Game.CameraSpeedDown.IsPressed()) velocity *= 0.5f;
+            else if (_actions.Game.CameraSpeedUp.IsPressed()) velocity *= 1.5f;
             if (velocity.magnitude == 0) return;
-            OnCameraMove?.Invoke(velocity);
+            _gameCamera.MoveCamera(velocity);
         }
 
-
-        private void OnDisable()
-        {
-            _actions.Disable();
-        }
+        public void OnSceneLoaded() { }
+        public void OnCameraZoomUpdate() { }
+        private void OnDisable() { _actions.Disable(); }
     }
 }

@@ -87,7 +87,7 @@ namespace UnitTests
 
             var tile = party.Tile;
 
-            var visibleEvent = Game.SentPackets.Where(e => e is EntityUpdatePacket && ((EntityUpdatePacket)e).EntityId == party.EntityId).FirstOrDefault() as EntityUpdatePacket;
+            var visibleEvent = Game.SentServerPackets.Where(e => e is EntityUpdatePacket && ((EntityUpdatePacket)e).EntityId == party.EntityId).FirstOrDefault() as EntityUpdatePacket;
 
             Assert.That(visibleEvent != null);
             Assert.AreEqual(party.EntityId, visibleEvent.EntityId);
