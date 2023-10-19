@@ -21,6 +21,9 @@ namespace Assets.Code
     {
         public override UIScreen ScreenAsset => UIScreen.BattleNotification;
 
+        private PartyButton _attacker;
+        private PartyButton _defender;
+
         public override void OnOpen()
         {
             var popup = Root.Q();
@@ -33,11 +36,12 @@ namespace Assets.Code
             var attacker = popup.Q<VisualElement>("PartyButton-Attacker");
             var t = attacker.GetType();
             var attackerLeader = setup.BattleHeader.Attacker.Units.Leader;
-            PartyButton.DisplayLeader(attacker, attackerLeader);
-
+            _attacker = new PartyButton(attacker);
+            _attacker.DisplayLeader(attackerLeader);
 
             var defender = popup.Q<VisualElement>("PartyButton-Defender-1");
-            PartyButton.DisplayLeader(defender, setup.BattleHeader.Defender.Units.Leader);
+            _defender = new PartyButton(defender);
+            _defender.DisplayLeader(setup.BattleHeader.Defender.Units.Leader);
             base.OnOpen();
         }
 

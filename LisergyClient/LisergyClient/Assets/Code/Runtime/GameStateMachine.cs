@@ -28,7 +28,7 @@ namespace Assets.Code.Assets.Code
         public GameStateMachine(IGameClient client)
         {
             _client = client;
-            _screens = ClientServices.Resolve<IScreenService>();
+            _screens = UnityServicesContainer.Resolve<IScreenService>();
 
             _stateMachine = new StateMachine<State, Trigger>(State.Login);
             _stateMachine.Configure(State.Login)

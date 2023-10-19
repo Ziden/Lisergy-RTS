@@ -28,6 +28,7 @@
     <ProjectReference Include="..\ClientSDK\ClientSDK.csproj" />
     <ProjectReference Include="..\Core\BaseServer.csproj" />
     <ProjectReference Include="..\GameDataTest\GameDataTest.csproj" />
+    <ProjectReference Include="..\WebGameLogic\WebPlayerLogic.csproj" />
   </ItemGroup>
 
 </Project>

@@ -15,13 +15,13 @@ using Game.Systems.Building;
 using Game.Systems.Dungeon;
 using Game.Systems.Party;
 using Game.Tile;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class Main : MonoBehaviour, IEventListener
 {
+    public static readonly bool OFFLINE_MODE = true;
+
     private GameClient _client;
     private ClientNetwork _network;
     private GameStateMachine _stateMachine;
@@ -31,7 +31,7 @@ public class Main : MonoBehaviour, IEventListener
     {
         Debug.Log("Main Awake");
         _client = new GameClient();
-        _client.ClientEvents.Register<GameStartedEvent>(this, SetupListeners);
+        _client.ClientEvents.Register<GameStartedEvent>(this, SetupClientSystemListeners);
         _network = _client.Network as ClientNetwork;
         SetupViews();
         ConfigureUnity();
@@ -43,7 +43,7 @@ public class Main : MonoBehaviour, IEventListener
     {
         Debug.Log("Starting Main Behaviour");
         DontDestroyOnLoad(gameObject);
-        ClientServices.OnSceneLoaded();
+        UnityServicesContainer.OnSceneLoaded();
         _stateMachine = new GameStateMachine(_client);
     }
 
@@ -60,12 +60,13 @@ public class Main : MonoBehaviour, IEventListener
     /// <summary>
     /// Registers event listeners to change client behaviour
     /// </summary>
-    private void SetupListeners(GameStartedEvent ev)
+    private void SetupClientSystemListeners(GameStartedEvent ev)
     {
         _listeners.Add(new FogOfWarListener(_client)); 
         _listeners.Add(new MapPlacementComponentListener(_client));
-        _listeners.Add(new GameLogicListener(_client));
-        _listeners.Add(new SelectedTileIndicatorListener(_client));
+        _listeners.Add(new IndicatorSelectedTileListener(_client));
+        _listeners.Add(new IndicatorSelectedEntityListener(_client));
+        _listeners.Add(new MapAnimationListener(_client));
     }
 
     public void SetupViews()
@@ -78,12 +79,12 @@ public class Main : MonoBehaviour, IEventListener
 
     public void SetupServices()
     {
-        ClientServices.Register<IInputService, InputService>(CreateInputService());
-        ClientServices.Register<IScreenService, ScreenService>(new ScreenService(_client));
-        ClientServices.Register<IAudioService, AudioService>(new AudioService(_client));
-        ClientServices.Register<INotificationService, NotificationService>(new NotificationService(_client));
-        ClientServices.Register<IAssetService, AssetService>(new AssetService());
-        ClientServices.Register<IServerModules, ServerModules>(_client.Modules as ServerModules);
+        UnityServicesContainer.Register<IInputService, InputService>(CreateInputService());
+        UnityServicesContainer.Register<IScreenService, ScreenService>(new ScreenService(_client));
+        UnityServicesContainer.Register<IAudioService, AudioService>(new AudioService(_client));
+        UnityServicesContainer.Register<INotificationService, NotificationService>(new NotificationService(_client));
+        UnityServicesContainer.Register<IAssetService, AssetService>(new AssetService());
+        UnityServicesContainer.Register<IServerModules, ServerModules>(_client.Modules as ServerModules);
     }
 
     InputService CreateInputService()
@@ -106,8 +107,8 @@ public class Main : MonoBehaviour, IEventListener
 
     private static void TrackAsyncErrors()
     {
-        TaskScheduler.UnobservedTaskException += (s, a) => Debug.LogException(a?.Exception);
-        AppDomain.CurrentDomain.FirstChanceException += (sender, args) => Debug.LogException(args.Exception);
-        AppDomain.CurrentDomain.UnhandledException += (sender, args) => Debug.LogException((Exception)args.ExceptionObject);
+        //TaskScheduler.UnobservedTaskException += (s, a) => Debug.LogException(a?.Exception);
+        //AppDomain.CurrentDomain.FirstChanceException += (sender, args) => Debug.LogException(args.Exception);
+        //AppDomain.CurrentDomain.UnhandledException += (sender, args) => Debug.LogException((Exception)args.ExceptionObject);
     }
 }

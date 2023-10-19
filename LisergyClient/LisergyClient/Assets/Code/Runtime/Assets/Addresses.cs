@@ -7,7 +7,7 @@ namespace GameAssets
 	{
 		HealthBar = 0,
 		PartyButton = 1,
-		RadialProgress = 2,
+		EntityDetails = 2,
 		BattleScreen = 3,
 		LoginScreen = 4,
 		PartySelectBar = 5,
@@ -37,7 +37,7 @@ namespace GameAssets
 
 	public enum MapObjectPrefab
 	{
-		Cursor = 22,
+		TileCursor = 22,
 		UnitCursor = 23,
 	}
 
@@ -261,7 +261,7 @@ namespace GameAssets
 		public static IReadOnlyDictionary<int, string> IdMap = new Dictionary<int, string>() {
 			{ 0, "Assets/Addressables/UIScreens/Components/HealthBar.uxml"},
 			{ 1, "Assets/Addressables/UIScreens/Components/PartyButton.uxml"},
-			{ 2, "Assets/Addressables/UIScreens/Components/RadialProgress.uxml"},
+			{ 2, "/Components/EntityDetails.uxmlComponents/EntityDetails.uxml"},
 			{ 3, "Assets/Addressables/UIScreens/BattleScreen.uxml"},
 			{ 4, "Assets/Addressables/UIScreens/LoginScreen.uxml"},
 			{ 5, "Assets/Addressables/UIScreens/PartySelectBar.uxml"},

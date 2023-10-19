@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ClientSDK.Data;
+using Cysharp.Threading.Tasks;
 using GameAssets;
 using GameData.Specs;
 using UnityEngine;
@@ -10,15 +11,15 @@ namespace Assets.Code.Assets.Code.Assets
 { 
     public interface IAssetService : IGameService
     {
-        Task GetAudio(SoundFX effect, Action<AudioClip> onComplete);
-        Task CreateMapFX(MapFX t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
-        Task CreateMapObject(MapObjectPrefab t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
-        Task CreateTile(TilePrefab tile, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
-        Task CreateBuilding(BuildingPrefab b, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
-        Task CreatePrefab(ArtSpec spec, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
-        Task GetSprite(ArtSpec spec, Action<Sprite> onComplete);
-        Task GetScreen(UIScreen screen, Action<VisualTreeAsset> onComplete);
-        Task GetUISetting(UISetting setting, Action<PanelSettings> onComplete);
+        UniTask GetAudio(SoundFX effect, Action<AudioClip> onComplete);
+        UniTask CreateMapFX(MapFX t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
+        UniTask CreateMapObject(MapObjectPrefab t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
+        UniTask CreateTile(TilePrefab tile, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
+        UniTask CreateBuilding(BuildingPrefab b, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
+        UniTask CreatePrefab(ArtSpec spec, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
+        UniTask GetSprite(ArtSpec spec, Action<Sprite> onComplete);
+        UniTask GetScreen(UIScreen screen, Action<VisualTreeAsset> onComplete);
+        UniTask GetUISetting(UISetting setting, Action<PanelSettings> onComplete);
     }
     
     public class AssetService : IAssetService
@@ -30,44 +31,44 @@ namespace Assets.Code.Assets.Code.Assets
         private AssetContainer<SoundFX, AudioClip> _audios = new ();
         private PrefabContainer _prefabs = new();
 
-        public async Task GetAudio(SoundFX fx, Action<AudioClip> onComplete)
+        public async UniTask GetAudio(SoundFX fx, Action<AudioClip> onComplete)
         {
             await _audios.LoadAsync(fx, onComplete);
         }
 
-        public async Task CreateMapFX(MapFX t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
+        public async UniTask CreateMapFX(MapFX t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
         {
             await _prefabs.InstantiateAsync(t, pos, rot, onComplete);
         }
 
-        public async Task CreateMapObject(MapObjectPrefab t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
+        public async UniTask CreateMapObject(MapObjectPrefab t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
         {
             await _prefabs.InstantiateAsync(t, pos, rot, onComplete);
         }
 
-        public async Task CreateTile(TilePrefab t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
-        {
-
-            await _prefabs.InstantiateAsync(t, pos, rot, onComplete);
-        }
-
-        public async Task CreateBuilding(BuildingPrefab t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
+        public async UniTask CreateTile(TilePrefab t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
         {
 
             await _prefabs.InstantiateAsync(t, pos, rot, onComplete);
         }
 
-        public async Task CreatePrefab(ArtSpec spec, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
+        public async UniTask CreateBuilding(BuildingPrefab t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
+        {
+
+            await _prefabs.InstantiateAsync(t, pos, rot, onComplete);
+        }
+
+        public async UniTask CreatePrefab(ArtSpec spec, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
         {
             await _prefabs.InstantiateAsync(spec.Address, pos, rot, onComplete);
         }
 
-        public async Task GetScreen(UIScreen screen, Action<VisualTreeAsset> onComplete)
+        public async UniTask GetScreen(UIScreen screen, Action<VisualTreeAsset> onComplete)
         {
             await _ui.LoadAsync(screen, onComplete);
         }
 
-        public async Task GetSprite(ArtSpec spec, Action<Sprite> onComplete)
+        public async UniTask GetSprite(ArtSpec spec, Action<Sprite> onComplete)
         {
             if(spec.Type == ArtType.SPRITE_SHEET)
             {
@@ -79,7 +80,7 @@ namespace Assets.Code.Assets.Code.Assets
             
         }
 
-        public async Task GetUISetting(UISetting setting, Action<PanelSettings> onComplete)
+        public async UniTask GetUISetting(UISetting setting, Action<PanelSettings> onComplete)
         {
             await _uiSettings.LoadAsync(setting, onComplete);
         }

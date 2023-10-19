@@ -1,4 +1,5 @@
-﻿using Game.Systems.Party;
+﻿using Game.ECS;
+using Game.Systems.Party;
 using Game.Tile;
 
 namespace Assets.Code.Assets.Code.Runtime
@@ -13,11 +14,11 @@ namespace Assets.Code.Assets.Code.Runtime
         /// <summary>
         /// Own party the player is controlling at the moment
         /// </summary>
-        public static PartyEntity SelectedParty;
+        public static IEntity SelectedEntity;
 
         static ClientState()
         {
-            UIEvents.OnSelectParty += p => SelectedParty = p;
+            UIEvents.OnSelectEntity += p => SelectedEntity = p;
             UIEvents.OnClickTile += t => SelectedTile = t;
         }
     }

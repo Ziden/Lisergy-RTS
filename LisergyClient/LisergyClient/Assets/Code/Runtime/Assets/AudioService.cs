@@ -31,7 +31,7 @@ namespace Assets.Code.Assets.Code.Audio
         {
             var audio = new GameObject("Sfx");
             _audioSource = audio.AddComponent<AudioSource>();
-            _assets = ClientServices.Resolve<IAssetService>();
+            _assets = UnityServicesContainer.Resolve<IAssetService>();
         }
 
         public void PlaySoundEffect(SoundFX fx, float volume = 1f)

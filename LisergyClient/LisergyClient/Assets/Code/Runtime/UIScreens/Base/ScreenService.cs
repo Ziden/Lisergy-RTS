@@ -47,7 +47,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
 
         public void OnSceneLoaded()
         {
-            _assets = ClientServices.Resolve<IAssetService>();
+            _assets = UnityServicesContainer.Resolve<IAssetService>();
             _screensContainer = new GameObject("Game Screens Container");
             _noSetup = new GenericSetup();
         }
@@ -56,7 +56,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         {
             foreach (var button in element.Query(null, BUTTON_CLASS).Build())
             {
-                button.RegisterCallback<PointerDownEvent>(ev => ClientServices.Resolve<IAudioService>().PlaySoundEffect(SoundFX.Button_click), TrickleDown.TrickleDown);
+                button.RegisterCallback<PointerDownEvent>(ev => UnityServicesContainer.Resolve<IAudioService>().PlaySoundEffect(SoundFX.Button_click), TrickleDown.TrickleDown);
             }
         }
 

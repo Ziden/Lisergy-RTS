@@ -1,41 +1,48 @@
-﻿using Assets.Code.Assets.Code.Assets;
-
-using Game;
+﻿using Game;
 using Game.Systems.Battler;
 using Game.Systems.Party;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Assets.Code.Assets.Code.Runtime.UIScreens.Parts
 {
-    public class PartyButton : VisualElement
+    public class PartyButton 
     {
-        public void DisplayParty(PartyEntity party)
+        private Button _btn;
+        private VisualElement _root;
+        private VisualElement _hpBar;
+        private VisualElement _rarityCircle;
+        private VisualElement _classIcon;
+
+        public PartyButton(VisualElement root)
         {
-            //DisplayLeader(party.BattleGroupLogic.Leader);
+            _root = root.Required();
+            _btn = (Button)_root;
+            _hpBar = _root.Q("GreenBar").Required();
+            _rarityCircle = _root.Q("RarityCircle").Required();
+            _classIcon = _root.Q("ClassIcon").Required();
         }
 
-        public static void UpdateHealth(VisualElement healthBar, Unit unit)
+        public void UpdateHealth(float percentage)
         {
-            var greenBar = healthBar.Q("GreenBar");
-            greenBar.style.width = Length.Percent(unit.HpRatio * 100); 
+            _hpBar.style.width = Length.Percent(percentage * 100); 
         }
 
-        public static void HideHealth(VisualElement root)
+        public void OnClick(Action a)
         {
-            var hpBar = root.Q("GreenBar");
-            hpBar.style.display = DisplayStyle.None;
+            _btn.clicked += a;
         }
 
-        public static void DisplayLeader(VisualElement root, Unit leader)
+        public void HideHealth()
         {
-            var hpBar = root.Q("GreenBar");
-            var rarityCircle = root.Q("RarityCircle");
-            var classIcon = root.Q("ClassIcon");
+            _hpBar.style.display = DisplayStyle.None;
+        }
+
+        public void DisplayLeader(Unit leader)
+        {
             var hpRatio = leader.HpRatio;
-            hpBar.style.width = Length.Percent(hpRatio * 100);
+            _hpBar.style.width = Length.Percent(hpRatio * 100);
           
             /*
             var icon = leader.GetSpec().IconArt;
@@ -44,23 +51,6 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens.Parts
                 classIcon.style.backgroundImage = new StyleBackground(sprite);
             });
             */
-        }
-
-        public new class UxmlFactory : UxmlFactory<PartyButton, UxmlTraits> { }
-
-        public new class UxmlTraits : VisualElement.UxmlTraits
-        {
-          
-            public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
-            {
-                get { yield break; }
-            }
-
-            public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
-            {
-                base.Init(ve, bag, cc);
-                var ate = ve as PartyButton;
-            }
         }
     }
 }

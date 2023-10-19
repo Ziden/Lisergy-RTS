@@ -6,14 +6,16 @@ using Game.Systems.Party;
 using Game.Systems.Battler;
 using Game;
 using ClientSDK.Data;
+using Assets.Code.Assets.Code.Runtime.Movement;
+using System.Collections.ObjectModel;
 
 namespace Assets.Code.World
 {
     public partial class PartyView : UnityEntityView<PartyEntity>
     {
-        private Dictionary<Unit, UnitView> _unitObjects = new Dictionary<Unit, UnitView>();
-
-        public IReadOnlyDictionary<Unit, UnitView> UnitObjects => _unitObjects;
+        private Dictionary<Unit, UnitView> _unitViews = new Dictionary<Unit, UnitView>();
+        public MovementInterpolator MovementInterpolator { get; private set; }
+        public IReadOnlyDictionary<Unit, UnitView> UnitObjects => _unitViews;
 
         protected override void CreateView()
         {
@@ -21,6 +23,7 @@ namespace Assets.Code.World
             GameObject.transform.SetParent(ViewContainer.transform);
             GameObject.transform.position = Entity.UnityPosition();
             UpdateUnits();
+            MovementInterpolator = new MovementInterpolator(Client, Entity);
             State = EntityViewState.RENDERED;
             Log.Debug($"Created new party instance {this}");
         }
@@ -37,7 +40,7 @@ namespace Assets.Code.World
                 {
                     o.transform.SetParent(GameObject.transform);
                     o.transform.localPosition = Vector3.zero;
-                    _unitObjects[unit] = unitObject;
+                    _unitViews[unit] = unitObject;
                 });
             }
         }

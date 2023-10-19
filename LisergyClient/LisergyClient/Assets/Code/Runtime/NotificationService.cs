@@ -20,7 +20,7 @@ namespace Assets.Code.Assets.Code.Runtime
 
         public void OnSceneLoaded()
         {
-            _screen = ClientServices.Resolve<IScreenService>();
+            _screen = UnityServicesContainer.Resolve<IScreenService>();
 
             UIEvents.OnBattleFinish += OnBattleFinish;
         }

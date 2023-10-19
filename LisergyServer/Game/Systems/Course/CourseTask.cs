@@ -3,6 +3,7 @@ using Game.Scheduler;
 using Game.Systems.Party;
 using Game.Tile;
 using Game.World;
+using System;
 using System.Collections.Generic;
 
 namespace Game.Systems.Movement
@@ -13,7 +14,7 @@ namespace Game.Systems.Movement
         public List<Position> Path;
         public CourseIntent Intent { get; private set; }
 
-        public CourseTask(IGame game, IEntity party, List<Position> path, CourseIntent intent) : base(game, party.Components.Get<MovespeedComponent>().MoveDelay, game.Players.GetPlayer(party.OwnerID))
+        public CourseTask(IGame game, IEntity party, List<Position> path, CourseIntent intent) : base(game, TimeSpan.FromMilliseconds(1), game.Players.GetPlayer(party.OwnerID))
         {
             Party = party;
             Path = path;
@@ -22,8 +23,10 @@ namespace Game.Systems.Movement
 
         public override void Tick()
         {
+            Delay = Party.Components.Get<MovespeedComponent>().MoveDelay;
             var courseId = Party.Components.Get<CourseComponent>().CourseId;
             var currentCourse = Game.Scheduler.GetTask(courseId);
+            if (currentCourse == null) return;
             if (currentCourse != this)
             {
                 if(currentCourse.Start <= Start)

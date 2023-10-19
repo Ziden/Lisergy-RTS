@@ -10,7 +10,7 @@ namespace Game.Scheduler
         public IGame Game { get; private set; }
         public bool HasFinished { get; internal set; }
         public GameId ID { get; private set; }
-        public TimeSpan Delay { get; private set; }
+        public TimeSpan Delay { get; protected set; }
         public DateTime Finish { get; private set; }
         public PlayerEntity Creator { get; private set; }
         public bool Repeat { get; set; }

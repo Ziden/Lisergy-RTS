@@ -10,14 +10,14 @@ namespace Assets.Code.World
     {
         public GameObject GameObject { get; set; }
         public Unit Unit;
-        public UnitMonoBehaviour UnitMonoBehaviour;
+        public UnitMonoBehaviour Animations;
         private IAssetService _assets;
         private IGameClient _client;
 
         public UnitView(IGameClient client, in Unit unit)
         {
             _client = client;
-            _assets = ClientServices.Resolve<IAssetService>();
+            _assets = UnityServicesContainer.Resolve<IAssetService>();
             Unit = unit;
         }
 
@@ -28,10 +28,10 @@ namespace Assets.Code.World
             {
                 GameObject = o;
                 GameObject.name = $"Unit Spec {Unit.SpecId}";
-                UnitMonoBehaviour = GameObject.GetComponent<UnitMonoBehaviour>();
-                if (UnitMonoBehaviour == null)
+                Animations = GameObject.GetComponent<UnitMonoBehaviour>();
+                if (Animations == null)
                 {
-                    UnitMonoBehaviour = GameObject.AddComponent<UnitMonoBehaviour>();
+                    Animations = GameObject.AddComponent<UnitMonoBehaviour>();
                 }
                 onAdded(o);
             });

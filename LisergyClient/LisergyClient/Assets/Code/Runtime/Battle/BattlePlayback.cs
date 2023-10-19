@@ -35,7 +35,7 @@ namespace Assets.Code.Battle
         public BattlePlayback(GameId battleId, BattleTeam attacker, BattleTeam defender)
         {
             //_battle = new TurnBattle(battleId, attacker, defender);
-            _audio = ClientServices.Resolve<IAudioService>();
+            _audio = UnityServicesContainer.Resolve<IAudioService>();
         }
 
         public async Task SetupScene(Transform root, Action onLoaded)

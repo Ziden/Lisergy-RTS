@@ -1,0 +1,976 @@
+fileFormatVersion: 2
+guid: fa92b106bb280da46b9f2d53f8ba4f92
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: Barrel 01
+  - first:
+      1: 100002
+    second: Box001
+  - first:
+      1: 100004
+    second: Box002
+  - first:
+      1: 100006
+    second: Box004
+  - first:
+      1: 100008
+    second: Box005
+  - first:
+      1: 100010
+    second: Cave Roof 01
+  - first:
+      1: 100012
+    second: Fence 01
+  - first:
+      1: 100014
+    second: Fence 02
+  - first:
+      1: 100016
+    second: Fence Pole 01
+  - first:
+      1: 100018
+    second: Fern 01
+  - first:
+      1: 100020
+    second: Fern 02
+  - first:
+      1: 100022
+    second: Fire Stand 01
+  - first:
+      1: 100024
+    second: //RootNode
+  - first:
+      1: 100026
+    second: Fire Stand 02
+  - first:
+      1: 100028
+    second: Flower 01
+  - first:
+      1: 100030
+    second: Flower 02
+  - first:
+      1: 100032
+    second: Grass 01
+  - first:
+      1: 100034
+    second: Ground Grass 01
+  - first:
+      1: 100036
+    second: Ground Grass 02
+  - first:
+      1: 100038
+    second: Ground Grass 03
+  - first:
+      1: 100040
+    second: Ground Raise 01
+  - first:
+      1: 100042
+    second: Ground Raise 02
+  - first:
+      1: 100044
+    second: Ground Soil 01
+  - first:
+      1: 100046
+    second: Mountain Rock 01
+  - first:
+      1: 100048
+    second: Mountain Rock 02
+  - first:
+      1: 100050
+    second: Mountain Rock 03
+  - first:
+      1: 100052
+    second: Ocean 01
+  - first:
+      1: 100054
+    second: Rock 01
+  - first:
+      1: 100056
+    second: Rock 02
+  - first:
+      1: 100058
+    second: Rock 03
+  - first:
+      1: 100060
+    second: Rock Step 01
+  - first:
+      1: 100062
+    second: Rope Ladder 01
+  - first:
+      1: 100064
+    second: Shore 01
+  - first:
+      1: 100066
+    second: Stacked Rocks 01
+  - first:
+      1: 100068
+    second: Stair 01 Torches
+  - first:
+      1: 100070
+    second: Stairs 01
+  - first:
+      1: 100072
+    second: Stairs 02
+  - first:
+      1: 100074
+    second: Stairs 03
+  - first:
+      1: 100076
+    second: Stairs 04
+  - first:
+      1: 100078
+    second: Stepping Stone 01
+  - first:
+      1: 100080
+    second: Stepping Stone 02
+  - first:
+      1: 100082
+    second: Stone Tile 01
+  - first:
+      1: 100084
+    second: Stone Tile 02
+  - first:
+      1: 100086
+    second: Stone Tomb 01
+  - first:
+      1: 100088
+    second: Stone Tomb 02
+  - first:
+      1: 100090
+    second: Tree 02
+  - first:
+      1: 100092
+    second: Tree Dead 01
+  - first:
+      1: 100094
+    second: Tree Dead 02
+  - first:
+      1: 100096
+    second: Tree Log 01
+  - first:
+      1: 100098
+    second: Tree LP 01
+  - first:
+      1: 100100
+    second: Tree LP 01 1
+  - first:
+      1: 100102
+    second: Tree MP 01
+  - first:
+      1: 100104
+    second: Urn 01
+  - first:
+      1: 100106
+    second: Urn 02
+  - first:
+      1: 100108
+    second: Urn 03
+  - first:
+      1: 100110
+    second: Urn 04
+  - first:
+      1: 100112
+    second: Urn Broken 01
+  - first:
+      1: 100114
+    second: Wagon 01
+  - first:
+      4: 400000
+    second: Barrel 01
+  - first:
+      4: 400002
+    second: Box001
+  - first:
+      4: 400004
+    second: Box002
+  - first:
+      4: 400006
+    second: Box004
+  - first:
+      4: 400008
+    second: Box005
+  - first:
+      4: 400010
+    second: Cave Roof 01
+  - first:
+      4: 400012
+    second: Fence 01
+  - first:
+      4: 400014
+    second: Fence 02
+  - first:
+      4: 400016
+    second: Fence Pole 01
+  - first:
+      4: 400018
+    second: Fern 01
+  - first:
+      4: 400020
+    second: Fern 02
+  - first:
+      4: 400022
+    second: Fire Stand 01
+  - first:
+      4: 400024
+    second: Fire Stand 02
+  - first:
+      4: 400026
+    second: //RootNode
+  - first:
+      4: 400028
+    second: Flower 01
+  - first:
+      4: 400030
+    second: Flower 02
+  - first:
+      4: 400032
+    second: Grass 01
+  - first:
+      4: 400034
+    second: Ground Grass 01
+  - first:
+      4: 400036
+    second: Ground Grass 02
+  - first:
+      4: 400038
+    second: Ground Grass 03
+  - first:
+      4: 400040
+    second: Ground Raise 01
+  - first:
+      4: 400042
+    second: Ground Raise 02
+  - first:
+      4: 400044
+    second: Ground Soil 01
+  - first:
+      4: 400046
+    second: Mountain Rock 01
+  - first:
+      4: 400048
+    second: Mountain Rock 02
+  - first:
+      4: 400050
+    second: Mountain Rock 03
+  - first:
+      4: 400052
+    second: Ocean 01
+  - first:
+      4: 400054
+    second: Rock 01
+  - first:
+      4: 400056
+    second: Rock 02
+  - first:
+      4: 400058
+    second: Rock 03
+  - first:
+      4: 400060
+    second: Rock Step 01
+  - first:
+      4: 400062
+    second: Rope Ladder 01
+  - first:
+      4: 400064
+    second: Shore 01
+  - first:
+      4: 400066
+    second: Stacked Rocks 01
+  - first:
+      4: 400068
+    second: Stair 01 Torches
+  - first:
+      4: 400070
+    second: Stairs 01
+  - first:
+      4: 400072
+    second: Stairs 02
+  - first:
+      4: 400074
+    second: Stairs 03
+  - first:
+      4: 400076
+    second: Stairs 04
+  - first:
+      4: 400078
+    second: Stepping Stone 01
+  - first:
+      4: 400080
+    second: Stepping Stone 02
+  - first:
+      4: 400082
+    second: Stone Tile 01
+  - first:
+      4: 400084
+    second: Stone Tile 02
+  - first:
+      4: 400086
+    second: Stone Tomb 01
+  - first:
+      4: 400088
+    second: Stone Tomb 02
+  - first:
+      4: 400090
+    second: Tree 02
+  - first:
+      4: 400092
+    second: Tree Dead 01
+  - first:
+      4: 400094
+    second: Tree Dead 02
+  - first:
+      4: 400096
+    second: Tree Log 01
+  - first:
+      4: 400098
+    second: Tree LP 01
+  - first:
+      4: 400100
+    second: Tree LP 01 1
+  - first:
+      4: 400102
+    second: Tree MP 01
+  - first:
+      4: 400104
+    second: Urn 01
+  - first:
+      4: 400106
+    second: Urn 02
+  - first:
+      4: 400108
+    second: Urn 03
+  - first:
+      4: 400110
+    second: Urn 04
+  - first:
+      4: 400112
+    second: Urn Broken 01
+  - first:
+      4: 400114
+    second: Wagon 01
+  - first:
+      23: 2300000
+    second: Barrel 01
+  - first:
+      23: 2300002
+    second: Box001
+  - first:
+      23: 2300004
+    second: Box002
+  - first:
+      23: 2300006
+    second: Box004
+  - first:
+      23: 2300008
+    second: Box005
+  - first:
+      23: 2300010
+    second: Cave Roof 01
+  - first:
+      23: 2300012
+    second: Fence 01
+  - first:
+      23: 2300014
+    second: Fence 02
+  - first:
+      23: 2300016
+    second: Fence Pole 01
+  - first:
+      23: 2300018
+    second: Fern 01
+  - first:
+      23: 2300020
+    second: Fern 02
+  - first:
+      23: 2300022
+    second: Fire Stand 01
+  - first:
+      23: 2300024
+    second: Fire Stand 02
+  - first:
+      23: 2300026
+    second: Flower 01
+  - first:
+      23: 2300028
+    second: Flower 02
+  - first:
+      23: 2300030
+    second: Grass 01
+  - first:
+      23: 2300032
+    second: Ground Grass 01
+  - first:
+      23: 2300034
+    second: Ground Grass 02
+  - first:
+      23: 2300036
+    second: Ground Grass 03
+  - first:
+      23: 2300038
+    second: Ground Raise 01
+  - first:
+      23: 2300040
+    second: Ground Raise 02
+  - first:
+      23: 2300042
+    second: Ground Soil 01
+  - first:
+      23: 2300044
+    second: Mountain Rock 01
+  - first:
+      23: 2300046
+    second: Mountain Rock 02
+  - first:
+      23: 2300048
+    second: Mountain Rock 03
+  - first:
+      23: 2300050
+    second: Ocean 01
+  - first:
+      23: 2300052
+    second: Rock 01
+  - first:
+      23: 2300054
+    second: Rock 02
+  - first:
+      23: 2300056
+    second: Rock 03
+  - first:
+      23: 2300058
+    second: Rock Step 01
+  - first:
+      23: 2300060
+    second: Rope Ladder 01
+  - first:
+      23: 2300062
+    second: Shore 01
+  - first:
+      23: 2300064
+    second: Stacked Rocks 01
+  - first:
+      23: 2300066
+    second: Stair 01 Torches
+  - first:
+      23: 2300068
+    second: Stairs 01
+  - first:
+      23: 2300070
+    second: Stairs 02
+  - first:
+      23: 2300072
+    second: Stairs 03
+  - first:
+      23: 2300074
+    second: Stairs 04
+  - first:
+      23: 2300076
+    second: Stepping Stone 01
+  - first:
+      23: 2300078
+    second: Stepping Stone 02
+  - first:
+      23: 2300080
+    second: Stone Tile 01
+  - first:
+      23: 2300082
+    second: Stone Tile 02
+  - first:
+      23: 2300084
+    second: Stone Tomb 01
+  - first:
+      23: 2300086
+    second: Stone Tomb 02
+  - first:
+      23: 2300088
+    second: Tree 02
+  - first:
+      23: 2300090
+    second: Tree Dead 01
+  - first:
+      23: 2300092
+    second: Tree Dead 02
+  - first:
+      23: 2300094
+    second: Tree Log 01
+  - first:
+      23: 2300096
+    second: Tree LP 01
+  - first:
+      23: 2300098
+    second: Tree LP 01 1
+  - first:
+      23: 2300100
+    second: Tree MP 01
+  - first:
+      23: 2300102
+    second: Urn 01
+  - first:
+      23: 2300104
+    second: Urn 02
+  - first:
+      23: 2300106
+    second: Urn 03
+  - first:
+      23: 2300108
+    second: Urn 04
+  - first:
+      23: 2300110
+    second: Urn Broken 01
+  - first:
+      23: 2300112
+    second: Wagon 01
+  - first:
+      23: 2300114
+    second: //RootNode
+  - first:
+      33: 3300000
+    second: Barrel 01
+  - first:
+      33: 3300002
+    second: Box001
+  - first:
+      33: 3300004
+    second: Box002
+  - first:
+      33: 3300006
+    second: Box004
+  - first:
+      33: 3300008
+    second: Box005
+  - first:
+      33: 3300010
+    second: Cave Roof 01
+  - first:
+      33: 3300012
+    second: Fence 01
+  - first:
+      33: 3300014
+    second: Fence 02
+  - first:
+      33: 3300016
+    second: Fence Pole 01
+  - first:
+      33: 3300018
+    second: Fern 01
+  - first:
+      33: 3300020
+    second: Fern 02
+  - first:
+      33: 3300022
+    second: Fire Stand 01
+  - first:
+      33: 3300024
+    second: Fire Stand 02
+  - first:
+      33: 3300026
+    second: Flower 01
+  - first:
+      33: 3300028
+    second: Flower 02
+  - first:
+      33: 3300030
+    second: Grass 01
+  - first:
+      33: 3300032
+    second: Ground Grass 01
+  - first:
+      33: 3300034
+    second: Ground Grass 02
+  - first:
+      33: 3300036
+    second: Ground Grass 03
+  - first:
+      33: 3300038
+    second: Ground Raise 01
+  - first:
+      33: 3300040
+    second: Ground Raise 02
+  - first:
+      33: 3300042
+    second: Ground Soil 01
+  - first:
+      33: 3300044
+    second: Mountain Rock 01
+  - first:
+      33: 3300046
+    second: Mountain Rock 02
+  - first:
+      33: 3300048
+    second: Mountain Rock 03
+  - first:
+      33: 3300050
+    second: Ocean 01
+  - first:
+      33: 3300052
+    second: Rock 01
+  - first:
+      33: 3300054
+    second: Rock 02
+  - first:
+      33: 3300056
+    second: Rock 03
+  - first:
+      33: 3300058
+    second: Rock Step 01
+  - first:
+      33: 3300060
+    second: Rope Ladder 01
+  - first:
+      33: 3300062
+    second: Shore 01
+  - first:
+      33: 3300064
+    second: Stacked Rocks 01
+  - first:
+      33: 3300066
+    second: Stair 01 Torches
+  - first:
+      33: 3300068
+    second: Stairs 01
+  - first:
+      33: 3300070
+    second: Stairs 02
+  - first:
+      33: 3300072
+    second: Stairs 03
+  - first:
+      33: 3300074
+    second: Stairs 04
+  - first:
+      33: 3300076
+    second: Stepping Stone 01
+  - first:
+      33: 3300078
+    second: Stepping Stone 02
+  - first:
+      33: 3300080
+    second: Stone Tile 01
+  - first:
+      33: 3300082
+    second: Stone Tile 02
+  - first:
+      33: 3300084
+    second: Stone Tomb 01
+  - first:
+      33: 3300086
+    second: Stone Tomb 02
+  - first:
+      33: 3300088
+    second: Tree 02
+  - first:
+      33: 3300090
+    second: Tree Dead 01
+  - first:
+      33: 3300092
+    second: Tree Dead 02
+  - first:
+      33: 3300094
+    second: Tree Log 01
+  - first:
+      33: 3300096
+    second: Tree LP 01
+  - first:
+      33: 3300098
+    second: Tree LP 01 1
+  - first:
+      33: 3300100
+    second: Tree MP 01
+  - first:
+      33: 3300102
+    second: Urn 01
+  - first:
+      33: 3300104
+    second: Urn 02
+  - first:
+      33: 3300106
+    second: Urn 03
+  - first:
+      33: 3300108
+    second: Urn 04
+  - first:
+      33: 3300110
+    second: Urn Broken 01
+  - first:
+      33: 3300112
+    second: Wagon 01
+  - first:
+      33: 3300114
+    second: //RootNode
+  - first:
+      43: 4300000
+    second: Box001
+  - first:
+      43: 4300002
+    second: Box002
+  - first:
+      43: 4300004
+    second: Ground Grass 01
+  - first:
+      43: 4300006
+    second: Tree 02
+  - first:
+      43: 4300008
+    second: Tree Dead 01
+  - first:
+      43: 4300010
+    second: Tree Dead 02
+  - first:
+      43: 4300012
+    second: Tree LP 01
+  - first:
+      43: 4300014
+    second: Tree LP 01
+  - first:
+      43: 4300016
+    second: Ocean 01
+  - first:
+      43: 4300018
+    second: Shore 01
+  - first:
+      43: 4300020
+    second: Rock 01
+  - first:
+      43: 4300022
+    second: Rock 02
+  - first:
+      43: 4300024
+    second: Rock Step 01
+  - first:
+      43: 4300026
+    second: Rope Ladder 01
+  - first:
+      43: 4300028
+    second: Rock 03
+  - first:
+      43: 4300030
+    second: Tree Log 01
+  - first:
+      43: 4300032
+    second: Ground Soil 01
+  - first:
+      43: 4300034
+    second: Ground Raise 01
+  - first:
+      43: 4300036
+    second: Ground Raise 02
+  - first:
+      43: 4300038
+    second: Tree MP 01
+  - first:
+      43: 4300040
+    second: Stacked Rocks 01
+  - first:
+      43: 4300042
+    second: Box004
+  - first:
+      43: 4300044
+    second: Stone Tomb 01
+  - first:
+      43: 4300046
+    second: Stone Tomb 02
+  - first:
+      43: 4300048
+    second: Mountain Rock 01
+  - first:
+      43: 4300050
+    second: Mountain Rock 02
+  - first:
+      43: 4300052
+    second: Mountain Rock 03
+  - first:
+      43: 4300054
+    second: Grass 01
+  - first:
+      43: 4300056
+    second: Fern 01
+  - first:
+      43: 4300058
+    second: Fern 02
+  - first:
+      43: 4300060
+    second: Flower 01
+  - first:
+      43: 4300062
+    second: Flower 02
+  - first:
+      43: 4300064
+    second: Ground Grass 02
+  - first:
+      43: 4300066
+    second: Ground Grass 03
+  - first:
+      43: 4300068
+    second: Stepping Stone 01
+  - first:
+      43: 4300070
+    second: Stepping Stone 02
+  - first:
+      43: 4300072
+    second: Urn 01
+  - first:
+      43: 4300074
+    second: Urn Broken 01
+  - first:
+      43: 4300076
+    second: Urn 02
+  - first:
+      43: 4300078
+    second: Urn 03
+  - first:
+      43: 4300080
+    second: Urn 04
+  - first:
+      43: 4300082
+    second: Fence 01
+  - first:
+      43: 4300084
+    second: Fence Pole 01
+  - first:
+      43: 4300086
+    second: Fence 02
+  - first:
+      43: 4300088
+    second: Wagon 01
+  - first:
+      43: 4300090
+    second: Barrel 01
+  - first:
+      43: 4300092
+    second: Stone Tile 01
+  - first:
+      43: 4300094
+    second: Stone Tile 02
+  - first:
+      43: 4300096
+    second: Stairs 01
+  - first:
+      43: 4300098
+    second: Stairs 02
+  - first:
+      43: 4300100
+    second: Stair 01 Torches
+  - first:
+      43: 4300102
+    second: Stairs 03
+  - first:
+      43: 4300104
+    second: Stairs 04
+  - first:
+      43: 4300106
+    second: Cave Roof 01
+  - first:
+      43: 4300108
+    second: Box005
+  - first:
+      43: 4300110
+    second: Fire Stand 01
+  - first:
+      43: 4300112
+    second: Fire Stand 02
+  externalObjects: {}
+  materials:
+    materialImportMode: 0
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 0
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

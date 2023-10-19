@@ -27,8 +27,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c2d1057aebdfa034bb0943a31096f9c9
-    m_Address: Assets/Addressables/UIScreens/Components/RadialProgress.uxml
+  - m_GUID: 98beca8e06a409343beee46acf31221c
+    m_Address: /Components/EntityDetails.uxmlComponents/EntityDetails.uxml
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -7,6 +7,7 @@ using GameAssets;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using Cysharp.Threading.Tasks;
 
 public class AssetContainer<K, T> where K: IComparable, IFormattable, IConvertible
 {
@@ -62,14 +63,14 @@ public class PrefabContainer
         return addr;
     }
 
-    public async Task InstantiateAsync<K>(K key, Vector3 pos, Quaternion rot, Action<GameObject> onComplete) where K : IComparable, IFormattable, IConvertible
+    public async UniTask InstantiateAsync<K>(K key, Vector3 pos, Quaternion rot, Action<GameObject> onComplete) where K : IComparable, IFormattable, IConvertible
     {
         var handle = Addressables.InstantiateAsync(GetAddress(key), pos, rot);
         await handle.Task;
         onComplete?.Invoke(handle.Result);
     }
 
-    public async Task InstantiateAsync(string address, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
+    public async UniTask InstantiateAsync(string address, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
     {
         var handle = Addressables.InstantiateAsync(address, pos, rot);
         await handle.Task;

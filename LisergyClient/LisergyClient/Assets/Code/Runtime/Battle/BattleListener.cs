@@ -13,7 +13,7 @@ namespace Assets.Code.Battle
 
         public BattleListener(EventBus<BasePacket> networkEvents)
         {
-            _screens = ClientServices.Resolve<IScreenService>();
+            _screens = UnityServicesContainer.Resolve<IScreenService>();
             networkEvents.Register<BattleLogPacket>(this, BattleLog);
             networkEvents.Register<BattleResultSummaryPacket>(this, BattleSummary);
             networkEvents.Register<BattleStartPacket>(this, BattleStart);

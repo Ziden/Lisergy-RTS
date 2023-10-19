@@ -26,7 +26,7 @@ namespace Assets.Code.Battle
             if (ev is UnitDeadEvent unitDead)
             {
                 var unitView = Units[unitDead.UnitId];
-                unitView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.Death);
+                unitView.Animations.PlayAnimation(UnitAnimation.Death);
                 _audio.PlaySoundEffect(SoundFX.Ogre3);
             }
             else if (ev is AttackAction atk)
@@ -50,10 +50,10 @@ namespace Assets.Code.Battle
 
                 sequence.Append(
                     attackerView.GameObject.transform.DOMove(dest, 0.5f)
-                    .OnStart(() => attackerView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.Running))
+                    .OnStart(() => attackerView.Animations.PlayAnimation(UnitAnimation.Running))
                     .OnComplete(() => {
                         _audio.PlaySoundEffect(SoundFX.Swing);
-                        attackerView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.MeleeAttack); 
+                        attackerView.Animations.PlayAnimation(UnitAnimation.MeleeAttack); 
 
                     }));
                 sequence.AppendInterval(0.3f);
@@ -62,7 +62,7 @@ namespace Assets.Code.Battle
                 sequence.AppendCallback(() =>
                 {
                     _audio.PlaySoundEffect(SoundFX.Sword_unsheathe5);
-                    defenderView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.Damaged, 0.7f);
+                    defenderView.Animations.PlayAnimation(UnitAnimation.Damaged, 0.7f);
                     ShowDamage(defenderView, result.Damage);
                     OnAttacked?.Invoke(atk);
                 });
@@ -73,13 +73,13 @@ namespace Assets.Code.Battle
                    attackerView.GameObject.transform.DOMove(ogPosition, 0.3f)
                    .OnStart(() =>
                    {
-                       attackerView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.JumpBack);
-                       defenderView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.BattleIddle);
+                       attackerView.Animations.PlayAnimation(UnitAnimation.JumpBack);
+                       defenderView.Animations.PlayAnimation(UnitAnimation.BattleIddle);
                    }));
                 sequence.Play();
                 while (sequence.IsPlaying()) await Task.Delay(1);
                 OnUnitFinishAct?.Invoke(atk.Unit);
-                attackerView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.BattleIddle);
+                attackerView.Animations.PlayAnimation(UnitAnimation.BattleIddle);
             }
         }
     }

@@ -40,8 +40,8 @@ namespace Assets.Code.World
 
         public static void BattleEffect(EntityType t)
         {
-            var assets = ClientServices.Resolve<IAssetService>();
-            var modules = ClientServices.Resolve<IServerModules>();
+            var assets = UnityServicesContainer.Resolve<IAssetService>();
+            var modules = UnityServicesContainer.Resolve<IServerModules>();
             var view = (UnityEntityView<EntityType>)modules.Views.GetOrCreateView(t);
             assets.CreateMapFX(GameAssets.MapFX.BattleEffect, view.GameObject.transform.position, Quaternion.identity, o =>
             {

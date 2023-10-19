@@ -1,4 +1,5 @@
-﻿using ClientSDK.Data;
+﻿using Assets.Code.Views;
+using ClientSDK.Data;
 using Game.Systems.Dungeon;
 using UnityEngine;
 
@@ -10,10 +11,11 @@ namespace Assets.Code.World
         {
             var spec = Client.Game.Specs.Dungeons[Entity.SpecId];
             State = EntityViewState.RENDERING;
-            IGameClientServices.Assets.CreatePrefab(spec.Art, new Vector3(Entity.Tile.X, 0, Entity.Tile.Y), Quaternion.identity, o =>
+            Assets.CreatePrefab(spec.Art, new Vector3(Entity.Tile.X, 0, Entity.Tile.Y), Quaternion.identity, o =>
             {
+                var tileView = (TileView)Client.Modules.Views.GetOrCreateView(Entity.Tile);
                 GameObject = o;
-                GameObject.transform.position = Entity.UnityPosition();
+                tileView.SetChildren(GameObject);
                 GameObject.isStatic = true;
                 State = EntityViewState.RENDERED;
             });

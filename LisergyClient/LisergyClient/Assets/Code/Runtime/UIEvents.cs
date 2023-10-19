@@ -3,6 +3,7 @@ using Assets.Code.UI;
 using Game.Battle;
 using Game.Battle.Data;
 using Game.DataTypes;
+using Game.ECS;
 using Game.Systems.Party;
 using Game.Tile;
 using System;
@@ -18,7 +19,7 @@ namespace Assets.Code
     {
         public static event Action<Vector3> OnCameraMove;
         public static event Action<TileEntity> OnClickTile;
-        public static event Action<PartyEntity> OnSelectParty;
+        public static event Action<IEntity> OnSelectEntity;
         public static event Action<PartyEntity> OnCourseCancelled;
         public static event Action<GameId, BattleTeam, BattleTeam> OnBattleStart;
         public static event Action<BattleHeaderData> OnBattleFinish;
@@ -49,9 +50,9 @@ namespace Assets.Code
             OnClickTile?.Invoke(tile);
         }
 
-        public static void SelectParty(PartyEntity party)
+        public static void SelectEntity(IEntity entity)
         {
-            OnSelectParty?.Invoke(party);
+            OnSelectEntity?.Invoke(entity);
         }
 
         public static void ActionSelected(PartyEntity p, TileEntity tile, EntityAction action)

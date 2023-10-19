@@ -1,4 +1,5 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
+using Cysharp.Threading.Tasks;
 using GameAssets;
 using System;
 using System.Collections;
@@ -33,13 +34,13 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens
             FillScreen();
         }
 
-        public async Task RunWhenScreenFilled(Action a) 
+        public async UniTask RunWhenScreenFilled(Action a) 
         {
             while (_x != 200) await Task.Delay(2);
             a();
         }
 
-        private async Task Close()
+        private async UniTask Close()
         {
             await Task.Delay(2000);
             _screenService.Close(this);

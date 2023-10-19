@@ -1,15 +1,12 @@
 using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Assets.Code.Runtime.UIScreens.Base;
-using Assets.Code.Assets.Code.Runtime.UIScreens.Parts;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.Battle;
-using Assets.Code.Views;
 using Assets.Code.World;
 using Game.Battle;
 using Game.Battle.BattleActions;
 using Game.Battle.Data;
 using Game.DataTypes;
-using Game.Events;
 using Game.Events.Bus;
 using Game.Network.ServerPackets;
 using GameAssets;
@@ -63,7 +60,7 @@ namespace Assets.Code
         {
             var setup = GetSetup<BattleScreenSetup>();
             OnFinishedPlayback += setup.OnFinish;
-            _assets = ClientServices.Resolve<IAssetService>();
+            _assets = UnityServicesContainer.Resolve<IAssetService>();
             for (var i = 0; i < 4; i++)
             {
                 if (i < setup.Attacker.Units.Length) await AddHealthbar(Units[setup.Attacker.Units[i].UnitID]);
@@ -137,7 +134,7 @@ namespace Assets.Code
                 unit.HP = 0;
             else
                 unit.HP -= (byte)result.Damage;
-            PartyButton.UpdateHealth(UnitHealthBars[unit.Id], unit);
+            // PartyButton.UpdateHealth(UnitHealthBars[unit.Id], unit);
         }
 
         public void TakeDamage(GameId unitId, ushort damage)

@@ -12,28 +12,27 @@ using UnityEngine;
 /// </summary>
 public class UnityEntityView<T> : EntityView<T>, IGameObject where T : IEntity
 {
-    public GameObject GameObject { get; set; }
+    protected event Action OnAfterRendered;
 
-    protected IAssetService Assets = ClientServices.Resolve<IAssetService>();
+    private GameObject _gameObject;
+    public GameObject GameObject { get => _gameObject; set
+        {
+            _gameObject = value;
+            OnAfterRendered?.Invoke();
+        }
+    }
+
+    protected IAssetService Assets => Client.UnityServices().Assets;
     private static string _containerName = typeof(T).Name + " Container";
     private static GameObject _container;
-
     protected static GameObject ViewContainer => _container = _container ?? new GameObject(_containerName);
 
     /// <summary>
-    /// Will be called, only once, after the entity view is fully rendered.
-    /// Will be called instantly in case its already rendered
+    /// Sets the gameobject as a child of this view
     /// </summary>
-    public void AfterRendered(Action onAfterRender)
+    public void SetChildren(GameObject child)
     {
-        if (State == EntityViewState.RENDERED) onAfterRender();
-        else OnAfterRendered += onAfterRender;
+        if (State == EntityViewState.RENDERED) child.transform.parent = GameObject.transform;
+        else OnAfterRendered += () => child.transform.parent = GameObject.transform;
     }
-
-    protected void CallAfterRenderCallbacks()
-    {
-        OnAfterRendered?.Invoke();
-    }
-
-    protected event Action OnAfterRendered;
 }

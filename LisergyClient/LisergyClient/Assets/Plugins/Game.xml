@@ -74,6 +74,17 @@
             Struct for specific data that is only needed inside battles
             </summary>
         </member>
+        <member name="T:Game.Comands.IPlayerCommandContext">
+            <summary>
+            Exposes all player logic objects that can be manipulated inside a command
+            </summary>
+        </member>
+        <member name="T:Game.Comands.IGameCommand">
+            <summary>
+            Game commands are run on the game and on the WebPlayerLogic server in a deterministic way
+            Commands alter player data (not world data)
+            </summary>
+        </member>
         <member name="T:Game.DataTypes.DeterministicRandom">
               Rangom number generator based on Gorge Marsaglia and his yolo XORSHIFT
               http://www.jstatsoft.org/v08/i14/xorshift.pdf
