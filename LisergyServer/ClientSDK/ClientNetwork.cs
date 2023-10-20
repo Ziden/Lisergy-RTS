@@ -15,6 +15,7 @@ namespace ClientSDK
     {
         public event Action<BasePacket>? OnReceiveGenericPacket;
 
+        private bool _enabled = true;
         internal const int READS_PER_TICK = 20;
         internal Message _msg;
         internal Client _socket = new Client();
@@ -42,8 +43,16 @@ namespace ClientSDK
             _toSend.Add(Serialization.FromPacketRaw(p));
         }
 
+        public void Disconnect()
+        {
+            Log.Info("Client disconnecting");
+            _enabled = false;
+            _socket.Disconnect();
+        }
+
         public void Tick()
         {
+            if (!_enabled) return;
             if (!_socket.Connected)
             {
                 _socket.Connect("127.0.0.1", 1337);

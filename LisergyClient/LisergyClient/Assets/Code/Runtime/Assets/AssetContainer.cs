@@ -13,10 +13,8 @@ public class AssetContainer<K, T> where K: IComparable, IFormattable, IConvertib
 {
     private Dictionary<string, AsyncOperationHandle<T>> _loaded = new Dictionary<string, AsyncOperationHandle<T>>();
 
-    public async Task LoadAsync(K key, Action<T> onComplete) 
+    public async UniTask<T> LoadAsync(K key, Action<T> onComplete) 
     {
-        Debug.Log("Loading Asset " + key);
-
         if (!typeof(K).IsEnum)
             throw new Exception("Not enum parameter");
         
@@ -25,25 +23,26 @@ public class AssetContainer<K, T> where K: IComparable, IFormattable, IConvertib
         {
             throw new Exception("Could not find asset address for "+key);
         }
-        await LoadAsync(addr, onComplete);
+        return await LoadAsync(addr, onComplete);
     }
 
-    public async Task LoadAsync(string address, Action<T> onComplete)
+    public async UniTask<T> LoadAsync(string address, Action<T> onComplete)
     {
         if (_loaded.TryGetValue(address, out var handle))
         {
             if (!handle.IsValid())
             {
                 Log.Error("Error loading " + address);
-                return;
+                return default(T);
             }
-            onComplete(handle.Result);
-            return;
+            onComplete?.Invoke(handle.Result);
+            return handle.Result;
         }
         handle = Addressables.LoadAssetAsync<T>(address);
         await handle.Task;
         _loaded[address] = handle;
-        onComplete(handle.Result);
+        onComplete?.Invoke(handle.Result);
+        return handle.Result;
     }
 }
 

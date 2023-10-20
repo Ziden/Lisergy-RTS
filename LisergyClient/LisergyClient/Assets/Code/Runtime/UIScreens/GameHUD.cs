@@ -1,10 +1,9 @@
-using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Assets.Code.Runtime;
+using Assets.Code.Assets.Code.Runtime.UIScreens.Parts;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.UI;
 using Assets.Code.World;
 using ClientSDK.SDKEvents;
-using Game;
 using Game.Events.Bus;
 using Game.Systems.Battler;
 using Game.Systems.Movement;
@@ -19,10 +18,10 @@ namespace Assets.Code
     /// <summary>
     /// Bottom bar on the screen that allows the player to select a party
     /// </summary>
-    public class PartySelectbar : UITKScreen, IEventListener
+    public class GameHUD : UITKScreen, IEventListener
     {
-        private VisualElement _uiCursor;
-        private Button[] _partyButtons = new Button[4];
+        private VisualElement _buttonCursor;
+        private PartyButton[] _partyButtons = new PartyButton[4];
         private Button _townButton;
 
         public override UIScreen ScreenAsset => UIScreen.PartySelectBar;
@@ -32,15 +31,18 @@ namespace Assets.Code
             var service = UnityServicesContainer.Resolve<IScreenService>();
             _townButton = Root.Q<Button>("TownButton");
             _townButton.clicked += () => TownButtonClick();
-            _uiCursor = Root.Q<VisualElement>("PartySelector");
-            for (var i = 0; i < 4; i++)
+          
+            for (byte i = 0; i < 4; i++)
             {
                 var index = i;
-                _partyButtons[i] = Root.Q<Button>($"PartyPortrait-{i + 1}");
-                _partyButtons[i].style.backgroundImage = null;
-                _partyButtons[i].clicked += () => PartyButtonClick(index);
+                _partyButtons[i] = new PartyButton(GameClient, Root.Q<VisualElement>($"Portrait-Container-{i + 1}"));
+                _partyButtons[i].OnClick(() => PartyButtonClick(index));
+                var party = GameClient.Modules.Player.LocalPlayer.GetParty(i);
+                _partyButtons[i].DisplayParty(party);
             }
-            _uiCursor.style.display = DisplayStyle.None;
+            _buttonCursor = Root.Q<VisualElement>("PartySelector");
+            _buttonCursor.style.display = DisplayStyle.None;
+            GameClient.ClientEvents.Register<OwnEntityInfoReceived<PartyEntity>>(this, OnOwnPartyReceived);
             UIEvents.OnCameraMove += OnCameraMove;
             UIEvents.OnClickTile += OnClickTile;
         }
@@ -48,23 +50,30 @@ namespace Assets.Code
         public override void OnLoaded(VisualElement root)
         {
             base.OnLoaded(root);
-            GameClient.ClientEvents.Register<OwnEntityInfoReceived<PartyEntity>>(this, OnOwnPartyReceived);
         }
 
         public override void OnClose()
         {
             UIEvents.OnCameraMove -= OnCameraMove;
             UIEvents.OnClickTile -= OnClickTile;
+            GameClient.ClientEvents.RemoveListener(this);
         }
 
         private void OnCameraMove(Vector3 newPos)
         {
-            if(newPos != Vector3.zero) ScreenService.Close<ActionsBar>();
+            if (newPos != Vector3.zero)
+            {
+                ScreenService.Close<UnitDetails>();
+                ScreenService.Close<ActionsBar>();
+                ScreenService.Close<EntityDetails>();
+            }
         }
 
         private void OnClickTile(TileEntity tile)
         {
-            if (ScreenService.IsOpen<ActionsBar>()) ScreenService.Close<ActionsBar>();
+            ScreenService.Close<UnitDetails>();
+            ScreenService.Close<ActionsBar>();
+            ScreenService.Close<EntityDetails>();
             if (ClientState.SelectedEntity != null && ClientState.SelectedEntity is PartyEntity party)
             {
                 ScreenService.Open<ActionsBar, ActionsBarSetup>(new ActionsBarSetup()
@@ -87,6 +96,18 @@ namespace Assets.Code
             if(ClientState.SelectedEntity is PartyEntity party)
             {
                 var tile = ClientState.SelectedTile;
+                if(action == EntityAction.CHECK)
+                {
+                    var selectedTile = ClientState.SelectedTile;
+                    if(selectedTile.Building != null)
+                    {
+                        ScreenService.Open<EntityDetails, EntityDetailsSetup>(new EntityDetailsSetup()
+                        {
+                            Entity = selectedTile.Building
+                        });
+                    }
+                    return;
+                }
                 var intent = action == EntityAction.ATTACK ? CourseIntent.OffensiveTarget : CourseIntent.Defensive;
                 GameClient.Modules.Actions.MoveParty(party, tile, intent);
             }
@@ -106,11 +127,7 @@ namespace Assets.Code
         {
             var party = view.Entity;
             var leader = party.Get<BattleGroupComponent>().Units.Leader;
-            var leaderSpec = GameClient.Game.Specs.Units[leader.SpecId];
-            UnityServicesContainer.Resolve<IAssetService>().GetSprite(leaderSpec.IconArt, sprite =>
-            {
-                _partyButtons[party.PartyIndex].style.backgroundImage = new StyleBackground(sprite);
-            });
+            _partyButtons[party.PartyIndex].DisplayLeader(leader);
         }
 
         private void PartyButtonClick(int partyIndex)
@@ -122,8 +139,8 @@ namespace Assets.Code
 
         private void TownButtonClick()
         {
-            _uiCursor.style.display = DisplayStyle.Flex;
-            _uiCursor.style.left = _townButton.worldBound.xMin - _uiCursor.parent.worldBound.xMin - 12;
+            _buttonCursor.style.display = DisplayStyle.Flex;
+            _buttonCursor.style.left = _townButton.worldBound.xMin - _buttonCursor.parent.worldBound.xMin - 11;
             var center = GameClient.Modules.Player.LocalPlayer.GetCenter();
             UIEvents.SelectEntity(center);
         }
@@ -131,8 +148,8 @@ namespace Assets.Code
         private void SelectEntity(PartyEntity party)
         {
             var button = _partyButtons[party.PartyIndex];
-            _uiCursor.style.display = DisplayStyle.Flex;
-            _uiCursor.style.left = button.worldBound.xMin - _uiCursor.parent.worldBound.xMin - 7;
+            _buttonCursor.style.display = DisplayStyle.Flex;
+            _buttonCursor.style.left = button.Bounds.xMin - _buttonCursor.parent.worldBound.xMin + 6;
             if(party != null) UIEvents.SelectEntity(party);
         }
     }

@@ -12,7 +12,10 @@ namespace BaseServer.Core
         private Message _pooledMessage;
         private ConsoleCommandExecutor _commandExecutor;
         protected Server _socketServer;
+        public Exception ServerError { get; private set; }
         public Ticker Ticker { get; protected set; }
+
+        private BasePacket _packet;
 
         public SocketServer(int port)
         {
@@ -34,8 +37,10 @@ namespace BaseServer.Core
             }
             catch (Exception e)
             {
+                ServerError = e;
                 Log.Error(e.ToString());
                 Log.Error("Press any key to die");
+                Console.ReadLine();
             }
         }
 
@@ -58,12 +63,13 @@ namespace BaseServer.Core
             _socketServer.Stop();
         }
         public abstract void RegisterConsoleCommands(ConsoleCommandExecutor executor);
-        protected abstract bool IsAuthenticated(BasePacket ev, int connectionID);
+        protected abstract bool IsAuthenticated(int connectionID);
+        protected abstract bool Authenticate(BasePacket packet, int connectionID);
         public abstract void Tick();
         public abstract void Disconnect(int connectionID);
         public abstract void Connect(int connectionID);
         public abstract ServerType GetServerType();
-        public abstract void HandleInputPacket(int connectionId, BasePacket input);
+        public abstract void ReceiveAuthenticatedPacket(int connectionId, BasePacket input);
         private void ReadSocketMessages()
         {
             while (_socketServer.GetNextMessage(out _pooledMessage))
@@ -74,14 +80,22 @@ namespace BaseServer.Core
                         Connect(_pooledMessage.connectionId);
                         break;
                     case EventType.Data:
-                        byte[] message = _pooledMessage.data;
-                        var ev = Serialization.ToPacketRaw<BasePacket>(message);
-                        ev.ConnectionID = _pooledMessage.connectionId;
-                        Log.Debug($"Received {message.Length} bytes for {ev} from connection {_pooledMessage.connectionId}");
-                        if (IsAuthenticated(ev, _pooledMessage.connectionId))
+                     
+                        Log.Debug($"Received {_pooledMessage.data.Length} bytes for {_packet} from connection {_pooledMessage.connectionId}");
+                        if (!IsAuthenticated(_pooledMessage.connectionId))
                         {
-                            HandleInputPacket(_pooledMessage.connectionId, ev);
+                            // TODO: Make not need to deserialize the whole message, check if header is AuthPacket
+                            _packet = Serialization.ToPacketRaw<BasePacket>(_pooledMessage.data);
+                            _packet.ConnectionID = _pooledMessage.connectionId;
+                            if (!Authenticate(_packet, _pooledMessage.connectionId)) return;
                         }
+                        if (_packet == null)
+                        {
+                            _packet = Serialization.ToPacketRaw<BasePacket>(_pooledMessage.data);
+                            _packet.ConnectionID = _pooledMessage.connectionId;
+                        }
+                        ReceiveAuthenticatedPacket(_pooledMessage.connectionId, _packet);
+                        _packet = null;
                         break;
                     case EventType.Disconnected:
                         Disconnect(_pooledMessage.connectionId);

@@ -27,7 +27,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         internal IGameClient GameClient;
 
 
-        internal bool Loaded { get => _loaded; set
+        internal bool FinishedLoading { get => _loaded; set
             {
                 _loaded = value;
                 OnLoad?.Invoke();
@@ -40,7 +40,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
 
         public void AddLoadCallback(Action cb)
         {
-            if (Loaded) cb(); else OnLoad = cb;
+            if (FinishedLoading) cb(); else OnLoad = cb;
         }
 
         public bool IsOpen => _screenService.IsOpen(this);

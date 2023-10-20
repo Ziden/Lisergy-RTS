@@ -1,10 +1,16 @@
 ﻿using ClientSDK;
+using ClientSDK.Data;
 using ClientSDK.SDKEvents;
 using Game;
+using Game.DataTypes;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Events.ServerEvents;
 using Game.Network;
+using Game.Systems.Building;
+using Game.Systems.Dungeon;
+using Game.Systems.Party;
+using Game.Tile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +36,15 @@ namespace ServerTests.Integration.Stubs
         private void OnGameStart(GameStartedEvent ev)
         {
             ev.Game.Events.OnEventFired += ev => EventsInClientLogic.Add(ev);
+        }
+
+        public void PrepareSDK()
+        {
+            GameId.DEBUG_MODE = 1;
+            Modules.Views.RegisterView<TileEntity, EntityView<TileEntity>>();
+            Modules.Views.RegisterView<PartyEntity, EntityView<PartyEntity>>();
+            Modules.Views.RegisterView<DungeonEntity, EntityView<DungeonEntity>>();
+            Modules.Views.RegisterView<PlayerBuildingEntity, EntityView<PlayerBuildingEntity>>();
         }
 
         private void OnReceivePacket(BasePacket packet)

@@ -36,11 +36,11 @@ namespace Assets.Code
             var attacker = popup.Q<VisualElement>("PartyButton-Attacker");
             var t = attacker.GetType();
             var attackerLeader = setup.BattleHeader.Attacker.Units.Leader;
-            _attacker = new PartyButton(attacker);
+            _attacker = new PartyButton(GameClient, attacker);
             _attacker.DisplayLeader(attackerLeader);
 
             var defender = popup.Q<VisualElement>("PartyButton-Defender-1");
-            _defender = new PartyButton(defender);
+            _defender = new PartyButton(GameClient, defender);
             _defender.DisplayLeader(setup.BattleHeader.Defender.Units.Leader);
             base.OnOpen();
         }

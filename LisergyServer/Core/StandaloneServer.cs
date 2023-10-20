@@ -68,7 +68,7 @@ namespace MapServer
         /// <summary>
         /// Handles whenever this server receives input from an authenticated connection
         /// </summary>
-        public override void HandleInputPacket(int connectionId, BasePacket input)
+        public override void ReceiveAuthenticatedPacket(int connectionId, BasePacket input)
         {
             var connectedPlayer = _connectionService.GetConnectedPlayer(connectionId);
             _game.Network.ReceiveInput(connectedPlayer.PlayerId, input);
@@ -80,10 +80,20 @@ namespace MapServer
         private void HandleOutgoingPacket(GameId player, BasePacket packet)
         {
             var connectedPlayer = _connectionService.GetConnectedPlayer(player);
-            connectedPlayer.Send(packet);
+            connectedPlayer?.Send(packet);
         }
 
-        protected override bool IsAuthenticated(BasePacket ev, int connectionID)
+
+
+        protected override bool IsAuthenticated(int connectionID)
+        {
+            var connectedAccount = _accountService.GetAuthenticatedConnection(connectionID);
+            var hasAuth = connectedAccount != null;
+            if (!hasAuth) Log.Error($"Connection {connectionID} is not authenticated");
+            return hasAuth;
+        }
+
+        protected override bool Authenticate(BasePacket ev, int connectionID)
         {
             Account? connectedAccount;
             if (ev is AuthPacket auth)
@@ -101,7 +111,7 @@ namespace MapServer
                         PlayerId = connectedAccount.PlayerId,
                         ConnectionID = connectionID
                     });
-                    if (auth.SpecVersion < _game.Specs.Version) Send(connectionID, new GameSpecPacket(_game));
+                    Log.Debug($"Connection {connectionID} registered authenticated as {connectedAccount.PlayerId}");
                 }
             }
             else

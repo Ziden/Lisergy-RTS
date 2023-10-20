@@ -15,6 +15,7 @@ namespace Game.Events.Bus
     {
         public event Action<EventType> OnEventFired;
 
+        internal List<RegisteredListener> _allListeners = new List<RegisteredListener>();
         internal Dictionary<Type, List<RegisteredListener>> _registeredListeners = new Dictionary<Type, List<RegisteredListener>>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -47,12 +48,27 @@ namespace Game.Events.Bus
                 _registeredListeners.Add(eventType, new List<RegisteredListener>());
             }
             List<RegisteredListener> eventList = _registeredListeners[eventType];
-            eventList.Add(new RegisteredListener()
+            var registry = new RegisteredListener()
             {
                 Method = callback,
-                Listener = new WeakReference<IEventListener>(listener),
+                Listener = listener,
                 Type = eventType
-            }); ;
+            };
+            eventList.Add(registry);
+            _allListeners.Add(registry);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public virtual void RemoveListener(IEventListener listener)
+        {
+            foreach(var l in new List<RegisteredListener>(_allListeners))
+            {
+                if(l.Listener == listener)
+                {
+                    _registeredListeners[l.Type].Remove(l);
+                    _allListeners.Remove(l);
+                }
+            }
         }
     }
 }

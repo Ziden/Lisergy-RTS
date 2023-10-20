@@ -4,7 +4,6 @@ using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Assets.Code.Audio;
 using Assets.Code.Assets.Code.Runtime;
 using Assets.Code.Assets.Code.UIScreens.Base;
-using Assets.Code.UI;
 using Assets.Code.Views;
 using Assets.Code.World;
 using ClientSDK;
@@ -62,7 +61,8 @@ public class Main : MonoBehaviour, IEventListener
     /// </summary>
     private void SetupClientSystemListeners(GameStartedEvent ev)
     {
-        _listeners.Add(new FogOfWarListener(_client)); 
+        _listeners.Add(new FogOfWarListener(_client));
+        _listeners.Add(new BattleGroupComponentListener(_client));
         _listeners.Add(new MapPlacementComponentListener(_client));
         _listeners.Add(new IndicatorSelectedTileListener(_client));
         _listeners.Add(new IndicatorSelectedEntityListener(_client));

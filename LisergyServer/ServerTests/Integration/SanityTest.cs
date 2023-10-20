@@ -36,6 +36,7 @@ namespace ServerTests.Integration
         {
             _server = new TestServerThread();
             _client = new TestGameClient();
+            _client.PrepareSDK();
         }
 
         [TearDown]
@@ -43,20 +44,24 @@ namespace ServerTests.Integration
 
         [Test]
 
+        public async Task TestDisconnection()
+        {
+            _client.Modules.Account.SendAuthenticationPacket("abc", "def");
+            _client.Network.Disconnect();
+            var result = await _client.WaitFor<AuthResultPacket>();
+            Assert.IsNull(result);
+        }
+
+        [Test]
+
         public async Task SmokeTestFlow()
         {
-            // PREPARE SDK
-            GameId.DEBUG_MODE = 1;
+        
             var mapPlacementUpdates = new List<IEntity>();
             _client.Modules.Components.OnComponentUpdate<MapPlacementComponent>((e, oldValue, newValue) =>
             {
                 mapPlacementUpdates.Add(e);
             });
-
-            _client.Modules.Views.RegisterView<TileEntity, EntityView<TileEntity>>();
-            _client.Modules.Views.RegisterView<PartyEntity, EntityView<PartyEntity>>();
-            _client.Modules.Views.RegisterView<DungeonEntity, EntityView<DungeonEntity>>();
-            _client.Modules.Views.RegisterView<PlayerBuildingEntity, EntityView<PlayerBuildingEntity>>();
 
             // LOGIN
             _client.Modules.Account.SendAuthenticationPacket("abc", "def");

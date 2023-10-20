@@ -22,6 +22,10 @@ namespace ServerTests.Integration.Stubs
                 Game.SetupGame(new TestWorld(), new GameServerNetwork(Game));
                 Server = new StandaloneServer(Game, 1337);
                 Server.RunServer();
+                if(Server.ServerError != null)
+                {
+                    throw Server.ServerError;
+                }
             });
             Thread.Start();
         }

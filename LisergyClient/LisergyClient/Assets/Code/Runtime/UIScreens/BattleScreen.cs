@@ -46,7 +46,8 @@ namespace Assets.Code
 
         private async Task AddHealthbar(UnitView view)
         {
-            await _assets.GetScreen(UIScreen.HealthBar, hb =>
+            /*
+            _assets.GetScreen(UIScreen.HealthBar, hb =>
             {
                 var tree = hb.CloneTree();
                 tree.style.position = Position.Absolute;
@@ -54,6 +55,7 @@ namespace Assets.Code
                 UnitHealthBars[view.Unit.Id] = tree;
                 tree.MoveToEntity(Root.panel, view, _battleCamera);
             });
+            */
         }
 
         private async Task OnSceneLoaded()
@@ -108,7 +110,7 @@ namespace Assets.Code
 
         public override void OnOpen()
         {
-            _screenService.Close<PartySelectbar>();
+            _screenService.Close<GameHUD>();
             _ = PrepareBattleSceneAsync();
 
         }

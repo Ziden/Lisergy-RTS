@@ -11,7 +11,7 @@ namespace Game
 {
     public enum ServerType
     {
-        BATTLE, WORLD
+        BATTLE, WORLD, HUB
     }
 
     public interface IGameNetwork

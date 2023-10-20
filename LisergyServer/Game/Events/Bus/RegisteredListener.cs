@@ -4,7 +4,7 @@ namespace Game.Events.Bus
 {
     public class RegisteredListener
     {
-        public WeakReference<IEventListener> Listener;
+        public IEventListener Listener;
         public Delegate Method;
         public Type Type;
 

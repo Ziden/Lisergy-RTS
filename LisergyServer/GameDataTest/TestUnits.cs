@@ -26,14 +26,14 @@ namespace GameDataTest
 
         private static UnitStats BaseStats = new UnitStats().SetStats(new Dictionary<Stat, byte>()
             {
-                    { Stat.SPEED, 5 },
-                    { Stat.ACCURACY, 5 },
-                    { Stat.DEF, 5 },
-                    { Stat.MDEF, 5 },
-                    { Stat.ATK, 5 },
-                    { Stat.MATK, 5 },
-                    { Stat.MHP, 20 },
-                    { Stat.MMP, 19 },
+                    { Stat.SPEED, 50 },
+                    { Stat.ACCURACY, 50 },
+                    { Stat.DEF, 50 },
+                    { Stat.MDEF, 50 },
+                    { Stat.ATK, 50 },
+                    { Stat.MATK, 50 },
+                    { Stat.MHP, 100 },
+                    { Stat.MMP, 30 },
         });
 
         public static UnitStats SetStats(this UnitStats u, Dictionary<Stat, byte> stats)
@@ -71,11 +71,12 @@ namespace GameDataTest
                 },
                 LOS = 2,
                 Stats = AddToBase(
-                    (Stat.SPEED, 2),
-                    (Stat.DEF, -2),
-                    (Stat.MDEF, -1),
-                    (Stat.ATK, 1),
-                    (Stat.MATK, -2)
+                    (Stat.ACCURACY, 20),
+                    (Stat.SPEED, 30),
+                    (Stat.DEF, -30),
+                    (Stat.MDEF, -20),
+                    (Stat.ATK, 30),
+                    (Stat.MATK, -30)
                 )
             });
             AddUnit(ref spec, new UnitSpec()
@@ -89,13 +90,13 @@ namespace GameDataTest
                     Address = AddrFace("Badge_warrior"),
                 },
                 Stats = AddToBase(
-                    (Stat.ATK, 1),
-                    (Stat.MDEF, -1),
-                    (Stat.SPEED, -3),
-                    (Stat.DEF, 2),
-                    (Stat.ACCURACY, 1),
-                    (Stat.MATK, -1),
-                    (Stat.MHP, 10)
+                    (Stat.ATK, 10),
+                    (Stat.MDEF, -30),
+                    (Stat.SPEED, -40),
+                    (Stat.DEF, 30),
+                    (Stat.ACCURACY, -10),
+                    (Stat.MATK, -10),
+                    (Stat.MHP, 30)
                 )
             });
             AddUnit(ref spec, new UnitSpec()
@@ -109,14 +110,14 @@ namespace GameDataTest
                 },
                 LOS = 3,
                 Stats = AddToBase(
-                    (Stat.ATK, -2),
-                    (Stat.MATK, 2),
-                    (Stat.MDEF, 1),
-                    (Stat.SPEED, -1),
-                    (Stat.DEF, -2),
-                    (Stat.ACCURACY, 2),
-                    (Stat.MHP, -5),
-                    (Stat.MMP, 10)
+                    (Stat.ATK, -30),
+                    (Stat.MATK, 30),
+                    (Stat.MDEF, 10),
+                    (Stat.SPEED, -10),
+                    (Stat.DEF, -30),
+                    (Stat.ACCURACY, 20),
+                    (Stat.MHP, -20),
+                    (Stat.MMP, 50)
                 )
             });
         }

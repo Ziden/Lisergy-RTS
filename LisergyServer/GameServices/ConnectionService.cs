@@ -40,9 +40,8 @@ namespace GameServices
         public IConnectedPlayer GetConnectedPlayer(int connection) => _connectedByConnectionId[connection];
         public IConnectedPlayer GetConnectedPlayer(GameId id)
         {
-            var aff = _connectedById.Keys.First();
-            var oxe = aff == id;
-            return _connectedById[id];
+            _connectedById.TryGetValue(id, out var connected);
+            return connected;
         }
 
         public void Send(GameId user, BasePacket packet)
