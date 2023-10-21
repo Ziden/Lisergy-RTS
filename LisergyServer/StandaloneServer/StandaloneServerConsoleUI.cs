@@ -84,11 +84,6 @@ public class StandaloneServerConsoleUI : Window
             Height = Dim.Fill()
         };
 
-        Log._Debug = m => OnReceiveLog(LogLevel.Debug, m);
-        Log._Info = m => OnReceiveLog(LogLevel.Info, m);
-        Log._Error = m => OnReceiveLog(LogLevel.Error, m);
-      
-
         logsBtn.Clicked += () => ViewLogs();
         eventsBtn.Clicked += () => ViewEvents();
 
@@ -142,8 +137,16 @@ public class StandaloneServerConsoleUI : Window
         });
     }
 
+    public static IGameLog HookLogs(IGameLog log)
+    {
+        var baseLog = (GameLog)log;
+        baseLog._Debug = m => OnReceiveLog(LogLevel.Debug, m);
+        baseLog._Info = m => OnReceiveLog(LogLevel.Info, m);
+        baseLog._Error = m => OnReceiveLog(LogLevel.Error, m);
+        return log;
+    }
 
-    public void OnReceiveLog(LogLevel level, string msg)
+    public static void OnReceiveLog(LogLevel level, string msg)
     {
         Application.MainLoop.Invoke(() =>
         {

@@ -49,7 +49,7 @@ namespace BaseServer.Commands
                     }
                     catch (Exception e)
                     {
-                        Log.Error(e.ToString());
+                        Console.WriteLine(e.ToString());
                     }
                 }
                 else

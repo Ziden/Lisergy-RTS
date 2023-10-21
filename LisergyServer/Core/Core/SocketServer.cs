@@ -1,6 +1,7 @@
 ﻿using BaseServer.Commands;
 using Game;
 using Game.Network;
+using NServiceBus.Logging;
 using System;
 using Telepathy;
 
@@ -14,12 +15,14 @@ namespace BaseServer.Core
         protected Server _socketServer;
         public Exception ServerError { get; private set; }
         public Ticker Ticker { get; protected set; }
+        public IGameLog Log { get; private set; }
 
         private BasePacket _packet;
 
-        public SocketServer(int port)
+        public SocketServer()
         {
-            _port = port;
+            _port = GetServerType().GetPort();
+            Log = new GameLog($"[Server {GetServerType()}]");
             _commandExecutor = new ConsoleCommandExecutor(null);
             _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
             _socketServer = new Server();
@@ -28,11 +31,12 @@ namespace BaseServer.Core
 
         public void RunServer()
         {
-            Log.Info("Starting Server");
+          
             _ = _socketServer.Start(_port);
             try
             {
                 Ticker = new Ticker(5);
+                Log.Info($"Server Started at port {GetServerType().GetPort()}");
                 Ticker.Run(RunTick);
             }
             catch (Exception e)
@@ -80,7 +84,7 @@ namespace BaseServer.Core
                         Connect(_pooledMessage.connectionId);
                         break;
                     case EventType.Data:
-                     
+
                         Log.Debug($"Received {_pooledMessage.data.Length} bytes for {_packet} from connection {_pooledMessage.connectionId}");
                         if (!IsAuthenticated(_pooledMessage.connectionId))
                         {

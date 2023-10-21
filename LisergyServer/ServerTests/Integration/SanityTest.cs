@@ -1,6 +1,4 @@
-﻿using ClientSDK.Data;
-using Game;
-using Game.DataTypes;
+﻿using Game;
 using Game.ECS;
 using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
@@ -10,7 +8,6 @@ using Game.Systems.Map;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Systems.Tile;
-using Game.Tile;
 using Game.World;
 using NUnit.Framework;
 using ServerTests.Integration.Stubs;
@@ -28,13 +25,13 @@ namespace ServerTests.Integration
     /// </summary>
     public class TestClientSDKSmoke
     {
-        TestServerThread _server;
+        MultithreadServers _server;
         TestGameClient _client;
 
         [SetUp]
         public void Setup()
         {
-            _server = new TestServerThread();
+            _server = new MultithreadServers();
             _client = new TestGameClient();
             _client.PrepareSDK();
         }
@@ -43,15 +40,12 @@ namespace ServerTests.Integration
         public void TearDown() => _server?.Dispose();
 
         [Test]
-
         public async Task TestDisconnection()
         {
             _client.Modules.Account.SendAuthenticationPacket("abc", "def");
             _client.Network.Disconnect();
             var result = await _client.WaitFor<LoginResultPacket>();
             Assert.IsNull(result);
-
-
         }
 
         [Test]
@@ -71,10 +65,8 @@ namespace ServerTests.Integration
         }
 
         [Test]
-
         public async Task SmokeTestFlow()
-        {
-        
+        {        
             var mapPlacementUpdates = new List<IEntity>();
             _client.Modules.Components.OnComponentUpdate<MapPlacementComponent>((e, oldValue, newValue) =>
             {
@@ -142,7 +134,7 @@ namespace ServerTests.Integration
             Assert.IsTrue(_client.Modules.Actions.MoveParty(party, nextTile, CourseIntent.Defensive));
 
             // DISCONNECT & RECONNECT
-            Log.Debug("----- RECONNECTING -----");
+            _client.Game.Log.Debug("----- RECONNECTING -----");
             _client.Network.Disconnect();
             _client.ReceivedPackets.Clear();
             _client.Network.Tick();

@@ -64,7 +64,6 @@ namespace Game
         /// </summary>
         public static void FlagMemoryToBeReused()
         {
-            Log.Info("Flagging all memory for reuse");
             _available = new Dictionary<IntPtr, int>(_allocs);
             _allocs.Clear();
         }

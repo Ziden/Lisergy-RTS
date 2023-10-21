@@ -32,7 +32,7 @@ public class AssetContainer<K, T> where K: IComparable, IFormattable, IConvertib
         {
             if (!handle.IsValid())
             {
-                Log.Error("Error loading " + address);
+                Debug.LogError("Error loading " + address);
                 return default(T);
             }
             onComplete?.Invoke(handle.Result);

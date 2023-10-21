@@ -32,7 +32,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
         {
             if(from.Distance(to) > 1)
             {
-                Log.Error($"{_entity} tried to move more than 1 tile distance using interpolation");
+                _client.Log.Error($"{_entity} tried to move more than 1 tile distance using interpolation");
                 return;
             }
             if (_currentSequence != null && _currentSequence.IsPlaying())

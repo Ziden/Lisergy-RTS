@@ -17,7 +17,7 @@ namespace Game.Systems.Movement
                 var tile = Game.World.Map.GetTile(position.X, position.Y);
                 if (!tile.Passable)
                 {
-                    Log.Error($"Impassable TileEntity {tile} in course path: {owner} moving {Entity}");
+                    Game.Log.Error($"Impassable TileEntity {tile} in course path: {owner} moving {Entity}");
                     return false;
                 }
             }

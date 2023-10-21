@@ -75,7 +75,7 @@ namespace Game.Services
         /// </summary>
         public void OnBattleTrigger(BattleQueuedPacket packet)
         {
-            Log.Debug($"Received {packet.Attacker} vs {packet.Defender}");
+            _game.Log.Debug($"Received {packet.Attacker} vs {packet.Defender}");
             var battle = new TurnBattle(packet.BattleID, packet.Attacker, packet.Defender);
             AllBattles[packet.BattleID] = new BattleLogPacket(packet);
             BattleTasks[battle.ID] = new BattleTask(_game, battle);
@@ -92,7 +92,7 @@ namespace Game.Services
             var fullResultPacket = ev.ResultPacket;
             if (!BattleTasks.TryGetValue(fullResultPacket.Header.BattleID, out var task))
             {
-                Log.Error($"Could not find battle {fullResultPacket.Header.BattleID}");
+                _game.Log.Error($"Could not find battle {fullResultPacket.Header.BattleID}");
                 return;
             }
 
@@ -102,7 +102,7 @@ namespace Game.Services
             foreach (var pl in GetAllPlayers(battle))
             {
                 _game.Network.SendToPlayer(summary, GetAllPlayers(battle).ToArray());
-                Log.Debug($"Player {pl} completed battle {battle.ID}");
+                _game.Log.Debug($"Player {pl} completed battle {battle.ID}");
             }
             _game.Network.SendToServer(fullResultPacket, ServerType.WORLD);
             BattleTasks.Remove(fullResultPacket.Header.BattleID);

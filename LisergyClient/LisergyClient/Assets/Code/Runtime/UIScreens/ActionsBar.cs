@@ -103,7 +103,7 @@ namespace Assets.Code.UI
             var actions = EvaluateActions(party, tile);
             if (actions == null || actions.Count == 0)
             {
-                Log.Error($"No actions for {party} on {tile}");
+                Debug.LogError($"No actions for {party} on {tile}");
                 ScreenService.Close<ActionsBar>();
                 return;
             }

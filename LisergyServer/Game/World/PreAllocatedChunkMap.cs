@@ -70,7 +70,6 @@ namespace Game.World
             TilemapDimensions = (_chunkMap.GetLength(0) * GameWorld.CHUNK_SIZE, _chunkMap.GetLength(1) * GameWorld.CHUNK_SIZE);
             _cache = new CachedChunkMap(this);
             World = world;
-            Log.Debug($"Initialized chunk map {sizeX}x{sizeY}");
         }
 
         public bool ValidCoords(in int tileX, in int tileY)

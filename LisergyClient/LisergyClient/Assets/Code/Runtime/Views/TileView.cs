@@ -51,7 +51,7 @@ namespace Assets.Code.Views
 
         public void SetFogState(FogState state)
         {
-            Log.Debug($"Setting fog state of {Entity} to {state}");
+            Debug.Log($"Setting fog state of {Entity} to {state}");
             FogState = state;
             if (state == FogState.EXPLORED)
             {
@@ -79,12 +79,12 @@ namespace Assets.Code.Views
             {
                 if (FogState != desiredState || FogObject != null) // changed while asset was loading
                 {
-                    Log.Debug($"Invalid fog created for {Entity}");
+                    Debug.Log($"Invalid fog created for {Entity}");
                     GameObject.Destroy(o);
                     return;
                 }
-               
-                Log.Debug($"Created fog for {Entity}");
+
+                Debug.Log($"Created fog for {Entity}");
                 o.name = $"Fog for {Entity.X} {Entity.Y}";
                 o.transform.parent = FogContainer.transform;
                 FogObject = o;

@@ -66,7 +66,7 @@ namespace Game.Systems.Map
                     Game.Network.SendToPlayer(new EntityDestroyPacket(Entity), previousTile.PlayersViewing.ToArray());
                 }
             }
-            Log.Debug($"Moved {Entity} to {component.Tile}");
+            Game.Log.Debug($"Moved {Entity} to {component.Tile}");
         }
     }
 }

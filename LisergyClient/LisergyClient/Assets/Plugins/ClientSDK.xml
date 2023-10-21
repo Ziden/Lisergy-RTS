@@ -107,6 +107,11 @@
             Client specific triggered event bus
             </summary>
         </member>
+        <member name="P:ClientSDK.IGameClient.Log">
+            <summary>
+            General client SDK log
+            </summary>
+        </member>
         <member name="T:ClientSDK.Services.IAccountModule">
             <summary>
             Service responsible for handling authentication and specific account and profile information.

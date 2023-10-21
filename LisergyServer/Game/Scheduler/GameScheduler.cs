@@ -107,7 +107,6 @@ namespace Game.Scheduler
             task.Start = Now;
             _tasks[task.ID] = task;
             _ = Queue.Add(task);
-            Log.Debug($"{Now} Registered new task {task}");
         }
     }
 }

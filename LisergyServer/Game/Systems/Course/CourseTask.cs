@@ -35,7 +35,7 @@ namespace Game.Systems.Movement
                 } else
                 {
                     Repeat = false;
-                    Log.Error($"Party {Party} Had Course {currentCourse} but course {this} was trying to move the party");
+                    Game.Log.Error($"Party {Party} Had Course {currentCourse} but course {this} was trying to move the party");
                     return;
                 }
             }

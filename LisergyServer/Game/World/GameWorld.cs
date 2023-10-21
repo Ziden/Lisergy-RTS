@@ -60,7 +60,6 @@ namespace Game.World
             _preallocatedMap = new PreAllocatedChunkMap(this, SizeX, SizeY);
             _preallocatedMap.CreateMap(SizeX, SizeY);
             Map = _preallocatedMap;
-            Log.Debug("Allocated Map");
         }
 
         public void Populate(int seed = 0, params ChunkPopulator[] populators)
@@ -69,7 +68,7 @@ namespace Game.World
                 seed = WorldUtils.Random.Next(0, ushort.MaxValue);
             WorldUtils.SetRandomSeed(seed);
             Seed = (ushort)seed;
-            Log.Debug($"Generating world seed {seed} {SizeX}x{SizeY} for {Players.MaxPlayers} players");
+            Game.Log.Debug($"Generating world seed {seed} {SizeX}x{SizeY} for {Players.MaxPlayers} players");
             foreach (var chunk in _preallocatedMap.AllChunks())
                 foreach (var populator in populators)
                     populator.Populate(this, _preallocatedMap, chunk);

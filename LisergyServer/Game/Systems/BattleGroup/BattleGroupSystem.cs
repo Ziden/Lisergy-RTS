@@ -23,7 +23,7 @@ namespace Game.Systems.Battler
         {
             if(GetLogic(ev.Attacker).IsBattling || GetLogic(ev.Defender).IsBattling)
             {
-                Log.Error($"Error battle {ev.Attacker} vs {ev.Defender} already battling");
+                Game.Log.Error($"Error battle {ev.Attacker} vs {ev.Defender} already battling");
                 return;
             }
             var battleId = GetLogic(ev.Attacker).StartBattle(ev.Defender);

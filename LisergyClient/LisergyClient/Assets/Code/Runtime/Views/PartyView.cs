@@ -25,7 +25,7 @@ namespace Assets.Code.World
             UpdateUnits();
             MovementInterpolator = new MovementInterpolator(Client, Entity);
             State = EntityViewState.RENDERED;
-            Log.Debug($"Created new party instance {this}");
+            Client.Log.Debug($"Created new party instance {this}");
         }
 
         /// <summary>

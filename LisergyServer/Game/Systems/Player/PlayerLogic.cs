@@ -23,7 +23,7 @@ namespace Game.Systems.Player
             var unit = new Unit(Game.Specs.Units[unitSpecId]);
 
             Data.Units.Add(unit);
-            Log.Debug($"{Entity} recruited {unit}");
+            Game.Log.Debug($"{Entity} recruited {unit}");
             return unit;
         }
 
@@ -57,7 +57,7 @@ namespace Game.Systems.Player
             if (!partyTile.Passable) partyTile = t.GetNeighbor(Direction.SOUTH);
             if (!partyTile.Passable) partyTile = t.GetNeighbor(Direction.NORTH);
             Game.Systems.Map.GetLogic(party).SetPosition(partyTile);
-            Log.Debug($"Placed new player {Entity} in {t}");
+            Game.Log.Debug($"Placed new player {Entity} in {t}");
             return;
         }
 
@@ -80,7 +80,7 @@ namespace Game.Systems.Player
                 Game.Logic.GetEntityLogic(existingParty).BattleGroup.RemoveUnit(u);
             }
             Game.Logic.GetEntityLogic(newParty).BattleGroup.AddUnit(u);
-            Log.Debug($"{Entity} moved unit {u} to party {newParty}");
+            Game.Log.Debug($"{Entity} moved unit {u} to party {newParty}");
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Game.Systems.Player
             building.BuildFromSpec(Game.Specs.Buildings[buildingSpecId]);
             Data.Buildings.Add(building);
             building.EntityLogic.Map.SetPosition(t);
-            Log.Debug($"Player {Entity} built {building}");
+            Game.Log.Debug($"Player {Entity} built {building}");
             return building;
         }
     } 

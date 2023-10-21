@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.DataTypes;
 using Game.Network;
+using Game.Network.ServerPackets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,23 +19,29 @@ namespace GameServices
     {
         private Dictionary<GameId, IConnectedPlayer> _connectedById = new Dictionary<GameId, IConnectedPlayer>();
         private Dictionary<int, IConnectedPlayer> _connectedByConnectionId = new Dictionary<int, IConnectedPlayer>();
+        private IGameLog _log;
+
+        public ConnectionService(IGameLog log)
+        {
+            _log = log;
+        }
 
         public void RegisterConnection(GameId id, IConnectedPlayer user)
         {
             _connectedById[id] = user;
             _connectedByConnectionId[user.ConnectionID] = user;
-            Log.Debug($"Player {id} Registered connection id {user.ConnectionID}");
+            _log.Debug($"Player {id} Registered connection id {user.ConnectionID}");
         }
 
         public void Disconnect(int connectionId)
         {
             if(_connectedByConnectionId.TryGetValue(connectionId, out var user))
             {
-                Log.Debug($"Player {user.PlayerId} disconnected from connection id {connectionId}");
+                _log.Debug($"Player {user.PlayerId} disconnected from connection id {connectionId}");
                 _connectedById.Remove(user.PlayerId);
                 _connectedByConnectionId.Remove(user.ConnectionID);
             }
-            Log.Error($"Error disconnecting connection {connectionId} - unknown user");
+            _log.Error($"Error disconnecting connection {connectionId} - unknown user");
         }
 
         public IConnectedPlayer GetConnectedPlayer(int connection) => _connectedByConnectionId[connection];

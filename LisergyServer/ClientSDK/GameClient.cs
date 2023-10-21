@@ -31,6 +31,11 @@ namespace ClientSDK
         /// Client specific triggered event bus
         /// </summary>
         public EventBus<IClientEvent> ClientEvents { get; }
+
+        /// <summary>
+        /// General client SDK log
+        /// </summary>
+        public IGameLog Log { get; }
     }
 
     public class GameClient : IGameClient
@@ -39,11 +44,13 @@ namespace ClientSDK
         public IGame Game { get; private set; } = null!;
         public IServerModules Modules { get; private set; }
         public EventBus<IClientEvent> ClientEvents { get; private set; } = new EventBus<IClientEvent>();
+        public IGameLog Log { get; private set; }
 
         public GameClient()
         {
             Serialization.LoadSerializers();
-            Network = new ClientNetwork(ServerType.WORLD);
+            Log = new GameLog("[Client SDK]");
+            Network = new ClientNetwork(Log, ServerType.WORLD);
             var s = new ServerModules(this);
             Modules = s;
             s.Register();

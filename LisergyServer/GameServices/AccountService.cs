@@ -19,6 +19,12 @@ namespace LisergyServer.Core
     {
         private Dictionary<string, Account> _accounts = new Dictionary<string, Account>();
         private Dictionary<int, Account> _authenticatedConnections = new Dictionary<int, Account>();
+        private IGameLog _log;
+
+        public AccountService(IGameLog log)
+        {
+            _log = log;
+        }
 
         public void Disconnect(int connectionId)
         {
@@ -33,7 +39,7 @@ namespace LisergyServer.Core
 
         public Account? Authenticate(LoginPacket ev)
         {
-            Log.Debug($"Authenticating account {ev.Login}");
+            _log.Debug($"Authenticating account {ev.Login}");
             Account acc;
             if (!_accounts.TryGetValue(ev.Login, out acc))
             {
@@ -43,12 +49,12 @@ namespace LisergyServer.Core
                 acc.Password = ev.Password;
                 _accounts[acc.Login] = acc;
                 _authenticatedConnections[ev.ConnectionID] = acc;
-                Log.Info($"Registered new account {acc.Login}");
+                _log.Info($"Registered new account {acc.Login}");
                 return acc;
             }
             else if (acc.Password != ev.Password)
             {
-                Log.Error($"Account {ev.Login} entered wrong password");
+                _log.Error($"Account {ev.Login} entered wrong password");
                 return null;
             }
             _authenticatedConnections[ev.ConnectionID] = acc;

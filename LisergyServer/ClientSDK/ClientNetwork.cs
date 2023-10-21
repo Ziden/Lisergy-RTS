@@ -18,12 +18,14 @@ namespace ClientSDK
         private bool _enabled = true;
         internal const int READS_PER_TICK = 20;
         internal Message _msg;
+        private IGameLog _log;
         internal Dictionary<ServerType, Client> _connections = new Dictionary<ServerType, Client>();
         internal Dictionary<ServerType, Queue<byte[]>> _toSend = new Dictionary<ServerType, Queue<byte[]>>();
         internal EventBus<BasePacket> _receivedFromServer = new EventBus<BasePacket>();
 
-        public ClientNetwork(params ServerType[] connections)
+        public ClientNetwork(IGameLog log, params ServerType[] connections)
         {
+            _log = log;
             foreach(var server in connections)
             {
                 _connections[server] = new Client();
@@ -60,7 +62,7 @@ namespace ClientSDK
 
         public void Disconnect()
         {
-            Log.Info("Client disconnecting");
+            _log.Info("Client disconnecting");
             _enabled = false;
             foreach(var client in _connections.Values) client.Disconnect();
         }
@@ -89,13 +91,13 @@ namespace ClientSDK
                     switch (_msg.eventType)
                     {
                         case EventType.Connected:
-                            Log.Debug("Connected to Server");
+                            _log.Debug("Connected to Server");
                             break;
                         case EventType.Data:
                             ReceiveServerMessage(server, Serialization.ToPacketRaw<BasePacket>(_msg.data));
                             break;
                         case EventType.Disconnected:
-                            Log.Debug("Disconnected from Server");
+                            _log.Debug("Disconnected from Server");
                             break;
                     }
                 }

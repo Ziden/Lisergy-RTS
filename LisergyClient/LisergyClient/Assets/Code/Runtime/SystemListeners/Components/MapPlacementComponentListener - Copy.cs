@@ -28,7 +28,7 @@ public class MapPlacementComponentListener : BaseComponentListener<MapPlacementC
     {
         var newTile = Client.Game.World.Map.GetTile(newComponent.Position.X, newComponent.Position.Y);
         var oldTile = Client.Game.World.Map.GetTile(oldComponent.Position.X, oldComponent.Position.Y);
-        Log.Debug($"Setting position of entity {entity}");
+        Client.Log.Debug($"Setting position of entity {entity}");
         entity.EntityLogic.Map.SetPosition(newTile);
         var view = entity.GetEntityView();
         _movementPath.OnFinishedMove(entity, newTile);

@@ -14,12 +14,12 @@ namespace ClientSDK.Data
     {
         private Dictionary<Type, Type> _viewTypes = new Dictionary<Type, Type>();
         private Dictionary<Type, Func<IEntityView>> _buildFunctions = new Dictionary<Type, Func<IEntityView>>();
+
         public void RegisterView<EntityType, ViewType>() where EntityType : IEntity where ViewType : EntityView<EntityType>
         {
             var buildFunction = Expression.Lambda<Func<EntityView<EntityType>>>(Expression.New(typeof(ViewType))).Compile();
             _buildFunctions[typeof(EntityType)] = buildFunction;
             _viewTypes[typeof(EntityType)] = typeof(ViewType);
-            Log.Debug($"Registered view {typeof(ViewType).Name} for entity {typeof(EntityType).Name}");
         }
 
         public IEntityView CreateView(Type entityType)

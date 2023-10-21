@@ -41,7 +41,7 @@ namespace Game
         {
             var c = Components.GetReference<MapReferenceComponent>();
             if (c.Tile == null) return;
-            Log.Debug($"Entity {this} Had DeltaFlag 'EXISTENCE' - Sending Packets");
+            Game.Log.Debug($"Entity {this} Had DeltaFlag 'EXISTENCE' - Sending Packets");
             foreach (var playerViewing in c.Tile.PlayersViewing)
                 Game.Network.SendToPlayer(GetUpdatePacket(playerViewing, onlyDeltas: false), playerViewing);
         }
@@ -52,7 +52,7 @@ namespace Game
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void OnRevealed(PlayerEntity trigger)
         {
-            Log.Debug($"Entity {this} Had DeltaFlag 'REVEALED' - Sending Packets");
+            Game.Log.Debug($"Entity {this} Had DeltaFlag 'REVEALED' - Sending Packets");
             Game.Network.SendToPlayer(GetUpdatePacket(trigger, onlyDeltas: false), trigger);
         }
 
@@ -64,7 +64,7 @@ namespace Game
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void SendUpdateToNewViewers()
         {
-            Log.Debug($"Entity {this} Had DeltaFlag 'COMPONENTS' - Sending Packets");
+            Game.Log.Debug($"Entity {this} Had DeltaFlag 'COMPONENTS' - Sending Packets");
             var c = Components.GetReference<MapReferenceComponent>();       
             var newTile = c.Tile;
             var previousTile = c.PreviousTile;

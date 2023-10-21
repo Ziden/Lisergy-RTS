@@ -48,12 +48,7 @@ public class IndicatorSelectedTileListener : IEventListener
     private void ClickTile(TileEntity tile)
     {
         if (tile == null) return;
-        Log.Debug($"TileUI selecting tile {tile}");
-        foreach (var e in tile.EntitiesViewing)
-        {
-            Log.Debug("" + e);
-        }
-
+        Debug.Log($"TileUI selecting tile {tile}");
         if (tile != null)
         {
             if (!IsActive(_tileCursor))

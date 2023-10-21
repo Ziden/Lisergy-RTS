@@ -23,7 +23,7 @@ namespace Game.Services
         public void RequestMovement(MoveRequestPacket ev)
         {
             var party = ev.Sender.GetParty(ev.PartyIndex);
-            Log.Debug($"{ev.Sender} requesting party {ev.PartyIndex} to move {ev.Path.Count} tiles");
+            _game.Log.Debug($"{ev.Sender} requesting party {ev.PartyIndex} to move {ev.Path.Count} tiles");
 
             if (!party.CanMove())
             {
@@ -35,7 +35,7 @@ namespace Game.Services
             if(existingCourse != null)
             {
                 _game.Scheduler.Cancel(existingCourse);
-                Log.Info($"{party} cancelled previous course {existingCourse} with a new request");
+                _game.Log.Debug($"{party} cancelled previous course {existingCourse} with a new request");
             }
 
             var first = ev.Path[0];

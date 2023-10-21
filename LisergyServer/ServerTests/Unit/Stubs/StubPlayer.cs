@@ -37,7 +37,7 @@ namespace ServerTests
         {
             if (ev.GetType() != typeof(TilePacket)) // avoid flood
             {
-                Log.Debug($"Server Sent Packet {ev.GetType().Name} to Player {this}");
+                Game.Log.Debug($"Server Sent Packet {ev.GetType().Name} to Player {this}");
             }
             var reSerialized = Serialization.ToPacketRaw(Serialization.FromPacketRaw(ev));
             PacketPool.Return(ev);

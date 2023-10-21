@@ -1,4 +1,5 @@
 ﻿using Game;
+using System;
 
 namespace BaseServer.Commands
 {
@@ -6,7 +7,7 @@ namespace BaseServer.Commands
     {
         public override void SendMessage(string message)
         {
-            Log.Info(message);
+            Console.WriteLine(message);
         }
     }
 }

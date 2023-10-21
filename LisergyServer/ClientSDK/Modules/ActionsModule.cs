@@ -44,31 +44,31 @@ namespace ClientSDK.Services
         {
             if (entity == null)
             {
-                Log.Error($"Error invalid entity");
+                _client.Log.Error($"Error invalid entity");
                 return false;
             }
             var entityId = entity.EntityId;
             if (entity.OwnerID != _client.Modules.Player.PlayerId)
             {
-                Log.Error($"Cannot Move Entity {entityId} is not own entity");
+                _client.Log.Error($"Cannot Move Entity {entityId} is not own entity");
                 return false;
             }
             if(!entity.Components.TryGet<MapPlacementComponent>(out var placement))
             {
-                Log.Error($"Cannot Move Entity {entityId} it is not placed in the map");
+                _client.Log.Error($"Cannot Move Entity {entityId} it is not placed in the map");
                 return false;
             }
             var map = _client.Game.World.Map;
             var sourceTile = map.GetTile(placement.Position.X, placement.Position.Y);
             if (!destinationTile.PlayersViewing.Any(p => p.EntityId == entity.OwnerID))
             {
-                Log.Error($"Cannot Move Entity {entityId} because target tile is not visible");
+                _client.Log.Error($"Cannot Move Entity {entityId} because target tile is not visible");
                 return false;
             }
             var path = map.FindPath(sourceTile, destinationTile);
             if(path == null || path.Count == 0)
             {
-                Log.Error($"Cannot Move Entity {entityId} it is not placed in the map");
+                _client.Log.Error($"Cannot Move Entity {entityId} it is not placed in the map");
                 return false;
             }
             foreach(var pathNode in path)
@@ -78,7 +78,7 @@ namespace ClientSDK.Services
 
                 if(tileView == null || tileView.State == EntityViewState.NOT_RENDERED)
                 {
-                    Log.Error($"Cannot Move Entity {entityId} by a path that is not known by the client");
+                    _client.Log.Error($"Cannot Move Entity {entityId} by a path that is not known by the client");
                     return false;
                 }
             }

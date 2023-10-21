@@ -99,9 +99,6 @@ public class Main : MonoBehaviour, IEventListener
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
-        Log._Debug = Debug.Log;
-        Log._Error = Debug.LogError;
-        Log._Info = Debug.Log;
         TrackAsyncErrors();
     }
 

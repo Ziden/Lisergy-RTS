@@ -21,12 +21,12 @@ namespace MapServer
         private ConnectionService _connectionService;
         private CryptographyService _cryptographyService;
 
-        public AccountServer(int port) : base(port)
+        public AccountServer() : base()
         {
             Serialization.LoadSerializers();
-            _accountService = new AccountService();
+            _accountService = new AccountService(Log);
             _cryptographyService = new CryptographyService(EnvironmentConfig.SECRET_KEY.ToString());
-            _connectionService = new ConnectionService();
+            _connectionService = new ConnectionService(Log);
         }
 
         public override void RegisterConsoleCommands(ConsoleCommandExecutor executor) { }

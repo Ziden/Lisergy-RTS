@@ -25,7 +25,6 @@ namespace ClientSDK.Data
             TilemapDimensions = (tilesAmtX, tilesAmtY);
             _cache = new CachedChunkMap(this);
             World = world;
-            Log.Debug($"Initialized lazy loaded chunk map {sizeX}x{sizeY}");
         }
 
         public IGameWorld World { get; private set; }

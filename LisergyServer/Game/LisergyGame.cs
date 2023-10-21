@@ -19,6 +19,8 @@ namespace Game
         public ISystems Systems { get; }
         public IGameLogic Logic { get; }
         public EventBus<IBaseEvent> Events { get; }
+        public IGameLog Log { get; }
+
     }
 
     public class LisergyGame : IGame
@@ -32,11 +34,13 @@ namespace Game
         public IGameLogic Logic { get; private set; }
         public IEntityLogic EntityLogic(IEntity e) => Logic.GetEntityLogic(e);
         public IGameNetwork Network { get; private set; }
+        public IGameLog Log { get; private set; }
         public EventBus<IBaseEvent> Events { get; private set; } = new EventBus<IBaseEvent>();
 
-        public LisergyGame(GameSpec specs)
+        public LisergyGame(GameSpec specs, IGameLog log)
         {
             Specs = specs;
+            Log = log;
         }
 
         public void SetupGame(GameWorld world, IGameNetwork network)
@@ -49,6 +53,7 @@ namespace Game
             world.Game = this;
             World = world;
             Entities.DeltaCompression.ClearDeltas();
+            Log.Info($"World {World.Map.TilemapDimensions.x}x{World.Map.TilemapDimensions.y} ready");
         }
     }
 }

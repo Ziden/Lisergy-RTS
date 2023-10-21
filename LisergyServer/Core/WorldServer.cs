@@ -31,17 +31,17 @@ namespace MapServer
 
         public override ServerType GetServerType() => ServerType.WORLD;
 
-        public WorldServer(LisergyGame game, int port) : base(port)
+        public WorldServer(LisergyGame game) : base()
         {
             Serialization.LoadSerializers();
             _game = game;
             _scheduler = game.Scheduler as GameScheduler;
             _network = game.Network as GameServerNetwork;
-            _accountService = new AccountService();
+            _accountService = new AccountService(Log);
             _battleService = new BattleService(_game);
             _worldService = new WorldService(_game);
             _courseService = new CourseService(_game);
-            _connectionService = new ConnectionService();
+            _connectionService = new ConnectionService(Log);
             _gameSpecs = Serialization.FromPacketRaw(new GameSpecPacket(game));
             _network.OnOutgoingPacket += HandleOutgoingPacket;
         }
@@ -73,6 +73,7 @@ namespace MapServer
         public override void ReceiveAuthenticatedPacket(int connectionId, BasePacket input)
         {
             var connectedPlayer = _connectionService.GetConnectedPlayer(connectionId);
+            Log.Debug($"Processing packet {input.GetType().Name} from player {connectedPlayer.PlayerId}");
             _game.Network.ReceiveInput(connectedPlayer.PlayerId, input);
         }
 
@@ -82,14 +83,18 @@ namespace MapServer
         private void HandleOutgoingPacket(GameId player, BasePacket packet)
         {
             var connectedPlayer = _connectionService.GetConnectedPlayer(player);
-            connectedPlayer?.Send(packet);
+            if(connectedPlayer != null)
+            {
+                Log.Debug($"Sending packet {packet.GetType().Name} to player {connectedPlayer.PlayerId}");
+                connectedPlayer.Send(packet);
+            }
         }
 
         protected override bool IsAuthenticated(int connectionID)
         {
             var connectedAccount = _accountService.GetAuthenticatedConnection(connectionID);
             var hasAuth = connectedAccount != null;
-            if (!hasAuth) Log.Error($"Connection {connectionID} is not authenticated");
+            if (!hasAuth) _game.Log.Error($"Connection {connectionID} is not authenticated");
             return hasAuth;
         }
 
@@ -112,7 +117,7 @@ namespace MapServer
                         ConnectionID = connectionID
                     });
                     _socketServer.Send(connectionID, _gameSpecs);
-                    Log.Debug($"Connection {connectionID} registered authenticated as {connectedAccount.PlayerId}");
+                    _game.Log.Debug($"Connection {connectionID} registered authenticated as {connectedAccount.PlayerId}");
                 }
             }
             else
@@ -120,7 +125,7 @@ namespace MapServer
                 connectedAccount = _accountService.GetAuthenticatedConnection(connectionID);
             }
             var hasAuth = connectedAccount != null;
-            if (!hasAuth) Log.Error($"Connection {connectionID} failed auth to send event {ev}");
+            if (!hasAuth) _game.Log.Error($"Connection {connectionID} failed auth to send event {ev}");
             return hasAuth;
         }
     }

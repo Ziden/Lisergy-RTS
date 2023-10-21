@@ -34,7 +34,7 @@ public class IndicatorSelectedEntityListener : IEventListener
     {
         if (_selector != null && e is BaseEntity be && be.Tile != null)
         {
-            Log.Debug($"Entity Selector Moving to {e}");
+            _client.Log.Debug($"Entity Selector Moving to {e}");
             var view = e.GetEntityView() as IGameObject;
             if (view.GameObject == null) return;
             _selector.gameObject.transform.SetParent(view.GameObject.transform, true);

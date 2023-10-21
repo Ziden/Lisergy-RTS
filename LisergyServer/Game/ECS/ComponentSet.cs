@@ -50,7 +50,7 @@ namespace Game.ECS
                         _returnBuffer.Add(_pointerComponents.AsInterface(t));
                 }
             }
-            Log.Debug($"Sync components [{string.Join(",",_returnBuffer.Select(c => c.GetType().Name))}] for entity {_entity}");
+            _entity.Game.Log.Debug($"Sync components [{string.Join(",",_returnBuffer.Select(c => c.GetType().Name))}] for entity {_entity}");
             return _returnBuffer;
         }
 

@@ -37,7 +37,20 @@ namespace ServerTests
 
         public GameScheduler GameScheduler => this.Scheduler as GameScheduler;
 
-        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs())
+        private static IGameLog GetTestLog()
+        {
+            var log = new GameLog("[Game]");
+            log._Debug = m =>
+            {
+                var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                if (lastLog != 0) m = $"[{now - lastLog}ms] " + m;
+                lastLog = now;
+                Console.WriteLine(m);
+            };
+            return log;
+        }
+
+        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), GetTestLog())
         {
             UnmanagedMemory.FlagMemoryToBeReused();
             CreateTestWorld();
@@ -104,17 +117,6 @@ namespace ServerTests
         }
 
         private static long lastLog = 0;
-
-        static TestGame()
-        {
-            Log._Debug = m =>
-            {
-                var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                if (lastLog != 0) m = $"[{now - lastLog}ms] " + m;
-                lastLog = now;
-                Console.WriteLine(m);
-            };
-        }
     }
 
 }

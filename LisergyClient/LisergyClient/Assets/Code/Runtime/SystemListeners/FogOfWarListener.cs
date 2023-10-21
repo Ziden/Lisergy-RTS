@@ -9,6 +9,7 @@ using Game.Systems.Tile;
 using Game.World;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 /// <summary>
 /// A fog of war lazy load. Instead of calculating the fog of war on every tile received from server
@@ -50,7 +51,7 @@ public class FogOfWarListener : IEventListener
         {
             await UniTask.Delay(10);
         }
-        Log.Info($"Calculating Fog for {_queued.Count} tiles");
+        _client.Log.Debug($"Calculating Fog for {_queued.Count} tiles");
         var proccess = new HashSet<TileView>(_queued);
         _queued.ExceptWith(proccess);
         _processingTime = DateTime.MinValue;

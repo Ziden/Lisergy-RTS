@@ -45,7 +45,7 @@ namespace Game.Systems.FogOfWar
         public void UpdateVisionRange(IEntity explorer, TileEntity from, TileEntity to)
         {
             var los = explorer.Components.Get<EntityVisionComponent>().LineOfSight;
-            Log.Debug($"Updating entity {explorer} vision range of {los}");
+            Game.Log.Debug($"Updating entity {explorer} vision range of {los}");
             if (los > 0)
             {
                 _oldLineOfSight.Clear();

@@ -46,9 +46,9 @@ namespace ClientSDK.Services
                 GameId.NextGeneration = packet.EntityId;
                 existingEntity = _client.Game.Entities.CreateEntity(packet.OwnerId, packet.Type);
                 entityCreated = true;
-                Log.Debug($"Client now aware of entity entity {existingEntity}");
+                _client.Log.Debug($"Client now aware of entity entity {existingEntity}");
             }
-            Log.Debug($"Received entity update for {existingEntity}");
+            _client.Log.Debug($"Received entity update for {existingEntity}");
          
             _entityComponents.UpdateComponents(existingEntity, packet.SyncedComponents);
             var view = _client.Modules.Views.GetOrCreateView(existingEntity);

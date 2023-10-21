@@ -17,7 +17,7 @@ public class CameraBehaviour : MonoBehaviour
 
     private void FocusOnTile(TileEntity t)
     {
-        Log.Debug($"Focusing on tile {t}");
+        Debug.Log($"Focusing on tile {t}");
         var coroutine = LerpTo(new Vector3(t.X - 2, 5, t.Y - 2), 0.2f);
         StartCoroutine(coroutine);
     }

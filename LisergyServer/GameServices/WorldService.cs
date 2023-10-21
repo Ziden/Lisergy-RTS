@@ -24,7 +24,7 @@ namespace Game.Services
             PlayerEntity player = null;
             if (_world.Players.GetPlayer(ev.Sender.EntityId, out player))
             {
-                Log.Debug($"Existing player {player.EntityId} joined");
+                _world.Game.Log.Debug($"Existing player {player.EntityId} joined");
                 foreach (var tile in player.Data.VisibleTiles)
                 {
                     tile.SetDeltaFlag(DeltaFlag.SELF_REVEALED);
@@ -33,7 +33,7 @@ namespace Game.Services
             else
             {
                 ev.Sender.EntityLogic.Player.PlaceNewPlayer(_world.GetUnusedStartingTile());
-                Log.Debug($"New player {ev.Sender.EntityId} joined the world");
+                _world.Game.Log.Debug($"New player {ev.Sender.EntityId} joined the world");
             }
         }
     }

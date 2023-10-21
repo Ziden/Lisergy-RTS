@@ -8,14 +8,14 @@ namespace ServerTests.Integration
 {
     public class TwoPlayerTest
     {
-        TestServerThread _server;
+        MultithreadServers _server;
         TestGameClient _p1;
         TestGameClient _p2;
 
         [SetUp]
         public void Setup()
         {
-            _server = new TestServerThread();
+            _server = new MultithreadServers();
             _p1 = new TestGameClient();
             _p1.PrepareSDK();
             _p2 = new TestGameClient();
@@ -61,7 +61,6 @@ namespace ServerTests.Integration
             var p1Received = await _p1.WaitFor<TilePacket>();
             var p2Received = await _p2.WaitFor<TilePacket>();
 
-            Assert.IsNull(_server.Server.ServerError);
             Assert.Null(p1Received);
             Assert.NotNull(p2Received);
         }

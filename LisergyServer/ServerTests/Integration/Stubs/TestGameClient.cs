@@ -49,7 +49,7 @@ namespace ServerTests.Integration.Stubs
 
         private void OnReceivePacket(BasePacket packet)
         {
-            if(!(packet is TilePacket)) Log.Debug($"Received {packet} from server ");
+            if(!(packet is TilePacket)) Game?.Log?.Debug($"Received {packet} from server ");
             ReceivedPackets.Add(packet);
         }
 
