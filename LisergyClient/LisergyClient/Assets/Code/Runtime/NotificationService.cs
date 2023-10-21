@@ -27,7 +27,7 @@ namespace Assets.Code.Assets.Code.Runtime
 
         private void OnBattleFinish(BattleHeaderData h)
         {
-            _screen.Open<BattleNotificationScreen, BattleNotificationSetup>(new BattleNotificationSetup()
+            _screen.Open<BattleNotificationScreen>(new BattleNotificationSetup()
             {
                 BattleHeader = h
             });

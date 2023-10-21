@@ -20,7 +20,7 @@ namespace ClientSDK.Data
         public override PlayerEntity GetPlayer(GameId id)
         {
             var p = base.GetPlayer(id);
-            if (p == null) _players[id] = new OtherPlayer(id, _game);
+            if (p == null) _players[id] = new OtherPlayer(new PlayerProfile(id), _game);
             return base.GetPlayer(id);
         }
     }

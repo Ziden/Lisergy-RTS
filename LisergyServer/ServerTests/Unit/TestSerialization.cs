@@ -101,8 +101,8 @@ namespace UnitTests
                 Login = "wololo",
                 Password = "walala"
             };
-            var bytes = Serialization.FromPacketRaw(authEvent);
-            var event2 = (LoginPacket)Serialization.ToPacketRaw(bytes);
+            var bytes = Serialization.FromBasePacket(authEvent);
+            var event2 = (LoginPacket)Serialization.ToBasePacket(bytes);
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);

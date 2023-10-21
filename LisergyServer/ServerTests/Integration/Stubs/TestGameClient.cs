@@ -23,6 +23,7 @@ namespace ServerTests.Integration.Stubs
         public new ClientNetwork Network { get; private set; }
         public List<BasePacket> ReceivedPackets { get; private set; } = new List<BasePacket>();
         public List<IBaseEvent> EventsInClientLogic { get; private set; } = new List<IBaseEvent>();
+        public List<IClientEvent> EventsInSdk { get; private set; } = new List<IClientEvent>();
         public TestGameClient() : base()
         {
             Network = base.Network as ClientNetwork;
@@ -35,7 +36,8 @@ namespace ServerTests.Integration.Stubs
         /// </summary>
         private void OnGameStart(GameStartedEvent ev)
         {
-            ev.Game.Events.OnEventFired += ev => EventsInClientLogic.Add(ev);
+            ClientEvents.OnEventFired += e => EventsInSdk.Add(e);
+            ev.Game.Events.OnEventFired += e => EventsInClientLogic.Add(e);
         }
 
         public void PrepareSDK()

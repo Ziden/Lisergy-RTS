@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.DataTypes;
 using Game.Events.ServerEvents;
+using Game.Systems.Player;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -35,15 +36,15 @@ namespace UnitTests
         {
             Serialization.LoadSerializers();
 
-            var p = new LoginResultPacket() { PlayerID = GameId.Generate() };
+            var p = new LoginResultPacket() { Profile = new PlayerProfile(GameId.Generate()) };
 
             var d = new Dictionary<GameId, int>();
 
-            d[p.PlayerID] = 123;
+            d[p.Profile.PlayerId] = 123;
 
-            var p2 = Serialization.ToPacketRaw<LoginResultPacket>(Serialization.FromPacketRaw(p));
+            var p2 = Serialization.ToCastedPacket<LoginResultPacket>(Serialization.FromBasePacket(p));
 
-            Assert.AreEqual(123, d[p2.PlayerID]);
+            Assert.AreEqual(123, d[p2.Profile.PlayerId]);
         }
 
         [Test]

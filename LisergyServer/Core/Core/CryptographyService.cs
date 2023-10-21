@@ -13,6 +13,7 @@ namespace BaseServer.Core
     public class CryptographyService : IDisposable
     {
         private Aes Encryptor;
+        public TimeSpan TokenDuration { get; private set; } = TimeSpan.FromMinutes(1);
 
         public CryptographyService(string key)
         {
@@ -33,7 +34,7 @@ namespace BaseServer.Core
         /// </summary>
         public string GenerateToken(GameId playerId)
         {
-            var expires = (DateTime.UtcNow + TimeSpan.FromMinutes(5)).Ticks;
+            var expires = (DateTime.UtcNow + TokenDuration).Ticks;
             var originalToken = $"{playerId}:{expires}";
             return Encrypt(originalToken);
         }

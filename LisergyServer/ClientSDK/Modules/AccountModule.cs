@@ -23,7 +23,7 @@ namespace ClientSDK.Services
 
     public class AccountModule : IAccountModule
     {
-        private GameId _playerId;
+        private PlayerProfile _profile;
         private GameClient _client;
 
         public AccountModule(GameClient client)
@@ -43,14 +43,15 @@ namespace ClientSDK.Services
             {
                 Login = username,
                 Password = password
-            });
+            }, ServerType.ACCOUNT);
         }
 
         private void OnAuthResult(LoginResultPacket packet)
         {
             if (packet.Success)
             {
-                _playerId = packet.PlayerID;
+                _profile = packet.Profile;
+                ((ClientNetwork)_client.Network).SetCredentials(packet);
             }
         }
 
@@ -61,7 +62,7 @@ namespace ClientSDK.Services
             var world = new ClientWorld(game, int.MaxValue, (ushort)ev.MapSizeX, (ushort)ev.MapSizeY);
             game.SetupGame(world, _client.Network);
             _client.InitializeGame(game);
-            _client.ClientEvents.Call(new GameStartedEvent(game, new PlayerEntity(_playerId, game)));
+            _client.ClientEvents.Call(new GameStartedEvent(game, new PlayerEntity(_profile, game)));
             _client.Network.SendToServer(new JoinWorldPacket());
         }
     }

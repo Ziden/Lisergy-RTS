@@ -27,7 +27,7 @@ namespace ServerTests
         public bool IsOnline { get; set; }
         private GameServerNetwork _network;
 
-        public TestServerPlayer(LisergyGame game) : base(GameId.Generate(), game)
+        public TestServerPlayer(LisergyGame game) : base(new PlayerProfile(GameId.Generate()), game)
         {
             IsOnline = true;
             _network = game.Network as GameServerNetwork;
@@ -39,7 +39,7 @@ namespace ServerTests
             {
                 Game.Log.Debug($"Server Sent Packet {ev.GetType().Name} to Player {this}");
             }
-            var reSerialized = Serialization.ToPacketRaw(Serialization.FromPacketRaw(ev));
+            var reSerialized = Serialization.ToBasePacket(Serialization.FromBasePacket(ev));
             PacketPool.Return(ev);
             OnReceivedPacket?.Invoke(reSerialized);
             ReceivedPackets.Add(reSerialized);

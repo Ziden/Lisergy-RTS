@@ -9,7 +9,7 @@ public class ClientPlayer : PlayerEntity
 
     public bool ViewBattles = true;
 
-    public ClientPlayer(GameId id, IGame game) : base(id, game)
+    public ClientPlayer(PlayerProfile profile, IGame game) : base(profile, game)
     {
     }
 }

@@ -11,8 +11,8 @@ namespace UnitTests
         public void TestBasicSerialization()
         {
             var game = new TestGame();
-            var serialized = Serialization.FromPacketRaw(new GameSpecPacket(game));
-            var deserialized = (GameSpecPacket)Serialization.ToPacketRaw(serialized);
+            var serialized = Serialization.FromBasePacket(new GameSpecPacket(game));
+            var deserialized = (GameSpecPacket)Serialization.ToBasePacket(serialized);
 
             Assert.AreEqual(game.Specs.Units.Count, deserialized.Spec.Units.Count);
         }

@@ -10,7 +10,7 @@ namespace ClientSDK.Data
     /// </summary>
     public class OtherPlayer : PlayerEntity
     {
-        public OtherPlayer(GameId id, IGame game) : base(id, game)
+        public OtherPlayer(PlayerProfile profile, IGame game) : base(profile, game)
         {
         }
     }

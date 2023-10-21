@@ -20,13 +20,13 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         public GameObject ScreenGameObject;
     }
 
-    public class GenericSetup : UIScreenSetup { }
+    public class GenericSetup : UIScreenParam { }
 
     public interface IScreenService : IGameService
     {
         T Get<T>() where T : UITKScreen;
         T Open<T>() where T : UITKScreen;
-        T Open<T, H>(H hooks) where T : UITKScreen where H : UIScreenSetup;
+        T Open<T>(object param) where T : UITKScreen;
         void Close<T>() where T : UITKScreen;
         void Close(UITKScreen screen);
         bool IsOpen<T>() where T : UITKScreen;
@@ -93,14 +93,14 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         /// <summary>
         /// Whenever reopening an already loaded screen
         /// </summary>
-        private T ReOpen<T, H>(LoadedScreen alreadyLoaded, H setup) where T : UITKScreen where H : UIScreenSetup
+        private T ReOpen<T>(LoadedScreen alreadyLoaded, object param) where T : UITKScreen
         {
             if (!alreadyLoaded.ScreenLogicClass.FinishedLoading) return alreadyLoaded.ScreenLogicClass as T;
             if (alreadyLoaded.ScreenGameObject.activeSelf) return alreadyLoaded.ScreenLogicClass as T;
             alreadyLoaded.ScreenLogicClass.OnBeforeOpen();
             alreadyLoaded.ScreenGameObject.SetActive(true);
             var uiDoc = alreadyLoaded.ScreenGameObject.GetComponent<UIDocument>();
-            alreadyLoaded.ScreenLogicClass._setup = setup;
+            alreadyLoaded.ScreenLogicClass._param = param;
             alreadyLoaded.ScreenLogicClass._panel = uiDoc.rootVisualElement.panel;
             alreadyLoaded.ScreenLogicClass._root = uiDoc.rootVisualElement;
             SetupBasicListeners(uiDoc.rootVisualElement);
@@ -108,10 +108,10 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
             return alreadyLoaded.ScreenLogicClass as T;
         }
 
-        private T Instantiate<T, H>(H setup) where T : UITKScreen where H : UIScreenSetup
+        private T Instantiate<T>(object param) where T : UITKScreen
         {
             var screen = (T)InstanceFactory.CreateInstance(typeof(T));
-            screen._setup = setup;
+            screen._param = param;
             screen.GameClient = _client;
             screen._screenService = this;
             screen.OnBeforeOpen();
@@ -144,20 +144,20 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
             screen.FinishedLoading = true;
         }
 
-        public T Open<T, H>(H setup) where T : UITKScreen where H : UIScreenSetup
+        public T Open<T>(object param) where T : UITKScreen
         {
             if (_loadedScreens.TryGetValue(typeof(T), out var obj))
             {
-                return ReOpen<T, H>(obj, setup);
+                return ReOpen<T>(obj, param);
             } else
             {
-                return Instantiate<T, H>(setup);
+                return Instantiate<T>(param);
             }
         }
 
         public T Open<T>() where T : UITKScreen
         {
-            return Open<T, GenericSetup>(_noSetup);
+            return Open<T>(_noSetup);
         }
 
         public void Close(UITKScreen s)

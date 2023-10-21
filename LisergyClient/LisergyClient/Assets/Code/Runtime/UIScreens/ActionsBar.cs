@@ -20,7 +20,7 @@ namespace Assets.Code.UI
         NONE, MOVE, GUARD, ATTACK, CHECK
     }
 
-    public class ActionsBarSetup : UIScreenSetup
+    public class ActionBarParams : UIScreenParam
     {
         public PartyEntity Party;
         public TileEntity Tile;
@@ -55,7 +55,7 @@ namespace Assets.Code.UI
             {
                 _buttons[kp.Key].clicked += () => ClickAction(kp.Key);
             }
-            var setup = GetSetup<ActionsBarSetup>();
+            var setup = GetParameter<ActionBarParams>();
             DisplayActionsFor(setup.Party, setup.Tile);
             //var root = Root.Q<VisualElement>("ActionsRoot");
             //root.style.scale = new Vector2(1, 1); // TODO: Animation of resize/rotate not working :( 
@@ -88,7 +88,7 @@ namespace Assets.Code.UI
 
         private void ClickAction(EntityAction a)
         {
-            GetSetup<ActionsBarSetup>().OnChosenAction(a);
+            GetParameter<ActionBarParams>().OnChosenAction(a);
         }
 
         private void MoveTo(TileEntity tile)

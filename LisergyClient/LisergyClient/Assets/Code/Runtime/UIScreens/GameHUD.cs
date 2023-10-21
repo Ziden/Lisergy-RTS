@@ -4,6 +4,7 @@ using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.UI;
 using Assets.Code.World;
 using ClientSDK.SDKEvents;
+using Cysharp.Threading.Tasks;
 using Game.Events.Bus;
 using Game.Systems.Battler;
 using Game.Systems.Movement;
@@ -22,16 +23,17 @@ namespace Assets.Code
     {
         private VisualElement _buttonCursor;
         private PartyButton[] _partyButtons = new PartyButton[4];
+        private ChatSummary _chatSummary;
         private Button _townButton;
 
-        public override UIScreen ScreenAsset => UIScreen.PartySelectBar;
+        public override UIScreen ScreenAsset => UIScreen.GameHud;
 
         public override void OnOpen()
         {
             var service = UnityServicesContainer.Resolve<IScreenService>();
             _townButton = Root.Q<Button>("TownButton");
             _townButton.clicked += () => TownButtonClick();
-          
+            _chatSummary = new ChatSummary(GameClient, Root.Q("Chat").Required());
             for (byte i = 0; i < 4; i++)
             {
                 var index = i;
@@ -57,6 +59,7 @@ namespace Assets.Code
             UIEvents.OnCameraMove -= OnCameraMove;
             UIEvents.OnClickTile -= OnClickTile;
             GameClient.ClientEvents.RemoveListener(this);
+            _chatSummary.Dispose();
         }
 
         private void OnCameraMove(Vector3 newPos)
@@ -76,7 +79,7 @@ namespace Assets.Code
             ScreenService.Close<EntityDetails>();
             if (ClientState.SelectedEntity != null && ClientState.SelectedEntity is PartyEntity party)
             {
-                ScreenService.Open<ActionsBar, ActionsBarSetup>(new ActionsBarSetup()
+                ScreenService.Open<ActionsBar>(new ActionBarParams()
                 {
                     Party = party,
                     Tile = tile,
@@ -101,7 +104,7 @@ namespace Assets.Code
                     var selectedTile = ClientState.SelectedTile;
                     if(selectedTile.Building != null)
                     {
-                        ScreenService.Open<EntityDetails, EntityDetailsSetup>(new EntityDetailsSetup()
+                        ScreenService.Open<EntityDetails>(new EntityDetailsParams()
                         {
                             Entity = selectedTile.Building
                         });

@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 
 namespace Assets.Code
 {
-    public class BattleNotificationSetup : UIScreenSetup
+    public class BattleNotificationSetup : UIScreenParam
     {
         public BattleHeaderData BattleHeader;
         public Action<BattleHeaderData> OnCheckItemDeltas;
@@ -28,7 +28,7 @@ namespace Assets.Code
         {
             var popup = Root.Q();
             popup.style.top = 0;
-            var setup = GetSetup<BattleNotificationSetup>();
+            var setup = GetParameter<BattleNotificationSetup>();
             var win = IsWin(setup.BattleHeader);
             popup.Query(className: "outcome-loose").ForEach(e => e.style.display = win ? DisplayStyle.None : DisplayStyle.Flex);
             popup.Query(className: "outcome-win").ForEach(e => e.style.display = win ? DisplayStyle.Flex : DisplayStyle.None);

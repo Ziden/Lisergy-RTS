@@ -1,5 +1,6 @@
 ﻿using Game.DataTypes;
 using Game.Network;
+using Game.Systems.Player;
 using System;
 
 namespace Game.Events.ServerEvents
@@ -9,6 +10,7 @@ namespace Game.Events.ServerEvents
     {
         public string Token;
         public bool Success;
-        public GameId PlayerID;
+        public PlayerProfile Profile;
+        public TimeSpan TokenDuration;
     }
 }

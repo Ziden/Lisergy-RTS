@@ -29,7 +29,7 @@ public class BattleGroupComponentUI
             var unit = component.Units[x];
             _parties[x].DisplayLeader(unit);
             if (!unit.Valid) continue;
-            _parties[x].OnClick(() => _client.UnityServices().Screen.Open<UnitDetails, UnitDetailsSetup>(new UnitDetailsSetup()
+            _parties[x].OnClick(() => _client.UnityServices().Screen.Open<UnitDetails>(new UnitDetailsSetup()
             {
                 Entity = owner,
                 Unit = unit

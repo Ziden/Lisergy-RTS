@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 namespace Assets.Code.UI
 {
 
-    public class UnitDetailsSetup : UIScreenSetup
+    public class UnitDetailsSetup : UIScreenParam
     {
         public IEntity Entity;
         public Unit Unit;
@@ -41,7 +41,7 @@ namespace Assets.Code.UI
 
         public override void OnOpen()
         {
-            var setup = GetSetup<UnitDetailsSetup>();
+            var setup = GetParameter<UnitDetailsSetup>();
             var spec = GameClient.Game.Specs.Units[setup.Unit.SpecId];
             Root.Q<Label>("UnitLabel").Required().text = spec.Name;
             var icon = Root.Q("Icon").Required();

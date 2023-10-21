@@ -23,15 +23,16 @@ namespace ServerTests.Integration
     /// This is done as a sdk instead of a client so it's easier to test and debug and ensure its logic is fully functional and can be safely
     /// exposed to client so the client is only required to ensure the UI and visual representations are working.
     /// </summary>
+    [NonParallelizable]
     public class TestClientSDKSmoke
     {
-        MultithreadServers _server;
+        StandaloneServer _server;
         TestGameClient _client;
 
         [SetUp]
         public void Setup()
         {
-            _server = new MultithreadServers();
+            _server = new StandaloneServer().Start();
             _client = new TestGameClient();
             _client.PrepareSDK();
         }
@@ -40,6 +41,7 @@ namespace ServerTests.Integration
         public void TearDown() => _server?.Dispose();
 
         [Test]
+        [NonParallelizable]
         public async Task TestDisconnection()
         {
             _client.Modules.Account.SendAuthenticationPacket("abc", "def");
@@ -49,8 +51,14 @@ namespace ServerTests.Integration
         }
 
         [Test]
+        [NonParallelizable]
         public async Task TestReconnection()
         {
+            var mapPlacementUpdates = new List<IEntity>();
+            _client.Modules.Components.OnComponentUpdate<MapPlacementComponent>((e, oldValue, newValue) =>
+            {
+                mapPlacementUpdates.Add(e);
+            });
             _client.Modules.Account.SendAuthenticationPacket("abc", "def");
             var result = await _client.WaitFor<LoginResultPacket>();
             Assert.NotNull(result);
@@ -58,13 +66,24 @@ namespace ServerTests.Integration
             _client.Network.Disconnect();
             _client.ReceivedPackets.Clear();
             _client.Network.Tick();
+            mapPlacementUpdates.Clear();
 
             _client.Modules.Account.SendAuthenticationPacket("abc", "def");
             result = await _client.WaitFor<LoginResultPacket>();
             Assert.AreEqual(true, result.Success);
+
+            await _client.WaitFor<EntityUpdatePacket>(e => e.Type == EntityType.Party);
+            await _client.WaitFor<EntityUpdatePacket>(e => e.Type == EntityType.Dungeon);
+            await _client.WaitFor<EntityUpdatePacket>(e => e.Type == EntityType.Building);
+
+            Assert.AreEqual(3, mapPlacementUpdates.Count); // Castle, Party, Dungeon
+            Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is PartyEntity));
+            Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is PlayerBuildingEntity));
+            Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is DungeonEntity));
         }
 
         [Test]
+        [NonParallelizable]
         public async Task SmokeTestFlow()
         {        
             var mapPlacementUpdates = new List<IEntity>();
@@ -132,27 +151,6 @@ namespace ServerTests.Integration
             var originalTile = party.Tile;
             var nextTile = originalTile.GetNeighbor(Direction.SOUTH);
             Assert.IsTrue(_client.Modules.Actions.MoveParty(party, nextTile, CourseIntent.Defensive));
-
-            // DISCONNECT & RECONNECT
-            _client.Game.Log.Debug("----- RECONNECTING -----");
-            _client.Network.Disconnect();
-            _client.ReceivedPackets.Clear();
-            _client.Network.Tick();
-
-            // RE-LOGIN
-            _client.Modules.Account.SendAuthenticationPacket("abc", "def");
-            result = await _client.WaitFor<LoginResultPacket>();
-            Assert.AreEqual(true, result.Success);
-
-            // CHECK COMPONENTS SYNCED
-            await _client.WaitFor<EntityUpdatePacket>(e => e.Type == EntityType.Party);
-            await _client.WaitFor<EntityUpdatePacket>(e => e.Type == EntityType.Dungeon);
-            await _client.WaitFor<EntityUpdatePacket>(e => e.Type == EntityType.Building);
-
-            Assert.AreEqual(3, mapPlacementUpdates.Count); // Castle, Party, Dungeon
-            Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is PartyEntity));
-            Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is PlayerBuildingEntity));
-            Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is DungeonEntity));
         }
     }
 }

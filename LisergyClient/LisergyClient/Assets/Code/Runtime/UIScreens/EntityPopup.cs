@@ -14,7 +14,7 @@ using UnityEngine.UIElements;
 namespace Assets.Code.UI
 {
 
-    public class EntityDetailsSetup : UIScreenSetup
+    public class EntityDetailsParams : UIScreenParam
     {
         public IEntity Entity;
     }
@@ -27,7 +27,7 @@ namespace Assets.Code.UI
 
         public override void OnOpen()
         {
-            var setup = GetSetup<EntityDetailsSetup>();
+            var setup = GetParameter<EntityDetailsParams>();
             var battleGroup = setup.Entity.Components.Get<BattleGroupComponent>();
             if (battleGroup.Units.Valids > 0)
             {

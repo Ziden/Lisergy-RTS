@@ -5,6 +5,7 @@ using Game.DataTypes;
 using Game.Events.ServerEvents;
 using Game.Network;
 using Game.Network.ClientPackets;
+using Game.Network.ServerPackets;
 using GameServices;
 using LisergyServer.Core;
 
@@ -36,49 +37,49 @@ namespace MapServer
            
         }
 
-        public override void Connect(int connectionID) { }
+        public override void Connect(in int connectionID) { }
 
-        public override void Disconnect(int connectionID)
+        public override void Disconnect(in int connectionID)
         {
             _accountService.Disconnect(connectionID);
             _connectionService.Disconnect(connectionID);
         }
 
-        public override void ReceiveAuthenticatedPacket(int connectionId, BasePacket input) { }
+        public override void ReceivePacketFromPlayer(in int connectionId, BasePacket input) { }
 
-        protected override bool IsAuthenticated(int connectionID)
+        protected override bool IsAuthenticated(in int connectionID)
         {
             var connectedAccount = _accountService.GetAuthenticatedConnection(connectionID);
             var hasAuth = connectedAccount != null;
             return hasAuth;
         }
 
-        protected override bool Authenticate(BasePacket ev, int connectionID)
+        protected override bool Authenticate(BasePacket ev, in int connectionID)
         {
             Account? connectedAccount;
             if (ev is LoginPacket auth)
             {
                 connectedAccount = _accountService.Authenticate(auth);
-                Send(connectionID, new LoginResultPacket()
+                var authResult = new LoginResultPacket()
                 {
-                    PlayerID = connectedAccount == null ? GameId.ZERO : connectedAccount.PlayerId,
                     Success = connectedAccount != null,
-                    Token = _cryptographyService.GenerateToken(connectedAccount.PlayerId)
-                });
+                };
+                if(authResult.Success)
+                {
+                    authResult.Token = _cryptographyService.GenerateToken(connectedAccount.Profile.PlayerId);
+                    authResult.TokenDuration = _cryptographyService.TokenDuration;
+                    authResult.Profile = connectedAccount.Profile;
+                }  
+                Send(connectionID, authResult);
                 if (connectedAccount != null)
                 {
-                    _connectionService.RegisterConnection(connectedAccount.PlayerId, new ConnectedPlayer(_socketServer)
-                    {
-                        PlayerId = connectedAccount.PlayerId,
-                        ConnectionID = connectionID
-                    });
-                    Log.Debug($"Connection {connectionID} registered authenticated as {connectedAccount.PlayerId}");
+                    _connectionService.RegisterAuthenticatedConnection(new ConnectedPlayer(connectedAccount.Profile.PlayerId, connectionID, _socketServer));
+                    Log.Debug($"Connection {connectionID} registered authenticated as {connectedAccount.Profile}");
                 }
+                return true;
             }
-            else
-            {
-                connectedAccount = _accountService.GetAuthenticatedConnection(connectionID);
-            }
+            Log.Error($"Connection {connectionID} tried to authenticate with {ev.GetType().Name}");
+            Send(connectionID, new InvalidSessionPacket());
             return false;
         }
     }

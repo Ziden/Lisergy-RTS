@@ -17,19 +17,33 @@ public class EventEntry
 {
     public IBaseEvent Event;
 
-     public override string ToString() => Event.ToString();
+    public override string ToString() => Event.ToString();
 
 }
 
-public enum Tab { LOGS, EVENTS }
+public enum Tab { LOGS, EVENTS, GAME, ACCOUNT, WORLD, CHAT }
 
+/// <summary>
+/// SO MANY HACKS JUST FOR A SIMPLE UI
+/// But well it helps debugging so why not
+/// </summary>
 public class StandaloneServerConsoleUI : Window
 {
     private static ListView List;
     private static ScrollBarView ScrollView;
     private static TextView TextView;
+
+    /// <summary>
+    /// TYPES OF LOGS
+    /// </summary>
+    private static List<LogEntry> _accountLogs = new();
+    private static List<LogEntry> _worldLogs = new();
+    private static List<LogEntry> _chatLogs = new();
+    private static List<LogEntry> _gameLogs = new();
     private static List<EventEntry> _events = new();
-    private static List<LogEntry> _log = new();
+    private static List<LogEntry> _allLogs = new();
+
+
     public static bool IsLoaded = false;
     private static Tab Tab = Tab.LOGS;
 
@@ -37,9 +51,10 @@ public class StandaloneServerConsoleUI : Window
     {
         Title = "Lisergy Standalone Server";
 
+        // FIRST COLUMN
         var logsBtn = new Button()
         {
-            Text = "Logs",
+            Text = "All",
             Y = 0,
             X = 0,
             IsDefault = true,
@@ -47,19 +62,51 @@ public class StandaloneServerConsoleUI : Window
         var eventsBtn = new Button()
         {
             Text = "Events",
+            Y = Pos.Bottom(logsBtn),
+            X = 0,
+            IsDefault = true,
+        };
+
+        // SECOND COLUMN
+        var gameBtn = new Button()
+        {
+            Text = "Game Logic",
             Y = 0,
             X = Pos.Right(logsBtn),
+            IsDefault = true,
+        };
+        var accountBtn = new Button()
+        {
+            Text = "Account Server",
+            Y = Pos.Bottom(gameBtn),
+            X = Pos.Right(eventsBtn),
+            IsDefault = true,
+        };
+
+        // THIRD COLUMN
+        var worldBtn = new Button()
+        {
+            Text = "World Server",
+            Y = 0,
+            X = Pos.Right(gameBtn),
+            IsDefault = true,
+        };
+        var chatBtn = new Button()
+        {
+            Text = "Chat Server",
+            Y = Pos.Bottom(worldBtn),
+            X = Pos.Right(accountBtn),
             IsDefault = true,
         };
         var frame = new FrameView()
         {
             AutoSize = true,
-            Y = Pos.Bottom(logsBtn),
+            Y = Pos.Bottom(chatBtn),
             X = 0,
             Width = Dim.Fill(),
             Height = Dim.Fill(),
         };
-        List = new ListView(_log)
+        List = new ListView(_allLogs)
         {
             AutoSize = true,
             X = 0,
@@ -67,7 +114,8 @@ public class StandaloneServerConsoleUI : Window
             Width = Dim.Fill(),
             Height = Dim.Fill(),
         };
-        List.DrawContent += (e) => {
+        List.DrawContent += (e) =>
+        {
             ScrollView.Size = List.Source.Count - 1;
             ScrollView.Position = List.TopItem;
             ScrollView.Refresh();
@@ -84,14 +132,18 @@ public class StandaloneServerConsoleUI : Window
             Height = Dim.Fill()
         };
 
-        logsBtn.Clicked += () => ViewLogs();
+        logsBtn.Clicked += () => ViewLogs(Tab.LOGS, _allLogs);
+        gameBtn.Clicked += () => ViewLogs(Tab.GAME, _gameLogs);
+        accountBtn.Clicked += () => ViewLogs(Tab.ACCOUNT, _accountLogs);
+        worldBtn.Clicked += () => ViewLogs(Tab.WORLD, _worldLogs);
+        chatBtn.Clicked += () => ViewLogs(Tab.CHAT, _chatLogs);
         eventsBtn.Clicked += () => ViewEvents();
 
         this.Loaded += () =>
         {
             IsLoaded = true;
         };
-        Add(logsBtn, eventsBtn, frame);
+        Add(logsBtn, eventsBtn, gameBtn, worldBtn, accountBtn, chatBtn, frame);
     }
 
     private void ViewEvents()
@@ -106,11 +158,11 @@ public class StandaloneServerConsoleUI : Window
         List.SetNeedsDisplay();
     }
 
-    private void ViewLogs()
+    private void ViewLogs(Tab tab, List<LogEntry> logs)
     {
-        Tab = Tab.LOGS;
-        List.SetSource(_log);
-        UpdateEntryList(_log);
+        Tab = tab;
+        List.SetSource(logs);
+        UpdateEntryList(logs);
         List.SetNeedsDisplay();
     }
 
@@ -132,7 +184,7 @@ public class StandaloneServerConsoleUI : Window
             {
                 Event = ev,
             });
-            if (_events.Count > 500) _events.RemoveAt(0);
+            if (_events.Count > 100) _events.RemoveAt(0);
             if (Tab == Tab.EVENTS) UpdateEntryList(_events);
         });
     }
@@ -140,22 +192,32 @@ public class StandaloneServerConsoleUI : Window
     public static IGameLog HookLogs(IGameLog log)
     {
         var baseLog = (GameLog)log;
-        baseLog._Debug = m => OnReceiveLog(LogLevel.Debug, m);
-        baseLog._Info = m => OnReceiveLog(LogLevel.Info, m);
-        baseLog._Error = m => OnReceiveLog(LogLevel.Error, m);
+        baseLog._Debug = m => OnReceiveLog(baseLog.Tag, LogLevel.Debug, m);
+        baseLog._Info = m => OnReceiveLog(baseLog.Tag, LogLevel.Info, m);
+        baseLog._Error = m => OnReceiveLog(baseLog.Tag, LogLevel.Error, m);
         return log;
     }
 
-    public static void OnReceiveLog(LogLevel level, string msg)
+    private static void AddLog(Tab forTab, List<LogEntry> log, LogEntry newLog)
+    {
+        log.Add(newLog);
+        if (log.Count > 500) log.RemoveAt(0);
+        if (Tab == forTab) UpdateEntryList(log);
+    }
+
+    public static void OnReceiveLog(string tag, LogLevel level, string msg)
     {
         Application.MainLoop.Invoke(() =>
         {
-            _log.Add(new LogEntry()
+            var entry = new LogEntry()
             {
                 Log = msg
-            });
-            if (_log.Count > 500) _log.RemoveAt(0);
-            if(Tab == Tab.LOGS) UpdateEntryList(_log);
+            };
+            AddLog(Tab.LOGS, _allLogs, entry);
+            if(tag.StartsWith("[Server Game]")) AddLog(Tab.GAME, _gameLogs, entry);
+            else if (tag.StartsWith("[Server WORLD]")) AddLog(Tab.WORLD, _worldLogs, entry);
+            else if (tag.StartsWith("[Server ACCOUNT]")) AddLog(Tab.ACCOUNT, _accountLogs, entry);
+            else if (tag.StartsWith("[Server CHAT]")) AddLog(Tab.CHAT, _chatLogs, entry);
         });
     }
 }

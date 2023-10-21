@@ -7,6 +7,7 @@ using BaseServer.Core;
 using NServiceBus.Logging;
 using Telepathy;
 using System.Runtime.CompilerServices;
+using ServerTests.Integration.Stubs;
 
 var RUN_UI = true;
 
@@ -21,16 +22,15 @@ if(RUN_UI)
     while (!StandaloneServerConsoleUI.IsLoaded) await Task.Yield();
 }
 
+var standaloneServer = new StandaloneServer();
+var world = standaloneServer.GetInstance<WorldServer>(ServerType.WORLD);
+var account = standaloneServer.GetInstance<AccountServer>(ServerType.ACCOUNT);
+var chat = standaloneServer.GetInstance<ChatServer>(ServerType.CHAT);
 
+StandaloneServerConsoleUI.HookLogs(world.Log);
+StandaloneServerConsoleUI.HookLogs(account.Log);
+StandaloneServerConsoleUI.HookLogs(chat.Log);
+world.Game.Events.OnEventFired += StandaloneServerConsoleUI.OnReceiveEvent;
 
-var gameSpecs = TestSpecs.Generate();
-var serverGameLog = StandaloneServerConsoleUI.HookLogs(new GameLog("[Game]"));
-var game = new LisergyGame(gameSpecs, serverGameLog);
-game.SetupGame(new TestWorld(), new GameServerNetwork(game));
-game.Entities.DeltaCompression.ClearDeltas();
-
-var server = new WorldServer(game, 1337);
-StandaloneServerConsoleUI.HookLogs(server.Log);
-
-game.Events.OnEventFired += StandaloneServerConsoleUI.OnReceiveEvent;
-server.RunServer();
+standaloneServer.Start();
+standaloneServer.BlockThread();

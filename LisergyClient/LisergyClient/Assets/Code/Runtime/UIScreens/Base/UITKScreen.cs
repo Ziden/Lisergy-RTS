@@ -10,17 +10,19 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
     /// <summary>
     /// UI hooks to expose ui callbacks to actions.
     /// </summary>
-    public interface UIScreenSetup { }
+    public interface UIScreenParam { }
 
     /// <summary>
     /// Represents a UI screen or element
     /// </summary>
+    /// 
+
     public abstract class UITKScreen
     {
         private bool _loaded;
 
         internal IPanel _panel;
-        internal UIScreenSetup _setup;
+        internal object _param;
         internal IScreenService _screenService;
         internal VisualElement _root;
         internal event Action OnLoad;
@@ -50,10 +52,17 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         public virtual void OnBeforeOpen() { }
         public virtual void OnOpen() { }
         public virtual void OnClose() { }
-        
         public void Hide() => Root.style.visibility = Visibility.Hidden;
         public void Show() => Root.style.visibility = Visibility.Visible;
         public bool IsHidden() => Root.style.visibility == Visibility.Hidden;
-        public T GetSetup<T>() => (T)_setup;
+        public T GetParameter<T>()
+        {
+            if(_param is T casted)
+            {
+                return casted;
+            }
+            Debug.LogError($"Screen {GetType().Name} requires parameter of type {typeof(T).Name} but type {_param?.GetType()?.Name} was found");
+            return (T)_param;
+        }
     }
 }

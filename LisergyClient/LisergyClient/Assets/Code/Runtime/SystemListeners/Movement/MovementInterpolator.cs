@@ -43,7 +43,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
             var view = _entity.GetEntityView() as IGameObject;
             var gameObject = view.GameObject;
             var moveComponent = _entity.Components.Get<MovespeedComponent>();
-            var duration = moveComponent.MoveDelay.TotalSeconds + 0.2f;
+            var duration = moveComponent.MoveDelay.TotalSeconds;
             var tilePos = to.UnityPosition();
             var finalPos = new Vector3(tilePos.x, view.GameObject.transform.position.y, tilePos.z);
             _currentSequence = gameObject.transform.DOMove(finalPos, (float)duration).SetEase(Ease.Linear)

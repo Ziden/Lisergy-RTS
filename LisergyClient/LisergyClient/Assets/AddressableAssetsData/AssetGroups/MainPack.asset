@@ -1042,6 +1042,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 966d0910a86086947af6f712d9c99e5b
+    m_Address: Assets/Addressables/UIScreens/ChatScreen.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2178327b0de06f479e2203a3606c728
+    m_Address: Assets/Addressables/UIScreens/Components/MessageBox.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b09defdd2ea25a04a9d7584493f44cd4, type: 2}
   m_SchemaSet:

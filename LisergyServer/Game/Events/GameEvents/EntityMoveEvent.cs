@@ -8,6 +8,11 @@ namespace Game.Events.GameEvents
         public IEntity Entity;
         public TileEntity ToTile;
         public TileEntity FromTile;
+
+        public override string ToString()
+        {
+            return $"<EntityMoveIn Entity={Entity} From={FromTile} To={ToTile}/>";
+        }
     }
 
     public class EntityMoveOutEvent : IGameEvent
@@ -15,6 +20,11 @@ namespace Game.Events.GameEvents
         public IEntity Entity;
         public TileEntity ToTile;
         public TileEntity FromTile;
+
+        public override string ToString()
+        {
+            return $"<EntityMoveIn Entity={Entity} From={FromTile} To={ToTile}/>";
+        }
     }
 }
 

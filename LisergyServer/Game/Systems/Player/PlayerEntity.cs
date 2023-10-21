@@ -18,27 +18,27 @@ namespace Game.Systems.Player
     {
         public const byte MAX_PARTIES = 4;
 
-        protected GameId _playerId;
-
         public PlayerDataComponent Data => Components.GetReference<PlayerDataComponent>();
 
-        public ref readonly GameId EntityId => ref _playerId;
-        public ref readonly GameId OwnerID => ref _playerId;
+        public PlayerProfile Profile { get; private set; }
+
+        public ref readonly GameId EntityId => ref Profile.PlayerId;
+        public ref readonly GameId OwnerID => ref Profile.PlayerId;
 
         public IGame Game { get; private set; }
-        public PlayerEntity(GameId id, IGame game)
+        public PlayerEntity(PlayerProfile profile, IGame game)
         {
             Game = game;
             Components = new ComponentSet(this);
             Components.Add<PlayerComponent>();
             Components.AddReference(new PlayerDataComponent());
-            _playerId = id;
+            Profile = profile;
             Data.Parties = new PartyEntity[MAX_PARTIES]
             {
-                (PartyEntity)game.Entities.CreateEntity(_playerId , EntityType.Party),
-                (PartyEntity)game.Entities.CreateEntity(_playerId , EntityType.Party),
-                (PartyEntity)game.Entities.CreateEntity(_playerId , EntityType.Party),
-                (PartyEntity)game.Entities.CreateEntity(_playerId , EntityType.Party)
+                (PartyEntity)game.Entities.CreateEntity(Profile.PlayerId , EntityType.Party),
+                (PartyEntity)game.Entities.CreateEntity(Profile.PlayerId , EntityType.Party),
+                (PartyEntity)game.Entities.CreateEntity(Profile.PlayerId , EntityType.Party),
+                (PartyEntity)game.Entities.CreateEntity(Profile.PlayerId , EntityType.Party)
             };
             for (byte x = 0; x < MAX_PARTIES; x++)
             {

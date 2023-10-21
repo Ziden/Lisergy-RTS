@@ -5,6 +5,7 @@ using Game.ECS;
 using Game.Events;
 using Game.Network;
 using Game.Systems.Battler;
+using Game.Systems.Player;
 using Game.Systems.Tile;
 using GameData;
 using NetSerializer;
@@ -35,6 +36,7 @@ namespace Game
             models.Add(typeof(BattleAction));
             models.Add(typeof(AttackAction));
             models.Add(typeof(TileMapData));
+            models.Add(typeof(PlayerProfile));
 
             // Game
             models.Add(typeof(GameSpec));
@@ -68,7 +70,7 @@ namespace Game
         }
 
      
-        public static BasePacket ToPacketRaw(byte[] message)
+        public static BasePacket ToBasePacket(byte[] message)
         {
             using (var stream = new MemoryStream(message))
             {
@@ -78,24 +80,23 @@ namespace Game
             }
         }
 
-        public static T ToPacketRaw<T>(byte[] message)
+        public static byte[] FromBasePacket(BasePacket ev)
+        {
+            using (var stream = new MemoryStream())
+            {
+                Serializer.Serialize(stream, ev);
+                return stream.ToArray();
+            }
+        }
+
+
+        public static T ToCastedPacket<T>(byte[] message)
         {
             using (var stream = new MemoryStream(message))
             {
                 T ev;
                 ev = (T)Serializer.Deserialize(stream);
                 return ev;
-            }
-        }
-
-
-
-        public static byte[] FromPacketRaw(BasePacket ev)
-        {
-            using (var stream = new MemoryStream())
-            {
-                Serializer.Serialize(stream, ev);
-                return stream.ToArray();
             }
         }
 
@@ -109,7 +110,6 @@ namespace Game
             }
         }
 
-
         public static T ToAnyType<T>(byte[] message)
         {
             using (var stream = new MemoryStream(message))
@@ -120,15 +120,14 @@ namespace Game
             }
         }
 
-
         public static T ToPacket<T>(byte[] message) where T : BasePacket
         {
-            return (T)ToPacketRaw(message);
+            return ToCastedPacket<T>(message);
         }
 
         public static byte[] FromPacket<T>(T ev) where T : BasePacket
         {
-            return FromPacketRaw(ev);
+            return FromBasePacket(ev);
 
         }
     }

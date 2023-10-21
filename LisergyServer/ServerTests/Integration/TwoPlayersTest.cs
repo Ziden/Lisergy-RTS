@@ -1,21 +1,26 @@
-﻿using Game.Events.ServerEvents;
+﻿using ClientSDK.SDKEvents;
+using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
 using NUnit.Framework;
 using ServerTests.Integration.Stubs;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Telepathy;
 
 namespace ServerTests.Integration
 {
+    [NonParallelizable]
     public class TwoPlayerTest
     {
-        MultithreadServers _server;
+        StandaloneServer _server;
         TestGameClient _p1;
         TestGameClient _p2;
 
         [SetUp]
         public void Setup()
         {
-            _server = new MultithreadServers();
+            _server = new StandaloneServer().Start();
             _p1 = new TestGameClient();
             _p1.PrepareSDK();
             _p2 = new TestGameClient();
@@ -26,6 +31,7 @@ namespace ServerTests.Integration
         public void TearDown() => _server?.Dispose();
 
         [Test]
+        [NonParallelizable]
 
         public async Task SmokeTest2p()
         {
@@ -43,9 +49,24 @@ namespace ServerTests.Integration
             Assert.NotNull(p1Received);
             Assert.NotNull(p2Received);
             Assert.AreNotEqual(p1Received.Data, p2Received.Data);
+
+            _p1.EventsInSdk.Clear();
+            _p2.EventsInSdk.Clear();
+
+            // TESTING CHAT
+            _p1.Modules.Chat.SendMessage("P1 MESSAGE");
+
+            var p1Seen = await _p1.WaitFor<ChatPacket>();
+            var p2Seen = await _p2.WaitFor<ChatPacket>();
+            
+            Assert.IsTrue(_p1.EventsInSdk.Any(e => e is ChatUpdateEvent chat && chat.NewPacket.Message == "P1 MESSAGE"));
+            Assert.IsTrue(_p2.EventsInSdk.Any(e => e is ChatUpdateEvent chat && chat.NewPacket.Message == "P1 MESSAGE"));
+            Assert.NotNull(p1Seen);
+            Assert.NotNull(p2Seen);
         }
 
         [Test]
+        [NonParallelizable]
 
         public async Task SmokeTestP1Disconnects()
         {

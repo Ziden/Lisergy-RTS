@@ -10,7 +10,7 @@ namespace LisergyServer.Core
 {
     public class Account
     {
-        public GameId PlayerId;
+        public PlayerProfile Profile;
         public string Login;
         public string Password;
     }
@@ -44,12 +44,15 @@ namespace LisergyServer.Core
             if (!_accounts.TryGetValue(ev.Login, out acc))
             {
                 acc = new Account();
-                acc.PlayerId = GameId.Generate();
+                acc.Profile = new PlayerProfile(GameId.Generate())
+                {
+                    PlayerName = ev.Login
+                };
                 acc.Login = ev.Login;
                 acc.Password = ev.Password;
                 _accounts[acc.Login] = acc;
                 _authenticatedConnections[ev.ConnectionID] = acc;
-                _log.Info($"Registered new account {acc.Login}");
+                _log.Info($"Registered new account {acc.Login} with playerId {acc.Profile.PlayerId}");
                 return acc;
             }
             else if (acc.Password != ev.Password)

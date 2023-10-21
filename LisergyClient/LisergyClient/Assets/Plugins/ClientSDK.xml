@@ -4,6 +4,11 @@
         <name>ClientSDK</name>
     </assembly>
     <members>
+        <member name="M:ClientSDK.ClientNetwork.SetCredentials(Game.Events.ServerEvents.LoginResultPacket)">
+            <summary>
+            Whenever we receive credentials we use it to handshake with the servers
+            </summary>
+        </member>
         <member name="T:ClientSDK.Data.IClientWorld">
             <summary>
             Implementation of the game world for the client SDK.
@@ -178,6 +183,26 @@
             Service responsible for handling authentication and specific account and profile information
             </summary>
         </member>
+        <member name="T:ClientSDK.Modules.IChatModule">
+            <summary>
+            Allows player to send chat messages. Will handle receiving messages too.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Modules.IChatModule.GetThumbnail">
+            <summary>
+            Gets the last two messages of the chat
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Modules.IChatModule.GetFullChat">
+            <summary>
+            Gets the full chat history
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Modules.IChatModule.SendMessage(System.String)">
+            <summary>
+            Sends a message to chat
+            </summary>
+        </member>
         <member name="T:ClientSDK.Modules.IComponentsModule">
             <summary>
             Enables the game to more specifically control how to update components.
@@ -211,6 +236,16 @@
             <summary>
             Whenever map placement updates are sent to the client we re-position the entity on the client logic.
             This will trigger all exploration events
+            </summary>
+        </member>
+        <member name="T:ClientSDK.SDKEvents.ChatUpdateEvent">
+            <summary>
+            Called when chat updates
+            </summary>
+        </member>
+        <member name="F:ClientSDK.SDKEvents.ChatUpdateEvent.NewPacket">
+            <summary>
+            Can be null when receiving more than one
             </summary>
         </member>
         <member name="T:ClientSDK.SDKEvents.ClientAwareOfEntityEvent">

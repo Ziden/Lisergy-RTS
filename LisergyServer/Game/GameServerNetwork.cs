@@ -11,9 +11,24 @@ namespace Game
 {
     public enum ServerType
     {
+        /// <summary>
+        /// Handles the game world, entities and components
+        /// </summary>
         WORLD,
+
+        /// <summary>
+        /// Handles authentication. Can generate tokens so the player can handshake with other servers
+        /// </summary>
         ACCOUNT,
-        HUB,
+
+        /// <summary>
+        /// Handles player chat. 
+        /// </summary>
+        CHAT,
+
+        /// <summary>
+        /// Proccess battles from a queue of battles to be processed
+        /// </summary>
         BATTLE, 
     }
 
@@ -23,6 +38,9 @@ namespace Game
     }
 
 
+    /// <summary>
+    /// Network interface to send and receive packets.
+    /// </summary>
     public interface IGameNetwork
     {
         /// <summary>
@@ -72,7 +90,7 @@ namespace Game
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReceiveInput(GameId sender, BasePacket input)
         {
-            input.Sender = _game.Players[sender] ?? new PlayerEntity(sender, _game);
+            input.Sender = _game.Players[sender] ?? new PlayerEntity(new PlayerProfile(sender), _game);
             IncomingPackets.Call(input);
             _game.Entities.DeltaCompression.SendDeltaPackets(input.Sender);
         }

@@ -1,13 +1,10 @@
 ﻿using BaseServer.Commands;
-using BaseServer.Core;
 using Game;
 using Game.DataTypes;
 using Game.Events.ServerEvents;
 using Game.Network;
-using Game.Network.ClientPackets;
 using Game.Scheduler;
 using Game.Services;
-using GameServices;
 using LisergyServer.Commands;
 using LisergyServer.Core;
 using System;
@@ -17,16 +14,14 @@ namespace MapServer
     /// <summary>
     /// Unified one server for everything, for now
     /// </summary>
-    public class WorldServer : SocketServer
+    public class WorldServer : BaseHandshackedServer
     {
-        private LisergyGame _game;
-        private GameScheduler _scheduler;
+        public LisergyGame Game { get; private set; }
+        private GameScheduler _gameTaskScheduler;
         private GameServerNetwork _network;
-        private AccountService _accountService;
         private BattleService _battleService;
         private WorldService _worldService;
         private CourseService _courseService;
-        private ConnectionService _connectionService;
         private byte[] _gameSpecs;
 
         public override ServerType GetServerType() => ServerType.WORLD;
@@ -34,99 +29,37 @@ namespace MapServer
         public WorldServer(LisergyGame game) : base()
         {
             Serialization.LoadSerializers();
-            _game = game;
-            _scheduler = game.Scheduler as GameScheduler;
+            Game = game;
+            _gameTaskScheduler = game.Scheduler as GameScheduler;
             _network = game.Network as GameServerNetwork;
-            _accountService = new AccountService(Log);
-            _battleService = new BattleService(_game);
-            _worldService = new WorldService(_game);
-            _courseService = new CourseService(_game);
-            _connectionService = new ConnectionService(Log);
-            _gameSpecs = Serialization.FromPacketRaw(new GameSpecPacket(game));
-            _network.OnOutgoingPacket += HandleOutgoingPacket;
+            _battleService = new BattleService(Game);
+            _worldService = new WorldService(Game);
+            _courseService = new CourseService(Game);
+            _gameSpecs = Serialization.FromBasePacket(new GameSpecPacket(game));
+            _network.OnOutgoingPacket += SendPacketToPlayer;
         }
 
         public override void RegisterConsoleCommands(ConsoleCommandExecutor executor)
         {
-            executor.RegisterCommand(new TileCommand(_game));
-            executor.RegisterCommand(new TaskCommand(_game));
-            executor.RegisterCommand(new BattlesCommand(_game, _battleService));
-            executor.RegisterCommand(new ServerCommand(_game));
+            executor.RegisterCommand(new TileCommand(Game));
+            executor.RegisterCommand(new TaskCommand(Game));
+            executor.RegisterCommand(new BattlesCommand(Game, _battleService));
+            executor.RegisterCommand(new ServerCommand(Game));
         }
 
         public override void Tick()
         {
-            _scheduler.Tick(DateTime.UtcNow);
+            _gameTaskScheduler.Tick(DateTime.UtcNow);
         }
 
-        public override void Connect(int connectionID) { }
-
-        public override void Disconnect(int connectionID)
+        public override void OnReceiveAuthenticatedPacket(in GameId player, BasePacket packet)
         {
-            _accountService.Disconnect(connectionID);
-            _connectionService.Disconnect(connectionID);
+            Game.Network.ReceiveInput(player, packet);
         }
 
-        /// <summary>
-        /// Handles whenever this server receives input from an authenticated connection
-        /// </summary>
-        public override void ReceiveAuthenticatedPacket(int connectionId, BasePacket input)
+        public override void OnAuthenticated(ConnectedPlayer player)
         {
-            var connectedPlayer = _connectionService.GetConnectedPlayer(connectionId);
-            Log.Debug($"Processing packet {input.GetType().Name} from player {connectedPlayer.PlayerId}");
-            _game.Network.ReceiveInput(connectedPlayer.PlayerId, input);
-        }
-
-        /// <summary>
-        /// Handles whenever this server wants to send an outgoing packet for a player
-        /// </summary>
-        private void HandleOutgoingPacket(GameId player, BasePacket packet)
-        {
-            var connectedPlayer = _connectionService.GetConnectedPlayer(player);
-            if(connectedPlayer != null)
-            {
-                Log.Debug($"Sending packet {packet.GetType().Name} to player {connectedPlayer.PlayerId}");
-                connectedPlayer.Send(packet);
-            }
-        }
-
-        protected override bool IsAuthenticated(int connectionID)
-        {
-            var connectedAccount = _accountService.GetAuthenticatedConnection(connectionID);
-            var hasAuth = connectedAccount != null;
-            if (!hasAuth) _game.Log.Error($"Connection {connectionID} is not authenticated");
-            return hasAuth;
-        }
-
-        protected override bool Authenticate(BasePacket ev, int connectionID)
-        {
-            Account? connectedAccount;
-            if (ev is LoginPacket auth)
-            {
-                connectedAccount = _accountService.Authenticate(auth);
-                Send(connectionID, new LoginResultPacket()
-                {
-                    PlayerID = connectedAccount == null ? GameId.ZERO : connectedAccount.PlayerId,
-                    Success = connectedAccount != null
-                });
-                if (connectedAccount != null)
-                {
-                    _connectionService.RegisterConnection(connectedAccount.PlayerId, new ConnectedPlayer(_socketServer)
-                    {
-                        PlayerId = connectedAccount.PlayerId,
-                        ConnectionID = connectionID
-                    });
-                    _socketServer.Send(connectionID, _gameSpecs);
-                    _game.Log.Debug($"Connection {connectionID} registered authenticated as {connectedAccount.PlayerId}");
-                }
-            }
-            else
-            {
-                connectedAccount = _accountService.GetAuthenticatedConnection(connectionID);
-            }
-            var hasAuth = connectedAccount != null;
-            if (!hasAuth) _game.Log.Error($"Connection {connectionID} failed auth to send event {ev}");
-            return hasAuth;
+            player.Send(_gameSpecs);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Game
         /// <summary>
         /// Creates a new entity based on a type
         /// </summary>
-        IEntity CreateEntity(GameId owner, EntityType type);
+        IEntity CreateEntity(in GameId owner, in EntityType type);
 
         /// <summary>
         /// Gets an entity by its given ID. Can return null if entity do not exists.
@@ -50,7 +50,7 @@ namespace Game
             _game = game;
         }
 
-        public IEntity CreateEntity(GameId owner, EntityType type)
+        public IEntity CreateEntity(in GameId owner, in EntityType type)
         {
             IEntity e = null;
             if (type == EntityType.Dungeon) e = new DungeonEntity(_game);

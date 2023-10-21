@@ -164,7 +164,7 @@ namespace UnitTests
 
             var update = party.GetUpdatePacket(_player);
 
-            var serialize = Serialization.FromPacketRaw(update);
+            var serialize = Serialization.FromBasePacket(update);
             var deserialize = Serialization.ToPacket<EntityUpdatePacket>(serialize);
 
             var unitsComponent = (BattleGroupComponent)deserialize.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(BattleGroupComponent));
@@ -189,7 +189,7 @@ namespace UnitTests
 
             var update = party.GetUpdatePacket(_player);
 
-            var serialize = Serialization.FromPacketRaw(update);
+            var serialize = Serialization.FromBasePacket(update);
             var deserialize = Serialization.ToPacket<EntityUpdatePacket>(serialize);
 
             Assert.IsTrue(deserialize.SyncedComponents.Any(c => c is PartyComponent));

@@ -1,17 +1,15 @@
 ﻿using Game;
 using Game.DataTypes;
 using Game.Network;
-using Game.Network.ServerPackets;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GameServices
 {
     public interface IConnectedPlayer
     {
-        public GameId PlayerId { get; set; }
+        public ref GameId PlayerId { get; }
         void Send<PacketType>(PacketType ev) where PacketType : BasePacket, new();
+        void Send(in byte[] data);
         int ConnectionID { get; }
     }
 
@@ -26,14 +24,24 @@ namespace GameServices
             _log = log;
         }
 
-        public void RegisterConnection(GameId id, IConnectedPlayer user)
+        public void Broadcast(BasePacket packet)
         {
-            _connectedById[id] = user;
-            _connectedByConnectionId[user.ConnectionID] = user;
-            _log.Debug($"Player {id} Registered connection id {user.ConnectionID}");
+            var bytes = Serialization.FromBasePacket(packet);
+            foreach(var u in _connectedById.Values)
+            {
+                _log.Debug($"Broadcasting {packet.GetType()} to player {u.PlayerId}");
+                u.Send(bytes);
+            }
         }
 
-        public void Disconnect(int connectionId)
+        public void RegisterAuthenticatedConnection(IConnectedPlayer user)
+        {
+            _connectedById[user.PlayerId] = user;
+            _connectedByConnectionId[user.ConnectionID] = user;
+            _log.Debug($"Player {user.PlayerId} Registered connection id {user.ConnectionID}");
+        }
+
+        public void Disconnect(in int connectionId)
         {
             if(_connectedByConnectionId.TryGetValue(connectionId, out var user))
             {
@@ -44,17 +52,16 @@ namespace GameServices
             _log.Error($"Error disconnecting connection {connectionId} - unknown user");
         }
 
-        public IConnectedPlayer GetConnectedPlayer(int connection) => _connectedByConnectionId[connection];
-        public IConnectedPlayer GetConnectedPlayer(GameId id)
+        public bool IsConnectionAuthenticated(in int connection)
+        {
+            return _connectedByConnectionId.ContainsKey(connection);
+        }
+
+        public IConnectedPlayer GetAuthenticatedConnection(in int connection) => _connectedByConnectionId[connection];
+        public IConnectedPlayer GetConnectedPlayer(in GameId id)
         {
             _connectedById.TryGetValue(id, out var connected);
             return connected;
-        }
-
-        public void Send(GameId user, BasePacket packet)
-        {
-            _connectedById.TryGetValue(user, out var connectedUser);
-            connectedUser.Send(packet);
         }
     }
 }

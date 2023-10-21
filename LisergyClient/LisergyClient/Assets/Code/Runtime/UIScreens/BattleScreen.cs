@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace Assets.Code
 {
-    public class BattleScreenSetup : UIScreenSetup
+    public class BattleScreenParam : UIScreenParam
     {
         public GameId BattleId;
         public BattleTeam Attacker;
@@ -60,7 +60,7 @@ namespace Assets.Code
 
         private async Task OnSceneLoaded()
         {
-            var setup = GetSetup<BattleScreenSetup>();
+            var setup = GetParameter<BattleScreenParam>();
             OnFinishedPlayback += setup.OnFinish;
             _assets = UnityServicesContainer.Resolve<IAssetService>();
             for (var i = 0; i < 4; i++)
@@ -102,7 +102,7 @@ namespace Assets.Code
             var battleScene = SceneManager.GetAllScenes().FirstOrDefault(s => s.name == "Battle");
             var scenario = battleScene.GetRootGameObjects().FirstOrDefault(o => o.name == "BattleScenario");
             _battleCamera = scenario.transform.Find("BattleCamera").gameObject.GetComponent<Camera>();
-            var setup = GetSetup<BattleScreenSetup>();
+            var setup = GetParameter<BattleScreenParam>();
             BattleID = setup.BattleId;
             _battlePlayback = new BattlePlayback(setup.BattleId, setup.Attacker, setup.Defender);
             await _battlePlayback.SetupScene(scenario.transform, () => _ = OnSceneLoaded());

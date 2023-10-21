@@ -86,7 +86,7 @@ namespace Assets.Code.Assets.Code
                 _stateMachine.Fire(Trigger.LocalBattleStart);
                 var transition = _screens.Open<TransitionScreen>();
                 _ = transition.RunWhenScreenFilled(() => {             
-                    _screens.Open<BattleScreen, BattleScreenSetup>(new BattleScreenSetup()
+                    _screens.Open<BattleScreen>(new BattleScreenParam()
                     {
                         Attacker = attacker,
                         Defender = defender,

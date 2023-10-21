@@ -1,7 +1,6 @@
 ﻿using BaseServer.Commands;
 using Game;
 using Game.Network;
-using NServiceBus.Logging;
 using System;
 using Telepathy;
 
@@ -35,7 +34,7 @@ namespace BaseServer.Core
             _ = _socketServer.Start(_port);
             try
             {
-                Ticker = new Ticker(5);
+                Ticker = new Ticker(60);
                 Log.Info($"Server Started at port {GetServerType().GetPort()}");
                 Ticker.Run(RunTick);
             }
@@ -48,7 +47,7 @@ namespace BaseServer.Core
             }
         }
 
-        public void Send<PacketType>(int connection, PacketType ev) where PacketType : BasePacket
+        public void Send<PacketType>(in int connection, PacketType ev) where PacketType : BasePacket
         {
             Log.Debug($"Sending {ev} to {connection}");
             _socketServer.Send(connection, Serialization.FromPacket(ev));
@@ -67,13 +66,13 @@ namespace BaseServer.Core
             _socketServer.Stop();
         }
         public abstract void RegisterConsoleCommands(ConsoleCommandExecutor executor);
-        protected abstract bool IsAuthenticated(int connectionID);
-        protected abstract bool Authenticate(BasePacket packet, int connectionID);
+        protected abstract bool IsAuthenticated(in int connectionID);
+        protected abstract bool Authenticate(BasePacket packet, in int connectionID);
         public abstract void Tick();
-        public abstract void Disconnect(int connectionID);
-        public abstract void Connect(int connectionID);
+        public abstract void Disconnect(in int connectionID);
+        public abstract void Connect(in int connectionID);
         public abstract ServerType GetServerType();
-        public abstract void ReceiveAuthenticatedPacket(int connectionId, BasePacket input);
+        public abstract void ReceivePacketFromPlayer(in int connectionId, BasePacket input);
         private void ReadSocketMessages()
         {
             while (_socketServer.GetNextMessage(out _pooledMessage))
@@ -89,16 +88,16 @@ namespace BaseServer.Core
                         if (!IsAuthenticated(_pooledMessage.connectionId))
                         {
                             // TODO: Make not need to deserialize the whole message, check if header is AuthPacket
-                            _packet = Serialization.ToPacketRaw<BasePacket>(_pooledMessage.data);
+                            _packet = Serialization.ToCastedPacket<BasePacket>(_pooledMessage.data);
                             _packet.ConnectionID = _pooledMessage.connectionId;
                             if (!Authenticate(_packet, _pooledMessage.connectionId)) return;
                         }
                         if (_packet == null)
                         {
-                            _packet = Serialization.ToPacketRaw<BasePacket>(_pooledMessage.data);
+                            _packet = Serialization.ToCastedPacket<BasePacket>(_pooledMessage.data);
                             _packet.ConnectionID = _pooledMessage.connectionId;
                         }
-                        ReceiveAuthenticatedPacket(_pooledMessage.connectionId, _packet);
+                        ReceivePacketFromPlayer(_pooledMessage.connectionId, _packet);
                         _packet = null;
                         break;
                     case EventType.Disconnected:

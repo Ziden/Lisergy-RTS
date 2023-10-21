@@ -50,7 +50,7 @@ namespace ClientSDK
         {
             Serialization.LoadSerializers();
             Log = new GameLog("[Client SDK]");
-            Network = new ClientNetwork(Log, ServerType.WORLD);
+            Network = new ClientNetwork(Log, ServerType.WORLD, ServerType.ACCOUNT, ServerType.CHAT);
             var s = new ServerModules(this);
             Modules = s;
             s.Register();

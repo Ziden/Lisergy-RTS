@@ -1,7 +1,9 @@
 ﻿using Game;
 using Game.DataTypes;
 using Game.Events.Bus;
+using Game.Events.ServerEvents;
 using Game.Network;
+using Game.Network.ClientPackets;
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,7 @@ namespace ClientSDK
         internal Dictionary<ServerType, Client> _connections = new Dictionary<ServerType, Client>();
         internal Dictionary<ServerType, Queue<byte[]>> _toSend = new Dictionary<ServerType, Queue<byte[]>>();
         internal EventBus<BasePacket> _receivedFromServer = new EventBus<BasePacket>();
+        private LoginResultPacket _credentials = null!;
 
         public ClientNetwork(IGameLog log, params ServerType[] connections)
         {
@@ -33,6 +36,23 @@ namespace ClientSDK
             }
         }
 
+        /// <summary>
+        /// Whenever we receive credentials we use it to handshake with the servers
+        /// </summary>
+        public void SetCredentials(LoginResultPacket loginResult)
+        {
+            if (!loginResult.Success) return;
+            _credentials = loginResult;
+            _log.Info("Logged In - Sending Handshake to servers");
+            var handshake = new HandshakePacket()
+            {
+                PlayerId = loginResult.Profile.PlayerId,
+                Token = loginResult.Token
+            };
+            SendToServer(handshake, ServerType.WORLD);
+            SendToServer(handshake, ServerType.CHAT);
+        }
+
         public void On<T>(Action<T> listener) where T : BasePacket
         {
             _receivedFromServer.Register(this, listener);
@@ -40,13 +60,14 @@ namespace ClientSDK
 
         public void ReceiveInput(GameId sender, BasePacket input) 
         {
+            _log.Debug($"Received Packet {input.GetType().Name}");
             _receivedFromServer.Call(input);
-            OnReceiveGenericPacket?.Invoke(input);
         }
 
         public void ReceiveServerMessage(ServerType server, BasePacket input)
         {
             ReceiveInput(GameId.ZERO, input);
+            OnReceiveGenericPacket?.Invoke(input);
         }
 
         public void SendToPlayer<PacketType>(PacketType p, params PlayerEntity[] players) where PacketType : BasePacket
@@ -57,7 +78,8 @@ namespace ClientSDK
         public void SendToServer(BasePacket p, ServerType server = ServerType.WORLD)
         {
             _enabled = true;
-            _toSend[server].Enqueue(Serialization.FromPacketRaw(p));
+            _log.Debug($"Sending {p.GetType().Name} to {server}");
+            _toSend[server].Enqueue(Serialization.FromBasePacket(p));
         }
 
         public void Disconnect()
@@ -91,13 +113,13 @@ namespace ClientSDK
                     switch (_msg.eventType)
                     {
                         case EventType.Connected:
-                            _log.Debug("Connected to Server");
+                            _log.Debug($"Connected to Server {server}");
                             break;
                         case EventType.Data:
-                            ReceiveServerMessage(server, Serialization.ToPacketRaw<BasePacket>(_msg.data));
+                            ReceiveServerMessage(server, Serialization.ToBasePacket(_msg.data));
                             break;
                         case EventType.Disconnected:
-                            _log.Debug("Disconnected from Server");
+                            _log.Debug($"Disconnected from Server {server}");
                             break;
                     }
                 }
