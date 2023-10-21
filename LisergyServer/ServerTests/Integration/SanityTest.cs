@@ -48,8 +48,26 @@ namespace ServerTests.Integration
         {
             _client.Modules.Account.SendAuthenticationPacket("abc", "def");
             _client.Network.Disconnect();
-            var result = await _client.WaitFor<AuthResultPacket>();
+            var result = await _client.WaitFor<LoginResultPacket>();
             Assert.IsNull(result);
+
+
+        }
+
+        [Test]
+        public async Task TestReconnection()
+        {
+            _client.Modules.Account.SendAuthenticationPacket("abc", "def");
+            var result = await _client.WaitFor<LoginResultPacket>();
+            Assert.NotNull(result);
+
+            _client.Network.Disconnect();
+            _client.ReceivedPackets.Clear();
+            _client.Network.Tick();
+
+            _client.Modules.Account.SendAuthenticationPacket("abc", "def");
+            result = await _client.WaitFor<LoginResultPacket>();
+            Assert.AreEqual(true, result.Success);
         }
 
         [Test]
@@ -65,7 +83,7 @@ namespace ServerTests.Integration
 
             // LOGIN
             _client.Modules.Account.SendAuthenticationPacket("abc", "def");
-            var result = await _client.WaitFor<AuthResultPacket>();
+            var result = await _client.WaitFor<LoginResultPacket>();
             Assert.AreEqual(true, result.Success);
 
             // RECEIVE TILES
@@ -125,13 +143,13 @@ namespace ServerTests.Integration
 
             // DISCONNECT & RECONNECT
             Log.Debug("----- RECONNECTING -----");
-            _client.Network._socket.Disconnect();
+            _client.Network.Disconnect();
             _client.ReceivedPackets.Clear();
             _client.Network.Tick();
 
             // RE-LOGIN
             _client.Modules.Account.SendAuthenticationPacket("abc", "def");
-            result = await _client.WaitFor<AuthResultPacket>();
+            result = await _client.WaitFor<LoginResultPacket>();
             Assert.AreEqual(true, result.Success);
 
             // CHECK COMPONENTS SYNCED

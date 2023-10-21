@@ -14,26 +14,49 @@ using System;
 
 namespace MapServer
 {
-    public class ConnectionHubServer : SocketServer
+    /// <summary>
+    /// Unified one server for everything, for now
+    /// </summary>
+    public class WorldServer : SocketServer
     {
-        private ConnectionHubNetwork _network;
+        private LisergyGame _game;
+        private GameScheduler _scheduler;
+        private GameServerNetwork _network;
         private AccountService _accountService;
+        private BattleService _battleService;
+        private WorldService _worldService;
+        private CourseService _courseService;
         private ConnectionService _connectionService;
+        private byte[] _gameSpecs;
 
-        public override ServerType GetServerType() => ServerType.HUB;
+        public override ServerType GetServerType() => ServerType.WORLD;
 
-        public ConnectionHubServer(int port) : base(port)
+        public WorldServer(LisergyGame game, int port) : base(port)
         {
             Serialization.LoadSerializers();
-            _network = new ConnectionHubNetwork();
+            _game = game;
+            _scheduler = game.Scheduler as GameScheduler;
+            _network = game.Network as GameServerNetwork;
             _accountService = new AccountService();
+            _battleService = new BattleService(_game);
+            _worldService = new WorldService(_game);
+            _courseService = new CourseService(_game);
             _connectionService = new ConnectionService();
+            _gameSpecs = Serialization.FromPacketRaw(new GameSpecPacket(game));
             _network.OnOutgoingPacket += HandleOutgoingPacket;
+        }
+
+        public override void RegisterConsoleCommands(ConsoleCommandExecutor executor)
+        {
+            executor.RegisterCommand(new TileCommand(_game));
+            executor.RegisterCommand(new TaskCommand(_game));
+            executor.RegisterCommand(new BattlesCommand(_game, _battleService));
+            executor.RegisterCommand(new ServerCommand(_game));
         }
 
         public override void Tick()
         {
-           
+            _scheduler.Tick(DateTime.UtcNow);
         }
 
         public override void Connect(int connectionID) { }
@@ -44,17 +67,22 @@ namespace MapServer
             _connectionService.Disconnect(connectionID);
         }
 
+        /// <summary>
+        /// Handles whenever this server receives input from an authenticated connection
+        /// </summary>
         public override void ReceiveAuthenticatedPacket(int connectionId, BasePacket input)
         {
             var connectedPlayer = _connectionService.GetConnectedPlayer(connectionId);
-           // _network.SendToServer(ServerType.WORLD)
-
+            _game.Network.ReceiveInput(connectedPlayer.PlayerId, input);
         }
 
-        private void HandleOutgoingPacket(ServerType server, RoutedPacket packet)
+        /// <summary>
+        /// Handles whenever this server wants to send an outgoing packet for a player
+        /// </summary>
+        private void HandleOutgoingPacket(GameId player, BasePacket packet)
         {
-            //var connectedPlayer = _connectionService.GetConnectedPlayer(player);
-            //connectedPlayer?.Send(packet);
+            var connectedPlayer = _connectionService.GetConnectedPlayer(player);
+            connectedPlayer?.Send(packet);
         }
 
         protected override bool IsAuthenticated(int connectionID)
@@ -68,10 +96,10 @@ namespace MapServer
         protected override bool Authenticate(BasePacket ev, int connectionID)
         {
             Account? connectedAccount;
-            if (ev is AuthPacket auth)
+            if (ev is LoginPacket auth)
             {
                 connectedAccount = _accountService.Authenticate(auth);
-                Send(connectionID, new AuthResultPacket()
+                Send(connectionID, new LoginResultPacket()
                 {
                     PlayerID = connectedAccount == null ? GameId.ZERO : connectedAccount.PlayerId,
                     Success = connectedAccount != null
@@ -83,6 +111,7 @@ namespace MapServer
                         PlayerId = connectedAccount.PlayerId,
                         ConnectionID = connectionID
                     });
+                    _socketServer.Send(connectionID, _gameSpecs);
                     Log.Debug($"Connection {connectionID} registered authenticated as {connectedAccount.PlayerId}");
                 }
             }
@@ -93,11 +122,6 @@ namespace MapServer
             var hasAuth = connectedAccount != null;
             if (!hasAuth) Log.Error($"Connection {connectionID} failed auth to send event {ev}");
             return hasAuth;
-        }
-
-        public override void RegisterConsoleCommands(ConsoleCommandExecutor executor)
-        {
-            throw new NotImplementedException();
         }
     }
 }

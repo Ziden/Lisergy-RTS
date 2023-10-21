@@ -5,8 +5,9 @@ using System;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class AuthResultPacket : BasePacket, IServerPacket
+    public class LoginResultPacket : BasePacket, IServerPacket
     {
+        public string Token;
         public bool Success;
         public GameId PlayerID;
     }

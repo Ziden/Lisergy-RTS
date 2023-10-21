@@ -30,11 +30,11 @@ namespace ServerTests.Integration
         public async Task SmokeTest2p()
         {
             _p1.Modules.Account.SendAuthenticationPacket("abc", "def");
-            var result = await _p1.WaitFor<AuthResultPacket>();
+            var result = await _p1.WaitFor<LoginResultPacket>();
             Assert.AreEqual(true, result.Success);
 
             _p2.Modules.Account.SendAuthenticationPacket("abc2", "def2");
-            var resultP2 = await _p2.WaitFor<AuthResultPacket>();
+            var resultP2 = await _p2.WaitFor<LoginResultPacket>();
             Assert.AreEqual(true, resultP2.Success);
 
             var p1Received = await _p1.WaitFor<TilePacket>();
@@ -50,12 +50,12 @@ namespace ServerTests.Integration
         public async Task SmokeTestP1Disconnects()
         {
             _p1.Modules.Account.SendAuthenticationPacket("abc", "def");
-            var result = await _p1.WaitFor<AuthResultPacket>();
+            var result = await _p1.WaitFor<LoginResultPacket>();
             Assert.AreEqual(true, result.Success);
             _p1.Network.Disconnect();
 
             _p2.Modules.Account.SendAuthenticationPacket("abc2", "def2");
-            var resultP2 = await _p2.WaitFor<AuthResultPacket>();
+            var resultP2 = await _p2.WaitFor<LoginResultPacket>();
             Assert.AreEqual(true, resultP2.Success);
 
             var p1Received = await _p1.WaitFor<TilePacket>();

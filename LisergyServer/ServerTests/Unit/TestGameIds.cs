@@ -35,13 +35,13 @@ namespace UnitTests
         {
             Serialization.LoadSerializers();
 
-            var p = new AuthResultPacket() { PlayerID = GameId.Generate() };
+            var p = new LoginResultPacket() { PlayerID = GameId.Generate() };
 
             var d = new Dictionary<GameId, int>();
 
             d[p.PlayerID] = 123;
 
-            var p2 = Serialization.ToPacketRaw<AuthResultPacket>(Serialization.FromPacketRaw(p));
+            var p2 = Serialization.ToPacketRaw<LoginResultPacket>(Serialization.FromPacketRaw(p));
 
             Assert.AreEqual(123, d[p2.PlayerID]);
         }

@@ -31,7 +31,7 @@ namespace LisergyServer.Core
             return acc;
         }
 
-        public Account? Authenticate(AuthPacket ev)
+        public Account? Authenticate(LoginPacket ev)
         {
             Log.Debug($"Authenticating account {ev.Login}");
             Account acc;

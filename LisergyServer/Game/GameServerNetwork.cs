@@ -11,8 +11,17 @@ namespace Game
 {
     public enum ServerType
     {
-        BATTLE, WORLD, HUB
+        WORLD,
+        ACCOUNT,
+        HUB,
+        BATTLE, 
     }
+
+    public static class ServerNetworkExt
+    {
+        public static int GetPort(this ServerType server) => 1337 + (int)server;
+    }
+
 
     public interface IGameNetwork
     {

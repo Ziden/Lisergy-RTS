@@ -35,7 +35,7 @@ namespace ClientSDK
 
     public class GameClient : IGameClient
     {
-        public IGameNetwork Network { get; private set; } = new ClientNetwork();
+        public IGameNetwork Network { get; private set; }
         public IGame Game { get; private set; } = null!;
         public IServerModules Modules { get; private set; }
         public EventBus<IClientEvent> ClientEvents { get; private set; } = new EventBus<IClientEvent>();
@@ -43,6 +43,7 @@ namespace ClientSDK
         public GameClient()
         {
             Serialization.LoadSerializers();
+            Network = new ClientNetwork(ServerType.WORLD);
             var s = new ServerModules(this);
             Modules = s;
             s.Register();

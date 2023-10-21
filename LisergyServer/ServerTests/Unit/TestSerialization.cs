@@ -29,13 +29,13 @@ namespace UnitTests
         public void TestSimpleSerialization()
         {
             Serialization.LoadSerializers();
-            var authEvent = new AuthPacket()
+            var authEvent = new LoginPacket()
             {
                 Login = "wololo",
                 Password = "walala"
             };
-            var bytes = Serialization.FromPacket<AuthPacket>(authEvent);
-            var event2 = Serialization.ToPacket<AuthPacket>(bytes);
+            var bytes = Serialization.FromPacket<LoginPacket>(authEvent);
+            var event2 = Serialization.ToPacket<LoginPacket>(bytes);
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);
@@ -96,13 +96,13 @@ namespace UnitTests
         public void TestRawSerialization()
         {
             Serialization.LoadSerializers();
-            var authEvent = new AuthPacket()
+            var authEvent = new LoginPacket()
             {
                 Login = "wololo",
                 Password = "walala"
             };
             var bytes = Serialization.FromPacketRaw(authEvent);
-            var event2 = (AuthPacket)Serialization.ToPacketRaw(bytes);
+            var event2 = (LoginPacket)Serialization.ToPacketRaw(bytes);
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);

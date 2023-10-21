@@ -18,19 +18,11 @@ if(RUN_UI)
     while (!StandaloneServerConsoleUI.IsLoaded) await Task.Yield();
 }
 
-/*
-var connectionHubThread = Task.Run(() =>
-{
-    var hub = new ConnectionHubServer(ConnectionHubNetwork.HUB_PORT);
-    hub.RunServer();
-});
-*/
-
 var gameSpecs = TestSpecs.Generate();
 var game = new LisergyGame(gameSpecs);
 game.SetupGame(new TestWorld(), new GameServerNetwork(game));
 
 game.Entities.DeltaCompression.ClearDeltas();
-var server = new StandaloneServer(game, ConnectionHubNetwork.HUB_PORT);
+var server = new WorldServer(game, 1337);
 game.Events.OnEventFired += StandaloneServerConsoleUI.OnReceiveEvent;
 server.RunServer();

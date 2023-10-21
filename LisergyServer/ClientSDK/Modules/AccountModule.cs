@@ -33,20 +33,20 @@ namespace ClientSDK.Services
 
         public void Register()
         {
-            _client.Network.On<AuthResultPacket>(OnAuthResult);
+            _client.Network.On<LoginResultPacket>(OnAuthResult);
             _client.Network.On<GameSpecPacket>(OnReceiveGameSpec);
         }
 
         public void SendAuthenticationPacket(string username, string password)
         {
-            _client.Network.SendToServer(new AuthPacket()
+            _client.Network.SendToServer(new LoginPacket()
             {
                 Login = username,
                 Password = password
             });
         }
 
-        private void OnAuthResult(AuthResultPacket packet)
+        private void OnAuthResult(LoginResultPacket packet)
         {
             if (packet.Success)
             {
