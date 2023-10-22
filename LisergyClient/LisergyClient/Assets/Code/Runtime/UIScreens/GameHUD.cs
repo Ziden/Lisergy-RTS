@@ -45,8 +45,8 @@ namespace Assets.Code
             _buttonCursor = Root.Q<VisualElement>("PartySelector");
             _buttonCursor.style.display = DisplayStyle.None;
             GameClient.ClientEvents.Register<OwnEntityInfoReceived<PartyEntity>>(this, OnOwnPartyReceived);
-            UIEvents.OnCameraMove += OnCameraMove;
-            UIEvents.OnClickTile += OnClickTile;
+            ClientState.OnCameraMove += OnCameraMove;
+            ClientState.OnSelectTile += OnClickTile;
         }
 
         public override void OnLoaded(VisualElement root)
@@ -56,8 +56,8 @@ namespace Assets.Code
 
         public override void OnClose()
         {
-            UIEvents.OnCameraMove -= OnCameraMove;
-            UIEvents.OnClickTile -= OnClickTile;
+            ClientState.OnCameraMove -= OnCameraMove;
+            ClientState.OnSelectTile -= OnClickTile;
             GameClient.ClientEvents.RemoveListener(this);
             _chatSummary.Dispose();
         }
@@ -145,7 +145,7 @@ namespace Assets.Code
             _buttonCursor.style.display = DisplayStyle.Flex;
             _buttonCursor.style.left = _townButton.worldBound.xMin - _buttonCursor.parent.worldBound.xMin - 11;
             var center = GameClient.Modules.Player.LocalPlayer.GetCenter();
-            UIEvents.SelectEntity(center);
+            ClientState.SelectedEntity = center;
         }
 
         private void SelectEntity(PartyEntity party)
@@ -153,7 +153,7 @@ namespace Assets.Code
             var button = _partyButtons[party.PartyIndex];
             _buttonCursor.style.display = DisplayStyle.Flex;
             _buttonCursor.style.left = button.Bounds.xMin - _buttonCursor.parent.worldBound.xMin + 6;
-            if(party != null) UIEvents.SelectEntity(party);
+            if(party != null) ClientState.SelectedEntity = party;
         }
     }
 }

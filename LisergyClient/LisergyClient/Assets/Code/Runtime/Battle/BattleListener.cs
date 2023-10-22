@@ -14,11 +14,12 @@ namespace Assets.Code.Battle
         public BattleListener(EventBus<BasePacket> networkEvents)
         {
             _screens = UnityServicesContainer.Resolve<IScreenService>();
-            networkEvents.Register<BattleLogPacket>(this, BattleLog);
-            networkEvents.Register<BattleResultSummaryPacket>(this, BattleSummary);
-            networkEvents.Register<BattleStartPacket>(this, BattleStart);
+            //networkEvents.Register<BattleLogPacket>(this, BattleLog);
+            //networkEvents.Register<BattleResultSummaryPacket>(this, BattleSummary);
+            //networkEvents.Register<BattleStartPacket>(this, BattleStart);
         }
 
+        /*
         public void BattleLog(BattleLogPacket ev)
         {
             var transition = _screens.Get<TransitionScreen>();
@@ -32,6 +33,7 @@ namespace Assets.Code.Battle
                 }
             });
         }
+        */
 
         public void BattleSummary(BattleResultSummaryPacket ev)
         {

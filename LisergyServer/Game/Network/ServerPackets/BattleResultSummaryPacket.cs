@@ -11,9 +11,9 @@ namespace Game.Events
     [Serializable]
     public class BattleResultSummaryPacket : BasePacket, IServerPacket
     {
-        public BattleHeaderData BattleHeader;
+        public BattleState BattleHeader;
 
-        public BattleResultSummaryPacket(BattleHeaderData header)
+        public BattleResultSummaryPacket(BattleState header)
         {
             BattleHeader = header;
         }

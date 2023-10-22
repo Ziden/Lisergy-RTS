@@ -10,7 +10,7 @@ namespace Game.Battle.Data
     /// Contains the final state of the attacker and defender teams
     /// </summary>
     [Serializable]
-    public class BattleHeaderData
+    public class BattleState
     {
         public bool AttackerWins;
         public GameId BattleID;

@@ -22,7 +22,7 @@ namespace Assets.Code.Assets.Code.Runtime
         {
             _screen = UnityServicesContainer.Resolve<IScreenService>();
 
-            UIEvents.OnBattleFinish += OnBattleFinish;
+            //UIEvents.OnBattleFinish += OnBattleFinish;
         }
 
         private void OnBattleFinish(BattleHeaderData h)

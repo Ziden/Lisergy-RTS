@@ -7,7 +7,7 @@ namespace Game.Events.GameEvents
     public class BattleFinishedEvent : IGameEvent
     {
         public GameId Battle;
-        public BattleHeaderData Header;
+        public BattleState Header;
         public BattleTurnLog[] Turns;
     }
 }

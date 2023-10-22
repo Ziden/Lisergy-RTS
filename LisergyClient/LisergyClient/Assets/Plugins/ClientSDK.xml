@@ -139,6 +139,11 @@
             Will return true or false if the entity is able to move there or not.
             </summary>
         </member>
+        <member name="T:ClientSDK.Services.IBattleModule">
+            <summary>
+            Has battle specific networking implementation
+            </summary>
+        </member>
         <member name="T:ClientSDK.Services.IEntityModule">
             <summary>
             Service that controls entities that the game client is aware of.
@@ -267,6 +272,11 @@
             <summary>
             Triggered when the client created the game instance and its ready to start receiving data from server
             This is triggered right after game specs are received and the game instance is setup
+            </summary>
+        </member>
+        <member name="T:ClientSDK.SDKEvents.OwnBattleFinishedEvent">
+            <summary>
+            Called whenever a battle owned by the player is finished
             </summary>
         </member>
         <member name="T:ClientSDK.SDKEvents.OwnEntityInfoReceived`1">

@@ -6,6 +6,7 @@ using Assets.Code;
 using ClientSDK;
 using ClientSDK.SDKEvents;
 using Game.Events.Bus;
+using Assets.Code.Assets.Code.Runtime;
 
 /// <summary>
 /// Listens for click events to draw the tile selection indicator
@@ -19,8 +20,8 @@ public class IndicatorSelectedTileListener : IEventListener
     public IndicatorSelectedTileListener(IGameClient client)
     {
         _client = client;
-        UIEvents.OnClickTile += ClickTile;
-        UIEvents.OnCameraMove += OnCameraMove;
+        ClientState.OnSelectTile += ClickTile;
+        ClientState.OnCameraMove += OnCameraMove;
         _client.ClientEvents.Register<EntityMovementRequestStarted>(this, OnStartMovement);
         _client.UnityServices().Assets.CreateMapObject(MapObjectPrefab.TileCursor, Vector3.zero, Quaternion.identity, o =>
         {

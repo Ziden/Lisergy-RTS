@@ -18,7 +18,7 @@ public class IndicatorSelectedEntityListener : IEventListener
     public IndicatorSelectedEntityListener(IGameClient client)
     {
         _client = client;
-        UIEvents.OnSelectEntity += OnEntitySelected;
+        ClientState.OnSelectEntity += OnEntitySelected;
         _client.UnityServices().Assets.CreateMapObject(MapObjectPrefab.UnitCursor, Vector3.zero, Quaternion.identity, o =>
         {
             o.SetActive(false);

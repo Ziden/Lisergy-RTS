@@ -35,7 +35,7 @@
             Updates the team data with the result of the battle
             </summary>
         </member>
-        <member name="T:Game.Battle.Data.BattleHeaderData">
+        <member name="T:Game.Battle.Data.BattleState">
             <summary>
             Represents a minimal header of the battle.
             Contains the final state of the attacker and defender teams
@@ -755,7 +755,7 @@
             Adds a new player to the given tile with the initial things a new player should have
             </summary>
         </member>
-        <member name="M:Game.Systems.Player.PlayerLogic.RecordBattleHeader(Game.Battle.Data.BattleHeaderData)">
+        <member name="M:Game.Systems.Player.PlayerLogic.RecordBattleHeader(Game.Battle.Data.BattleState)">
             <summary>
             Record a battle header of a battle that happened for this player
             </summary>

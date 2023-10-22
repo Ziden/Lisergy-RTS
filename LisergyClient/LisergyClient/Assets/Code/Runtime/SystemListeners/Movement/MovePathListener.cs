@@ -26,7 +26,7 @@ namespace Assets.Code.UI
         {
             _gameClient = _client;
             _client.ClientEvents.Register<EntityMovementRequestStarted>(this, OnMoveRequestStarted);
-            UIEvents.OnCourseCancelled += OnCourseChanged;
+            //UIEvents.OnCourseCancelled += OnCourseChanged;
         }
 
         private void OnCourseChanged(PartyEntity p)

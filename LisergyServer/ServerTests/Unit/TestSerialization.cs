@@ -122,6 +122,8 @@ namespace UnitTests
 
             var deserializedHeader = log.DeserializeStartingState();
 
+            var header = log.BattleStartHeaderData;
+
             Assert.AreEqual(deserializedHeader.Attacker.Units[0].Id, myTeam.Units.First().Id);
             Assert.AreEqual(deserializedHeader.Defender.Units[0].Id, enemyTeam.Units.First().Id);
         }

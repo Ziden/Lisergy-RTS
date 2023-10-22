@@ -64,7 +64,7 @@ namespace Game.Systems.Player
         /// <summary>
         /// Record a battle header of a battle that happened for this player
         /// </summary>
-        public void RecordBattleHeader(BattleHeaderData header)
+        public void RecordBattleHeader(BattleState header)
         {
             Data.BattleHeaders[header.BattleID] = header;
         }

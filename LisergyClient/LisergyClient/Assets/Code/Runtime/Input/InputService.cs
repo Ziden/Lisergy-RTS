@@ -1,3 +1,4 @@
+using Assets.Code.Assets.Code.Runtime;
 using ClientSDK.Data;
 using Game.Tile;
 using System;
@@ -45,7 +46,7 @@ namespace Assets.Code
                 var tileComponent = hit.collider.GetComponentInParent<TileMonoComponent>();
                 if (tileComponent == null) return;
                 var tile = tileComponent.Tile;
-                UIEvents.ClickTile(tile);
+                ClientState.SelectedTile = tile;
             }
         }
 

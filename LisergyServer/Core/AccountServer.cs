@@ -1,7 +1,6 @@
 ﻿using BaseServer.Commands;
 using BaseServer.Core;
 using Game;
-using Game.DataTypes;
 using Game.Events.ServerEvents;
 using Game.Network;
 using Game.Network.ClientPackets;

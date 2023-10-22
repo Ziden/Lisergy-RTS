@@ -7,6 +7,7 @@ using System.Collections;
 using Assets.Code.Code;
 using UnityEngine;
 using Game.ECS;
+using Assets.Code.Assets.Code.Runtime;
 
 public class CameraBehaviour : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class CameraBehaviour : MonoBehaviour
 
     private void Start()
     {
-        UIEvents.OnSelectEntity += OnSelectEntity;
+        ClientState.OnSelectEntity += OnSelectEntity;
     }
 
     private void OnSelectEntity(IEntity e)
@@ -58,7 +59,7 @@ public class CameraBehaviour : MonoBehaviour
         if (old != pos)
         {
             transform.position = pos;
-            UIEvents.CameraMoved(pos);
+            ClientState.CameraPosition = pos;
         }
     }
 }

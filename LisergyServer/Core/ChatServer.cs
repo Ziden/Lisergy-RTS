@@ -26,11 +26,11 @@ namespace MapServer
         {
             if (packet is ChatPacket chatPacket)
             {
+                chatPacket.Owner = player;
                 chatPacket.Time = DateTime.UtcNow;
                 Log.Debug($"ChatPacket From {player}: {chatPacket.Name} "+chatPacket.Message);
                 _chatLog.Add(chatPacket);
                 if(_chatLog.Count > 30) _chatLog.RemoveAt(0);
-                chatPacket.Owner = player;
                 _validConnections.Broadcast(chatPacket);
             }
         }
