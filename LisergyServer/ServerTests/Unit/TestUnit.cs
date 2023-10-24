@@ -21,11 +21,10 @@ namespace UnitTests
         public void TestInitialUnit()
         {
             var player = Game.GetTestPlayer();
-            var unit = player.Data.Units.First();
-            var party = player.Data.Parties.First();
+            var party = player.Parties.First();
 
-            Assert.AreEqual(1, player.Data.Units.Count);
-            Assert.AreEqual(Game.Specs.InitialUnitSpecId, unit.SpecId);
+            Assert.AreEqual(1, player.Data.StoredUnits.Count);
+            Assert.AreEqual(Game.Specs.InitialUnitSpecId, party.Get<BattleGroupComponent>().Units.Leader.SpecId);
             Assert.That(party.Tile.EntitiesIn.Contains(party));
         }
 
@@ -57,8 +56,8 @@ namespace UnitTests
         public void TestUnitTileReference()
         {
             var player = Game.GetTestPlayer();
-            var unit = player.Data.Units.First();
-            var party = player.Data.Parties.First();
+
+            var party = player.Parties.First();
 
             var tile = Game.World.Map.GetTile(party.Tile.X, party.Tile.Y);
 
@@ -81,9 +80,8 @@ namespace UnitTests
         public void TestUnitVisibleEvent()
         {
             var player = Game.GetTestPlayer();
-            var unit = player.Data.Units.First();
-            var building = player.Data.Buildings.First();
-            var party = player.Data.Parties.First();
+            var building = player.Buildings.First();
+            var party = player.Parties.First();
 
             var tile = party.Tile;
 

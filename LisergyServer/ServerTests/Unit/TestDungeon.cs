@@ -42,7 +42,7 @@ namespace UnitTests
         [Test]
         public void TestPassiveMoveTowardsDungeon()
         {
-            var playerCastleTile = _player.Data.Buildings.First().Tile;
+            var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
 
@@ -95,7 +95,7 @@ namespace UnitTests
         [Test]
         public void TestDungeonComponentsRegisterBuilding()
         {
-            var playerCastleTile = _player.Data.Buildings.First().Tile;
+            var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
 
             _dungeon.EntityLogic.Map.SetPosition(dungeonTile);
@@ -125,7 +125,7 @@ namespace UnitTests
         [Test]
         public void TestDungeonRemovedWhenComplete()
         {
-            var playerCastleTile = _player.Data.Buildings.First().Tile;
+            var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
 
@@ -153,7 +153,7 @@ namespace UnitTests
         [Test]
         public void TestPartyTeleportsBackAfterLoosingToDungeon()
         {
-            var playerCastleTile = _player.Data.Buildings.First().Tile;
+            var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
 
@@ -233,7 +233,7 @@ namespace UnitTests
         [Test]
         public void TestPartyDefeatHealsDungeon()
         {
-            var playerCastleTile = _player.Data.Buildings.First().Tile;
+            var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.EAST);
             var party = _player.GetParty(0);
 

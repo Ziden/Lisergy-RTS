@@ -17,7 +17,7 @@ namespace Game.Events
     {
         private static Dictionary<Type, Queue<BasePacket>> _free = new Dictionary<Type, Queue<BasePacket>>();
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public static T Get<T>() where T : BasePacket, new()
         {
             if (!_free.TryGetValue(typeof(T), out var queue))
@@ -29,7 +29,7 @@ namespace Game.Events
             return FastNew<T>.Instance();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public static void Return(BasePacket item)
         {
             if (_free.TryGetValue(item.GetType(), out var queue))

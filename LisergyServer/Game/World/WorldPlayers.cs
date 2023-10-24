@@ -2,6 +2,7 @@
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Game.World
 {
@@ -12,7 +13,8 @@ namespace Game.World
         PlayerEntity GetPlayer(GameId id);
         public int MaxPlayers { get; }
         public int PlayerCount { get; }
-        public PlayerEntity this[GameId id] => GetPlayer(id); 
+        public PlayerEntity this[GameId id] => GetPlayer(id);
+        public IReadOnlyCollection<PlayerEntity> AllPlayers();
     }
 
     /// <summary>
@@ -62,6 +64,11 @@ namespace Game.World
         {
             _players.TryGetValue(id, out var player);
             return player;
+        }
+
+        public IReadOnlyCollection<PlayerEntity> AllPlayers()
+        {
+            return _players.Values;
         }
     }
 }

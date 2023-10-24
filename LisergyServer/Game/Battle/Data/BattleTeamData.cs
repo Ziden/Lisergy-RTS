@@ -13,7 +13,7 @@ namespace Game.Battle.Data
     /// Will be present as an updated output from battles as well.
     /// </summary>
     [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct BattleTeamData
     {
         public GameId EntityId;

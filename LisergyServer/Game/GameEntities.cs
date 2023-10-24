@@ -40,8 +40,8 @@ namespace Game
     public class GameEntities : IGameEntities, IDisposable
     {
         private IGame _game;
-        private readonly Dictionary<GameId, IEntity> _entities = new Dictionary<GameId, IEntity>();
-        private DeltaCompression _deltaTracker = new DeltaCompression();
+        internal readonly Dictionary<GameId, IEntity> _entities = new Dictionary<GameId, IEntity>();
+        internal DeltaCompression _deltaTracker = new DeltaCompression();
 
         public IDeltaCompression DeltaCompression  => _deltaTracker;
 
@@ -58,6 +58,11 @@ namespace Game
             else if (type == EntityType.Building) e = new PlayerBuildingEntity(_game, owner);
             else throw new Exception($"Entity type {type} is not createable");
             _entities[e.EntityId] = e;
+            if(!owner.IsZero())
+            {
+                var player = _game.World.Players[owner];
+                player.AddOwnedEntity(e);
+            }
             e.DeltaFlags.SetFlag(DeltaFlag.CREATED);
             return e;
         }
@@ -74,5 +79,7 @@ namespace Game
                 return entity;
             }
         }
+
+        public IReadOnlyCollection<IEntity> AllEntities => _entities.Values;
     }
 }

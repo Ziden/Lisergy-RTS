@@ -11,7 +11,6 @@ namespace Game.DataTypes
     [Serializable]
     public unsafe struct FixedString : IEquatable<FixedString>
     {
-
         private static readonly Encoding ENCODING = Encoding.UTF8;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]

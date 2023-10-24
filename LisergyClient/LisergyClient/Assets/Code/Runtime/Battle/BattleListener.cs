@@ -1,5 +1,4 @@
-﻿using Assets.Code.Assets.Code.Runtime.UIScreens;
-using Assets.Code.Assets.Code.UIScreens.Base;
+﻿using Assets.Code.Assets.Code.UIScreens.Base;
 using Game.Events;
 using Game.Events.Bus;
 using Game.Network;
@@ -9,11 +8,11 @@ namespace Assets.Code.Battle
 {
     public class BattleListener : IEventListener
     {
-        IScreenService _screens;
+        IUiService _screens;
 
         public BattleListener(EventBus<BasePacket> networkEvents)
         {
-            _screens = UnityServicesContainer.Resolve<IScreenService>();
+            _screens = UnityServicesContainer.Resolve<IUiService>();
             //networkEvents.Register<BattleLogPacket>(this, BattleLog);
             //networkEvents.Register<BattleResultSummaryPacket>(this, BattleSummary);
             //networkEvents.Register<BattleStartPacket>(this, BattleStart);
@@ -35,7 +34,7 @@ namespace Assets.Code.Battle
         }
         */
 
-        public void BattleSummary(BattleResultSummaryPacket ev)
+        public void BattleSummary(BattleHeaderPacket ev)
         {
             /*
             Log.Info($"Battle Summary Received {ev.BattleHeader.BattleID}");

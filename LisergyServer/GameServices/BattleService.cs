@@ -97,11 +97,11 @@ namespace Game.Services
             }
 
             AllBattles[fullResultPacket.Header.BattleID].SetTurns(fullResultPacket);
-            var summary = new BattleResultSummaryPacket(fullResultPacket.Header);
+            var header = new BattleHeaderPacket(fullResultPacket.Header);
             var battle = task.Battle;
             foreach (var pl in GetAllPlayers(battle))
             {
-                _game.Network.SendToPlayer(summary, GetAllPlayers(battle).ToArray());
+                _game.Network.SendToPlayer(header, GetAllPlayers(battle).ToArray());
                 _game.Log.Debug($"Player {pl} completed battle {battle.ID}");
             }
             _game.Network.SendToServer(fullResultPacket, ServerType.WORLD);

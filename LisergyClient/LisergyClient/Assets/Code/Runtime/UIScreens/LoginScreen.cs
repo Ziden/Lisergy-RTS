@@ -10,13 +10,13 @@ using UnityEngine.UIElements;
 
 namespace Assets.Code
 {
-    public class LoginScreen : UITKScreen, IEventListener
+    public class LoginScreen : GameUi, IEventListener
     {
         public TextField Login;
         public TextField Password;
         public Button Submit;
 
-        public override UIScreen ScreenAsset => UIScreen.LoginScreen;
+        public override UIScreen UiAsset => UIScreen.LoginScreen;
 
         public override void OnBeforeOpen()
         {
@@ -30,7 +30,7 @@ namespace Assets.Code
 
         public override void OnLoaded(VisualElement root)
         {
-            var service = UnityServicesContainer.Resolve<IScreenService>();
+            var service = UnityServicesContainer.Resolve<IUiService>();
             Login = root.Q<TextField>("Login");
             Password = root.Q<TextField>("Password");
             Submit = root.Q<Button>("LoginButton");

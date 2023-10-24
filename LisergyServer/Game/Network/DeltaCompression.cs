@@ -45,7 +45,7 @@ namespace Game.Network
             _modifiedEntities.Clear();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void SendDeltaPackets(PlayerEntity trigger)
         {
             foreach (var tracked in _modifiedEntities)
@@ -106,13 +106,13 @@ namespace Game.Network
         /// <summary>
         /// Should only send updates to client and not run any events or logic
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         void ProccessDeltas(PlayerEntity trigger);
 
         /// <summary>
         /// Gets the update packet of a given delta updateable
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public BasePacket GetUpdatePacket(PlayerEntity receiver, bool onlyDeltas = true);
     }
 }

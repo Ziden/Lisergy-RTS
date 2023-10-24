@@ -18,7 +18,7 @@ namespace Game.Events.Bus
         internal List<RegisteredListener> _allListeners = new List<RegisteredListener>();
         internal Dictionary<Type, List<RegisteredListener>> _registeredListeners = new Dictionary<Type, List<RegisteredListener>>();
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public virtual void Call(EventType ev)
         {
             OnEventFired?.Invoke(ev);
@@ -39,7 +39,7 @@ namespace Game.Events.Bus
         
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public virtual void Register<EvType>(IEventListener listener, Action<EvType> callback)
         {
             var eventType = typeof(EvType);
@@ -58,7 +58,7 @@ namespace Game.Events.Bus
             _allListeners.Add(registry);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public virtual void RemoveListener(IEventListener listener)
         {
             foreach(var l in new List<RegisteredListener>(_allListeners))

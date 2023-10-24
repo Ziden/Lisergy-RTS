@@ -15,20 +15,20 @@ namespace Game.Tile
 {
     public unsafe partial class TileEntity : IEntity
     {
-        private TileMapData* _tileData;
+        private TileData* _tileData;
         private Chunk _chunk;
         private GameId _id;
         private DeltaFlags _flags;
+        private Position _position;
         public ComponentSet _components { get; private set; }
         public EntityType EntityType => EntityType.Tile;
 
-        public TileEntity(Chunk c, in TileMapData* tileData, in int x, in int y)
+        public TileEntity(Chunk c, in TileData* tileData, in int x, in int y)
         {
             _chunk = c;
             _tileData = tileData;
-            _tileData->X = (ushort)x;
-            _tileData->Y = (ushort)y;
-            _id = new GameId(_tileData->Position);
+            _position = new Position(x, y);
+            _id = new GameId(_position);
             _components = new ComponentSet(this);
             DeltaFlags = new DeltaFlags(this);
             SetupComponents();
@@ -38,7 +38,7 @@ namespace Game.Tile
         /// Sets flag for the given tile
         /// Also sets the same flag for every entity & building on the tile
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void SetDeltaFlag(DeltaFlag flag)
         {
             DeltaFlags.SetFlag(flag);
@@ -46,7 +46,7 @@ namespace Game.Tile
             Building?.DeltaFlags.SetFlag(flag);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void SetupComponents()
         {
             Components.Add<TileComponent>();
@@ -54,15 +54,16 @@ namespace Game.Tile
             Components.AddReference(new TileHabitants());
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public BasePacket GetUpdatePacket(PlayerEntity receiver, bool onlyDeltas = true)
         {
             var packet = PacketPool.Get<TilePacket>();
             packet.Data = *_tileData;
+            packet.Position = _position;
             return packet;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void ProccessDeltas(PlayerEntity trigger)
         {
             if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
@@ -70,11 +71,11 @@ namespace Game.Tile
         }
 
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
-        public void UpdateData(in TileMapData newData) => *_tileData = newData;
+        public void UpdateData(in TileData newData) => *_tileData = newData;
         public ref Chunk Chunk => ref _chunk;
         public ref byte SpecId { get => ref _tileData->TileId; }
-        public float MovementFactor { get => this.GetSpec().MovementFactor; }
-        public ref readonly Position Position => ref _tileData->Position;
+        public float MovementFactor { get => Game.Specs.Tiles[SpecId].MovementFactor; }
+        public ref readonly Position Position => ref _position;
         public ref readonly ushort Y { get => ref Position.Y; }
         public ref readonly ushort X { get => ref Position.X; }
         public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.GetReference<TileVisibility>().PlayersViewing;

@@ -103,9 +103,9 @@ namespace ServerTests.Integration
             foreach (var tileUpdate in _client.ReceivedPackets.Where(p => p.GetType() == typeof(TilePacket)))
             {
                 var tilePacket = (TilePacket)tileUpdate;
-                var tile = _client.Game.World.Map.GetTile(tilePacket.Data.X, tilePacket.Data.Y);
-                Assert.AreEqual(tile.X, tilePacket.Data.X);
-                Assert.AreEqual(tile.Y, tilePacket.Data.Y);
+                var tile = _client.Game.World.Map.GetTile(tilePacket.Position.X, tilePacket.Position.Y);
+                Assert.AreEqual(tile.X, tilePacket.Position.X);
+                Assert.AreEqual(tile.Y, tilePacket.Position.Y);
                 Assert.AreEqual(tile.SpecId, tilePacket.Data.TileId);
                 Assert.AreEqual(new Position(tile.X >> GameWorld.CHUNK_SIZE_BITSHIFT, tile.Y >> GameWorld.CHUNK_SIZE_BITSHIFT), tile.Chunk.Position);
             }

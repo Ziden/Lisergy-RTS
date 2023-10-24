@@ -7,6 +7,8 @@ using System.Threading;
 using BaseServer.Core;
 using System.Collections.Concurrent;
 using System.Linq;
+using BaseServer.Persistence;
+using System.Threading.Tasks;
 
 namespace ServerTests.Integration.Stubs
 {
@@ -17,6 +19,8 @@ namespace ServerTests.Integration.Stubs
     public class StandaloneServer : IDisposable
     {
         public ConcurrentDictionary<ServerType, RunningServer> _servers = new ConcurrentDictionary<ServerType, RunningServer>();
+
+        public FlatFileWorldPersistence Persistence;
 
         private void SetupServer(SocketServer server)
         {
@@ -32,7 +36,7 @@ namespace ServerTests.Integration.Stubs
         }
 
         public StandaloneServer Start()
-        {
+        { 
             foreach(var server in _servers.Values)
             {
                 server.Thread.Start();
@@ -47,11 +51,17 @@ namespace ServerTests.Integration.Stubs
 
         public T GetInstance<T>(ServerType serverType) where T: SocketServer => (T)_servers[serverType].Server;
 
+        public void SaveWorld(string worldname)
+        {
+            Persistence.Save(GetInstance<WorldServer>(ServerType.WORLD).Game, worldname).Wait();
+        }
+
         public StandaloneServer()
         {
             var game = new LisergyGame(TestSpecs.Generate(), new GameLog("[Server Game]"));
             game.SetupGame(new TestWorld(), new GameServerNetwork(game));
-           
+            Persistence = new FlatFileWorldPersistence(game.Log);
+
             SetupServer(new WorldServer(game));
             SetupServer(new AccountServer());
             SetupServer(new ChatServer());

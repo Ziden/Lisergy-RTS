@@ -2,7 +2,6 @@ using Assets.Code.Views;
 using ClientSDK;
 using ClientSDK.Data;
 using Cysharp.Threading.Tasks;
-using Game;
 using Game.Events.Bus;
 using Game.Events.GameEvents;
 using Game.Systems.Tile;
@@ -20,21 +19,14 @@ public class FogOfWarListener : IEventListener
     public IGameClient _client;
 
     private HashSet<TileView> _queued = new HashSet<TileView>();
-    private DateTime _processingTime = DateTime.MinValue;
+    private DateTime _bufferExpireTime = DateTime.MinValue;
     private readonly TimeSpan _bufferTime = TimeSpan.FromMilliseconds(50);
-    public bool Running => _processingTime != DateTime.MinValue;
+    public bool Running => _bufferExpireTime != DateTime.MinValue;
 
     public FogOfWarListener(GameClient client)
     {
         _client = client;
         _client.Game.Events.Register<TileVisibilityChangedForPlayerEvent>(this, OnVisibilityChanged);
-    }
-
-    private void SetTileDirty(TileView view)
-    {
-        _queued.Add(view);
-        if (!Running) _ = Run();
-        else _processingTime = DateTime.UtcNow + _bufferTime;
     }
 
     private void OnVisibilityChanged(TileVisibilityChangedForPlayerEvent ev)
@@ -44,17 +36,28 @@ public class FogOfWarListener : IEventListener
         SetTileDirty((TileView)view);
     }
 
-    private async UniTask Run()
+    /// <summary>
+    /// Sets the tile as having visibility modified. 
+    /// It will get buffered to be recalculated on the next batch
+    /// </summary>
+    private void SetTileDirty(TileView view)
     {
-        _processingTime = DateTime.UtcNow + _bufferTime;
-        while (DateTime.UtcNow < _processingTime)
+        _queued.Add(view);
+        if (!Running) _ = WaitForNextBatch();
+        else _bufferExpireTime = DateTime.UtcNow + _bufferTime;
+    }
+
+    private async UniTask WaitForNextBatch()
+    {
+        _bufferExpireTime = DateTime.UtcNow + _bufferTime;
+        while (DateTime.UtcNow < _bufferExpireTime)
         {
             await UniTask.Delay(10);
         }
         _client.Log.Debug($"Calculating Fog for {_queued.Count} tiles");
         var proccess = new HashSet<TileView>(_queued);
         _queued.ExceptWith(proccess);
-        _processingTime = DateTime.MinValue;
+        _bufferExpireTime = DateTime.MinValue;
         foreach (var view in proccess)
         {
             CalculateFog(view);
@@ -62,7 +65,7 @@ public class FogOfWarListener : IEventListener
         }
     }
 
-    public void CalculateFog(TileView view)
+    private void CalculateFog(TileView view)
     {
         if (view.Entity.IsVisible()) view.SetFogState(FogState.EXPLORED);
         else view.SetFogState(FogState.UNEXPLORED);
@@ -77,10 +80,7 @@ public class FogOfWarListener : IEventListener
         var near = thisView.Entity.GetNeighbor(d);
         if (near == null) return;
         var view = (TileView)_client.Modules.Views.GetOrCreateView(near);
-        if (view.State == EntityViewState.NOT_RENDERED)
-        {
-            view.SetFogState(FogState.UNEXPLORED);
-        }
+        if (view.State == EntityViewState.NOT_RENDERED) view.SetFogState(FogState.UNEXPLORED);
     }
 
 }

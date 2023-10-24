@@ -46,10 +46,7 @@ public class Main : MonoBehaviour, IEventListener
         _stateMachine = new GameStateMachine(_client);
     }
 
-    void Update()
-    {
-        _network.Tick();
-    }
+    void Update() => _network.Tick();
 
     private void OnApplicationQuit()
     {
@@ -67,6 +64,7 @@ public class Main : MonoBehaviour, IEventListener
         _listeners.Add(new IndicatorSelectedTileListener(_client));
         _listeners.Add(new IndicatorSelectedEntityListener(_client));
         _listeners.Add(new MapAnimationListener(_client));
+        _listeners.Add(new BattleLIstener(_client));
     }
 
     public void SetupViews()
@@ -80,7 +78,7 @@ public class Main : MonoBehaviour, IEventListener
     public void SetupServices()
     {
         UnityServicesContainer.Register<IInputService, InputService>(CreateInputService());
-        UnityServicesContainer.Register<IScreenService, ScreenService>(new ScreenService(_client));
+        UnityServicesContainer.Register<IUiService, UiService>(new UiService(_client));
         UnityServicesContainer.Register<IAudioService, AudioService>(new AudioService(_client));
         UnityServicesContainer.Register<INotificationService, NotificationService>(new NotificationService(_client));
         UnityServicesContainer.Register<IAssetService, AssetService>(new AssetService());

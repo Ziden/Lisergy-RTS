@@ -28,6 +28,7 @@ namespace ClientSDK
         public IComponentsModule Components { get; }
         public IActionModule Actions { get; }
         public IChatModule Chat { get; }
+        public IBattleModule Battles { get; }
     }
 
     public class ServerModules : IServerModules
@@ -41,6 +42,7 @@ namespace ClientSDK
         private ILogicModule Logic { get; }
         public IActionModule Actions { get; }
         public IChatModule Chat { get; }
+        public IBattleModule Battles { get; }
 
         public ServerModules(GameClient client)
         {
@@ -53,6 +55,7 @@ namespace ClientSDK
             Logic = new LogicModule(client);
             Actions = new ActionsModule(client);
             Chat = new ChatModule(client);
+            Battles = new BattleModule(client);
         }
 
         public void Register()
@@ -66,6 +69,7 @@ namespace ClientSDK
             Logic.Register();
             Actions.Register();
             Chat.Register();
+            Battles.Register();
         }
 
         public void OnSceneLoaded() {  }

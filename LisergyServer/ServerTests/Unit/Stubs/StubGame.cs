@@ -15,20 +15,20 @@ namespace ServerTests
 {
     public class TestGame : LisergyGame
     {
-        private GameId _testPlayerId = GameId.Generate();
-        public GameServerNetwork TestNetwork { get; private set; }
-        public BattleService BattleService { get; private set; }
-        public WorldService WorldService { get; private set; }
-        public CourseService CourseService { get; private set; }
-        public List<BasePacket> SentServerPackets { get; private set; } = new List<BasePacket>();
-        public GameWorld TestWorld { get; private set; }
-        public PreAllocatedChunkMap TestMap { get; private set; }
+        protected GameId _testPlayerId = GameId.Generate();
+        public GameServerNetwork TestNetwork { get; protected set; }
+        public BattleService BattleService { get; protected set; }
+        public WorldService WorldService { get; protected set; }
+        public CourseService CourseService { get; protected set; }
+        public List<BasePacket> SentServerPackets { get; protected set; } = new List<BasePacket>();
+        public GameWorld TestWorld { get; protected set; }
+        public PreAllocatedChunkMap TestMap { get; protected set; }
 
-        private GameWorld CreateTestWorld()
+        protected virtual GameWorld CreateTestWorld()
         {
             GameId.DEBUG_MODE = 1;
             WorldUtils.SetRandomSeed(666);
-            TestWorld = new GameWorld(2, 16, 16);
+            TestWorld = new GameWorld(16, 16);
             SetupGame(TestWorld, new GameServerNetwork(this));
             Entities.DeltaCompression.ClearDeltas();
             TestMap = TestWorld.Map as PreAllocatedChunkMap;

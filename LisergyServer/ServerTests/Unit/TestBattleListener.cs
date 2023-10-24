@@ -65,7 +65,7 @@ namespace UnitTests
             _game.BattleService.AllBattles.TryGetValue(battle.ID, out var log);
 
 
-            Assert.That(attackerPlayer.Data.BattleHeaders.ContainsKey(battle.ID));
+            Assert.That(attackerPlayer.Data.BattleHeaders.Any(b => b.BattleID == battle.ID));
             Assert.That(log.Turns.Count() == battle.Record.Turns.Count());
         }
 

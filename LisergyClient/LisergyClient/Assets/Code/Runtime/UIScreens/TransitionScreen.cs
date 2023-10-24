@@ -12,7 +12,7 @@ using UnityEngine.UIElements;
 
 namespace Assets.Code.Assets.Code.Runtime.UIScreens
 {
-    public class TransitionScreen : UITKScreen
+    public class TransitionScreen : GameUi
     {
         private Length RIGHT = Length.Percent(100f);
         private Length CENTER = Length.Percent(33f);
@@ -22,7 +22,7 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens
 
         private VisualElement _root;
 
-        public override UIScreen ScreenAsset => UIScreen.TransitionScreen;
+        public override UIScreen UiAsset => UIScreen.TransitionScreen;
 
         public override void OnLoaded(VisualElement root)
         {
@@ -43,7 +43,7 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens
         private async UniTask Close()
         {
             await Task.Delay(2000);
-            _screenService.Close(this);
+            _uiService.Close(this);
         }
 
         public void CloseTransition(Action callback = null)

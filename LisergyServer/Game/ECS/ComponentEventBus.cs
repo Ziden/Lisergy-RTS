@@ -27,7 +27,7 @@ namespace Game.ECS
         }
 
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void CallEntityEvent<EventType>(IEntity entity, EventType ev) where EventType : IBaseEvent
         {
             var t = typeof(ComponentType);

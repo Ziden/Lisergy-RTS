@@ -22,13 +22,13 @@ namespace Assets.Code.Assets.Code
         private enum Trigger { LoggedIn, LocalBattleStart, LocalBattleFinish };
 
         private StateMachine<State, Trigger> _stateMachine;
-        private IScreenService _screens;
+        private IUiService _screens;
         private IGameClient _client;
 
         public GameStateMachine(IGameClient client)
         {
             _client = client;
-            _screens = UnityServicesContainer.Resolve<IScreenService>();
+            _screens = UnityServicesContainer.Resolve<IUiService>();
 
             _stateMachine = new StateMachine<State, Trigger>(State.Login);
             _stateMachine.Configure(State.Login)

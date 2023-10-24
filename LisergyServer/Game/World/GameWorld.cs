@@ -4,6 +4,7 @@ using Game.Systems.Tile;
 using Game.Tile;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Game.World
 {
@@ -41,11 +42,11 @@ namespace Game.World
         public IGamePlayers Players { get; protected set; }
         public IChunkMap Map { get; protected set; }
 
-        public GameWorld(int maxPlayers, in ushort sizeX, in ushort sizeY)
+        public GameWorld( in ushort sizeX, in ushort sizeY)
         {
             SizeX = sizeX;
             SizeY = sizeY;
-            Players = new WorldPlayers(maxPlayers);
+            Players = new WorldPlayers(int.MaxValue);
             CreateMap();
         }
 
@@ -84,6 +85,7 @@ namespace Game.World
             return freeChunk.FindTileWithId(0);
         }
 
+       
         public virtual IEnumerable<TileEntity> AllTiles()
         {
             foreach (var chunk in _preallocatedMap.AllChunks())
@@ -91,9 +93,6 @@ namespace Game.World
                     yield return tile;
         }
 
-        public Chunk GetTileChunk(in int tileX, in int tileY) => _preallocatedMap.GetTileChunk(tileX, tileY);
-        public TileEntity GetTile(in Position pos) => _preallocatedMap.GetTile(pos.X, pos.Y);
-        //public virtual TileEntity Map.GetTile(in int tileX, in int tileY) => Map.GetTile(tileX, tileY);
         public void Dispose() => FreeMemory();
     }
 }

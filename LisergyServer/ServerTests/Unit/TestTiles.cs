@@ -52,7 +52,7 @@ namespace UnitTests
         public void TestAddingStaticEntity()
         {
             var player = Game.GetTestPlayer();
-            var building = player.Data.Buildings.FirstOrDefault();
+            var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile.GetNeighbor(Direction.NORTH);
 
             var dungeon = (DungeonEntity)Game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);

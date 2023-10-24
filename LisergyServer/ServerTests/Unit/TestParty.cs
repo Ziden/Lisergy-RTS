@@ -27,7 +27,7 @@ namespace UnitTests
         [Test]
         public void TestPartyStatusUpdatedAfterBattle()
         {
-            var playerCastleTile = _player.Data.Buildings.First().Tile;
+            var playerCastleTile = _player.Buildings.First().Tile;
             var party = _player.GetParty(0);
             _game.Systems.Map.GetLogic(party).SetPosition(_game.World.Map.GetTile(0, 0));
 
@@ -120,7 +120,7 @@ namespace UnitTests
             var unit2 = new Unit(_game.Specs.Units[0]);
             var unit3 = new Unit(_game.Specs.Units[2]);
 
-            var party = _game.Entities.CreateEntity(_player.EntityId, EntityType.Dungeon);
+            var party = _game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
             _game.EntityLogic(party).BattleGroup.AddUnit(unit1);
             _game.EntityLogic(party).BattleGroup.AddUnit(unit2);
             _game.EntityLogic(party).BattleGroup.ReplaceUnit(unit2, unit3, 1);
@@ -182,7 +182,7 @@ namespace UnitTests
         [Test]
         public void TestPartyDoesNotReceiveDestroyPacket()
         {
-            var party = _player.GetParty(1);
+            var party = _player.GetParty(0);
             var component = party.Get<PartyComponent>();
             component.PartyIndex = 2;
             party.Save(component);

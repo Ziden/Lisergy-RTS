@@ -69,7 +69,7 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens.Parts
             else SetEmpty();
         }
 
-        private void SetEmpty()
+        public void SetEmpty()
         {
             _classIcon.style.backgroundImage = null;
             if (_hpBarContainer != null)

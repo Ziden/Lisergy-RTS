@@ -16,6 +16,8 @@ namespace ClientSDK.Data
         
         private CachedChunkMap _cache;
 
+        public (int x, int y) ChunkMapDimensions { get; private set; }
+
         public (int x, int y) TilemapDimensions { get; private set; }
 
         public LazyLoadChunkMap(IGameWorld world, int tilesAmtX, int tilesAmtY) : base()
@@ -23,6 +25,7 @@ namespace ClientSDK.Data
             var sizeX = tilesAmtX / GameWorld.CHUNK_SIZE;
             var sizeY = tilesAmtY / GameWorld.CHUNK_SIZE;
             TilemapDimensions = (tilesAmtX, tilesAmtY);
+            ChunkMapDimensions = (sizeX, sizeY);
             _cache = new CachedChunkMap(this);
             World = world;
         }

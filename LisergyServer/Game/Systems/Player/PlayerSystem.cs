@@ -35,20 +35,18 @@ namespace Game.Systems.Player
             if (defPlayer != null) GetLogic(defPlayer).RecordBattleHeader(packet.Header);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void OnTileVisibilityChanged(IEntity player, TileVisibilityChangedForPlayerEvent ev)
         {
             var tileObj = ev.Tile;
-           
             var owner = Players.GetPlayer(ev.Explorer.OwnerID);
             if (ev.Visible)
             {
-                owner.Data.OnceExplored.Add(tileObj);
-                owner.Data.VisibleTiles.Add(tileObj);
+                //owner.VisibilityReferences.OnceExplored.Add(tileObj.Position);
+                owner.VisibilityReferences.VisibleTiles.Add(tileObj.Position);
             }
             else
             {
-                owner.Data.VisibleTiles.Remove(tileObj);
+                owner.VisibilityReferences.VisibleTiles.Remove(tileObj.Position);
             }
         }
     }

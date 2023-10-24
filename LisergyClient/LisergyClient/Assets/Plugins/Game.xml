@@ -35,7 +35,7 @@
             Updates the team data with the result of the battle
             </summary>
         </member>
-        <member name="T:Game.Battle.Data.BattleState">
+        <member name="T:Game.Battle.Data.BattleHeader">
             <summary>
             Represents a minimal header of the battle.
             Contains the final state of the attacker and defender teams
@@ -128,9 +128,19 @@
             If there is please use <see cref="T:Game.DataTypes.InstanceFactory"/>
             </summary>
         </member>
+        <member name="T:Game.DataTypes.FPSin">
+            <summary>
+            Yolo lookup table for sin calculations
+            </summary>
+        </member>
         <member name="T:Game.DataTypes.FixedString">
             <summary>
             Fixed implementation of a string
+            </summary>
+        </member>
+        <member name="T:Game.DataTypes.FPTan">
+            <summary>
+            Yolo lookup table for TAN 
             </summary>
         </member>
         <member name="T:Game.DataTypes.GameId">
@@ -266,6 +276,11 @@
             Free's all memory used by this entity components
             </summary>
         </member>
+        <member name="M:Game.ECS.ComponentPointers.ToArray">
+            <summary>
+            Gets all components
+            </summary>
+        </member>
         <member name="T:Game.ECS.ComponentPointers.ComponentPointersDebugView">
             <summary>
             Debug panel to be able to visualize the pointers in debugger windows
@@ -379,7 +394,7 @@
             Packets that are sent alot and are better pooled
             </summary>
         </member>
-        <member name="T:Game.Events.BattleResultSummaryPacket">
+        <member name="T:Game.Events.BattleHeaderPacket">
             <summary>
             Summary of the battle result
             </summary>
@@ -553,6 +568,16 @@
             Sends a packet to server.
             </summary>
         </member>
+        <member name="T:Game.Persistence.FastWriter">
+            <summary>
+            Writes and read structs from byte arrays as fast as possible
+            </summary>
+        </member>
+        <member name="M:Game.Persistence.FastWriter.FastLoadPointer``1(System.Byte[],System.Int32,``0*)">
+            <summary>
+            Ensure the pointer is pre-allocated already
+            </summary>
+        </member>
         <member name="T:Game.Scheduler.IGameScheduler">
             <summary>
             Responsible for controlling the game tasks.
@@ -723,6 +748,36 @@
             Party index on player party array
             </summary>
         </member>
+        <member name="T:Game.Systems.Player.PlayerData">
+            <summary>
+            Keeps track of the player data
+            </summary>
+        </member>
+        <member name="F:Game.Systems.Player.PlayerData.OwnedEntities">
+            <summary>
+            All entities owned by the player in the current world
+            </summary>
+        </member>
+        <member name="F:Game.Systems.Player.PlayerData.StoredUnits">
+            <summary>
+            Keeps track of all units that are not deployed in parties
+            </summary>
+        </member>
+        <member name="F:Game.Systems.Player.PlayerData.BattleHeaders">
+            <summary>
+            Battle headers of this player battles
+            </summary>
+        </member>
+        <member name="F:Game.Systems.Player.VisibilityReferences.VisibleTiles">
+            <summary>
+            All tiles that the player is currently seeing
+            </summary>
+        </member>
+        <member name="F:Game.Systems.Player.VisibilityReferences.OnceExplored">
+            <summary>
+            All tiles that the player has seen at least once
+            </summary>
+        </member>
         <member name="T:Game.Systems.Player.PlayerEntity">
             <summary>
             Represents a player in the world.
@@ -745,22 +800,17 @@
             Recruits a new unit for the player
             </summary>
         </member>
-        <member name="M:Game.Systems.Player.PlayerLogic.FindParty(Game.Systems.Battler.Unit)">
-            <summary>
-            Finds the party of a given unit
-            </summary>
-        </member>
         <member name="M:Game.Systems.Player.PlayerLogic.PlaceNewPlayer(Game.Tile.TileEntity)">
             <summary>
             Adds a new player to the given tile with the initial things a new player should have
             </summary>
         </member>
-        <member name="M:Game.Systems.Player.PlayerLogic.RecordBattleHeader(Game.Battle.Data.BattleState)">
+        <member name="M:Game.Systems.Player.PlayerLogic.RecordBattleHeader(Game.Battle.Data.BattleHeader)">
             <summary>
             Record a battle header of a battle that happened for this player
             </summary>
         </member>
-        <member name="M:Game.Systems.Player.PlayerLogic.PlaceUnitInParty(Game.Systems.Battler.Unit,Game.Systems.Party.PartyEntity)">
+        <member name="M:Game.Systems.Player.PlayerLogic.PlaceUnitInParty(Game.DataTypes.GameId,Game.Systems.Party.PartyEntity)">
             <summary>
             Moves a unit to a given party
             </summary>
@@ -785,15 +835,15 @@
             Represents a tile. That's a square in the map grid.
             </summary>
         </member>
-        <member name="T:Game.Systems.Tile.TileHabitantsSystem">
-            <summary>
-            System that keeps track of references of which entities and which buildings are on which tiles
-            </summary>
-        </member>
-        <member name="T:Game.Systems.Tile.TileMapData">
+        <member name="T:Game.Systems.Tile.TileData">
             <summary>
             Main struct data used for tiles.
             This struct represents a single tile. It's size should be as low as possible.
+            </summary>
+        </member>
+        <member name="T:Game.Systems.Tile.TileHabitantsSystem">
+            <summary>
+            System that keeps track of references of which entities and which buildings are on which tiles
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Game.Tile.TileEntity.SetDeltaFlag(Game.Network.DeltaFlag)" -->
@@ -820,8 +870,23 @@
         </member>
         <member name="T:Game.World.ChunkData">
             <summary>
-            Unmanaged memory to allocate map data.
-            Allocates a chunk of tiles.
+            Flat structure of a 8x8 chunk generated using <see cref="!:ChunkStructGenerator"/>
+            This is done this way so we can reference all the chunk memory via single pointer so one memory allocation per chunk
+            </summary>
+        </member>
+        <member name="F:Game.World.ChunkData._tile_0_0">
+            <summary>
+            Tiles can only be accessed via pointer in <see cref="T:Game.World.ChunkDataHolder"/>
+            </summary>
+        </member>
+        <member name="F:Game.World.ChunkData.Flags">
+            <summary>
+            Chunk data after all tile data for simpler pointer acessing
+            </summary>
+        </member>
+        <member name="T:Game.World.ChunkDataHolder">
+            <summary>
+            Responsible for manipulating chunk data
             </summary>
         </member>
         <member name="P:Game.World.IGameWorld.Game">
@@ -877,7 +942,12 @@
         </member>
         <member name="P:Game.World.IChunkMap.TilemapDimensions">
             <summary>
-            Gets the dimensions of the map
+            Gets the dimensions of the map in amount of tiles
+            </summary>
+        </member>
+        <member name="P:Game.World.IChunkMap.ChunkMapDimensions">
+            <summary>
+            Gets the dimensions of the map in amount of chunks
             </summary>
         </member>
         <member name="T:Game.World.PreAllocatedChunkMap">

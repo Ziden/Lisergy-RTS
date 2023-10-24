@@ -3,10 +3,8 @@ using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using NUnit.Framework;
 using ServerTests.Integration.Stubs;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Telepathy;
 
 namespace ServerTests.Integration
 {

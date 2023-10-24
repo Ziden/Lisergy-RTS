@@ -20,16 +20,16 @@ namespace Assets.Code.UI
         NONE, MOVE, GUARD, ATTACK, CHECK
     }
 
-    public class ActionBarParams : UIScreenParam
+    public class ActionBarParams : IGameUiParam
     {
         public PartyEntity Party;
         public TileEntity Tile;
         public Action<EntityAction> OnChosenAction;
     }
 
-    public class ActionsBar : UITKScreen, IEventListener
+    public class ActionsBar : GameUi, IEventListener
     {
-        public override UIScreen ScreenAsset => UIScreen.UnitActions;
+        public override UIScreen UiAsset => UIScreen.UnitActions;
         private Dictionary<EntityAction, Button> _buttons = new Dictionary<UI.EntityAction, Button>();
         public List<EntityAction> NoPartyActions = new EntityAction[] { EntityAction.CHECK }.ToList();
 
@@ -104,7 +104,7 @@ namespace Assets.Code.UI
             if (actions == null || actions.Count == 0)
             {
                 Debug.LogError($"No actions for {party} on {tile}");
-                ScreenService.Close<ActionsBar>();
+                UiService.Close<ActionsBar>();
                 return;
             }
             var visible = new List<VisualElement>();

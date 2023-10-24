@@ -12,7 +12,7 @@ namespace Assets.Code
     public interface IGameClientServices
     {
         public IInputService Input { get; }
-        public IScreenService Screen { get; }
+        public IUiService UI { get; }
         public IAudioService Audio { get; }
         public INotificationService Notifications { get; }
         public IAssetService Assets { get; }
@@ -22,7 +22,7 @@ namespace Assets.Code
     public class ClientServiceAcessors : IGameClientServices
     {
         public IInputService Input => UnityServicesContainer.Resolve<IInputService>();
-        public IScreenService Screen => UnityServicesContainer.Resolve<IScreenService>();
+        public IUiService UI => UnityServicesContainer.Resolve<IUiService>();
         public IAudioService Audio => UnityServicesContainer.Resolve<IAudioService>();
         public INotificationService Notifications => UnityServicesContainer.Resolve<INotificationService>();
         public IAssetService Assets => UnityServicesContainer.Resolve<IAssetService>();

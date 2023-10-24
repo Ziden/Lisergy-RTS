@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 namespace Game.Systems.Battler
 {
     [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct Unit : IEquatable<Unit>, IEqualityComparer<Unit>
     {
         public GameId Id;

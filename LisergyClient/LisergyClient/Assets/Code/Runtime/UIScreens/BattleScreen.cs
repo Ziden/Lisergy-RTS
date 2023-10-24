@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace Assets.Code
 {
-    public class BattleScreenParam : UIScreenParam
+    public class BattleScreenParam : IGameUiParam
     {
         public GameId BattleId;
         public BattleTeam Attacker;
@@ -28,13 +28,13 @@ namespace Assets.Code
         public Action OnFinish;
     }
 
-    public class BattleScreen : UITKScreen, IEventListener
+    public class BattleScreen : GameUi, IEventListener
     {
         public GameId BattleID { get; private set; }
 
         public event Action OnFinishedPlayback;
 
-        public override UIScreen ScreenAsset => UIScreen.BattleScreen;
+        public override UIScreen UiAsset => UIScreen.BattleScreen;
 
         private IDictionary<GameId, VisualElement> UnitHealthBars = new Dictionary<GameId, VisualElement>();
         private IDictionary<GameId, UnitView> Units => _battlePlayback.Units;
@@ -42,7 +42,7 @@ namespace Assets.Code
         private BattlePlayback _battlePlayback;
         private BattleLogPacket _log;
         private Camera _battleCamera;
-        public BattleHeaderData ResultHeader { get; private set; }
+       // public BattleHeaderData ResultHeader { get; private set; }
 
         private async Task AddHealthbar(UnitView view)
         {
@@ -85,11 +85,12 @@ namespace Assets.Code
             }
         }
 
+        /*
         public void SetResultHeader(BattleHeaderData header)
         {
             ResultHeader = header;
         }
-
+        */
 
         private async Task PrepareBattleSceneAsync()
         {
@@ -110,7 +111,7 @@ namespace Assets.Code
 
         public override void OnOpen()
         {
-            _screenService.Close<GameHUD>();
+            _uiService.Close<GameHUD>();
             _ = PrepareBattleSceneAsync();
 
         }

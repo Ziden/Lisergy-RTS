@@ -11,7 +11,7 @@ namespace Assets.Code.Assets.Code.Runtime
     public class ClientStateStorage
     {
         public TileEntity SelectedTile;
-        public IEntity SelectedEntity;
+        public IUnityEntityView SelectedEntity;
         public Vector3 CameraPosition;
     }
 
@@ -23,7 +23,7 @@ namespace Assets.Code.Assets.Code.Runtime
     {
         public static event Action<Vector3> OnCameraMove;
         public static event Action<TileEntity> OnSelectTile;
-        public static event Action<IEntity> OnSelectEntity;
+        public static event Action<IUnityEntityView> OnSelectEntity;
 
         private static ClientStateStorage State = new();
 
@@ -44,7 +44,7 @@ namespace Assets.Code.Assets.Code.Runtime
         /// <summary>
         /// Own party the player is controlling at the moment
         /// </summary>
-        public static IEntity SelectedEntity
+        public static IUnityEntityView SelectedEntity
         {
             get
             {

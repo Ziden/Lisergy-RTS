@@ -1,6 +1,4 @@
-﻿using System;
-using Assets.Code;
-using Assets.Code.World;
+﻿using Assets.Code;
 using Game;
 using Game.Tile;
 using System.Collections;
@@ -15,6 +13,8 @@ public class CameraBehaviour : MonoBehaviour
     public bool edgeScrolling = false;
     public Camera Camera;
     private static bool lerping = false;
+    private Vector3 velocity = Vector3.zero;
+    private float _smoothTime = 0.3f;
 
     private void FocusOnTile(TileEntity t)
     {
@@ -28,13 +28,26 @@ public class CameraBehaviour : MonoBehaviour
         ClientState.OnSelectEntity += OnSelectEntity;
     }
 
-    private void OnSelectEntity(IEntity e)
+    private void OnSelectEntity(IUnityEntityView e)
     {
-        if(e is BaseEntity be && be.Tile != null)
+        if(e.BaseEntity is BaseEntity be && be.Tile != null)
         {
             FocusOnTile(be.Tile);
         }
     }
+
+    /*
+    private void Update()
+    {
+        if(ClientState.SelectedEntity != null)
+        {
+            transform.position =
+                Vector3.SmoothDamp(transform.position,
+                CameraPosition(ClientState.SelectedEntity.GameObject.transform.position),
+                ref velocity, _smoothTime);
+        }
+    }
+    */
 
     IEnumerator LerpTo(Vector3 pos2, float duration)
     {

@@ -20,9 +20,9 @@ namespace Assets.Code.UI
         public VisualTreeAsset MsgBoxAsset;
     }
 
-    public class ChatScreen : UITKScreen, IEventListener
+    public class ChatScreen : GameUi, IEventListener
     {
-        public override UIScreen ScreenAsset => UIScreen.ChatScreen;
+        public override UIScreen UiAsset => UIScreen.ChatScreen;
 
         private Button _sendButton;
         private TextField _input;
@@ -107,7 +107,7 @@ namespace Assets.Code.UI
 
         private void OnBack()
         {
-            GameClient.UnityServices().Screen.Close(this);
+            GameClient.UnityServices().UI.Close(this);
         }
 
         private void OnSend()

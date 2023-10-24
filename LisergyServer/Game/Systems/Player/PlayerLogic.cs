@@ -13,30 +13,26 @@ namespace Game.Systems.Player
 {
     public class PlayerLogic : BaseEntityLogic<PlayerComponent>
     {
-        private PlayerDataComponent Data => Entity.Components.GetReference<PlayerDataComponent>();
-
+        private PlayerData Data => Entity.Components.GetReference<PlayerData>();
+ 
         /// <summary>
         /// Recruits a new unit for the player
         /// </summary>
         public Unit RecruitUnit(ushort unitSpecId)
         {
             var unit = new Unit(Game.Specs.Units[unitSpecId]);
-
-            Data.Units.Add(unit);
+            Data.StoredUnits.Add(unit.Id, unit);
             Game.Log.Debug($"{Entity} recruited {unit}");
             return unit;
         }
 
-        /// <summary>
-        /// Finds the party of a given unit
-        /// </summary>
-        public PartyEntity FindParty(Unit u)
+        public IEntity CreateNewParty(byte index)
         {
-            foreach (PartyEntity p in Data.Parties)
-            {
-                if (p.Get<BattleGroupComponent>().Units.Contains(u)) return p;
-            }   
-            return null;
+            var entity = (PartyEntity)Game.Entities.CreateEntity(Entity.EntityId, EntityType.Party);
+            var party = entity.Get<PartyComponent>();
+            party.PartyIndex = index;
+            entity.Save(party);
+            return entity;
         }
 
         /// <summary>
@@ -50,8 +46,8 @@ namespace Game.Systems.Player
             Build(castleID, t);
             ushort initialUnit = Game.Specs.InitialUnit.UnitSpecID;
             var unit = RecruitUnit(initialUnit);
-            var party = Data.Parties[0];
-            PlaceUnitInParty(unit, party);
+            var party = CreateNewParty(0);
+            PlaceUnitInParty(unit.Id, (PartyEntity)party);
             var partyTile = t.GetNeighbor(Direction.EAST);
             if(!partyTile.Passable) partyTile = t.GetNeighbor(Direction.WEST);
             if (!partyTile.Passable) partyTile = t.GetNeighbor(Direction.SOUTH);
@@ -64,23 +60,23 @@ namespace Game.Systems.Player
         /// <summary>
         /// Record a battle header of a battle that happened for this player
         /// </summary>
-        public void RecordBattleHeader(BattleState header)
+        public void RecordBattleHeader(BattleHeader header)
         {
-            Data.BattleHeaders[header.BattleID] = header;
+            Data.BattleHeaders.Add(header);
         }
 
         /// <summary>
         /// Moves a unit to a given party
         /// </summary>
-        public void PlaceUnitInParty(Unit u, PartyEntity newParty)
+        public void PlaceUnitInParty(GameId unitId, PartyEntity newParty)
         {
-            var existingParty = FindParty(u);
-            if (existingParty != null)
+            if(!Data.StoredUnits.TryGetValue(unitId, out var storedUnit))
             {
-                Game.Logic.GetEntityLogic(existingParty).BattleGroup.RemoveUnit(u);
+                Game.Log.Error($"Tried to add unity {unitId} to party but unit was not free");
+                return;
             }
-            Game.Logic.GetEntityLogic(newParty).BattleGroup.AddUnit(u);
-            Game.Log.Debug($"{Entity} moved unit {u} to party {newParty}");
+            Game.Logic.GetEntityLogic(newParty).BattleGroup.AddUnit(storedUnit);
+            Game.Log.Debug($"{Entity} moved unit {storedUnit} to party {newParty}");
         }
 
         /// <summary>
@@ -90,7 +86,6 @@ namespace Game.Systems.Player
         {
             var building = (PlayerBuildingEntity)Game.Entities.CreateEntity(Entity.OwnerID, EntityType.Building);
             building.BuildFromSpec(Game.Specs.Buildings[buildingSpecId]);
-            Data.Buildings.Add(building);
             building.EntityLogic.Map.SetPosition(t);
             Game.Log.Debug($"Player {Entity} built {building}");
             return building;

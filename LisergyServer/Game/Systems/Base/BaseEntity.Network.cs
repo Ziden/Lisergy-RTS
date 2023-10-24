@@ -25,7 +25,7 @@ namespace Game
         private DeltaFlags _flags;
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void ProccessDeltas(PlayerEntity trigger)
         {
             if (DeltaFlags.HasFlag(DeltaFlag.CREATED)) OnExistenceChanged();
@@ -36,7 +36,7 @@ namespace Game
         /// <summary>
         /// Sends the whole enity to whoever can see it whenever entity is created
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         private void OnExistenceChanged()
         {
             var c = Components.GetReference<MapReferenceComponent>();
@@ -49,7 +49,7 @@ namespace Game
         /// <summary>
         /// When entity is revealed send a full update only to the player that triggered the delta
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         private void OnRevealed(PlayerEntity trigger)
         {
             Game.Log.Debug($"Entity {this} Had DeltaFlag 'REVEALED' - Sending Packets");
@@ -61,7 +61,7 @@ namespace Game
         /// But if the map position has updated then we also need to send the update
         /// for the old viwers so they can see the entity moving our of their view
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         private void SendUpdateToNewViewers()
         {
             Game.Log.Debug($"Entity {this} Had DeltaFlag 'COMPONENTS' - Sending Packets");
@@ -89,7 +89,7 @@ namespace Game
         /// Gets the base update packet of the given entity.
         /// Will add only updated components if onlyDeltas is toggled
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public BasePacket GetUpdatePacket(PlayerEntity receiver, bool onlyDeltas = true)
         {
             var packet = PacketPool.Get<EntityUpdatePacket>();

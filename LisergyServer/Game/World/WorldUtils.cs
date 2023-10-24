@@ -129,10 +129,18 @@ namespace Game.World
 
         public static IEnumerable<TileEntity> GetAOE(this TileEntity tile, ushort radius)
         {
-            for (var xx = tile.X - radius; xx <= tile.X + radius; xx++)
-                for (var yy = tile.Y - radius; yy <= tile.Y + radius; yy++)
-                    if (tile.Chunk.Map.ValidCoords(xx, yy))
-                        yield return tile.Chunk.Map.GetTile(xx, yy);
+            for (var xx = -radius; xx <= radius; xx++)
+                for (var yy = - radius; yy <= radius; yy++)
+                {
+                    if (xx == -radius && yy == -radius) continue;
+                    if (xx == -radius && yy == radius) continue;
+                    if (xx == radius && yy == -radius) continue;
+                    if (xx == radius && yy == radius) continue;
+                    var x = tile.X + xx;
+                    var y = tile.Y + yy;
+                    if (tile.Chunk.Map.ValidCoords(x, y))
+                        yield return tile.Chunk.Map.GetTile(x, y);
+                }
         }
     }
 }

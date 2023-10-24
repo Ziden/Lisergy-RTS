@@ -3,10 +3,13 @@ using Game.ECS;
 using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Network;
+using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Party;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace Game.Systems.Player
 {
@@ -17,11 +20,9 @@ namespace Game.Systems.Player
     public class PlayerEntity : IEntity
     {
         public const byte MAX_PARTIES = 4;
-
-        public PlayerDataComponent Data => Components.GetReference<PlayerDataComponent>();
-
+        public PlayerData Data => Components.GetReference<PlayerData>();
+        public VisibilityReferences VisibilityReferences => Components.GetReference<VisibilityReferences>();
         public PlayerProfile Profile { get; private set; }
-
         public ref readonly GameId EntityId => ref Profile.PlayerId;
         public ref readonly GameId OwnerID => ref Profile.PlayerId;
 
@@ -31,34 +32,21 @@ namespace Game.Systems.Player
             Game = game;
             Components = new ComponentSet(this);
             Components.Add<PlayerComponent>();
-            Components.AddReference(new PlayerDataComponent());
+            Components.AddReference(new PlayerData());
+            Components.AddReference(new VisibilityReferences());
             Profile = profile;
-            Data.Parties = new PartyEntity[MAX_PARTIES]
-            {
-                (PartyEntity)game.Entities.CreateEntity(Profile.PlayerId , EntityType.Party),
-                (PartyEntity)game.Entities.CreateEntity(Profile.PlayerId , EntityType.Party),
-                (PartyEntity)game.Entities.CreateEntity(Profile.PlayerId , EntityType.Party),
-                (PartyEntity)game.Entities.CreateEntity(Profile.PlayerId , EntityType.Party)
-            };
-            for (byte x = 0; x < MAX_PARTIES; x++)
-            {
-                var entity = Data.Parties[x];
-                var party = entity.Get<PartyComponent>();
-                party.PartyIndex = x;
-                entity.Save(party);
-            }
         }
 
         /// <summary>
         /// Gets a party of a given party slot for this player
         /// </summary>
-        public PartyEntity GetParty(byte partyIndex) => Data.Parties[partyIndex];
+        public PartyEntity GetParty(byte partyIndex) => Parties[partyIndex];
 
         /// <summary>
         /// Gets the main building (center) of this player
         public PlayerBuildingEntity GetCenter()
         {
-            return Data.Buildings.First(b => b.SpecId == Game.Specs.InitialBuilding.Id);
+            return Buildings.First(b => b.SpecId == Game.Specs.InitialBuilding.Id);
         }
 
         /// <summary>
@@ -67,6 +55,20 @@ namespace Game.Systems.Player
         public void SendMessage(string msg, MessageType type = MessageType.RAW_TEXT)
         {
             Game.Network.SendToPlayer(new MessagePacket(MessageType.BAD_INPUT, msg), this);
+        }
+
+        public IReadOnlyCollection<Unit> OwnedUnits => Data.StoredUnits.Values;
+        public IReadOnlyList<PartyEntity> Parties => OwnedEntities<PartyEntity>(EntityType.Party).ToList();
+        public IReadOnlyList<PlayerBuildingEntity> Buildings => OwnedEntities<PlayerBuildingEntity>(EntityType.Building).ToList();
+
+        public void AddOwnedEntity(IEntity entity)
+        {
+            Data.OwnedEntities[entity.EntityType].Add(entity.EntityId);
+        }
+
+        public IEnumerable<T> OwnedEntities<T>(EntityType type) where T : IEntity
+        {
+            foreach (var id in Data.OwnedEntities[type]) yield return (T)Game.Entities[id];
         }
 
         public IComponentSet Components { get; private set; }

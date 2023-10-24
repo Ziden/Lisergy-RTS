@@ -1,5 +1,6 @@
 ﻿using ClientSDK.SDKEvents;
 using Game.DataTypes;
+using Game.Events;
 using Game.Events.Bus;
 using Game.Systems.Building;
 using Game.Systems.Party;
@@ -42,17 +43,22 @@ namespace ClientSDK.Services
         {
             _client.ClientEvents.Register<GameStartedEvent>(this, OnGameStart);
             _client.ClientEvents.Register<ClientAwareOfEntityEvent>(this, OnAwareOfEntity);
+            _client.Network.On<BattleHeaderPacket>(OnBattleSummary);
+        }
+
+        private void OnBattleSummary(BattleHeaderPacket result)
+        {
+            LocalPlayer.Data.BattleHeaders.Add(result.BattleHeader);
         }
 
         private void OnAwareOfEntity(ClientAwareOfEntityEvent ev) {
             if (ev.Entity.OwnerID != PlayerId) return;
+            LocalPlayer.AddOwnedEntity(ev.Entity);
             if(ev.Entity is PlayerBuildingEntity building)
             {
-                LocalPlayer.Data.Buildings.Add(building);
                 _client.ClientEvents.Call(new OwnEntityInfoReceived<PlayerBuildingEntity>(building));
             } else if(ev.Entity is PartyEntity party)
             {
-                LocalPlayer.Data.Parties[party.PartyIndex] = party;
                 _client.ClientEvents.Call(new OwnEntityInfoReceived<PartyEntity>(party));
             }
         }

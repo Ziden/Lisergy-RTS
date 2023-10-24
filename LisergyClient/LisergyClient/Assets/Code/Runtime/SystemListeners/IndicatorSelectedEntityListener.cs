@@ -30,16 +30,15 @@ public class IndicatorSelectedEntityListener : IEventListener
         });
     }
 
-    private void OnEntitySelected(IEntity e)
+    private void OnEntitySelected(IUnityEntityView e)
     {
-        if (_selector != null && e is BaseEntity be && be.Tile != null)
+        if (_selector != null && e.BaseEntity is BaseEntity be && be.Tile != null)
         {
             _client.Log.Debug($"Entity Selector Moving to {e}");
-            var view = e.GetEntityView() as IGameObject;
-            if (view.GameObject == null) return;
-            _selector.gameObject.transform.SetParent(view.GameObject.transform, true);
-            _selector.gameObject.transform.position = view.GameObject.transform.position;
-            if (e.EntityType == EntityType.Building)
+            if (e.GameObject == null) return;
+            _selector.gameObject.transform.SetParent(e.GameObject.transform, true);
+            _selector.gameObject.transform.position = e.GameObject.transform.position;
+            if (e.BaseEntity.EntityType == EntityType.Building)
             {
                 _selector.BuildingRadial.SetActive(true);
                 _selector.UnitRadial.SetActive(false);

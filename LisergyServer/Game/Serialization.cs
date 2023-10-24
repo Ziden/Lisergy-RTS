@@ -35,8 +35,10 @@ namespace Game
             models.Add(typeof(BattleEvent));
             models.Add(typeof(BattleAction));
             models.Add(typeof(AttackAction));
-            models.Add(typeof(TileMapData));
+            models.Add(typeof(TileData));
             models.Add(typeof(PlayerProfile));
+            models.Add(typeof(SerializedEntity));
+            models.Add(typeof(SerializedPlayer));
 
             // Game
             models.Add(typeof(GameSpec));
@@ -47,6 +49,8 @@ namespace Game
             }
             Serializer = new Serializer(models);
         }
+
+        public static uint GetTypeId(Type t) => Serializer.GetTypeMap()[t];
 
         public static IEnumerable<Type> GetDefaultSerializationTypes()
         {
@@ -69,7 +73,7 @@ namespace Game
             }
         }
 
-     
+
         public static BasePacket ToBasePacket(byte[] message)
         {
             using (var stream = new MemoryStream(message))
@@ -100,7 +104,32 @@ namespace Game
             }
         }
 
+        public static byte[] FromAnyTypes<T>(IReadOnlyCollection<T> list)
+        {
+            using (var stream = new MemoryStream())
+            {
+                foreach (var o in list)
+                {
+                    Serializer.Serialize(stream, o);
+                }
+                return stream.ToArray();
+            }
+        }
 
+        public static List<T> ToAnyTypes<T>(byte[] data)
+        {
+            var l = new List<T>();
+            using (var stream = new MemoryStream(data))
+            {
+                while (stream.Position < data.Length)
+                {
+                    l.Add((T)Serializer.Deserialize(stream));
+                }
+                return l;
+            }
+        }
+
+        // TODO: Use serialize direct
         public static byte[] FromAnyType<T>(T o)
         {
             using (var stream = new MemoryStream())

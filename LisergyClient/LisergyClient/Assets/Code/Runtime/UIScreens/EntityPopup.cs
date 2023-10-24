@@ -14,14 +14,14 @@ using UnityEngine.UIElements;
 namespace Assets.Code.UI
 {
 
-    public class EntityDetailsParams : UIScreenParam
+    public class EntityDetailsParams : IGameUiParam
     {
         public IEntity Entity;
     }
 
-    public class EntityDetails : UITKScreen, IEventListener
+    public class EntityDetails : GameUi, IEventListener
     {
-        public override UIScreen ScreenAsset => UIScreen.EntityDetails;
+        public override UIScreen UiAsset => UIScreen.EntityDetails;
 
         private BattleGroupComponentUI _battleGroup;
 

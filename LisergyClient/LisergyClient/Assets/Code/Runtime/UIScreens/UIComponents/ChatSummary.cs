@@ -90,7 +90,7 @@ public class ChatSummary : IEventListener, IDisposable
 
     private void OnClickChat()
     {
-        _client.UnityServices().Screen.Open<ChatScreen>(new ChatScreenParam()
+        _client.UnityServices().UI.Open<ChatScreen>(new ChatScreenParam()
         {
             MsgBoxAsset = _msgBox
         });

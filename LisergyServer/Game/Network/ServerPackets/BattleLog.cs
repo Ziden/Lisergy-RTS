@@ -13,7 +13,7 @@ namespace Game.Network.ServerPackets
     {
         public byte [] BattleStartHeaderData;
 
-        public BattleState DeserializeStartingState() => Serialization.ToAnyType<BattleState>(BattleStartHeaderData);
+        public BattleHeader DeserializeStartingState() => Serialization.ToAnyType<BattleHeader>(BattleStartHeaderData);
 
         public BattleTurnLog[] Turns;
 
@@ -23,7 +23,7 @@ namespace Game.Network.ServerPackets
             {
                 throw new Exception("Cannot start a battle log from a battle that already started");
             }
-            BattleStartHeaderData = Serialization.FromAnyType(new BattleState
+            BattleStartHeaderData = Serialization.FromAnyType(new BattleHeader
             {
                 BattleID = battle.ID,
                 BattleTime = DateTime.UtcNow,
@@ -34,7 +34,7 @@ namespace Game.Network.ServerPackets
 
         public BattleLogPacket(BattleQueuedPacket start)
         {
-            BattleStartHeaderData = Serialization.FromAnyType(new BattleState
+            BattleStartHeaderData = Serialization.FromAnyType(new BattleHeader
             {
                 BattleID = start.BattleID,
                 BattleTime = DateTime.UtcNow,

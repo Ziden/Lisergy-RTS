@@ -25,8 +25,9 @@ namespace Game.Services
             if (_world.Players.GetPlayer(ev.Sender.EntityId, out player))
             {
                 _world.Game.Log.Debug($"Existing player {player.EntityId} joined");
-                foreach (var tile in player.Data.VisibleTiles)
+                foreach (var pos in player.VisibilityReferences.VisibleTiles)
                 {
+                    var tile = _world.Map.GetTile(pos.X, pos.Y);
                     tile.SetDeltaFlag(DeltaFlag.SELF_REVEALED);
                 }
             }

@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Assets.Code.Assets.Code.Runtime.UIScreens
 {
-    public abstract class Notification : UITKScreen
+    public abstract class Notification : GameUi
     {
         
     }

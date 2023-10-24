@@ -12,14 +12,14 @@ namespace Game.Network.ServerPackets
     [Serializable]
     public class BattleResultPacket : BasePacket, IServerPacket
     {
-        public BattleState Header;
+        public BattleHeader Header;
 
         public BattleTurnLog[] Turns;
 
         public BattleResultPacket(in GameId battleID, TurnBattleRecord result)
         {
             //result.Attacker.AllDead
-            Header = new BattleState
+            Header = new BattleHeader
             {
                 BattleID = battleID,
                 BattleTime = DateTime.UtcNow,

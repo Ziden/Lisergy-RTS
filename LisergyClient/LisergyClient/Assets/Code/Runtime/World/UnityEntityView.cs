@@ -3,14 +3,19 @@
 using Assets.Code;
 using Assets.Code.Assets.Code.Assets;
 using ClientSDK.Data;
+using Game;
 using Game.ECS;
 using System;
 using UnityEngine;
 
+public interface IUnityEntityView : IEntityView, IGameObject {
+    public EntityType EntityType { get; }
+}
+
 /// <summary>
 /// Represents a entity view that's specific for Unity game engine
 /// </summary>
-public class UnityEntityView<T> : EntityView<T>, IGameObject where T : IEntity
+public class UnityEntityView<T> : EntityView<T>, IUnityEntityView where T : IEntity
 {
     protected event Action OnAfterRendered;
 
@@ -22,6 +27,7 @@ public class UnityEntityView<T> : EntityView<T>, IGameObject where T : IEntity
         }
     }
 
+    public EntityType EntityType => Entity.EntityType;
     protected IAssetService Assets => Client.UnityServices().Assets;
     private static string _containerName = typeof(T).Name + " Container";
     private static GameObject _container;

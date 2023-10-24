@@ -28,7 +28,7 @@ namespace ClientSDK.Services
 
         private void OnReceiveTile(TilePacket tile)
         {
-            var tileEntity = _client.Game.World.Map.GetTile(tile.Data.X, tile.Data.Y);
+            var tileEntity = _client.Game.World.Map.GetTile(tile.Position.X, tile.Position.Y);
             tileEntity.UpdateData(tile.Data);
             var tileView = _client.Modules.Views.GetOrCreateView(tileEntity);
             if (tileView.State == EntityViewState.NOT_RENDERED)

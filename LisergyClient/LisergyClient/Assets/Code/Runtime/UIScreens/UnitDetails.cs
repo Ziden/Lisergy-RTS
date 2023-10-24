@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 namespace Assets.Code.UI
 {
 
-    public class UnitDetailsSetup : UIScreenParam
+    public class UnitDetailsSetup : IGameUiParam
     {
         public IEntity Entity;
         public Unit Unit;
@@ -35,9 +35,9 @@ namespace Assets.Code.UI
         }
     }
 
-    public class UnitDetails : UITKScreen, IEventListener
+    public class UnitDetails : GameUi, IEventListener
     {
-        public override UIScreen ScreenAsset => UIScreen.UnitDetails;
+        public override UIScreen UiAsset => UIScreen.UnitDetails;
 
         public override void OnOpen()
         {

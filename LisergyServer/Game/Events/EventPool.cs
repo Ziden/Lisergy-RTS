@@ -13,7 +13,7 @@ namespace Game.Events
         public static int MAX_CREATED = 1;
         private static int _created = 0;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public static T Get()
         {
             if (_free.TryDequeue(out var item)) return item;
@@ -22,7 +22,7 @@ namespace Game.Events
             return FastNew<T>.Instance();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public static void Return(T item) {
             _free.Enqueue(item);
             _created--;

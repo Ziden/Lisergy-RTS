@@ -32,7 +32,7 @@ namespace UnitTests
 
             Assert.AreEqual(1, Game.World.Players.PlayerCount);
             Assert.AreEqual(clientPlayer, createdPlayer);
-            Assert.AreEqual(1, createdPlayer.Data.Buildings.Count);  // initial building
+            Assert.AreEqual(1, createdPlayer.Buildings.Count);  // initial building
             Assert.IsTrue(createdPlayer.GetParty(0) != null);    // initial party
         }
 
@@ -71,7 +71,7 @@ namespace UnitTests
             Assert.IsTrue(tileUpdates.Count > 2);
             Assert.AreEqual(2, entityUpdates.Count);
             Assert.IsTrue(entityUpdates.Where(e => e.EntityId == player.GetParty(0).EntityId).Any());
-            Assert.IsTrue(entityUpdates.Where(e => e.EntityId == player.Data.Buildings.First().EntityId).Any());
+            Assert.IsTrue(entityUpdates.Where(e => e.EntityId == player.Buildings.First().EntityId).Any());
         }
 
         [Test]

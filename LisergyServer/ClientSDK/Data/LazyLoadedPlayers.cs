@@ -12,7 +12,7 @@ namespace ClientSDK.Data
     {
         private IGame _game;
 
-        public LazyLoadedPlayers(IGame game, int maxPlayers) : base(maxPlayers)
+        public LazyLoadedPlayers(IGame game) : base(int.MaxValue)
         {
             _game = game;
         }

@@ -33,7 +33,7 @@ namespace UnitTests
         [Test]
         public void TestMapLogicSetPosition()
         {
-            var playerCastleTile = _player.Data.Buildings.First().Tile;
+            var playerCastleTile = _player.Buildings.First().Tile;
             var dungeonTile = playerCastleTile.GetNeighbor(Direction.SOUTH);
             var party = _player.GetParty(0);
 

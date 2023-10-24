@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Game.Systems.BattleGroup
 {
@@ -11,6 +12,7 @@ namespace Game.Systems.BattleGroup
     /// Unmanaged reference of a unit group
     /// </summary>
     [Serializable]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct UnitGroup : IEnumerable<Unit>
     {
         public Unit Leader;

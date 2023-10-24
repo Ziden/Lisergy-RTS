@@ -22,7 +22,7 @@ namespace GameDataTest.TestWorldGenerator
             }
         }
 
-        public TestWorld() : base(10, 100, 100)
+        public TestWorld() : base(100, 100)
         {
          
         }

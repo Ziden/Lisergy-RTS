@@ -144,6 +144,17 @@
             Has battle specific networking implementation
             </summary>
         </member>
+        <member name="M:ClientSDK.Services.IBattleModule.RequestBattleLog(Game.DataTypes.GameId@)">
+            <summary>
+            Requests a full battle log to view the full battle
+            Will fire a BattleLogReceivedEvent
+            </summary>
+        </member>
+        <member name="P:ClientSDK.Services.IBattleModule.BattleHeaders">
+            <summary>
+            Gets the list of battle headers for this player
+            </summary>
+        </member>
         <member name="T:ClientSDK.Services.IEntityModule">
             <summary>
             Service that controls entities that the game client is aware of.
@@ -245,7 +256,7 @@
         </member>
         <member name="T:ClientSDK.SDKEvents.ChatUpdateEvent">
             <summary>
-            Called when chat updates
+            Called when chat updates. Either when receiving a new message or chat log received.
             </summary>
         </member>
         <member name="F:ClientSDK.SDKEvents.ChatUpdateEvent.NewPacket">
@@ -276,7 +287,7 @@
         </member>
         <member name="T:ClientSDK.SDKEvents.OwnBattleFinishedEvent">
             <summary>
-            Called whenever a battle owned by the player is finished
+            Called whenever a battle owned by the player is finished.
             </summary>
         </member>
         <member name="T:ClientSDK.SDKEvents.OwnEntityInfoReceived`1">

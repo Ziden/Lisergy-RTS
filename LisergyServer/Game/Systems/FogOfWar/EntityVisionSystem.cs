@@ -14,19 +14,19 @@ namespace Game.Systems.FogOfWar
             EntityEvents.On<UnitRemovedEvent>(OnUnitRemoved);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         private void OnUnitAdded(IEntity e, UnitAddToGroupEvent ev)
         {
             GetLogic(e).UpdateGroupLineOfSight();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         private void OnUnitRemoved(IEntity e, UnitRemovedEvent ev)
         {
             GetLogic(e).UpdateGroupLineOfSight();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         private void OnEntityStepOnTile(IEntity e, EntityMoveInEvent ev)
         {
             GetLogic(e).UpdateVisionRange(e, ev.FromTile, ev.ToTile);

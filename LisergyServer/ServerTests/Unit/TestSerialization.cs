@@ -54,8 +54,8 @@ namespace UnitTests
             var unserialized = Serialization.ToPacket<TilePacket>(serialized);
 
             Assert.AreEqual(tile.SpecId, unserialized.Data.TileId);
-            Assert.AreEqual(tile.X, unserialized.Data.X);
-            Assert.AreEqual(tile.Y, unserialized.Data.Y);
+            Assert.AreEqual(tile.X, unserialized.Position.X);
+            Assert.AreEqual(tile.Y, unserialized.Position.Y);
         }
 
         [Test]
@@ -64,9 +64,9 @@ namespace UnitTests
             var game = new TestGame();
 
             var player = game.GetTestPlayer();
-            var unit = player.Data.Units.First();
-            var building = player.Data.Buildings.First();
-            var tile = player.Data.Parties[0].Tile;
+            var unit = player.Data.StoredUnits.First();
+            var building = player.Buildings.First();
+            var tile = player.Parties[0].Tile;
 
             var visibleEvent = game.SentServerPackets.Where(e => e is EntityUpdatePacket).FirstOrDefault() as EntityUpdatePacket;
 
@@ -82,7 +82,7 @@ namespace UnitTests
             var game = new TestGame();
 
             var player = game.GetTestPlayer();
-            var party = player.Data.Parties[0];
+            var party = player.Parties[0];
 
             var entityUpdate = new EntityUpdatePacket(party);
 

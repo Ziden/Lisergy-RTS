@@ -18,7 +18,7 @@ namespace Game.Systems.FogOfWar
             EntityEvents.On<EntityTileVisibilityUpdateEvent>(OnTileExplorationChanged);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         private void OnTileExplorationChanged(IEntity tile, EntityTileVisibilityUpdateEvent ev)
         {
             var tileObj = ev.Tile;

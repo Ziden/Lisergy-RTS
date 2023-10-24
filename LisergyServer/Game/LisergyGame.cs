@@ -36,7 +36,6 @@ namespace Game
         public IGameNetwork Network { get; private set; }
         public IGameLog Log { get; private set; }
         public EventBus<IBaseEvent> Events { get; private set; } = new EventBus<IBaseEvent>();
-
         public LisergyGame(GameSpec specs, IGameLog log)
         {
             Specs = specs;

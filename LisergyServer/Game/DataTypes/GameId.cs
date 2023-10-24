@@ -12,7 +12,7 @@ namespace Game.DataTypes
     /// Main difference is that its an unmanaged data structure that's serialized as two ulongs
     /// for faster serialization, reading and writing
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     [Serializable]
     public unsafe struct GameId : IEquatable<GameId>, IEqualityComparer<GameId>
     {

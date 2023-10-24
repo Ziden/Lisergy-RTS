@@ -46,25 +46,25 @@ namespace Game
         /// <summary>
         /// Receive and proccess an input packet
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         void ReceiveInput(GameId sender, BasePacket input);
 
         /// <summary>
         /// Listens for packets being received
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void On<T>(Action<T> listener) where T : BasePacket;
 
         /// <summary>
         /// Sends a packet to player
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void SendToPlayer<PacketType>(PacketType p, params PlayerEntity[] players) where PacketType : BasePacket;
 
         /// <summary>
         /// Sends a packet to server.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void SendToServer(BasePacket p, ServerType server = ServerType.WORLD);
     }
 
@@ -81,13 +81,13 @@ namespace Game
             _game = game;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void On<T>(Action<T> listener) where T : BasePacket
         {
             IncomingPackets.Register(this, listener);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void ReceiveInput(GameId sender, BasePacket input)
         {
             input.Sender = _game.Players[sender] ?? new PlayerEntity(new PlayerProfile(sender), _game);
@@ -95,13 +95,13 @@ namespace Game
             _game.Entities.DeltaCompression.SendDeltaPackets(input.Sender);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void SendToServer(BasePacket p, ServerType server)
         {
             IncomingPackets.Call(p); // Hack for local server for now
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       
         public void SendToPlayer<PacketType>(PacketType p, params PlayerEntity[] players) where PacketType : BasePacket
         {
             foreach (var player in players)
