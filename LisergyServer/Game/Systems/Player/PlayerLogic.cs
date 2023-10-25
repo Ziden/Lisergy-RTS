@@ -42,8 +42,6 @@ namespace Game.Systems.Player
         {
             var p = Entity as PlayerEntity;
             Game.Players.Add(p);
-            var castleID = Game.Specs.InitialBuilding.Id;
-            Build(castleID, t);
             ushort initialUnit = Game.Specs.InitialUnit.UnitSpecID;
             var unit = RecruitUnit(initialUnit);
             var party = CreateNewParty(0);

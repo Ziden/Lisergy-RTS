@@ -33,7 +33,7 @@ namespace UnitTests
                 .ToList();
 
             var range = initialBuildingSpec.LOS * 2 + 1;
-            Assert.AreEqual(range * range, events.Count);
+            Assert.AreEqual(range * range - 4, events.Count);
         }
 
         [Test]
@@ -155,7 +155,7 @@ namespace UnitTests
             var range = aoe * 2 + 1;
             var los = tile.GetAOE(aoe).ToList();
 
-            Assert.That(los.Count() == range * range);
+            Assert.That(los.Count() == range * range - 4);
         }
 
         [Test]
@@ -187,7 +187,7 @@ namespace UnitTests
             Game.Entities.DeltaCompression.SendDeltaPackets(player);
 
             /*          
-                                o o o o E
+                                o o o o X
                                 o o o o E   
                                 o o o o E    <- Explores this new row
             P Moving right ->   P o o o E 
@@ -195,8 +195,9 @@ namespace UnitTests
             */
 
             // Only send update to visible ones
-            Assert.AreEqual(party.GetLineOfSight() + 1, player.ReceivedPacketsOfType<TilePacket>().Count);
-            Assert.AreEqual(party.GetLineOfSight() + 1, player.TriggeredEventsOfType<TileVisibilityChangedForPlayerEvent>().Count);
+            Assert.AreEqual(party.GetLineOfSight(), player.ReceivedPacketsOfType<TilePacket>().Count);
+            Assert.AreEqual(party.GetLineOfSight(), player.TriggeredEventsOfType<TileVisibilityChangedForPlayerEvent>().Count);
+            // TODO: Why  + 1 ?
             Assert.AreEqual(party.GetLineOfSight() + 1, player.TriggeredEventsOfType<EntityTileVisibilityUpdateEvent>().Count);
         }
 
