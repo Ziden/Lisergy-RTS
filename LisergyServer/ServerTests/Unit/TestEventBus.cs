@@ -1,6 +1,5 @@
 using Game.Events.Bus;
 using Game.World;
-using Microsoft.OpenApi.Models;
 using NUnit.Framework;
 using ServerTests;
 
