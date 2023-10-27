@@ -6,6 +6,7 @@ using NUnit.Framework;
 using ServerTests;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using GameDataTest;
 
 namespace UnitTests
 {

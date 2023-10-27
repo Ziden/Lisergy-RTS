@@ -9,6 +9,7 @@
   <ItemGroup>
     <Compile Remove="Scheduler\FastGameTask.cs" />
     <Compile Remove="Scheduler\FastScheduler.cs" />
+    <Compile Remove="Systems\Resources\ResourceTypes.cs" />
   </ItemGroup>
 
   <ItemGroup>

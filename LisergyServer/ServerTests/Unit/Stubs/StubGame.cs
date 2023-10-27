@@ -50,7 +50,7 @@ namespace ServerTests
             return log;
         }
 
-        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), GetTestLog())
+        public TestGame(GameSpec specs = null, GameWorld world = null, bool createPlayer = true) : base(specs ?? GetTestSpecs(), GetTestLog())
         {
             UnmanagedMemory.FlagMemoryToBeReused();
             CreateTestWorld();
@@ -98,7 +98,10 @@ namespace ServerTests
 
         private static GameSpec GetTestSpecs()
         {
-            return TestSpecs.Generate();
+            var spec =  TestSpecs.Generate();
+            // Allow having initial building in tests
+            spec.InitialBuildingSpecId = spec.Buildings[1].Id;
+            return spec;
         }
 
         public BuildingSpec RandomBuildingSpec()

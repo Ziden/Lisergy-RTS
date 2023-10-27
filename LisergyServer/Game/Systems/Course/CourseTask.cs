@@ -5,59 +5,56 @@ using Game.Tile;
 using Game.World;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using Game.DataTypes;
 
 namespace Game.Systems.Movement
 {
-    public class CourseTask : GameTask
+    [Serializable]
+    public unsafe class CourseTaskExecutor : ITaskExecutor
     {
-        public IEntity Party;
+        public GameId EntityId;
         public List<Position> Path;
-        public CourseIntent Intent { get; private set; }
+        public CourseIntent Intent;
 
-        public CourseTask(IGame game, IEntity party, List<Position> path, CourseIntent intent) : base(game, TimeSpan.FromMilliseconds(1), game.Players.GetPlayer(party.OwnerID))
+        public CourseTaskExecutor(IEntity party, List<Position> path, CourseIntent intent)
         {
-            Party = party;
+            EntityId = party.EntityId;
             Path = path;
             Intent = intent;
         }
 
-        public override void Tick()
+        public void Execute(GameTask task)
         {
-            Delay = Party.Components.Get<MovespeedComponent>().MoveDelay;
-            var courseId = Party.Components.Get<CourseComponent>().CourseId;
-            var currentCourse = Game.Scheduler.GetTask(courseId);
+            var entity = task.Game.Entities[EntityId];
+            task.Delay = entity.Components.Get<MovespeedComponent>().MoveDelay;
+            var courseId = entity.Components.Get<CourseComponent>().CourseId;
+            var currentCourse = task.Game.Scheduler.GetTask(courseId);
             if (currentCourse == null) return;
-            if (currentCourse != this)
+            if (currentCourse.Executor != this)
             {
-                if(currentCourse.Start <= Start)
+                if(currentCourse.Start <= task.Start)
                 {
-                    Game.Scheduler.Cancel(currentCourse);
+                    task.Game.Scheduler.Cancel(currentCourse);
                 } else
                 {
-                    Repeat = false;
-                    Game.Log.Error($"Party {Party} Had Course {currentCourse} but course {this} was trying to move the party");
+                    task.Repeat = false;
+                    task.Game.Log.Error($"Party {entity} Had Course {currentCourse} but course {this} was trying to move the party");
                     return;
                 }
             }
-            Game.Systems.Map.GetLogic(Party).SetPosition(NextTile);
+
+            var nextTile = Path == null || Path.Count == 0 ? null : task.Game.World.Map.GetTile(Path[0].X, Path[0].Y);
+            task.Game.Systems.Map.GetLogic(entity).SetPosition(nextTile);
             Path.RemoveAt(0);
-            Repeat = Path.Count > 0;
-            if(!Repeat)
+            task.Repeat = Path.Count > 0;
+            if(!task.Repeat)
             {
-                Game.Systems.EntityMovement.GetLogic(Party).FinishCourse();
+                task.Game.Systems.EntityMovement.GetLogic(entity).FinishCourse();
             }
         }
 
-        public bool IsLastMovement()
-        {
-            return Path == null || Path.Count <= 1;
-        }
-
-        private TileEntity NextTile { get => Path == null || Path.Count == 0 ? null : Game.World.Map.GetTile(Path[0].X, Path[0].Y); }
-
-        public override string ToString()
-        {
-            return $"<Course {ID.ToString()} Start=<{Start}> End={Finish} Party={Party} Next={NextTile}>";
-        }
+        public bool IsLastMovement() => Path == null || Path.Count <= 1;
+        public override string ToString() => $"<CourseExecutor Entity={EntityId} PathSize={Path?.Count}>";
     }
 }

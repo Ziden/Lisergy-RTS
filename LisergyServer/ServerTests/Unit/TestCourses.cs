@@ -159,7 +159,6 @@ namespace UnitTests
             Assert.AreNotEqual(course1, course2);
             Assert.IsFalse(_game.GameScheduler.Queue.Contains(course1));
             Assert.IsTrue(_game.GameScheduler.Queue.Contains(course2));
-            Assert.IsTrue(course1.HasFinished);
             Assert.IsFalse(course2.HasFinished);
         }
 

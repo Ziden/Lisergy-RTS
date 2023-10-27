@@ -48,11 +48,7 @@ namespace Game.Services
             if (!party.EntityLogic.Movement.TryStartMovement(ev.Path, ev.Intent))
             {
                 ev.Sender.SendMessage("Bad course");
-            } else
-            {
-                var s = _game.Scheduler;
-                var asd = 123;
-            }
+            } 
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Game.ECS
 {
@@ -35,5 +33,13 @@ namespace Game.ECS
         {
             ComponentType = componentType;
         }
+    }
+    
+    /// <summary>
+    /// This component won't be saved during worldsave
+    /// Means in case of a server restart it will be wiped
+    /// </summary>
+    public class NonPersisted : Attribute
+    {
     }
 }

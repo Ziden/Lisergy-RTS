@@ -14,7 +14,10 @@ namespace UnitTests
 
         private class TestTask : GameTask
         {
-            public TestTask(IGame game, TimeSpan delay) : base(game, delay, null) { }
+            public TestTask(IGame game, TimeSpan delay) : base(game, delay, null, null)
+            {
+                game.Scheduler.Add(this);
+            }
             public bool Ran = false;
             public override void Tick()
             {
@@ -86,6 +89,29 @@ namespace UnitTests
             Assert.AreEqual(t2, _scheduler.NextTask);
             Assert.AreEqual(2, _scheduler.PendingTasks);
         }
+        
+        [Test]
+        public void TackingUnmanagedMemory()
+        {
+            var t1 = new TestTask(_game, TimeSpan.FromSeconds(1));
+            var t2 = new TestTask(_game, TimeSpan.FromSeconds(5));
+            var t3 = new TestTask(_game, TimeSpan.FromSeconds(7));
+
+            Assert.AreNotEqual(t1.Pointer, t2.Pointer);
+            Assert.AreNotEqual(t1.Pointer, t3.Pointer);
+            
+            Assert.IsTrue(UnmanagedMemory._allocs.ContainsKey(t1.Pointer));
+            Assert.IsTrue(UnmanagedMemory._allocs.ContainsKey(t2.Pointer));
+            Assert.IsTrue(UnmanagedMemory._allocs.ContainsKey(t3.Pointer));
+            
+            t1.Dispose();
+            t2.Dispose();
+            t3.Dispose();
+            
+            Assert.IsFalse(UnmanagedMemory._allocs.ContainsKey(t1.Pointer));
+            Assert.IsFalse(UnmanagedMemory._allocs.ContainsKey(t2.Pointer));
+            Assert.IsFalse(UnmanagedMemory._allocs.ContainsKey(t3.Pointer));
+        }
 
         [Test]
         public void TestRunningTwoTasks()
@@ -131,7 +157,7 @@ namespace UnitTests
             _scheduler.SetLogicalTime(DateTime.UnixEpoch);
 
             var t1 = new TestTask(_game, TimeSpan.FromSeconds(10));
-
+            
             _scheduler.Tick(DateTime.UnixEpoch + TimeSpan.FromMilliseconds(1));
 
             Assert.AreEqual(t1, _scheduler.NextTask);

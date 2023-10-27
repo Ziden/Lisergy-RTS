@@ -1,6 +1,5 @@
 ﻿using GameData;
 using GameData.Specs;
-using System.Collections.Generic;
 
 namespace GameDataTest
 {
@@ -19,6 +18,8 @@ namespace GameDataTest
         {
             ID = 1,
             MovementFactor = 0,
+            ResourceSpotSpecId = TestHarvestingSpots.MOUNTAIN.SpecId,
+            ChangeToTileIdWhenDepleted = GRASS.ID,
             Art = new ArtSpec() { Address = Addr("Mountain"), Type=ArtType.PREFAB }
         };
 
@@ -26,6 +27,8 @@ namespace GameDataTest
         {
             ID = 2,
             MovementFactor = 0.5f,
+            ResourceSpotSpecId = TestHarvestingSpots.RIVER.SpecId,
+            ChangeToTileIdWhenDepleted = GRASS.ID,
             Art = new ArtSpec() { Address = Addr("Water"), Type=ArtType.PREFAB }
         };
 
@@ -33,6 +36,8 @@ namespace GameDataTest
         {
             MovementFactor = 0.8f,
             ID = 3,
+            ResourceSpotSpecId = TestHarvestingSpots.LOGS.SpecId,
+            ChangeToTileIdWhenDepleted = GRASS.ID,
             Art =new ArtSpec() { Address = Addr("Forest"), Type=ArtType.PREFAB }
         };
 

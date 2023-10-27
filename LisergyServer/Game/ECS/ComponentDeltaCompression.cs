@@ -21,7 +21,7 @@ namespace Game.ECS
             var totalSize = components.Sum(c => Marshal.SizeOf(c));
             if(_size < totalSize)
             {
-                UnmanagedMemory.Free(_ptr);
+                UnmanagedMemory.DeallocateMemory(_ptr);
                 _ptr = UnmanagedMemory.Alloc(totalSize);
             }
         }

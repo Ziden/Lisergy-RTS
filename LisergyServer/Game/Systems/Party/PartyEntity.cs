@@ -7,6 +7,8 @@ using Game.Systems.Movement;
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
+using Game.Scheduler;
+using Game.Systems.Resources;
 
 namespace Game.Systems.Party
 {
@@ -24,6 +26,8 @@ namespace Game.Systems.Party
             Components.Add<EntityVisionComponent>();
             Components.Add<CourseComponent>();
             Components.Add<MovespeedComponent>();
+            Components.Add<CargoComponent>();
+            Components.Get<CargoComponent>().MaxWeight = game.Specs.Harvesting.StartingPartyCargoWeight;
             Components.Get<MovespeedComponent>().MoveDelay = TimeSpan.FromSeconds(0.3);
             Components.AddReference(new MapReferenceComponent());
         }
@@ -32,14 +36,8 @@ namespace Game.Systems.Party
         {
             return Get<BattleGroupComponent>().BattleID == GameId.ZERO;
         }
-
-        // TODO: Remove this
-        public CourseTask Course
-        {
-            get => (CourseTask)EntityLogic.Movement.GetCourse();
-            set => EntityLogic.Movement.SetCourse(value);
-        }
-
+        
+        public GameTask Course => EntityLogic.Movement.GetCourseTask();
         public ref readonly byte PartyIndex { get => ref Components.Get<PartyComponent>().PartyIndex; }
         public ref readonly byte GetLineOfSight() => ref Components.Get<EntityVisionComponent>().LineOfSight;
         public override string ToString()

@@ -9,7 +9,17 @@ namespace GameData
     {
         public byte ID;
         public ArtSpec Art;
-
+        
+        /// <summary>
+        /// Any resources that are always present on this tile id
+        /// </summary>
+        public byte? ResourceSpotSpecId;
+        
+        /// <summary>
+        /// Change to tile id when resource is depleted
+        /// </summary>
+        public byte ChangeToTileIdWhenDepleted;
+        
         // 1=passable, 0=impassable, 0.5% slower
         public float MovementFactor;
 

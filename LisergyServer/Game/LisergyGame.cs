@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Game.ECS;
 using Game.Events;
 using Game.Events.Bus;
@@ -20,6 +21,7 @@ namespace Game
         public IGameLogic Logic { get; }
         public EventBus<IBaseEvent> Events { get; }
         public IGameLog Log { get; }
+        public DateTime GameTime { get; }
 
     }
 
@@ -36,6 +38,8 @@ namespace Game
         public IGameNetwork Network { get; private set; }
         public IGameLog Log { get; private set; }
         public EventBus<IBaseEvent> Events { get; private set; } = new EventBus<IBaseEvent>();
+        public DateTime GameTime => Scheduler.Now;
+        
         public LisergyGame(GameSpec specs, IGameLog log)
         {
             Specs = specs;

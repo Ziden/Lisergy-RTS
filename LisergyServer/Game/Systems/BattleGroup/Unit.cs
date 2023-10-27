@@ -32,7 +32,7 @@ namespace Game.Systems.Battler
         public byte Speed { get => Stats.Speed; set => Stats.Speed = value; }
         public byte Accuracy { get => Stats.Accuracy; set => Stats.Accuracy = value; }
         public byte Weight { get => Stats.Weight; set => Stats.Weight = value; }
-        public byte Move { get => Stats.Move; set => Stats.Move = value; }
+        public byte CargoWeight { get => Stats.CargoWeightBonusPct; set => Stats.CargoWeightBonusPct = value; }
         public byte HP { get => Stats.HP; set => Stats.HP = value; }
         public byte MaxHP { get => Stats.MaxHP; set => Stats.MaxHP = value; }
         public byte MP { get => Stats.MP; set => Stats.MP = value; }

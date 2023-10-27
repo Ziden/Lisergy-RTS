@@ -1,4 +1,5 @@
-﻿using Game.DataTypes;
+﻿using System;
+using Game.DataTypes;
 using Game.ECS;
 using Game.Scheduler;
 using Game.Systems.Map;
@@ -22,7 +23,9 @@ namespace Game.Systems.Movement
                 }
             }
             var movement = Entity.Components.GetPointer<CourseComponent>();
-            var task = new CourseTask(Game, Entity, sentPath, intent);
+            var taskExecutor = new CourseTaskExecutor(Entity, sentPath, intent);
+            var task = new GameTask(Game, TimeSpan.FromMilliseconds(1), owner, taskExecutor);
+            Game.Scheduler.Add(task);
             movement->CourseId = task.ID;
             movement->MovementIntent = intent;
             return true;
@@ -34,23 +37,18 @@ namespace Game.Systems.Movement
             movement->CourseId = GameId.ZERO;
         }
 
-        public GameTask GetCourse() => Game.Scheduler.GetTask(Entity.Components.Get<CourseComponent>().CourseId);
+        public GameTask GetCourseTask() => Game.Scheduler.GetTask(Entity.Components.Get<CourseComponent>().CourseId);
 
-        public CourseTask? TryGetCourseTask()
+        public GameTask? TryGetCourseTask()
         {
             var courseId = Entity.Components.Get<CourseComponent>().CourseId;
             if (courseId == GameId.ZERO) return null;
-            return Game.Scheduler.GetTask(courseId) as CourseTask;
+            return Game.Scheduler.GetTask(courseId);
         }
 
-        public void SetCourse(CourseTask newCourse)
+        public CourseTaskExecutor? TryGetCourseTaskExecutor()
         {
-            var existingCourse = GetCourse();
-            if (existingCourse != null && !existingCourse.HasFinished)
-                existingCourse.Cancel();
-            var component = Entity.Components.Get<CourseComponent>();
-            component.CourseId = newCourse.ID;
-            Entity.Components.Save(component);
+            return TryGetCourseTask()?.Executor as CourseTaskExecutor;
         }
     }
 }

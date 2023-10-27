@@ -35,8 +35,8 @@ namespace Game.Battle.Data
             {
                 Buffer.MemoryCopy(_units, group, groupSize, groupSize);
             }
-            UnmanagedMemory.FlagMemoryToBeReused((IntPtr)_unitStates);
-            UnmanagedMemory.FlagMemoryToBeReused((IntPtr)_units);
+            UnmanagedMemory.FreeForReuse((IntPtr)_unitStates);
+            UnmanagedMemory.FreeForReuse((IntPtr)_units);
         }
 
         public IntPtr Pointer => (IntPtr)_units;

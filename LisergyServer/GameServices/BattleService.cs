@@ -19,29 +19,26 @@ namespace Game.Services
     internal class BattleFinishedTaskEvent : IGameEvent
     {
         public BattleResultPacket ResultPacket;
+        public TurnBattle Battle;
     }
 
     /// <summary>
     /// Task to proccess a battle
     /// </summary>
-    public class BattleTask : GameTask
+    public class BattleTaskExecutor : ITaskExecutor
     {
-        public TurnBattle Battle { get; private set; }
-        private readonly IGame _game;
+        public TurnBattle Battle;
 
-        public BattleTask(IGame game, TurnBattle battle) : base(game, TimeSpan.FromSeconds(3), null)
+        public BattleTaskExecutor(TurnBattle battle) {  Battle = battle; }
+        
+        public void Execute(GameTask task)
         {
-            Battle = battle;
-            _game = game;
+            task.Game.Events.Call(new BattleFinishedTaskEvent()
+            {
+                Battle = Battle,
+                ResultPacket = new BattleResultPacket(Battle.ID, Battle.AutoRun.RunAllRounds())
+            });
         }
-
-        public override void Tick()
-        {
-            var result = Battle.AutoRun.RunAllRounds();
-            _game.Events.Call(new BattleFinishedTaskEvent() { ResultPacket = new BattleResultPacket(Battle.ID, result) });
-        }
-
-        public override string ToString() => $"<BattleTask {ID} {Battle}>";
     }
 
     /// <summary>
@@ -51,7 +48,7 @@ namespace Game.Services
     public class BattleService : IEventListener
     {
         private IGame _game;
-        public Dictionary<GameId, BattleTask> BattleTasks { get; private set; } = new Dictionary<GameId, BattleTask>();
+        public Dictionary<GameId, GameTask> BattleTasks { get; private set; } = new Dictionary<GameId, GameTask>();
         public Dictionary<GameId, BattleLogPacket> AllBattles { get; private set; } = new Dictionary<GameId, BattleLogPacket>();
 
         public BattleService(LisergyGame game)
@@ -78,7 +75,12 @@ namespace Game.Services
             _game.Log.Debug($"Received {packet.Attacker} vs {packet.Defender}");
             var battle = new TurnBattle(packet.BattleID, packet.Attacker, packet.Defender);
             AllBattles[packet.BattleID] = new BattleLogPacket(packet);
-            BattleTasks[battle.ID] = new BattleTask(_game, battle);
+
+            var attackerPlayer = _game.Players[packet.Attacker.OwnerID];
+            var executor = new BattleTaskExecutor(battle);
+            var task = new GameTask(_game, TimeSpan.FromSeconds(3), attackerPlayer, executor);
+            _game.Scheduler.Add(task);
+            BattleTasks[battle.ID] = task;
             _game.Network.SendToPlayer(new BattleStartPacket(packet.BattleID, packet.Position, packet.Attacker, packet.Defender), GetAllPlayers(battle).ToArray());
         }
 
@@ -98,7 +100,7 @@ namespace Game.Services
 
             AllBattles[fullResultPacket.Header.BattleID].SetTurns(fullResultPacket);
             var header = new BattleHeaderPacket(fullResultPacket.Header);
-            var battle = task.Battle;
+            var battle = ev.Battle;
             foreach (var pl in GetAllPlayers(battle))
             {
                 _game.Network.SendToPlayer(header, GetAllPlayers(battle).ToArray());
@@ -108,7 +110,7 @@ namespace Game.Services
             BattleTasks.Remove(fullResultPacket.Header.BattleID);
         }
 
-        public TurnBattle GetRunningBattle(GameId id) => BattleTasks[id].Battle;
+        public TurnBattle GetRunningBattle(GameId id) => ((BattleTaskExecutor)BattleTasks[id].Executor).Battle;
 
         public IEnumerable<PlayerEntity> GetAllPlayers(TurnBattle battle)
         {

@@ -25,13 +25,13 @@ namespace Game.World
         public void FlagToBeReused()
         {
             _dataPointer->Flags = 0;
-            UnmanagedMemory.FlagMemoryToBeReused((IntPtr)_dataPointer);
+            UnmanagedMemory.FreeForReuse((IntPtr)_dataPointer);
         }
 
         public void Free()
         {
             _dataPointer->Flags = 0;
-            UnmanagedMemory.Free((IntPtr)_dataPointer);
+            UnmanagedMemory.DeallocateMemory((IntPtr)_dataPointer);
         }
 
         public TileData* GetTileData(in int x, in int y) => (TileData*)_dataPointer +x + y * GameWorld.CHUNK_SIZE;

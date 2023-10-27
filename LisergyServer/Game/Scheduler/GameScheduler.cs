@@ -35,9 +35,9 @@ namespace Game.Scheduler
                 task.Tick();
             }
             task.Game.Entities.DeltaCompression.SendDeltaPackets(task.Creator);  // TODO: Maybe not best place
-            _ = Queue.Remove(task);
-            _ = _tasks.Remove(task.ID);
+            Cancel(task);
         }
+
 
         public GameTask GetTask(GameId id)
         {
@@ -65,7 +65,8 @@ namespace Game.Scheduler
         {
             _ = _tasks.Remove(task.ID);
             _ = Queue.Remove(task);
-            task.HasFinished = true;
+            task.Delay = TimeSpan.FromSeconds(0);
+            task.Dispose();
         }
 
         internal void RunTask(GameTask task)
@@ -81,9 +82,8 @@ namespace Game.Scheduler
             }
             else
             {
-                task.HasFinished = true;
+                task.Dispose();
             }
-
             NextTask = Queue.FirstOrDefault();
         }
 

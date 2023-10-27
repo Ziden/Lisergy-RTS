@@ -14,7 +14,7 @@ namespace UnitTests
         {
             GameWorld world = new GameWorld(50, 50);
 
-            Game = new TestGame(world);
+            Game = new TestGame(world: world);
         }
 
         [Test]

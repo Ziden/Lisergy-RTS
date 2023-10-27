@@ -17,8 +17,8 @@ namespace Game.Systems.Movement
         private void OnEntityMoveIn(IEntity owner, EntityMoveInEvent ev)
         {
             var tileHabitants = ev.ToTile.Components.GetReference<TileHabitants>();
-            var course = ev.Entity.EntityLogic.Movement.TryGetCourseTask();
-
+            var course = ev.Entity.EntityLogic.Movement.TryGetCourseTaskExecutor();
+            
             if (course == null || course.Intent != CourseIntent.OffensiveTarget || !course.IsLastMovement()) return;
             if (tileHabitants.Building == null) return;
 

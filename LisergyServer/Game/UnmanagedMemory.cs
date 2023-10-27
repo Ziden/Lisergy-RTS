@@ -36,6 +36,11 @@ namespace Game
             Marshal.Copy(new byte[size], 0, ptr, size);
 #endif
         }
+        
+        public unsafe static T* Alloc<T>() where T : unmanaged
+        {
+            return (T*)Alloc(sizeof(T));
+        }
 
         public static IntPtr Alloc(int size)
         {
@@ -68,7 +73,7 @@ namespace Game
             _allocs.Clear();
         }
 
-        public static void FlagMemoryToBeReused(IntPtr ptr)
+        public static void FreeForReuse(IntPtr ptr)
         {
             if (_allocs.ContainsKey(ptr))
             {
@@ -78,7 +83,7 @@ namespace Game
         }
 
 
-        public static void Free(IntPtr p)
+        public static void DeallocateMemory(IntPtr p)
         {
             _ = _allocs[p];
             Marshal.FreeHGlobal(p);
