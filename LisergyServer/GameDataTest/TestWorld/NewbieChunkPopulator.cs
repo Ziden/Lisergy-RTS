@@ -7,7 +7,7 @@ namespace Game.Generator
         int tries = GameWorld.PLAYERS_CHUNKS;
         int wait = 0;
 
-        public override void Populate(GameWorld w, PreAllocatedChunkMap map, Chunk c)
+        public override void Populate(GameWorld w, ServerChunkMap map, Chunk c)
         {
             map.SetFlag(c.X, c.Y, ChunkFlag.NEWBIE_CHUNK);
 

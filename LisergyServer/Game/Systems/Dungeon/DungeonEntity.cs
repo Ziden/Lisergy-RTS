@@ -43,7 +43,7 @@ namespace Game.Systems.Dungeon
                     group->Units.Add(units[i]);
                 }
             }
-            Components.GetPointer<DungeonComponent>()->SpecId = spec.DungeonSpecID;
+            Components.GetPointer<DungeonComponent>()->SpecId = spec.SpecId;
         }
     }
 }

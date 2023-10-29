@@ -56,6 +56,7 @@ namespace Game.ECS
         bool TryGetReference<T>(out T component) where T : class, IReferenceComponent;
         bool TryGet<T>(out T component) where T : unmanaged, IComponent;
         bool Has<T>() where T : unmanaged, IComponent;
+        void Remove<T>() where T : unmanaged, IComponent;
         void ClearDeltas();
         void CallEvent(IBaseEvent e);
     }

@@ -1,12 +1,9 @@
-﻿using Game.Events.Bus;
-using Game.Events.ServerEvents;
+﻿using Game.DataTypes;
+using Game.Events.Bus;
 using Game.Network.ClientPackets;
-using Game.Systems.MapPosition;
-using Game.Systems.Movement;
-using Game.Systems.Party;
-using Game.Tile;
+using Game.Systems.Battler;
+
 using Game.World;
-using System.Collections.Generic;
 
 namespace Game.Services
 {
@@ -25,7 +22,7 @@ namespace Game.Services
             var party = ev.Sender.GetParty(ev.PartyIndex);
             _game.Log.Debug($"{ev.Sender} requesting party {ev.PartyIndex} to move {ev.Path.Count} tiles");
 
-            if (!party.CanMove())
+            if (party.Get<BattleGroupComponent>().BattleID != GameId.ZERO)
             {
                 ev.Sender.SendMessage("Bad move");
                 return;

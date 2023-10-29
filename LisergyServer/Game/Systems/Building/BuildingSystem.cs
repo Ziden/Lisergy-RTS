@@ -1,5 +1,5 @@
 ﻿using Game.ECS;
-using Game.Events.GameEvents;
+using Game.Systems.Map;
 
 namespace Game.Systems.Building
 {

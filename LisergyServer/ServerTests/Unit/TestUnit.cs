@@ -23,7 +23,7 @@ namespace UnitTests
             var player = Game.GetTestPlayer();
             var party = player.Parties.First();
 
-            Assert.AreEqual(1, player.Data.StoredUnits.Count);
+            Assert.AreEqual(0, player.Data.StoredUnits.Count);
             Assert.AreEqual(Game.Specs.InitialUnitSpecId, party.Get<BattleGroupComponent>().Units.Leader.SpecId);
             Assert.That(party.Tile.EntitiesIn.Contains(party));
         }

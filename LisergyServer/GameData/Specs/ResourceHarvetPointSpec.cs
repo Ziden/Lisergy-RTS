@@ -1,7 +1,18 @@
-﻿using System;
+﻿using GameData.Specs;
+using System;
+using System.Runtime.InteropServices;
 
 namespace GameData
 {
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct HarvestPointSpecId
+    {
+        public byte Id;
+        public static implicit operator byte(HarvestPointSpecId d) => d.Id;
+        public static implicit operator HarvestPointSpecId(byte b) => new HarvestPointSpecId() { Id = b };
+    }
+
     /// <summary>
     /// Represents a harvestable resource on a given tile
     /// </summary>
@@ -11,12 +22,12 @@ namespace GameData
         /// <summary>
         /// Spec id
         /// </summary>
-        public byte SpecId;
+        public HarvestPointSpecId SpecId;
         
         /// <summary>
         /// What resource to spawn
         /// </summary>
-        public byte ResourceId;
+        public ResourceSpecId ResourceId;
         
         /// <summary>
         /// Max amount of resource to spawn
@@ -33,9 +44,9 @@ namespace GameData
         /// </summary>
         public TimeSpan RespawnTime;
         
-        public ResourceHarvestPointSpec(byte i)
+        public ResourceHarvestPointSpec(in byte i)
         {
-            SpecId = i;
+            SpecId = new HarvestPointSpecId() { Id = i };
         }
     }
 }

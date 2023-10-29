@@ -4,9 +4,7 @@ using Game.Systems.FogOfWar;
 using Game.Systems.Map;
 using Game.Systems.MapPosition;
 using Game.Systems.Movement;
-using Game.Systems.Player;
 using System;
-using System.Collections.Generic;
 using Game.Scheduler;
 using Game.Systems.Resources;
 
@@ -27,22 +25,15 @@ namespace Game.Systems.Party
             Components.Add<CourseComponent>();
             Components.Add<MovespeedComponent>();
             Components.Add<CargoComponent>();
+            Components.Add<HarvesterComponent>();
             Components.Get<CargoComponent>().MaxWeight = game.Specs.Harvesting.StartingPartyCargoWeight;
             Components.Get<MovespeedComponent>().MoveDelay = TimeSpan.FromSeconds(0.3);
             Components.AddReference(new MapReferenceComponent());
-        }
-
-        public bool CanMove()
-        {
-            return Get<BattleGroupComponent>().BattleID == GameId.ZERO;
         }
         
         public GameTask Course => EntityLogic.Movement.GetCourseTask();
         public ref readonly byte PartyIndex { get => ref Components.Get<PartyComponent>().PartyIndex; }
         public ref readonly byte GetLineOfSight() => ref Components.Get<EntityVisionComponent>().LineOfSight;
-        public override string ToString()
-        {
-            return $"<Party Entity={EntityId} Index={PartyIndex} Owner={OwnerID}>";
-        }
+        public override string ToString() => $"<Party Entity={EntityId} Index={PartyIndex} Owner={OwnerID}>";
     }
 }

@@ -1,9 +1,5 @@
-﻿using Game.DataTypes;
-using Game.ECS;
-using Game.Events.Bus;
-using Game.Events.GameEvents;
-using Game.Systems.Battler;
-using Game.Systems.FogOfWar;
+﻿using Game.ECS;
+using Game.Systems.BattleGroup;
 using Game.Systems.Map;
 
 namespace Game.Systems.Party

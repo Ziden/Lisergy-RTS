@@ -72,8 +72,8 @@ namespace BaseServer.Persistence
             var chunkSize = Math.Sqrt(qtdChunks);
             var tileSize = (ushort)(chunkSize * GameWorld.CHUNK_SIZE);
             var game = new LisergyGame(gameSpec, new GameLog("[Game]"));
-            var world = new GameWorld(tileSize, tileSize);
-            game.SetupGame(world, new GameServerNetwork(game));
+            var world = new GameWorld(game, tileSize, tileSize);
+            game.SetupWorld(world);
 
             DeserializeMap(game, mapTask.Result);
             DeserializePlayers(game, playersTask.Result);
@@ -140,7 +140,7 @@ namespace BaseServer.Persistence
 
         public unsafe void DeserializeMap(LisergyGame game, byte[] data)
         {
-            var map = (PreAllocatedChunkMap)game.World.Map;
+            var map = (ServerChunkMap)game.World.Map;
             var chunkSize = sizeof(ChunkData);
             var qtdChunks = data.Length / chunkSize;
             var qtdChunksInMap = map.ChunkMapDimensions.x * map.ChunkMapDimensions.y;
@@ -161,7 +161,7 @@ namespace BaseServer.Persistence
 
         public unsafe byte[] SerializeMap(LisergyGame game)
         {
-            var map = (PreAllocatedChunkMap)game.World.Map;
+            var map = (ServerChunkMap)game.World.Map;
             var chunkSize = sizeof(ChunkData);
             var totalChunks = map.ChunkMapDimensions.x * map.ChunkMapDimensions.y;
             var worldData = new byte[totalChunks * chunkSize + 4];

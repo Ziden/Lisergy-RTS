@@ -35,18 +35,19 @@ namespace Game.World
         public const int PLAYERS_CHUNKS = 2;
 
         public virtual IGame Game { get; set; }
-        protected PreAllocatedChunkMap _preallocatedMap { get; set; }
+        protected ServerChunkMap _preallocatedMap { get; set; }
         public ushort Seed { get; set; }
         public ushort SizeX { get; private set; }
         public ushort SizeY { get; private set; }
         public IGamePlayers Players { get; protected set; }
         public IChunkMap Map { get; protected set; }
 
-        public GameWorld( in ushort sizeX, in ushort sizeY)
+        public GameWorld(IGame game, in ushort sizeX, in ushort sizeY)
         {
             SizeX = sizeX;
             SizeY = sizeY;
             Players = new WorldPlayers(int.MaxValue);
+            Game = game;
             CreateMap();
         }
 
@@ -58,7 +59,7 @@ namespace Game.World
         public virtual void CreateMap()
         {
             _id = GameId.Generate();
-            _preallocatedMap = new PreAllocatedChunkMap(this, SizeX, SizeY);
+            _preallocatedMap = new ServerChunkMap(this, SizeX, SizeY);
             _preallocatedMap.CreateMap(SizeX, SizeY);
             Map = _preallocatedMap;
         }

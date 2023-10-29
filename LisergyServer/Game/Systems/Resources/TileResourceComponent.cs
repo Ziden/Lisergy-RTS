@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Game.ECS;
+using GameData;
 
 namespace Game.Systems.Resources
 {
@@ -22,7 +23,7 @@ namespace Game.Systems.Resources
 		/// <summary>
 		/// The resource to be harvested
 		/// </summary>
-		public byte ResourceId;
+		public ResourceSpecId ResourceId;
 
 		/// <summary>
 		/// If this tile is currently being harvested or not

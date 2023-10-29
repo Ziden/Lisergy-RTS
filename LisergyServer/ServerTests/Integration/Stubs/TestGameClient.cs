@@ -78,7 +78,7 @@ namespace ServerTests.Integration.Stubs
 
         public void Dispose()
         {
-            UnmanagedMemory.FreeAll();
+           UnmanagedMemory.FreeAll();
         }
     }
 }

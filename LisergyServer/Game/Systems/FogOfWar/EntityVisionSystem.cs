@@ -1,6 +1,6 @@
 ﻿using Game.ECS;
-using Game.Events.GameEvents;
-using System.Runtime.CompilerServices;
+using Game.Systems.BattleGroup;
+using Game.Systems.Map;
 
 namespace Game.Systems.FogOfWar
 {

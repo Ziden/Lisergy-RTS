@@ -29,9 +29,9 @@ namespace UnitTests
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Components.GetReference<MapReferenceComponent>().Tile;
             Assert.IsTrue(player.Buildings.Count == 1);
-            Assert.IsTrue(player.Buildings.Any(b => b.SpecId == initialBuildingSpec.Id));
-            Assert.IsTrue(tile.Components.GetReference<TileHabitants>().Building == player.Buildings.First());
-            Assert.IsTrue(((PlayerBuildingEntity)tile.Components.GetReference<TileHabitants>().Building).SpecId == initialBuildingSpec.Id);
+            Assert.IsTrue(player.Buildings.Any(b => b.SpecId == initialBuildingSpec.SpecId));
+            Assert.IsTrue(tile.Components.GetReference<TileHabitantsReferenceComponent>().Building == player.Buildings.First());
+            Assert.IsTrue(((PlayerBuildingEntity)tile.Components.GetReference<TileHabitantsReferenceComponent>().Building).SpecId == initialBuildingSpec.SpecId);
         }
 
         [Test]
@@ -48,12 +48,12 @@ namespace UnitTests
             var tile = Game.RandomNotBuiltTile();
             var buildingSpec = Game.RandomBuildingSpec();
 
-            player.EntityLogic.Player.Build(buildingSpec.Id, tile);
+            player.EntityLogic.Player.Build(buildingSpec.SpecId, tile);
 
             Assert.IsTrue(player.Buildings.Count == 2);
-            Assert.IsTrue(player.Buildings.Any(b => b.SpecId == buildingSpec.Id));
-            Assert.IsTrue(tile.Components.GetReference<TileHabitants>().Building == player.Buildings.Last());
-            Assert.IsTrue(((PlayerBuildingEntity)tile.Building).SpecId == buildingSpec.Id);
+            Assert.IsTrue(player.Buildings.Any(b => b.SpecId == buildingSpec.SpecId));
+            Assert.IsTrue(tile.Components.GetReference<TileHabitantsReferenceComponent>().Building == player.Buildings.Last());
+            Assert.IsTrue(((PlayerBuildingEntity)tile.Building).SpecId == buildingSpec.SpecId);
             Assert.That(tile.EntitiesViewing.Contains(tile.Building));
 
         }
@@ -68,7 +68,7 @@ namespace UnitTests
             Game.Entities.DeltaCompression.ClearDeltas();
             Game.SentServerPackets.Clear();
 
-            var building = player.EntityLogic.Player.Build(buildingSpec.Id, tile);
+            var building = player.EntityLogic.Player.Build(buildingSpec.SpecId, tile);
             Game.Entities.DeltaCompression.SendDeltaPackets(player);
             var buildingPacket = Game.SentServerPackets.First(o => o is EntityUpdatePacket p && p.EntityId == building.EntityId);
 

@@ -22,9 +22,5 @@ namespace GameData.Specs
 		/// How much of the speed is affected when cargo is full ?
 		/// </summary>
 		public byte WeightSpeedReduction = 255;
-
-		
-
-
 	}
 }

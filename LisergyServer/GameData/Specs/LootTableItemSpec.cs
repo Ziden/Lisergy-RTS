@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace GameData.Specs
 {
+
     [Serializable]
     public class LootTableItemSpec
     {

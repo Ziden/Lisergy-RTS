@@ -96,7 +96,7 @@ namespace ClientSDK
             {
                 if (!socket.Connected)
                 {
-                    socket.Connect("127.0.0.1", server.GetPort());
+                    socket.Connect("127.0.0.1", server.GetDefaultPort());
                     return;
                 }
 

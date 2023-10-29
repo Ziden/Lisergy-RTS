@@ -1,20 +1,29 @@
 ﻿using GameData.Specs;
 using System;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace GameData
 {
     [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ResourceSpecId
+    {
+        public byte Id;
+        public static implicit operator byte(ResourceSpecId d) => d.Id;
+        public static implicit operator ResourceSpecId(byte b) => new ResourceSpecId() { Id = b };
+    }
+
+    [Serializable]
     public class ResourceSpec
     {
-        public byte SpecId;
+        public ResourceSpecId SpecId;
         public ArtSpec Art;
         public string Name;
         public byte WeightPerUnit;
 
         public ResourceSpec(byte i)
         {
-            this.SpecId = i;
+            this.SpecId = new ResourceSpecId() { Id = i };
             this.Art = default;
         }
     }

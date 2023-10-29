@@ -1,11 +1,8 @@
 ﻿using Game.ECS;
 using Game.Events;
-using Game.Events.GameEvents;
 using Game.Network;
 using Game.Systems.Tile;
-using Game.Tile;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Game.Systems.FogOfWar
 {
@@ -23,7 +20,7 @@ namespace Game.Systems.FogOfWar
         {
             var tileObj = ev.Tile;
             var component = tile.Components.GetReference<TileVisibility>();
-            var habitants = tile.Components.GetReference<TileHabitants>();
+            var habitants = tile.Components.GetReference<TileHabitantsReferenceComponent>();
             var owner = Players.GetPlayer(ev.Explorer.OwnerID);
             if (ev.Explored)
             {

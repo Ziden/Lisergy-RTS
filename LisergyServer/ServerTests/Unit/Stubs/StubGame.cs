@@ -22,16 +22,22 @@ namespace ServerTests
         public CourseService CourseService { get; protected set; }
         public List<BasePacket> SentServerPackets { get; protected set; } = new List<BasePacket>();
         public GameWorld TestWorld { get; protected set; }
-        public PreAllocatedChunkMap TestMap { get; protected set; }
+        public ServerChunkMap TestMap { get; protected set; }
+
+        private static GameSpec _testSpecs;
 
         protected virtual GameWorld CreateTestWorld()
         {
             GameId.DEBUG_MODE = 1;
+            Log.Debug("Setting Seed");
             WorldUtils.SetRandomSeed(666);
-            TestWorld = new GameWorld(16, 16);
-            SetupGame(TestWorld, new GameServerNetwork(this));
-            Entities.DeltaCompression.ClearDeltas();
-            TestMap = TestWorld.Map as PreAllocatedChunkMap;
+            Log.Debug("Creating World");
+            TestWorld = new GameWorld(this, 16, 16);
+            SetupWorld(TestWorld);
+            Log.Debug("Clearing deltas");
+            long originalByteCount = GC.GetTotalMemory(false) / 1000;
+            Log.Debug($"Test World Ready: Heap Allocation Total {originalByteCount}kb");
+            TestMap = TestWorld.Map as ServerChunkMap;
             return TestWorld;
         }
 
@@ -52,9 +58,10 @@ namespace ServerTests
 
         public TestGame(GameSpec specs = null, GameWorld world = null, bool createPlayer = true) : base(specs ?? GetTestSpecs(), GetTestLog())
         {
-            UnmanagedMemory.FlagMemoryToBeReused();
             CreateTestWorld();
+            Log.Debug("Setting up serializer");
             Serialization.LoadSerializers();
+            Log.Debug("Creating local services");
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);
@@ -67,14 +74,16 @@ namespace ServerTests
 
         public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : BasePacket
         {
-            var deserialized = Serialization.ToCastedPacket<BasePacket>(Serialization.FromBasePacket(ev));
-            deserialized.Sender = sender;
-            TestNetwork.IncomingPackets.Call(deserialized);
+            //var deserialized = Serialization.ToCastedPacket<BasePacket>(Serialization.FromBasePacket(ev));
+            //deserialized.Sender = sender;
+            ev.Sender = sender;
+            TestNetwork.IncomingPackets.Call(ev);
             Entities.DeltaCompression.SendDeltaPackets(sender);
         }
 
         public TestServerPlayer CreatePlayer(in int x = 10, in int y = 10)
         {
+            Log.Debug("Creating new Test Player");
             var player = new TestServerPlayer(this);
             player.OnReceivedPacket += ev => ReceivePacket(ev);
             _testPlayerId = player.EntityId;
@@ -96,12 +105,20 @@ namespace ServerTests
             return (TestServerPlayer)pl;
         }
 
+        public static void BuildTestSpecs()
+        {
+            _testSpecs = TestSpecs.Generate();
+            // Allow having initial building in tests
+            _testSpecs.InitialBuildingSpecId = _testSpecs.Buildings[1].SpecId;
+        }
+
         private static GameSpec GetTestSpecs()
         {
-            var spec =  TestSpecs.Generate();
-            // Allow having initial building in tests
-            spec.InitialBuildingSpecId = spec.Buildings[1].Id;
-            return spec;
+            if(_testSpecs == null)
+            {
+                BuildTestSpecs();
+            }
+            return _testSpecs;
         }
 
         public BuildingSpec RandomBuildingSpec()

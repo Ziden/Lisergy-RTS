@@ -8,6 +8,8 @@ using Game.Systems.Party;
 using Game.Systems.Tile;
 using Game.Tile;
 using Game.World;
+using GameData;
+using GameData.Specs;
 
 namespace Game.Systems.Player
 {
@@ -18,7 +20,7 @@ namespace Game.Systems.Player
         /// <summary>
         /// Recruits a new unit for the player
         /// </summary>
-        public Unit RecruitUnit(ushort unitSpecId)
+        public Unit RecruitUnit(UnitSpecId unitSpecId)
         {
             var unit = new Unit(Game.Specs.Units[unitSpecId]);
             Data.StoredUnits.Add(unit.Id, unit);
@@ -41,12 +43,13 @@ namespace Game.Systems.Player
         public void PlaceNewPlayer(TileEntity t)
         {
             var p = Entity as PlayerEntity;
+            Game.Log.Debug($"Placing new player {p} on tile {t}");
             Game.Players.Add(p);
             if (Game.Specs.InitialBuildingSpecId.HasValue)
             {
                 Build(Game.Specs.InitialBuildingSpecId.Value, t);
             }
-            ushort initialUnit = Game.Specs.InitialUnit.UnitSpecID;
+            var initialUnit = Game.Specs.InitialUnit.SpecId;
             var unit = RecruitUnit(initialUnit);
             var party = CreateNewParty(0);
             PlaceUnitInParty(unit.Id, (PartyEntity)party);
@@ -77,6 +80,7 @@ namespace Game.Systems.Player
                 Game.Log.Error($"Tried to add unity {unitId} to party but unit was not free");
                 return;
             }
+            Data.StoredUnits.Remove(unitId);
             Game.Logic.GetEntityLogic(newParty).BattleGroup.AddUnit(storedUnit);
             Game.Log.Debug($"{Entity} moved unit {storedUnit} to party {newParty}");
         }
@@ -84,7 +88,7 @@ namespace Game.Systems.Player
         /// <summary>
         /// Builds a new building on the given tile
         /// </summary>
-        public PlayerBuildingEntity Build(ushort buildingSpecId, TileEntity t)
+        public PlayerBuildingEntity Build(BuildingSpecId buildingSpecId, TileEntity t)
         {
             var building = (PlayerBuildingEntity)Game.Entities.CreateEntity(Entity.OwnerID, EntityType.Building);
             building.BuildFromSpec(Game.Specs.Buildings[buildingSpecId]);

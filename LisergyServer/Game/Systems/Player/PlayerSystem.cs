@@ -1,12 +1,6 @@
 ﻿using Game.ECS;
-using Game.Events;
-using Game.Events.GameEvents;
-using Game.Network;
 using Game.Network.ServerPackets;
 using Game.Systems.FogOfWar;
-using Game.Systems.Tile;
-using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Game.Systems.Player
 {

@@ -69,7 +69,7 @@ namespace Game.ECS
        
         public void Free<T>() where T : unmanaged
         {
-            UnmanagedMemory.DeallocateMemory(Pointer<T>());
+            UnmanagedMemory.FreeForReuse(Pointer<T>());
             Remove(typeof(T));
         }
 

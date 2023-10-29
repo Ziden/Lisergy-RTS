@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace ServerTests.Integration
 {
-    [NonParallelizable]
     public class TwoPlayerTest
     {
         StandaloneServer _server;
@@ -29,7 +28,6 @@ namespace ServerTests.Integration
         public void TearDown() => _server?.Dispose();
 
         [Test]
-        [NonParallelizable]
 
         public async Task SmokeTest2p()
         {
@@ -64,7 +62,6 @@ namespace ServerTests.Integration
         }
 
         [Test]
-        [NonParallelizable]
 
         public async Task SmokeTestP1Disconnects()
         {

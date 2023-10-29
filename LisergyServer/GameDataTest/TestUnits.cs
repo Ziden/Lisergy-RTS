@@ -15,14 +15,14 @@ namespace GameDataTest
 
         private static void AddUnit(ref GameSpec spec, UnitSpec unitSpec)
         {
-            var id = (ushort)spec.Units.Count;
-            unitSpec.UnitSpecID = id;
+            var id = (byte)spec.Units.Count;
+            unitSpec.SpecId = id;
             spec.Units[id] = unitSpec;
         }
 
-        public static readonly ushort THIEF = 0;
-        public static readonly ushort KNIGHT = 1;
-        public static readonly ushort MAGE = 2;
+        public static readonly UnitSpecId THIEF = 0;
+        public static readonly UnitSpecId KNIGHT = 1;
+        public static readonly UnitSpecId MAGE = 2;
 
         private static UnitStats BaseStats = new UnitStats().SetStats(new Dictionary<Stat, byte>()
             {

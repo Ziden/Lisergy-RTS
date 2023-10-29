@@ -17,6 +17,11 @@
         /// part of the course.
         /// Entities along the way will be ignored unless this entity is attacked.
         /// </summary>
-        OffensiveTarget
+        OffensiveTarget,
+
+        /// <summary>
+        /// Moves to a given location to harvest resources that are located on the last tile of the course
+        /// </summary>
+        Harvest,
     }
 }

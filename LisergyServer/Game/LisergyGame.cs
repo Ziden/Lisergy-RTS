@@ -40,23 +40,23 @@ namespace Game
         public EventBus<IBaseEvent> Events { get; private set; } = new EventBus<IBaseEvent>();
         public DateTime GameTime => Scheduler.Now;
         
-        public LisergyGame(GameSpec specs, IGameLog log)
+        public LisergyGame(GameSpec specs, IGameLog log, IGameNetwork network = null)
         {
             Specs = specs;
             Log = log;
-        }
-
-        public void SetupGame(GameWorld world, IGameNetwork network)
-        {
-            Network = network;
+            Network = network ?? new GameServerNetwork(this);
             Entities = new GameEntities(this);
             Systems = new GameSystems(this);
             Logic = new GameLogic(Systems);
             Scheduler = new GameScheduler();
+        }
+
+        public void SetupWorld(GameWorld world)
+        {
             world.Game = this;
             World = world;
             Entities.DeltaCompression.ClearDeltas();
-            Log.Info($"World {World.Map.TilemapDimensions.x}x{World.Map.TilemapDimensions.y} ready");
+            Log.Debug($"World {World.Map.TilemapDimensions.x}x{World.Map.TilemapDimensions.y} ready");
         }
     }
 }

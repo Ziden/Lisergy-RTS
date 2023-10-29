@@ -1,8 +1,6 @@
 ﻿using Game.ECS;
-using Game.Events.GameEvents;
 using Game.Network.ServerPackets;
 using Game.Network;
-using Game.Systems.FogOfWar;
 using Game.Systems.MapPosition;
 using Game.Tile;
 using System.Linq;

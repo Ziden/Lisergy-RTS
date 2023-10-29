@@ -9,8 +9,8 @@ namespace GameData
     {
         public int Version;
 
-        public ushort? InitialBuildingSpecId;
-        public ushort InitialUnitSpecId;
+        public BuildingSpecId? InitialBuildingSpecId;
+        public UnitSpecId InitialUnitSpecId;
 
         public BuildingSpec InitialBuilding => Buildings[InitialBuildingSpecId.Value];
         public UnitSpec InitialUnit => Units[InitialUnitSpecId];
@@ -20,24 +20,25 @@ namespace GameData
             InitialBuildingSpecId = null;
             InitialUnitSpecId = 2;
             Version = version;
-            Buildings = new Dictionary<ushort, BuildingSpec>();
-            Tiles = new Dictionary<ushort, TileSpec>();
-            Units = new Dictionary<ushort, UnitSpec>();
+            Buildings = new Dictionary<BuildingSpecId, BuildingSpec>();
+            Tiles = new Dictionary<TileSpecId, TileSpec>();
+            Units = new Dictionary<UnitSpecId, UnitSpec>();
             Items = new Dictionary<ushort, ItemSpec>();
             Loots = new Dictionary<ushort, LootSpec>();
-            Dungeons = new Dictionary<ushort, DungeonSpec>();
-            HarvestPoints = new Dictionary<byte, ResourceHarvestPointSpec>();
+            Dungeons = new Dictionary<DungeonSpecId, DungeonSpec>();
+            Resources = new Dictionary<ResourceSpecId, ResourceSpec>();
+            HarvestPoints = new Dictionary<HarvestPointSpecId, ResourceHarvestPointSpec>();
             Harvesting = new HarvestingSpec();
         }
 
         public HarvestingSpec Harvesting;
-        public Dictionary<ushort, BuildingSpec> Buildings;
-        public Dictionary<ushort, TileSpec> Tiles;
-        public Dictionary<ushort, UnitSpec> Units;
+        public Dictionary<BuildingSpecId, BuildingSpec> Buildings;
+        public Dictionary<TileSpecId, TileSpec> Tiles;
+        public Dictionary<UnitSpecId, UnitSpec> Units;
         public Dictionary<ushort, ItemSpec> Items;
         public Dictionary<ushort, LootSpec> Loots;
-        public Dictionary<ushort, DungeonSpec> Dungeons;
-        public Dictionary<byte, ResourceSpec> Resources;
-        public Dictionary<byte, ResourceHarvestPointSpec> HarvestPoints;
+        public Dictionary<DungeonSpecId, DungeonSpec> Dungeons;
+        public Dictionary<ResourceSpecId, ResourceSpec> Resources;
+        public Dictionary<HarvestPointSpecId, ResourceHarvestPointSpec> HarvestPoints;
     }
 }

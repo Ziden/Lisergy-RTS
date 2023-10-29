@@ -9,7 +9,7 @@ using Game.Systems.Tile;
 using Game.World;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using GameData;
 
 namespace Game.Tile
 {
@@ -32,13 +32,21 @@ namespace Game.Tile
             _components = new ComponentSet(this);
             DeltaFlags = new DeltaFlags(this);
             SetupComponents();
+            OnUpdated();
+        }
+
+        private void OnUpdated()
+        {
+            var ev = EventPool<TileUpdatedEvent>.Get();
+            ev.Tile = this;
+            _components.CallEvent(ev);
+            EventPool<TileUpdatedEvent>.Return(ev);
         }
 
         /// <summary>
         /// Sets flag for the given tile
         /// Also sets the same flag for every entity & building on the tile
         /// </summary>
-       
         public void SetDeltaFlag(DeltaFlag flag)
         {
             DeltaFlags.SetFlag(flag);
@@ -46,15 +54,14 @@ namespace Game.Tile
             Building?.DeltaFlags.SetFlag(flag);
         }
 
-       
         public void SetupComponents()
         {
             Components.Add<TileComponent>();
             Components.AddReference(new TileVisibility());
-            Components.AddReference(new TileHabitants());
+            Components.AddReference(new TileHabitantsReferenceComponent());
+           
         }
 
-       
         public BasePacket GetUpdatePacket(PlayerEntity receiver, bool onlyDeltas = true)
         {
             var packet = PacketPool.Get<TilePacket>();
@@ -62,7 +69,6 @@ namespace Game.Tile
             packet.Position = _position;
             return packet;
         }
-
        
         public void ProccessDeltas(PlayerEntity trigger)
         {
@@ -71,17 +77,21 @@ namespace Game.Tile
         }
 
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
-        public void UpdateData(in TileData newData) => *_tileData = newData;
+        public void UpdateData(in TileData newData)
+        {
+            *_tileData = newData;
+            OnUpdated();
+        }
         public ref Chunk Chunk => ref _chunk;
-        public ref byte SpecId { get => ref _tileData->TileId; }
+        public ref TileSpecId SpecId { get => ref _tileData->TileId; }
         public float MovementFactor { get => Game.Specs.Tiles[SpecId].MovementFactor; }
         public ref readonly Position Position => ref _position;
         public ref readonly ushort Y { get => ref Position.Y; }
         public ref readonly ushort X { get => ref Position.X; }
         public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.GetReference<TileVisibility>().PlayersViewing;
         public IReadOnlyCollection<IEntity> EntitiesViewing => _components.GetReference<TileVisibility>().EntitiesViewing;
-        public IReadOnlyList<IEntity> EntitiesIn => _components.GetReference<TileHabitants>().EntitiesIn;
-        public IEntity Building => _components.GetReference<TileHabitants>().Building;
+        public IReadOnlyList<IEntity> EntitiesIn => _components.GetReference<TileHabitantsReferenceComponent>().EntitiesIn;
+        public IEntity Building => _components.GetReference<TileHabitantsReferenceComponent>().Building;
         public ref readonly GameId EntityId => ref _id;
         public IComponentSet Components => _components;
         public bool Passable => MovementFactor > 0;
@@ -90,6 +100,8 @@ namespace Game.Tile
         public IGame Game => this.Chunk.Map.World.Game;
         public IEntityLogic EntityLogic => Game.Logic.GetEntityLogic(this);
         public override string ToString() => $"<Tile Type={SpecId} {Position}>";
+        public TileSpec Spec => Game.Specs.Tiles[SpecId];
+        public ResourceHarvestPointSpec HarvestPointSpec => Spec.ResourceSpotSpecId.HasValue ? Game.Specs.HarvestPoints[Spec.ResourceSpotSpecId.Value] : null;
         public ref T Get<T>() where T : unmanaged, IComponent => ref _components.Get<T>();
         public void Save<T>(in T c) where T : unmanaged, IComponent => throw new NotImplementedException("Tiles cannot save components atm, just have references");
 

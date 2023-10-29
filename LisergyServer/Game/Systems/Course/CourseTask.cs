@@ -50,7 +50,7 @@ namespace Game.Systems.Movement
             task.Repeat = Path.Count > 0;
             if(!task.Repeat)
             {
-                task.Game.Systems.EntityMovement.GetLogic(entity).FinishCourse();
+                task.Game.Systems.EntityMovement.GetLogic(entity).FinishCourse(nextTile);
             }
         }
 

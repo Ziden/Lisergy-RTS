@@ -6,6 +6,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Drawing;
 
 #if UNITY
 using Unity.Collections.LowLevel.Unsafe;
@@ -53,6 +54,7 @@ namespace Game
                 return available;
             }
             IntPtr p = Marshal.AllocHGlobal(size);
+            GC.AddMemoryPressure(size);
             _allocs[p] = size;
             SetZeros(p, size);
             return p;
@@ -85,16 +87,18 @@ namespace Game
 
         public static void DeallocateMemory(IntPtr p)
         {
-            _ = _allocs[p];
+            var size = _allocs[p];
             Marshal.FreeHGlobal(p);
+            GC.RemoveMemoryPressure(size);
             _allocs.Clear();
         }
 
         public static void FreeAll()
         {
-            foreach (IntPtr p in _allocs.Keys)
+            foreach (var (p, s) in _allocs)
             {
                 Marshal.FreeHGlobal(p);
+                GC.RemoveMemoryPressure(s);
             }
             _allocs.Clear();
             _available.Clear();

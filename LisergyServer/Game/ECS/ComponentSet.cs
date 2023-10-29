@@ -1,4 +1,5 @@
 ﻿using Game.Events;
+using Game.Systems.Building;
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Game.ECS
         internal ComponentPointers _pointerComponents = new ComponentPointers();
 
         internal HashSet<Type> _modifiedComponents = new HashSet<Type>();
+        internal HashSet<IComponent> _removedComponents = new HashSet<IComponent>();
         internal List<Type> _networkedPublic = new List<Type>();
         internal List<Type> _networkedSelf = new List<Type>();
 
@@ -32,6 +34,7 @@ namespace Game.ECS
 
         /// <summary>
         /// TODO: Use buffers for performance
+        /// TODO: Communicate removed components
         /// </summary>
        
         public IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver, bool deltaCompression = true)
@@ -52,11 +55,16 @@ namespace Game.ECS
                         _returnBuffer.Add(_pointerComponents.AsInterface(t));
                 }
             }
+            foreach (var r in _removedComponents) _returnBuffer.Add(r);
             _entity.Game.Log.Debug($"Sync components [{string.Join(",",_returnBuffer.Select(c => c.GetType().Name))}] for entity {_entity}");
             return _returnBuffer;
         }
 
-        public void ClearDeltas() => _modifiedComponents.Clear();
+        public void ClearDeltas()
+        {
+            _modifiedComponents.Clear();
+            _removedComponents.Clear();
+        }
 
        
         public IReadOnlyCollection<Type> All() => _pointerComponents.Keys;
@@ -78,7 +86,15 @@ namespace Game.ECS
             TrackSync<T>();
         }
 
-       
+        public void Remove<T>() where T : unmanaged, IComponent
+        {
+            var t = typeof(T);
+            _modifiedComponents.Remove(t);
+            _pointerComponents.Free<T>();
+            _removedComponents.Add(default(T));
+            UntrackSync<T>();
+        }
+
         public T AddReference<T>(in T c) where T : class, IReferenceComponent
         {
             _referenceComponents[typeof(T)] = c;
@@ -97,7 +113,19 @@ namespace Game.ECS
                     _networkedPublic.Add(type);
             }
         }
-       
+
+        private void UntrackSync<T>()
+        {
+            var type = typeof(T);
+            var sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
+            if (sync != null)
+            {
+                _networkedSelf.Remove(type);
+                if (!sync.OnlyMine)
+                    _networkedPublic.Remove(type);
+            }
+        }
+
         public bool TryGet<T>(out T comp) where T : unmanaged, IComponent => _pointerComponents.TryGet<T>(out comp);
 
         public void CallEvent(IBaseEvent ev) => _entity.Game.Systems.CallEvent(_entity, ev);

@@ -43,7 +43,7 @@ namespace UnitTests
         [Test]
         public void TestGetStartingChunk()
         {
-            var newbieChunk = ((PreAllocatedChunkMap)Game.World.Map).GetUnnocupiedNewbieChunk();
+            var newbieChunk = ((ServerChunkMap)Game.World.Map).GetUnnocupiedNewbieChunk();
 
             Assert.IsFalse(newbieChunk == null);
         }

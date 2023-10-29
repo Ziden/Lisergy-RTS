@@ -21,7 +21,6 @@ namespace Game.Events
             if (_created > MAX_CREATED) throw new Exception("Some leak with object " + typeof(T).Name);
             return FastNew<T>.Instance();
         }
-
        
         public static void Return(T item) {
             _free.Enqueue(item);

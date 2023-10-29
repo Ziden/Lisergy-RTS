@@ -1,10 +1,7 @@
 ﻿using Game.DataTypes;
 using Game.ECS;
-using Game.Events.GameEvents;
-using Game.Network.ServerPackets;
+using Game.Systems.BattleGroup;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Game.Systems.Battler
 {
@@ -57,7 +54,11 @@ namespace Game.Systems.Battler
             var component = Entity.Components.GetPointer<BattleGroupComponent>();
             if (preferAtIndex >= 0) component->Units[preferAtIndex] = u;
             else component->Units.Add(u);
-            Entity.Components.CallEvent(new UnitAddToGroupEvent(Entity, u));
+            Entity.Components.CallEvent(new UnitAddToGroupEvent()
+            {
+                Unit = u,
+                Entity = Entity
+            });
         }
 
         public virtual void RemoveUnit(in Unit u, in int preferAtIndex = -1)

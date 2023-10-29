@@ -1,13 +1,23 @@
 ﻿using Game.Entity;
 using System;
+using System.Runtime.InteropServices;
 
 namespace GameData.Specs
 {
     [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct UnitSpecId
+    {
+        public byte Id;
+        public static implicit operator byte(UnitSpecId d) => d.Id;
+        public static implicit operator UnitSpecId(byte b) => new UnitSpecId() { Id = b };
+    }
+
+    [Serializable]
     public class UnitSpec
     {
         public string Name;
-        public ushort UnitSpecID;
+        public UnitSpecId SpecId;
         public byte LOS;
         public ArtSpec Art;
         public ArtSpec IconArt;

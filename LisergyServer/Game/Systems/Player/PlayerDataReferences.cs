@@ -6,6 +6,7 @@ using Game.Systems.Building;
 using Game.Systems.Party;
 using Game.Tile;
 using Game.World;
+using GameData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,11 @@ namespace Game.Systems.Player
         /// Battle headers of this player battles
         /// </summary>
         public List<BattleHeader> BattleHeaders = new List<BattleHeader>();
+
+        /// <summary>
+        /// Current resources this player have
+        /// </summary>
+        public Dictionary<ResourceSpecId, ushort> Resources = new Dictionary<ResourceSpecId, ushort>();
     }
 
     public class VisibilityReferences : IReferenceComponent

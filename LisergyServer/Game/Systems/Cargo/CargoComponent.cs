@@ -3,22 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Game.ECS;
-using Game.Systems.Battler;
+using GameData;
 
 namespace Game.Systems.Resources
 {
-	/// <summary>
-	/// Represents a resource in cargo
-	/// </summary>
-	[Serializable]
-	[StructLayout(LayoutKind.Sequential)]
-	public struct CargoResource
-	{
-		public byte ResourceSpecId;
-		public ushort Amount;
-
-		public bool Empty => Amount == 0;
-	}
 	
 	/// <summary>
 	/// Component for entities that holds a cargo
@@ -28,29 +16,56 @@ namespace Game.Systems.Resources
 	[Serializable]
 	[StructLayout(LayoutKind.Sequential)]
 	[SyncedComponent]
-	public struct CargoComponent : IComponent,  IEnumerable<CargoResource>
+	public struct CargoComponent : IComponent,  IEnumerable<ResourceStackData>
 	{
 		public ushort CurrentWeight;
 		public ushort MaxWeight;
-		public CargoResource Slot1;
-		public CargoResource Slot2;
-		public CargoResource Slot3;
+		public ResourceStackData Slot1;
+		public ResourceStackData Slot2;
+		public ResourceStackData Slot3;
 
-		public bool HasRoom => Slot1.Empty || Slot2.Empty || Slot3.Empty;
-		public ushort RemainingWeight => (ushort)(MaxWeight - CurrentWeight);
+		/// <summary>
+		/// Gets the remaining weight to be used on this cargo
+		/// </summary>
+        public ushort RemainingWeight => (ushort)(MaxWeight - CurrentWeight);
 
-		public CargoResource this[in int i]
+        /// <summary>
+        /// Gets a free slot in the cargo for the given resource
+        /// </summary>
+        public int GetRoomFor(in ResourceSpecId resource)
 		{
-			get
-			{
-				if (i == 0) return Slot1;
-				else if (i == 1) return Slot2;
-				else if (i == 2) return Slot3;
-				throw new ArgumentOutOfRangeException();
-			}
+			if (Slot1.Empty || Slot1.SpecId == resource) return 0;
+			else if (Slot2.Empty || Slot2.SpecId == resource) return 1;
+			else if (Slot3.Empty || Slot3.SpecId == resource) return 2;
+			return -1;
+        }
+
+		/// <summary>
+		/// Gets current owned amount of a given resource
+		/// </summary>
+		public ushort GetAmount(in ResourceSpecId id)
+		{
+			foreach(var r in this) if (r.SpecId == id) return r.Amount;
+			return 0;
 		}
 
-		public IEnumerator<CargoResource> GetEnumerator()
+		public void Add(in ResourceStackData stack)
+		{
+			if(Slot1.CanAdd(stack)) Slot1.Add(stack);
+            else if (Slot2.CanAdd(stack)) Slot2.Add(stack);
+            else if (Slot3.CanAdd(stack)) Slot3.Add(stack);
+            else throw new ArgumentOutOfRangeException();
+        }
+
+		public void GetStackAtSlot(in int i, out ResourceStackData stack)
+		{
+            if (i == 0) stack = Slot1;
+            else if (i == 1) stack = Slot2;
+            else if (i == 2) stack = Slot3;
+            throw new ArgumentOutOfRangeException();
+        }
+
+        public IEnumerator<ResourceStackData> GetEnumerator()
 		{
 			yield return Slot1;
 			yield return Slot2;
@@ -60,6 +75,11 @@ namespace Game.Systems.Resources
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+
+		public override string ToString()
+		{
+			return $"<Cargo Weight={CurrentWeight}/{MaxWeight} S1={Slot1} S2={Slot2} S3={Slot3}>";
 		}
 	}
 }

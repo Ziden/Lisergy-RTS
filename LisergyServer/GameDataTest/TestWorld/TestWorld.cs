@@ -9,22 +9,12 @@ namespace GameDataTest.TestWorldGenerator
         public const int MAX_PLAYERS = 40;
         public const int SEED = 12345;
 
-        public override IGame Game
+        public TestWorld(IGame game) : base(game, 100, 100)
         {
-            get => base.Game;
-            set
-            {
-                base.Game = value;
-                Populate(SEED,
-                    new NewbieChunkPopulator(),
-                    new DungeonsPopulator()
-                );
-            }
-        }
-
-        public TestWorld() : base(100, 100)
-        {
-         
+           Populate(SEED,
+               new NewbieChunkPopulator(),
+               new DungeonsPopulator()
+           );
         }
     }
 }

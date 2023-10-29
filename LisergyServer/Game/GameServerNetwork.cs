@@ -34,7 +34,9 @@ namespace Game
 
     public static class ServerNetworkExt
     {
-        public static int GetPort(this ServerType server) => 1337 + (int)server;
+        public static int PORT_START = 1337;
+
+        public static int GetDefaultPort(this ServerType server) => PORT_START + (int)server;
     }
 
 

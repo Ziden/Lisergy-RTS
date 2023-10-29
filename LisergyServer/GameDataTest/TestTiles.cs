@@ -9,14 +9,12 @@ namespace GameDataTest
         
         public static readonly TileSpec GRASS = new TileSpec(0)
         {
-            ID = 0,
             MovementFactor = 1,
             Art = new ArtSpec() { Address = Addr("Plains"), Type=ArtType.PREFAB }
         };
 
         public static readonly TileSpec MOUNTAIN = new TileSpec(1)
         {
-            ID = 1,
             MovementFactor = 0,
             ResourceSpotSpecId = TestHarvestingSpots.MOUNTAIN.SpecId,
             ChangeToTileIdWhenDepleted = GRASS.ID,
@@ -25,7 +23,6 @@ namespace GameDataTest
 
         public static readonly TileSpec WATER = new TileSpec(2)
         {
-            ID = 2,
             MovementFactor = 0.5f,
             ResourceSpotSpecId = TestHarvestingSpots.RIVER.SpecId,
             ChangeToTileIdWhenDepleted = GRASS.ID,
@@ -35,7 +32,6 @@ namespace GameDataTest
         public static readonly TileSpec FOREST = new TileSpec(3)
         {
             MovementFactor = 0.8f,
-            ID = 3,
             ResourceSpotSpecId = TestHarvestingSpots.LOGS.SpecId,
             ChangeToTileIdWhenDepleted = GRASS.ID,
             Art =new ArtSpec() { Address = Addr("Forest"), Type=ArtType.PREFAB }

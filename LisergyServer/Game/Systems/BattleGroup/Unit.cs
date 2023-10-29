@@ -13,13 +13,13 @@ namespace Game.Systems.Battler
     public unsafe struct Unit : IEquatable<Unit>, IEqualityComparer<Unit>
     {
         public GameId Id;
-        public ushort SpecId;
+        public UnitSpecId SpecId;
         public UnitStats Stats;
 
         public Unit(UnitSpec spec)
         {
             Id = GameId.Generate();
-            SpecId = spec.UnitSpecID;
+            SpecId = spec.SpecId;
             Stats = new UnitStats();
             Stats.SetStats(spec.Stats);
             HealAll();

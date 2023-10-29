@@ -47,7 +47,7 @@ namespace UnitTests
             var party = _player.GetParty(0);
 
             // place the dungeon reference
-            dungeonTile.Components.GetReference<TileHabitants>().Building = _dungeon;
+            dungeonTile.Components.GetReference<TileHabitantsReferenceComponent>().Building = _dungeon;
 
             // send intent to move player to the party
             _player.SendMoveRequest(party, dungeonTile, CourseIntent.Defensive);
@@ -100,7 +100,7 @@ namespace UnitTests
 
             _dungeon.EntityLogic.Map.SetPosition(dungeonTile);
 
-            var tileBuilding = dungeonTile.Components.GetReference<TileHabitants>().Building;
+            var tileBuilding = dungeonTile.Components.GetReference<TileHabitantsReferenceComponent>().Building;
             Assert.That(tileBuilding.EntityId == _dungeon.EntityId);
             Assert.That(tileBuilding.Components.Get<BattleGroupComponent>().Units.Valids > 0);
         }
@@ -146,7 +146,7 @@ namespace UnitTests
             Assert.IsTrue(_dungeon.Tile == null);
             Assert.IsTrue(_dungeon.EntityLogic.BattleGroup.IsDestroyed);
             Assert.AreEqual(_dungeon.Tile, null);
-            Assert.AreEqual(dungeonTile.Components.GetReference<TileHabitants>().Building, null);
+            Assert.AreEqual(dungeonTile.Components.GetReference<TileHabitantsReferenceComponent>().Building, null);
             Assert.AreEqual(_player.ReceivedPacketsOfType<EntityDestroyPacket>().Count, 1);
         }
 
@@ -175,7 +175,7 @@ namespace UnitTests
             Assert.IsTrue(party.Tile == playerCastleTile);
             Assert.IsTrue(!party.EntityLogic.BattleGroup.IsDestroyed);
             Assert.AreEqual(_dungeon.Tile, dungeonTile);
-            Assert.AreEqual(dungeonTile.Components.GetReference<TileHabitants>().Building, _dungeon);
+            Assert.AreEqual(dungeonTile.Components.GetReference<TileHabitantsReferenceComponent>().Building, _dungeon);
             Assert.AreEqual(_player.ReceivedPacketsOfType<EntityDestroyPacket>().Count, 0);
         }
 
@@ -244,7 +244,7 @@ namespace UnitTests
             component.Units[0] = unit;
             party.Save(component);
 
-            dungeonTile.Components.GetReference<TileHabitants>().Building = _dungeon;
+            dungeonTile.Components.GetReference<TileHabitantsReferenceComponent>().Building = _dungeon;
 
             _player.SendMoveRequest(_player.GetParty(0), dungeonTile, CourseIntent.OffensiveTarget);
             _player.GetParty(0).Course.Tick();

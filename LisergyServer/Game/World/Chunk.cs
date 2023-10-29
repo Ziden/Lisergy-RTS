@@ -32,7 +32,7 @@ namespace Game.World
 
         public IChunkMap Map { get; private set; }
 
-        public Chunk(IChunkMap map, in ushort x, in ushort y)
+        public Chunk(IChunkMap map, in int x, in int y)
         {
             _data = new ChunkDataHolder();
             _data.Allocate(map.ChunkMapDimensions.x * map.ChunkMapDimensions.y);
@@ -55,15 +55,19 @@ namespace Game.World
        
         public TileEntity CreateTile(in int internalTileX, in int internalTileY)
         {
-            if (Tiles[internalTileX, internalTileY] != null) throw new Exception($"Tile already created {internalTileX} {internalTileY}");
             TileData* dataPointer = _data.GetTileData(internalTileX, internalTileY);
             var tile = new TileEntity(this, dataPointer, X * GameWorld.CHUNK_SIZE + internalTileX, Y * GameWorld.CHUNK_SIZE + internalTileY);
             Tiles[internalTileX, internalTileY] = tile;
             return tile;
         }
 
-       
-        public TileEntity GetTile(in int x, in int y) => Tiles[x, y];
+
+        public TileEntity GetTile(in int x, in int y)
+        {
+            var tile = Tiles[x, y];
+            if (tile == null) tile = CreateTile(x, y);
+            return tile;
+        }
 
        
         public override string ToString() => $"<Chunk x={X} y={Y}>";
@@ -73,7 +77,7 @@ namespace Game.World
         {
             for (var x = 0; x < _tileReferences.GetLength(0); x++)
                 for (var y = 0; y < _tileReferences.GetLength(1); y++)
-                    yield return _tileReferences[x, y];
+                    yield return GetTile(x, y);
         }
         public void Dispose() => _data.Free();
     }

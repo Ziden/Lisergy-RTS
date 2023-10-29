@@ -1,8 +1,11 @@
 ﻿using Game.ECS;
 using Game.Events;
-using Game.Events.GameEvents;
 using Game.Network.ServerPackets;
-using System.Linq;
+using Game.Systems.BattleGroup;
+using Game.Systems.Course;
+using Game.Systems.Map;
+using Game.Systems.Movement;
+using Game.Systems.Tile;
 
 namespace Game.Systems.Battler
 {
@@ -12,22 +15,24 @@ namespace Game.Systems.Battler
         public override void OnEnabled()
         {
             EntityEvents.On<BattleFinishedEvent>(OnBattleFinish);
-            EntityEvents.On<OffensiveActionEvent>(OnOffensiveAction);
+            EntityEvents.On<CourseFinishEvent>(OnCourseFinish);
             Game.Network.On<BattleResultPacket>(OnBattleResult);
         }
 
-        /// <summary>
-        /// When a entity moved offensively towards another entity
-        /// </summary>
-        private void OnOffensiveAction(IEntity attacker, OffensiveActionEvent ev)
+
+        private void OnCourseFinish(IEntity entity, CourseFinishEvent ev)
         {
-            if(GetLogic(ev.Attacker).IsBattling || GetLogic(ev.Defender).IsBattling)
-            {
-                Game.Log.Error($"Error battle {ev.Attacker} vs {ev.Defender} already battling");
-                return;
-            }
-            var battleId = GetLogic(ev.Attacker).StartBattle(ev.Defender);
-            Game.Network.SendToServer(new BattleQueuedPacket(battleId, ev.Attacker, ev.Defender), ServerType.BATTLE);
+            var tileHabitants = ev.ToTile.Components.GetReference<TileHabitantsReferenceComponent>();
+
+            if (ev.Intent != CourseIntent.OffensiveTarget) return;
+            if (tileHabitants.Building == null) return;
+
+            if (!ev.Entity.Components.Has<BattleGroupComponent>() || !tileHabitants.Building.Components.Has<BattleGroupComponent>()) return;
+            var atkGroup = ev.Entity.Components.Get<BattleGroupComponent>();
+            var defGroup = tileHabitants.Building.Components.Get<BattleGroupComponent>();
+            if (GetLogic(ev.Entity).IsBattling || GetLogic(tileHabitants.Building).IsBattling) return;
+            var battleId = GetLogic(ev.Entity).StartBattle(tileHabitants.Building);
+            Game.Network.SendToServer(new BattleQueuedPacket(battleId, ev.Entity, tileHabitants.Building), ServerType.BATTLE);
         }
 
         /// <summary>

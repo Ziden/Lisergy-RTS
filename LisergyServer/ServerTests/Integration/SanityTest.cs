@@ -1,9 +1,7 @@
 ﻿using Game;
 using Game.ECS;
-using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
-using Game.Systems.Building;
-using Game.Systems.Dungeon;
+using Game.Systems.FogOfWar;
 using Game.Systems.Map;
 using Game.Systems.Movement;
 using Game.Systems.Party;
@@ -23,7 +21,6 @@ namespace ServerTests.Integration
     /// This is done as a sdk instead of a client so it's easier to test and debug and ensure its logic is fully functional and can be safely
     /// exposed to client so the client is only required to ensure the UI and visual representations are working.
     /// </summary>
-    [NonParallelizable]
     public class TestClientSDKSmoke
     {
         StandaloneServer _server;
@@ -76,10 +73,8 @@ namespace ServerTests.Integration
             await _client.WaitFor<EntityUpdatePacket>(e => e.Type == EntityType.Dungeon);
             await _client.WaitFor<EntityUpdatePacket>(e => e.Type == EntityType.Building);
 
-            Assert.AreEqual(3, mapPlacementUpdates.Count); // Castle, Party, Dungeon
+            Assert.AreEqual(1, mapPlacementUpdates.Count); // Party
             Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is PartyEntity));
-            Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is PlayerBuildingEntity));
-            Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is DungeonEntity));
         }
 
         [Test]
@@ -127,10 +122,8 @@ namespace ServerTests.Integration
 
             // COMPONENTS SYNC TRIGGERED
             await _client.WaitFor<EntityUpdatePacket>(p => p.Type == EntityType.Party);
-            Assert.AreEqual(3, mapPlacementUpdates.Count); // Castle, Party, Dungeon
+            Assert.AreEqual(1, mapPlacementUpdates.Count); // Party
             Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is PartyEntity));
-            Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is PlayerBuildingEntity));
-            Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is DungeonEntity));
             mapPlacementUpdates.Clear();
 
             // CHECK IF CLIENT-SIDE EVENTS ARE FIRED

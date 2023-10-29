@@ -37,7 +37,7 @@ namespace UnitTests
             
             // Messing the tilemap to ensure its all correct
             var random = new Random();
-            foreach (var tile in world1.AllTiles()) tile.SpecId = (byte)(random.NextSingle() * 200);
+            foreach (var tile in world1.AllTiles()) tile.SpecId = (byte)(random.NextSingle() * 3);
 
             FlatFileWorldPersistence persistence = new FlatFileWorldPersistence(null);
 
@@ -46,8 +46,8 @@ namespace UnitTests
             var entityBytes = persistence.SerializeEntities(game1);
 
             var game2 = new LisergyGame(game1.Specs, game1.Log);
-            var world2 = new GameWorld(mapSize, mapSize);
-            game2.SetupGame(world2, game1.Network);
+            var world2 = new GameWorld(game2, mapSize, mapSize);
+            game2.SetupWorld(world2);
 
             persistence.DeserializeMap(game2, worldBytes);
             persistence.DeserializePlayers(game2, playerBytes);

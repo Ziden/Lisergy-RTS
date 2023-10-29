@@ -58,9 +58,9 @@ namespace ClientSDK.Services
         private void OnReceiveGameSpec(GameSpecPacket ev)
         {
             _client.Log.Debug("Initialized Specs");
-            var game = new LisergyGame(ev.Spec, new GameLog("[Client Game]"));
+            var game = new LisergyGame(ev.Spec, new GameLog("[Client Game]"), _client.Network);
             var world = new ClientWorld(game, (ushort)ev.MapSizeX, (ushort)ev.MapSizeY);
-            game.SetupGame(world, _client.Network);
+            game.SetupWorld(world);
             _client.InitializeGame(game);
             _client.ClientEvents.Call(new GameStartedEvent(game, new PlayerEntity(_profile, game)));
             _client.Network.SendToServer(new JoinWorldPacket());

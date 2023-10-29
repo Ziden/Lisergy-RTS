@@ -20,26 +20,35 @@ namespace ServerTests.Integration.Stubs
     {
         public ConcurrentDictionary<ServerType, RunningServer> _servers = new ConcurrentDictionary<ServerType, RunningServer>();
 
+        private static object _lock = new object();
+
         public FlatFileWorldPersistence Persistence;
 
         private void SetupServer(SocketServer server)
         {
-            _servers[server.GetServerType()] = new RunningServer()
+            lock(_lock)
             {
-                Thread = new Thread(() =>
+                _servers[server.GetServerType()] = new RunningServer()
                 {
-                    server.RunServer();
-                    if (server.ServerError != null) throw server.ServerError;
-                }),
-                Server = server
-            };
+                    Thread = new Thread(() =>
+                    {
+                        server.RunServer();
+                        if (server.ServerError != null) throw server.ServerError;
+                    }),
+                    Server = server
+                };
+            }
+           
         }
 
         public StandaloneServer Start()
         { 
-            foreach(var server in _servers.Values)
+            lock(_lock)
             {
-                server.Thread.Start();
+                foreach (var server in _servers.Values)
+                {
+                    server.Thread.Start();
+                }
             }
             return this;
         }
@@ -58,21 +67,28 @@ namespace ServerTests.Integration.Stubs
 
         public StandaloneServer()
         {
-            var game = new LisergyGame(TestSpecs.Generate(), new GameLog("[Server Game]"));
-            game.SetupGame(new TestWorld(), new GameServerNetwork(game));
-            Persistence = new FlatFileWorldPersistence(game.Log);
+            lock(_lock)
+            {
+                ServerNetworkExt.PORT_START += 10;
+                var game = new LisergyGame(TestSpecs.Generate(), new GameLog("[Server Game]"));
+                game.SetupWorld(new TestWorld(game));
+                Persistence = new FlatFileWorldPersistence(game.Log);
 
-            SetupServer(new WorldServer(game));
-            SetupServer(new AccountServer());
-            SetupServer(new ChatServer());
+                SetupServer(new WorldServer(game));
+                SetupServer(new AccountServer());
+                SetupServer(new ChatServer());
+            } 
         }
 
         public void Dispose()
         {
-            foreach (var running in _servers)
+            lock(_lock)
             {
-                running.Value.Server?.Stop();
-                running.Value.Thread?.Interrupt();
+                foreach (var running in _servers)
+                {
+                    running.Value.Server?.Stop();
+                    running.Value.Thread?.Interrupt();
+                }
             }
         }
     }

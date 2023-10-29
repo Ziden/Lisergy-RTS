@@ -64,7 +64,7 @@ namespace UnitTests
             var game = new TestGame();
 
             var player = game.GetTestPlayer();
-            var unit = player.Data.StoredUnits.First();
+            var unit = player.Parties[0].Get<BattleGroupComponent>().Units.First();
             var building = player.Buildings.First();
             var tile = player.Parties[0].Tile;
 

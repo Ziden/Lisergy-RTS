@@ -91,7 +91,7 @@ namespace Game.World
             {
                 var rndX = _random.Next(0, tiles.GetLength(0));
                 var rndY = _random.Next(0, tiles.GetLength(1));
-                TileEntity tile = tiles[rndX, rndY];
+                TileEntity tile = chunk.GetTile(rndX, rndY);
                 if (tile.SpecId == tileID)
                     return tile;
                 tries--;

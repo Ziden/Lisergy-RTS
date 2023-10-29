@@ -12,9 +12,7 @@ namespace UnitTests
         [SetUp]
         public void SetupTests()
         {
-            GameWorld world = new GameWorld(50, 50);
-
-            Game = new TestGame(world: world);
+            Game = new TestGame();
         }
 
         [Test]

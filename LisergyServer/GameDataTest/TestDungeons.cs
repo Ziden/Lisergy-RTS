@@ -12,10 +12,10 @@ namespace GameDataTest
         {
             Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("dungeon") },
             LootSpecID = TestLoots.GOLD_GUARANTEED.SpecID,
-            DungeonSpecID = 0,
+            SpecId = 0,
             BattleSpecs = new List<BattleSpec>() { new BattleSpec()
             {
-                 UnitSpecIDS = new ushort[1] { TestUnitData.THIEF }
+                 UnitSpecIDS = new UnitSpecId[1] { TestUnitData.THIEF }
             }}
         };
 

@@ -1,5 +1,6 @@
 ﻿using Game.Pathfinder;
 using Game.World;
+using GameData;
 using System;
 using System.Runtime.InteropServices;
 
@@ -13,7 +14,7 @@ namespace Game.Systems.Tile
     [Serializable]
     public struct TileData
     {
-        public byte TileId;
+        public TileSpecId TileId;
 
         public override string ToString() => $"<TileData ID={TileId}>";
     }

@@ -12,7 +12,7 @@ namespace Game.Systems.Building
     {
         public override EntityType EntityType => EntityType.Building;
 
-        public ushort SpecId => Components.Get<PlayerBuildingComponent>().SpecId;
+        public BuildingSpecId SpecId => Components.Get<PlayerBuildingComponent>().SpecId;
 
         public PlayerBuildingEntity(IGame game, GameId owner) : base(game, owner)
         {
@@ -26,7 +26,7 @@ namespace Game.Systems.Building
 
         public void BuildFromSpec(BuildingSpec spec)
         {
-            Components.GetPointer<PlayerBuildingComponent>()->SpecId = spec.Id;
+            Components.GetPointer<PlayerBuildingComponent>()->SpecId = spec.SpecId;
             Components.GetPointer<EntityVisionComponent>()->LineOfSight = spec.LOS;
         }
 

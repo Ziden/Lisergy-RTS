@@ -5,6 +5,6 @@ namespace Game.World
     public abstract class ChunkPopulator
     {
        
-        public abstract void Populate(GameWorld w, PreAllocatedChunkMap map, Chunk c);
+        public abstract void Populate(GameWorld w, ServerChunkMap map, Chunk c);
     }
 }

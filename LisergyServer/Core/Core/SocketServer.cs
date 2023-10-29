@@ -20,7 +20,7 @@ namespace BaseServer.Core
 
         public SocketServer()
         {
-            _port = GetServerType().GetPort();
+            _port = GetServerType().GetDefaultPort();
             Log = new GameLog($"[Server {GetServerType()}]");
             _commandExecutor = new ConsoleCommandExecutor(null);
             _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
@@ -35,7 +35,7 @@ namespace BaseServer.Core
             try
             {
                 Ticker = new Ticker(60);
-                Log.Info($"Server Started at port {GetServerType().GetPort()}");
+                Log.Info($"Server Started at port {GetServerType().GetDefaultPort()}");
                 Ticker.Run(RunTick);
             }
             catch (Exception e)

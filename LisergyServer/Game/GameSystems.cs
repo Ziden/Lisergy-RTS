@@ -12,6 +12,8 @@ using Game.Events;
 using Game.Systems.Map;
 using Game.Systems.Player;
 using Game.DataTypes;
+using Game.Systems.Resources;
+using System.Linq;
 
 namespace Game
 {
@@ -25,8 +27,11 @@ namespace Game
         TileVisibilitySystem TileVisibility { get; }
         MapSystem Map { get; }
         PartySystem Party { get; }
-        TileHabitantsSystem TileHabitants { get; }
+        TileSystem Tile { get; }
         PlayerSystem Players { get; }
+        HarvestingSystem Harvesting { get; }
+        ResourceSystem Resources { get; }
+        CargoSystem Cargo { get; }
         void CallEvent(IEntity entity, IBaseEvent ev);
     }
 
@@ -47,9 +52,12 @@ namespace Game
             AddSystem(EntityMovement = new CourseSystem(game));
             AddSystem(TileVisibility = new TileVisibilitySystem(game));
             AddSystem(Party = new PartySystem(game));
-            AddSystem(TileHabitants = new TileHabitantsSystem(game));
+            AddSystem(Tile = new TileSystem(game));
             AddSystem(Map = new MapSystem(game));
             AddSystem(Players = new PlayerSystem(game));
+            AddSystem(Harvesting = new HarvestingSystem(game));
+            AddSystem(Resources = new ResourceSystem(game));
+            AddSystem(Cargo = new CargoSystem(game));
         }
 
         public MapSystem Map { get; private set; }
@@ -61,8 +69,11 @@ namespace Game
         public CourseSystem EntityMovement { get; private set; }
         public TileVisibilitySystem TileVisibility { get; private set; }
         public PartySystem Party { get; private set; }
-        public TileHabitantsSystem TileHabitants { get; private set; }
+        public TileSystem Tile { get; private set; }
         public PlayerSystem Players { get; private set; }
+        public HarvestingSystem Harvesting { get; private set; }
+        public ResourceSystem Resources { get; private set; }
+        public CargoSystem Cargo { get; private set; }
 
         private void AddSystem<ComponentType>(GameSystem<ComponentType> system) where ComponentType : unmanaged, IComponent 
         {
@@ -73,7 +84,7 @@ namespace Game
         public void CallEvent(IEntity entity, IBaseEvent ev)
         {
             _game.Events.Call(ev);
-            foreach (var componentType in entity.Components.All())
+            foreach (var componentType in entity.Components.All().ToArray())
             {
                 CallSystemEvent(componentType, entity, ev);
             }

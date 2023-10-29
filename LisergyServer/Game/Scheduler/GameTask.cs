@@ -28,6 +28,7 @@ namespace Game.Scheduler
         public DateTime Finish => _data->Start + _data->Delay;
         public ref DateTime Start => ref _data->Start;
         public ref readonly GameId ID => ref _data->TaskId;
+
         public ref bool Repeat => ref _data->Repeat;
         public ref TimeSpan Delay => ref _data->Delay;
         public PlayerEntity Creator => Game.Players[_data->PlayerCreatorId];
@@ -51,9 +52,18 @@ namespace Game.Scheduler
         public virtual void Tick() => Executor.Execute(this);
         public bool IsDue() => Finish <= Game.Scheduler.Now;
         public void Cancel() => Game.Scheduler.Cancel(this);
-        public int CompareTo(GameTask other) => other.ID == ID ? 0 : other.Finish > Finish ? -1 : 1;
-        public override string ToString() => $"<Task {ID} Start={Start} End={Finish} Executor={Executor}>";
+        public int CompareTo(GameTask other)
+        {
+            if (other._data == default || _data == default) return -1; 
+            return other.ID == ID ? 0 : other.Finish > Finish ? -1 : 1;
+        }
 
-        public void Dispose() => UnmanagedMemory.FreeForReuse(Pointer);
+        public override string ToString() => _data == default ? "<Task Nulled>" : $"<Task {ID} Start={Start} End={Finish} Executor={Executor}>";
+
+        public void Dispose()
+        {
+            UnmanagedMemory.FreeForReuse(Pointer);
+            _data = default;
+        }
     }
 }

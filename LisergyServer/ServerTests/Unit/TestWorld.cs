@@ -1,5 +1,8 @@
-﻿using Game.World;
+﻿using Game.DataTypes;
+using Game.World;
+using GameData;
 using NUnit.Framework;
+using ServerTests;
 
 namespace UnitTests
 {
@@ -8,13 +11,14 @@ namespace UnitTests
         [Test]
         public void TestSimpleCreation()
         {
-            var world = new GameWorld(16, 16);
+            var game = new TestGame();
+            var world = new GameWorld(game, 16, 16);
 
             var tile = world.Map.GetTile(1, 2);
 
             Assert.AreEqual(1, tile.X);
             Assert.AreEqual(2, tile.Y);
-            Assert.AreEqual(0, tile.SpecId);
+            Assert.AreEqual(new TileSpecId() { Id = 0 }, tile.SpecId);
         }        
     }
 

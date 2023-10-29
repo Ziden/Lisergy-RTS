@@ -1,4 +1,5 @@
 ﻿using Game.ECS;
+using GameData;
 using System;
 
 namespace Game.Systems.Building
@@ -7,6 +8,6 @@ namespace Game.Systems.Building
     [SyncedComponent]
     public struct PlayerBuildingComponent : IComponent
     {
-        public ushort SpecId;
+        public BuildingSpecId SpecId;
     }
 }

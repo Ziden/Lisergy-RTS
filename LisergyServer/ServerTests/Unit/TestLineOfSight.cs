@@ -1,4 +1,3 @@
-using Game.Events.GameEvents;
 using Game.Events.ServerEvents;
 using Game.Systems.Battler;
 using Game.Systems.FogOfWar;
@@ -21,6 +20,12 @@ namespace UnitTests
             Game = new TestGame(createPlayer: false);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            TestGame.BuildTestSpecs();
+        }
+
         [Test]
         public void TestLOSEvents()
         {
@@ -40,10 +45,10 @@ namespace UnitTests
         public void TestCreatingExploringEntityLOS()
         {
             var player = new TestServerPlayer(Game);
-            var newbieChunk = ((PreAllocatedChunkMap)Game.World.Map).GetUnnocupiedNewbieChunk();
+            var newbieChunk = ((ServerChunkMap)Game.World.Map).GetUnnocupiedNewbieChunk();
             Game.World.Players.Add(player);
             var tile = newbieChunk.FindTileWithId(0);
-            var castleID = Game.Specs.InitialBuilding.Id;
+            var castleID = Game.Specs.InitialBuilding.SpecId;
             player.EntityLogic.Player.Build(castleID, tile);
 
             Game.Entities.DeltaCompression.SendDeltaPackets(player);
@@ -64,6 +69,7 @@ namespace UnitTests
             var player = Game.GetTestPlayer();
 
             var initialBuildingSpec = Game.Specs.InitialBuilding;
+
             var building = player.Buildings.FirstOrDefault();
             var tile = building.Tile;
             var areaTiles = tile.GetAOE(initialBuildingSpec.LOS).ToList();
@@ -79,6 +85,7 @@ namespace UnitTests
         }
 
         [Test]
+
         public void TestBuildingLineOfSight()
         {
             Game.CreatePlayer();

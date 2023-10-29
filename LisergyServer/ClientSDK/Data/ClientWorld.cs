@@ -15,7 +15,7 @@ namespace ClientSDK.Data
 
     public class ClientWorld : GameWorld, IClientWorld
     {
-        public ClientWorld(IGame game, in ushort sizeX, in ushort sizeY) : base(sizeX, sizeY)
+        public ClientWorld(IGame game, in ushort sizeX, in ushort sizeY) : base(game, sizeX, sizeY)
         {
             Players = new LazyLoadedPlayers(game);
         }
