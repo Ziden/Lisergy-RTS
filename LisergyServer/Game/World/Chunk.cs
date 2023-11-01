@@ -36,7 +36,7 @@ namespace Game.World
         {
             _data = new ChunkDataHolder();
             _data.Allocate(map.ChunkMapDimensions.x * map.ChunkMapDimensions.y);
-            _data.Position = new Position(x, y);
+            _data.Position = new TileVector(x, y);
             _id = new GameId(_data.Position);
             _tileReferences = new TileEntity[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
             Map = map;
@@ -44,7 +44,7 @@ namespace Game.World
 
         public ref readonly ushort X => ref _data.Position.X;
         public ref readonly ushort Y => ref _data.Position.Y;
-        public ref readonly Position Position => ref _data.Position;
+        public ref readonly TileVector Position => ref _data.Position;
         public ref readonly byte Flags { get => ref _data.ChunkFlags; }
         public void SetFlag(in byte flag) => _data.SetFlag(flag);
         public TileEntity[,] Tiles { get => _tileReferences; private set => _tileReferences = value; }

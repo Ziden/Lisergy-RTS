@@ -21,7 +21,7 @@ namespace Game.ECS
         public GameSystem(LisergyGame game) { Game = game; }
         internal virtual void OnComponentAdded(IEntity owner, ComponentType component) { }
         public virtual void OnDisabled() { }
-        public virtual void OnEnabled() { }
+        public virtual void RegisterListeners() { }
         internal virtual void OnComponentRemoved(IEntity owner, ComponentType component) { }
 
         public void On<EventType>(Action<IEntity, EventType> cb) where EventType : IBaseEvent

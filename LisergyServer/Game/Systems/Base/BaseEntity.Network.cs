@@ -75,8 +75,8 @@ namespace Game
             {
                 c.PreviousTile = null;
                 _stoppedSeeingEntity.Clear();
-                _stoppedSeeingEntity.UnionWith(previousTile.PlayersViewing);
-                _stoppedSeeingEntity.ExceptWith(newTile.PlayersViewing);
+                if(previousTile != null) _stoppedSeeingEntity.UnionWith(previousTile.PlayersViewing);
+                if(newTile != null) _stoppedSeeingEntity.ExceptWith(newTile.PlayersViewing);
                 foreach (var stoppedSeeingEntity in _stoppedSeeingEntity)
                     Game.Network.SendToPlayer(GetUpdatePacket(stoppedSeeingEntity), stoppedSeeingEntity);
             }

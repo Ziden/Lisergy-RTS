@@ -11,6 +11,7 @@ namespace GameData
         public byte Id;
         public static implicit operator byte(ResourceSpecId d) => d.Id;
         public static implicit operator ResourceSpecId(byte b) => new ResourceSpecId() { Id = b };
+        public override string ToString() => Id.ToString();
     }
 
     [Serializable]

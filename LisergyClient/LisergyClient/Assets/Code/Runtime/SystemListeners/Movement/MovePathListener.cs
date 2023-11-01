@@ -51,7 +51,7 @@ namespace Assets.Code.UI
 
             var clientPath = new MovePathView();
             _entityPaths[party.EntityId] = clientPath;
-            for (var x = 0; x < ev.Path.Count; x++)
+            for (var x = 0; x < path.Count; x++)
             {
                 var nodeTile = path[x];
                 var view = server.Views.GetView<TileView>(nodeTile);

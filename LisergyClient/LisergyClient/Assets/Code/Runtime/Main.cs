@@ -8,6 +8,7 @@ using Assets.Code.Views;
 using Assets.Code.World;
 using ClientSDK;
 using ClientSDK.SDKEvents;
+using Cysharp.Threading.Tasks;
 using Game;
 using Game.Events.Bus;
 using Game.Systems.Building;
@@ -19,7 +20,7 @@ using UnityEngine;
 
 public class Main : MonoBehaviour, IEventListener
 {
-    public static readonly bool OFFLINE_MODE = true;
+    public static readonly bool OFFLINE_MODE = false;
 
     private GameClient _client;
     private ClientNetwork _network;
@@ -30,7 +31,7 @@ public class Main : MonoBehaviour, IEventListener
     {
         Debug.Log("Main Awake");
         _client = new GameClient();
-        _client.ClientEvents.Register<GameStartedEvent>(this, SetupClientSystemListeners);
+        _client.ClientEvents.Register<GameStartedEvent>(this, OnGameStarted);
         _network = _client.Network as ClientNetwork;
         SetupViews();
         ConfigureUnity();
@@ -50,21 +51,32 @@ public class Main : MonoBehaviour, IEventListener
 
     private void OnApplicationQuit()
     {
-        // Disposes
+        _network.Disconnect();
+        _client.Game.World.Dispose();
+        _client.Game.Entities.Dispose();
+    }
+
+    private void SetupLog(IGame game)
+    {
+        GameLog log = (GameLog)game.Log;
+        log._Debug = Debug.Log;
+        log._Info = Debug.Log;
+        log._Error = Debug.LogError;
     }
 
     /// <summary>
     /// Registers event listeners to change client behaviour
     /// </summary>
-    private void SetupClientSystemListeners(GameStartedEvent ev)
+    private void OnGameStarted(GameStartedEvent ev)
     {
+        SetupLog(ev.Game);
         _listeners.Add(new FogOfWarListener(_client));
-        _listeners.Add(new BattleGroupComponentListener(_client));
         _listeners.Add(new MapPlacementComponentListener(_client));
         _listeners.Add(new IndicatorSelectedTileListener(_client));
         _listeners.Add(new IndicatorSelectedEntityListener(_client));
         _listeners.Add(new MapAnimationListener(_client));
-        _listeners.Add(new BattleLIstener(_client));
+        _listeners.Add(new BattleGroupListener(_client));
+        _listeners.Add(new HarvesterListener(_client));
     }
 
     public void SetupViews()
@@ -77,19 +89,14 @@ public class Main : MonoBehaviour, IEventListener
 
     public void SetupServices()
     {
-        UnityServicesContainer.Register<IInputService, InputService>(CreateInputService());
+        UnityServicesContainer.Register<IInputService, InputService>(gameObject?.AddComponent<InputService>());
         UnityServicesContainer.Register<IUiService, UiService>(new UiService(_client));
         UnityServicesContainer.Register<IAudioService, AudioService>(new AudioService(_client));
         UnityServicesContainer.Register<INotificationService, NotificationService>(new NotificationService(_client));
         UnityServicesContainer.Register<IAssetService, AssetService>(new AssetService());
         UnityServicesContainer.Register<IServerModules, ServerModules>(_client.Modules as ServerModules);
+        UnityServicesContainer.Register<IVfxService, VfxService>(new VfxService());
     }
-
-    InputService CreateInputService()
-    {
-        return gameObject?.AddComponent<InputService>();
-    }
-
 
     public static void ConfigureUnity()
     {
@@ -97,13 +104,5 @@ public class Main : MonoBehaviour, IEventListener
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
-        TrackAsyncErrors();
-    }
-
-    private static void TrackAsyncErrors()
-    {
-        //TaskScheduler.UnobservedTaskException += (s, a) => Debug.LogException(a?.Exception);
-        //AppDomain.CurrentDomain.FirstChanceException += (sender, args) => Debug.LogException(args.Exception);
-        //AppDomain.CurrentDomain.UnhandledException += (sender, args) => Debug.LogException((Exception)args.ExceptionObject);
     }
 }

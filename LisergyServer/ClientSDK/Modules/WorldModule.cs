@@ -23,13 +23,17 @@ namespace ClientSDK.Services
 
         public void Register()
         {
-            _client.Network.On<TilePacket>(OnReceiveTile);
+            _client.Network.On<TileUpdatePacket>(OnReceiveTile);
         }
 
-        private void OnReceiveTile(TilePacket tile)
+        private void OnReceiveTile(TileUpdatePacket packet)
         {
-            var tileEntity = _client.Game.World.Map.GetTile(tile.Position.X, tile.Position.Y);
-            tileEntity.UpdateData(tile.Data);
+            var tileEntity = _client.Game.World.Map.GetTile(packet.Position.X, packet.Position.Y);
+            tileEntity.UpdateData(packet.Data);
+            if(packet.Components != null && packet.Components.Count > 0)
+            {
+                _client.Modules.Components.UpdateComponents(tileEntity, packet.Components.ToArray());
+            }
             var tileView = _client.Modules.Views.GetOrCreateView(tileEntity);
             if (tileView.State == EntityViewState.NOT_RENDERED)
             {

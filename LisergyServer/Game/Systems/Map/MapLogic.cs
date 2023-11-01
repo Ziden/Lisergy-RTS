@@ -25,10 +25,6 @@ namespace Game.Systems.Map
             {
                 Entity.DeltaFlags.SetFlag(DeltaFlag.CREATED);
             }
-            else if (previousTile != component.Tile)
-            {
-                Entity.DeltaFlags.SetFlag(DeltaFlag.COMPONENTS);
-            }
             if (previousTile != null)
             {
                 var ev = EventPool<EntityMoveOutEvent>.Get();

@@ -1,38 +1,46 @@
-﻿using Game.Tile;
+﻿using AStar;
+using Game.Tile;
 
 namespace Game.World
 {
     /// <summary>
     /// Used for pathfinding.
     /// </summary>
-    public class CachedChunkMap
+    public class CachedChunkMap : IPathfinderGridProvider
     {
-        public TileEntity[,] array;
+        public Cell[,] CellArray;
+        private TileVector _size;
         private IChunkMap _chunkMap;
 
         public CachedChunkMap(IChunkMap chunkMap)
         {
             _chunkMap = chunkMap;
-            array = new TileEntity[SizeX, SizeY];
+            _size = new TileVector(SizeX, SizeY);
+            CellArray = new Cell[SizeX, SizeY];
         }
 
-        public TileEntity GetTile(in int x, in int y)
+        public void Reset()
         {
-            var cached = array[x, y];
-            if (cached == null)
-            {
-                cached = _chunkMap.GetTile(x, y);
-                array[x, y] = cached;
-            }
-            return cached;
-        }
-
-        public TileEntity this[in int x, in int y]
-        {
-            get => GetTile(x, y);
+            CellArray = new Cell[SizeX, SizeY];
         }
 
         public int SizeX { get => _chunkMap.TilemapDimensions.x; }
         public int SizeY { get => _chunkMap.TilemapDimensions.y; }
+        public TileVector Size => _size;
+
+        public Cell this[TileVector position]
+        {
+            get
+            {
+                var cell = CellArray[position.X, position.Y];
+                if (cell == null)
+                {
+                    cell = new Cell(position);
+                    cell.Blocked = !_chunkMap.GetTile(position.X, position.Y).Passable;
+                    CellArray[position.X, position.Y] = cell;
+                }
+                return cell;
+            }
+        }
     }
 }

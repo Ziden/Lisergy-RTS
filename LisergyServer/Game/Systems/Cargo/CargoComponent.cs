@@ -34,9 +34,9 @@ namespace Game.Systems.Resources
         /// </summary>
         public int GetRoomFor(in ResourceSpecId resource)
 		{
-			if (Slot1.Empty || Slot1.SpecId == resource) return 0;
-			else if (Slot2.Empty || Slot2.SpecId == resource) return 1;
-			else if (Slot3.Empty || Slot3.SpecId == resource) return 2;
+			if (Slot1.Empty || Slot1.ResourceId == resource) return 0;
+			else if (Slot2.Empty || Slot2.ResourceId == resource) return 1;
+			else if (Slot3.Empty || Slot3.ResourceId == resource) return 2;
 			return -1;
         }
 
@@ -45,7 +45,7 @@ namespace Game.Systems.Resources
 		/// </summary>
 		public ushort GetAmount(in ResourceSpecId id)
 		{
-			foreach(var r in this) if (r.SpecId == id) return r.Amount;
+			foreach(var r in this) if (r.ResourceId == id) return r.Amount;
 			return 0;
 		}
 

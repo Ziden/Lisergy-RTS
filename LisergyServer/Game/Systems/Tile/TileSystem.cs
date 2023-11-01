@@ -7,10 +7,11 @@ namespace Game.Systems.Tile
     /// <summary>
     /// System that keeps track of references of which entities and which buildings are on which tiles
     /// </summary>
+    [SyncedSystem]
     public class TileSystem : GameSystem<TileComponent>
     {
         public TileSystem(LisergyGame game) : base(game) { }
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
             EntityEvents.On<BuildingPlacedEvent>(OnStaticEntityPlaced);
             EntityEvents.On<BuildingRemovedEvent>(OnStaticEntityRemoved);

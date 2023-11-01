@@ -22,7 +22,8 @@ namespace ClientSDK.Data
 
         public override void CreateMap()
         {
-           Map = new LazyLoadChunkMap(this, SizeX, SizeY);
+            _preallocatedMap = new ServerChunkMap(this, SizeX, SizeY); // TODO: Remove
+            Map = _preallocatedMap;
         }
     }
 }

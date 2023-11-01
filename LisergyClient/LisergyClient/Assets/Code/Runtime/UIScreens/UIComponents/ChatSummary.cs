@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// Small chat window to be on the main UI
+/// </summary>
 public class ChatSummary : IEventListener, IDisposable
 {
     private VisualElement _root;

@@ -3,12 +3,11 @@ using ClientSDK;
 using ClientSDK.Data;
 using Cysharp.Threading.Tasks;
 using Game.Events.Bus;
-using Game.Events.GameEvents;
+using Game.Systems.FogOfWar;
 using Game.Systems.Tile;
 using Game.World;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 /// <summary>
 /// A fog of war lazy load. Instead of calculating the fog of war on every tile received from server

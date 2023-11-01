@@ -21,6 +21,14 @@ namespace Game.ECS
     }
 
     /// <summary>
+    /// Used on systems to determine that the given system will handle events on the client side too
+    /// </summary>
+    public class SyncedSystem : Attribute
+    {
+
+    }
+
+    /// <summary>
     /// Validates the entity must have both components
     /// TODO: not implemented yet
     /// </summary>

@@ -1,6 +1,5 @@
 ﻿using GameData.Specs;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace GameData
@@ -12,14 +11,19 @@ namespace GameData
         public byte Id;
         public static implicit operator byte(TileSpecId d) => d.Id;
         public static implicit operator TileSpecId(byte b) => new TileSpecId() { Id = b };
+
+        public override string ToString()
+        {
+            return Id.ToString();
+        }
     }
 
     [Serializable]
     public class TileSpec
     {
         public TileSpecId ID;
-        public ArtSpec Art;
-        
+        public ArtSpec TilePrefab;
+
         /// <summary>
         /// Any resources that are always present on this tile id
         /// </summary>
@@ -36,7 +40,7 @@ namespace GameData
         public TileSpec(in byte i)
         {
             this.ID = new TileSpecId() { Id = i };
-            this.Art = default;
+            this.TilePrefab = default;
             this.MovementFactor = 1.0f;
         }
     }

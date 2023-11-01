@@ -13,7 +13,7 @@ namespace Game.Systems.Resources
 	[SyncedComponent]
 	public struct HarvestingComponent : IComponent
 	{
-		public Position Tile;
-		public DateTime StartedAt;
+		public TileVector Tile;
+		public long StartedAt;
 	}
 }

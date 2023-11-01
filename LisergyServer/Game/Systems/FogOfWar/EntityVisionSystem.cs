@@ -4,10 +4,11 @@ using Game.Systems.Map;
 
 namespace Game.Systems.FogOfWar
 {
+    [SyncedSystem]
     public unsafe class EntityVisionSystem : LogicSystem<EntityVisionComponent, EntityVisionLogic>
     {
         public EntityVisionSystem(LisergyGame game) : base(game) { }
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
             EntityEvents.On<EntityMoveInEvent>(OnEntityStepOnTile);
             EntityEvents.On<UnitAddToGroupEvent>(OnUnitAdded);

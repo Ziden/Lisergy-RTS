@@ -7,7 +7,7 @@ namespace Game.Systems.Resources
     {
         public CargoSystem(LisergyGame game) : base(game)  {}
 
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
             EntityEvents.On<HarvestingEndedEvent>(OnHarvestEnd);
         }

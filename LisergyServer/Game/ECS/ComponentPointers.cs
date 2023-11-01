@@ -53,20 +53,26 @@ namespace Game.ECS
         /// <summary>
         /// Reads the given component as IComponent base interface
         /// </summary>
-       
-        public IComponent AsInterface(Type t) => (IComponent)Marshal.PtrToStructure(this[t], t);
+
+        public IComponent AsInterface(Type t)
+        {
+            if (!TryGetValue(t, out var ptr)) return null;
+            return (IComponent)Marshal.PtrToStructure(ptr, t);
+        }
 
         /// <summary>
         /// Allocates unmanaged memory for the given component to exist.
         /// Will attempt to reuse any free memory if available.
         /// </summary>
        
-        public void Alloc<T>() where T : unmanaged => this[typeof(T)] = UnmanagedMemory.Alloc(sizeof(T));
+        public void Alloc<T>() where T : IComponent => this[typeof(T)] = UnmanagedMemory.Alloc(sizeof(T));
+
+        public void Alloc(Type t) => this[t] = UnmanagedMemory.Alloc(Marshal.SizeOf(t));
 
         /// <summary>
         /// Free's allocated memory for the given component
         /// </summary>
-       
+
         public void Free<T>() where T : unmanaged
         {
             UnmanagedMemory.FreeForReuse(Pointer<T>());

@@ -15,7 +15,7 @@ namespace Game.Systems.Resources
         private ushort _amount;
 
         public ushort Amount => _amount;
-        public ResourceSpecId SpecId => _specId;
+        public ResourceSpecId ResourceId => _specId;
 
         public ResourceStackData(in ResourceSpecId id, in ushort amount)
         {
@@ -25,7 +25,7 @@ namespace Game.Systems.Resources
 
         public bool CanAdd(in ResourceStackData data)
         {
-            return Empty || SpecId == data.SpecId;
+            return Empty || ResourceId == data.ResourceId;
         }
 
         public void Add(in ResourceStackData stack)

@@ -1,9 +1,10 @@
-﻿using Game.Pathfinder;
-using Game.Tile;
+﻿using Game.Tile;
 using Game;
 using Game.World;
 using System.Collections.Generic;
 using Game.DataTypes;
+using AStar;
+using System.Linq;
 
 namespace ClientSDK.Data
 {
@@ -37,14 +38,14 @@ namespace ClientSDK.Data
             return tileX >= 0 && tileX < TilemapDimensions.x && tileY >= 0 && tileY < TilemapDimensions.y;
         }
 
-        public List<PathFinderNode> FindPath(TileEntity from, TileEntity to)
+        public IEnumerable<TileVector> FindPath(TileEntity from, TileEntity to)
         {
-            return new PathFinder(_cache).FindPath(new Position(from.X, from.Y), new Position(to.X, to.Y));
+            return new AStarSearch(_cache).Find(from.Position, to.Position);
         }
 
         public Chunk GetChunk(in int chunkX, in int chunkY)
         {
-            var chunkId = new GameId(new Position(chunkX, chunkY));
+            var chunkId = new GameId(new TileVector(chunkX, chunkY));
             if (!_chunks.TryGetValue(chunkId, out var chunk))
             {
                 chunk = new Chunk(this, (ushort)chunkX, (ushort)chunkY);

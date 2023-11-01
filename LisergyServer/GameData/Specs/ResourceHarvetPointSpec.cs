@@ -11,6 +11,7 @@ namespace GameData
         public byte Id;
         public static implicit operator byte(HarvestPointSpecId d) => d.Id;
         public static implicit operator HarvestPointSpecId(byte b) => new HarvestPointSpecId() { Id = b };
+        public override string ToString() => Id.ToString();
     }
 
     /// <summary>

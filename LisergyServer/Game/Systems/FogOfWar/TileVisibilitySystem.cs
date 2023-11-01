@@ -6,11 +6,11 @@ using System.Linq;
 
 namespace Game.Systems.FogOfWar
 {
-    // TODO: Remove
+    [SyncedSystem]
     public class TileVisibilitySystem : GameSystem<TileComponent>
     {
         public TileVisibilitySystem(LisergyGame game) : base(game) { }
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
             EntityEvents.On<EntityTileVisibilityUpdateEvent>(OnTileExplorationChanged);
         }

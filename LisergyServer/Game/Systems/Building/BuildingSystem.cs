@@ -7,7 +7,7 @@ namespace Game.Systems.Building
     {
         public BuildingSystem(LisergyGame game) : base(game) { }
 
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
             EntityEvents.On<EntityMoveInEvent>(OnPlaceBuilding);
             EntityEvents.On<EntityMoveOutEvent>(OnRemovedBuilding);

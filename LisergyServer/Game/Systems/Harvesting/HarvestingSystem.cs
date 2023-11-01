@@ -9,7 +9,7 @@ namespace Game.Systems.Resources
     {
         public HarvestingSystem(LisergyGame game) : base(game) {}
 
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
             EntityEvents.On<CourseFinishEvent>(OnCourseFinish);
             EntityEvents.On<EntityMoveOutEvent>(OnMoveOutTile);

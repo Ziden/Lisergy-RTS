@@ -10,6 +10,7 @@ using Game.World;
 using System;
 using System.Collections.Generic;
 using GameData;
+using Game.Systems.Resources;
 
 namespace Game.Tile
 {
@@ -19,7 +20,7 @@ namespace Game.Tile
         private Chunk _chunk;
         private GameId _id;
         private DeltaFlags _flags;
-        private Position _position;
+        private TileVector _position;
         public ComponentSet _components { get; private set; }
         public EntityType EntityType => EntityType.Tile;
 
@@ -27,12 +28,11 @@ namespace Game.Tile
         {
             _chunk = c;
             _tileData = tileData;
-            _position = new Position(x, y);
+            _position = new TileVector(x, y);
             _id = new GameId(_position);
             _components = new ComponentSet(this);
             DeltaFlags = new DeltaFlags(this);
             SetupComponents();
-            OnUpdated();
         }
 
         private void OnUpdated()
@@ -64,9 +64,12 @@ namespace Game.Tile
 
         public BasePacket GetUpdatePacket(PlayerEntity receiver, bool onlyDeltas = true)
         {
-            var packet = PacketPool.Get<TilePacket>();
+            var packet = PacketPool.Get<TileUpdatePacket>();
             packet.Data = *_tileData;
             packet.Position = _position;
+            var updatedComponents = Components.GetSyncedComponents(receiver, onlyDeltas);
+            if (updatedComponents != null && updatedComponents.Count > 0) packet.Components = updatedComponents;
+            else packet.Components = null;
             return packet;
         }
        
@@ -74,6 +77,8 @@ namespace Game.Tile
         {
             if (DeltaFlags.HasFlag(DeltaFlag.SELF_REVEALED))
                 Game.Network.SendToPlayer(GetUpdatePacket(trigger, false), trigger);
+            else if(DeltaFlags.HasFlag(DeltaFlag.COMPONENTS))
+                Game.Network.SendToPlayer(GetUpdatePacket(trigger, true), trigger);
         }
 
         public ref DeltaFlags DeltaFlags { get => ref _flags; }
@@ -82,10 +87,11 @@ namespace Game.Tile
             *_tileData = newData;
             OnUpdated();
         }
+
         public ref Chunk Chunk => ref _chunk;
-        public ref TileSpecId SpecId { get => ref _tileData->TileId; }
+        public TileSpecId SpecId { get => _tileData->TileId; set { _tileData->TileId = value; OnUpdated(); } }
         public float MovementFactor { get => Game.Specs.Tiles[SpecId].MovementFactor; }
-        public ref readonly Position Position => ref _position;
+        public ref readonly TileVector Position => ref _position;
         public ref readonly ushort Y { get => ref Position.Y; }
         public ref readonly ushort X { get => ref Position.X; }
         public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.GetReference<TileVisibility>().PlayersViewing;
@@ -101,6 +107,7 @@ namespace Game.Tile
         public IEntityLogic EntityLogic => Game.Logic.GetEntityLogic(this);
         public override string ToString() => $"<Tile Type={SpecId} {Position}>";
         public TileSpec Spec => Game.Specs.Tiles[SpecId];
+        public bool HasHarvestSpot => HarvestPointSpec != null;
         public ResourceHarvestPointSpec HarvestPointSpec => Spec.ResourceSpotSpecId.HasValue ? Game.Specs.HarvestPoints[Spec.ResourceSpotSpecId.Value] : null;
         public ref T Get<T>() where T : unmanaged, IComponent => ref _components.Get<T>();
         public void Save<T>(in T c) where T : unmanaged, IComponent => throw new NotImplementedException("Tiles cannot save components atm, just have references");

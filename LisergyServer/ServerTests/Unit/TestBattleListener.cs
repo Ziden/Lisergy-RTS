@@ -19,7 +19,7 @@ namespace UnitTests
     public class TestBattleListener
     {
         private TestGame _game;
-        private List<Position> _path;
+        private List<TileVector> _path;
         private TestServerPlayer _player;
         private PartyEntity _party;
         private DungeonEntity _dungeon;
@@ -29,7 +29,7 @@ namespace UnitTests
         {
             _game = new TestGame();
             _player = _game.GetTestPlayer();
-            _path = new List<Position>();
+            _path = new List<TileVector>();
             _party = _player.GetParty(0);
             _dungeon = (DungeonEntity)_game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);

@@ -14,9 +14,9 @@ namespace Game.Systems.Resources
 		public int GetAvailableSpace(in ResourceStackData resource)
 		{
 			var cargo = Entity.Get<CargoComponent>();
-			var slot = cargo.GetRoomFor(resource.SpecId);
+			var slot = cargo.GetRoomFor(resource.ResourceId);
             if (slot == -1) return -1;
-			var spec = Game.Specs.Resources[resource.SpecId];
+			var spec = Game.Specs.Resources[resource.ResourceId];
 			var totalWeight = spec.WeightPerUnit * resource.Amount;
 			if (totalWeight > cargo.RemainingWeight) return -1;
 			return slot;
@@ -33,7 +33,7 @@ namespace Game.Systems.Resources
 				Game.Log.Error($"Cargo capacity rached for {resource} to cargo {Entity.Get<CargoComponent>()} from {Entity}");
 				return false;
 			}
-            var spec = Game.Specs.Resources[resource.SpecId];
+            var spec = Game.Specs.Resources[resource.ResourceId];
 			var totalWeight = (ushort)(spec.WeightPerUnit * resource.Amount);
             var cargo = Entity.Components.GetPointer<CargoComponent>();
 			cargo->Add(resource);

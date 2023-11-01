@@ -46,7 +46,7 @@ namespace Game.Systems.Player
         /// Gets the main building (center) of this player
         public PlayerBuildingEntity GetCenter()
         {
-            return Buildings.First(b => b.SpecId == Game.Specs.InitialBuilding.SpecId);
+            return Buildings.FirstOrDefault(b => b.SpecId == Game.Specs.InitialBuilding.SpecId);
         }
 
         /// <summary>

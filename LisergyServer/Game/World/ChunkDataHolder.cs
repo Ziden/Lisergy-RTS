@@ -1,7 +1,5 @@
-﻿using Game.Pathfinder;
-using Game.Systems.Tile;
+﻿using Game.Systems.Tile;
 using System;
-using System.Runtime.InteropServices;
 
 namespace Game.World
 {
@@ -35,7 +33,7 @@ namespace Game.World
         }
 
         public TileData* GetTileData(in int x, in int y) => (TileData*)_dataPointer +x + y * GameWorld.CHUNK_SIZE;
-        public ref Position Position => ref _dataPointer->Position;
+        public ref TileVector Position => ref _dataPointer->Position;
         public ref readonly byte ChunkFlags => ref _dataPointer->Flags;
         public void SetFlag(in byte flag) => _dataPointer->Flags |= flag;
 

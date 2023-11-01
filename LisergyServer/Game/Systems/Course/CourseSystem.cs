@@ -6,7 +6,7 @@ namespace Game.Systems.Movement
     {
         public CourseSystem(LisergyGame game) : base(game) { }
 
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
             
         }

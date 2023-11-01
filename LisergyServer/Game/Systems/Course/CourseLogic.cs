@@ -12,7 +12,7 @@ namespace Game.Systems.Movement
 {
     public unsafe class CourseLogic : BaseEntityLogic<CourseComponent>
     {
-        public bool TryStartMovement(List<Position> sentPath, CourseIntent intent)
+        public bool TryStartMovement(List<TileVector> sentPath, CourseIntent intent)
         {
             var owner = Game.Players.GetPlayer(Entity.OwnerID);
             foreach (var position in sentPath)

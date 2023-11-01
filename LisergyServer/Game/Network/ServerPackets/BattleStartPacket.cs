@@ -14,12 +14,12 @@ namespace Game.Network.ServerPackets
     [Serializable]
     public class BattleStartPacket : BasePacket, IServerPacket
     {
-        public Position Position;
+        public TileVector Position;
         public GameId BattleID;
         public BattleTeamData Attacker;
         public BattleTeamData Defender;
 
-        public BattleStartPacket(in GameId battleId, in Position position, in BattleTeamData attacker, in BattleTeamData defender)
+        public BattleStartPacket(in GameId battleId, in TileVector position, in BattleTeamData attacker, in BattleTeamData defender)
         {
             BattleID = battleId;
             Attacker = attacker;

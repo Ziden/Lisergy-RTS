@@ -23,9 +23,9 @@ public class IndicatorSelectedEntityListener : IEventListener
         {
             o.SetActive(false);
             _selector = o.GetComponent<EntitySelectionComponent>();
-            if (ClientState.SelectedEntity != null)
+            if (ClientState.SelectedEntityView != null)
             {
-                OnEntitySelected(ClientState.SelectedEntity);
+                OnEntitySelected(ClientState.SelectedEntityView);
             }
         });
     }

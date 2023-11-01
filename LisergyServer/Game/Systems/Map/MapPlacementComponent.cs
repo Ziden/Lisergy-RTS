@@ -11,7 +11,7 @@ namespace Game.Systems.Map
     [SyncedComponent]
     public struct MapPlacementComponent : IComponent
     {
-        public Position Position;
+        public TileVector Position;
 
         public override string ToString() => $"<MapPlacementComponent {Position}>";
     }

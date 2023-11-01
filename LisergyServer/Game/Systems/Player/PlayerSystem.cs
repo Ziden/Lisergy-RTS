@@ -10,7 +10,7 @@ namespace Game.Systems.Player
         {
         }
 
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
             Game.Network.On<BattleResultPacket>(OnBattleResultPacket);
             EntityEvents.On<TileVisibilityChangedForPlayerEvent>(OnTileVisibilityChanged);

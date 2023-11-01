@@ -118,7 +118,7 @@ namespace BaseServer.Persistence
                 GameId.NextGeneration = p.PlayerId;
                 var newPlayer = new PlayerEntity(new PlayerProfile(p.PlayerId), game);
                 newPlayer.Components.AddReference(p.Data);
-                newPlayer.VisibilityReferences.OnceExplored = new HashSet<Position>(p.SeenTiles);
+                newPlayer.VisibilityReferences.OnceExplored = new HashSet<TileVector>(p.SeenTiles);
                 game.Players.Add(newPlayer);
 
                 // We clear the owned entities because it will be filled when entities are deserialized

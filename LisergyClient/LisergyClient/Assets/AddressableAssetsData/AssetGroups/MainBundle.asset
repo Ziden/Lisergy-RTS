@@ -16,12 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 519db5531e882de4d9cae75c63b29d1e
-  m_SerializeEntries:
-  - m_GUID: c2d1057aebdfa034bb0943a31096f9c9
-    m_Address: Assets/Addressables/UIScreens/Components/RadialProgress.uxml
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b09defdd2ea25a04a9d7584493f44cd4, type: 2}
   m_SchemaSet:

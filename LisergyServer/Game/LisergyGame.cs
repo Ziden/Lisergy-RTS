@@ -22,7 +22,6 @@ namespace Game
         public EventBus<IBaseEvent> Events { get; }
         public IGameLog Log { get; }
         public DateTime GameTime { get; }
-
     }
 
     public class LisergyGame : IGame
@@ -39,9 +38,11 @@ namespace Game
         public IGameLog Log { get; private set; }
         public EventBus<IBaseEvent> Events { get; private set; } = new EventBus<IBaseEvent>();
         public DateTime GameTime => Scheduler.Now;
+        public bool IsClientGame { get; private set; }
         
-        public LisergyGame(GameSpec specs, IGameLog log, IGameNetwork network = null)
+        public LisergyGame(GameSpec specs, IGameLog log, IGameNetwork network = null, bool isClientGame = false)
         {
+            IsClientGame = isClientGame;
             Specs = specs;
             Log = log;
             Network = network ?? new GameServerNetwork(this);
@@ -55,6 +56,7 @@ namespace Game
         {
             world.Game = this;
             World = world;
+            World.Populate();
             Entities.DeltaCompression.ClearDeltas();
             Log.Debug($"World {World.Map.TilemapDimensions.x}x{World.Map.TilemapDimensions.y} ready");
         }

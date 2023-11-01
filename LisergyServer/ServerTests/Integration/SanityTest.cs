@@ -5,6 +5,7 @@ using Game.Systems.FogOfWar;
 using Game.Systems.Map;
 using Game.Systems.Movement;
 using Game.Systems.Party;
+using Game.Systems.Resources;
 using Game.Systems.Tile;
 using Game.World;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace ServerTests.Integration
         StandaloneServer _server;
         TestGameClient _client;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             _server = new StandaloneServer().Start();
@@ -34,7 +35,7 @@ namespace ServerTests.Integration
             _client.PrepareSDK();
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void TearDown() => _server?.Dispose();
 
         [Test]
@@ -73,18 +74,19 @@ namespace ServerTests.Integration
             await _client.WaitFor<EntityUpdatePacket>(e => e.Type == EntityType.Dungeon);
             await _client.WaitFor<EntityUpdatePacket>(e => e.Type == EntityType.Building);
 
-            Assert.AreEqual(1, mapPlacementUpdates.Count); // Party
+            Assert.AreEqual(2, mapPlacementUpdates.Count); // Party, Dungeon
             Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is PartyEntity));
         }
 
         [Test]
         [NonParallelizable]
         public async Task SmokeTestFlow()
-        {        
+        {
             var mapPlacementUpdates = new List<IEntity>();
             _client.Modules.Components.OnComponentUpdate<MapPlacementComponent>((e, oldValue, newValue) =>
             {
                 mapPlacementUpdates.Add(e);
+                e.EntityLogic.Map.SetPosition(e.Game.World.Map.GetTile(newValue.Position.X, newValue.Position.Y));
             });
 
             // LOGIN
@@ -93,16 +95,16 @@ namespace ServerTests.Integration
             Assert.AreEqual(true, result.Success);
 
             // RECEIVE TILES
-            var firstReceived = await _client.WaitFor<TilePacket>();
+            var firstReceived = await _client.WaitFor<TileUpdatePacket>();
             Assert.NotNull(firstReceived);
-            foreach (var tileUpdate in _client.ReceivedPackets.Where(p => p.GetType() == typeof(TilePacket)))
+            foreach (var tileUpdate in _client.ReceivedPackets.Where(p => p.GetType() == typeof(TileUpdatePacket)))
             {
-                var tilePacket = (TilePacket)tileUpdate;
+                var tilePacket = (TileUpdatePacket)tileUpdate;
                 var tile = _client.Game.World.Map.GetTile(tilePacket.Position.X, tilePacket.Position.Y);
                 Assert.AreEqual(tile.X, tilePacket.Position.X);
                 Assert.AreEqual(tile.Y, tilePacket.Position.Y);
                 Assert.AreEqual(tile.SpecId, tilePacket.Data.TileId);
-                Assert.AreEqual(new Position(tile.X >> GameWorld.CHUNK_SIZE_BITSHIFT, tile.Y >> GameWorld.CHUNK_SIZE_BITSHIFT), tile.Chunk.Position);
+                Assert.AreEqual(new TileVector(tile.X >> GameWorld.CHUNK_SIZE_BITSHIFT, tile.Y >> GameWorld.CHUNK_SIZE_BITSHIFT), tile.Chunk.Position);
             }
 
             // RECEIVE ENTITIES
@@ -115,14 +117,23 @@ namespace ServerTests.Integration
                 Assert.NotNull(clientEntity);
                 Assert.AreEqual(clientEntity.EntityId, entityUpdate.EntityId);
                 Assert.AreEqual(clientEntity.OwnerID, entityUpdate.OwnerId);
-
                 // Entitty View was created
                 Assert.NotNull(_client.Modules.Views.GetEntityView(clientEntity));
             }
 
+            // CHECK TILE RESOURCES
+            var map = _client.Game.World as GameWorld;
+            foreach (var tile in map.AllTiles())
+            {
+                if (tile.Components.Has<TileResourceComponent>() && !tile.HasHarvestSpot)
+                {
+                    Assert.Fail($"Tile {tile} has invalid resource ?");
+                }
+            }
+
             // COMPONENTS SYNC TRIGGERED
             await _client.WaitFor<EntityUpdatePacket>(p => p.Type == EntityType.Party);
-            Assert.AreEqual(1, mapPlacementUpdates.Count); // Party
+            Assert.AreEqual(2, mapPlacementUpdates.Count); // Party
             Assert.AreEqual(1, mapPlacementUpdates.Count(c => c is PartyEntity));
             mapPlacementUpdates.Clear();
 
@@ -139,11 +150,30 @@ namespace ServerTests.Integration
                 Assert.That(placement.Position.X > 0 && placement.Position.Y > 0);
             }
 
-            // MOVEMENT REQUEST
+            // HARVEST
+            _client.ReceivedPackets.Clear();
             var party = _client.Modules.Player.LocalPlayer.GetParty(0);
-            var originalTile = party.Tile;
-            var nextTile = originalTile.GetNeighbor(Direction.SOUTH);
-            Assert.IsTrue(_client.Modules.Actions.MoveParty(party, nextTile, CourseIntent.Defensive));
+            var resourceTile = party.Tile;
+            foreach(var tile in party.Tile.GetAOE(2))
+            {
+                if(tile.HasHarvestSpot)
+                {
+                    _client.Log.Debug($"Found harvest tile {tile}");
+                    resourceTile = tile;
+                    break;
+                }
+            }
+            Assert.IsTrue(_client.Modules.Actions.MoveParty(party, resourceTile, CourseIntent.Harvest));
+            var update = await _client.WaitFor<EntityUpdatePacket>(p => p.SyncedComponents.Any(c => c.GetType()==typeof(HarvestingComponent)));
+            var syncedHarvest = (HarvestingComponent)update.SyncedComponents.First(c => c.GetType() == typeof(HarvestingComponent));
+            Assert.That(syncedHarvest.StartedAt != 0);
+
+            // STOP HARVEST
+            _client.ReceivedPackets.Clear();
+            Assert.IsTrue(_client.Modules.Actions.MoveParty(party, resourceTile.GetNeighbor(Direction.SOUTH), CourseIntent.Defensive));
+            update = await _client.WaitFor<EntityUpdatePacket>(p => p.SyncedComponents.Any(c => c.GetType() == typeof(HarvestingComponent)));
+            syncedHarvest = (HarvestingComponent)update.SyncedComponents.First(c => c.GetType() == typeof(HarvestingComponent));
+            Assert.That(syncedHarvest.StartedAt == 0);
         }
     }
 }

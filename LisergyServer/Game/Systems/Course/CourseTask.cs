@@ -14,10 +14,10 @@ namespace Game.Systems.Movement
     public unsafe class CourseTaskExecutor : ITaskExecutor
     {
         public GameId EntityId;
-        public List<Position> Path;
+        public List<TileVector> Path;
         public CourseIntent Intent;
 
-        public CourseTaskExecutor(IEntity party, List<Position> path, CourseIntent intent)
+        public CourseTaskExecutor(IEntity party, List<TileVector> path, CourseIntent intent)
         {
             EntityId = party.EntityId;
             Path = path;

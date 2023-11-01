@@ -1,5 +1,4 @@
-﻿using Game.Pathfinder;
-using Game.World;
+﻿using Game.World;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -134,7 +133,7 @@ namespace Game.DataTypes
             return _leftside == id2._leftside && _rightside == id2._rightside;
         }
 
-        public GameId(Position pos)
+        public GameId(TileVector pos)
         {
             _leftside = pos.X;
             _rightside = pos.Y;

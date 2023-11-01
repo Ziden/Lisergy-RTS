@@ -1,5 +1,4 @@
-﻿using Game.Pathfinder;
-using Game.Systems.Movement;
+﻿using Game.Systems.Movement;
 using Game.World;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ namespace Game.Network.ClientPackets
     {
         public CourseIntent Intent;
         public byte PartyIndex;
-        public List<Position> Path;
+        public List<TileVector> Path;
     }
 
 }

@@ -48,10 +48,10 @@ namespace UnitTests
             var player = _game.GetTestPlayer();
             var tile = _game.World.Map.GetTile(1, 1);
 
-            Serialization.LoadSerializers(typeof(TilePacket));
+            Serialization.LoadSerializers(typeof(TileUpdatePacket));
 
-            var serialized = Serialization.FromPacket<TilePacket>(tile.GetUpdatePacket(null) as TilePacket);
-            var unserialized = Serialization.ToPacket<TilePacket>(serialized);
+            var serialized = Serialization.FromPacket<TileUpdatePacket>(tile.GetUpdatePacket(null) as TileUpdatePacket);
+            var unserialized = Serialization.ToPacket<TileUpdatePacket>(serialized);
 
             Assert.AreEqual(tile.SpecId, unserialized.Data.TileId);
             Assert.AreEqual(tile.X, unserialized.Position.X);

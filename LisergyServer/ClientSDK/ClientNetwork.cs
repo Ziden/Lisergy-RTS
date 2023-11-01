@@ -60,7 +60,7 @@ namespace ClientSDK
 
         public void ReceiveInput(GameId sender, BasePacket input) 
         {
-            _log.Debug($"Received Packet {input.GetType().Name}");
+            _log.Debug($"Received Packet {input}");
             _receivedFromServer.Call(input);
         }
 

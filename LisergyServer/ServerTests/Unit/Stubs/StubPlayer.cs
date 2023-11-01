@@ -35,7 +35,7 @@ namespace ServerTests
 
         public void SendTestPacket<EventType>(EventType ev) where EventType : BasePacket, new()
         {
-            if (ev.GetType() != typeof(TilePacket)) // avoid flood
+            if (ev.GetType() != typeof(TileUpdatePacket)) // avoid flood
             {
                 Game.Log.Debug($"Server Sent Packet {ev.GetType().Name} to Player {this}");
             }
@@ -55,7 +55,7 @@ namespace ServerTests
 
         public void SendMoveRequest(PartyEntity p, TileEntity t, CourseIntent intent)
         {
-            var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new Position(pa.X, pa.Y)).ToList();
+            var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new TileVector(pa.X, pa.Y)).ToList();
             var ev = new MoveRequestPacket() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };
             ev.Sender = this;
             _network.IncomingPackets.Call(ev);

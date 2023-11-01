@@ -15,6 +15,11 @@ namespace ClientSDK.Modules
     public interface IComponentsModule : IClientModule
     {
         /// <summary>
+        /// Updates the components of the given entity
+        /// </summary>
+        void UpdateComponents(IEntity currentEntity, IComponent[] newComponents);
+
+        /// <summary>
         /// Registers a component sync. 
         /// Whenever the given entity type has the given component type updated, instead of the values simply being copied
         /// the sync code will be called.
@@ -47,6 +52,7 @@ namespace ClientSDK.Modules
         /// </summary>
         public void UpdateComponents(IEntity currentEntity, IComponent[] newComponents)
         {
+
             _toSync.Clear();
             foreach (var newComponent in newComponents)
             {

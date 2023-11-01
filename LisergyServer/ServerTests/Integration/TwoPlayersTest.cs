@@ -14,7 +14,7 @@ namespace ServerTests.Integration
         TestGameClient _p1;
         TestGameClient _p2;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             _server = new StandaloneServer().Start();
@@ -24,10 +24,11 @@ namespace ServerTests.Integration
             _p2.PrepareSDK();
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void TearDown() => _server?.Dispose();
 
         [Test]
+        [NonParallelizable]
 
         public async Task SmokeTest2p()
         {
@@ -39,8 +40,8 @@ namespace ServerTests.Integration
             var resultP2 = await _p2.WaitFor<LoginResultPacket>();
             Assert.AreEqual(true, resultP2.Success);
 
-            var p1Received = await _p1.WaitFor<TilePacket>();
-            var p2Received = await _p2.WaitFor<TilePacket>();
+            var p1Received = await _p1.WaitFor<TileUpdatePacket>();
+            var p2Received = await _p2.WaitFor<TileUpdatePacket>();
 
             Assert.NotNull(p1Received);
             Assert.NotNull(p2Received);
@@ -62,6 +63,7 @@ namespace ServerTests.Integration
         }
 
         [Test]
+        [NonParallelizable]
 
         public async Task SmokeTestP1Disconnects()
         {
@@ -69,13 +71,14 @@ namespace ServerTests.Integration
             var result = await _p1.WaitFor<LoginResultPacket>();
             Assert.AreEqual(true, result.Success);
             _p1.Network.Disconnect();
+            _p1.ReceivedPackets.Clear();
 
             _p2.Modules.Account.SendAuthenticationPacket("abc2", "def2");
             var resultP2 = await _p2.WaitFor<LoginResultPacket>();
             Assert.AreEqual(true, resultP2.Success);
 
-            var p1Received = await _p1.WaitFor<TilePacket>();
-            var p2Received = await _p2.WaitFor<TilePacket>();
+            var p1Received = await _p1.WaitFor<TileUpdatePacket>();
+            var p2Received = await _p2.WaitFor<TileUpdatePacket>();
 
             Assert.Null(p1Received);
             Assert.NotNull(p2Received);

@@ -134,7 +134,7 @@ namespace Priority_Queue
             }
             if (_numNodes >= _nodes.Length - 1)
             {
-                throw new InvalidOperationException("Queue is full - node cannot be added: " + node);
+                throw new InvalidOperationException("Queue is full - node cannot be added: " + node+" with size at "+ _numNodes);
             }
             if (node.Queue != null && !Equals(node.Queue))
             {

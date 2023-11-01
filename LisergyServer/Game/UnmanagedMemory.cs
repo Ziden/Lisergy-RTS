@@ -2,11 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
-using System.Drawing;
 
 #if UNITY
 using Unity.Collections.LowLevel.Unsafe;
@@ -54,7 +49,9 @@ namespace Game
                 return available;
             }
             IntPtr p = Marshal.AllocHGlobal(size);
-            GC.AddMemoryPressure(size);
+#if !UNITY
+            //GC.AddMemoryPressure(size);
+#endif
             _allocs[p] = size;
             SetZeros(p, size);
             return p;
@@ -89,7 +86,9 @@ namespace Game
         {
             var size = _allocs[p];
             Marshal.FreeHGlobal(p);
-            GC.RemoveMemoryPressure(size);
+#if !UNITY
+            //GC.RemoveMemoryPressure(size);
+#endif
             _allocs.Clear();
         }
 

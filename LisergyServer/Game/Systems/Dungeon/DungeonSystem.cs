@@ -7,7 +7,7 @@ namespace Game.Systems.Dungeon
     {
         public DungeonSystem(LisergyGame game) : base(game) { }
 
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
             EntityEvents.On<GroupDeadEvent>(OnGroupDead);
         }

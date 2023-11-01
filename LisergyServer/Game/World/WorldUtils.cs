@@ -116,7 +116,7 @@ namespace Game.World
             return Math.Abs(tile.X - t2.X) + Math.Abs(tile.Y - t2.Y);
         }
         
-        public static int Distance(this Position tile, in Position t2)
+        public static int Distance(this TileVector tile, in TileVector t2)
         {
             return Math.Abs(tile.X - t2.X) + Math.Abs(tile.Y - t2.Y);
         }

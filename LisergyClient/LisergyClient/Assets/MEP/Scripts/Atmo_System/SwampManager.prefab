@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 400000}
+  - component: {fileID: 6500000}
+  - component: {fileID: 11400000}
+  m_Layer: 0
+  m_Name: SwampManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_LocalRotation: {x: -6.1128214e-10, y: 0.15684886, z: 0.0000000054681886, w: 0.9876227}
+  m_LocalPosition: {x: 562.9058, y: 76.54085, z: 997.8801}
+  m_LocalScale: {x: 258.067, y: 159.21497, z: 637.5444}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6500000
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.2301959, y: 1, z: 0.71535057}
+  m_Center: {x: 0.010676444, y: 0, z: -0.17637256}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76d8496c1c13c5645a380cce6fe1d1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skyMat: {fileID: 2100000, guid: 088bd71e759322e4a8a0af6015d63ea4, type: 2}
+  skyBright: {r: 1, g: 0.9137255, b: 0.827451, a: 0.5058824}
+  skyDark: {r: 0.69411767, g: 0.6627451, b: 0.5137255, a: 1}
+  dirLight: {fileID: 0}
+  lightBright: {r: 1, g: 0.9490196, b: 0.89411765, a: 1}
+  lightDark: {r: 0.7761194, g: 0.67988425, b: 0.4633549, a: 1}
+  minLightIntensity: 0.85
+  maxLightIntensity: 1
+  useRenderFog: 1
+  fogBright: {r: 0.6039216, g: 0.5568628, b: 0.49019608, a: 1}
+  fogDark: {r: 0.29803923, g: 0.30588236, b: 0.1882353, a: 1}
+  minFog: 0.004
+  maxFog: 0.007
+  fadeState: 1
+  fadeTime: 122

@@ -44,7 +44,7 @@ namespace Assets.Code.Assets.Code.Runtime
         /// <summary>
         /// Own party the player is controlling at the moment
         /// </summary>
-        public static IUnityEntityView SelectedEntity
+        public static IUnityEntityView SelectedEntityView
         {
             get
             {

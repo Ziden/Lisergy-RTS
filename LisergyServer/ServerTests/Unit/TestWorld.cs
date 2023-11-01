@@ -6,7 +6,7 @@ using ServerTests;
 
 namespace UnitTests
 {
-    public class TestWorld
+    public class TestGameWorld
     {
         [Test]
         public void TestSimpleCreation()

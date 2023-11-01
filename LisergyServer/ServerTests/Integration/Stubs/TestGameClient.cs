@@ -51,7 +51,7 @@ namespace ServerTests.Integration.Stubs
 
         private void OnReceivePacket(BasePacket packet)
         {
-            if(!(packet is TilePacket)) Game?.Log?.Debug($"Received {packet} from server ");
+            if(!(packet is TileUpdatePacket)) Game?.Log?.Debug($"Received {packet} from server ");
             ReceivedPackets.Add(packet);
         }
 
@@ -60,9 +60,8 @@ namespace ServerTests.Integration.Stubs
             return (T)ReceivedPackets.First(p => p.GetType() == typeof(T));
         }
 
-        public async Task<T> WaitFor<T>(Func<T, bool> validate = null) where T : BasePacket
+        public async Task<T> WaitFor<T>(Func<T, bool> validate = null, int timeout = 10) where T : BasePacket
         {
-            var timeout = 10;
             Network.Tick();
             var p = ReceivedPackets.FirstOrDefault(p => p.GetType() == typeof(T));
             while (p == null && timeout >= 0)
@@ -72,6 +71,7 @@ namespace ServerTests.Integration.Stubs
                 Network.Tick();
                 p = ReceivedPackets.FirstOrDefault(p => p.GetType() == typeof(T) && (validate==null || validate((T)p)));
             }
+            if (timeout == 0) p = null;
             Network.Tick();
             return (T)p;
         }

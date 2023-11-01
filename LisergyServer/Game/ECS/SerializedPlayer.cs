@@ -13,7 +13,7 @@ namespace Game.ECS
     {
         public GameId PlayerId;
         public PlayerData Data;
-        public List<Position> SeenTiles;
+        public List<TileVector> SeenTiles;
 
         public SerializedPlayer() { }
 

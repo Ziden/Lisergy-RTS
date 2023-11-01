@@ -104,7 +104,7 @@ namespace UnitTests
 
             Assert.That(chunk.X > 0);
             Assert.That(chunk.Y > 0);
-            Assert.AreEqual(chunk.EntityId, new GameId(new Position(chunk.X, chunk.Y)));
+            Assert.AreEqual(chunk.EntityId, new GameId(new TileVector(chunk.X, chunk.Y)));
         }
 
         [Test]

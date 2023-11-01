@@ -90,6 +90,6 @@ namespace Game.World
         /// Chunk data after all tile data for simpler pointer acessing
         /// </summary>
         public byte Flags;
-        public Position Position;
+        public TileVector Position;
     }
 }

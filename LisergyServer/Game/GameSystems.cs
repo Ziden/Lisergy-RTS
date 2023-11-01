@@ -14,6 +14,7 @@ using Game.Systems.Player;
 using Game.DataTypes;
 using Game.Systems.Resources;
 using System.Linq;
+using System.Reflection;
 
 namespace Game
 {
@@ -41,7 +42,7 @@ namespace Game
 
         private LisergyGame _game;
 
-        public GameSystems(LisergyGame game) 
+        public GameSystems(LisergyGame game)
         {
             _game = game;
             AddSystem(Building = new BuildingSystem(game));
@@ -78,7 +79,13 @@ namespace Game
         private void AddSystem<ComponentType>(GameSystem<ComponentType> system) where ComponentType : unmanaged, IComponent 
         {
             _systems[typeof(ComponentType)].Add(system);
-            system.OnEnabled();
+            if(_game.IsClientGame)
+            {
+                var sync = system.GetType().GetCustomAttribute(typeof(SyncedSystem)) as SyncedSystem;
+                if (sync == null) return;
+            }
+            _game.Log.Debug($"Registered System {system.GetType().Name}");
+            system.RegisterListeners();
         }
 
         public void CallEvent(IEntity entity, IBaseEvent ev)

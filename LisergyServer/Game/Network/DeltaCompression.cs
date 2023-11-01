@@ -81,7 +81,7 @@ namespace Game.Network
 
         public void SetFlag(DeltaFlag f)
         {
-            if (f > 0 && _flags == 0) _owner.Game.Entities.DeltaCompression.Add(_owner);
+            if (f > 0 && _flags == 0) _owner.Game?.Entities.DeltaCompression.Add(_owner);
             _flags |= f;
         }
 

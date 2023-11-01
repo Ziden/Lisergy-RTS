@@ -226,6 +226,11 @@
             This module is able to implement callbacks from when a given component is synced so the client can react to it.
             </summary>
         </member>
+        <member name="M:ClientSDK.Modules.IComponentsModule.UpdateComponents(Game.ECS.IEntity,Game.ECS.IComponent[])">
+            <summary>
+            Updates the components of the given entity
+            </summary>
+        </member>
         <member name="M:ClientSDK.Modules.IComponentsModule.OnComponentUpdate``1(System.Action{Game.ECS.IEntity,``0,``0})">
             <summary>
             Registers a component sync. 

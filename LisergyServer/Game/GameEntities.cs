@@ -19,7 +19,7 @@ namespace Game
     /// <summary>
     /// Represents the entities that are currently in the game
     /// </summary>
-    public interface IGameEntities
+    public interface IGameEntities : IDisposable
     {
         /// <summary>
         /// Creates a new entity based on a type
@@ -37,7 +37,7 @@ namespace Game
         IDeltaCompression DeltaCompression { get; }
     }
 
-    public class GameEntities : IGameEntities, IDisposable
+    public class GameEntities : IGameEntities
     {
         private IGame _game;
         internal readonly Dictionary<GameId, IEntity> _entities = new Dictionary<GameId, IEntity>();

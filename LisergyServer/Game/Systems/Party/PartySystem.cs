@@ -8,7 +8,7 @@ namespace Game.Systems.Party
     {
         public PartySystem(LisergyGame game) : base(game) { }
 
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
             EntityEvents.On<GroupDeadEvent>(OnGroupDead);
         }

@@ -20,11 +20,10 @@ namespace ServerTests
         {
             GameId.DEBUG_MODE = 1;
             WorldUtils.SetRandomSeed(666);
-            TestWorld = new TestWorld(this);
-            SetupWorld(TestWorld);
+            var world = new TestWorld(this);
+            SetupWorld(world);
             Entities.DeltaCompression.ClearDeltas();
-            TestMap = TestWorld.Map as ServerChunkMap;
-            return TestWorld;
+            return world;
         }
     }
 

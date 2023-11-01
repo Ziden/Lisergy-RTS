@@ -23,7 +23,7 @@ namespace Game.Systems.Dungeon
             Components.AddReference(new MapReferenceComponent());
         }
 
-        public ushort SpecId => Components.Get<DungeonComponent>().SpecId;
+        public DungeonSpecId SpecId => Components.Get<DungeonComponent>().SpecId;
 
         public override string ToString()
         {

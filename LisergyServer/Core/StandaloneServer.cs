@@ -8,7 +8,6 @@ using BaseServer.Core;
 using System.Collections.Concurrent;
 using System.Linq;
 using BaseServer.Persistence;
-using System.Threading.Tasks;
 
 namespace ServerTests.Integration.Stubs
 {
@@ -69,7 +68,6 @@ namespace ServerTests.Integration.Stubs
         {
             lock(_lock)
             {
-                ServerNetworkExt.PORT_START += 10;
                 var game = new LisergyGame(TestSpecs.Generate(), new GameLog("[Server Game]"));
                 game.SetupWorld(new TestWorld(game));
                 Persistence = new FlatFileWorldPersistence(game.Log);

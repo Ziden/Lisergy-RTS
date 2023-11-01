@@ -1,6 +1,7 @@
-﻿using Game.Pathfinder;
+﻿using AStar;
 using Game.Tile;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game.World
 {
@@ -28,7 +29,7 @@ namespace Game.World
         /// Finds a path between source and destination.
         /// Can return an empty list if no path is found.
         /// </summary>
-        List<PathFinderNode> FindPath(TileEntity from, TileEntity to);
+        IEnumerable<TileVector> FindPath(TileEntity from, TileEntity to);
 
         /// <summary>
         /// Creates the chunk map instance and allocate needed memory
@@ -58,6 +59,7 @@ namespace Game.World
     {
         private Chunk[,] _chunkMap;
         private CachedChunkMap _cache;
+        private IPathfinder _pathfinder;
         private Dictionary<ChunkFlag, List<Chunk>> _chunksByFlags = new Dictionary<ChunkFlag, List<Chunk>>();
         public (int x, int y) TilemapDimensions { get; private set; }
         public (int x, int y) ChunkMapDimensions { get; private set; }
@@ -71,10 +73,10 @@ namespace Game.World
             TilemapDimensions = (_chunkMap.GetLength(0) * GameWorld.CHUNK_SIZE, _chunkMap.GetLength(1) * GameWorld.CHUNK_SIZE);
             ChunkMapDimensions = (_chunkMap.GetLength(0), _chunkMap.GetLength(1));
             _cache = new CachedChunkMap(this);
+            _pathfinder = new AStarSearch(_cache);
             World = world;
         }
 
-       
         public bool ValidCoords(in int tileX, in int tileY)
         {
             var dim = TilemapDimensions;
@@ -94,9 +96,9 @@ namespace Game.World
         }
 
        
-        public List<PathFinderNode> FindPath(TileEntity from, TileEntity to)
+        public IEnumerable<TileVector> FindPath(TileEntity from, TileEntity to)
         {
-            return new PathFinder(_cache).FindPath(new Position(from.X, from.Y), new Position(to.X, to.Y));
+            return _pathfinder.Find(from.Position, to.Position);
         }
 
        
@@ -141,6 +143,7 @@ namespace Game.World
        
         public virtual TileEntity GetTile(in int tileX, in int tileY)
         {
+            if (!ValidCoords(tileX, tileY)) return null;
             var internalTileX = tileX % GameWorld.CHUNK_SIZE;
             var internalTileY = tileY % GameWorld.CHUNK_SIZE;
             return GetTileChunk(tileX, tileY).GetTile(internalTileX, internalTileY);

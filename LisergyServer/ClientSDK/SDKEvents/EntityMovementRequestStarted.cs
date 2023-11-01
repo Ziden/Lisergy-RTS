@@ -1,8 +1,8 @@
 ﻿using ClientSDK.Data;
-using Game.Pathfinder;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Tile;
+using Game.World;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +17,7 @@ namespace ClientSDK.SDKEvents
     public class EntityMovementRequestStarted : IClientEvent
     {
         public PartyEntity Party;
-        public List<PathFinderNode> Path;
+        public IEnumerable<TileVector> Path;
         public TileEntity Destination;
         public CourseIntent Intent;
     }

@@ -14,7 +14,7 @@ namespace Game.Network.ServerPackets
     [Serializable]
     public class BattleQueuedPacket : BasePacket, IServerPacket
     {
-        public Position Position;
+        public TileVector Position;
         public GameId BattleID;
         public BattleTeamData Attacker;
         public BattleTeamData Defender;

@@ -17,7 +17,7 @@ namespace Game.ECS
         /// <summary>
         /// Gets all components a given player needs to have in sync for this given entity
         /// </summary>
-        IReadOnlyList<IComponent> GetSyncedComponents(PlayerEntity receiver, bool deltaCompression = true);
+        List<IComponent> GetSyncedComponents(PlayerEntity receiver, bool deltaCompression = true);
 
         /// <summary>
         /// Gets all pointer components this entity have

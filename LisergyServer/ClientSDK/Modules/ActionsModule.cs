@@ -66,7 +66,7 @@ namespace ClientSDK.Services
                 return false;
             }
             var path = map.FindPath(sourceTile, destinationTile);
-            if(path == null || path.Count == 0)
+            if(path == null || path.Count() == 0)
             {
                 _client.Log.Error($"Cannot Move Entity {entityId} it is not placed in the map");
                 return false;
@@ -82,6 +82,7 @@ namespace ClientSDK.Services
                     return false;
                 }
             }
+            _client.Log.Debug($"Sending request to move party {entity} {path.Count()} tiles");
             _client.ClientEvents.Call(new EntityMovementRequestStarted()
             {
                 Destination = destinationTile,
@@ -94,7 +95,7 @@ namespace ClientSDK.Services
             {
                 PartyIndex = entity.PartyIndex,
                 Intent = intent,
-                Path = path.Select(p => p.Position).ToList()
+                Path = path.ToList()
             });
             return true;
         }

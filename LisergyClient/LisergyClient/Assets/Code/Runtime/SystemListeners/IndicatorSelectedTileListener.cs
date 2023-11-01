@@ -49,7 +49,6 @@ public class IndicatorSelectedTileListener : IEventListener
     private void ClickTile(TileEntity tile)
     {
         if (tile == null) return;
-        Debug.Log($"TileUI selecting tile {tile}");
         if (tile != null)
         {
             if (!IsActive(_tileCursor))

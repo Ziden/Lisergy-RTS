@@ -33,8 +33,8 @@ namespace UnitTests
             var player = game.GetTestPlayer();
 
             var events = game.SentServerPackets
-                .Where(e => e is TilePacket)
-                .Select(e => (TilePacket)e)
+                .Where(e => e is TileUpdatePacket)
+                .Select(e => (TileUpdatePacket)e)
                 .ToList();
         }
     }

@@ -1,7 +1,6 @@
 using Assets.Code.Assets.Code.Runtime.UIScreens.Layout;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.Views;
-using Game;
 using Game.Events.Bus;
 using Game.Systems.Dungeon;
 using Game.Systems.Party;
@@ -17,7 +16,7 @@ namespace Assets.Code.UI
 {
     public enum EntityAction
     {
-        NONE, MOVE, GUARD, ATTACK, CHECK
+        NONE, MOVE, GUARD, ATTACK, CHECK, HARVEST
     }
 
     public class ActionBarParams : IGameUiParam
@@ -33,32 +32,19 @@ namespace Assets.Code.UI
         private Dictionary<EntityAction, Button> _buttons = new Dictionary<UI.EntityAction, Button>();
         public List<EntityAction> NoPartyActions = new EntityAction[] { EntityAction.CHECK }.ToList();
 
-        public override void OnLoaded(VisualElement root)
-        {
-            //var actionsRoot = root.Q("ActionsRoot");
-            //actionsRoot.style.scale = new Vector2(0.1f, 0.1f);
-        }
-
-        public override void OnClose()
-        {
-            //var root = Root.Q<VisualElement>("ActionsRoot");
-            //root.style.scale = new Vector2(0.1f, 0.1f);
-        }
-
         public override void OnOpen()
         {
             _buttons[EntityAction.MOVE] = Root.Q<Button>("MoveAction");
             _buttons[EntityAction.GUARD] = Root.Q<Button>("GuardAction");
             _buttons[EntityAction.ATTACK] = Root.Q<Button>("AttackAction");
             _buttons[EntityAction.CHECK] = Root.Q<Button>("CheckAction");
+            _buttons[EntityAction.HARVEST] = Root.Q<Button>("HarvestAction");
             foreach (var kp in _buttons)
             {
                 _buttons[kp.Key].clicked += () => ClickAction(kp.Key);
             }
             var setup = GetParameter<ActionBarParams>();
             DisplayActionsFor(setup.Party, setup.Tile);
-            //var root = Root.Q<VisualElement>("ActionsRoot");
-            //root.style.scale = new Vector2(1, 1); // TODO: Animation of resize/rotate not working :( 
         }
 
         private List<EntityAction> EvaluateActions(PartyEntity party, TileEntity tile)
@@ -76,13 +62,17 @@ namespace Assets.Code.UI
             if (tileView.Entity.Building is DungeonEntity)
             {
                 actions.Add(EntityAction.CHECK);
-                actions.Add(EntityAction.ATTACK);
+                if(GameClient.Modules.Player.LocalPlayer.Buildings.Any()) actions.Add(EntityAction.ATTACK);
+                return actions; 
             }
-            else
+  
+            actions.Add(EntityAction.MOVE);
+            if(party.EntityLogic.Harvesting.GetAvailableResourcesToHarvest(tile).Amount > 0)
             {
-                actions.Add(EntityAction.MOVE);
-                actions.Add(EntityAction.GUARD);
+                actions.Add(EntityAction.HARVEST);
             }
+            //actions.Add(EntityAction.GUARD);
+            
             return actions;
         }
 
@@ -108,16 +98,17 @@ namespace Assets.Code.UI
                 return;
             }
             var visible = new List<VisualElement>();
-            foreach (var kp in _buttons)
+            foreach (var (action, button) in _buttons)
             {
-                if (actions.Contains(kp.Key))
+                if (actions.Contains(action))
                 {
-                    visible.Add(_buttons[kp.Key]);
-                    _buttons[kp.Key].style.display = DisplayStyle.Flex;
+                    visible.Add(button);
+                    button.style.display = DisplayStyle.Flex;
+
                 }
                 else
                 {
-                    _buttons[kp.Key].style.display = DisplayStyle.None;
+                    button.style.display = DisplayStyle.None;
                 }
             }
             MoveTo(tile);

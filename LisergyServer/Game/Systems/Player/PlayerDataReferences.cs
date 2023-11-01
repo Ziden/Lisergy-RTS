@@ -49,11 +49,11 @@ namespace Game.Systems.Player
         /// <summary>
         /// All tiles that the player is currently seeing
         /// </summary>
-        public HashSet<Position> VisibleTiles = new HashSet<Position>();
+        public HashSet<TileVector> VisibleTiles = new HashSet<TileVector>();
 
         /// <summary>
         /// All tiles that the player has seen at least once
         /// </summary>
-        public HashSet<Position> OnceExplored = new HashSet<Position>();
+        public HashSet<TileVector> OnceExplored = new HashSet<TileVector>();
     }
 }

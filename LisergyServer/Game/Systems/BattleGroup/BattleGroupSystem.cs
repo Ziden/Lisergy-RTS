@@ -12,7 +12,7 @@ namespace Game.Systems.Battler
     public unsafe class BattleGroupSystem : LogicSystem<BattleGroupComponent, BattleGroupLogic>
     {
         public BattleGroupSystem(LisergyGame game) : base(game) { }
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
             EntityEvents.On<BattleFinishedEvent>(OnBattleFinish);
             EntityEvents.On<CourseFinishEvent>(OnCourseFinish);

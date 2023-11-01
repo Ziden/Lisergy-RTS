@@ -6,7 +6,7 @@ namespace Game.Systems.Map
     {
         public MapSystem(LisergyGame game) : base(game) { }
 
-        public override void OnEnabled()
+        public override void RegisterListeners()
         {
 
         }
