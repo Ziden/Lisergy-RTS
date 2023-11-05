@@ -2,6 +2,7 @@
 using Game.ECS;
 using Game.Network;
 using System;
+using System.Linq;
 
 namespace Game.Events.ServerEvents
 {
@@ -24,7 +25,7 @@ namespace Game.Events.ServerEvents
 
         public override string ToString()
         {
-            return $"<EntityUpdate {EntityId}>";
+            return $"<EntityUpdate {EntityId} Components={string.Join(',', SyncedComponents.ToList())}>";
         }
     }
 }

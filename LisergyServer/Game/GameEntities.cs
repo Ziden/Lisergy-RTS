@@ -13,7 +13,11 @@ namespace Game
 {
     public enum EntityType : byte
     {
-        Player, Party, Dungeon, Building, Tile
+        Player, 
+        Party, 
+        Dungeon, 
+        Building, 
+        Tile
     }
 
     /// <summary>

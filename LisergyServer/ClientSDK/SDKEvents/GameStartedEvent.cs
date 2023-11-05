@@ -21,5 +21,10 @@ namespace ClientSDK.SDKEvents
             LocalPlayer = pl;
         }
 
+        public T Clone<T>()
+        {
+            return (T)this.MemberwiseClone();
+        }
+
     }
 }

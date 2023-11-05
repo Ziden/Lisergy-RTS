@@ -67,9 +67,15 @@ namespace Game.Tile
             var packet = PacketPool.Get<TileUpdatePacket>();
             packet.Data = *_tileData;
             packet.Position = _position;
-            var updatedComponents = Components.GetSyncedComponents(receiver, onlyDeltas);
-            if (updatedComponents != null && updatedComponents.Count > 0) packet.Components = updatedComponents;
-            else packet.Components = null;
+            if(onlyDeltas && !Components.HasDeltas())
+            {
+                packet.Components = null;
+            } else
+            {
+                var updatedComponents = Components.GetSyncedComponents(receiver, onlyDeltas);
+                if (updatedComponents != null && updatedComponents.Count > 0) packet.Components = updatedComponents;
+                else packet.Components = null;
+            }
             return packet;
         }
        

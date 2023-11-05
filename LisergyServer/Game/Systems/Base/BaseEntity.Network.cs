@@ -8,6 +8,7 @@ using System.Linq;
 using System;
 using Game.Events;
 using System.Runtime.CompilerServices;
+using Game.ECS;
 
 namespace Game
 {
@@ -97,6 +98,7 @@ namespace Game
             packet.OwnerId = OwnerID;
             packet.Type = EntityType;
             packet.SyncedComponents = Components.GetSyncedComponents(receiver, onlyDeltas).ToArray();
+            Game.Log.Debug($"Sync components [{string.Join(",", packet.SyncedComponents.Select(c => c.GetType().Name))}] for entity {this}");
             if (packet.SyncedComponents.Length == 0) throw new Exception("Trying to sync entity without modifying any component");
             return packet;
         }

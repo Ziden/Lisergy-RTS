@@ -31,7 +31,6 @@ namespace Game.Systems.Map
                 ev.Entity = Entity;
                 ev.ToTile = value;
                 ev.FromTile = previousTile;
-                previousTile.Components.CallEvent(ev);
                 Entity.Components.CallEvent(ev);
                 EventPool<EntityMoveOutEvent>.Return(ev);
             }
@@ -41,7 +40,6 @@ namespace Game.Systems.Map
                 ev.Entity = Entity;
                 ev.ToTile = value;
                 ev.FromTile = previousTile;
-                value.Components.CallEvent(ev);
                 Entity.Components.CallEvent(ev);
                 EventPool<EntityMoveInEvent>.Return(ev);
             }
@@ -60,7 +58,7 @@ namespace Game.Systems.Map
                     Game.Network.SendToPlayer(new EntityDestroyPacket(Entity), previousTile.PlayersViewing.ToArray());
                 }
             }
-            Game.Log.Debug($"Moved {Entity} to {component.Tile}");
+            Game.Log.Debug($"MapLogic - Set {Entity} position to {component.Tile?.Position}");
         }
     }
 }

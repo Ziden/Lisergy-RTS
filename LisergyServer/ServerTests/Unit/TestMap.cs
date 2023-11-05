@@ -1,5 +1,6 @@
 using Game;
 using Game.Battle;
+using Game.DataTypes;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
@@ -18,27 +19,15 @@ namespace UnitTests
 {
     public class TestMap
     {
-        private TestGame _game;
-        private TestServerPlayer _player;
-        private PartyEntity _party;
-
-        [SetUp]
-        public void Setup()
-        {
-            _game = new TestGame();
-            _player = _game.GetTestPlayer();
-            _party = _player.GetParty(0);
-        }
-
         [Test]
-        public void TestMapLogicSetPosition()
+        public void TestMapCreation()
         {
-            var playerCastleTile = _player.Buildings.First().Tile;
-            var dungeonTile = playerCastleTile.GetNeighbor(Direction.SOUTH);
-            var party = _player.GetParty(0);
+            var game = new TestGame(createWorld: false);
+            var world = new GameWorld(game, 8, 8);
+            game.SetupWorld(world);
+            var player = game.CreatePlayer(4, 4);
 
-            //Assert.That(party.Tile == _game)
-            party.EntityLogic.Map.SetPosition(dungeonTile);
+            Assert.AreEqual(player, world.Players[player.EntityId]);
         }
     }
 }

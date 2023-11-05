@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Numerics;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -149,6 +150,26 @@ namespace Game.DataTypes
             return func;
         }
     }
+
+    /// <summary>
+    /// Shallow cloner. Not very fast, only for testing plx
+    /// </summary>
+    public static class CloneUtil
+    {
+
+        private static readonly Dictionary<Type, Func<object, object>> Delegates = new Dictionary<Type, Func<object, object>>();
+
+        public static T ShallowClone<T>(this T obj)
+        {
+            if(!Delegates.TryGetValue(obj.GetType(), out var del)) {
+                var cloneMethod = obj.GetType().GetMethod("MemberwiseClone", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                del = (Func<object, object>)cloneMethod.CreateDelegate(typeof(Func<object, object>));
+                Delegates[obj.GetType()] = del;
+            } 
+            return (T)del(obj);
+        }
+    }
+
 
     public class TypeToIgnore
     {

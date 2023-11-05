@@ -4,6 +4,7 @@ using Game.Events;
 using Game;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ClientSDK.Modules
 {
@@ -52,19 +53,18 @@ namespace ClientSDK.Modules
         /// </summary>
         public void UpdateComponents(IEntity currentEntity, IComponent[] newComponents)
         {
-
             _toSync.Clear();
             foreach (var newComponent in newComponents)
             {
-                if(_componentSyncs.ContainsKey(newComponent.GetType()))
+                if (_componentSyncs.ContainsKey(newComponent.GetType()))
                 {
                     _toSync.Add((currentEntity.Components.GetByType(newComponent.GetType()), newComponent));
-                } 
+                }
                 currentEntity.Components.Save(newComponent);
             }
             foreach(var toSync in _toSync)
             {
-                foreach(var deleg in _componentSyncs[toSync.Item1.GetType()])
+                foreach(var deleg in _componentSyncs[toSync.Item2.GetType()])
                 {
                     deleg.DynamicInvoke(currentEntity, toSync.Item1, toSync.Item2);
                 }

@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 /// </summary>
 public class EntitySelectBar : IEventListener, IDisposable
 {
-    private PartyButton[] _partyButtons = new PartyButton[4];
+    private WidgetPartyButton[] _partyButtons = new WidgetPartyButton[4];
     private Button _townButton; 
     private VisualElement _buttonCursor;
     private IGameClient GameClient;
@@ -35,7 +35,7 @@ public class EntitySelectBar : IEventListener, IDisposable
         for (byte i = 0; i < 4; i++)
         {
             var index = i;
-            _partyButtons[i] = new PartyButton(client, Root.Q<VisualElement>($"Portrait-Container-{i + 1}"));
+            _partyButtons[i] = new WidgetPartyButton(client, Root.Q<VisualElement>($"Portrait-Container-{i + 1}"));
             _partyButtons[i].OnClick(() => PartyButtonClick(index));
             if (i < client.Modules.Player.LocalPlayer.Parties.Count)
             {
@@ -46,7 +46,7 @@ public class EntitySelectBar : IEventListener, IDisposable
         }
         _buttonCursor = Root.Q<VisualElement>("PartySelector");
         _buttonCursor.style.display = DisplayStyle.None;
-        if (ClientState.SelectedEntityView == null && client.Modules.Player.LocalPlayer.Parties.Count > 0)
+        if (ClientViewState.SelectedEntityView == null && client.Modules.Player.LocalPlayer.Parties.Count > 0)
         {
             SelectEntity(client.Modules.Player.LocalPlayer.Parties[0]);
         }
@@ -69,7 +69,7 @@ public class EntitySelectBar : IEventListener, IDisposable
     {
         if (ev.Entity.Get<BattleGroupComponent>().Units.Valids == 0) return;
         UpdatePartyIcon(ev.Entity.GetEntityView());
-        if (ClientState.SelectedEntityView == null)
+        if (ClientViewState.SelectedEntityView == null)
         {
             SelectEntity(ev.Entity);
         }
@@ -95,7 +95,7 @@ public class EntitySelectBar : IEventListener, IDisposable
         _buttonCursor.style.display = DisplayStyle.Flex;
         _buttonCursor.style.left = _townButton.worldBound.xMin - _buttonCursor.parent.worldBound.xMin - 11;
         var center = GameClient.Modules.Player.LocalPlayer.GetCenter();
-        ClientState.SelectedEntityView = center.GetEntityView();
+        ClientViewState.SelectedEntityView = center.GetEntityView();
     }
 
     private void SelectEntity(PartyEntity party)
@@ -103,6 +103,6 @@ public class EntitySelectBar : IEventListener, IDisposable
         var button = _partyButtons[party.PartyIndex];
         _buttonCursor.style.display = DisplayStyle.Flex;
         _buttonCursor.style.left = button.Bounds.xMin - _buttonCursor.parent.worldBound.xMin + 6;
-        ClientState.SelectedEntityView = party.GetEntityView();
+        ClientViewState.SelectedEntityView = party.GetEntityView();
     }
 }

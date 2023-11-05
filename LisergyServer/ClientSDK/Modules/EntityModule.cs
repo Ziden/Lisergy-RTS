@@ -49,11 +49,10 @@ namespace ClientSDK.Services
                 _client.Log.Debug($"Client now aware of entity entity {existingEntity}");
             }
             _client.Log.Debug($"Received entity update for {existingEntity}");
-         
-            _entityComponents.UpdateComponents(existingEntity, packet.SyncedComponents);
             var view = _client.Modules.Views.GetOrCreateView(existingEntity);
             if (view.State == EntityViewState.NOT_RENDERED) view.RenderView();
-            if(entityCreated)
+            _entityComponents.UpdateComponents(existingEntity, packet.SyncedComponents);
+            if (entityCreated)
             {
                 _client.ClientEvents.Call(new ClientAwareOfEntityEvent()
                 {

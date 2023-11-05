@@ -1,9 +1,7 @@
 ﻿using Game.Events;
-using Game.Systems.Building;
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -56,7 +54,6 @@ namespace Game.ECS
                 }
             }
             foreach (var r in _removedComponents) _returnBuffer.Add(r);
-            _entity.Game.Log.Debug($"Sync components [{string.Join(",",_returnBuffer.Select(c => c.GetType().Name))}] for entity {_entity}");
             return _returnBuffer;
         }
 
@@ -67,12 +64,11 @@ namespace Game.ECS
             _removedComponents.Clear();
         }
 
-       
         public IReadOnlyCollection<Type> All() => _pointerComponents.Keys;
-
        
         public ref T Get<T>() where T : unmanaged, IComponent => ref _pointerComponents.AsReference<T>();
 
+        public bool HasDeltas() => _deltaComponents.Count > 0;
        
         public bool Has<T>() where T : unmanaged, IComponent => _pointerComponents.ContainsKey(typeof(T));
 
@@ -97,6 +93,7 @@ namespace Game.ECS
             }
         }
 
+
         public void Remove<T>() where T : unmanaged, IComponent
         {
             var t = typeof(T);
@@ -118,7 +115,16 @@ namespace Game.ECS
             return c;
         }
 
-       
+        public void RemoveReference<T>() where T : class, IReferenceComponent
+        {
+            var t = typeof(T);
+            if(_referenceComponents.TryGetValue(t, out var c))
+            {
+                if (c is IDisposable d) d.Dispose();
+                _referenceComponents.Remove(t);
+            }
+        }
+
         private void TrackSync<T>()
         {
             var type = typeof(T);

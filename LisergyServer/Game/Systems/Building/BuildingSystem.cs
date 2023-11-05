@@ -3,6 +3,7 @@ using Game.Systems.Map;
 
 namespace Game.Systems.Building
 {
+    [SyncedSystem]
     public class BuildingSystem : GameSystem<BuildingComponent>
     {
         public BuildingSystem(LisergyGame game) : base(game) { }

@@ -5,7 +5,7 @@ using Game.Tile;
 namespace Game.Systems.Map
 {
     /// <summary>
-    /// Whenever an entity steps in a tile
+    /// Whenever an entity moves in a tile
     /// </summary>
     public class EntityMoveInEvent : IGameEvent
     {
@@ -15,7 +15,7 @@ namespace Game.Systems.Map
 
         public override string ToString()
         {
-            return $"<EntityMoveIn Entity={Entity} From={FromTile} To={ToTile}/>";
+            return $"<EntityMoveIn Entity={Entity} From={FromTile.Position} To={ToTile.Position}/>";
         }
     }
 
@@ -30,7 +30,7 @@ namespace Game.Systems.Map
 
         public override string ToString()
         {
-            return $"<EntityMoveIn Entity={Entity} From={FromTile} To={ToTile}/>";
+            return $"<EntityMoveIn Entity={Entity} From={FromTile.Position} To={ToTile.Position}/>";
         }
     }
 }

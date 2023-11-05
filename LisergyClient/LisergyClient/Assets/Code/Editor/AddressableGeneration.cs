@@ -19,7 +19,7 @@ namespace Code.Editor
 			{"Tiles", "TilePrefab"},
 			{"Buildings", "BuildingPrefab"},
 			{"Units", "UnitPrefab"},
-			{"Effects", "MapFX"},
+			{"Effects", "VfxPrefab"},
 			{"Sprites", "SpritePrefab"},
 			{"MapObjects", "MapObjectPrefab"},
 			{"Screens", "UIScreen"},

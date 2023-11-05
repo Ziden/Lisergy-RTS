@@ -24,7 +24,6 @@ namespace Game.Scheduler
         
         private GameTaskData* _data;
         public IntPtr Pointer => (IntPtr)_data;
-        
         public DateTime Finish => _data->Start + _data->Delay;
         public ref DateTime Start => ref _data->Start;
         public ref readonly GameId ID => ref _data->TaskId;

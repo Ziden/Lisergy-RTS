@@ -25,8 +25,9 @@ namespace Assets.Code
         {
             var service = UnityServicesContainer.Resolve<IUiService>();
             _selectBar = new EntitySelectBar(GameClient, Root);
-            ClientState.OnCameraMove += OnCameraMove;
-            ClientState.OnSelectTile += OnClickTile;
+            _chatSummary = new ChatSummary(GameClient, Root.Q("Chat"));
+            ClientViewState.OnCameraMove += OnCameraMove;
+            ClientViewState.OnSelectTile += OnClickTile;
         }
 
         public override void OnLoaded(VisualElement root)
@@ -36,8 +37,8 @@ namespace Assets.Code
 
         public override void OnClose()
         {
-            ClientState.OnCameraMove -= OnCameraMove;
-            ClientState.OnSelectTile -= OnClickTile;
+            ClientViewState.OnCameraMove -= OnCameraMove;
+            ClientViewState.OnSelectTile -= OnClickTile;
             GameClient.ClientEvents.RemoveListener(this);
             _selectBar.Dispose();
             _chatSummary.Dispose();
@@ -47,21 +48,21 @@ namespace Assets.Code
         {
             if (newPos != Vector3.zero)
             {
-                UiService.Close<UnitDetails>();
-                UiService.Close<ActionsBar>();
+                UiService.Close<WidgetUnitDetails>();
+                UiService.Close<WidgetPartyActions>();
                 UiService.Close<EntityDetails>();
-                UiService.Close<TileDetails>();
+                UiService.Close<WidgetTileDetails>();
             }
         }
 
         private void OnClickTile(TileEntity tile)
         {
-            UiService.Close<UnitDetails>();
-            UiService.Close<ActionsBar>();
+            UiService.Close<WidgetUnitDetails>();
+            UiService.Close<WidgetPartyActions>();
             UiService.Close<EntityDetails>();
-            if (ClientState.SelectedEntityView != null && ClientState.SelectedEntityView.BaseEntity is PartyEntity party)
+            if (ClientViewState.SelectedEntityView != null && ClientViewState.SelectedEntityView.BaseEntity is PartyEntity party)
             {
-                UiService.Open<ActionsBar>(new ActionBarParams()
+                UiService.Open<WidgetPartyActions>(new ActionBarParams()
                 {
                     Party = party,
                     Tile = tile,
@@ -72,18 +73,18 @@ namespace Assets.Code
 
         private void OnActionChosen(EntityAction action)
         {
-            UiService.Close<ActionsBar>();
+            UiService.Close<WidgetPartyActions>();
             PerformActionWithSelectedParty(action);
         }
 
         private void PerformActionWithSelectedParty(EntityAction action)
         {
-            if (ClientState.SelectedEntityView.BaseEntity is PartyEntity party)
+            if (ClientViewState.SelectedEntityView.BaseEntity is PartyEntity party)
             {
-                var tile = ClientState.SelectedTile;
+                var tile = ClientViewState.SelectedTile;
                 if (action == EntityAction.CHECK)
                 {
-                    var selectedTile = ClientState.SelectedTile;
+                    var selectedTile = ClientViewState.SelectedTile;
                     if (selectedTile.Building != null)
                     {
                         UiService.Open<EntityDetails>(new EntityDetailsParams(){ Entity = selectedTile.Building });

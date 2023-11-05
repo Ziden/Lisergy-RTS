@@ -13,7 +13,7 @@ namespace Game.Systems.BattleGroup
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct UnitGroup : IEnumerable<Unit>
+    public struct UnitGroup : IEnumerable<Unit>, IComparable<UnitGroup>, IEqualityComparer<UnitGroup>
     {
         public Unit Leader;
         public Unit LeftFlank;
@@ -131,6 +131,21 @@ namespace Game.Systems.BattleGroup
         public override string ToString()
         {
             return $"{string.Join(" ", this.Where(u => u.Valid))}";
+        }
+
+        public int CompareTo(UnitGroup other)
+        {
+            return this.Array.SequenceEqual(other.Array) ? 1 : 0;
+        }
+
+        public bool Equals(UnitGroup x, UnitGroup y)
+        {
+            return x.Array.SequenceEqual(y.Array);
+        }
+
+        public int GetHashCode(UnitGroup obj)
+        {
+            return obj.GetHashCode(this);
         }
     }
 }

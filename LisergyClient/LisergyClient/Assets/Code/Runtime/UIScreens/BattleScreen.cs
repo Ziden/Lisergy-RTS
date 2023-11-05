@@ -46,16 +46,12 @@ namespace Assets.Code
 
         private async Task AddHealthbar(UnitView view)
         {
-            /*
-            _assets.GetScreen(UIScreen.HealthBar, hb =>
-            {
-                var tree = hb.CloneTree();
-                tree.style.position = Position.Absolute;
-                Root.Add(tree);
-                UnitHealthBars[view.Unit.Id] = tree;
-                tree.MoveToEntity(Root.panel, view, _battleCamera);
-            });
-            */
+            var hb = await _assets.GetScreen(UIScreen.HealthBar);
+            var tree = hb.CloneTree();
+            tree.style.position = Position.Absolute;
+            Root.Add(tree);
+            UnitHealthBars[view.Unit.Id] = tree;
+            tree.MoveToEntity(Root.panel, view, _battleCamera);
         }
 
         private async Task OnSceneLoaded()

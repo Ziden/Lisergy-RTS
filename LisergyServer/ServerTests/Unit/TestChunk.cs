@@ -8,19 +8,7 @@ using System.Linq;
 namespace UnitTests
 {
 
-    [SetUpFixture]
-    public class TestFixture : IDisposable
-    {
-        public TestFixture()
-        {
-            // runs before all tests
-        }
-
-        public void Dispose()
-        {
-            UnmanagedMemory.FlagMemoryToBeReused();
-        }
-    }
+ 
 
     public class TestWorldEvents
     {

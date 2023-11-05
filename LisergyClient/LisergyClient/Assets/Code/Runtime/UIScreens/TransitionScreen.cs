@@ -20,14 +20,7 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens
 
         private float _x = 0;
 
-        private VisualElement _root;
-
         public override UIScreen UiAsset => UIScreen.TransitionScreen;
-
-        public override void OnLoaded(VisualElement root)
-        {
-            _root = root;
-        }
 
         public override void OnOpen()
         {

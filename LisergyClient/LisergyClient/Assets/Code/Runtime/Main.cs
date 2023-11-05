@@ -8,7 +8,6 @@ using Assets.Code.Views;
 using Assets.Code.World;
 using ClientSDK;
 using ClientSDK.SDKEvents;
-using Cysharp.Threading.Tasks;
 using Game;
 using Game.Events.Bus;
 using Game.Systems.Building;
@@ -52,8 +51,7 @@ public class Main : MonoBehaviour, IEventListener
     private void OnApplicationQuit()
     {
         _network.Disconnect();
-        _client.Game.World.Dispose();
-        _client.Game.Entities.Dispose();
+        //_client.Game.Entities.Dispose();
     }
 
     private void SetupLog(IGame game)
@@ -71,12 +69,14 @@ public class Main : MonoBehaviour, IEventListener
     {
         SetupLog(ev.Game);
         _listeners.Add(new FogOfWarListener(_client));
-        _listeners.Add(new MapPlacementComponentListener(_client));
+        _listeners.Add(new EntityPositionListener(_client));
         _listeners.Add(new IndicatorSelectedTileListener(_client));
-        _listeners.Add(new IndicatorSelectedEntityListener(_client));
-        _listeners.Add(new MapAnimationListener(_client));
+        _listeners.Add(new IndicatorSelectedPartyListener(_client));
+        _listeners.Add(new PartyMovementListener(_client));
         _listeners.Add(new BattleGroupListener(_client));
-        _listeners.Add(new HarvesterListener(_client));
+        _listeners.Add(new HarvestingComponentListener(_client));
+        _listeners.Add(new HarvestingViewListener(_client));
+        _listeners.Add(new BattleGroupUnitListener(_client));
     }
 
     public void SetupViews()
@@ -95,7 +95,7 @@ public class Main : MonoBehaviour, IEventListener
         UnityServicesContainer.Register<INotificationService, NotificationService>(new NotificationService(_client));
         UnityServicesContainer.Register<IAssetService, AssetService>(new AssetService());
         UnityServicesContainer.Register<IServerModules, ServerModules>(_client.Modules as ServerModules);
-        UnityServicesContainer.Register<IVfxService, VfxService>(new VfxService());
+        UnityServicesContainer.Register<IVfxService, VfxService>(new VfxService(_client));
     }
 
     public static void ConfigureUnity()

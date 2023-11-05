@@ -30,6 +30,13 @@ namespace Game.ECS
         void Save<T>(in T c) where T : IComponent;
 
         /// <summary>
+        /// Check if this component set has any deltas
+        /// </summary>
+        bool HasDeltas();
+
+        bool HasReference<T>() where T : class, IComponent;
+
+        /// <summary>
         /// Adds a new component to the entity
         /// </summary>
         void Add<T>() where T : unmanaged, IComponent;
@@ -53,6 +60,7 @@ namespace Game.ECS
         T* GetPointer<T>() where T : unmanaged, IComponent;
         T AddReference<T>(in T c) where T : class, IReferenceComponent;
         T GetReference<T>() where T : class, IReferenceComponent;
+        void RemoveReference<T>() where T : class, IReferenceComponent;
         bool TryGetReference<T>(out T component) where T : class, IReferenceComponent;
         bool TryGet<T>(out T component) where T : unmanaged, IComponent;
         bool Has<T>() where T : unmanaged, IComponent;

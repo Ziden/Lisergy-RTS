@@ -2,6 +2,7 @@ using Game;
 using Game.Battle;
 using Game.Battle.Data;
 using Game.DataTypes;
+using Game.Events;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
@@ -37,6 +38,12 @@ namespace UnitTests
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
             Assert.That(_dungeon.Get<BattleGroupComponent>().Units.Valids == 1);
             _dungeon.EntityLogic.Map.SetPosition(_game.World.Map.GetTile(8, 8));
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            // EventPoolValidator.ValidateDisposed();
         }
 
         [Test]
@@ -178,7 +185,6 @@ namespace UnitTests
             Assert.AreEqual(dungeonTile.Components.GetReference<TileHabitantsReferenceComponent>().Building, _dungeon);
             Assert.AreEqual(_player.ReceivedPacketsOfType<EntityDestroyPacket>().Count, 0);
         }
-
 
         [Test]
         public void TestRevealingDungeonReceivesPacket()

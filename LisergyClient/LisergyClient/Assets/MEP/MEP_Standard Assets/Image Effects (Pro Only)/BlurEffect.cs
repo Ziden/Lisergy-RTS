@@ -45,11 +45,6 @@ public class BlurEffect : MonoBehaviour
 	
 	protected void Start()
 	{
-		// Disable if we don't support image effects
-		if (!SystemInfo.supportsImageEffects) {
-			enabled = false;
-			return;
-		}
 		// Disable if the shader can't run on the users graphics card
 		if (!blurShader || !material.shader.isSupported) {
 			enabled = false;

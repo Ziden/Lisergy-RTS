@@ -34,8 +34,11 @@ namespace ClientSDK.Modules
         /// </summary>
         private void OnUpdatePlacement(IEntity entity, MapPlacementComponent oldValue, MapPlacementComponent newValue) 
         {
-            var newTile = _gameClient.Game.World.Map.GetTile(newValue.Position.X, newValue.Position.Y);
-            entity.EntityLogic.Map.SetPosition(newTile);
+            if(oldValue.Position != newValue.Position)
+            {
+                var newTile = _gameClient.Game.World.Map.GetTile(newValue.Position.X, newValue.Position.Y);
+                entity.EntityLogic.Map.SetPosition(newTile);
+            }
         }
     }
 }

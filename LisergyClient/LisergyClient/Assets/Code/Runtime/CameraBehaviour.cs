@@ -1,10 +1,8 @@
-﻿using Assets.Code;
-using Game;
+﻿using Game;
 using Game.Tile;
 using System.Collections;
 using Assets.Code.Code;
 using UnityEngine;
-using Game.ECS;
 using Assets.Code.Assets.Code.Runtime;
 
 public class CameraBehaviour : MonoBehaviour
@@ -13,8 +11,6 @@ public class CameraBehaviour : MonoBehaviour
     public bool edgeScrolling = false;
     public Camera Camera;
     private static bool lerping = false;
-    private Vector3 velocity = Vector3.zero;
-    private float _smoothTime = 0.3f;
 
     private void FocusOnTile(TileEntity t)
     {
@@ -25,7 +21,7 @@ public class CameraBehaviour : MonoBehaviour
 
     private void Start()
     {
-        ClientState.OnSelectEntity += OnSelectEntity;
+        ClientViewState.OnSelectEntity += OnSelectEntity;
     }
 
     private void OnSelectEntity(IUnityEntityView e)
@@ -72,7 +68,7 @@ public class CameraBehaviour : MonoBehaviour
         if (old != pos)
         {
             transform.position = pos;
-            ClientState.CameraPosition = pos;
+            ClientViewState.CameraPosition = pos;
         }
     }
 }

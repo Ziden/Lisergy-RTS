@@ -36,8 +36,8 @@ namespace ServerTests.Integration.Stubs
         /// </summary>
         private void OnGameStart(GameStartedEvent ev)
         {
-            ClientEvents.OnEventFired += e => EventsInSdk.Add(e);
-            ev.Game.Events.OnEventFired += e => EventsInClientLogic.Add(e);
+            ClientEvents.OnEventFired += e => EventsInSdk.Add(e.ShallowClone());
+            ev.Game.Events.OnEventFired += e => EventsInClientLogic.Add(e.ShallowClone());
         }
 
         public void PrepareSDK()

@@ -78,10 +78,10 @@ namespace ServerTests
 
         public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : BasePacket
         {
-            //var deserialized = Serialization.ToCastedPacket<BasePacket>(Serialization.FromBasePacket(ev));
-            //deserialized.Sender = sender;
-            ev.Sender = sender;
-            TestNetwork.IncomingPackets.Call(ev);
+            var deserialized = Serialization.ToCastedPacket<BasePacket>(Serialization.FromBasePacket(ev));
+            deserialized.Sender = sender;
+            //ev.Sender = sender;
+            TestNetwork.IncomingPackets.Call(deserialized);
             Entities.DeltaCompression.SendDeltaPackets(sender);
         }
 

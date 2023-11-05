@@ -13,6 +13,7 @@ using ServerTests.Integration.Stubs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Telepathy;
 
 namespace ServerTests.Integration
 {
@@ -86,7 +87,6 @@ namespace ServerTests.Integration
             _client.Modules.Components.OnComponentUpdate<MapPlacementComponent>((e, oldValue, newValue) =>
             {
                 mapPlacementUpdates.Add(e);
-                e.EntityLogic.Map.SetPosition(e.Game.World.Map.GetTile(newValue.Position.X, newValue.Position.Y));
             });
 
             // LOGIN
@@ -151,6 +151,7 @@ namespace ServerTests.Integration
             }
 
             // HARVEST
+            _client.EventsInClientLogic.Clear();
             _client.ReceivedPackets.Clear();
             var party = _client.Modules.Player.LocalPlayer.GetParty(0);
             var resourceTile = party.Tile;
@@ -163,10 +164,21 @@ namespace ServerTests.Integration
                     break;
                 }
             }
+
+            _client.Game.Log.Debug("--- Testing Movement Updates");
+            var expectedMovementRange = resourceTile.Distance(party.Tile);
             Assert.IsTrue(_client.Modules.Actions.MoveParty(party, resourceTile, CourseIntent.Harvest));
             var update = await _client.WaitFor<EntityUpdatePacket>(p => p.SyncedComponents.Any(c => c.GetType()==typeof(HarvestingComponent)));
             var syncedHarvest = (HarvestingComponent)update.SyncedComponents.First(c => c.GetType() == typeof(HarvestingComponent));
             Assert.That(syncedHarvest.StartedAt != 0);
+
+            // MOVEMENT EVENTS
+            Assert.That(party.Tile == resourceTile);
+            Assert.That(party.Get<MapPlacementComponent>().Position == resourceTile.Position);
+            var moveEvents = _client.EventsInClientLogic.Where(e => e is EntityMoveInEvent).Cast<EntityMoveInEvent>();
+            Assert.AreEqual(expectedMovementRange, moveEvents.Count());
+
+            await Task.Delay(1000);
 
             // STOP HARVEST
             _client.ReceivedPackets.Clear();
@@ -174,6 +186,10 @@ namespace ServerTests.Integration
             update = await _client.WaitFor<EntityUpdatePacket>(p => p.SyncedComponents.Any(c => c.GetType() == typeof(HarvestingComponent)));
             syncedHarvest = (HarvestingComponent)update.SyncedComponents.First(c => c.GetType() == typeof(HarvestingComponent));
             Assert.That(syncedHarvest.StartedAt == 0);
+
+            // HARVEST CARGO
+            var cargo = party.Get<CargoComponent>();
+            Assert.That(cargo.Slot1.Amount > 0);
         }
     }
 }

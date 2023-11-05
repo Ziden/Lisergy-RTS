@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace Game
 {
-    public class Serialization
+    public static class Serialization
     {
         private static Serializer Serializer;
 
@@ -157,7 +157,6 @@ namespace Game
         public static byte[] FromPacket<T>(T ev) where T : BasePacket
         {
             return FromBasePacket(ev);
-
         }
     }
 }

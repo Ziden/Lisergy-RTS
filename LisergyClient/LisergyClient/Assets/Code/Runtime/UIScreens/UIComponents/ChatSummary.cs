@@ -6,6 +6,7 @@ using Game.Events.Bus;
 using GameAssets;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine.UIElements;
 
 /// <summary>
@@ -24,7 +25,7 @@ public class ChatSummary : IEventListener, IDisposable
     {
         _root = root;
         _client = client;
-        _thumbnail = root.Q("ChatThumbnail").Required();
+        _thumbnail = root.Q("ChatSummary").Required();
         _container = root.Q("MessageContainer").Required();
         client.ClientEvents.Register<ChatUpdateEvent>(this, OnChatUpdate);
         _ = PreloadRequirements();

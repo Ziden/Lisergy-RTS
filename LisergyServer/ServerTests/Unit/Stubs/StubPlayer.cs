@@ -49,7 +49,7 @@ namespace ServerTests
         {
             Game.Events.Register<EventType>(this, ev =>
             {
-                TriggeredEvents.Add(ev);
+                TriggeredEvents.Add(ev.ShallowClone());
             });
         }
 

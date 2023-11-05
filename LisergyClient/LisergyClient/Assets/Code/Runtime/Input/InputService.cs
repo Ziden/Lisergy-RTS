@@ -46,7 +46,7 @@ namespace Assets.Code
                 var tileComponent = hit.collider.GetComponentInParent<TileMonoComponent>();
                 if (tileComponent == null) return;
                 var tile = tileComponent.Tile;
-                ClientState.SelectedTile = tile;
+                ClientViewState.SelectedTile = tile;
             }
         }
 

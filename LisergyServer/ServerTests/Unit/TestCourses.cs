@@ -62,6 +62,8 @@ namespace UnitTests
             var next = tile.GetNeighbor(Direction.SOUTH);
             _path.Add(new TileVector(next.X, next.Y));
 
+            _player.ListenTo<EntityMoveInEvent>();
+
             SendMoveRequest();
 
             Assert.AreEqual(tile, _party.Tile);
