@@ -12,7 +12,6 @@ namespace Game.Systems.Party
 {
     public class PartyEntity : BaseEntity
     {
-        public const int SIZE = 4;
 
         public override EntityType EntityType => EntityType.Party;
 

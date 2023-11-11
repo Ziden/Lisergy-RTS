@@ -1,10 +1,7 @@
 ﻿using Game.DataTypes;
 using Game.Systems.FogOfWar;
-using Game.Systems.Map;
 using Game.Systems.MapPosition;
-using Game.Systems.Player;
 using GameData;
-using System;
 
 namespace Game.Systems.Building
 {
@@ -16,11 +13,6 @@ namespace Game.Systems.Building
 
         public PlayerBuildingEntity(IGame game, GameId owner) : base(game, owner)
         {
-            Components.Add<MapPlacementComponent>();
-            Components.Add<BuildingComponent>();
-            Components.Add<PlayerBuildingComponent>();
-            Components.Add<EntityVisionComponent>();
-            Components.Add<BuildingComponent>();
             Components.AddReference(new MapReferenceComponent());
         }
 

@@ -28,6 +28,7 @@ namespace GameData
             Dungeons = new Dictionary<DungeonSpecId, DungeonSpec>();
             Resources = new Dictionary<ResourceSpecId, ResourceSpec>();
             HarvestPoints = new Dictionary<HarvestPointSpecId, ResourceHarvestPointSpec>();
+            Entities = new Dictionary<EntitySpecId, EntitySpec>();
             Harvesting = new HarvestingSpec();
         }
 
@@ -40,5 +41,6 @@ namespace GameData
         public Dictionary<DungeonSpecId, DungeonSpec> Dungeons;
         public Dictionary<ResourceSpecId, ResourceSpec> Resources;
         public Dictionary<HarvestPointSpecId, ResourceHarvestPointSpec> HarvestPoints;
+        public Dictionary<EntitySpecId, EntitySpec> Entities;
     }
 }

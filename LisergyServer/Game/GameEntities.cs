@@ -5,6 +5,7 @@ using Game.Systems.Building;
 using Game.Systems.Dungeon;
 using Game.Systems.Party;
 using Game.Systems.Player;
+using GameData.Specs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -54,12 +55,25 @@ namespace Game
             _game = game;
         }
 
+        private void SetupEntity(IEntity entity, in EntitySpecId id)
+        {
+            var spec = _game.Specs.Entities[id];
+            foreach (var component in spec.Components)
+            {
+                entity.Components.Save(component);
+            }
+        }
+
         public IEntity CreateEntity(in GameId owner, in EntityType type)
         {
             IEntity e = null;
             if (type == EntityType.Dungeon) e = new DungeonEntity(_game);
             else if (type == EntityType.Party) e = new PartyEntity(_game, owner);
-            else if (type == EntityType.Building) e = new PlayerBuildingEntity(_game, owner);
+            else if (type == EntityType.Building)
+            {
+                e = new PlayerBuildingEntity(_game, owner);
+                SetupEntity(e, 1);
+            }
             else throw new Exception($"Entity type {type} is not createable");
             _entities[e.EntityId] = e;
             if(!owner.IsZero())

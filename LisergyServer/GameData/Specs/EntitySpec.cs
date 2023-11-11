@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Game.ECS;
+using System;
 using System.Runtime.InteropServices;
-
 
 namespace GameData.Specs
 {
@@ -14,9 +14,12 @@ namespace GameData.Specs
         public override string ToString() => Id.ToString();
     }
 
+    [Serializable]
     public class EntitySpec
     {
+        public string Name;
         public EntitySpecId SpecId;
         public ArtSpec Icon;
+        public IComponent [] Components;
     }
 }

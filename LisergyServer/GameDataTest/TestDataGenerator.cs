@@ -16,6 +16,7 @@ namespace GameDataTest
             TestDungeons.Generate(ref spec);
             TestResources.Generate(ref spec);
             TestHarvestingSpots.Generate(ref spec);
+            TestEntitySpecs.Generate(ref spec);
             spec.InitialBuildingSpecId = null;//spec.Buildings[1].Id;
             spec.InitialUnitSpecId = TestUnitData.MAGE;
             return spec;

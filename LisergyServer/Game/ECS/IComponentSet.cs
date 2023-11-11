@@ -41,6 +41,8 @@ namespace Game.ECS
         /// </summary>
         void Add<T>() where T : unmanaged, IComponent;
 
+        void Add(Type t);
+
         /// <summary>
         /// Gets a component from the entity.
         /// Will get the reference of the component, but if the component is assigned to

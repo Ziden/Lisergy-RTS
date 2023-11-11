@@ -78,10 +78,14 @@ namespace Game.ECS
        
         public void Add<T>() where T : unmanaged, IComponent
         {
-            var t = typeof(T);
-            TrackSync<T>();
+            Add(typeof(T));
+        }
+
+        public void Add(Type t)
+        {
+            TrackSync(t);
             FlagCompnentHasDelta(t);
-            _pointerComponents.Alloc<T>();
+            _pointerComponents.Alloc(t);
         }
 
         private void FlagCompnentHasDelta(Type t)
@@ -104,7 +108,7 @@ namespace Game.ECS
                 _removedComponents.Add(default(T));
                 _entity.DeltaFlags.SetFlag(Network.DeltaFlag.COMPONENTS);
             }
-            UntrackSync<T>();
+            UntrackSync(t);
             _deltaComponents.Remove(t);
             _entity.Game.Log.Debug($"Removed {typeof(T)} from {_entity}");
         }
@@ -125,9 +129,8 @@ namespace Game.ECS
             }
         }
 
-        private void TrackSync<T>()
+        private void TrackSync(Type type)
         {
-            var type = typeof(T);
             var sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
             if (sync != null)
             {
@@ -137,9 +140,8 @@ namespace Game.ECS
             }
         }
 
-        private void UntrackSync<T>()
+        private void UntrackSync(Type type)
         {
-            var type = typeof(T);
             var sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
             if (sync != null)
             {
@@ -156,7 +158,11 @@ namespace Game.ECS
         public void Save<T>(in T c) where T : IComponent
         {
             var t = c.GetType();
-            if(!_pointerComponents.TryGetValue(t, out var ptr)) _pointerComponents.Alloc(t);
+            if (!_pointerComponents.TryGetValue(t, out var ptr))
+            {
+                _pointerComponents.Alloc(t);
+                TrackSync(t);
+            }
             Marshal.StructureToPtr(c, _pointerComponents[t], true);
             FlagCompnentHasDelta(t);
         }
@@ -188,6 +194,8 @@ namespace Game.ECS
         public void Dispose() => _pointerComponents.FreeAll();
 
         public IComponent GetByType(Type t) => _pointerComponents.AsInterface(t);
+
+     
     }
 
 
