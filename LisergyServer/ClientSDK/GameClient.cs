@@ -44,13 +44,14 @@ namespace ClientSDK
         public IGame Game { get; private set; } = null!;
         public IServerModules Modules { get; private set; }
         public EventBus<IClientEvent> ClientEvents { get; private set; } = new EventBus<IClientEvent>();
-        public IGameLog Log { get; private set; }
+        public IGameLog SDKLog { get; private set; }
+        public IGameLog Log => Game.Log;
 
         public GameClient()
         {
             Serialization.LoadSerializers();
-            Log = new GameLog("[Client SDK]");
-            Network = new ClientNetwork(Log, ServerType.WORLD, ServerType.ACCOUNT, ServerType.CHAT);
+            SDKLog = new GameLog("[Client SDK]");
+            Network = new ClientNetwork(SDKLog, ServerType.WORLD, ServerType.ACCOUNT, ServerType.CHAT);
             var s = new ServerModules(this);
             Modules = s;
             s.Register();

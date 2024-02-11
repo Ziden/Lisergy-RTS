@@ -1,3 +1,4 @@
+using Assets.Code.Assets.Code.Runtime.Movement;
 using Assets.Code.UI;
 using Assets.Code.World;
 using ClientSDK;
@@ -27,13 +28,13 @@ public class EntityPositionListener : IEventListener
         if (ev.ToTile == null) return;
         _client.Game.Log.Debug($"Entity {ev.Entity} moved from {ev.FromTile} to {ev.ToTile}");
         _movementPath.OnFinishedMove(ev.Entity, ev.ToTile);
-        var view = ev.Entity.GetEntityView() as PartyView;
+        var view = ev.Entity.GetEntityView() as IUnityEntityView;
         if (view == null) return;
-        if (ev.FromTile != null && ev.ToTile.Distance(ev.FromTile) <= 1)
+        if (view is IEntityMovementInterpolated i && ev.FromTile != null && ev.ToTile.Distance(ev.FromTile) <= 1)
         {
-            view.MovementInterpolator.InterpolateMovement(ev.FromTile, ev.ToTile);
+            i.MovementInterpolator.InterpolateMovement(ev.FromTile, ev.ToTile);
         }
-        else
+        else if(view.BaseEntity.Components.Has<MapPlacementComponent>() && view.State == ClientSDK.Data.EntityViewState.RENDERED)
         {
             view.GameObject.transform.position = ev.ToTile.UnityPosition();
         }

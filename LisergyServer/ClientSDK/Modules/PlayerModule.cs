@@ -33,11 +33,11 @@ namespace ClientSDK.Services
 
     public class PlayerModule : IPlayerModule
     {
-        private IGameClient _client;
+        private GameClient _client;
         public PlayerEntity LocalPlayer { get; private set; }
         public GameId PlayerId => LocalPlayer.EntityId;
 
-        public PlayerModule(IGameClient client) { _client = client; }
+        public PlayerModule(GameClient client) { _client = client; }
 
         public void Register()
         {

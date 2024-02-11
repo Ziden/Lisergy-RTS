@@ -137,10 +137,10 @@ Material:
     - _Parallax: 0.005
     - _ParallaxStrength: 0
     - _SmoothnessTextureChannel: 0
-    - _SmoothnessshiftAlphaChannel: 1.47
-    - _SmoothnessshiftBlackchannel: 0.7
-    - _SmoothnessshiftGreenChannel: 0.85
-    - _SmoothnessshiftRedChannel: 0.7
+    - _SmoothnessshiftAlphaChannel: 1.65
+    - _SmoothnessshiftBlackchannel: 1.76
+    - _SmoothnessshiftGreenChannel: 2.16
+    - _SmoothnessshiftRedChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Tiling: 20

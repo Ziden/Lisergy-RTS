@@ -1,13 +1,8 @@
-using Assets.Code.World;
 using ClientSDK;
-using ClientSDK.SDKEvents;
-using Game.DataTypes;
 using Game.ECS;
 using Game.Systems.Battler;
 using Game.Systems.Party;
-using GameAssets;
-using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
+
 
 
 public class BattleGroupUnitListener : BaseComponentListener<BattleGroupComponent>

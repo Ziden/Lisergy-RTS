@@ -16,7 +16,7 @@ namespace Assets.Code
     /// </summary>
     public class GameHUD : GameUi, IEventListener
     {
-        private EntitySelectBar _selectBar;
+        private WidgetEntitySelectBar _selectBar;
         private ChatSummary _chatSummary;
        
         public override UIScreen UiAsset => UIScreen.GameHud;
@@ -24,7 +24,7 @@ namespace Assets.Code
         public override void OnOpen()
         {
             var service = UnityServicesContainer.Resolve<IUiService>();
-            _selectBar = new EntitySelectBar(GameClient, Root);
+            _selectBar = new WidgetEntitySelectBar(GameClient, Root);
             _chatSummary = new ChatSummary(GameClient, Root.Q("Chat"));
             ClientViewState.OnCameraMove += OnCameraMove;
             ClientViewState.OnSelectTile += OnClickTile;

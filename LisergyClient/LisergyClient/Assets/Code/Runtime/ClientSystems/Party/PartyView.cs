@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Assets.Code.World
 {
-    public partial class PartyView : UnityEntityView<PartyEntity>
+    public partial class PartyView : UnityEntityView<PartyEntity>, IEntityMovementInterpolated
     {
         public MovementInterpolator MovementInterpolator { get; private set; }
 

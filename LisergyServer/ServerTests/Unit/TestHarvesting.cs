@@ -82,10 +82,10 @@ namespace UnitTests
             var harvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
 
             var tileResourceAfter = _logs.Get<TileResourceComponent>();
-            var resourcedSubtracted = tileResourceBefore.AmountResourcesLeft - tileResourceAfter.AmountResourcesLeft;
+            var resourcedSubtracted = tileResourceBefore.Resource.Amount - tileResourceAfter.Resource.Amount;
             var partyCargo = _party.Get<CargoComponent>();
 
-            Assert.AreEqual(resourcedSubtracted, partyCargo.GetAmount(tileResourceAfter.ResourceId));
+            Assert.AreEqual(resourcedSubtracted, partyCargo.GetAmount(tileResourceAfter.Resource.ResourceId));
             Assert.AreEqual(resourcedSubtracted, harvestedStack.Amount);
             Assert.IsFalse(_party.Components.Has<HarvestingComponent>());
             Assert.AreEqual(false, tileResourceAfter.BeingHarvested);
@@ -150,9 +150,41 @@ namespace UnitTests
 
             var harvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
             var tileResourceAfter = _logs.Get<TileResourceComponent>();
+            var cargo = _party.Get<CargoComponent>();
 
-            Assert.AreEqual(harvestedStack.Amount, tileResourceBefore.AmountResourcesLeft / 2);
-            Assert.AreEqual(tileResourceAfter.AmountResourcesLeft, tileResourceBefore.AmountResourcesLeft / 2);
+            Assert.AreEqual(harvestedStack.Amount, tileResourceBefore.Resource.Amount / 2);
+            Assert.AreEqual(tileResourceAfter.Resource.Amount, tileResourceBefore.Resource.Amount / 2);
+            Assert.AreEqual(cargo.CurrentWeight, harvestedStack.Amount * _game.Specs.Resources[_logs.HarvestPointSpec.ResourceId].WeightPerUnit);
+
+        }
+
+        [Test]
+        public void TestFinishHarvestingHalfTwice()
+        {
+            var tileResourceBefore = _logs.Get<TileResourceComponent>();
+
+            _party.EntityLogic.Harvesting.StartHarvesting(_logs);
+            var totalTime = _logs.HarvestPointSpec.ResourceAmount * _logs.HarvestPointSpec.HarvestTimePerUnit;
+
+            // Advance half of the harvesting time
+            _scheduler.SetLogicalTime(_game.GameTime + (totalTime / 2));
+
+            // Harvest the remaining half
+            _party.EntityLogic.Harvesting.StopHarvesting();
+
+            var tileResourceAfterFirst = _logs.Get<TileResourceComponent>();
+
+            _party.EntityLogic.Harvesting.StartHarvesting(_logs);
+            _scheduler.SetLogicalTime(_game.GameTime + totalTime);
+            var harvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
+            var cargo = _party.Get<CargoComponent>();
+
+            var tileResourceAfter = _logs.Get<TileResourceComponent>();
+
+            Assert.AreEqual(harvestedStack.Amount, tileResourceBefore.Resource.Amount / 2);
+            Assert.AreEqual(0, tileResourceAfter.Resource.Amount);
+            Assert.AreEqual(cargo.Slot1.Amount, tileResourceBefore.Resource.Amount);
+            Assert.AreEqual(cargo.CurrentWeight, cargo.Slot1.Amount * _game.Specs.Resources[_logs.HarvestPointSpec.ResourceId].WeightPerUnit);
         }
 
         [Test]

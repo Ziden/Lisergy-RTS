@@ -2357,6 +2357,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a4ff356607f04341b0b8fbd929a84df
+    m_Address: Assets/Addressables/UIScreens/Components/ResourceDisplayWidget.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 170a0de474dcaf44f8bfcd2379cd4950
+    m_Address: Assets/Addressables/UIScreens/Notifications/HarvestFinishedNotification.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b09defdd2ea25a04a9d7584493f44cd4, type: 2}
   m_SchemaSet:

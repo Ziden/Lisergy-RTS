@@ -159,7 +159,7 @@ namespace ServerTests.Integration
             {
                 if(tile.HasHarvestSpot)
                 {
-                    _client.Log.Debug($"Found harvest tile {tile}");
+                    _client.SDKLog.Debug($"Found harvest tile {tile}");
                     resourceTile = tile;
                     break;
                 }

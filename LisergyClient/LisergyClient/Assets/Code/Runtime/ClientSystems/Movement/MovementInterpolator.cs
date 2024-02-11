@@ -10,6 +10,14 @@ using UnityEngine;
 namespace Assets.Code.Assets.Code.Runtime.Movement
 {
     /// <summary>
+    /// Interface for entities who have movement interpolated
+    /// </summary>
+    public interface IEntityMovementInterpolated
+    {
+        MovementInterpolator MovementInterpolator { get; }
+    }
+
+    /// <summary>
     /// Adds a movement interpolator component to an entity and allows the entity to interpolate and predict movements.
     /// </summary>
     public class MovementInterpolator
@@ -30,7 +38,9 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
         /// </summary>
         public void InterpolateMovement(TileEntity from, TileEntity to)
         {
-            if(from.Distance(to) > 1)
+            if (from == to) return;
+            _client.Log.Debug($"[MovementInterpolator] Receiving interpolation request {_entity} from {from} to {to}");
+            if (from.Distance(to) > 1)
             {
                 _client.Log.Error($"{_entity} tried to move more than 1 tile distance using interpolation");
                 return;
@@ -52,8 +62,14 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
                 .SetAutoKill(true);
         }
 
+        public void ClearQueue()
+        {
+            _queue.Clear();
+        }
+
         private void OnStart(TileEntity from, TileEntity to)
         {
+            _client.Log.Debug($"[MovementInterpolator] Interpolation Started {_entity} from {from} to {to}");
             _client.ClientEvents.Call(new MovementInterpolationStart()
             {
                 Entity = _entity,
@@ -64,6 +80,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
 
         private void OnFinish(TileEntity from, TileEntity to)
         {
+            _currentSequence = null;
             _client.ClientEvents.Call(new MovementInterpolationEnd()
             {
                 Entity = _entity,

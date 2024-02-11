@@ -55,7 +55,7 @@ namespace Assets.Code.UI
         private void BindItem(VisualElement e, int index)
         {
             var packet = _chatLog[index];
-            var messageBox = (MessageBox)e.userData;
+            var messageBox = (MessageBoxWidget)e.userData;
             messageBox.SetMessage(packet.Owner.IsMine(), packet.Name, packet.Message);
             if(index == _chatLog.Count - 1 && _newMessage == packet)
             {
@@ -69,7 +69,7 @@ namespace Assets.Code.UI
             var param = GetParameter<ChatScreenParam>();
             var visualTree = param.MsgBoxAsset;
             var template = visualTree.Instantiate();
-            template.userData = new MessageBox(template);
+            template.userData = new MessageBoxWidget(template, GameClient);
             return template;
         }
 

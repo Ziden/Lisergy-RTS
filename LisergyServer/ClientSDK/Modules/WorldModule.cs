@@ -14,9 +14,9 @@ namespace ClientSDK.Services
 
     public class WorldModule : IWorldModule
     {
-        private IGameClient _client;
+        private GameClient _client;
 
-        public WorldModule(IGameClient client)
+        public WorldModule(GameClient client)
         {
             _client = client;
         }

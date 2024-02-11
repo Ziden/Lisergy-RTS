@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Burst;
 using UnityEngine;
 
@@ -7,11 +8,7 @@ using UnityEngine;
 /// </summary>
 public class TileMeshNoiser : MonoBehaviour
 {
-    public static byte[,] VertexArray = new byte[6, 6];
-    private static Vector3[] _verticles;
-
-    private Mesh _mesh;
-    public float[,] Heights = new float[6, 6];
+    private static Dictionary<long, Mesh> _cache = new Dictionary<long, Mesh>();
 
     // TODO: Make this run inside a burst compiled job
     [BurstCompile]
@@ -22,13 +19,14 @@ public class TileMeshNoiser : MonoBehaviour
         var mesh = new Mesh();
         mesh.name = "Procedural Grid";
 
-        _verticles = new Vector3[(xSize + 1) * (ySize + 1)];
+        var _verticles = new Vector3[(xSize + 1) * (ySize + 1)];
         var uv = new Vector2[_verticles.Length];
+        var vertexBuffer = new byte[6, 6]; 
         for (int i = 0, y = 0; y <= ySize; y++)
         {
             for (int x = 0; x <= xSize; x++, i++)
             {
-                VertexArray[x, y] = (byte)i;
+                vertexBuffer[x, y] = (byte)i;
                 _verticles[i] = new Vector3(x, heights[x, y], y);
                 uv[i] = new Vector2((float)x / xSize, (float)y / ySize);
             }
@@ -49,19 +47,25 @@ public class TileMeshNoiser : MonoBehaviour
         }
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+        mesh.Optimize();
         return mesh;
     }
 
-    public void Adjust()
+    public void Adjust(float[,] heights, long hash)
     {
-        _mesh = GenerateTileMesh(Heights);
-        GetComponent<MeshFilter>().mesh = _mesh;
-        transform.localScale = new Vector3(0.2f, 1, 0.2f);
-        _mesh.vertices = _verticles;
-        _mesh.Optimize();
-        _mesh.RecalculateBounds();
-        _mesh.RecalculateNormals();
+        var size = 1f / 5;
+        transform.localScale = new Vector3(size, 1, size);
         transform.localPosition = new Vector3(-0.5f, 0, -0.5f);
+        if (!_cache.TryGetValue(hash, out var mesh))
+        {
+            mesh = GenerateTileMesh(heights);
+            _cache[hash] = mesh;
+        }
+        else
+        {
+            Debug.Log("Used cached mesh ! ");
+        }
+        GetComponent<MeshFilter>().mesh = mesh;
+
     }
 }

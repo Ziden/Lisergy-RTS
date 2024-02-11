@@ -2,22 +2,30 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: dot
-  m_Shader: {fileID: 4800000, guid: 80412fe88398cd147be3aacebe2c3fe3, type: 3}
-  m_ShaderKeywords: OUTLINES TCP2_DISABLE_WRAPPED_LIGHT TCP2_REFLECTIONS_FRESNEL TCP2_RIM_LIGHTING_LIGHTMASK
-    TCP2_UV_NORMALS_FULL _ALPHATEST_ON
+  m_Shader: {fileID: 10750, guid: 0000000000000000f000000000000000, type: 0}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - OUTLINES
+  - TCP2_DISABLE_WRAPPED_LIGHT
+  - TCP2_REFLECTIONS_FRESNEL
+  - TCP2_RIM_LIGHTING_LIGHTMASK
+  - TCP2_UV_NORMALS_FULL
+  - _ALPHATEST_ON
   m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
-  stringTagMap:
-    RenderType: TransparentCutout
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -85,6 +93,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _BumpScale: 1
     - _Cull: 2
@@ -184,3 +193,4 @@ Material:
     - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.5}
     - _SColor: {r: 0.86701983, g: 1, b: 0.5424528, a: 1}
     - _SpecularColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
+  m_BuildTextureStacks: []

@@ -30,12 +30,12 @@ namespace ClientSDK.Services
 
     public class GameViewModule : IGameView
     {
-        private IGameClient _client;
+        private GameClient _client;
 
         public ViewContainer _views = new ViewContainer();
         private EntityViewRegistry _viewRegistry = new EntityViewRegistry();
 
-        public GameViewModule(IGameClient client)
+        public GameViewModule(GameClient client)
         {
             _client = client;
         }

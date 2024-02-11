@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PolygonNature_Leaves_Pine_Brown
-  m_Shader: {fileID: -6465566751694194690, guid: c767be1032f805747872f8fa75577d5b, type: 3}
+  m_Shader: {fileID: 50, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -147,6 +147,7 @@ Material:
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Shininess: 0.7
     - _Small_Wave: 2.27
     - _Small_WindAmount: 0.1
     - _Small_WindSpeed: 0.015
@@ -169,5 +170,7 @@ Material:
     - Color_FA85148A: {r: 0.5943396, g: 0.21828899, b: 0.058873262, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorTint: {r: 1, g: 0.65922916, b: 0.29411763, a: 0}
+    - _Emission: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []

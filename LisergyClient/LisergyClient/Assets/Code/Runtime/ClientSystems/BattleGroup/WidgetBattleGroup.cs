@@ -5,14 +5,14 @@ using Game.ECS;
 using Game.Systems.Battler;
 using UnityEngine.UIElements;
 
-public class WidgetBattleGroup
+public class WidgetBattleGroup : UIWidget
 {
     private VisualElement _root;
     private IGameClient _client;
 
     private WidgetPartyButton[] _parties = new WidgetPartyButton[4];
 
-    public WidgetBattleGroup(IGameClient client, VisualElement root)
+    public WidgetBattleGroup(IGameClient client, VisualElement root) : base(root, client)
     {
         _client = client;
         _root = root;
@@ -22,7 +22,7 @@ public class WidgetBattleGroup
         }
     }
 
-    public void DisplayGroup(IEntity owner, in BattleGroupComponent component)
+    public void DisplayComponent(IEntity owner, in BattleGroupComponent component)
     {
         for(int x = 0; x < 4; x++)
         {
@@ -35,5 +35,10 @@ public class WidgetBattleGroup
                 Unit = unit
             }));
         }
+    }
+
+    public override void Dispose()
+    {
+        
     }
 }

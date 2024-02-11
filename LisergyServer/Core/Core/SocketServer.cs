@@ -34,7 +34,7 @@ namespace BaseServer.Core
             _ = _socketServer.Start(_port);
             try
             {
-                Ticker = new Ticker(60);
+                Ticker = new Ticker();
                 Log.Info($"Server Started at port {GetServerType().GetDefaultPort()}");
                 Ticker.Run(RunTick);
             }

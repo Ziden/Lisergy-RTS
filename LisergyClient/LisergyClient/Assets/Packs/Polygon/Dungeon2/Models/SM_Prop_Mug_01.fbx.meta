@@ -1,4 +1,4 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: b4bd7ed2a57c61749965d05f532dfb49
 ModelImporter:
   serializedVersion: 22200
@@ -88,7 +88,7 @@ ModelImporter:
     useFileScale: 1
     strictVertexDataChecks: 0
   tangentSpace:
-    normalSmoothAngle: 5
+    normalSmoothAngle: 84
     normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
@@ -113,8 +113,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource:
-    instanceID: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 0
   humanoidOversampling: 1

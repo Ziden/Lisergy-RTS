@@ -11,7 +11,6 @@ public class CameraBehaviour : MonoBehaviour
     public bool edgeScrolling = false;
     public Camera Camera;
     private static bool lerping = false;
-
     private void FocusOnTile(TileEntity t)
     {
         Debug.Log($"Focusing on tile {t}");

@@ -21,21 +21,21 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PolygonAncientWorlds_01_A
-  m_Shader: {fileID: 4800000, guid: 3e3093d2c3fb57f4483a13f48685e76c, type: 3}
+  m_Shader: {fileID: 10701, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - TCP2_DISABLE_WRAPPED_LIGHT
-  - TCP2_RAMPTEXT
-  - TCP2_SPEC_TOON
-  - TCP2_ZSMOOTH_ON
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - OUTLINES
+  - TCP2_DISABLE_WRAPPED_LIGHT
   - TCP2_MOBILE
+  - TCP2_RAMPTEXT
   - TCP2_RAMP_BANDS_CRISP
   - TCP2_REFLECTIONS_FRESNEL
   - TCP2_RIM_LIGHTING_LIGHTMASK
+  - TCP2_SPEC_TOON
   - TCP2_UV_NORMALS_FULL
+  - TCP2_ZSMOOTH_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0

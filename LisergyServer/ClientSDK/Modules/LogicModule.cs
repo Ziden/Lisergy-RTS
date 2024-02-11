@@ -16,9 +16,9 @@ namespace ClientSDK.Modules
 
     public class LogicModule : ILogicModule
     {
-        private IGameClient _gameClient;
+        private GameClient _gameClient;
 
-        public LogicModule(IGameClient gameClient)
+        public LogicModule(GameClient gameClient)
         {
             _gameClient = gameClient;
         }

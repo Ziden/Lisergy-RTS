@@ -18,12 +18,12 @@ public class HarvestingViewListener : IEventListener
         _client = client;
         _vfx = new HarvestVfx(client);
         ClientViewState.OnSelectTile += OnSelectedTile;
-        _client.ClientEvents.Register<HarvestedResourceEvent>(this, OnHarvestResources);
+        _client.ClientEvents.Register<HarvestingUpdateEvent>(this, OnHarvestResources);
     }
 
-    private void OnHarvestResources(HarvestedResourceEvent ev)
+    private void OnHarvestResources(HarvestingUpdateEvent ev)
     {
-        _ = _vfx.ShowResource(ev.Entity, ev.TileResources.ResourceId, ev.AmountHarvestedNow);
+        _ = _vfx.ShowResource(ev.Entity, ev.TileResources.Resource.ResourceId, ev.AmountHarvestedNow);
     }
 
     private void OnSelectedTile(TileEntity tile)

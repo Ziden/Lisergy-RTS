@@ -23,10 +23,10 @@ namespace ClientSDK.Services
 
     public class EntityModule : IEntityModule
     {
-        private IGameClient _client;
+        private GameClient _client;
         private ComponentsModule _entityComponents;
 
-        public EntityModule(IGameClient client)
+        public EntityModule(GameClient client)
         {
             _client = client;
         }
@@ -46,9 +46,9 @@ namespace ClientSDK.Services
                 GameId.NextGeneration = packet.EntityId;
                 existingEntity = _client.Game.Entities.CreateEntity(packet.OwnerId, packet.Type);
                 entityCreated = true;
-                _client.Log.Debug($"Client now aware of entity entity {existingEntity}");
+                _client.SDKLog.Debug($"Client now aware of entity entity {existingEntity}");
             }
-            _client.Log.Debug($"Received entity update for {existingEntity}");
+            _client.SDKLog.Debug($"Received entity update for {existingEntity}");
             var view = _client.Modules.Views.GetOrCreateView(existingEntity);
             if (view.State == EntityViewState.NOT_RENDERED) view.RenderView();
             _entityComponents.UpdateComponents(existingEntity, packet.SyncedComponents);

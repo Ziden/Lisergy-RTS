@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PolygonNature_Leaves_Base_Yellow
-  m_Shader: {fileID: -6465566751694194690, guid: c767be1032f805747872f8fa75577d5b, type: 3}
+  m_Shader: {fileID: 50, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -143,6 +143,7 @@ Material:
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Shininess: 0.7
     - _Small_Wave: 1.9
     - _Small_WindAmount: 0.1
     - _Small_WindSpeed: 0.01
@@ -170,7 +171,9 @@ Material:
     - Color_FA85148A: {r: 0.8113208, g: 0.40566036, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorTint: {r: 0.6838235, g: 0.47035405, b: 0.2765463, a: 0}
+    - _Emission: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0.32352942, g: 0.1004057, b: 0, a: 0}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 0}
     - _deepColor: {r: 0.01938236, g: 0.06480328, b: 0.07036011, a: 1}
     - _edgeFoamColor: {r: 0.7454045, g: 0.7454045, b: 0.7454045, a: 1}
     - _shallowColor: {r: 0.07421358, g: 0.1529262, b: 0.1470273, a: 1}

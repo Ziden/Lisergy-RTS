@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PolygonNature_Leaves_Pine_LOD_01
-  m_Shader: {fileID: -6465566751694194690, guid: 3d492456782aac74fbe0f9f6a22a5632, type: 3}
+  m_Shader: {fileID: 50, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -139,6 +139,7 @@ Material:
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Shininess: 0.7
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _Specular: 0
@@ -154,4 +155,5 @@ Material:
     - _ColorTint: {r: 1, g: 1, b: 1, a: 0}
     - _Emission: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []

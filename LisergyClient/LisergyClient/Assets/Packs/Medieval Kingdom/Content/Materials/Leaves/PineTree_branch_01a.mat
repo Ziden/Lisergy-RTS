@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PineTree_branch_01a
-  m_Shader: {fileID: 4800000, guid: 622e53292efa62c40b5304524c246595, type: 3}
+  m_Shader: {fileID: 10701, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -112,7 +112,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: a057df87aeb2adb47b42dbcb1de8a642, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -166,7 +166,7 @@ Material:
     - _AO_Intensity: 0.537
     - _Alpha_cutout_level: 1
     - _BumpScale: 1
-    - _Cutoff: 0.1
+    - _Cutoff: 0.311
     - _DetailNormalMapScale: 1
     - _Detail_level: 0
     - _DstBlend: 0
@@ -185,6 +185,7 @@ Material:
     - _Normal_intensity: 2
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Shininess: 0.1
     - _SmoothnessTextureChannel: 0
     - _Smoothness_Shift: 0.42
     - _Smoothness_shift: 0
@@ -212,9 +213,11 @@ Material:
     - _Color1: {r: 0.5930606, g: 0.697, b: 0, a: 0}
     - _Color2: {r: 1, g: 0, b: 0, a: 1}
     - _Detail_color: {r: 0.056455217, g: 0.0754717, b: 0.011747954, a: 0}
+    - _Emission: {r: 0.009433985, g: 0.009433985, b: 0.009433985, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmisive_color: {r: 0.9779412, g: 0.9210103, b: 0.6831207, a: 0}
     - _Leaf_mask_color: {r: 1, g: 0, b: 0, a: 1}
     - _Leaves_2nd_color: {r: 1, g: 1, b: 1, a: 0}
     - _Leaves_base_color: {r: 0.586004, g: 0.7941176, b: 0, a: 0}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []

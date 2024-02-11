@@ -19,6 +19,7 @@ namespace Assets.Code.Views
 
         protected override void CreateView()
         {
+            State = EntityViewState.RENDERING;
             var tileSpec = Client.Game.Specs.Tiles[Entity.SpecId];
             Assets.CreatePrefab(tileSpec.TilePrefab, new Vector3(Entity.X, 0, Entity.Y), Quaternion.identity, o =>
             {

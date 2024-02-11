@@ -1,14 +1,11 @@
-using Assets.Code.Assets.Code.Runtime.UIScreens.Layout;
 using Assets.Code.Assets.Code.UIScreens.Base;
-using Assets.Code.Views;
-using Game;
 using Game.ECS;
 using Game.Events.Bus;
 using Game.Systems.Battler;
-
+using Game.Systems.Party;
+using Game.Systems.Resources;
 using GameAssets;
-using System;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace Assets.Code.UI
@@ -23,17 +20,40 @@ namespace Assets.Code.UI
     {
         public override UIScreen UiAsset => UIScreen.EntityDetails;
 
-        private WidgetBattleGroup _battleGroup;
+        private VisualElement _icon;
+        private Label _name;
 
         public override void OnOpen()
         {
             var setup = GetParameter<EntityDetailsParams>();
-            var battleGroup = setup.Entity.Components.Get<BattleGroupComponent>();
-            if (battleGroup.Units.Valids > 0)
+            var e = setup.Entity;
+
+            _icon = Root.Q("Icon").Required();
+            _name = Root.Q<Label>("EntityLabel").Required();
+            _name.text = e.EntityType.ToString();
+
+            if (e is PartyEntity party)
             {
-                _battleGroup = new WidgetBattleGroup(GameClient, Root.Q("BattleGroupComponent").Required());
-                _battleGroup.DisplayGroup(setup.Entity, battleGroup);
+                var leader = party.Components.Get<BattleGroupComponent>().Units.Leader;
+                var leaderSpec = GameClient.Game.Specs.Units[leader.SpecId];
+                _icon.SetBackground(leaderSpec.IconArt);
             }
+
+            var groupWidget = new WidgetBattleGroup(GameClient, Root.Q("BattleGroupComponent").Required());
+            if (e.Components.TryGet<BattleGroupComponent>(out var battleGroup) && battleGroup.Units.Valids > 0)
+            {
+                groupWidget.Show();
+                groupWidget.DisplayComponent(setup.Entity, battleGroup);
+            }
+            else groupWidget.Hide();
+
+
+            var cargoWidget = new WidgetCargoComponent(Root.Q("CargoComponent").Required(), GameClient);
+            if (e.Components.TryGet<CargoComponent>(out var cargo) && cargo.CurrentWeight > 0)
+            {
+                cargoWidget.Show();
+                cargoWidget.DisplayComponent(cargo);
+            } else cargoWidget.Hide();
         }
     }
 }

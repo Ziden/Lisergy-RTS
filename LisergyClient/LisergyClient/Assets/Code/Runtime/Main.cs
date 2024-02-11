@@ -10,10 +10,12 @@ using ClientSDK;
 using ClientSDK.SDKEvents;
 using Game;
 using Game.Events.Bus;
+using Game.Scheduler;
 using Game.Systems.Building;
 using Game.Systems.Dungeon;
 using Game.Systems.Party;
 using Game.Tile;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +27,7 @@ public class Main : MonoBehaviour, IEventListener
     private ClientNetwork _network;
     private GameStateMachine _stateMachine;
     private List<IEventListener> _listeners = new List<IEventListener>();
+    private GameScheduler _scheduler;
 
     void Awake()
     {
@@ -46,7 +49,11 @@ public class Main : MonoBehaviour, IEventListener
         _stateMachine = new GameStateMachine(_client);
     }
 
-    void Update() => _network.Tick();
+    void Update()
+    {
+        _network.Tick();
+        _scheduler?.Tick(DateTime.UtcNow);
+    }
 
     private void OnApplicationQuit()
     {
@@ -54,9 +61,9 @@ public class Main : MonoBehaviour, IEventListener
         //_client.Game.Entities.Dispose();
     }
 
-    private void SetupLog(IGame game)
+    private void SetupLog(IGameLog ilog)
     {
-        GameLog log = (GameLog)game.Log;
+        GameLog log = (GameLog)ilog;
         log._Debug = Debug.Log;
         log._Info = Debug.Log;
         log._Error = Debug.LogError;
@@ -67,7 +74,8 @@ public class Main : MonoBehaviour, IEventListener
     /// </summary>
     private void OnGameStarted(GameStartedEvent ev)
     {
-        SetupLog(ev.Game);
+        SetupLog(ev.Game.Log);
+        // SetupLog(_client.Log); // SDK LOGS
         _listeners.Add(new FogOfWarListener(_client));
         _listeners.Add(new EntityPositionListener(_client));
         _listeners.Add(new IndicatorSelectedTileListener(_client));
@@ -77,6 +85,7 @@ public class Main : MonoBehaviour, IEventListener
         _listeners.Add(new HarvestingComponentListener(_client));
         _listeners.Add(new HarvestingViewListener(_client));
         _listeners.Add(new BattleGroupUnitListener(_client));
+        _scheduler = _client.Game.Scheduler as GameScheduler;
     }
 
     public void SetupViews()

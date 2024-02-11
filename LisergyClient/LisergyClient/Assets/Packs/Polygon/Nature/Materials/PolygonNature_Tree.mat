@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PolygonNature_Tree
-  m_Shader: {fileID: -6465566751694194690, guid: c767be1032f805747872f8fa75577d5b, type: 3}
+  m_Shader: {fileID: 50, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -134,6 +134,9 @@ Material:
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RampSmoothing: 0.1
+    - _RampThreshold: 0.5
+    - _Shininess: 0.7
     - _Small_Wave: 1.9
     - _Small_WindAmount: 0.01
     - _Small_WindSpeed: 0.1
@@ -151,12 +154,17 @@ Material:
     - _WindSpeed: 0.1
     - _ZWrite: 1
     - __dirty: 1
+    - __dummy__: 0
     m_Colors:
     - Color_369F793F: {r: 1, g: 1, b: 1, a: 0}
     - Color_FA85148A: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorTint: {r: 1, g: 1, b: 1, a: 0}
+    - _Emission: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _HColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
+    - _SColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &8765755018797063676
 MonoBehaviour:

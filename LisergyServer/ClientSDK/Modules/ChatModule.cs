@@ -48,9 +48,9 @@ namespace ClientSDK.Modules
 
         private SortedSet<ChatPacket> _chatLog = new SortedSet<ChatPacket>(new ChatSorter());
 
-        private IGameClient _gameClient;
+        private GameClient _gameClient;
 
-        public ChatModule(IGameClient gameClient)
+        public ChatModule(GameClient gameClient)
         {
             _gameClient = gameClient;
         }

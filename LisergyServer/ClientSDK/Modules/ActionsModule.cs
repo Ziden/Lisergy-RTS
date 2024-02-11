@@ -28,9 +28,9 @@ namespace ClientSDK.Services
 
     public class ActionsModule : IActionModule
     {
-        private IGameClient _client;
+        private GameClient _client;
 
-        public ActionsModule(IGameClient client)
+        public ActionsModule(GameClient client)
         {
             _client = client;
         }
@@ -44,31 +44,31 @@ namespace ClientSDK.Services
         {
             if (entity == null)
             {
-                _client.Log.Error($"Error invalid entity");
+                _client.SDKLog.Error($"Error invalid entity");
                 return false;
             }
             var entityId = entity.EntityId;
             if (entity.OwnerID != _client.Modules.Player.PlayerId)
             {
-                _client.Log.Error($"Cannot Move Entity {entityId} is not own entity");
+                _client.SDKLog.Error($"Cannot Move Entity {entityId} is not own entity");
                 return false;
             }
             if(!entity.Components.TryGet<MapPlacementComponent>(out var placement))
             {
-                _client.Log.Error($"Cannot Move Entity {entityId} it is not placed in the map");
+                _client.SDKLog.Error($"Cannot Move Entity {entityId} it is not placed in the map");
                 return false;
             }
             var map = _client.Game.World.Map;
             var sourceTile = map.GetTile(placement.Position.X, placement.Position.Y);
             if (!destinationTile.PlayersViewing.Any(p => p.EntityId == entity.OwnerID))
             {
-                _client.Log.Error($"Cannot Move Entity {entityId} because target tile is not visible");
+                _client.SDKLog.Error($"Cannot Move Entity {entityId} because target tile is not visible");
                 return false;
             }
             var path = map.FindPath(sourceTile, destinationTile);
             if(path == null || path.Count() == 0)
             {
-                _client.Log.Error($"Cannot Move Entity {entityId} it is not placed in the map");
+                _client.SDKLog.Error($"Cannot Move Entity {entityId} it is not placed in the map");
                 return false;
             }
             foreach(var pathNode in path)
@@ -78,11 +78,11 @@ namespace ClientSDK.Services
 
                 if(tileView == null || tileView.State == EntityViewState.NOT_RENDERED)
                 {
-                    _client.Log.Error($"Cannot Move Entity {entityId} by a path that is not known by the client");
+                    _client.SDKLog.Error($"Cannot Move Entity {entityId} by a path that is not known by the client");
                     return false;
                 }
             }
-            _client.Log.Debug($"Sending request to move party {entity} {path.Count()} tiles");
+            _client.SDKLog.Debug($"Sending request to move party {entity} {path.Count()} tiles");
             _client.ClientEvents.Call(new EntityMovementRequestStarted()
             {
                 Destination = destinationTile,

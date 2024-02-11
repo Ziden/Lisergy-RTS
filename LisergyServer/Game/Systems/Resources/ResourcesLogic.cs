@@ -23,8 +23,7 @@ namespace Game.Systems.Resources
             }
             tile.Components.Add<TileResourceComponent>();
             var res = tile.Components.GetPointer<TileResourceComponent>();
-            res->AmountResourcesLeft = harvestPoint.ResourceAmount;
-            res->ResourceId = harvestPoint.ResourceId;
+            res->Resource = new ResourceStackData(harvestPoint.ResourceId, harvestPoint.ResourceAmount); 
         }
 
     }

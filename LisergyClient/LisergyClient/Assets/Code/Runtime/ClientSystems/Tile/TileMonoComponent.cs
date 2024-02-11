@@ -19,12 +19,18 @@ public class TileMonoComponent : MonoBehaviour
     /// </summary>
     private bool _decorated;
 
-    public List<GameObject> ChooseOne;
-    public List<GameObject> Remove50;
-    public List<GameObject> Remove85;
-    public List<GameObject> Remove25;
-    public List<GameObject> RandomizePosition;
-    public List<GameObject> RandomizeRotation;
+    /// <summary>
+    /// Indicate if hills have been made
+    /// </summary>
+    private bool _hills;
+
+    public List<GameObject> ChooseOne = null;
+    public List<GameObject> Remove50 = null;
+    public List<GameObject> Remove85 = null;
+    public List<GameObject> Remove25 = null;
+    public List<GameObject> RandomizePosition = null;
+    public bool UseRandomizePositionListForRotation = false;
+    public List<GameObject> RandomizeRotation = null;
 
     // Gets removed if the tile is connected with the same tileid to east
     // TODO: Make this better in editor window perhaps ? (defining the target tile etc)
@@ -99,6 +105,8 @@ public class TileMonoComponent : MonoBehaviour
         return (int)(a < 0 && b < 0 || a >= 0 && b >= 0 ? C : -C - 1);
     }
 
+    private static float[,] _heightMap = new float[6, 6];
+
     public void MakeHills()
     {
         var mesh = GetComponentInChildren<TileMeshNoiser>();
@@ -106,23 +114,7 @@ public class TileMonoComponent : MonoBehaviour
         {
             return;
         }
-        var hillX = Random.Range(1, 4);
-        var hillY = Random.Range(1, 4);
-        mesh.Heights[hillX, hillY] = Random.value / 12;
-        mesh.Heights[hillX + 1, hillY] = Random.value / 12;
-        mesh.Heights[hillX, hillY + 1] = Random.value / 12;
-        mesh.Heights[hillX + 1, hillY + 1] = Random.value / 12;
-
-        if (Random.value > 0.5f)
-        {
-            hillX = Random.Range(1, 4);
-            hillY = Random.Range(1, 4);
-            mesh.Heights[hillX, hillY] = Random.value / 8;
-            mesh.Heights[hillX + 1, hillY] = Random.value / 8;
-            mesh.Heights[hillX, hillY + 1] = Random.value / 8;
-            mesh.Heights[hillX + 1, hillY + 1] = Random.value / 8;
-        }
-        mesh.Adjust();
+        mesh.Adjust(_heightMap, 1);
     }
 
     public void CreateTileDecoration(TileView tile)
@@ -153,15 +145,12 @@ public class TileMonoComponent : MonoBehaviour
         if (ChooseOne != null && ChooseOne.Count > 0)
         {
             var one = ChooseOne[Random.Range(0, ChooseOne.Count)];
+            one.SetActive(true);
             foreach (var o in ChooseOne)
             {
                 if (o != one)
                 {
                     removed.Add(o);
-                }
-                else
-                {
-                    o.SetActive(true);
                 }
             }
         }
@@ -184,12 +173,21 @@ public class TileMonoComponent : MonoBehaviour
             obj.transform.localRotation = Quaternion.Euler(0, Random.value * 360, 0);
         }
 
+        if (UseRandomizePositionListForRotation)
+        {
+            RandomizeRotation = RandomizePosition;
+        }
         foreach (var obj in RandomizeRotation)
         {
             if (obj == null) continue;
             obj.transform.Rotate(new Vector3(0, Random.value * 360, 0), Space.Self);
         }
 
+        if (_hills)
+        {
+            Debug.LogError($"Hills already created for tile {_tile}");
+        }
         MakeHills();
+        _hills = true;
     }
 }

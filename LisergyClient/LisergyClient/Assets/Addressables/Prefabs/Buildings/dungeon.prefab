@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6944673672660967978}
   - component: {fileID: 6039695139868785268}
   - component: {fileID: 68713752023751501}
-  - component: {fileID: 5004170957138144184}
   m_Layer: 0
   m_Name: Black
   m_TagString: Untagged
@@ -84,28 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5004170957138144184
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2696449568355426227}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &2808258071021844985
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,7 +240,7 @@ PrefabInstance:
     - target: {fileID: 2390140, guid: 51e254adee22b4d40bca863a6138e8af, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1cd09ff2f582b6f45a9ecd152d7af39e, type: 2}
+      objectReference: {fileID: 2100000, guid: 55cf1ed158797504c8357529c278eb45, type: 2}
     m_RemovedComponents:
     - {fileID: 64156871278251950, guid: 51e254adee22b4d40bca863a6138e8af, type: 3}
     m_RemovedGameObjects: []
@@ -340,7 +317,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64699127286929500, guid: d74d4ec61fec68b42bdb97019a7926ad, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -490,7 +468,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64216544092228602, guid: ff5c549bd91cb7c43ba46386303671e8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

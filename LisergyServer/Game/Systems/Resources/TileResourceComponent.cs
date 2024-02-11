@@ -15,15 +15,7 @@ namespace Game.Systems.Resources
 	[NonPersisted]
 	public struct TileResourceComponent : IComponent
 	{
-		/// <summary>
-		/// Amount of resources left
-		/// </summary>
-		public ushort AmountResourcesLeft;
-
-		/// <summary>
-		/// The resource to be harvested
-		/// </summary>
-		public ResourceSpecId ResourceId;
+		public ResourceStackData Resource;
 
 		/// <summary>
 		/// If this tile is currently being harvested or not

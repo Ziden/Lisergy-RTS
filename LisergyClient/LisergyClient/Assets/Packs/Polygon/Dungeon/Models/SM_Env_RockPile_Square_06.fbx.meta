@@ -91,7 +91,7 @@ ModelImporter:
     normalSmoothAngle: 180
     normalImportMode: 1
     tangentImportMode: 3
-    normalCalculationMode: 4
+    normalCalculationMode: 1
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
