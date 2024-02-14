@@ -1,0 +1,15 @@
+newmtl Grass_Top
+map_Kd Mud.png
+Kd 1.0 1.0 1.0
+d 1.0
+
+newmtl Grass_Base_Color
+map_Kd Grass.png
+Kd 1.0 1.0 1.0
+d 1.0
+
+newmtl Grass_Leafs
+map_Kd Leaves_02.png
+Kd 1.0 1.0 1.0
+d 1.0
+

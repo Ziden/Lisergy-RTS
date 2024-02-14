@@ -21,10 +21,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PolygonNature_01
-  m_Shader: {fileID: 4800000, guid: ef3178aabaab247448c46c904e37bf43, type: 3}
+  m_Shader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - OUTLINES
   - TCP2_MOBILE
   - TCP2_OUTLINE_CONST_SIZE
   - TCP2_RAMP_BANDS_CRISP
@@ -32,8 +34,6 @@ Material:
   - TCP2_RIM_LIGHTING_LIGHTMASK
   - TCP2_SPECULAR
   - TCP2_UV_NORMALS_FULL
-  m_InvalidKeywords:
-  - OUTLINES
   - _SPECULAR_COLOR
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0

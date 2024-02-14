@@ -67,6 +67,18 @@ public class PrefabContainer
         return handle.Result;
     }
 
+    public async UniTask LoadAsync(string addr) 
+    {
+        var handle = Addressables.LoadAssetAsync<GameObject>(addr);
+        await handle.Task;
+    }
+
+    public async UniTask LoadAsync<K>(K key) where K : IComparable, IFormattable, IConvertible
+    {
+        var handle = Addressables.LoadAssetAsync<GameObject>(GetAddress(key));
+        await handle.Task;
+    }
+
     public async UniTask<GameObject> InstantiateAsync(string address, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
     {
         var handle = Addressables.InstantiateAsync(address, pos, rot);

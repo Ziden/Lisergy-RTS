@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace BaseServer.Core
 {
@@ -32,13 +33,11 @@ namespace BaseServer.Core
                 {
                     _lastTick = DateTime.UtcNow;
                     tick();
-#if DEBUG
-                    if (_delays.Count == 10)
+                    var timeUntilNextTick = (NextTick - DateTime.UtcNow).TotalMilliseconds;
+                    if (timeUntilNextTick > 0)
                     {
-                        _delays.RemoveAt(0);
+                        Thread.Sleep((int)timeUntilNextTick); // finished early, sleep thread to allow others to run
                     }
-                    _delays.Add((DateTime.UtcNow - DateTime.UtcNow).TotalMilliseconds);
-#endif
                 }
             }
         }

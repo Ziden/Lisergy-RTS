@@ -92,11 +92,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ef8b54e292f8de94d941c1b7878f71d8
-    m_Address: Assets/Addressables/Prefabs/Tiles/Plains_Mobile.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9a39b1fca5da36142a6d804fc1b9f0b3
     m_Address: Assets/Addressables/Prefabs/Tiles/Plane.prefab
     m_ReadOnly: 0
@@ -2364,6 +2359,31 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 170a0de474dcaf44f8bfcd2379cd4950
     m_Address: Assets/Addressables/UIScreens/Notifications/HarvestFinishedNotification.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0a7d06808efbd243b4a537aa06686ef
+    m_Address: Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.2_81.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ee88bc28e40a764d9991cea4040cf18
+    m_Address: Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.6_88.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67b60d00ab3e6e0439143760fc750131
+    m_Address: Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.6_94.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 579a03a72a3a1664092f1b1df3272542
+    m_Address: Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.2_30.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a3d2ed97e45cb6468bec723fd09d606
+    m_Address: Assets/Addressables/UIScreens/MinimapTexture.renderTexture
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

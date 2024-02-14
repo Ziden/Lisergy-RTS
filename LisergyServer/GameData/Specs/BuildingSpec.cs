@@ -1,5 +1,7 @@
-﻿using GameData.Specs;
+﻿using Game.Systems.Resources;
+using GameData.Specs;
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace GameData
@@ -14,18 +16,29 @@ namespace GameData
         public override string ToString() => Id.ToString();
     }
 
+    public class BuildingTechTreeNode
+    {
+        public List<BuildingTechTreeNode> Children = new List<BuildingTechTreeNode>();
+
+        public BuildingSpecId? UnlockBuilding;
+    }
+
+    public class BuildingTechTree
+    {
+        public BuildingTechTreeNode Root;
+    }
+
     [Serializable]
     public class BuildingSpec
     {
         public BuildingSpecId SpecId;
         public ArtSpec Art;
         public byte LOS;
+        public List<ResourceStackData> BuildingCost;
 
-        public BuildingSpec(byte id, ArtSpec art, byte los = 4)
+        public BuildingSpec(byte id)
         {
             this.SpecId = new BuildingSpecId() { Id = id };
-            this.Art = art;
-            this.LOS = los;
         }
     }
 }

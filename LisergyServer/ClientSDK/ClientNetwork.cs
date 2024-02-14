@@ -18,7 +18,7 @@ namespace ClientSDK
         public event Action<BasePacket>? OnReceiveGenericPacket;
 
         private bool _enabled = true;
-        internal const int READS_PER_TICK = 20;
+        internal const int READS_PER_TICK = 5;
         internal Message _msg;
         private IGameLog _log;
         internal Dictionary<ServerType, Client> _connections = new Dictionary<ServerType, Client>();

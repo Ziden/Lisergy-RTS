@@ -17,7 +17,7 @@ public class TileMeshNoiser : MonoBehaviour
         var xSize = 5;
         var ySize = 5;
         var mesh = new Mesh();
-        mesh.name = "Procedural Grid";
+        mesh.name = "TileMeshNoiser Grid";
 
         var _verticles = new Vector3[(xSize + 1) * (ySize + 1)];
         var uv = new Vector2[_verticles.Length];
@@ -60,10 +60,6 @@ public class TileMeshNoiser : MonoBehaviour
         {
             mesh = GenerateTileMesh(heights);
             _cache[hash] = mesh;
-        }
-        else
-        {
-            Debug.Log("Used cached mesh ! ");
         }
         GetComponent<MeshFilter>().mesh = mesh;
 

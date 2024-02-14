@@ -4,6 +4,7 @@ using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.UI;
 using ClientSDK;
 using ClientSDK.SDKEvents;
+using Cysharp.Threading.Tasks;
 using Game.Battle;
 using Game.DataTypes;
 using Game.Events.Bus;
@@ -18,7 +19,7 @@ namespace Assets.Code.Assets.Code
     /// </summary>
     public class GameStateMachine : IEventListener
     {
-        private enum State { Login, MapView, Battle };
+        private enum State { Boot, Login, MapView, Battle };
         private enum Trigger { LoggedIn, LocalBattleStart, LocalBattleFinish };
 
         private StateMachine<State, Trigger> _stateMachine;
@@ -31,6 +32,7 @@ namespace Assets.Code.Assets.Code
             _screens = UnityServicesContainer.Resolve<IUiService>();
 
             _stateMachine = new StateMachine<State, Trigger>(State.Login);
+
             _stateMachine.Configure(State.Login)
                 .OnActivate(OnEnterLoginState)
                 .OnExit(OnLeaveLoginState)
@@ -66,7 +68,10 @@ namespace Assets.Code.Assets.Code
         }
 
         private void OnLeaveLoginState() => _screens.Close<LoginScreen>();
-        private void OnEnterLoginState() => _screens.Open<LoginScreen>();
+        private void OnEnterLoginState() {
+            _screens.Open<LoginScreen>();
+            AssetPreloader.StartPreload(_client, GameDataTest.TestSpecs.Generate()).Forget();
+        }
 
         private void OnEnterBattleState() {}
 

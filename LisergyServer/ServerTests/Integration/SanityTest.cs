@@ -182,7 +182,7 @@ namespace ServerTests.Integration
 
             // STOP HARVEST
             _client.ReceivedPackets.Clear();
-            Assert.IsTrue(_client.Modules.Actions.MoveParty(party, resourceTile.GetNeighbor(Direction.SOUTH), CourseIntent.Defensive));
+            Assert.IsTrue(_client.Modules.Actions.StopParty(party));
             update = await _client.WaitFor<EntityUpdatePacket>(p => p.SyncedComponents.Any(c => c.GetType() == typeof(HarvestingComponent)));
             syncedHarvest = (HarvestingComponent)update.SyncedComponents.First(c => c.GetType() == typeof(HarvestingComponent));
             Assert.That(syncedHarvest.StartedAt == 0);

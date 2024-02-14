@@ -28,6 +28,7 @@ namespace Assets.Code
             _chatSummary = new ChatSummary(GameClient, Root.Q("Chat"));
             ClientViewState.OnCameraMove += OnCameraMove;
             ClientViewState.OnSelectTile += OnClickTile;
+            ClientViewState.OnSelectEntity += OnSelectEntity;
         }
 
         public override void OnLoaded(VisualElement root)
@@ -53,6 +54,11 @@ namespace Assets.Code
                 UiService.Close<EntityDetails>();
                 UiService.Close<WidgetTileDetails>();
             }
+        }
+
+        private void OnSelectEntity(IUnityEntityView entity)
+        {
+            UiService.Open<EntityDetails>(new EntityDetailsParams() { Entity = entity.BaseEntity });
         }
 
         private void OnClickTile(TileEntity tile)

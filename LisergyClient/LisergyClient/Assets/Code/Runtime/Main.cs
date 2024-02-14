@@ -76,6 +76,8 @@ public class Main : MonoBehaviour, IEventListener
     {
         SetupLog(ev.Game.Log);
         // SetupLog(_client.Log); // SDK LOGS
+        _listeners.Add(new TileDecorationListener(_client));
+        _listeners.Add(new TileRenderingListener(_client));
         _listeners.Add(new FogOfWarListener(_client));
         _listeners.Add(new EntityPositionListener(_client));
         _listeners.Add(new IndicatorSelectedTileListener(_client));

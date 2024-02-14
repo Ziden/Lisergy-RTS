@@ -60,7 +60,7 @@ namespace ServerTests.Integration.Stubs
             return (T)ReceivedPackets.First(p => p.GetType() == typeof(T));
         }
 
-        public async Task<T> WaitFor<T>(Func<T, bool> validate = null, int timeout = 10) where T : BasePacket
+        public async Task<T> WaitFor<T>(Func<T, bool> validate = null, int timeout = 20) where T : BasePacket
         {
             Network.Tick();
             var p = ReceivedPackets.FirstOrDefault(p => p.GetType() == typeof(T));

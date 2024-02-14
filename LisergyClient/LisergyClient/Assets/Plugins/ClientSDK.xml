@@ -139,6 +139,11 @@
             Will return true or false if the entity is able to move there or not.
             </summary>
         </member>
+        <member name="M:ClientSDK.Services.IActionModule.StopParty(Game.Systems.Party.PartyEntity)">
+            <summary>
+            Stops the party for any actions.
+            </summary>
+        </member>
         <member name="T:ClientSDK.Services.IBattleModule">
             <summary>
             Has battle specific networking implementation

@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="PartyButton" src="project://database/Assets/Addressables/UIScreens/Components/PartyButton.uxml?fileID=9197481963319205126&amp;guid=74a2f0793cb29bd4cafd65a68762332b&amp;type=3#PartyButton" />
+    <ui:VisualElement name="Container" style="flex-grow: 1;">
+        <ui:VisualElement name="Frame" style="flex-grow: 0; background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Frame/frame_stageframe_00_s2.png?fileID=21300000&amp;guid=b61d54ada442843bb81c0b4ae4c744fa&amp;type=3#frame_stageframe_00_s2&apos;); height: 65px; width: 64px; justify-content: center; align-items: center;">
+            <ui:VisualElement name="FrameBg" style="flex-grow: 1; position: absolute; width: 35px; height: 46px; background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Icon_PictoIcons_(Original)/btn_icon_bookmark.png?fileID=21300000&amp;guid=65f075dc29b824107b33adfaa6652478&amp;type=3#btn_icon_bookmark&apos;); top: 17px; -unity-background-image-tint-color: rgb(217, 203, 144); left: auto; display: flex;" />
+            <ui:VisualElement name="ClassIcon" style="flex-grow: 0; width: 30px; height: 30px; background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Demo/Demo_Icon/set_icon_role_wizard.png?fileID=2800000&amp;guid=8a247aa270b8b49a692ad2f1643312d0&amp;type=3#set_icon_role_wizard&apos;); -unity-background-image-tint-color: rgb(255, 0, 0); background-color: rgba(255, 255, 255, 0);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Instance template="PartyButton" name="PartyButton" />
+</ui:UXML>

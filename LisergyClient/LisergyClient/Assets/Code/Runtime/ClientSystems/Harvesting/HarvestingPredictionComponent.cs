@@ -3,6 +3,8 @@ using ClientSDK;
 using Cysharp.Threading.Tasks;
 using Game.ECS;
 using Game.Events;
+using Game.Systems.Movement;
+using Game.Systems.Party;
 using Game.Systems.Resources;
 using Game.Tile;
 using GameData;
@@ -36,9 +38,13 @@ public class HarvestingPredictionComponent : IReferenceComponent, IDisposable
 
     public void Dispose()
     {
-        _client.Game.Log.Debug($"[Harvest Prediction] Disposing: Stopping prediction");
-        _tracking = false;
-        NotifyFinished();
+        if (_tracking)
+        {
+            _client.Game.Log.Debug($"[Harvest Prediction] Disposing: Stopping prediction");
+            _tracking = false;
+            NotifyFinished();
+        }
+
     }
 
     private void NotifyFinished()
@@ -68,8 +74,10 @@ public class HarvestingPredictionComponent : IReferenceComponent, IDisposable
         SendEvent(0, harvestedTotal, depleted);
         while (_tracking)
         {
+            if (depleted) continue;
             _client.Game.Log.Debug($"[Harvest Prediction] Waiting prediction next tick: {nextHarvest} now {DateTime.UtcNow}");
             await UniTask.Delay(nextHarvest - DateTime.UtcNow);
+            if (!_tracking) return;
             if (!_entity.Components.Has<HarvestingComponent>())
             {
                 _client.Game.Log.Debug($"Cancelling harvesting as have no component");
@@ -83,8 +91,9 @@ public class HarvestingPredictionComponent : IReferenceComponent, IDisposable
             _client.Game.Log.Debug($"[Harvest Prediction] Harvested 1 -> {harvestedTotal}/{_initialComponent.Resource.Amount}");
             if (depleted)
             {
-                _client.Game.Log.Debug($"[Harvest Prediction] Client predicted depletion on {_tile}");
-                Dispose();
+                _client.Game.Log.Debug($"[Harvest Prediction] Client predicted depletion on {_tile} - stopping party");
+                _client.Modules.Actions.StopParty(_entity as PartyEntity);
+                break;
             }
         }
     }

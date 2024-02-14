@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5649871211521485609}
   - component: {fileID: 146516844898244558}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: UnitSelector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4250362670220139310}
   - component: {fileID: 168025682186747665}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TileSelector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -252,6 +252,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitCursor
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d484c2c3a4b8e71488afd89e3cf739f7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3415157614650222266, guid: d484c2c3a4b8e71488afd89e3cf739f7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3415157614650222266, guid: d484c2c3a4b8e71488afd89e3cf739f7,
         type: 3}
       propertyPath: m_IsActive
@@ -333,9 +343,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6010957630680935740}
     m_Modifications:
+    - target: {fileID: 1787779553554474, guid: 47ff09db40c15d348b9eda3645231e65, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1800309328307456, guid: 47ff09db40c15d348b9eda3645231e65, type: 3}
       propertyPath: m_Name
       value: Select Arrow 01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1800309328307456, guid: 47ff09db40c15d348b9eda3645231e65, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4129047670157238, guid: 47ff09db40c15d348b9eda3645231e65, type: 3}
       propertyPath: m_LocalScale.x

@@ -48,7 +48,7 @@ public class IndicatorSelectedPartyListener : IEventListener
                 _selector.BuildingRadial.SetActive(false);
                 _selector.UnitRadial.SetActive(true);
             }
+            _selector.gameObject.SetActive(true);
         }
-        _selector.gameObject.SetActive(true);
     }
 }

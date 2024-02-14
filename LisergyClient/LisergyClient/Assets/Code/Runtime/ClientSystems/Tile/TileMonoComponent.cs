@@ -1,8 +1,23 @@
 ﻿using Assets.Code.Views;
 using ClientSDK;
+using Game.DataTypes;
 using Game.Tile;
+using System;
+using System.Buffers;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using UnityEngine;
+
+
+[Serializable]
+public class TileRandomizationSetup
+{
+    public List<GameObject> Objects = new List<GameObject>();
+    public bool RandomizeLocation = false;
+    public bool RandomizeRotation = false;
+    public bool LeaveOne = false;
+    public float ChanceToEnable = 1f;
+}
 
 /// <summary>
 /// Responsible for getting a tile and randomizing its decoration
@@ -12,25 +27,16 @@ using UnityEngine;
 /// </summary>
 public class TileMonoComponent : MonoBehaviour
 {
+    private static DeterministicRandom _rng = new DeterministicRandom();
+
     private TileEntity _tile;
+
+    public List<TileRandomizationSetup> _config = new List<TileRandomizationSetup>();
 
     /// <summary>
     /// Indicates if this tile was already decorated
     /// </summary>
     private bool _decorated;
-
-    /// <summary>
-    /// Indicate if hills have been made
-    /// </summary>
-    private bool _hills;
-
-    public List<GameObject> ChooseOne = null;
-    public List<GameObject> Remove50 = null;
-    public List<GameObject> Remove85 = null;
-    public List<GameObject> Remove25 = null;
-    public List<GameObject> RandomizePosition = null;
-    public bool UseRandomizePositionListForRotation = false;
-    public List<GameObject> RandomizeRotation = null;
 
     // Gets removed if the tile is connected with the same tileid to east
     // TODO: Make this better in editor window perhaps ? (defining the target tile etc)
@@ -65,7 +71,7 @@ public class TileMonoComponent : MonoBehaviour
     /// </summary>
     private void DecorateBoundaries(TileView currentTileView)
     {
-        var modules = Assets.Code.UnityServicesContainer.Resolve<IServerModules> ();
+        var modules = Assets.Code.UnityServicesContainer.Resolve<IServerModules>();
         var tile = currentTileView.Entity;
         var decorationComponent = currentTileView.GameObject.GetComponent<TileMonoComponent>();
         var map = currentTileView.Entity.Chunk.Map;
@@ -97,97 +103,71 @@ public class TileMonoComponent : MonoBehaviour
         }
     }
 
-    public static int GetTilePositionHash(ushort a, ushort b)
-    {
-        var A = (uint)(a >= 0 ? 2 * (int)a : -2 * (int)a - 1);
-        var B = (uint)(b >= 0 ? 2 * (int)b : -2 * (int)b - 1);
-        var C = (uint)((A >= B ? A * A + A + B : A + B * B) / 2);
-        return (int)(a < 0 && b < 0 || a >= 0 && b >= 0 ? C : -C - 1);
-    }
+    public static int GetTilePositionHash(ushort a, ushort b) => a * b * a * b * 31 * 31;
 
-    private static float[,] _heightMap = new float[6, 6];
 
-    public void MakeHills()
-    {
-        var mesh = GetComponentInChildren<TileMeshNoiser>();
-        if(mesh == null)
-        {
-            return;
-        }
-        mesh.Adjust(_heightMap, 1);
-    }
+    // Need to change this if this code run async !
+    private static HashSet<GameObject> _added = new HashSet<GameObject>();
+    private static HashSet<GameObject> _removed = new HashSet<GameObject>();
 
     public void CreateTileDecoration(TileView tile)
     {
-        Random.InitState(GetTilePositionHash(tile.Entity.X, tile.Entity.Y));
-        _tile = tile.Entity;
-        DecorateBoundaries(tile);
+        unchecked
+        {
+            _rng.Reinitialise(GetTilePositionHash(tile.Entity.X, tile.Entity.Y));
+            _tile = tile.Entity;
+            DecorateBoundaries(tile);
 
-        _decorated = true;
+            _decorated = true;
 
-        var removed = new List<GameObject>();
-        foreach (var o in Remove50)
-        {
-            if (Random.value < 0.55)
-                removed.Add(o);
-        }
-        foreach (var o in Remove85)
-        {
-            if (Random.value < 0.85)
-                removed.Add(o);
-        }
-        foreach (var o in Remove25)
-        {
-            if (Random.value < 0.25)
-                removed.Add(o);
-        }
-
-        if (ChooseOne != null && ChooseOne.Count > 0)
-        {
-            var one = ChooseOne[Random.Range(0, ChooseOne.Count)];
-            one.SetActive(true);
-            foreach (var o in ChooseOne)
+            foreach (var r in _config)
             {
-                if (o != one)
+                if (r.LeaveOne)
                 {
-                    removed.Add(o);
+                    var chosen = r.Objects[_rng.Next(0, r.Objects.Count)];
+                    for (var x = 0; x < r.Objects.Count; x++)
+                    {
+                        var o = r.Objects[x];
+                        if(o != chosen) Destroy(o);
+                    }
+                    r.Objects.Clear();
+                    r.Objects.Add(chosen); 
+                    chosen.SetActive(true);
                 }
+
+                foreach (var o in r.Objects)
+                {
+                    if (r.ChanceToEnable >= 1f || _rng.NextSingle() < r.ChanceToEnable)
+                    {
+                        _added.Add(o);
+                        if (r.RandomizeLocation)
+                        {
+                            o.transform.localPosition = new Vector3(-0.5f + _rng.NextSingle(), 0, -0.5f + _rng.NextSingle());
+                        }
+                        if (r.RandomizeRotation)
+                        {
+                            o.transform.localRotation = Quaternion.Euler(0, _rng.NextSingle() * 360, 0);
+                        }
+                    }
+                    else
+                    {
+                        _removed.Add(o);
+                    }
+                }
+
+                foreach (var a in _added)
+                {
+                    a.gameObject.SetActive(true);
+                }
+
+                foreach (var rem in _removed)
+                {
+                    Destroy(rem);
+                }
+
+                _added.Clear();
+                _removed.Clear();
             }
         }
-
-        foreach (var rem in removed)
-        {
-            if (RandomizePosition != null)
-                RandomizePosition.Remove(rem);
-            if (RandomizeRotation != null)
-                RandomizeRotation.Remove(rem);
-            Destroy(rem);
-        }
-
-        foreach (var obj in RandomizePosition)
-        {
-            if (obj == null) continue;
-            float x = -0.5f + Random.value;
-            float y = -0.5f + Random.value;
-            obj.transform.localPosition = new Vector3(x, 0, y);
-            obj.transform.localRotation = Quaternion.Euler(0, Random.value * 360, 0);
-        }
-
-        if (UseRandomizePositionListForRotation)
-        {
-            RandomizeRotation = RandomizePosition;
-        }
-        foreach (var obj in RandomizeRotation)
-        {
-            if (obj == null) continue;
-            obj.transform.Rotate(new Vector3(0, Random.value * 360, 0), Space.Self);
-        }
-
-        if (_hills)
-        {
-            Debug.LogError($"Hills already created for tile {_tile}");
-        }
-        MakeHills();
-        _hills = true;
     }
 }

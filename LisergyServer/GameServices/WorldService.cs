@@ -14,6 +14,16 @@ namespace Game.Services
         {
             _world = (GameWorld)game.World;
             game.Network.On<JoinWorldPacket>(JoinWorld);
+            game.Network.On<StopEntityPacket>(StopEntity);
+        }
+
+        public void StopEntity(StopEntityPacket p)
+        {
+            var party = p.Sender.Parties[p.PartyIndex];
+            if (party.EntityLogic.Harvesting.IsHarvesting())
+            {
+                party.EntityLogic.Harvesting.StopHarvesting();
+            }
         }
 
         /// <summary>

@@ -16,6 +16,7 @@ namespace Assets.Code.World
                 var tileView = (TileView)Client.Modules.Views.GetOrCreateView(Entity.Tile);
                 GameObject = o;
                 tileView.SetChildren(GameObject);
+                GameObject.transform.localPosition = Vector3.zero;
                 GameObject.isStatic = true;
                 State = EntityViewState.RENDERED;
             });

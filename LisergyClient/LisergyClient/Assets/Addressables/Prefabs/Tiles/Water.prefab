@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8698152558119828634}
   - component: {fileID: 732242350115380469}
   - component: {fileID: 1851732144801711820}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,7 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8072642209235373996}
   - component: {fileID: 120852187901967432}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Water
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,17 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d518d51bc61953e41bed718a92d7cc2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChooseOne: []
-  Remove50:
-  - {fileID: 0}
-  - {fileID: 0}
-  Remove85: []
-  Remove25: []
-  RandomizePosition:
-  - {fileID: 0}
-  - {fileID: 0}
-  UseRandomizePositionListForRotation: 0
-  RandomizeRotation: []
+  _config: []
   RemoveWhenConnectEast:
   - {fileID: 6229621121362864653}
   RemoveWhenConnectSouth:
@@ -243,6 +233,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8391222552659086748, guid: 4249220a7130bc047ad928b4e58c5e59,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 4249220a7130bc047ad928b4e58c5e59,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -265,6 +260,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: South
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4249220a7130bc047ad928b4e58c5e59,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4249220a7130bc047ad928b4e58c5e59,
         type: 3}
@@ -358,6 +358,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8391222552659086748, guid: 4249220a7130bc047ad928b4e58c5e59,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 4249220a7130bc047ad928b4e58c5e59,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -370,6 +375,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: West
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4249220a7130bc047ad928b4e58c5e59,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4249220a7130bc047ad928b4e58c5e59,
         type: 3}
@@ -463,6 +473,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8391222552659086748, guid: 4249220a7130bc047ad928b4e58c5e59,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 4249220a7130bc047ad928b4e58c5e59,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -475,6 +490,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: North
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4249220a7130bc047ad928b4e58c5e59,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4249220a7130bc047ad928b4e58c5e59,
         type: 3}
@@ -568,6 +588,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8391222552659086748, guid: 4249220a7130bc047ad928b4e58c5e59,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 4249220a7130bc047ad928b4e58c5e59,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -580,6 +605,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: East
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4249220a7130bc047ad928b4e58c5e59,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4249220a7130bc047ad928b4e58c5e59,
         type: 3}

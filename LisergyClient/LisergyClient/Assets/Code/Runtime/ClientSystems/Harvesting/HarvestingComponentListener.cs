@@ -21,7 +21,6 @@ public class HarvestingComponentListener : BaseComponentListener<HarvestingCompo
             GameClient.Log.Debug($"[HarvestingComponentListener] Moving from {e.From} to {e.To} while harvesting, stopping prediction");
             e.Entity.Components.RemoveReference<HarvestingPredictionComponent>();
         }
-
     }
 
     private void OnBeginHarvesting(IEntity entity)

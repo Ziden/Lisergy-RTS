@@ -62,6 +62,11 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens.Parts
 
         public void UpdateResourceTask(HarvestingUpdateEvent ev)
         {
+            if (ev.Depleted)
+            {
+                ClearTask();
+                return;
+            }
             _taskOverlay.style.display = DisplayStyle.Flex;
             var resourceSpec = _client.Game.Specs.Resources[ev.TileResources.Resource.ResourceId];
             _taskIcon.SetBackground(resourceSpec.Art);

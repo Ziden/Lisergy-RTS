@@ -67,7 +67,7 @@ namespace GameDataTest
                 IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = AddrFace("Badge_rogue"),
+                    Address = "Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.2_30.png",
                 },
                 LOS = 2,
                 Stats = AddToBase(
@@ -87,7 +87,7 @@ namespace GameDataTest
                 IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = AddrFace("Badge_warrior"),
+                    Address = "Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.6_94.png",
                 },
                 Stats = AddToBase(
                     (Stat.ATK, 10),
@@ -106,7 +106,7 @@ namespace GameDataTest
                 IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = AddrFace("Badge_mage"),
+                    Address = "Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.2_81.png",
                 },
                 LOS = 3,
                 Stats = AddToBase(

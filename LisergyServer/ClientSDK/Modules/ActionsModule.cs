@@ -10,6 +10,7 @@ using Game.Systems.Map;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Tile;
+using System.IO;
 using System.Linq;
 
 namespace ClientSDK.Services
@@ -24,6 +25,11 @@ namespace ClientSDK.Services
         /// Will return true or false if the entity is able to move there or not.
         /// </summary>
         bool MoveParty(PartyEntity party, TileEntity toTile, CourseIntent intent);
+
+        /// <summary>
+        /// Stops the party for any actions.
+        /// </summary>
+        bool StopParty(PartyEntity party);
     }
 
     public class ActionsModule : IActionModule
@@ -96,6 +102,15 @@ namespace ClientSDK.Services
                 PartyIndex = entity.PartyIndex,
                 Intent = intent,
                 Path = path.ToList()
+            });
+            return true;
+        }
+
+        public bool StopParty(PartyEntity party)
+        {
+            _client.Network.SendToServer(new StopEntityPacket()
+            {
+                PartyIndex = party.PartyIndex,
             });
             return true;
         }

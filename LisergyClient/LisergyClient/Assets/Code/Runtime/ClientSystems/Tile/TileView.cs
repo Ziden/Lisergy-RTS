@@ -26,10 +26,9 @@ namespace Assets.Code.Views
                 GameObject = o;
                 GameObject.transform.parent = GetChunkObject().transform;
                 GameObject.name = $"Tile_{Entity.X}-{Entity.Y}";
-                GameObject.GetComponent<TileMonoComponent>().CreateTileDecoration(this);
                 GameObject.isStatic = true;
                 State = EntityViewState.RENDERED;
-                Client.ClientEvents.Call(new TileViewRendered() { View = this });
+                Client.ClientEvents.Call(new TileRenderedEvent() { View = this, Reactivate = false });
             });
         }
 

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3715016467780563043}
   - component: {fileID: 4592283307425957374}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plains
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,52 +51,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d518d51bc61953e41bed718a92d7cc2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChooseOne:
-  - {fileID: 2813963638682687483}
-  - {fileID: 8545975321861889640}
-  - {fileID: 8167441680512584929}
-  - {fileID: 2813963638682687483}
-  - {fileID: 8545975321861889640}
-  - {fileID: 8545975321861889640}
-  - {fileID: 8545975321861889640}
-  - {fileID: 2813963638682687483}
-  - {fileID: 8545975321861889640}
-  - {fileID: 8545975321861889640}
-  - {fileID: 8545975321861889640}
-  - {fileID: 8545975321861889640}
-  - {fileID: 8545975321861889640}
-  - {fileID: 2813963638682687483}
-  - {fileID: 8545975321861889640}
-  - {fileID: 8545975321861889640}
-  - {fileID: 8545975321861889640}
-  Remove50:
-  - {fileID: 0}
-  - {fileID: 0}
-  Remove85:
-  - {fileID: 28663905144444900}
-  - {fileID: 1441938189409557076}
-  - {fileID: 1239701735263986395}
-  - {fileID: 3012822764185370520}
-  - {fileID: 7776746249556709400}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 3642106277247440990}
-  Remove25: []
-  RandomizePosition:
-  - {fileID: 28663905144444900}
-  - {fileID: 1441938189409557076}
-  - {fileID: 1239701735263986395}
-  - {fileID: 7776746249556709400}
-  - {fileID: 3012822764185370520}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 3642106277247440990}
-  UseRandomizePositionListForRotation: 1
-  RandomizeRotation: []
+  _config:
+  - Objects:
+    - {fileID: 8545975321861889640}
+    - {fileID: 8167441680512584929}
+    - {fileID: 7455229466988050079}
+    - {fileID: 2813963638682687483}
+    - {fileID: 8545975321861889640}
+    - {fileID: 8545975321861889640}
+    - {fileID: 8545975321861889640}
+    - {fileID: 8545975321861889640}
+    - {fileID: 2813963638682687483}
+    - {fileID: 8545975321861889640}
+    - {fileID: 2813963638682687483}
+    - {fileID: 8545975321861889640}
+    RandomizeLocation: 0
+    RandomizeRotation: 0
+    LeaveOne: 1
+    ChanceToEnable: 1
+  - Objects:
+    - {fileID: 3642106277247440990}
+    - {fileID: 28663905144444900}
+    - {fileID: 1441938189409557076}
+    - {fileID: 1239701735263986395}
+    - {fileID: 7776746249556709400}
+    - {fileID: 3012822764185370520}
+    RandomizeLocation: 1
+    RandomizeRotation: 1
+    LeaveOne: 0
+    ChanceToEnable: 0.1
   RemoveWhenConnectEast: []
   RemoveWhenConnectSouth: []
   RemoveWhenConnectNorth: []
@@ -112,6 +95,14 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 90a1079a61561c548bb6fab038424bfe, type: 3}
       propertyPath: m_Name
       value: MEP_GroundRocks_01_g
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 90a1079a61561c548bb6fab038424bfe, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 90a1079a61561c548bb6fab038424bfe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 90a1079a61561c548bb6fab038424bfe, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -199,6 +190,14 @@ PrefabInstance:
       value: CliffStone_03_26
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 652482fb47909714fbbf0d8e12ba8015, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 652482fb47909714fbbf0d8e12ba8015, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 652482fb47909714fbbf0d8e12ba8015, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -282,6 +281,14 @@ PrefabInstance:
     - target: {fileID: 100000, guid: e379c91dd591c7c4489026858318f0f2, type: 3}
       propertyPath: m_Name
       value: MEP_Stones_01_d
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e379c91dd591c7c4489026858318f0f2, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e379c91dd591c7c4489026858318f0f2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: e379c91dd591c7c4489026858318f0f2, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -368,6 +375,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: MEP_Fern_01
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5bddecc45eb03ed4c964fb8ef1bd2fdf, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5bddecc45eb03ed4c964fb8ef1bd2fdf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5bddecc45eb03ed4c964fb8ef1bd2fdf, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.18683
@@ -448,6 +463,14 @@ PrefabInstance:
     - target: {fileID: 100000, guid: d3940dc494bcba54b943d15a5d0fef52, type: 3}
       propertyPath: m_Name
       value: Cliff_03_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d3940dc494bcba54b943d15a5d0fef52, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d3940dc494bcba54b943d15a5d0fef52, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: d3940dc494bcba54b943d15a5d0fef52, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -616,6 +639,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3748361265608923016}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7455229466988050079 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6013027905245602071, guid: 45badf52542492c448c2d57c23ed939f,
+    type: 3}
+  m_PrefabInstance: {fileID: 3748361265608923016}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8026334665887524089 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6586407168605762417, guid: 45badf52542492c448c2d57c23ed939f,
@@ -645,6 +674,14 @@ PrefabInstance:
     - target: {fileID: 100000, guid: cb429bf900605544b8fb74895d3a6800, type: 3}
       propertyPath: m_Name
       value: MEP_Fern_05
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: cb429bf900605544b8fb74895d3a6800, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: cb429bf900605544b8fb74895d3a6800, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: cb429bf900605544b8fb74895d3a6800, type: 3}
       propertyPath: m_StaticEditorFlags

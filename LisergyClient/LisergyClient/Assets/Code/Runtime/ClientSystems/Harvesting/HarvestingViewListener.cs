@@ -31,7 +31,7 @@ public class HarvestingViewListener : IEventListener
         _client.UnityServices().UI.Close<WidgetTileDetails>();
         if (ClientViewState.SelectedEntityView.BaseEntity is PartyEntity party)
         {
-            if (party.EntityLogic.Harvesting.GetAvailableResourcesToHarvest(tile).Amount > 0)
+            if (tile.HasHarvestSpot)
             {
                 _client.UnityServices().UI.Open<WidgetTileDetails>(new TileDetailsParams() { Tile = tile, Harvester = party });
             }

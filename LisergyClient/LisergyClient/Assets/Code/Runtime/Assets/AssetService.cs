@@ -17,6 +17,8 @@ namespace Assets.Code.Assets.Code.Assets
         UniTaskVoid CreateTile(TilePrefab tile, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
         UniTaskVoid CreateBuilding(BuildingPrefab b, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
         UniTaskVoid CreatePrefab(ArtSpec spec, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
+        UniTask PreloadAsset(ArtSpec spec);
+        UniTask PreloadAsset<K>(K k) where K : IComparable, IFormattable, IConvertible;
         UniTask<Sprite> GetSprite(ArtSpec spec);
         UniTask<VisualTreeAsset> GetScreen(UIScreen screen);
         UniTask<PanelSettings> GetUISetting(UISetting setting);
@@ -79,5 +81,15 @@ namespace Assets.Code.Assets.Code.Assets
         }
 
         public void OnSceneLoaded() { }
+
+        public async UniTask PreloadAsset(ArtSpec spec)
+        {
+            await _prefabs.LoadAsync(spec.Address);
+        }
+
+        public async UniTask PreloadAsset<K>(K k) where K : IComparable, IFormattable, IConvertible
+        {
+            await _prefabs.LoadAsync(k);
+        }
     }
 }
