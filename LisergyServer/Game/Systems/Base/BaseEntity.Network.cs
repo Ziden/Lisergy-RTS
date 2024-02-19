@@ -62,7 +62,6 @@ namespace Game
         /// But if the map position has updated then we also need to send the update
         /// for the old viwers so they can see the entity moving our of their view
         /// </summary>
-       
         private void SendUpdateToNewViewers()
         {
             Game.Log.Debug($"Entity {this} Had DeltaFlag 'COMPONENTS' - Sending Packets");
@@ -90,14 +89,15 @@ namespace Game
         /// Gets the base update packet of the given entity.
         /// Will add only updated components if onlyDeltas is toggled
         /// </summary>
-       
         public BasePacket GetUpdatePacket(PlayerEntity receiver, bool onlyDeltas = true)
         {
             var packet = PacketPool.Get<EntityUpdatePacket>();
             packet.EntityId = EntityId;
             packet.OwnerId = OwnerID;
             packet.Type = EntityType;
-            packet.SyncedComponents = Components.GetSyncedComponents(receiver, onlyDeltas).ToArray();
+            var deltas = Components.GetComponentDeltas(receiver, onlyDeltas);
+            packet.SyncedComponents = deltas.updated.ToArray();
+            packet.RemovedComponentIds = deltas.removed.Select(c => Serialization.GetTypeId(c)).ToArray();
             Game.Log.Debug($"Sync components [{string.Join(",", packet.SyncedComponents.Select(c => c.GetType().Name))}] for entity {this}");
             if (packet.SyncedComponents.Length == 0) throw new Exception("Trying to sync entity without modifying any component");
             return packet;

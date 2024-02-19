@@ -183,9 +183,14 @@ namespace ServerTests.Integration
             // STOP HARVEST
             _client.ReceivedPackets.Clear();
             Assert.IsTrue(_client.Modules.Actions.StopParty(party));
-            update = await _client.WaitFor<EntityUpdatePacket>(p => p.SyncedComponents.Any(c => c.GetType() == typeof(HarvestingComponent)));
-            syncedHarvest = (HarvestingComponent)update.SyncedComponents.First(c => c.GetType() == typeof(HarvestingComponent));
-            Assert.That(syncedHarvest.StartedAt == 0);
+            update = await _client.WaitFor<EntityUpdatePacket>(p => p.EntityId == party.EntityId);
+
+            // Server should have remoevd the Harvesting Component
+            Assert.IsFalse(update.SyncedComponents.Any(c => c.GetType() == typeof(HarvestingComponent)));
+            Assert.IsTrue(update.RemovedComponentIds.Any(c => c == Serialization.GetTypeId(typeof(HarvestingComponent))));
+
+            // Client needs to have also remoevd the harvesting component
+            Assert.IsFalse(_client.Game.Entities[party.EntityId].Components.Has<HarvestingComponent>());
 
             // HARVEST CARGO
             var cargo = party.Get<CargoComponent>();

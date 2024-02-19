@@ -250,6 +250,9 @@ namespace NetSerializer
             }
         }
 
+        public IReadOnlyDictionary<Type, uint> TypeMap => m_runtimeTypeMap.ToDictionary();
+
+
         readonly TypeDictionary m_runtimeTypeMap;
         readonly TypeIDList m_runtimeTypeIDList;
 

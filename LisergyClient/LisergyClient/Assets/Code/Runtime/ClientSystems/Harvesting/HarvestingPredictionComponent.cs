@@ -3,8 +3,6 @@ using ClientSDK;
 using Cysharp.Threading.Tasks;
 using Game.ECS;
 using Game.Events;
-using Game.Systems.Movement;
-using Game.Systems.Party;
 using Game.Systems.Resources;
 using Game.Tile;
 using GameData;
@@ -22,6 +20,7 @@ public class HarvestingPredictionComponent : IReferenceComponent, IDisposable
     private ResourceHarvestPointSpec _harvestSpec;
     private IGameClient _client;
     private bool _tracking = false;
+    private ushort _harvestedTotal;
 
     public HarvestingPredictionComponent(IGameClient client, IEntity harvester)
     {
@@ -51,60 +50,49 @@ public class HarvestingPredictionComponent : IReferenceComponent, IDisposable
     {
         _client.UnityServices().Notifications.Display<FinishedHarvestingNotification>(new FinishedHarvestingParam()
         {
-            Resource = _initialComponent.Resource,
+            Resource = new ResourceStackData(_initialComponent.Resource.ResourceId, _harvestedTotal),
             Entity = _entity.GetEntityView() as IUnityEntityView,
         });
     }
 
     private async UniTaskVoid TrackerTask()
-    {
-        var harvesting = _entity.Get<HarvestingComponent>();
-        var startedDate = DateTime.FromBinary(harvesting.StartedAt);
-        var nextHarvest = startedDate + _harvestSpec.HarvestTimePerUnit;
-        var harvestedTotal = 0;
-        if (nextHarvest < DateTime.UtcNow)
+    {  
+        var harvestState = _entity.EntityLogic.Harvesting.CalculateCurrentState();
+        var nextHarvest = harvestState.TaskState.StartTime + _harvestSpec.HarvestTimePerUnit;
+        _harvestedTotal = 0;
+        if (nextHarvest < _client.Game.GameTime)
         {
-            harvestedTotal = (int)Math.Floor((DateTime.UtcNow - startedDate) / _harvestSpec.HarvestTimePerUnit);
-            if (harvestedTotal > _initialComponent.Resource.Amount) harvestedTotal = _initialComponent.Resource.Amount;
+            _harvestedTotal = (ushort)Math.Floor((_client.Game.GameTime - harvestState.TaskState.StartTime) / _harvestSpec.HarvestTimePerUnit);
+            if (_harvestedTotal > _initialComponent.Resource.Amount) _harvestedTotal = _initialComponent.Resource.Amount;
 
-            nextHarvest = startedDate + (_harvestSpec.HarvestTimePerUnit * (harvestedTotal + 1));
-            _client.Game.Log.Debug($"[Harvest Prediction] Was harvesting already for some time - Harvested Total Start {harvestedTotal}");
+            nextHarvest = harvestState.TaskState.StartTime + (_harvestSpec.HarvestTimePerUnit * (_harvestedTotal + 1));
+            _client.Game.Log.Debug($"[Harvest Prediction] Was harvesting already for some time - Harvested Total Start {_harvestedTotal}");
         }
-        var depleted = harvestedTotal >= _initialComponent.Resource.Amount;
-        SendEvent(0, harvestedTotal, depleted);
+        var depleted = _harvestedTotal >= _initialComponent.Resource.Amount;
+        SendEvent(0, _harvestedTotal, depleted, harvestState);
         while (_tracking)
         {
-            if (depleted) continue;
-            _client.Game.Log.Debug($"[Harvest Prediction] Waiting prediction next tick: {nextHarvest} now {DateTime.UtcNow}");
-            await UniTask.Delay(nextHarvest - DateTime.UtcNow);
+            _client.Game.Log.Debug($"[Harvest Prediction] Waiting prediction next tick: {nextHarvest} now {_client.Game.GameTime}");
+            await UniTask.Delay(nextHarvest - _client.Game.GameTime);
             if (!_tracking) return;
-            if (!_entity.Components.Has<HarvestingComponent>())
-            {
-                _client.Game.Log.Debug($"Cancelling harvesting as have no component");
-                Dispose();
-                return;
-            }
+            if (depleted) return;
+
             nextHarvest += _harvestSpec.HarvestTimePerUnit;
-            harvestedTotal++;
-            depleted = harvestedTotal >= _initialComponent.Resource.Amount;
-            SendEvent(1, harvestedTotal, depleted);
-            _client.Game.Log.Debug($"[Harvest Prediction] Harvested 1 -> {harvestedTotal}/{_initialComponent.Resource.Amount}");
-            if (depleted)
-            {
-                _client.Game.Log.Debug($"[Harvest Prediction] Client predicted depletion on {_tile} - stopping party");
-                _client.Modules.Actions.StopParty(_entity as PartyEntity);
-                break;
-            }
+            _harvestedTotal++;
+            depleted = _harvestedTotal >= _initialComponent.Resource.Amount;
+            SendEvent(1, _harvestedTotal, depleted, harvestState);
+            _client.Game.Log.Debug($"[Harvest Prediction] Harvested 1 -> {_harvestedTotal}/{_initialComponent.Resource.Amount}");
         }
     }
     
-    private void SendEvent(int amountHarvested, int harvestedTotal, bool depleted)
+    private void SendEvent(int amountHarvested, int harvestedTotal, bool depleted, in HarvestingTaskState initialState)
     {
         var ev = EventPool<HarvestingUpdateEvent>.Get();
         ev.TileResources = _initialComponent;
         ev.Tile = _tile;
         ev.AmountHarvestedNow = amountHarvested;
         ev.AmountHarvestedTotal = harvestedTotal;
+        ev.InitialState = initialState;
         ev.Entity = _entity;
         ev.Depleted = depleted;
         _client.ClientEvents.Call(ev);

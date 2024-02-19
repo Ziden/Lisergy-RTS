@@ -31,10 +31,12 @@ namespace GameData
     [Serializable]
     public class BuildingSpec
     {
+        public string Name;
         public BuildingSpecId SpecId;
         public ArtSpec Art;
         public byte LOS;
         public List<ResourceStackData> BuildingCost;
+        public ArtSpec Icon;
 
         public BuildingSpec(byte id)
         {

@@ -27,6 +27,13 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
         private Tweener _currentSequence;
         private Queue<(TileEntity, TileEntity)> _queue = new Queue<(TileEntity, TileEntity)> ();
 
+        public bool IsInterpolating()
+        {
+            return _currentSequence != null && _currentSequence.IsPlaying() && _currentSequence.IsActive();
+        }
+
+        public bool HasQueue() => _queue.Count > 0;
+
         public MovementInterpolator(IGameClient client, BaseEntity entity)
         {
             _client = client;
@@ -45,7 +52,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
                 _client.Log.Error($"{_entity} tried to move more than 1 tile distance using interpolation");
                 return;
             }
-            if (_currentSequence != null && _currentSequence.IsActive() && _currentSequence.IsPlaying())
+            if (IsInterpolating())
             {
                 _queue.Enqueue((from, to));
                 return;
@@ -58,8 +65,9 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
             var finalPos = new Vector3(tilePos.x, view.GameObject.transform.position.y, tilePos.z);
             _currentSequence = gameObject.transform.DOMove(finalPos, (float)duration).SetEase(Ease.Linear)
                 .OnStart(() => OnStart(from, to))
-                .OnKill(() => OnFinish(from, to))
+                .OnComplete(() => OnFinish(from, to))
                 .SetAutoKill(true);
+            _currentSequence.Play();
         }
 
         public void ClearQueue()

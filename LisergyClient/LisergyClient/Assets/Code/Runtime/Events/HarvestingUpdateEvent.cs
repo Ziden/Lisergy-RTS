@@ -10,6 +10,7 @@ using Game.Tile;
 /// </summary>
 public class HarvestingUpdateEvent : IClientEvent
 {
+    public HarvestingTaskState InitialState;
     public TileResourceComponent TileResources;
     public int AmountHarvestedTotal;
     public int AmountHarvestedNow;

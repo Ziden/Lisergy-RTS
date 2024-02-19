@@ -51,7 +51,7 @@ namespace ClientSDK.Services
             _client.SDKLog.Debug($"Received entity update for {existingEntity}");
             var view = _client.Modules.Views.GetOrCreateView(existingEntity);
             if (view.State == EntityViewState.NOT_RENDERED) view.RenderView();
-            _entityComponents.UpdateComponents(existingEntity, packet.SyncedComponents);
+            _entityComponents.ProccessUpdate(existingEntity, packet.SyncedComponents, packet.RemovedComponentIds);
             if (entityCreated)
             {
                 _client.ClientEvents.Call(new ClientAwareOfEntityEvent()

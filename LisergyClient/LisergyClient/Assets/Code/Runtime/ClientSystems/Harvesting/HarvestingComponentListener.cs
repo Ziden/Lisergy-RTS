@@ -45,4 +45,9 @@ public class HarvestingComponentListener : BaseComponentListener<HarvestingCompo
         if (oldComponent.StartedAt == 0 && newComponent.StartedAt > 0) OnBeginHarvesting(entity);
         else if (oldComponent.StartedAt > 0 && newComponent.StartedAt == 0) OnFinishHarvesting(entity);
     }
+
+    public override void OnComponentRemoved(IEntity entity, HarvestingComponent oldComponent)
+    {
+        OnFinishHarvesting(entity);
+    }
 }

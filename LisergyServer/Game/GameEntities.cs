@@ -46,6 +46,7 @@ namespace Game
     {
         private IGame _game;
         internal readonly Dictionary<GameId, IEntity> _entities = new Dictionary<GameId, IEntity>();
+
         internal DeltaCompression _deltaTracker = new DeltaCompression();
 
         public IDeltaCompression DeltaCompression  => _deltaTracker;

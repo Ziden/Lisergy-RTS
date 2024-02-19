@@ -1,31 +1,39 @@
+using Assets.Code.ClientSystems.Party.UI;
 using ClientSDK;
 using GameData;
 using UnityEngine.UIElements;
 
-public class WidgetResourceDisplay : UIWidget
+namespace Resource.UI
 {
-    private VisualElement _icon;
-    private Label _text;
-    private Label _name;
-
-    public WidgetResourceDisplay(VisualElement root, IGameClient client) : base(root, client)
+    public class WidgetResourceDisplay : WidgetElement
     {
-        _icon = root.Q("ResourceIconImage").Required();
-        _name = root.Q<Label>("ItemName").Required();
-        _text = root.Q<Label>("ItemQtd").Required();
-    }
+        private VisualElement _icon;
+        private Label _text;
+        private Label _name;
+        private GameSpec _specs;
 
-    public void Display(ResourceSpecId id, int amount)
-    {
-        var resourceSpec = _client.Game.Specs.Resources[id];
-        _icon.SetBackground(resourceSpec.Art);
-        _name.text = resourceSpec.Name;
-        _text.text = amount.ToString();
+        public WidgetResourceDisplay()
+        {
+            LoadUxmlFromResource("WidgetResourceDisplay");
+            _icon = this.Q("ResourceIconImage").Required();
+            _name = this.Q<Label>("ItemName").Required();
+            _text = this.Q<Label>("ItemQtd").Required();
+        }
 
-    }
+        public override void OnAddedDuringGame(IGameClient client)
+        {
+            _specs = client.Game.Specs;
+        }
 
-    public override void Dispose()
-    {
-        
+        public void Display(ResourceSpecId id, int amount)
+        {
+            var resourceSpec = _specs.Resources[id];
+            _icon.SetBackground(resourceSpec.Art);
+            _name.text = resourceSpec.Name;
+            _text.text = amount.ToString();
+        }
+
+        public new class UxmlFactory : UxmlFactory<WidgetResourceDisplay, UxmlTraits> { }
+        public new class UxmlTraits : VisualElement.UxmlTraits { }
     }
 }

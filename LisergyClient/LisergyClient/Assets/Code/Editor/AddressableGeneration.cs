@@ -6,7 +6,6 @@ using Game.DataTypes;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
-using UnityEngine;
 
 namespace Code.Editor
 {
@@ -20,10 +19,12 @@ namespace Code.Editor
 			{"Buildings", "BuildingPrefab"},
 			{"Units", "UnitPrefab"},
 			{"Effects", "VfxPrefab"},
-			{"Sprites", "SpritePrefab"},
+            {"Vfx", "VfxPrefab"},
+            {"Sprites", "SpritePrefab"},
 			{"MapObjects", "MapObjectPrefab"},
 			{"Screens", "UIScreen"},
-			{"UISetting", "UISetting"},
+            {"UI/Addressables", "UIScreen"},
+            {"UISetting", "UISetting"},
 		};
 		
 		[MenuItem("Lisergy/Generate Addressable Map")]

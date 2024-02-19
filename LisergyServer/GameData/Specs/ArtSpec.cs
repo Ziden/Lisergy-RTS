@@ -27,6 +27,9 @@ namespace GameData.Specs
             Type = type;
         }
 
+        public static implicit operator string(ArtSpec d) => d.Address;
+        public static implicit operator ArtSpec(string b) => new ArtSpec() { Address = b };
+
         public override string ToString() => $"<Art Type={Type} Addr={Address}/>";
     }
 }

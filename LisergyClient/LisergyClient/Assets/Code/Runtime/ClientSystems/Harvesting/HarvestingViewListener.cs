@@ -1,6 +1,7 @@
 using Assets.Code.Assets.Code.Runtime;
 using Assets.Code.UI;
 using ClientSDK;
+using Game.ECS;
 using Game.Events.Bus;
 using Game.Systems.Party;
 using Game.Tile;
@@ -24,16 +25,24 @@ public class HarvestingViewListener : IEventListener
     private void OnHarvestResources(HarvestingUpdateEvent ev)
     {
         _ = _vfx.ShowResource(ev.Entity, ev.TileResources.Resource.ResourceId, ev.AmountHarvestedNow);
+        if (ev.Depleted)
+        {
+            var p = ev.Entity as PartyEntity;
+            _client.Game.Log.Debug($"[Harvest Prediction] Client predicted depletion on {ev.Tile} - stopping party");
+            _client.Modules.Actions.StopParty(p);
+            p.Components.RemoveReference<HarvestingPredictionComponent>();
+         
+        }
     }
 
     private void OnSelectedTile(TileEntity tile)
     {
-        _client.UnityServices().UI.Close<WidgetTileDetails>();
+        _client.UnityServices().UI.Close<ScreenTileDetails>();
         if (ClientViewState.SelectedEntityView.BaseEntity is PartyEntity party)
         {
             if (tile.HasHarvestSpot)
             {
-                _client.UnityServices().UI.Open<WidgetTileDetails>(new TileDetailsParams() { Tile = tile, Harvester = party });
+                _client.UnityServices().UI.Open<ScreenTileDetails>(new ScreenTileDetailsParams() { Tile = tile, Harvester = party });
             }
         }
     }

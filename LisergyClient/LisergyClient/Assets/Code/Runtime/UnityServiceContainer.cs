@@ -5,6 +5,7 @@ using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.World;
 using ClientSDK;
 using ClientSDK.Data;
+using Game.DataTypes;
 using System;
 using System.Collections.Generic;
 
@@ -27,42 +28,68 @@ namespace Assets.Code
         public IUiService UI => UnityServicesContainer.Resolve<IUiService>();
         public IAudioService Audio => UnityServicesContainer.Resolve<IAudioService>();
         public INotificationService Notifications => UnityServicesContainer.Resolve<INotificationService>();
-        public IAssetService Assets => UnityServicesContainer.Resolve<IAssetService>();
+        public IAssetService Assets => UnityServicesContainer.ResolveOrCreate<IAssetService, AssetService>();
         public IServerModules ServerModules => UnityServicesContainer.Resolve<IServerModules>();
         public IVfxService Vfx => UnityServicesContainer.Resolve<IVfxService>();
     }
 
-    internal class UnityServicesContainer 
+    /// <summary>
+    /// Static place where all unity services can be accessed.
+    /// </summary>
+    internal static class UnityServicesContainer 
     {
-        private static Dictionary<Type, IGameService> _values = new();
+        private static Dictionary<Type, object> _services = new();
+        internal static IGameClient Client;
+
         public static IGameClientServices Interface { get; private set; } = new UnityServicesAcessor();
-        internal static T Resolve<T>() where T : IGameService
+        public static bool TryResolve<T>(out T t)
         {
-            if (_values.TryGetValue(typeof(T), out var dependency))
+            if (_services.TryGetValue(typeof(T), out var dependency))
             {
-                return (T)dependency;
+                t =  (T)dependency;
+                return true;
             }
-            throw new ArgumentException("Dependency not found " + typeof(T).FullName);
+            t = default;
+            return false;
+        }
+
+        public static T Resolve<T>()
+        {
+            if (!TryResolve<T>(out var t))
+            {
+                throw new Exception("Service not registered " + typeof(T).Name);
+            }
+           return t;
+        }
+
+        public static bool Has<T>()
+        {
+            return _services.ContainsKey(typeof(T));
+        }
+
+        internal static T ResolveOrCreate<T, I>() where I : T
+        {
+            if (!_services.TryGetValue(typeof(T), out var dependency))
+            {
+                dependency = (T)Activator.CreateInstance(typeof(I));
+                _services[typeof(T)] = dependency;
+            }
+            return (T)dependency;
         }
 
         public static void Register<T,V>(V value) 
             where T: IGameService 
             where V: T
         {
-            _values[typeof(T)] = value;
+            _services[typeof(T)] = value;
         }
 
         public static void OnSceneLoaded()
         {
-            foreach(var s in _values.Values)
+            foreach(var s in _services.Values)
             {
-                s.OnSceneLoaded();
+                if(s is IGameService igs) igs.OnSceneLoaded();
             }
-        }
-
-        public static IInputService InputManager()
-        {
-            return Resolve<IInputService>();
         }
     }
 }

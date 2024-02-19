@@ -72,8 +72,8 @@ namespace Game.Tile
                 packet.Components = null;
             } else
             {
-                var updatedComponents = Components.GetSyncedComponents(receiver, onlyDeltas);
-                if (updatedComponents != null && updatedComponents.Count > 0) packet.Components = updatedComponents;
+                var updatedComponents = Components.GetComponentDeltas(receiver, onlyDeltas);
+                if (updatedComponents.updated != null && updatedComponents.updated.Count > 0) packet.Components = updatedComponents.updated.ToArray();
                 else packet.Components = null;
             }
             return packet;

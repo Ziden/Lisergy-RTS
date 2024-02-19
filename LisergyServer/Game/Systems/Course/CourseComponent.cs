@@ -10,6 +10,7 @@ namespace Game.Systems.Movement
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     [Serializable]
+    [SyncedComponent]
     public struct CourseComponent : IComponent
     {
         public GameId CourseId;

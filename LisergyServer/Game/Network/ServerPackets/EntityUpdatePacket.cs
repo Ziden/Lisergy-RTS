@@ -13,6 +13,7 @@ namespace Game.Events.ServerEvents
         public GameId EntityId;
         public GameId OwnerId;
         public IComponent [] SyncedComponents;
+        public uint[] RemovedComponentIds;
 
         public EntityUpdatePacket() { }
 

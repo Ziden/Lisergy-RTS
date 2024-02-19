@@ -79,10 +79,16 @@ namespace Game.ECS
             Remove(typeof(T));
         }
 
+        public void Free(Type t)
+        {
+            UnmanagedMemory.FreeForReuse(this[t]);
+            Remove(t);
+        }
+
         /// <summary>
         /// Free's all memory used by this entity components
         /// </summary>
-       
+
         public void FreeAll()
         {
             foreach (var p in this.Values) UnmanagedMemory.DeallocateMemory(p);

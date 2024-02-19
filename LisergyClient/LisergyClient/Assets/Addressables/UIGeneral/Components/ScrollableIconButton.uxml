@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/base.uss?fileID=7433441132597879392&amp;guid=f09695809089cfe4d9eac34818d302c8&amp;type=3#base" />
+    <ui:VisualElement name="ScrollableIconButton" class="icon-button icon-button--highlight" style="width: 150px; height: 150px; flex-shrink: 0; flex-grow: 1;">
+        <ui:Label tabindex="-1" text="Castle" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Name" class="icon-buton__name" style="font-size: 32px; -unity-font: resource(&apos;font/BreatheFireIii-PKLOB&apos;);" />
+        <ui:VisualElement name="Icon" class="icon-button__icon" style="width: 89px; height: 85px;" />
+    </ui:VisualElement>
+</ui:UXML>

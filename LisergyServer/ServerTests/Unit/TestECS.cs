@@ -65,7 +65,7 @@ namespace UnitTests
             clientEntity.Components.Add<SelfSyncComponent>();
             var componentSet = clientEntity.Components as ComponentSet;
 
-            Assert.IsTrue(clientEntity.Components.GetSyncedComponents(player).Contains(clientEntity.Components.Get<SelfSyncComponent>()));
+            Assert.IsTrue(clientEntity.Components.GetComponentDeltas(player).updated.Contains(clientEntity.Components.Get<SelfSyncComponent>()));
 
             var selfPacket = clientEntity.GetUpdatePacket(player) as EntityUpdatePacket;
 

@@ -36,9 +36,10 @@ namespace Assets.Code.UI
         }
     }
 
+    // TODO: Move to Widget not Screen
     public class WidgetUnitDetails : GameUi, IEventListener
     {
-        public override UIScreen UiAsset => UIScreen.UnitDetails;
+        public override UIScreen UiAsset => UIScreen.ScreenUnitDetails;
 
         public override void OnOpen()
         {
@@ -47,8 +48,8 @@ namespace Assets.Code.UI
             Root.Q<Label>("UnitLabel").Required().text = spec.Name;
             var icon = Root.Q("Icon").Required();
             icon.SetBackground(spec.IconArt);
-            Root.Q("HpGreenBar").Required().style.width = Length.Percent(setup.Unit.HpRatio * 100);
-            Root.Q<Label>("Hp").Required().text = $"{setup.Unit.HP} / {setup.Unit.MaxHP}";
+            Root.Q("HP").Q("GreenBar").Required().style.width = Length.Percent(setup.Unit.HpRatio * 100);
+            Root.Q("HP").Q<Label>("StatValue").Required().text = $"{setup.Unit.HP} / {setup.Unit.MaxHP}";
             new UnitStatBar(Root.Q("Attack").Required()).SetValue(setup.Unit.Atk);
             new UnitStatBar(Root.Q("Defense").Required()).SetValue(setup.Unit.Def);
             new UnitStatBar(Root.Q("Matk").Required()).SetValue(setup.Unit.Matk);

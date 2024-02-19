@@ -1,11 +1,8 @@
-﻿using Game.Comands;
-using Game.ECS;
+﻿using Game.ECS;
 using Game.Network;
 using Game.Systems.Tile;
-using Game.Tile;
 using Game.World;
 using System;
-using System.Collections.Generic;
 
 namespace Game.Events.ServerEvents
 {
@@ -14,11 +11,12 @@ namespace Game.Events.ServerEvents
     {
         public TileData Data;
         public TileVector Position;
-        public List<IComponent> Components; 
+        public IComponent [] Components; 
+        // public List<uint> Removed; // Todo: centralize with entity update packet ?
 
         public override string ToString()
         {
-            return $"<TilePacket {Position} {Data} Components={Components?.Count}>";
+            return $"<TilePacket {Position} {Data} Components={Components?.Length}>";
         }
     }
 }

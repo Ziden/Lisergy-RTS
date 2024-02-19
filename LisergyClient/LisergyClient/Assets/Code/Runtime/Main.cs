@@ -43,7 +43,6 @@ public class Main : MonoBehaviour, IEventListener
 
     void Start()
     {
-        Debug.Log("Starting Main Behaviour");
         DontDestroyOnLoad(gameObject);
         UnityServicesContainer.OnSceneLoaded();
         _stateMachine = new GameStateMachine(_client);
@@ -100,6 +99,7 @@ public class Main : MonoBehaviour, IEventListener
 
     public void SetupServices()
     {
+        UnityServicesContainer.Client = _client;
         UnityServicesContainer.Register<IInputService, InputService>(gameObject?.AddComponent<InputService>());
         UnityServicesContainer.Register<IUiService, UiService>(new UiService(_client));
         UnityServicesContainer.Register<IAudioService, AudioService>(new AudioService(_client));

@@ -52,6 +52,14 @@ namespace Game
 
         public static uint GetTypeId(Type t) => Serializer.GetTypeMap()[t];
 
+        public static Type GetType(uint id) {
+            foreach (var kp in Serializer.GetTypeMap())
+            {
+                if (kp.Value == id) return kp.Key;
+            }
+            return null;
+        }
+
         public static IEnumerable<Type> GetDefaultSerializationTypes()
         {
             foreach (Type type in typeof(IBaseEvent).Assembly.GetTypes())

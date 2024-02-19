@@ -1,11 +1,12 @@
-using Assets.Code.Assets.Code.Runtime.UIScreens.Parts;
+using Assets.Code.ClientSystems.Party.UI;
 using Assets.Code.UI;
 using ClientSDK;
 using Game.ECS;
 using Game.Systems.Battler;
+using Party.UI;
 using UnityEngine.UIElements;
 
-public class WidgetBattleGroup : UIWidget
+public class WidgetBattleGroup : VisualStruct
 {
     private VisualElement _root;
     private IGameClient _client;
@@ -18,7 +19,7 @@ public class WidgetBattleGroup : UIWidget
         _root = root;
         for (var x = 0; x < _parties.Length; x++)
         {
-            _parties[x] = new WidgetPartyButton(client, _root.Q($"PartyButton-{x + 1}").Required());
+            _parties[x] = _root.Q<WidgetPartyButton>($"Party-{x + 1}").Required();
         }
     }
 
@@ -27,13 +28,21 @@ public class WidgetBattleGroup : UIWidget
         for(int x = 0; x < 4; x++)
         {
             var unit = component.Units[x];
-            _parties[x].DisplayLeader(unit);
-            if (!unit.Valid) continue;
-            _parties[x].OnClick(() => _client.UnityServices().UI.Open<WidgetUnitDetails>(new UnitDetailsSetup()
+            if (!unit.Valid)
             {
-                Entity = owner,
-                Unit = unit
-            }));
+                _parties[x].style.display = DisplayStyle.None;
+            }
+            else
+            {
+                _parties[x].style.display = DisplayStyle.Flex;
+                _parties[x].DisplayUnit(unit).Forget();
+                _parties[x].OnClick = () => _client.UnityServices().UI.Open<WidgetUnitDetails>(new UnitDetailsSetup()
+                {
+                    Entity = owner,
+                    Unit = unit
+                });
+
+            }
         }
     }
 

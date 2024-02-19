@@ -1,9 +1,10 @@
 using ClientSDK;
 using Game.Systems.Resources;
+using Resource.UI;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
-public class WidgetCargoComponent : UIWidget
+public class WidgetCargoComponent : VisualStruct
 {
     private List<WidgetResourceDisplay> _resources = new List<WidgetResourceDisplay>();
     private Label _wt;
@@ -15,7 +16,7 @@ public class WidgetCargoComponent : UIWidget
 
         foreach(var c in list.Children())
         {
-            _resources.Add(new WidgetResourceDisplay(c, client));
+            _resources.Add((WidgetResourceDisplay)c);
         }
     }
 

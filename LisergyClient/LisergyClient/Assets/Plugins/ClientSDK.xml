@@ -160,6 +160,11 @@
             Gets the list of battle headers for this player
             </summary>
         </member>
+        <member name="T:ClientSDK.Services.IBuildingModule">
+            <summary>
+            Service responsible for handling authentication and specific account and profile information
+            </summary>
+        </member>
         <member name="T:ClientSDK.Services.IEntityModule">
             <summary>
             Service that controls entities that the game client is aware of.
@@ -231,7 +236,7 @@
             This module is able to implement callbacks from when a given component is synced so the client can react to it.
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.IComponentsModule.UpdateComponents(Game.ECS.IEntity,Game.ECS.IComponent[])">
+        <member name="M:ClientSDK.Modules.IComponentsModule.ProccessUpdate(Game.ECS.IEntity,Game.ECS.IComponent[],System.UInt32[])">
             <summary>
             Updates the components of the given entity
             </summary>
@@ -244,7 +249,19 @@
             The callback has the Entity, OLD VALUE and NEW VALUE parameters.
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.ComponentsModule.UpdateComponents(Game.ECS.IEntity,Game.ECS.IComponent[])">
+        <member name="M:ClientSDK.Modules.IComponentsModule.OnComponentRemoved``1(System.Action{Game.ECS.IEntity,``0})">
+            <summary>
+            Registers a component removed callback. 
+            Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
+            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Modules.IComponentsModule.RemoveListener(System.Object)">
+            <summary>
+            Removes all event callbacks from the given object
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Modules.ComponentsModule.ProccessUpdate(Game.ECS.IEntity,Game.ECS.IComponent[],System.UInt32[])">
             <summary>
             Updates the components of the given entity.
             Will copy all new values to old values

@@ -2,6 +2,7 @@
 using ClientSDK.Data;
 using Game.Tile;
 using ClientSDK.SDKEvents;
+using System;
 
 namespace ClientSDK.Services
 {
@@ -30,9 +31,9 @@ namespace ClientSDK.Services
         {
             var tileEntity = _client.Game.World.Map.GetTile(packet.Position.X, packet.Position.Y);
             tileEntity.UpdateData(packet.Data);
-            if(packet.Components != null && packet.Components.Count > 0)
+            if(packet.Components != null && packet.Components.Length > 0)
             {
-                _client.Modules.Components.UpdateComponents(tileEntity, packet.Components.ToArray());
+                _client.Modules.Components.ProccessUpdate(tileEntity, packet.Components, Array.Empty<uint>());
             }
             var tileView = _client.Modules.Views.GetOrCreateView(tileEntity);
             if (tileView.State == EntityViewState.NOT_RENDERED)

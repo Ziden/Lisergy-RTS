@@ -130,11 +130,30 @@ namespace UnitTests
 
             var entityUpdate2 = _party.GetUpdatePacket(_player) as EntityUpdatePacket;
 
-            var firstUpdate = (HarvestingComponent)entityUpdate1.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(HarvestingComponent));
-            var secondUpdate = (HarvestingComponent)entityUpdate2.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(HarvestingComponent));
+            var firstUpdate = entityUpdate1.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(HarvestingComponent));
+            var secondUpdate = entityUpdate2.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(HarvestingComponent));
 
-            Assert.AreEqual(startTime.ToBinary(), firstUpdate.StartedAt);
-            Assert.AreEqual(DateTime.MinValue.ToBinary(), secondUpdate.StartedAt);
+            Assert.IsNull(secondUpdate);
+            Assert.AreEqual(startTime.ToBinary(), ((HarvestingComponent)firstUpdate).StartedAt);
+        }
+
+        [Test]
+        public unsafe void TestHarvestingComponentRemoved()
+        {
+            var tileResourceBefore = _logs.Get<TileResourceComponent>();
+            _game.Entities.DeltaCompression.ClearDeltas();
+            _party.EntityLogic.Harvesting.StartHarvesting(_logs);
+            var totalTime = _logs.HarvestPointSpec.ResourceAmount * _logs.HarvestPointSpec.HarvestTimePerUnit;
+            var startTime = _game.GameTime;
+
+            // Advance all harvesting time
+            _scheduler.SetLogicalTime(_game.GameTime + totalTime);
+            _game.Entities.DeltaCompression.ClearDeltas();
+            var harvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
+
+            var entityUpdate = _party.GetUpdatePacket(_player) as EntityUpdatePacket;
+
+            Assert.IsTrue(entityUpdate.RemovedComponentIds.First() == Serialization.GetTypeId(typeof(HarvestingComponent)));
         }
 
         [Test]

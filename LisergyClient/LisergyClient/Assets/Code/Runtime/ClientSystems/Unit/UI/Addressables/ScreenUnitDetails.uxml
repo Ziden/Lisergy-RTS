@@ -1,0 +1,100 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/base.uss?fileID=7433441132597879392&amp;guid=f09695809089cfe4d9eac34818d302c8&amp;type=3#base" />
+    <ui:VisualElement name="UnitDetails" style="flex-grow: 0; background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Frame/frame_stageframe_02_n.png?fileID=21300000&amp;guid=ea20bb65163124847b01bc00d332b739&amp;type=3#frame_stageframe_02_n&apos;); height: 264px; width: 413px; background-color: rgba(255, 255, 255, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; min-height: auto; max-height: none; flex-direction: column; flex-wrap: nowrap; flex-shrink: 1; position: relative; align-items: stretch; padding-bottom: 22px; align-self: flex-end; scale: 1 1; translate: 0 0;">
+        <ui:VisualElement name="Header" style="flex-grow: 1; flex-direction: row; height: 50px; max-height: 50px; min-height: 50px; justify-content: flex-end; align-self: center; -unity-text-align: lower-left; width: 100%; align-items: flex-end; padding-right: 25px;">
+            <ui:VisualElement name="Icon" style="flex-grow: 1; position: absolute; width: 80px; height: 80px; max-height: 80px; max-width: 80px; min-width: 80px; min-height: 80px; background-image: url(&apos;project://database/Assets/Addressables/Sprites/Badges/Badge_rogue.png?fileID=21300000&amp;guid=984e0e0fdaded8e4ab5ae907bab99cd4&amp;type=3#Badge_rogue&apos;); top: 4px; left: 16px; background-color: rgb(68, 54, 73); -unity-background-scale-mode: stretch-to-fill; border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;" />
+            <ui:Label tabindex="-1" text="Rogue" parse-escape-sequences="true" display-tooltip-when-elided="true" name="UnitLabel" style="-unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 1px; text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.43); background-color: rgba(255, 255, 255, 0); color: rgb(255, 255, 255); font-size: 30px; -unity-text-align: lower-center; -unity-font: resource(&apos;font/BreatheFireIii-PKLOB&apos;); -unity-font-style: bold; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; align-self: center; position: absolute; top: 12px; left: 238px; width: 157px;" />
+            <ui:VisualElement name="HP" style="flex-grow: 0; flex-direction: column; align-self: center; justify-content: center; align-items: center; position: absolute; top: 67px; left: 315px;">
+                <ui:VisualElement name="Icon" style="flex-grow: 1; width: 66px; height: 53px; background-image: url(&apos;project://database/Assets/Packs/Ziden/sprites/stat_hp.png?fileID=2800000&amp;guid=2a0e1c7add1e73d47a8c2cb46dc8d7af&amp;type=3#stat_hp&apos;); position: absolute; top: -33px; left: -123px;" />
+                <ui:VisualElement name="StatValues" class="stat-bar" style="margin-top: -9px; left: -65px; top: -12px;">
+                    <ui:VisualElement name="StatBar" class="hpbar" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 16px; max-height: none; min-height: auto; width: 117px; max-width: none; min-width: auto; background-image: none; -unity-background-image-tint-color: rgb(0, 0, 0); margin-top: 0; scale: 1 1; position: relative; top: auto; left: auto; rotate: 0; display: flex; visibility: visible; justify-content: center; align-items: auto;">
+                        <ui:VisualElement name="BackBar" style="display: none;" />
+                        <ui:VisualElement name="GreenBar" class="stat-bar__green" />
+                        <ui:VisualElement name="DarkLine" class="hpbar__shadow" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Slider/slider_basictype_00_fill.png?fileID=2800000&amp;guid=74d8bba7512764f81af121db893de726&amp;type=3#slider_basictype_00_fill&apos;); height: 2px; position: absolute; width: 100%; max-width: none; max-height: none; min-width: auto; min-height: auto; margin-top: 0; margin-left: 0; -unity-background-image-tint-color: rgba(65, 65, 65, 0.32); flex-shrink: 0; align-self: auto; bottom: 2px; left: 0;" />
+                        <ui:VisualElement name="Shineline" class="hpbar__shadow stat-bar__light" />
+                    </ui:VisualElement>
+                    <ui:Label tabindex="-1" text="100 / 100" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StatValue" class="stat-value" style="top: 4px; left: 13px; font-size: 20px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Contents" style="flex-grow: 0; padding-top: 0; padding-right: 5px; padding-left: 31px; height: 365px; margin-top: 39px;">
+            <ui:VisualElement name="Stats" style="flex-grow: 0; flex-direction: row; flex-wrap: wrap; background-color: rgba(255, 255, 255, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; height: 134px; display: flex; margin-top: -2px;">
+                <ui:VisualElement name="Attack" class="stat">
+                    <ui:VisualElement name="StatIcon" class="stat__icon" />
+                    <ui:VisualElement name="StatValues" class="stat-bar">
+                        <ui:VisualElement name="StatBar" class="hpbar" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 16px; max-height: none; min-height: auto; width: 117px; max-width: none; min-width: auto; background-image: none; -unity-background-image-tint-color: rgb(0, 0, 0); margin-top: 0; scale: 1 1; position: relative; top: auto; left: auto; rotate: 0; display: flex; visibility: visible; justify-content: center; align-items: auto; overflow: hidden;">
+                            <ui:VisualElement name="BackBar" class="stat-bar__black" style="border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px;" />
+                            <ui:VisualElement name="GreenBar" class="stat-bar__green" style="border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; visibility: visible; display: flex;" />
+                            <ui:VisualElement name="DarkLine" class="hpbar__shadow" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Slider/slider_basictype_00_fill.png?fileID=2800000&amp;guid=74d8bba7512764f81af121db893de726&amp;type=3#slider_basictype_00_fill&apos;); height: 2px; position: absolute; width: 100%; max-width: none; max-height: none; min-width: auto; min-height: auto; margin-top: 0; margin-left: 0; -unity-background-image-tint-color: rgba(65, 65, 65, 0.32); flex-shrink: 0; align-self: auto; bottom: 2px; left: 0;" />
+                            <ui:VisualElement name="Shineline" class="hpbar__shadow stat-bar__light" />
+                        </ui:VisualElement>
+                        <ui:Label tabindex="-1" text="255" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StatValue" class="stat-value" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Defense" class="stat">
+                    <ui:VisualElement name="StatIcon" class="stat__icon" style="background-image: url(&apos;project://database/Assets/Packs/Ziden/sprites/stat_def.png?fileID=2800000&amp;guid=4e9b496503ab3e24ab0dedd8443711e9&amp;type=3#stat_def&apos;);" />
+                    <ui:VisualElement name="StatValues" class="stat-bar">
+                        <ui:VisualElement name="StatBar" class="hpbar" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 16px; max-height: none; min-height: auto; width: 117px; max-width: none; min-width: auto; background-image: none; -unity-background-image-tint-color: rgb(0, 0, 0); margin-top: 0; scale: 1 1; position: relative; top: auto; left: auto; rotate: 0; display: flex; visibility: visible; justify-content: center; align-items: auto;">
+                            <ui:VisualElement name="BackBar" class="stat-bar__black" />
+                            <ui:VisualElement name="GreenBar" class="stat-bar__green" />
+                            <ui:VisualElement name="DarkLine" class="hpbar__shadow" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Slider/slider_basictype_00_fill.png?fileID=2800000&amp;guid=74d8bba7512764f81af121db893de726&amp;type=3#slider_basictype_00_fill&apos;); height: 2px; position: absolute; width: 100%; max-width: none; max-height: none; min-width: auto; min-height: auto; margin-top: 0; margin-left: 0; -unity-background-image-tint-color: rgba(65, 65, 65, 0.32); flex-shrink: 0; align-self: auto; bottom: 2px; left: 0;" />
+                            <ui:VisualElement name="Shineline" class="hpbar__shadow stat-bar__light" />
+                        </ui:VisualElement>
+                        <ui:Label tabindex="-1" text="255" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StatValue" class="stat-value" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Matk" class="stat">
+                    <ui:VisualElement name="StatIcon" class="stat__icon" style="background-image: url(&apos;project://database/Assets/Packs/Ziden/sprites/stat_mag.png?fileID=2800000&amp;guid=6e9c932a042d2314d9d1c2bc28c6e60a&amp;type=3#stat_mag&apos;);" />
+                    <ui:VisualElement name="StatValues" class="stat-bar">
+                        <ui:VisualElement name="StatBar" class="hpbar" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 16px; max-height: none; min-height: auto; width: 117px; max-width: none; min-width: auto; background-image: none; -unity-background-image-tint-color: rgb(0, 0, 0); margin-top: 0; scale: 1 1; position: relative; top: auto; left: auto; rotate: 0; display: flex; visibility: visible; justify-content: center; align-items: auto;">
+                            <ui:VisualElement name="BackBar" class="stat-bar__black" />
+                            <ui:VisualElement name="GreenBar" class="stat-bar__green" />
+                            <ui:VisualElement name="DarkLine" class="hpbar__shadow" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Slider/slider_basictype_00_fill.png?fileID=2800000&amp;guid=74d8bba7512764f81af121db893de726&amp;type=3#slider_basictype_00_fill&apos;); height: 2px; position: absolute; width: 100%; max-width: none; max-height: none; min-width: auto; min-height: auto; margin-top: 0; margin-left: 0; -unity-background-image-tint-color: rgba(65, 65, 65, 0.32); flex-shrink: 0; align-self: auto; bottom: 2px; left: 0;" />
+                            <ui:VisualElement name="Shineline" class="hpbar__shadow stat-bar__light" />
+                        </ui:VisualElement>
+                        <ui:Label tabindex="-1" text="255" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StatValue" class="stat-value" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Mdef" class="stat">
+                    <ui:VisualElement name="StatIcon" class="stat__icon" style="background-image: url(&apos;project://database/Assets/Packs/Ziden/sprites/stat_res.png?fileID=2800000&amp;guid=cf7d3077f7e4ff843a87714eb8d0d778&amp;type=3#stat_res&apos;);" />
+                    <ui:VisualElement name="StatValues" class="stat-bar">
+                        <ui:VisualElement name="StatBar" class="hpbar" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 16px; max-height: none; min-height: auto; width: 117px; max-width: none; min-width: auto; background-image: none; -unity-background-image-tint-color: rgb(0, 0, 0); margin-top: 0; scale: 1 1; position: relative; top: auto; left: auto; rotate: 0; display: flex; visibility: visible; justify-content: center; align-items: auto;">
+                            <ui:VisualElement name="BackBar" class="stat-bar__black" />
+                            <ui:VisualElement name="GreenBar" class="stat-bar__green" />
+                            <ui:VisualElement name="DarkLine" class="hpbar__shadow" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Slider/slider_basictype_00_fill.png?fileID=2800000&amp;guid=74d8bba7512764f81af121db893de726&amp;type=3#slider_basictype_00_fill&apos;); height: 2px; position: absolute; width: 100%; max-width: none; max-height: none; min-width: auto; min-height: auto; margin-top: 0; margin-left: 0; -unity-background-image-tint-color: rgba(65, 65, 65, 0.32); flex-shrink: 0; align-self: auto; bottom: 2px; left: 0;" />
+                            <ui:VisualElement name="Shineline" class="hpbar__shadow stat-bar__light" />
+                        </ui:VisualElement>
+                        <ui:Label tabindex="-1" text="255" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StatValue" class="stat-value" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Speed" class="stat">
+                    <ui:VisualElement name="StatIcon" class="stat__icon" style="background-image: url(&apos;project://database/Assets/Packs/Ziden/sprites/stat_spd.png?fileID=2800000&amp;guid=29960dfe6d5135148b4183d4744819b3&amp;type=3#stat_spd&apos;);" />
+                    <ui:VisualElement name="StatValues" class="stat-bar">
+                        <ui:VisualElement name="StatBar" class="hpbar" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 16px; max-height: none; min-height: auto; width: 117px; max-width: none; min-width: auto; background-image: none; -unity-background-image-tint-color: rgb(0, 0, 0); margin-top: 0; scale: 1 1; position: relative; top: auto; left: auto; rotate: 0; display: flex; visibility: visible; justify-content: center; align-items: auto;">
+                            <ui:VisualElement name="BackBar" class="stat-bar__black" />
+                            <ui:VisualElement name="GreenBar" class="stat-bar__green" />
+                            <ui:VisualElement name="DarkLine" class="hpbar__shadow" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Slider/slider_basictype_00_fill.png?fileID=2800000&amp;guid=74d8bba7512764f81af121db893de726&amp;type=3#slider_basictype_00_fill&apos;); height: 2px; position: absolute; width: 100%; max-width: none; max-height: none; min-width: auto; min-height: auto; margin-top: 0; margin-left: 0; -unity-background-image-tint-color: rgba(65, 65, 65, 0.32); flex-shrink: 0; align-self: auto; bottom: 2px; left: 0;" />
+                            <ui:VisualElement name="Shineline" class="hpbar__shadow stat-bar__light" />
+                        </ui:VisualElement>
+                        <ui:Label tabindex="-1" text="255" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StatValue" class="stat-value" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Accuracy" class="stat">
+                    <ui:VisualElement name="StatIcon" class="stat__icon" style="background-image: url(&apos;project://database/Assets/Packs/Ziden/sprites/stat_acc.png?fileID=2800000&amp;guid=cc9b67d167f6cd04f962c15c33421bd5&amp;type=3#stat_acc&apos;);" />
+                    <ui:VisualElement name="StatValues" class="stat-bar">
+                        <ui:VisualElement name="StatBar" class="hpbar" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 16px; max-height: none; min-height: auto; width: 117px; max-width: none; min-width: auto; background-image: none; -unity-background-image-tint-color: rgb(0, 0, 0); margin-top: 0; scale: 1 1; position: relative; top: auto; left: auto; rotate: 0; display: flex; visibility: visible; justify-content: center; align-items: auto;">
+                            <ui:VisualElement name="BackBar" class="stat-bar__black" />
+                            <ui:VisualElement name="GreenBar" class="stat-bar__green" />
+                            <ui:VisualElement name="DarkLine" class="hpbar__shadow" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Slider/slider_basictype_00_fill.png?fileID=2800000&amp;guid=74d8bba7512764f81af121db893de726&amp;type=3#slider_basictype_00_fill&apos;); height: 2px; position: absolute; width: 100%; max-width: none; max-height: none; min-width: auto; min-height: auto; margin-top: 0; margin-left: 0; -unity-background-image-tint-color: rgba(65, 65, 65, 0.32); flex-shrink: 0; align-self: auto; bottom: 2px; left: 0;" />
+                            <ui:VisualElement name="Shineline" class="hpbar__shadow stat-bar__light" />
+                        </ui:VisualElement>
+                        <ui:Label tabindex="-1" text="255" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StatValue" class="stat-value" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="Tabs" style="flex-grow: 1; flex-direction: row; height: 40px; min-height: 40px; max-height: 40px; justify-content: center; margin-top: 5px; display: none;">
+                <ui:Button text="Entity" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Entity" style="background-image: url(&apos;project://database/Assets/Packs/UiArt/Sprites/Component/Button/btn_rectangle_01_n_bluegray.png?fileID=21300000&amp;guid=68b35d2059b8c46e0a98e53628e9b3af&amp;type=3#btn_rectangle_01_n_bluegray&apos;); background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

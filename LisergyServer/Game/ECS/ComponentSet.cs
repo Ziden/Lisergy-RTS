@@ -14,11 +14,11 @@ namespace Game.ECS
         internal Dictionary<Type, IComponent> _referenceComponents = new Dictionary<Type, IComponent>();
         internal ComponentPointers _pointerComponents = new ComponentPointers();
 
-        internal HashSet<Type> _deltaComponents = new HashSet<Type>();
-        internal HashSet<IComponent> _removedComponents = new HashSet<IComponent>();
+        internal HashSet<Type> _modifiedComponents = new HashSet<Type>();
+        internal HashSet<Type> _removedComponents = new HashSet<Type>();
 
         internal HashSet<Type> _networkedPublic = new HashSet<Type>();
-        internal HashSet<Type> _networkedAll = new HashSet<Type>();
+        internal HashSet<Type> _networkedPrivate = new HashSet<Type>();
 
         internal IEntity _entity;
 
@@ -34,48 +34,47 @@ namespace Game.ECS
         /// <summary>
         /// TODO: Use proper buffers for performance
         /// </summary>
-       
-        public List<IComponent> GetSyncedComponents(PlayerEntity receiver, bool deltaCompression = true)
+
+        public (List<IComponent> updated, HashSet<Type> removed) GetComponentDeltas(PlayerEntity receiver, bool deltaCompression = true)
         {
             _returnBuffer.Clear();
             if (receiver != null && receiver.OwnerID == _entity.OwnerID)
             {
-                foreach (var t in _networkedAll)
+                foreach (var t in _networkedPrivate)
                 {
-                    if (!deltaCompression || _deltaComponents.Contains(t)) _returnBuffer.Add(_pointerComponents.AsInterface(t));
+                    if (!deltaCompression || _modifiedComponents.Contains(t)) _returnBuffer.Add(_pointerComponents.AsInterface(t));
                 }
             }
             else
             {
                 foreach (var t in _networkedPublic)
                 {
-                    if (!deltaCompression || _deltaComponents.Contains(t))
+                    if (!deltaCompression || _modifiedComponents.Contains(t))
                         _returnBuffer.Add(_pointerComponents.AsInterface(t));
                 }
             }
-            foreach (var r in _removedComponents) _returnBuffer.Add(r);
-            return _returnBuffer;
+            return (_returnBuffer, _removedComponents);
         }
 
         public void ClearDeltas()
         {
             _entity.DeltaFlags.Clear();
-            _deltaComponents.Clear();
+            _modifiedComponents.Clear();
             _removedComponents.Clear();
         }
 
         public IReadOnlyCollection<Type> All() => _pointerComponents.Keys;
-       
+
         public ref T Get<T>() where T : unmanaged, IComponent => ref _pointerComponents.AsReference<T>();
 
-        public bool HasDeltas() => _deltaComponents.Count > 0;
-       
+        public bool HasDeltas() => _modifiedComponents.Count > 0 || _removedComponents.Count > 0;
+
         public bool Has<T>() where T : unmanaged, IComponent => _pointerComponents.ContainsKey(typeof(T));
 
-       
+
         public bool HasReference<T>() where T : class, IComponent => _referenceComponents.ContainsKey(typeof(T));
 
-       
+
         public void Add<T>() where T : unmanaged, IComponent
         {
             Add(typeof(T));
@@ -90,26 +89,35 @@ namespace Game.ECS
 
         private void FlagCompnentHasDelta(Type t)
         {
-            if (_networkedAll.Contains(t))
+            if (_networkedPrivate.Contains(t))
             {
-                _deltaComponents.Add(t);
+                _modifiedComponents.Add(t);
                 _entity.DeltaFlags.SetFlag(Network.DeltaFlag.COMPONENTS);
             }
         }
 
+        public void Remove(Type t)
+        {
+            _pointerComponents.Free(t);
+            _removedComponents.Add(t);
+            _modifiedComponents.Remove(t);
+            _entity.DeltaFlags.SetFlag(Network.DeltaFlag.COMPONENTS);
+            UntrackSync(t);
+            _entity.Game.Log.Debug($"Removed {t} from {_entity}");
+        }
 
         public void Remove<T>() where T : unmanaged, IComponent
         {
             var t = typeof(T);
-          
+
             _pointerComponents.Free<T>();
-            if(_networkedAll.Contains(t))
+            if (_networkedPrivate.Contains(t))
             {
-                _removedComponents.Add(default(T));
+                _removedComponents.Add(t);
                 _entity.DeltaFlags.SetFlag(Network.DeltaFlag.COMPONENTS);
             }
             UntrackSync(t);
-            _deltaComponents.Remove(t);
+            _modifiedComponents.Remove(t);
             _entity.Game.Log.Debug($"Removed {typeof(T)} from {_entity}");
         }
 
@@ -122,7 +130,7 @@ namespace Game.ECS
         public void RemoveReference<T>() where T : class, IReferenceComponent
         {
             var t = typeof(T);
-            if(_referenceComponents.TryGetValue(t, out var c))
+            if (_referenceComponents.TryGetValue(t, out var c))
             {
                 if (c is IDisposable d) d.Dispose();
                 _referenceComponents.Remove(t);
@@ -134,7 +142,7 @@ namespace Game.ECS
             var sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
             if (sync != null)
             {
-                _networkedAll.Add(type);
+                _networkedPrivate.Add(type);
                 if (!sync.OnlyMine)
                     _networkedPublic.Add(type);
             }
@@ -145,7 +153,7 @@ namespace Game.ECS
             var sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
             if (sync != null)
             {
-                _networkedAll.Remove(type);
+                _networkedPrivate.Remove(type);
                 if (!sync.OnlyMine)
                     _networkedPublic.Remove(type);
             }
@@ -154,7 +162,7 @@ namespace Game.ECS
         public bool TryGet<T>(out T comp) where T : unmanaged, IComponent => _pointerComponents.TryGet(out comp);
 
         public void CallEvent(IBaseEvent ev) => _entity.Game.Systems.CallEvent(_entity, ev);
-       
+
         public void Save<T>(in T c) where T : IComponent
         {
             var t = c.GetType();
@@ -167,7 +175,7 @@ namespace Game.ECS
             FlagCompnentHasDelta(t);
         }
 
-       
+
         public bool TryGetReference<T>(out T component) where T : class, IReferenceComponent
         {
             if (_referenceComponents.TryGetValue(typeof(T), out var r))
@@ -179,10 +187,10 @@ namespace Game.ECS
             return false;
         }
 
-       
+
         public T GetReference<T>() where T : class, IReferenceComponent => (T)_referenceComponents[typeof(T)];
 
-       
+
         public unsafe T* GetPointer<T>() where T : unmanaged, IComponent
         {
             var t = typeof(T);
@@ -190,12 +198,12 @@ namespace Game.ECS
             return _pointerComponents.AsPointer<T>();
         }
 
-       
+
         public void Dispose() => _pointerComponents.FreeAll();
 
         public IComponent GetByType(Type t) => _pointerComponents.AsInterface(t);
 
-     
+
     }
 
 

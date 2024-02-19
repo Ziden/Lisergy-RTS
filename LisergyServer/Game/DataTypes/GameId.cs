@@ -133,6 +133,15 @@ namespace Game.DataTypes
             return _leftside == id2._leftside && _rightside == id2._rightside;
         }
 
+        public TileVector ToPosition()
+        {
+            return new TileVector()
+            {
+                X = (ushort)_leftside,
+                Y = (ushort)_rightside
+            };
+        }
+
         public GameId(TileVector pos)
         {
             _leftside = pos.X;
