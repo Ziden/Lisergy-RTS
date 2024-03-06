@@ -1,18 +1,20 @@
-﻿using Game.Battle.Data;
-using Game.DataTypes;
-using Game.ECS;
-using Game.Network.ServerPackets;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.ECS;
+using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Party;
-using Game.Systems.Tile;
 using Game.Tile;
 using Game.World;
 using GameData;
 using GameData.Specs;
+using System.Collections.Generic;
 
 namespace Game.Systems.Player
 {
+    /// <summary>
+    /// Interacts with player specific data
+    /// </summary>
     public class PlayerLogic : BaseEntityLogic<PlayerComponent>
     {
         private PlayerData Data => Entity.Components.GetReference<PlayerData>();
@@ -28,6 +30,9 @@ namespace Game.Systems.Player
             return unit;
         }
 
+        /// <summary>
+        /// Creates a new party for the player on the given party index
+        /// </summary>
         public IEntity CreateNewParty(byte index)
         {
             var entity = (PartyEntity)Game.Entities.CreateEntity(Entity.EntityId, EntityType.Party);
@@ -35,6 +40,19 @@ namespace Game.Systems.Player
             party.PartyIndex = index;
             entity.Save(party);
             return entity;
+        }
+
+        /// <summary>
+        /// Gets what the owner of the given entity can build at this moment
+        /// </summary>
+        public List<BuildingConstructionSpec> GetBuildingOptions()
+        {
+            var list = new List<BuildingConstructionSpec>();
+            foreach (var kp in Game.Specs.BuildingConstructions)
+            {
+                list.Add(kp.Value);
+            }
+            return list;
         }
 
         /// <summary>

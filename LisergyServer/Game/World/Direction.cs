@@ -1,4 +1,4 @@
-﻿namespace Game.Systems.Tile
+﻿namespace Game.World
 {
     public enum Direction
     {

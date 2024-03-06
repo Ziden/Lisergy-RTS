@@ -1,4 +1,4 @@
-﻿using Game.DataTypes;
+﻿using Game.Engine.DataTypes;
 using Game.Systems.Tile;
 using Game.Tile;
 using System;
@@ -36,7 +36,7 @@ namespace Game.World
         {
             _data = new ChunkDataHolder();
             _data.Allocate(map.ChunkMapDimensions.x * map.ChunkMapDimensions.y);
-            _data.Position = new TileVector(x, y);
+            _data.Position = new Location(x, y);
             _id = new GameId(_data.Position);
             _tileReferences = new TileEntity[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
             Map = map;
@@ -44,7 +44,7 @@ namespace Game.World
 
         public ref readonly ushort X => ref _data.Position.X;
         public ref readonly ushort Y => ref _data.Position.Y;
-        public ref readonly TileVector Position => ref _data.Position;
+        public ref readonly Location Position => ref _data.Position;
         public ref readonly byte Flags { get => ref _data.ChunkFlags; }
         public void SetFlag(in byte flag) => _data.SetFlag(flag);
         public TileEntity[,] Tiles { get => _tileReferences; private set => _tileReferences = value; }
@@ -52,7 +52,7 @@ namespace Game.World
         public void FreeMemoryForReuse() => _data.FlagToBeReused();
         public ref readonly ChunkDataHolder Data => ref _data;
 
-       
+
         public TileEntity CreateTile(in int internalTileX, in int internalTileY)
         {
             TileData* dataPointer = _data.GetTileData(internalTileX, internalTileY);
@@ -69,10 +69,10 @@ namespace Game.World
             return tile;
         }
 
-       
+
         public override string ToString() => $"<Chunk x={X} y={Y}>";
 
-       
+
         public IEnumerable<TileEntity> AllTiles()
         {
             for (var x = 0; x < _tileReferences.GetLength(0); x++)

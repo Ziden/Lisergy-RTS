@@ -1,10 +1,9 @@
-﻿using Game.GamePlayer;
-using PlayFab;
+﻿using PlayFab;
 using PlayFab.ServerModels;
 
 namespace WebGameLogic.Playfab
 {
-    public class PlayfabInventory : IPlayerInventory
+    public class PlayfabInventory //: IPlayerInventory
     {
         private string _playfabId;
 

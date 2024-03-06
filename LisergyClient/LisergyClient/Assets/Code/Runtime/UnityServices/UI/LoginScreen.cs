@@ -1,7 +1,7 @@
 using Assets.Code.Assets.Code.UIScreens;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Game;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using GameAssets;

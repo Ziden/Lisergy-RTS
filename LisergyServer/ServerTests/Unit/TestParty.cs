@@ -1,5 +1,6 @@
 ﻿using Game;
-using Game.DataTypes;
+using Game.Engine;
+using Game.Engine.DataTypes;
 using Game.Events.ServerEvents;
 using Game.Network.ServerPackets;
 using Game.Systems.Battler;

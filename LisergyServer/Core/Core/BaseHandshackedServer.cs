@@ -1,8 +1,8 @@
 ﻿using BaseServer.Commands;
 using BaseServer.Core;
-using Game;
-using Game.DataTypes;
-using Game.Network;
+using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.Network;
 using Game.Network.ClientPackets;
 using GameServices;
 using LisergyServer.Core;

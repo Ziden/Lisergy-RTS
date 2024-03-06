@@ -1,7 +1,6 @@
 ﻿using ClientSDK.Data;
-using Game.Battle;
-using Game.Battle.Data;
-using Game.DataTypes;
+using Game.Engine.DataTypes;
+using Game.Systems.Battle.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -1,4 +1,4 @@
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using Game.World;
 using NUnit.Framework;
 using ServerTests;

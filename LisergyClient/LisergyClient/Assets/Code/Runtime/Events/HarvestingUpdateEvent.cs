@@ -1,5 +1,6 @@
 using ClientSDK.Data;
 using Game.ECS;
+using Game.Engine.ECS;
 using Game.Systems.Resources;
 using Game.Tile;
 

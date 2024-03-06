@@ -1,7 +1,7 @@
 ﻿
 using BaseServer.Commands;
 using Game;
-using Game.Scheduler;
+using Game.Engine.Scheduler;
 
 namespace LisergyServer.Commands
 {

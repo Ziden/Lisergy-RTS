@@ -1,6 +1,6 @@
 using Game;
-using Game.DataTypes;
 using Game.ECS;
+using Game.Engine.DataTypes;
 using Game.Systems.Building;
 using Game.Systems.Dungeon;
 using Game.Systems.Map;

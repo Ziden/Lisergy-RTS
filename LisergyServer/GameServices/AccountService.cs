@@ -1,5 +1,5 @@
-﻿using Game;
-using Game.DataTypes;
+﻿using Game.Engine;
+using Game.Engine.DataTypes;
 using Game.Network.ClientPackets;
 using Game.Systems.Player;
 using GameServices;

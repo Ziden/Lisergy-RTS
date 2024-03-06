@@ -1,5 +1,5 @@
-﻿using Game.ECS;
-using Game.Events;
+﻿using Game.Engine.ECS;
+using Game.Engine.Events;
 using Game.Systems.Resources;
 using Game.Tile;
 using GameData;

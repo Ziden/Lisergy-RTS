@@ -1,5 +1,5 @@
 ﻿using Game;
-using Game.ECS;
+using Game.Engine.ECS;
 using System;
 
 namespace ClientSDK.Data

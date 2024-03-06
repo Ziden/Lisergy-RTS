@@ -1,6 +1,6 @@
-﻿using Game.Battle.Data;
-using Game.DataTypes;
-using Game.ECS;
+﻿using Game.ECS;
+using Game.Engine.DataTypes;
+using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Party;
@@ -49,11 +49,11 @@ namespace Game.Systems.Player
         /// <summary>
         /// All tiles that the player is currently seeing
         /// </summary>
-        public HashSet<TileVector> VisibleTiles = new HashSet<TileVector>();
+        public HashSet<Location> VisibleTiles = new HashSet<Location>();
 
         /// <summary>
         /// All tiles that the player has seen at least once
         /// </summary>
-        public HashSet<TileVector> OnceExplored = new HashSet<TileVector>();
+        public HashSet<Location> OnceExplored = new HashSet<Location>();
     }
 }

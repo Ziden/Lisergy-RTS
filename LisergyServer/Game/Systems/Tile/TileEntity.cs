@@ -1,16 +1,17 @@
-﻿using Game.DataTypes;
-using Game.ECS;
+﻿using Game.ECS;
 using Game.Events.ServerEvents;
-using Game.Events;
-using Game.Network;
 using Game.Systems.FogOfWar;
 using Game.Systems.Player;
 using Game.Systems.Tile;
-using Game.World;
 using System;
 using System.Collections.Generic;
 using GameData;
 using Game.Systems.Resources;
+using Game.Engine.Events;
+using Game.Engine.ECS;
+using Game.Engine.DataTypes;
+using Game.Engine.Network;
+using Game.World;
 
 namespace Game.Tile
 {
@@ -20,7 +21,7 @@ namespace Game.Tile
         private Chunk _chunk;
         private GameId _id;
         private DeltaFlags _flags;
-        private TileVector _position;
+        private Location _position;
         public ComponentSet _components { get; private set; }
         public EntityType EntityType => EntityType.Tile;
 
@@ -28,7 +29,7 @@ namespace Game.Tile
         {
             _chunk = c;
             _tileData = tileData;
-            _position = new TileVector(x, y);
+            _position = new Location(x, y);
             _id = new GameId(_position);
             _components = new ComponentSet(this);
             DeltaFlags = new DeltaFlags(this);
@@ -97,7 +98,7 @@ namespace Game.Tile
         public ref Chunk Chunk => ref _chunk;
         public TileSpecId SpecId { get => _tileData->TileId; set { _tileData->TileId = value; OnUpdated(); } }
         public float MovementFactor { get => Game.Specs.Tiles[SpecId].MovementFactor; }
-        public ref readonly TileVector Position => ref _position;
+        public ref readonly Location Position => ref _position;
         public ref readonly ushort Y { get => ref Position.Y; }
         public ref readonly ushort X { get => ref Position.X; }
         public IReadOnlyCollection<PlayerEntity> PlayersViewing => _components.GetReference<TileVisibility>().PlayersViewing;

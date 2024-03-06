@@ -1,6 +1,6 @@
 ﻿using BaseServer.Commands;
-using Game;
-using Game.Network;
+using Game.Engine;
+using Game.Engine.Network;
 using System;
 using Telepathy;
 

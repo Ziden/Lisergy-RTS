@@ -1,7 +1,7 @@
-﻿using Game;
-using MapServer;
+﻿using MapServer;
 using Terminal.Gui;
 using ServerTests.Integration.Stubs;
+using Game.Engine;
 
 bool UI = false;
 

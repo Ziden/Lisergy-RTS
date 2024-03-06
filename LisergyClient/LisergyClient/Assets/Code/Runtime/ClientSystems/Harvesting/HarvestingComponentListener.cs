@@ -1,6 +1,7 @@
 using Assets.Code.World;
 using ClientSDK;
 using Game.ECS;
+using Game.Engine.ECS;
 using Game.Systems.Resources;
 using GameAssets;
 

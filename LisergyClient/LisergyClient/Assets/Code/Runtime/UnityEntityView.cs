@@ -5,6 +5,7 @@ using Assets.Code.Assets.Code.Assets;
 using ClientSDK.Data;
 using Game;
 using Game.ECS;
+using Game.Engine.ECS;
 using System;
 using UnityEngine;
 

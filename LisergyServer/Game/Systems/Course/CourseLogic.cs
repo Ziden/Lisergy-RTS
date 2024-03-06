@@ -1,18 +1,18 @@
 ﻿using System;
-using Game.DataTypes;
-using Game.ECS;
-using Game.Scheduler;
-using Game.World;
 using System.Collections.Generic;
-using Game.Events;
 using Game.Systems.Course;
 using Game.Tile;
+using Game.Engine.Events;
+using Game.Engine.ECS;
+using Game.Engine.DataTypes;
+using Game.Engine.Scheduler;
+using Game.World;
 
 namespace Game.Systems.Movement
 {
     public unsafe class CourseLogic : BaseEntityLogic<CourseComponent>
     {
-        public bool TryStartMovement(List<TileVector> sentPath, CourseIntent intent)
+        public bool TryStartMovement(List<Location> sentPath, CourseIntent intent)
         {
             var owner = Game.Players.GetPlayer(Entity.OwnerID);
             foreach (var position in sentPath)

@@ -1,14 +1,14 @@
 ﻿using Game.Events.ServerEvents;
-using Game.Network;
 using System.Collections.Generic;
 using Game.Systems.Movement;
 using Game.Systems.Player;
 using Game.Systems.MapPosition;
 using System.Linq;
 using System;
-using Game.Events;
 using System.Runtime.CompilerServices;
 using Game.ECS;
+using Game.Engine.Network;
+using Game.Engine;
 
 namespace Game
 {

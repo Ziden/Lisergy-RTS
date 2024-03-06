@@ -1,5 +1,5 @@
 ﻿using ClientSDK.Services;
-using Game.ECS;
+using Game.Engine.ECS;
 using Game.Systems.Map;
 using System;
 using System.Collections.Generic;

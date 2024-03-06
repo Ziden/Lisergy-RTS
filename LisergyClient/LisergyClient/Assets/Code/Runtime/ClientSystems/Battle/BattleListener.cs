@@ -1,7 +1,7 @@
 ﻿using Assets.Code.Assets.Code.UIScreens.Base;
 using Game.Events;
-using Game.Events.Bus;
-using Game.Network;
+using Game.Engine.Events.Bus;
+using Game.Engine.Network;
 using Game.Network.ServerPackets;
 
 namespace Assets.Code.Battle

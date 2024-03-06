@@ -2,8 +2,7 @@
 using ClientSDK.Modules;
 using ClientSDK.SDKEvents;
 using Game;
-using Game.DataTypes;
-
+using Game.Engine.DataTypes;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Systems.Map;

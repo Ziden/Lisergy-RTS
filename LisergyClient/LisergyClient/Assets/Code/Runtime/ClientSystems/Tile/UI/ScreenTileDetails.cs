@@ -1,5 +1,5 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Systems.Resources;
@@ -43,7 +43,7 @@ namespace Assets.Code.UI
             Root.Q<Label>("HarvestTime").Required().text = $"{timeToHarvest.ToReadableString()}";
 
             _resource = Root.Q<WidgetResourceDisplay>("Resource").Required();
-            _resource.Display(tileResources.Resource.ResourceId, tileResources.Resource.Amount);
+            _resource.SetData(tileResources.Resource.ResourceId, tileResources.Resource.Amount);
         }
 
         private void OnClickHarvest()

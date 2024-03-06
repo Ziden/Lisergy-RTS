@@ -1,6 +1,7 @@
 using ClientSDK;
 using Game.ECS;
-using Game.Events.Bus;
+using Game.Engine.ECS;
+using Game.Engine.Events.Bus;
 
 public interface IComponentListener : IEventListener { }
 

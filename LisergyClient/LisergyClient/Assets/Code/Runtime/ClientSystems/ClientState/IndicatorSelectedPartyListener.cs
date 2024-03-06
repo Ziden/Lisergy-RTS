@@ -3,7 +3,7 @@ using Assets.Code.Assets.Code.Runtime;
 using ClientSDK;
 using Game;
 using Game.ECS;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using GameAssets;
 using UnityEngine;
 

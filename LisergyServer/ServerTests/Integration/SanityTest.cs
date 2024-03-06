@@ -1,5 +1,6 @@
 ﻿using Game;
-using Game.ECS;
+using Game.Engine;
+using Game.Engine.ECS;
 using Game.Events.ServerEvents;
 using Game.Systems.FogOfWar;
 using Game.Systems.Map;
@@ -104,7 +105,7 @@ namespace ServerTests.Integration
                 Assert.AreEqual(tile.X, tilePacket.Position.X);
                 Assert.AreEqual(tile.Y, tilePacket.Position.Y);
                 Assert.AreEqual(tile.SpecId, tilePacket.Data.TileId);
-                Assert.AreEqual(new TileVector(tile.X >> GameWorld.CHUNK_SIZE_BITSHIFT, tile.Y >> GameWorld.CHUNK_SIZE_BITSHIFT), tile.Chunk.Position);
+                Assert.AreEqual(new Location(tile.X >> GameWorld.CHUNK_SIZE_BITSHIFT, tile.Y >> GameWorld.CHUNK_SIZE_BITSHIFT), tile.Chunk.Position);
             }
 
             // RECEIVE ENTITIES

@@ -1,8 +1,8 @@
-﻿using Game;
-using Game.DataTypes;
-using Game.Events.Bus;
+﻿using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.Events.Bus;
+using Game.Engine.Network;
 using Game.Events.ServerEvents;
-using Game.Network;
 using Game.Network.ClientPackets;
 using Game.Systems.Player;
 using System;

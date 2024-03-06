@@ -1,13 +1,12 @@
 using Game;
-using Game.Battle;
-using Game.DataTypes;
+using Game.Engine.DataTypes;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
+using Game.Systems.Battle;
 using Game.Systems.Battler;
 using Game.Systems.Dungeon;
 using Game.Systems.Movement;
 using Game.Systems.Party;
-using Game.Systems.Tile;
 using Game.World;
 using NUnit.Framework;
 using ServerTests;
@@ -19,7 +18,7 @@ namespace UnitTests
     public class TestBattleListener
     {
         private TestGame _game;
-        private List<TileVector> _path;
+        private List<Location> _path;
         private TestServerPlayer _player;
         private PartyEntity _party;
         private DungeonEntity _dungeon;
@@ -29,7 +28,7 @@ namespace UnitTests
         {
             _game = new TestGame();
             _player = _game.GetTestPlayer();
-            _path = new List<TileVector>();
+            _path = new List<Location>();
             _party = _player.GetParty(0);
             _dungeon = (DungeonEntity)_game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
             _dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);

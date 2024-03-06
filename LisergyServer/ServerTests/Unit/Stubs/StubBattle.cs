@@ -1,6 +1,6 @@
-﻿using Game.Battle;
-using Game.Battle.Data;
-using Game.DataTypes;
+﻿using Game.Engine.DataTypes;
+using Game.Systems.Battle;
+using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
 using System;
 using System.Linq;

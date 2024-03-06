@@ -1,10 +1,12 @@
-﻿using Game.DataTypes;
-using Game.ECS;
+﻿using Game.ECS;
 using Game.Network;
 using Game.Tile;
 using System;
 using Game.Systems.Player;
 using Game.Systems.MapPosition;
+using Game.Engine.ECS;
+using Game.Engine.DataTypes;
+using Game.Engine.Network;
 
 namespace Game
 {

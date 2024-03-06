@@ -2,9 +2,10 @@ using Assets.Code.Views;
 using ClientSDK;
 using Cysharp.Threading.Tasks;
 using Game.Events;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using System;
 using System.Collections.Generic;
+using Game.Engine.Events;
 
 /// <summary>
 /// A pipeline to proccess tile decoration.

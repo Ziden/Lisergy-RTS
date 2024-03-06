@@ -1,5 +1,5 @@
-﻿using Game;
-using Game.Events;
+﻿using Game.Engine;
+using Game.Engine.Events;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

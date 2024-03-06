@@ -2,10 +2,10 @@
 using Assets.Code.World;
 using DG.Tweening;
 using Game;
-using Game.Battle;
-using Game.Battle.BattleActions;
-using Game.Battle.BattleEvents;
-using Game.Battle.Data;
+using Game.Engine.DataTypes;
+using Game.Systems.Battle.BattleActions;
+using Game.Systems.Battle.BattleEvents;
+using Game.Systems.Battle.Data;
 using GameAssets;
 using System;
 using System.Linq;

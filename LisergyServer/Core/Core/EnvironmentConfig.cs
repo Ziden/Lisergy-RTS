@@ -1,4 +1,4 @@
-﻿using Game.DataTypes;
+﻿using Game.Engine.DataTypes;
 
 namespace BaseServer.Core
 {

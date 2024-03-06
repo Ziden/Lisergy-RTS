@@ -1,8 +1,8 @@
 ﻿using BaseServer.Commands;
 using BaseServer.Core;
-using Game;
+using Game.Engine;
+using Game.Engine.Network;
 using Game.Events.ServerEvents;
-using Game.Network;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
 using GameServices;

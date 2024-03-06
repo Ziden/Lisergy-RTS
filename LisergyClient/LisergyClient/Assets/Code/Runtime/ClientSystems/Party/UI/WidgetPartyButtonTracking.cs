@@ -1,8 +1,8 @@
 using Assets.Code.ClientSystems.Party.UI;
 using ClientSDK;
 using Cysharp.Threading.Tasks;
-using Game.ECS;
-using Game.Events.Bus;
+using Game.Engine.ECS;
+using Game.Engine.Events.Bus;
 using Game.Systems.Battler;
 using Game.Systems.Movement;
 using Game.Systems.Resources;
@@ -191,7 +191,7 @@ namespace Party.UI
         {
             _taskSymbol.style.display = DisplayStyle.None;
             _taskOverlay.style.display = DisplayStyle.None;
-            _progressBar.Pause();
+            _progressBar?.Pause();
             _progressBar = null;
             HideBar();
         }

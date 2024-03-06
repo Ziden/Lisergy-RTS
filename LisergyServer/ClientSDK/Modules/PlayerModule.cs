@@ -1,7 +1,7 @@
 ﻿using ClientSDK.SDKEvents;
-using Game.DataTypes;
+using Game.Engine.DataTypes;
+using Game.Engine.Events.Bus;
 using Game.Events;
-using Game.Events.Bus;
 using Game.Systems.Building;
 using Game.Systems.Party;
 using Game.Systems.Player;

@@ -1,10 +1,12 @@
-﻿using Game.Battle;
-using Game.DataTypes;
+﻿using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.Events;
+using Game.Engine.Events.Bus;
+using Game.Engine.Scheduler;
 using Game.Events;
-using Game.Events.Bus;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
-using Game.Scheduler;
+using Game.Systems.Battle;
 using Game.Systems.Player;
 using Game.World;
 using System;

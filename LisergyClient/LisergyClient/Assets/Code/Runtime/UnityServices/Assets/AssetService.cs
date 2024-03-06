@@ -103,7 +103,7 @@ namespace Assets.Code.Assets.Code.Assets
         public async UniTask<Texture2D> GetPrefabIcon(ArtSpec spec)
         {
             var prefab = await _prefabs.LoadAsync(spec.Address);
-            return PrefabUtility.GetIconForGameObject(prefab);
+            return AssetPreview.GetAssetPreview(prefab);
         }
     }
 }

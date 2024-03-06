@@ -2,7 +2,7 @@ using Assets.Code.Views;
 using ClientSDK;
 using ClientSDK.Data;
 using Cysharp.Threading.Tasks;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using Game.Systems.FogOfWar;
 using Game.Systems.Tile;
 using Game.World;

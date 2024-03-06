@@ -1,5 +1,5 @@
-﻿using Game;
-using Game.Events;
+﻿using Game.Engine;
+using Game.Engine.Events;
 using MapServer;
 using NServiceBus.Logging;
 using System.Collections;

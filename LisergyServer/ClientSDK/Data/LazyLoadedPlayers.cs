@@ -1,7 +1,7 @@
-﻿using Game.DataTypes;
-using Game.Systems.Player;
-using Game.World;
+﻿using Game.Systems.Player;
 using Game;
+using Game.Engine.DataTypes;
+using Game.World;
 
 namespace ClientSDK.Data
 {

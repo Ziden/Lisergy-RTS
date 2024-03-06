@@ -1,8 +1,7 @@
 using Assets.Code.Assets.Code.Runtime;
 using Assets.Code.UI;
 using ClientSDK;
-using Game.ECS;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using Game.Systems.Party;
 using Game.Tile;
 

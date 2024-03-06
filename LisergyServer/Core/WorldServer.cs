@@ -1,9 +1,10 @@
 ﻿using BaseServer.Commands;
 using Game;
-using Game.DataTypes;
+using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.Network;
+using Game.Engine.Scheduler;
 using Game.Events.ServerEvents;
-using Game.Network;
-using Game.Scheduler;
 using Game.Services;
 using LisergyServer.Commands;
 using LisergyServer.Core;

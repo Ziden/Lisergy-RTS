@@ -5,7 +5,7 @@ using UnityEngine;
 using Assets.Code;
 using ClientSDK;
 using ClientSDK.SDKEvents;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using Assets.Code.Assets.Code.Runtime;
 
 /// <summary>

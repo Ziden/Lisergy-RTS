@@ -25,7 +25,7 @@ namespace Resource.UI
             _specs = client.Game.Specs;
         }
 
-        public void Display(ResourceSpecId id, int amount)
+        public void SetData(ResourceSpecId id, int amount)
         {
             var resourceSpec = _specs.Resources[id];
             _icon.SetBackground(resourceSpec.Art);

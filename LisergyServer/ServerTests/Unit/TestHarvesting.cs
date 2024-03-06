@@ -2,20 +2,19 @@ using NUnit.Framework;
 using ServerTests;
 using Game.Systems.Player;
 using Game.Tile;
-using Game.Systems.Tile;
 using GameDataTest;
 using Game.Systems.Party;
-using Game.World;
 using Game.Systems.Resources;
-using Game.Scheduler;
 using Game.Network.ClientPackets;
 using System.Collections.Generic;
 using Game.Systems.Movement;
 using Game.Events.ServerEvents;
 using System.Linq;
 using System;
-using Game;
 using GameDataTest.TestWorldGenerator;
+using Game.Engine.Scheduler;
+using Game.Engine;
+using Game.World;
 
 namespace UnitTests
 {
@@ -189,11 +188,9 @@ namespace UnitTests
             _scheduler.SetLogicalTime(_game.GameTime + (totalTime / 2));
 
             // Harvest the remaining half
-            _party.EntityLogic.Harvesting.StopHarvesting();
+            var firstHarvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
 
-            var tileResourceAfterFirst = _logs.Get<TileResourceComponent>();
-
-            _party.EntityLogic.Harvesting.StartHarvesting(_logs);
+            Assert.IsTrue(_party.EntityLogic.Harvesting.StartHarvesting(_logs));
             _scheduler.SetLogicalTime(_game.GameTime + totalTime);
             var harvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
             var cargo = _party.Get<CargoComponent>();
@@ -212,7 +209,7 @@ namespace UnitTests
             Assert.IsFalse(_party.Components.Has<HarvestingComponent>());
 
             // Course starts harvesting
-            var ev = new MoveRequestPacket() { Path = new List<TileVector>() { _logs.Position }, PartyIndex = _party.PartyIndex, Intent = CourseIntent.Harvest };
+            var ev = new MoveRequestPacket() { Path = new List<Location>() { _logs.Position }, PartyIndex = _party.PartyIndex, Intent = CourseIntent.Harvest };
             ev.Sender = _player;
             _game.HandleClientEvent(_player, ev);
             _game.GameScheduler.Tick(_game.GameTime + _party.Course.Delay);
@@ -223,7 +220,7 @@ namespace UnitTests
             Assert.IsTrue(tileResources->BeingHarvested);
 
             // Course to end harvesting
-            ev = new MoveRequestPacket() { Path = new List<TileVector>() { _logs.GetNeighbor(Direction.SOUTH).Position }, PartyIndex = _party.PartyIndex };
+            ev = new MoveRequestPacket() { Path = new List<Location>() { _logs.GetNeighbor(Direction.SOUTH).Position }, PartyIndex = _party.PartyIndex };
             ev.Sender = _player;
             _game.HandleClientEvent(_player, ev);
             _game.GameScheduler.Tick(_game.GameTime + _party.Course.Delay);

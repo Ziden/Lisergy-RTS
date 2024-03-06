@@ -25,14 +25,14 @@ public class WidgetCargoComponent : VisualStruct
         if(cargo.Slot1.Amount > 0)
         {
             _resources[0].Show();
-            _resources[0].Display(cargo.Slot1.ResourceId, cargo.Slot1.Amount);
+            _resources[0].SetData(cargo.Slot1.ResourceId, cargo.Slot1.Amount);
         }
         else _resources[0].Hide();
 
         if (cargo.Slot2.Amount > 0)
         {
             _resources[1].Show();
-            _resources[1].Display(cargo.Slot2.ResourceId, cargo.Slot2.Amount);
+            _resources[1].SetData(cargo.Slot2.ResourceId, cargo.Slot2.Amount);
         }
         else _resources[1].Hide();
 

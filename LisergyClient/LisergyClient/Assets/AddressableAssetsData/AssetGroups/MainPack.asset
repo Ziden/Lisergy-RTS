@@ -2367,11 +2367,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: db144769347ec7a48a63c10a2313d990
-    m_Address: Assets/Addressables/UIScreens/Components/ScrollableIconButton.uxml
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 66d66aac1c9c2434a89033c121fa197c
     m_Address: Assets/Addressables/UIScreens/SelectBuildingScreen.uxml
     m_ReadOnly: 0
@@ -2394,6 +2389,21 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5193186771e11435f8761b7ece8ba3ba
     m_Address: Assets/Packs/UiArt/Sprites/Component/Icon_ItemIcons_(Original)/icon_itemicon_battle.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a2b985356e81714f9b0306b8a028794
+    m_Address: Assets/Addressables/Sprites/Icons/Places/camp_place.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2aebd1af261c4b24cb4923b82aa28c2a
+    m_Address: Assets/Addressables/Sprites/Icons/Places/castle_place.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c14715936179504bb09216114cc72bb
+    m_Address: Assets/Addressables/Sprites/Icons/Places/farm_place.jpg
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

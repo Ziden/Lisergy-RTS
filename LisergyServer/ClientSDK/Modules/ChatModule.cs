@@ -1,8 +1,7 @@
 ﻿using ClientSDK.SDKEvents;
 using ClientSDK.Services;
-using Game;
-using Game.DataTypes;
 using Game.ECS;
+using Game.Engine;
 using Game.Network.ClientPackets;
 using Game.Systems.Map;
 using System;

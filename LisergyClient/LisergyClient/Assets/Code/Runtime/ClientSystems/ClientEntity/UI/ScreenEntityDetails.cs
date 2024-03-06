@@ -1,6 +1,7 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Game.ECS;
-using Game.Events.Bus;
+using Game.Engine.ECS;
+using Game.Engine.Events.Bus;
 using Game.Systems.Battler;
 using Game.Systems.Party;
 using Game.Systems.Resources;

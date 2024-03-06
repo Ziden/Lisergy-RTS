@@ -1,4 +1,4 @@
-using Game.DataTypes;
+using Game.Engine.DataTypes;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Systems.Battler;
@@ -6,7 +6,6 @@ using Game.Systems.FogOfWar;
 using Game.Systems.Map;
 using Game.Systems.Movement;
 using Game.Systems.Party;
-using Game.Systems.Tile;
 using Game.World;
 using NUnit.Framework;
 using ServerTests;
@@ -19,7 +18,7 @@ namespace UnitTests
     public class TestMovement
     {
         private TestGame _game;
-        private List<TileVector> _path;
+        private List<Location> _path;
         private TestServerPlayer _player;
         private PartyEntity _party;
 
@@ -28,7 +27,7 @@ namespace UnitTests
         {
             _game = new TestGame();
             _player = _game.GetTestPlayer();
-            _path = new List<TileVector>();
+            _path = new List<Location>();
             _party = _player.GetParty(0);
         }
 
@@ -44,7 +43,7 @@ namespace UnitTests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new TileVector(next.X, next.Y));
+            _path.Add(new Location(next.X, next.Y));
 
             SendMoveRequest();
 
@@ -60,7 +59,7 @@ namespace UnitTests
 
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new TileVector(next.X, next.Y));
+            _path.Add(new Location(next.X, next.Y));
 
             _player.ListenTo<EntityMoveInEvent>();
 
@@ -93,7 +92,7 @@ namespace UnitTests
             _player.ReceivedPackets.Clear();
 
             // Moving player2 to 5 7 which is slightly outside p1 vision
-            _path.Add(new TileVector(5, 7));
+            _path.Add(new Location(5, 7));
             _game.HandleClientEvent(player2, new MoveRequestPacket() { Path = _path, PartyIndex = player2Party.PartyIndex });
             _game.GameScheduler.Tick(_game.GameScheduler.Now + player2Party.Course.Delay);
 
@@ -109,7 +108,7 @@ namespace UnitTests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new TileVector(next.X, next.Y));
+            _path.Add(new Location(next.X, next.Y));
 
             _game.Entities.DeltaCompression.ClearDeltas();
             _player.ReceivedPackets.Clear();
@@ -145,12 +144,12 @@ namespace UnitTests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new TileVector(next.X, next.Y));
+            _path.Add(new Location(next.X, next.Y));
 
             SendMoveRequest();
             var course1 = _game.GameScheduler.Queue.First();
 
-            _path.Add(new TileVector(next.X + 1, next.Y));
+            _path.Add(new Location(next.X + 1, next.Y));
             SendMoveRequest();
             var course2 = _game.GameScheduler.Queue.First();
 
@@ -165,12 +164,12 @@ namespace UnitTests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new TileVector(next.X, next.Y));
+            _path.Add(new Location(next.X, next.Y));
             var component = _party.Get<BattleGroupComponent>();
             component.BattleID = GameId.Generate();
             _party.Save(component);
 
-            _path.Add(new TileVector(next.X + 1, next.Y));
+            _path.Add(new Location(next.X + 1, next.Y));
             SendMoveRequest();
 
             Assert.AreEqual(GameId.ZERO, _party.Get<CourseComponent>().CourseId);
@@ -186,9 +185,9 @@ namespace UnitTests
             var next1 = tile.GetNeighbor(Direction.SOUTH);
             var next2 = next1.GetNeighbor(Direction.SOUTH);
             var next3 = next2.GetNeighbor(Direction.SOUTH);
-            _path.Add(new TileVector(next1.X, next1.Y));
-            _path.Add(new TileVector(next2.X, next2.Y));
-            _path.Add(new TileVector(next3.X, next3.Y));
+            _path.Add(new Location(next1.X, next1.Y));
+            _path.Add(new Location(next2.X, next2.Y));
+            _path.Add(new Location(next3.X, next3.Y));
 
             _game.Entities.DeltaCompression.ClearDeltas();
             _player.ReceivedPackets.Clear();

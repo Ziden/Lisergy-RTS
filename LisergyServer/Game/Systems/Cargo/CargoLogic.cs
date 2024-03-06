@@ -1,11 +1,11 @@
-using Game.ECS;
+using Game.Engine.ECS;
 
 namespace Game.Systems.Resources
 {
-	/// <summary>
-	/// Logic for any entity that has a cargo component meaning he can harvest resources
-	/// </summary>
-	public unsafe class CargoLogic : BaseEntityLogic<CargoComponent>
+    /// <summary>
+    /// Logic for any entity that has a cargo component meaning he can harvest resources
+    /// </summary>
+    public unsafe class CargoLogic : BaseEntityLogic<CargoComponent>
 	{
 		/// <summary>
 		/// Checks if there's room on the given unit cargo to store 
@@ -23,9 +23,27 @@ namespace Game.Systems.Resources
 		}
 
 		/// <summary>
-		/// Adds the given resource stack to the entity cargo
+		/// Modifies the given resource stack to have maximum amount that the player can carry
+		/// Returns the amount that was trimmed out
 		/// </summary>
-		public bool AddTocargo(in ResourceStackData resource)
+        public int TrimResourcesToMaxCargo(ref ResourceStackData resource)
+        {
+            var cargo = Entity.Get<CargoComponent>();
+            var spec = Game.Specs.Resources[resource.ResourceId];
+			var canCarry = cargo.RemainingWeight / spec.WeightPerUnit;
+			var excess = resource.Amount - canCarry;
+			if (excess > 0)
+			{
+				resource.Amount -= (ushort)excess;
+				return excess;
+			}
+			return 0;
+        }
+
+        /// <summary>
+        /// Adds the given resource stack to the entity cargo
+        /// </summary>
+        public bool AddTocargo(in ResourceStackData resource)
 		{
 			var slot = GetAvailableSpace(resource);
 			if(slot == -1)

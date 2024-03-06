@@ -2,6 +2,8 @@
 using ClientSDK;
 using Cysharp.Threading.Tasks;
 using Game.ECS;
+using Game.Engine.ECS;
+using Game.Engine.Events;
 using Game.Events;
 using Game.Systems.Resources;
 using Game.Tile;

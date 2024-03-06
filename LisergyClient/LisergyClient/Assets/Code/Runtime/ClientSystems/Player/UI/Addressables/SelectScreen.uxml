@@ -1,0 +1,40 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Rendering/UI%20Toolkit/base.uss?fileID=7433441132597879392&amp;guid=f09695809089cfe4d9eac34818d302c8&amp;type=3#base" />
+    <ui:VisualElement name="Screen" class="screen" style="flex-direction: column; -unity-background-image-tint-color: rgb(255, 255, 255); width: auto; height: 100%; flex-grow: 0; justify-content: flex-start;">
+        <ui:VisualElement name="Header" class="header" style="flex-shrink: 1; display: flex; visibility: visible; align-self: auto;">
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="BackButton" focusable="false" tabindex="2" class="header-back">
+                <ui:VisualElement name="ArrowIcon" picking-mode="Ignore" class="header-back__icon" />
+            </ui:Button>
+            <ui:Label tabindex="-1" text="Select" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" class="header__title" style="-unity-font: resource(&apos;font/BreatheFireIii-PKLOB&apos;);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Body" style="flex-grow: 0; width: 100%; height: auto; display: flex; align-self: center;">
+            <ui:ScrollView name="Scroll" mode="Horizontal" nested-interaction-kind="Default" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" elasticity="0.5" mouse-wheel-scroll-size="50" style="width: 100%; height: 436px; flex-direction: row; flex-grow: 1; align-items: center; justify-content: flex-start; align-self: center; -unity-text-align: middle-center; background-image: url(&quot;project://database/Assets/Packs/UiArt/Sprites/Component/Frame/frame_linetextframe_02_2.png?fileID=21300000&amp;guid=81f9915ab6f8b43dd9e4f78cc8bb3325&amp;type=3#frame_linetextframe_02_2&quot;); min-height: 150px; display: flex; flex-shrink: 0; max-width: none; -unity-background-scale-mode: scale-and-crop; margin-top: 10px;">
+                <ui:VisualElement name="Items" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; margin-left: 0; align-items: center; height: 412px;" />
+            </ui:ScrollView>
+            <ui:VisualElement name="SelectionRow" class="selection-row" style="display: none; visibility: hidden;">
+                <ui:VisualElement name="BuildingSelection" class="icon-button">
+                    <ui:Label tabindex="-1" text="Castle" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Name" class="icon-buton__name" />
+                    <ui:VisualElement name="Icon" class="icon-button__icon" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="BuildingDetails" picking-mode="Ignore" style="flex-grow: 0; width: auto; height: auto; background-image: none; flex-direction: row; justify-content: flex-end; align-items: center; align-self: flex-end; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; display: flex; flex-shrink: 1; flex-wrap: wrap; position: absolute; right: 35px; visibility: visible; bottom: 35px;">
+            <ui:VisualElement name="DetailsContainer" style="align-self: flex-end; align-items: center; justify-content: space-around; width: auto; flex-direction: column; margin-top: 10px; padding-top: 5px; padding-right: 5px; padding-bottom: 13px; padding-left: 5px; background-image: url(&quot;project://database/Assets/Packs/UiArt/Sprites/Component/Frame/frame_stageframe_04_d.png?fileID=21300000&amp;guid=9d3b67463bf7f4935a3aa15d2fe8453c&amp;type=3#frame_stageframe_04_d&quot;);">
+                <ui:Label tabindex="-1" text="Serves as a deposit for other resources. You can deposit if you want to&#10;But you dont need to. You know..." parse-escape-sequences="true" display-tooltip-when-elided="true" name="Desc" style="-unity-font-style: bold; font-size: 27px; -unity-text-align: upper-center; color: rgb(255, 255, 255); -unity-text-outline-width: 0; -unity-text-outline-color: rgb(0, 0, 0); text-shadow: 0 0 0 rgba(255, 255, 255, 0); flex-grow: 0; overflow: visible; flex-wrap: wrap; flex-direction: column; white-space: normal; display: flex; -unity-font: resource(&apos;font/BreatheFireIii-PKLOB&apos;); margin-bottom: 10px; background-color: rgb(60, 46, 65); padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; width: 535px;" />
+                <ui:VisualElement name="Cost" style="flex-grow: 0; flex-direction: row; flex-shrink: 0; margin-top: 0; justify-content: space-around; width: 100%; padding-right: 15px; padding-left: 15px;">
+                    <Resource.UI.WidgetResourceDisplay />
+                    <Resource.UI.WidgetResourceDisplay />
+                    <Resource.UI.WidgetResourceDisplay />
+                    <Resource.UI.WidgetResourceDisplay />
+                </ui:VisualElement>
+                <ui:VisualElement name="BuildTime" style="flex-grow: 0; width: auto; height: auto; background-image: none; flex-direction: row; justify-content: space-between; align-items: center; margin-top: 15px;">
+                    <ui:VisualElement name="TimeIcon" style="flex-grow: 0; width: 39px; height: 41px; background-image: url(&quot;project://database/Assets/Packs/UiArt/Sprites/Component/Icon_PictoIcons_(Original)/btn_icon_timer.png?fileID=21300000&amp;guid=bd877b5c67dfe43c8a6195e4deee07c7&amp;type=3#btn_icon_timer&quot;); flex-shrink: 0; margin-right: 9px;" />
+                    <ui:Label tabindex="-1" text="10 Seconds" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BuildTime" style="-unity-font-style: bold; font-size: 28px; color: rgb(255, 255, 255); -unity-font: resource(&apos;font/BreatheFireIii-PKLOB&apos;);" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Actions" style="flex-grow: 1; width: 100%; align-self: center; justify-content: flex-start; align-items: center; padding-bottom: 24px; display: none; visibility: hidden;">
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="ActionButton" class="confirm-button" style="position: absolute; height: 71px; width: 114px; align-self: center; align-items: flex-start;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

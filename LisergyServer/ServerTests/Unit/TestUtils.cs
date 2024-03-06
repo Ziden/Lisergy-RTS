@@ -1,6 +1,5 @@
-using Game;
-using Game.DataTypes;
-using Game.Network.ClientPackets;
+
+using Game.Engine.DataTypes;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

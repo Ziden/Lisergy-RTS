@@ -3,7 +3,7 @@ using Assets.Code.ClientSystems.Party.UI;
 using ClientSDK;
 using ClientSDK.SDKEvents;
 using ClientSDK.Services;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Party;

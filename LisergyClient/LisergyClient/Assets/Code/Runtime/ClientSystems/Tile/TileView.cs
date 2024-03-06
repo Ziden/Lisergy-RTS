@@ -3,7 +3,7 @@ using ClientSDK.Data;
 using UnityEngine;
 using Game;
 using System.Collections.Generic;
-using Game.DataTypes;
+using Game.Engine.DataTypes;
 using GameAssets;
 
 namespace Assets.Code.Views

@@ -1,6 +1,6 @@
 ﻿using Game;
-using Game.DataTypes;
-using Game.ECS;
+using Game.Engine.DataTypes;
+using Game.Engine.ECS;
 using System;
 using System.Collections.Generic;
 using System.Text;

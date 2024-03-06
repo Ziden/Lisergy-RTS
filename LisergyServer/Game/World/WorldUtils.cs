@@ -1,5 +1,4 @@
-﻿using Game.DataTypes;
-using Game.Systems.Tile;
+﻿using Game.Engine.DataTypes;
 using Game.Tile;
 using System;
 using System.Collections.Generic;
@@ -115,8 +114,8 @@ namespace Game.World
         {
             return Math.Abs(tile.X - t2.X) + Math.Abs(tile.Y - t2.Y);
         }
-        
-        public static int Distance(this TileVector tile, in TileVector t2)
+
+        public static int Distance(this Location tile, in Location t2)
         {
             return Math.Abs(tile.X - t2.X) + Math.Abs(tile.Y - t2.Y);
         }
@@ -135,7 +134,7 @@ namespace Game.World
         public static IEnumerable<TileEntity> GetAOE(this TileEntity tile, ushort radius)
         {
             for (var xx = -radius; xx <= radius; xx++)
-                for (var yy = - radius; yy <= radius; yy++)
+                for (var yy = -radius; yy <= radius; yy++)
                 {
                     if (xx == -radius && yy == -radius) continue;
                     if (xx == -radius && yy == radius) continue;

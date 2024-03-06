@@ -1,4 +1,4 @@
-﻿using Game.ECS;
+﻿using Game.Engine.ECS;
 using Game.Systems.Harvesting;
 
 namespace Game.Systems.Resources

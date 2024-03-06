@@ -1,5 +1,5 @@
 ﻿using ClientSDK.Data;
-using Game.ECS;
+using Game.Engine.ECS;
 
 namespace ClientSDK.SDKEvents
 {

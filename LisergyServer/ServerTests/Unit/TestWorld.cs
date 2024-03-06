@@ -1,5 +1,4 @@
-﻿using Game.DataTypes;
-using Game.World;
+﻿using Game.World;
 using GameData;
 using NUnit.Framework;
 using ServerTests;

@@ -8,6 +8,7 @@ using BaseServer.Core;
 using System.Collections.Concurrent;
 using System.Linq;
 using BaseServer.Persistence;
+using Game.Engine;
 
 namespace ServerTests.Integration.Stubs
 {

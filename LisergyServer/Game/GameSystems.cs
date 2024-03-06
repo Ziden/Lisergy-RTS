@@ -8,13 +8,14 @@ using Game.Systems.Party;
 using Game.Systems.Tile;
 using System.Collections.Generic;
 using System;
-using Game.Events;
 using Game.Systems.Map;
 using Game.Systems.Player;
-using Game.DataTypes;
 using Game.Systems.Resources;
 using System.Linq;
 using System.Reflection;
+using Game.Engine.Events;
+using Game.Engine.ECS;
+using Game.Engine.DataTypes;
 
 namespace Game
 {

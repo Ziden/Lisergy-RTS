@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 using Assets.Code.Assets.Code.Assets;
 using ClientSDK;
 using ClientSDK.Data;
-using Game.DataTypes;
+using Game.Engine.DataTypes;
 using Cysharp.Threading.Tasks;
 using Assets.Code.ClientSystems.Party.UI;
 

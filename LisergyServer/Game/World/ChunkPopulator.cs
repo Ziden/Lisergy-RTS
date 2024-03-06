@@ -4,7 +4,7 @@ namespace Game.World
 {
     public abstract class ChunkPopulator
     {
-       
+
         public abstract void Populate(GameWorld w, ServerChunkMap map, Chunk c);
     }
 }

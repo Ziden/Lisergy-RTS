@@ -1,7 +1,6 @@
-﻿using Game;
-using Game.DataTypes;
-using Game.Events;
-using Game.Network;
+﻿using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.Network;
 using GameServices;
 
 using Telepathy;

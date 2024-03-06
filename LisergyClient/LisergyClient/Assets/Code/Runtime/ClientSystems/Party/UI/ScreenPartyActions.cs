@@ -1,7 +1,7 @@
 using Assets.Code.Assets.Code.Runtime.UIScreens.Layout;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.Views;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using Game.Systems.Dungeon;
 using Game.Systems.Party;
 using Game.Tile;

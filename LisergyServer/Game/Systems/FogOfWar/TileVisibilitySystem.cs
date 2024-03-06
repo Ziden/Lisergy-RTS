@@ -1,6 +1,7 @@
 ﻿using Game.ECS;
-using Game.Events;
-using Game.Network;
+using Game.Engine.ECS;
+using Game.Engine.Events;
+using Game.Engine.Network;
 using Game.Systems.Tile;
 using System.Linq;
 

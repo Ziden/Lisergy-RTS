@@ -1,6 +1,7 @@
 using System;
-using Game.ECS;
-using Game.Events;
+using Game.Engine.DataTypes;
+using Game.Engine.ECS;
+using Game.Engine.Events;
 using Game.Systems.Harvesting;
 using Game.Systems.Map;
 using Game.Tile;
@@ -17,7 +18,7 @@ namespace Game.Systems.Resources
         /// <summary>
         /// Harvesting task prediction data
         /// </summary>
-        public EntityTaskState TaskState;
+        public TimeBlockSnapshot TimeSnapshot;
 
         /// <summary>
         /// What are the resources and amount being harvested
@@ -33,11 +34,6 @@ namespace Game.Systems.Resources
         /// How many units of the resource still fits the cargo ?
         /// </summary>
         public ushort CargoAvailableForUnits;
-
-        /// <summary>
-        /// Reference to the resource spec being harvested
-        /// </summary>
-        public ResourceSpec Spec;
     }
 
     /// <summary>
@@ -101,6 +97,30 @@ namespace Game.Systems.Resources
         }
 
         /// <summary>
+        /// Given the current entity max cargo and resources on the given tile
+        /// Gets the amount of resource that could be harvested from a given tile
+        /// </summary>
+        public (TimeBlock time, ResourceStackData resource)? GetPossibleHarvest(TileEntity tile)
+        {
+            var tileSpec = Game.Specs.Tiles[tile.SpecId];
+            if (!tileSpec.ResourceSpotSpecId.HasValue)
+            {
+                return default;
+            }
+            var harvestSpec = Game.Specs.HarvestPoints[tileSpec.ResourceSpotSpecId.Value];
+            var tileResources = tile.Components.Get<TileResourceComponent>();
+            var toHarvest = tileResources.Resource;
+            Entity.EntityLogic.Cargo.TrimResourcesToMaxCargo(ref toHarvest);
+            var timeToHarvest = toHarvest.Amount * harvestSpec.HarvestTimePerUnit;
+            var block = new TimeBlock()
+            {
+                StartTime = Game.GameTime,
+                EndTime = Game.GameTime + timeToHarvest
+            };
+            return (block, toHarvest);
+        }
+
+        /// <summary>
         /// Calculates what's the current state of the harvesting task.
         /// </summary>
         public HarvestingTaskState CalculateCurrentState()
@@ -108,40 +128,26 @@ namespace Game.Systems.Resources
             var harvesting = Entity.Components.Get<HarvestingComponent>();
             var tile = Game.World.Map.GetTile(harvesting.Tile.X, harvesting.Tile.Y);
             var startTime = DateTime.FromBinary(harvesting.StartedAt);
-            var totalTimeHarvesting = Game.GameTime - startTime;
+        
+            //
             var tileSpec = Game.Specs.Tiles[tile.SpecId];
             if (!tileSpec.ResourceSpotSpecId.HasValue)
             {
                 return default;
             }
             var harvestSpec = Game.Specs.HarvestPoints[tileSpec.ResourceSpotSpecId.Value];
-            var amountHarvested = (ushort)Math.Floor(totalTimeHarvesting / harvestSpec.HarvestTimePerUnit);
             var tileResources = tile.Components.Get<TileResourceComponent>();
             var totalTaskTime = (harvestSpec.HarvestTimePerUnit * tileResources.Resource.Amount);
-            var expectedFinish = startTime + totalTaskTime;
-            var timeLeft = expectedFinish - Game.GameTime;
-            var cargo = Entity.Components.Get<CargoComponent>();
-            var resourceSpec = Game.Specs.Resources[tileResources.Resource.ResourceId];
-            var unitsCanCarry = (ushort)(cargo.RemainingWeight / resourceSpec.WeightPerUnit);
-            if (amountHarvested > tileResources.Resource.Amount)
-                amountHarvested = tileResources.Resource.Amount;
-            if (amountHarvested > unitsCanCarry)
-                amountHarvested = unitsCanCarry;
-
+            var timeBlock = startTime.GetTimeBlock(totalTaskTime);
+            var timeSnapshot = timeBlock.GetCurrentSnapshot(Game.GameTime);
+            var possible = GetPossibleHarvest(tile);
+            var harvested = possible.Value.resource;
+            harvested.Amount = (ushort)Math.Round(harvested.Amount * timeSnapshot.Percentagage);
             return new HarvestingTaskState()
             {
-                AmountHarvested = amountHarvested,
+                AmountHarvested = harvested.Amount,
                 Resources = tileResources,
-                CargoAvailableForUnits = unitsCanCarry,
-                Spec = resourceSpec,
-                TaskState = new EntityTaskState()
-                {
-                    StartTime = startTime,
-                    EndTime = expectedFinish,
-                    TimeSpentOnTask = totalTimeHarvesting,
-                    TimeToFinishTask = timeLeft,
-                    TotalTimeRequiredForTask = totalTaskTime
-                }
+                TimeSnapshot = timeSnapshot
             };
         }
 
@@ -154,10 +160,12 @@ namespace Game.Systems.Resources
             var harvesting = Entity.Components.Get<HarvestingComponent>();
             var tile = Game.World.Map.GetTile(harvesting.Tile.X, harvesting.Tile.Y);
             var harvestState = CalculateCurrentState();
+            var spec = Game.Specs.Resources[harvestState.Resources.Resource.ResourceId];
+
             Entity.Components.Remove<HarvestingComponent>();
-            harvestState.Resources.BeingHarvested = false;
-            harvestState.Resources.Resource.Amount = (ushort)(harvestState.Resources.Resource.Amount - harvestState.AmountHarvested);
-            tile.Components.Save(harvestState.Resources);
+            var tileResources = tile.Components.GetPointer<TileResourceComponent>();
+            tileResources->BeingHarvested = false;
+            tileResources->Resource.Amount = (ushort)(tileResources->Resource.Amount - harvestState.AmountHarvested);
             var finalStack = new ResourceStackData(harvestState.Resources.Resource.ResourceId, harvestState.AmountHarvested);
             var ev = EventPool<HarvestingEndedEvent>.Get();
             ev.Tile = tile;
@@ -165,7 +173,7 @@ namespace Game.Systems.Resources
             ev.Resource = finalStack;
             Entity.Components.CallEvent(ev);
             EventPool<HarvestingEndedEvent>.Return(ev);
-            Game.Log.Debug($"{Entity} finished harvesting on {tile} and got {harvestState.AmountHarvested}x{harvestState.Spec.Name}");
+            Game.Log.Debug($"{Entity} finished harvesting on {tile} and got {harvestState.AmountHarvested}x{spec.Name}");
             return finalStack;
         }
     }

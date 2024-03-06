@@ -1,6 +1,6 @@
-﻿using Game.DataTypes;
-using Game.ECS;
-using Game.Network;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.ECS;
+using Game.Engine.Network;
 using Game.Systems.Building;
 using Game.Systems.Dungeon;
 using Game.Systems.Party;

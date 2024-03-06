@@ -3,11 +3,12 @@ using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.UI;
 using Chat.UI;
 using Cysharp.Threading.Tasks;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using Game.Systems.Movement;
 using Game.Systems.Party;
 using Game.Tile;
 using GameAssets;
+using GameData;
 using Player.UI;
 using System.Linq;
 using UnityEngine;
@@ -31,7 +32,7 @@ namespace Assets.Code
             _selectBar = Root.Q<WidgetEntitySelectBar>("WidgetEntitySelectBar").Required();
             _chatSummary = Root.Q<WidgetChatSummary>("WidgetChatSummary").Required();
             _selectBar.OnTownClicked += OnTownButtonClick;
-            _selectBar.OnBuildClicked += () => OnBuildButton().Forget();
+            _selectBar.OnBuildClicked += () => OpenBuildSelect().Forget();
             ClientViewState.OnCameraMove += OnCameraMove;
             ClientViewState.OnSelectTile += OnClickTile;
             ClientViewState.OnSelectEntity += OnSelectEntity;
@@ -43,16 +44,23 @@ namespace Assets.Code
             ClientViewState.SelectedEntityView = center.GetEntityView();
         }
 
-        private async UniTaskVoid OnBuildButton()
+        private async UniTaskVoid OpenBuildSelect()
         {
-            GameClient.UnityServices().UI.Open<SelectScreen>(new SelectScreenParam()
+            GameClient.UnityServices().UI.Open<SelectScreen<BuildingSpec>>(new SelectScreenParam<BuildingSpec>()
             {
-                ItemAsset = await GameClient.UnityServices().Assets.GetScreen(UIScreen.ScrollableIconButton),
-                ToShow = GameClient.Modules.Buildings.GetBuildingsKnown().Select(b => new SelectableItem()
+                Datasource = GameClient.Modules.Buildings.GetBuildingsKnown().ToList(),
+                OnPreview = (item, element) =>
                 {
-                    Icon = b.Art,
-                    Name = b.Name
-                }).ToList()
+                    element.Description.text = item.Description;
+                    element.Time.text = item.BuildTimeSeconds + " seconds";
+                    element.CostFromResource(item.BuildingCost);
+                },
+                CreateSelection = b =>
+                {
+                    var w = new WidgetSelectionItem();
+                    w.SetData(b.Name, b.Icon, b).Forget();
+                    return w;
+                }
             });
         }
 

@@ -1,4 +1,4 @@
-﻿using Game.DataTypes;
+﻿using Game.Engine.DataTypes;
 using Game.Systems.FogOfWar;
 using Game.Systems.MapPosition;
 using GameData;

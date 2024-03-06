@@ -5,7 +5,7 @@ using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.World;
 using ClientSDK;
 using ClientSDK.Data;
-using Game.DataTypes;
+using Game.Engine.DataTypes;
 using System;
 using System.Collections.Generic;
 

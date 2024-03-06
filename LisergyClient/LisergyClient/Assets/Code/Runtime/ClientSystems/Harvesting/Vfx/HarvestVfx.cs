@@ -3,6 +3,7 @@ using ClientSDK;
 using Cysharp.Threading.Tasks;
 using Game;
 using Game.ECS;
+using Game.Engine.ECS;
 using GameAssets;
 using GameData;
 using UnityEngine;

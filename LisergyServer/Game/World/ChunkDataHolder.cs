@@ -1,4 +1,5 @@
-﻿using Game.Systems.Tile;
+﻿using Game.Engine;
+using Game.Systems.Tile;
 using System;
 
 namespace Game.World
@@ -32,8 +33,8 @@ namespace Game.World
             UnmanagedMemory.DeallocateMemory((IntPtr)_dataPointer);
         }
 
-        public TileData* GetTileData(in int x, in int y) => (TileData*)_dataPointer +x + y * GameWorld.CHUNK_SIZE;
-        public ref TileVector Position => ref _dataPointer->Position;
+        public TileData* GetTileData(in int x, in int y) => (TileData*)_dataPointer + x + y * GameWorld.CHUNK_SIZE;
+        public ref Location Position => ref _dataPointer->Position;
         public ref readonly byte ChunkFlags => ref _dataPointer->Flags;
         public void SetFlag(in byte flag) => _dataPointer->Flags |= flag;
 

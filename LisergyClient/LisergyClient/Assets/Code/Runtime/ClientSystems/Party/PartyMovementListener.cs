@@ -1,6 +1,6 @@
 using Assets.Code;
 using ClientSDK;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using Game.Systems.Party;
 using UnityEngine;
 

@@ -1,7 +1,8 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Cysharp.Threading.Tasks;
 using Game.ECS;
-using Game.Events.Bus;
+using Game.Engine.ECS;
+using Game.Engine.Events.Bus;
 using Game.Systems.Battler;
 using Game.Tile;
 using GameAssets;
@@ -9,7 +10,6 @@ using UnityEngine.UIElements;
 
 namespace Assets.Code.UI
 {
-
     public class UnitDetailsSetup : IGameUiParam
     {
         public IEntity Entity;

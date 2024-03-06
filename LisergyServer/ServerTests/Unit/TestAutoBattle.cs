@@ -1,11 +1,11 @@
 ﻿using Game;
-using Game.Battle;
-using Game.Battle.BattleActions;
-using Game.Battle.BattleEvents;
-using Game.Battle.Data;
-using Game.DataTypes;
 using Game.ECS;
+using Game.Engine.DataTypes;
 using Game.Network;
+using Game.Systems.Battle;
+using Game.Systems.Battle.BattleActions;
+using Game.Systems.Battle.BattleEvents;
+using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
 using Game.Systems.Party;
 using Game.Systems.Player;

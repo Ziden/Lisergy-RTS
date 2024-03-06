@@ -1,8 +1,8 @@
-﻿using Game.Battle.Data;
-using Game.DataTypes;
-using Game.ECS;
-using Game.Events;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.ECS;
+using Game.Engine.Events;
 using Game.Network.ServerPackets;
+using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
 using Game.Systems.Map;
 using Game.World;
@@ -24,7 +24,7 @@ namespace Game.Systems.BattleGroup
     /// </summary>
     public class BattleTriggeredEvent : IGameEvent
     {
-        public TileVector Position;
+        public Location Position;
         public GameId BattleID;
         public BattleTeamData Attacker;
         public BattleTeamData Defender;

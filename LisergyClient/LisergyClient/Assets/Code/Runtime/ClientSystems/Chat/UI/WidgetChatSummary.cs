@@ -3,7 +3,7 @@ using Assets.Code.UI;
 using ClientSDK;
 using ClientSDK.SDKEvents;
 using Cysharp.Threading.Tasks;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using GameAssets;
 using System;
 using System.Collections.Generic;

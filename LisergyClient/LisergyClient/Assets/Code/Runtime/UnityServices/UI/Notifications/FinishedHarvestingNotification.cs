@@ -26,6 +26,6 @@ public class FinishedHarvestingNotification : Notification
             ClientViewState.SelectedEntityView = param.Entity; 
         };
         _resource = Root.Q<WidgetResourceDisplay>("ResourceDisplayWidget").Required();
-        _resource.Display(param.Resource.ResourceId, param.Resource.Amount);
+        _resource.SetData(param.Resource.ResourceId, param.Resource.Amount);
     }
 }

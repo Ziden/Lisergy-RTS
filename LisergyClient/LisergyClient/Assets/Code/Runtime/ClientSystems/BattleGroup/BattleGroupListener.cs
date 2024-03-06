@@ -1,8 +1,8 @@
 using Assets.Code.World;
 using ClientSDK;
 using ClientSDK.SDKEvents;
-using Game.DataTypes;
-using Game.ECS;
+using Game.Engine.DataTypes;
+using Game.Engine.ECS;
 using Game.Systems.Battler;
 using GameAssets;
 

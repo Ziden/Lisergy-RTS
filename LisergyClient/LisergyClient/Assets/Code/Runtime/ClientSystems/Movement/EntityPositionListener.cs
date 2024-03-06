@@ -2,7 +2,7 @@ using Assets.Code.Assets.Code.Runtime.Movement;
 using Assets.Code.UI;
 using Assets.Code.World;
 using ClientSDK;
-using Game.Events.Bus;
+using Game.Engine.Events.Bus;
 using Game.Systems.Map;
 using Game.World;
 

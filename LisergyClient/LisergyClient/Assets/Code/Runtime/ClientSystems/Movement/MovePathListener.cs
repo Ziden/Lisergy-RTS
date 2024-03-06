@@ -2,9 +2,9 @@
 using Assets.Code.Views;
 using ClientSDK;
 using ClientSDK.SDKEvents;
-using Game.DataTypes;
-using Game.ECS;
-using Game.Events.Bus;
+using Game.Engine.DataTypes;
+using Game.Engine.ECS;
+using Game.Engine.Events.Bus;
 using Game.Systems.Party;
 using Game.Tile;
 using Game.World;

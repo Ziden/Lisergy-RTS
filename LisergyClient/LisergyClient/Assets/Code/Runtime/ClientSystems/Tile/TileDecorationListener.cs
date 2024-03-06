@@ -1,6 +1,6 @@
 using ClientSDK;
-using Game.DataTypes;
-using Game.Events.Bus;
+using Game.Engine.DataTypes;
+using Game.Engine.Events.Bus;
 using UnityEngine;
 
 /// <summary>

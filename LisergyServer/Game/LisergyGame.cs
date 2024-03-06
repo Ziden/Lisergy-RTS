@@ -1,9 +1,10 @@
 ﻿
 using System;
-using Game.ECS;
-using Game.Events;
-using Game.Events.Bus;
-using Game.Scheduler;
+using Game.Engine;
+using Game.Engine.ECS;
+using Game.Engine.Events;
+using Game.Engine.Events.Bus;
+using Game.Engine.Scheduler;
 using Game.World;
 using GameData;
 

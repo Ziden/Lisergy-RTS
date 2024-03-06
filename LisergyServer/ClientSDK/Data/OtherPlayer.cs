@@ -1,6 +1,5 @@
 ﻿
 using Game;
-using Game.DataTypes;
 using Game.Systems.Player;
 
 namespace ClientSDK.Data

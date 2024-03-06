@@ -1,5 +1,4 @@
-﻿using Game.Persistence;
-using Game.Systems.Battler;
+﻿using Game.Systems.Battler;
 using Game.Systems.Tile;
 using System;
 using System.Collections;
@@ -90,6 +89,6 @@ namespace Game.World
         /// Chunk data after all tile data for simpler pointer acessing
         /// </summary>
         public byte Flags;
-        public TileVector Position;
+        public Location Position;
     }
 }

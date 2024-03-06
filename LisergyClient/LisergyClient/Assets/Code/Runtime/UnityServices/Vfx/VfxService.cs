@@ -2,8 +2,8 @@
 using ClientSDK;
 using ClientSDK.Data;
 using Cysharp.Threading.Tasks;
-using Game.DataTypes;
-using Game.ECS;
+using Game.Engine.DataTypes;
+using Game.Engine.ECS;
 using GameAssets;
 using System.Collections.Generic;
 using UnityEngine;

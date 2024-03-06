@@ -1,11 +1,12 @@
-﻿using Game.DataTypes;
+﻿using Game.Engine.DataTypes;
 using Game.Tile;
 using System;
 using System.Collections.Generic;
 
 namespace Game.World
 {
-    public interface IGameWorld : IDisposable {
+    public interface IGameWorld : IDisposable
+    {
 
         /// <summary>
         /// Gets the game this world belongs to
@@ -89,7 +90,7 @@ namespace Game.World
             return freeChunk.FindTileWithId(0);
         }
 
-       
+
         public virtual IEnumerable<TileEntity> AllTiles()
         {
             foreach (var chunk in _preallocatedMap.AllChunks())

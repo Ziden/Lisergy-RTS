@@ -1,12 +1,12 @@
-﻿using Game.ECS;
-using Game.Scheduler;
-using Game.Systems.Party;
+﻿using Game.Systems.Party;
 using Game.Tile;
-using Game.World;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Game.DataTypes;
+using Game.Engine.ECS;
+using Game.Engine.DataTypes;
+using Game.Engine.Scheduler;
+using Game.World;
 
 namespace Game.Systems.Movement
 {
@@ -14,10 +14,10 @@ namespace Game.Systems.Movement
     public unsafe class CourseTaskExecutor : ITaskExecutor
     {
         public GameId EntityId;
-        public List<TileVector> Path;
+        public List<Location> Path;
         public CourseIntent Intent;
 
-        public CourseTaskExecutor(IEntity party, List<TileVector> path, CourseIntent intent)
+        public CourseTaskExecutor(IEntity party, List<Location> path, CourseIntent intent)
         {
             EntityId = party.EntityId;
             Path = path;

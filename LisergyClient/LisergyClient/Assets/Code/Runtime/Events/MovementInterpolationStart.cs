@@ -1,6 +1,7 @@
 
 using ClientSDK.Data;
 using Game.ECS;
+using Game.Engine.ECS;
 using Game.Tile;
 
 /// <summary>

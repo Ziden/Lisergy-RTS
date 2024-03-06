@@ -1,4 +1,4 @@
-using Game;
+using Game.Engine;
 using Game.Events.ServerEvents;
 using NUnit.Framework;
 using ServerTests;

@@ -2,13 +2,13 @@
 using Game;
 using Game.Events.ServerEvents;
 using System;
-using Game.DataTypes;
 using ClientSDK.Data;
 using Game.Systems.Player;
 using ClientSDK.SDKEvents;
 using Game.Events;
 using System.Collections.Generic;
-using Game.Battle.Data;
+using Game.Systems.Battle.Data;
+using Game.Engine.DataTypes;
 
 namespace ClientSDK.Services
 {

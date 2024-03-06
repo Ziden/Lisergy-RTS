@@ -1,10 +1,10 @@
-using Game;
-using Game.Battle;
-using Game.Battle.BattleActions;
-using Game.Battle.Data;
-using Game.DataTypes;
+using Game.Engine;
+using Game.Engine.DataTypes;
 using Game.Events;
 using Game.Network.ServerPackets;
+using Game.Systems.Battle;
+using Game.Systems.Battle.BattleActions;
+using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
 using GameDataTest;
 using NUnit.Framework;

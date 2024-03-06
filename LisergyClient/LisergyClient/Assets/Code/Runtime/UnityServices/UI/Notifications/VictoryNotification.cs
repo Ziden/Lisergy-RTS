@@ -1,6 +1,6 @@
 using Assets.Code.Assets.Code.Runtime.UIScreens;
 using ClientSDK.SDKEvents;
-using Game.Battle.Data;
+using Game.Systems.Battle.Data;
 using GameAssets;
 using UnityEngine.UIElements;
 

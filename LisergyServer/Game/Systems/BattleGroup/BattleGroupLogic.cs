@@ -1,5 +1,5 @@
-﻿using Game.DataTypes;
-using Game.ECS;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.ECS;
 using Game.Systems.BattleGroup;
 using System;
 

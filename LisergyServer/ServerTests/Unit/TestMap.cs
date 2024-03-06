@@ -1,6 +1,4 @@
 using Game;
-using Game.Battle;
-using Game.DataTypes;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;

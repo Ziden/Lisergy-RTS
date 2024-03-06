@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
-using Game.Battle;
 using Game.Systems.BattleGroup;
-using Game.Battle.Data;
+using Game.Systems.Battle.Data;
 
 namespace UnitTests
 {

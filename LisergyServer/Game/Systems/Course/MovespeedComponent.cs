@@ -1,5 +1,4 @@
-﻿using Game.DataTypes;
-using Game.ECS;
+﻿using Game.ECS;
 using System;
 
 namespace Game.Systems.Movement

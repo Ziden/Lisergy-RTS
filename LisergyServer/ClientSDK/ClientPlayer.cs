@@ -1,7 +1,7 @@
-﻿using Game.DataTypes;
-using Game.Systems.Player;
+﻿using Game.Systems.Player;
 using Game;
 using System.Collections.Generic;
+using Game.Engine.DataTypes;
 
 public class ClientPlayer : PlayerEntity
 {

@@ -1,12 +1,12 @@
 ﻿using ClientSDK;
 using ClientSDK.Data;
 using ClientSDK.SDKEvents;
-using Game;
-using Game.DataTypes;
-using Game.Events;
-using Game.Events.Bus;
+using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.Events;
+using Game.Engine.Events.Bus;
+using Game.Engine.Network;
 using Game.Events.ServerEvents;
-using Game.Network;
 using Game.Systems.Building;
 using Game.Systems.Dungeon;
 using Game.Systems.Party;

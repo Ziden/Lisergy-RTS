@@ -5,9 +5,9 @@ using Assets.Code.UI;
 using ClientSDK;
 using ClientSDK.SDKEvents;
 using Cysharp.Threading.Tasks;
-using Game.Battle;
-using Game.DataTypes;
-using Game.Events.Bus;
+using Game.Engine.DataTypes;
+using Game.Engine.Events.Bus;
+using Game.Systems.Battle;
 using Stateless;
 using UnityEngine;
 

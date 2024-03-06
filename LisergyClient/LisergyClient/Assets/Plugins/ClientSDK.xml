@@ -149,7 +149,7 @@
             Has battle specific networking implementation
             </summary>
         </member>
-        <member name="M:ClientSDK.Services.IBattleModule.RequestBattleLog(Game.DataTypes.GameId@)">
+        <member name="M:ClientSDK.Services.IBattleModule.RequestBattleLog(Game.Engine.DataTypes.GameId@)">
             <summary>
             Requests a full battle log to view the full battle
             Will fire a BattleLogReceivedEvent
@@ -171,18 +171,18 @@
             Expose basic entity control functionality like moving or taking entity actions.
             </summary>
         </member>
-        <member name="M:ClientSDK.Services.IGameView.GetOrCreateView(Game.ECS.IEntity)">
+        <member name="M:ClientSDK.Services.IGameView.GetOrCreateView(Game.Engine.ECS.IEntity)">
             <summary>
             Gets or creates a given entity view
             </summary>
         </member>
-        <member name="M:ClientSDK.Services.IGameView.GetView``1(Game.ECS.IEntity)">
+        <member name="M:ClientSDK.Services.IGameView.GetView``1(Game.Engine.ECS.IEntity)">
             <summary>
             Gets an entity view and casts to the given type.
             Will throw if not existant or wrong type
             </summary>
         </member>
-        <member name="M:ClientSDK.Services.IGameView.GetEntityView(Game.ECS.IEntity)">
+        <member name="M:ClientSDK.Services.IGameView.GetEntityView(Game.Engine.ECS.IEntity)">
             <summary>
             Gets an uncasted entity view
             </summary>
@@ -236,12 +236,12 @@
             This module is able to implement callbacks from when a given component is synced so the client can react to it.
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.IComponentsModule.ProccessUpdate(Game.ECS.IEntity,Game.ECS.IComponent[],System.UInt32[])">
+        <member name="M:ClientSDK.Modules.IComponentsModule.ProccessUpdate(Game.Engine.ECS.IEntity,Game.ECS.IComponent[],System.UInt32[])">
             <summary>
             Updates the components of the given entity
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.IComponentsModule.OnComponentUpdate``1(System.Action{Game.ECS.IEntity,``0,``0})">
+        <member name="M:ClientSDK.Modules.IComponentsModule.OnComponentUpdate``1(System.Action{Game.Engine.ECS.IEntity,``0,``0})">
             <summary>
             Registers a component sync. 
             Whenever the given entity type has the given component type updated, instead of the values simply being copied
@@ -249,7 +249,7 @@
             The callback has the Entity, OLD VALUE and NEW VALUE parameters.
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.IComponentsModule.OnComponentRemoved``1(System.Action{Game.ECS.IEntity,``0})">
+        <member name="M:ClientSDK.Modules.IComponentsModule.OnComponentRemoved``1(System.Action{Game.Engine.ECS.IEntity,``0})">
             <summary>
             Registers a component removed callback. 
             Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
@@ -261,7 +261,7 @@
             Removes all event callbacks from the given object
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.ComponentsModule.ProccessUpdate(Game.ECS.IEntity,Game.ECS.IComponent[],System.UInt32[])">
+        <member name="M:ClientSDK.Modules.ComponentsModule.ProccessUpdate(Game.Engine.ECS.IEntity,Game.ECS.IComponent[],System.UInt32[])">
             <summary>
             Updates the components of the given entity.
             Will copy all new values to old values
@@ -275,7 +275,7 @@
             The only thing this won't keep track is the player data which is handled in <see cref="T:ClientSDK.Services.IPlayerModule"/>
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.LogicModule.OnUpdatePlacement(Game.ECS.IEntity,Game.Systems.Map.MapPlacementComponent,Game.Systems.Map.MapPlacementComponent)">
+        <member name="M:ClientSDK.Modules.LogicModule.OnUpdatePlacement(Game.Engine.ECS.IEntity,Game.Systems.Map.MapPlacementComponent,Game.Systems.Map.MapPlacementComponent)">
             <summary>
             Whenever map placement updates are sent to the client we re-position the entity on the client logic.
             This will trigger all exploration events

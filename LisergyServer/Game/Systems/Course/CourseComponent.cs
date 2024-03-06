@@ -1,5 +1,5 @@
-﻿using Game.DataTypes;
-using Game.ECS;
+﻿using Game.ECS;
+using Game.Engine.DataTypes;
 using System;
 using System.Runtime.InteropServices;
 

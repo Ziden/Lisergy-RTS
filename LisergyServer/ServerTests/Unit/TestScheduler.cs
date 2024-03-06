@@ -1,5 +1,6 @@
 using Game;
-using Game.Scheduler;
+using Game.Engine;
+using Game.Engine.Scheduler;
 using NUnit.Framework;
 using ServerTests;
 using System;

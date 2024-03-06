@@ -7,7 +7,6 @@ using GameDataTest;
 using Game.Systems.Party;
 using Game.World;
 using Game.Systems.Resources;
-using Game.Scheduler;
 
 namespace UnitTests
 {

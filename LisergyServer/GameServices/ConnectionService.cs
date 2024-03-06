@@ -1,6 +1,6 @@
-﻿using Game;
-using Game.DataTypes;
-using Game.Network;
+﻿using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.Network;
 using System.Collections.Generic;
 
 namespace GameServices

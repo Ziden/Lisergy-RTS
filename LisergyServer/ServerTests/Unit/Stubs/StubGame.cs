@@ -1,7 +1,8 @@
 ﻿using Game;
-using Game.DataTypes;
-using Game.Network;
-using Game.Scheduler;
+using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.Network;
+using Game.Engine.Scheduler;
 using Game.Services;
 using Game.Systems.Player;
 using Game.Tile;

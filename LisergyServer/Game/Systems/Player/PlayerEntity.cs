@@ -1,8 +1,9 @@
-﻿using Game.DataTypes;
-using Game.ECS;
+﻿using Game.ECS;
+using Game.Engine.DataTypes;
+using Game.Engine.ECS;
+using Game.Engine.Network;
 using Game.Events;
 using Game.Events.ServerEvents;
-using Game.Network;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Party;

@@ -1,6 +1,6 @@
 ﻿using BaseServer.Persistence;
 using Game;
-using Game.ECS;
+using Game.Engine.ECS;
 using Game.World;
 using NUnit.Framework;
 using ServerTests;

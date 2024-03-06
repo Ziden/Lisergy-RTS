@@ -1,11 +1,12 @@
 ﻿using ClientSDK.SDKEvents;
 using Game.ECS;
 using Game.Events;
-using Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Events.ServerEvents;
+using Game.Engine.ECS;
+using Game.Engine;
 
 namespace ClientSDK.Modules
 {

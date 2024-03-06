@@ -1,4 +1,4 @@
-﻿using AStar;
+﻿using Game.Engine.Pathfinder;
 using Game.Tile;
 
 namespace Game.World
@@ -9,13 +9,13 @@ namespace Game.World
     public class CachedChunkMap : IPathfinderGridProvider
     {
         public Cell[,] CellArray;
-        private TileVector _size;
+        private Location _size;
         private IChunkMap _chunkMap;
 
         public CachedChunkMap(IChunkMap chunkMap)
         {
             _chunkMap = chunkMap;
-            _size = new TileVector(SizeX, SizeY);
+            _size = new Location(SizeX, SizeY);
             CellArray = new Cell[SizeX, SizeY];
         }
 
@@ -26,9 +26,9 @@ namespace Game.World
 
         public int SizeX { get => _chunkMap.TilemapDimensions.x; }
         public int SizeY { get => _chunkMap.TilemapDimensions.y; }
-        public TileVector Size => _size;
+        public Location Size => _size;
 
-        public Cell this[TileVector position]
+        public Cell this[Location position]
         {
             get
             {
