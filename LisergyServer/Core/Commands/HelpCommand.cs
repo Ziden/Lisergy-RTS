@@ -2,9 +2,9 @@
 {
     public class HelpCommand : Command
     {
-        private readonly CommandExecutor _executor;
+        private readonly ConsoleCommandExecutor _executor;
 
-        public HelpCommand(CommandExecutor executor) : base(null)
+        public HelpCommand(ConsoleCommandExecutor executor) : base(null)
         {
             _executor = executor;
         }

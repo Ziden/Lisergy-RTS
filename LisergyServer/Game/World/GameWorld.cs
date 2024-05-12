@@ -1,112 +1,103 @@
-﻿using Game.Player;
+﻿using Game.Engine.DataTypes;
 using Game.Tile;
-using Game.World;
 using System;
 using System.Collections.Generic;
 
-namespace Game
+namespace Game.World
 {
-    public class GameWorld
+    public interface IGameWorld : IDisposable
     {
-        private string _id;
 
-        // Amount of tiles the chunk length
+        /// <summary>
+        /// Gets the game this world belongs to
+        /// </summary>
+        public IGame Game { get; }
+
+        /// <summary>
+        /// Gets the players that reside in this world
+        /// </summary>
+        public IGamePlayers Players { get; }
+
+        /// <summary>
+        /// Gets the world map
+        /// </summary>
+        public IChunkMap Map { get; }
+
+        /// <summary>
+        /// Populates the given world using the chunk populators configured
+        /// </summary>
+        public void Populate();
+    }
+
+    public class GameWorld : IGameWorld
+    {
+        private GameId _id;
         public const int CHUNK_SIZE = 8;
-
-        // Bitshift needed to get the chunk of a given tile
         public static readonly int CHUNK_SIZE_BITSHIFT = CHUNK_SIZE.BitsRequired() - 1;
-
-        // how many tiles is the area of a chunk
         public const int TILES_IN_CHUNK = CHUNK_SIZE * CHUNK_SIZE;
-
-        // how many chunks are "player reserved chunks" per player
         public const int PLAYERS_CHUNKS = 2;
 
-        public StrategyGame Game { get; set; }
-        public WorldPlayers Players { get; set; }
-        public ChunkMap Map { get; set; }
+        public List<ChunkPopulator> ChunkPopulators { get; private set; } = new List<ChunkPopulator>();
+        public virtual IGame Game { get; set; }
+        protected ServerChunkMap _preallocatedMap { get; set; }
+        public int Seed { get; set; }
+        public ushort SizeX { get; private set; }
+        public ushort SizeY { get; private set; }
+        public IGamePlayers Players { get; protected set; }
+        public IChunkMap Map { get; protected set; }
 
-        public ushort Seed { get; set; }
-        public int SizeX { get; private set; }
-        public int SizeY { get; private set; }
-
-        public GameWorld(int maxPlayers, int sizeX, int sizeY)
+        public GameWorld(IGame game, in ushort sizeX, in ushort sizeY)
         {
             SizeX = sizeX;
             SizeY = sizeY;
-            Players = new WorldPlayers(maxPlayers);
+            Players = new WorldPlayers(int.MaxValue);
+            Game = game;
             CreateMap();
         }
 
-        public void FreeMap()
+        public void FreeMemory()
         {
-            foreach (var c in Map.AllChunks())
-            {
-                c.FreeMemoryForReuse();
-                foreach (var t in c.AllTiles())
-                {
-                    Map.ClearTile(t);
-                }
-            }
+            foreach (var c in _preallocatedMap.AllChunks()) c.Dispose();
         }
 
         public virtual void CreateMap()
         {
-            _id = Guid.NewGuid().ToString();
-            Map = new ChunkMap(this, SizeX, SizeY);
-            GenerateTiles();
+            _id = GameId.Generate();
+            _preallocatedMap = new ServerChunkMap(this, SizeX, SizeY);
+            _preallocatedMap.CreateMap(SizeX, SizeY);
+            Map = _preallocatedMap;
         }
 
-        public virtual void GenerateTiles()
+        public void Populate()
         {
-            this.Map.GenerateTiles(this.SizeX, this.SizeY);
+            if (ChunkPopulators.Count == 0) return;
+            if (Seed == 0)
+                Seed = WorldUtils.Random.Next(0, ushort.MaxValue);
+            WorldUtils.SetRandomSeed(Seed);
+            Game.Log.Debug($"Populating world seed {Seed} {SizeX}x{SizeY} for {Players.MaxPlayers} players");
+            foreach (var chunk in _preallocatedMap.AllChunks())
+                foreach (var populator in ChunkPopulators)
+                    populator.Populate(this, _preallocatedMap, chunk);
         }
 
-        /// <summary>
-        /// Finds a newbie chunk that is not used and returns a random TileEntity of it of the given
-        /// spec id
-        /// </summary>
         public TileEntity GetUnusedStartingTile()
         {
-            var freeChunk = Map.GetUnnocupiedNewbieChunk();
-            if (freeChunk.IsVoid())
+            var freeChunk = _preallocatedMap.GetUnnocupiedNewbieChunk();
+            if (freeChunk == null)
             {
                 throw new Exception("No more room for newbie players in this world");
             }
             return freeChunk.FindTileWithId(0);
         }
 
-        public virtual void PlaceNewPlayer(PlayerEntity player, TileEntity t)
-        {
-            Players.Add(player);
-            var castleID = StrategyGame.Specs.InitialBuilding;
-            player.Build(castleID, t);
-
-            ushort initialUnit = StrategyGame.Specs.InitialUnit;
-            var unit = player.RecruitUnit(initialUnit);
-            unit.Name = "Merlin";
-            var party = player.GetParty(0);
-            player.PlaceUnitInParty(unit, party);
-            party.Tile = t.GetNeighbor(Direction.EAST);
-            Log.Debug($"Placed new player in {t}");
-            return;
-        }
 
         public virtual IEnumerable<TileEntity> AllTiles()
         {
-            foreach (var chunk in Map.AllChunks())
+            foreach (var chunk in _preallocatedMap.AllChunks())
                 foreach (var tile in chunk.AllTiles())
                     yield return tile;
         }
 
-        public Chunk GetTileChunk(int tileX, int tileY)
-        {
-            return Map.GetTileChunk(tileX, tileY);
-        }
-
-        public TileEntity GetTile(int tileX, int tileY)
-        {
-            return Map.GetTile(tileX, tileY);
-        }
+        public void Dispose() => FreeMemory();
     }
 }

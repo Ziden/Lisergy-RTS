@@ -1,405 +1,1178 @@
 fileFormatVersion: 2
 guid: 5ba8cfbb11f3c084492d7c403603fa2c
-timeCreated: 1535624932
-licenseType: Store
 ModelImporter:
-  serializedVersion: 21
-  fileIDToRecycleName:
-    100000: 01 Head 01
-    100002: 02 Torso 01
-    100004: 02 Torso 02
-    100006: 02 Torso 03
-    100008: 02 Torso 04
-    100010: 02 Torso 05
-    100012: 02 Torso 06
-    100014: 02 Torso 07
-    100016: 02 Torso 08
-    100018: 02 Torso 09
-    100020: 02 Torso 10
-    100022: 02 Torso 11
-    100024: 02 Torso 12
-    100026: 03 Bottom 01
-    100028: 03 Bottom 02
-    100030: 03 Bottom 03
-    100032: 03 Bottom 04
-    100034: 03 Bottom 05
-    100036: 03 Bottom 06
-    100038: 03 Bottom 07
-    100040: 04 Feet 01
-    100042: 04 Feet 02
-    100044: 04 Feet 03
-    100046: 04 Feet 04
-    100048: 04 Feet 05
-    100050: 04 Feet 06
-    100052: 05 Hand 01
-    100054: 06 Belt 01
-    100056: //RootNode
-    100058: Particle View 001
-    100060: Rig
-    100062: RigHead
-    100064: RigHeadBone001
-    100066: RigLCalf
-    100068: RigLCollarbone
-    100070: RigLFinger11
-    100072: RigLFinger12
-    100074: RigLFinger13
-    100076: RigLFinger14
-    100078: RigLFinger21
-    100080: RigLFinger22
-    100082: RigLFinger23
-    100084: RigLFinger24
-    100086: RigLFinger31
-    100088: RigLFinger32
-    100090: RigLFinger33
-    100092: RigLFinger34
-    100094: RigLFinger41
-    100096: RigLFinger42
-    100098: RigLFinger43
-    100100: RigLFinger44
-    100102: RigLFinger51
-    100104: RigLFinger52
-    100106: RigLFinger53
-    100108: RigLFinger54
-    100110: RigLFoot
-    100112: RigLForearm
-    100114: RigLPalm
-    100116: RigLPlatform
-    100118: RigLThigh
-    100120: RigLToe11
-    100122: RigLToe12
-    100124: RigLUpperarm
-    100126: RigNeck
-    100128: RigPelvis
-    100130: RigRCalf
-    100132: RigRCollarbone
-    100134: RigRFinger11
-    100136: RigRFinger12
-    100138: RigRFinger13
-    100140: RigRFinger14
-    100142: RigRFinger21
-    100144: RigRFinger22
-    100146: RigRFinger23
-    100148: RigRFinger24
-    100150: RigRFinger31
-    100152: RigRFinger32
-    100154: RigRFinger33
-    100156: RigRFinger34
-    100158: RigRFinger41
-    100160: RigRFinger42
-    100162: RigRFinger43
-    100164: RigRFinger44
-    100166: RigRFinger51
-    100168: RigRFinger52
-    100170: RigRFinger53
-    100172: RigRFinger54
-    100174: RigRFoot
-    100176: RigRForearm
-    100178: RigRibcage
-    100180: RigRPalm
-    100182: RigRPlatform
-    100184: RigRThigh
-    100186: RigRToe11
-    100188: RigRToe12
-    100190: RigRUpperarm
-    100192: RigSpine1
-    100194: RigSpine2
-    100196: RigSpine3
-    100198: 06 Belt 02
-    100200: 06 Belt 03
-    100202: 06 Belt 04
-    100204: 06 Belt 05
-    100206: 06 Belt 06
-    100208: 06 Belt 07
-    100210: 06 Belt 08
-    100212: 06 Belt 09
-    100214: 06 Belt 10
-    100216: 05 Hand 02
-    100218: 05 Hand 03
-    100220: 05 Hand 04
-    100222: 03 Bottom 08
-    100224: 03 Bottom 09
-    100226: 03 Bottom 10
-    100228: 03 Bottom 11
-    100230: 03 Bottom 12
-    100232: 02 Torso 13
-    100234: 02 Torso 14
-    100236: 02 Torso 15
-    100238: 02 Torso 16
-    100240: 02 Torso 17
-    100242: 02 Torso 18
-    100244: 03 Bottom 13
-    100246: 03 Bottom 14
-    100248: Object001
-    100250: 03 Bottom 15
-    100252: 03 Bottom 16
-    100254: 03 Bottom 17
-    100256: 03 Bottom 18
-    100258: 03 Bottom 19
-    100260: 03 Bottom 20
-    400000: 01 Head 01
-    400002: 02 Torso 01
-    400004: 02 Torso 02
-    400006: 02 Torso 03
-    400008: 02 Torso 04
-    400010: 02 Torso 05
-    400012: 02 Torso 06
-    400014: 02 Torso 07
-    400016: 02 Torso 08
-    400018: 02 Torso 09
-    400020: 02 Torso 10
-    400022: 02 Torso 11
-    400024: 02 Torso 12
-    400026: 03 Bottom 01
-    400028: 03 Bottom 02
-    400030: 03 Bottom 03
-    400032: 03 Bottom 04
-    400034: 03 Bottom 05
-    400036: 03 Bottom 06
-    400038: 03 Bottom 07
-    400040: 04 Feet 01
-    400042: 04 Feet 02
-    400044: 04 Feet 03
-    400046: 04 Feet 04
-    400048: 04 Feet 05
-    400050: 04 Feet 06
-    400052: 05 Hand 01
-    400054: 06 Belt 01
-    400056: //RootNode
-    400058: Particle View 001
-    400060: Rig
-    400062: RigHead
-    400064: RigHeadBone001
-    400066: RigLCalf
-    400068: RigLCollarbone
-    400070: RigLFinger11
-    400072: RigLFinger12
-    400074: RigLFinger13
-    400076: RigLFinger14
-    400078: RigLFinger21
-    400080: RigLFinger22
-    400082: RigLFinger23
-    400084: RigLFinger24
-    400086: RigLFinger31
-    400088: RigLFinger32
-    400090: RigLFinger33
-    400092: RigLFinger34
-    400094: RigLFinger41
-    400096: RigLFinger42
-    400098: RigLFinger43
-    400100: RigLFinger44
-    400102: RigLFinger51
-    400104: RigLFinger52
-    400106: RigLFinger53
-    400108: RigLFinger54
-    400110: RigLFoot
-    400112: RigLForearm
-    400114: RigLPalm
-    400116: RigLPlatform
-    400118: RigLThigh
-    400120: RigLToe11
-    400122: RigLToe12
-    400124: RigLUpperarm
-    400126: RigNeck
-    400128: RigPelvis
-    400130: RigRCalf
-    400132: RigRCollarbone
-    400134: RigRFinger11
-    400136: RigRFinger12
-    400138: RigRFinger13
-    400140: RigRFinger14
-    400142: RigRFinger21
-    400144: RigRFinger22
-    400146: RigRFinger23
-    400148: RigRFinger24
-    400150: RigRFinger31
-    400152: RigRFinger32
-    400154: RigRFinger33
-    400156: RigRFinger34
-    400158: RigRFinger41
-    400160: RigRFinger42
-    400162: RigRFinger43
-    400164: RigRFinger44
-    400166: RigRFinger51
-    400168: RigRFinger52
-    400170: RigRFinger53
-    400172: RigRFinger54
-    400174: RigRFoot
-    400176: RigRForearm
-    400178: RigRibcage
-    400180: RigRPalm
-    400182: RigRPlatform
-    400184: RigRThigh
-    400186: RigRToe11
-    400188: RigRToe12
-    400190: RigRUpperarm
-    400192: RigSpine1
-    400194: RigSpine2
-    400196: RigSpine3
-    400198: 06 Belt 02
-    400200: 06 Belt 03
-    400202: 06 Belt 04
-    400204: 06 Belt 05
-    400206: 06 Belt 06
-    400208: 06 Belt 07
-    400210: 06 Belt 08
-    400212: 06 Belt 09
-    400214: 06 Belt 10
-    400216: 05 Hand 02
-    400218: 05 Hand 03
-    400220: 05 Hand 04
-    400222: 03 Bottom 08
-    400224: 03 Bottom 09
-    400226: 03 Bottom 10
-    400228: 03 Bottom 11
-    400230: 03 Bottom 12
-    400232: 02 Torso 13
-    400234: 02 Torso 14
-    400236: 02 Torso 15
-    400238: 02 Torso 16
-    400240: 02 Torso 17
-    400242: 02 Torso 18
-    400244: 03 Bottom 13
-    400246: 03 Bottom 14
-    400248: Object001
-    400250: 03 Bottom 15
-    400252: 03 Bottom 16
-    400254: 03 Bottom 17
-    400256: 03 Bottom 18
-    400258: 03 Bottom 19
-    400260: 03 Bottom 20
-    2300000: 03 Bottom 14
-    2300002: Object001
-    3300000: 03 Bottom 14
-    3300002: Object001
-    4300000: 04 Feet 01
-    4300002: 06 Belt 01
-    4300004: 01 Head 01
-    4300006: 02 Torso 01
-    4300008: 05 Hand 01
-    4300010: 03 Bottom 01
-    4300012: 03 Bottom 02
-    4300014: 04 Feet 02
-    4300016: 02 Torso 02
-    4300018: 03 Bottom 03
-    4300020: 04 Feet 03
-    4300022: 03 Bottom 04
-    4300024: 03 Bottom 05
-    4300026: 02 Torso 03
-    4300028: 02 Torso 04
-    4300030: 04 Feet 04
-    4300032: 02 Torso 05
-    4300034: 02 Torso 06
-    4300036: 02 Torso 07
-    4300038: 03 Bottom 06
-    4300040: 02 Torso 08
-    4300042: 02 Torso 09
-    4300044: 02 Torso 10
-    4300046: 03 Bottom 07
-    4300048: 04 Feet 05
-    4300050: 04 Feet 06
-    4300052: 02 Torso 11
-    4300054: 02 Torso 12
-    4300056: 06 Belt 02
-    4300058: 06 Belt 03
-    4300060: 06 Belt 04
-    4300062: 06 Belt 05
-    4300064: 06 Belt 06
-    4300066: 06 Belt 07
-    4300068: 06 Belt 08
-    4300070: 06 Belt 09
-    4300072: 06 Belt 10
-    4300074: 05 Hand 02
-    4300076: 05 Hand 03
-    4300078: 05 Hand 04
-    4300080: 03 Bottom 08
-    4300082: 03 Bottom 09
-    4300084: 03 Bottom 10
-    4300086: 03 Bottom 11
-    4300088: 03 Bottom 12
-    4300090: 02 Torso 13
-    4300092: 02 Torso 14
-    4300094: 02 Torso 15
-    4300096: 02 Torso 16
-    4300098: 02 Torso 17
-    4300100: 02 Torso 18
-    4300102: 03 Bottom 13
-    4300104: 03 Bottom 14
-    4300106: Object001
-    4300108: 03 Bottom 15
-    4300110: 03 Bottom 16
-    4300112: 03 Bottom 17
-    4300114: 03 Bottom 18
-    4300116: 03 Bottom 19
-    4300118: 03 Bottom 20
-    9500000: //RootNode
-    13700000: 01 Head 01
-    13700002: 02 Torso 01
-    13700004: 02 Torso 02
-    13700006: 02 Torso 03
-    13700008: 02 Torso 04
-    13700010: 02 Torso 05
-    13700012: 02 Torso 06
-    13700014: 02 Torso 07
-    13700016: 02 Torso 08
-    13700018: 02 Torso 09
-    13700020: 02 Torso 10
-    13700022: 02 Torso 11
-    13700024: 02 Torso 12
-    13700026: 03 Bottom 01
-    13700028: 03 Bottom 02
-    13700030: 03 Bottom 03
-    13700032: 03 Bottom 04
-    13700034: 03 Bottom 05
-    13700036: 03 Bottom 06
-    13700038: 03 Bottom 07
-    13700040: 04 Feet 01
-    13700042: 04 Feet 02
-    13700044: 04 Feet 03
-    13700046: 04 Feet 04
-    13700048: 04 Feet 05
-    13700050: 04 Feet 06
-    13700052: 05 Hand 01
-    13700054: 06 Belt 01
-    13700056: 06 Belt 02
-    13700058: 06 Belt 03
-    13700060: 06 Belt 04
-    13700062: 06 Belt 05
-    13700064: 06 Belt 06
-    13700066: 06 Belt 07
-    13700068: 06 Belt 08
-    13700070: 06 Belt 09
-    13700072: 06 Belt 10
-    13700074: 05 Hand 02
-    13700076: 05 Hand 03
-    13700078: 05 Hand 04
-    13700080: 03 Bottom 08
-    13700082: 03 Bottom 09
-    13700084: 03 Bottom 10
-    13700086: 03 Bottom 11
-    13700088: 03 Bottom 12
-    13700090: 02 Torso 13
-    13700092: 02 Torso 14
-    13700094: 02 Torso 15
-    13700096: 02 Torso 16
-    13700098: 02 Torso 17
-    13700100: 02 Torso 18
-    13700102: 03 Bottom 13
-    13700104: 03 Bottom 14
-    13700106: 03 Bottom 15
-    13700108: 03 Bottom 16
-    13700110: 03 Bottom 17
-    13700112: 03 Bottom 18
-    13700114: 03 Bottom 19
-    13700116: 03 Bottom 20
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: 01 Head 01
+  - first:
+      1: 100002
+    second: 02 Torso 01
+  - first:
+      1: 100004
+    second: 02 Torso 02
+  - first:
+      1: 100006
+    second: 02 Torso 03
+  - first:
+      1: 100008
+    second: 02 Torso 04
+  - first:
+      1: 100010
+    second: 02 Torso 05
+  - first:
+      1: 100012
+    second: 02 Torso 06
+  - first:
+      1: 100014
+    second: 02 Torso 07
+  - first:
+      1: 100016
+    second: 02 Torso 08
+  - first:
+      1: 100018
+    second: 02 Torso 09
+  - first:
+      1: 100020
+    second: 02 Torso 10
+  - first:
+      1: 100022
+    second: 02 Torso 11
+  - first:
+      1: 100024
+    second: 02 Torso 12
+  - first:
+      1: 100026
+    second: 03 Bottom 01
+  - first:
+      1: 100028
+    second: 03 Bottom 02
+  - first:
+      1: 100030
+    second: 03 Bottom 03
+  - first:
+      1: 100032
+    second: 03 Bottom 04
+  - first:
+      1: 100034
+    second: 03 Bottom 05
+  - first:
+      1: 100036
+    second: 03 Bottom 06
+  - first:
+      1: 100038
+    second: 03 Bottom 07
+  - first:
+      1: 100040
+    second: 04 Feet 01
+  - first:
+      1: 100042
+    second: 04 Feet 02
+  - first:
+      1: 100044
+    second: 04 Feet 03
+  - first:
+      1: 100046
+    second: 04 Feet 04
+  - first:
+      1: 100048
+    second: 04 Feet 05
+  - first:
+      1: 100050
+    second: 04 Feet 06
+  - first:
+      1: 100052
+    second: 05 Hand 01
+  - first:
+      1: 100054
+    second: 06 Belt 01
+  - first:
+      1: 100056
+    second: //RootNode
+  - first:
+      1: 100058
+    second: Particle View 001
+  - first:
+      1: 100060
+    second: Rig
+  - first:
+      1: 100062
+    second: RigHead
+  - first:
+      1: 100064
+    second: RigHeadBone001
+  - first:
+      1: 100066
+    second: RigLCalf
+  - first:
+      1: 100068
+    second: RigLCollarbone
+  - first:
+      1: 100070
+    second: RigLFinger11
+  - first:
+      1: 100072
+    second: RigLFinger12
+  - first:
+      1: 100074
+    second: RigLFinger13
+  - first:
+      1: 100076
+    second: RigLFinger14
+  - first:
+      1: 100078
+    second: RigLFinger21
+  - first:
+      1: 100080
+    second: RigLFinger22
+  - first:
+      1: 100082
+    second: RigLFinger23
+  - first:
+      1: 100084
+    second: RigLFinger24
+  - first:
+      1: 100086
+    second: RigLFinger31
+  - first:
+      1: 100088
+    second: RigLFinger32
+  - first:
+      1: 100090
+    second: RigLFinger33
+  - first:
+      1: 100092
+    second: RigLFinger34
+  - first:
+      1: 100094
+    second: RigLFinger41
+  - first:
+      1: 100096
+    second: RigLFinger42
+  - first:
+      1: 100098
+    second: RigLFinger43
+  - first:
+      1: 100100
+    second: RigLFinger44
+  - first:
+      1: 100102
+    second: RigLFinger51
+  - first:
+      1: 100104
+    second: RigLFinger52
+  - first:
+      1: 100106
+    second: RigLFinger53
+  - first:
+      1: 100108
+    second: RigLFinger54
+  - first:
+      1: 100110
+    second: RigLFoot
+  - first:
+      1: 100112
+    second: RigLForearm
+  - first:
+      1: 100114
+    second: RigLPalm
+  - first:
+      1: 100116
+    second: RigLPlatform
+  - first:
+      1: 100118
+    second: RigLThigh
+  - first:
+      1: 100120
+    second: RigLToe11
+  - first:
+      1: 100122
+    second: RigLToe12
+  - first:
+      1: 100124
+    second: RigLUpperarm
+  - first:
+      1: 100126
+    second: RigNeck
+  - first:
+      1: 100128
+    second: RigPelvis
+  - first:
+      1: 100130
+    second: RigRCalf
+  - first:
+      1: 100132
+    second: RigRCollarbone
+  - first:
+      1: 100134
+    second: RigRFinger11
+  - first:
+      1: 100136
+    second: RigRFinger12
+  - first:
+      1: 100138
+    second: RigRFinger13
+  - first:
+      1: 100140
+    second: RigRFinger14
+  - first:
+      1: 100142
+    second: RigRFinger21
+  - first:
+      1: 100144
+    second: RigRFinger22
+  - first:
+      1: 100146
+    second: RigRFinger23
+  - first:
+      1: 100148
+    second: RigRFinger24
+  - first:
+      1: 100150
+    second: RigRFinger31
+  - first:
+      1: 100152
+    second: RigRFinger32
+  - first:
+      1: 100154
+    second: RigRFinger33
+  - first:
+      1: 100156
+    second: RigRFinger34
+  - first:
+      1: 100158
+    second: RigRFinger41
+  - first:
+      1: 100160
+    second: RigRFinger42
+  - first:
+      1: 100162
+    second: RigRFinger43
+  - first:
+      1: 100164
+    second: RigRFinger44
+  - first:
+      1: 100166
+    second: RigRFinger51
+  - first:
+      1: 100168
+    second: RigRFinger52
+  - first:
+      1: 100170
+    second: RigRFinger53
+  - first:
+      1: 100172
+    second: RigRFinger54
+  - first:
+      1: 100174
+    second: RigRFoot
+  - first:
+      1: 100176
+    second: RigRForearm
+  - first:
+      1: 100178
+    second: RigRibcage
+  - first:
+      1: 100180
+    second: RigRPalm
+  - first:
+      1: 100182
+    second: RigRPlatform
+  - first:
+      1: 100184
+    second: RigRThigh
+  - first:
+      1: 100186
+    second: RigRToe11
+  - first:
+      1: 100188
+    second: RigRToe12
+  - first:
+      1: 100190
+    second: RigRUpperarm
+  - first:
+      1: 100192
+    second: RigSpine1
+  - first:
+      1: 100194
+    second: RigSpine2
+  - first:
+      1: 100196
+    second: RigSpine3
+  - first:
+      1: 100198
+    second: 06 Belt 02
+  - first:
+      1: 100200
+    second: 06 Belt 03
+  - first:
+      1: 100202
+    second: 06 Belt 04
+  - first:
+      1: 100204
+    second: 06 Belt 05
+  - first:
+      1: 100206
+    second: 06 Belt 06
+  - first:
+      1: 100208
+    second: 06 Belt 07
+  - first:
+      1: 100210
+    second: 06 Belt 08
+  - first:
+      1: 100212
+    second: 06 Belt 09
+  - first:
+      1: 100214
+    second: 06 Belt 10
+  - first:
+      1: 100216
+    second: 05 Hand 02
+  - first:
+      1: 100218
+    second: 05 Hand 03
+  - first:
+      1: 100220
+    second: 05 Hand 04
+  - first:
+      1: 100222
+    second: 03 Bottom 08
+  - first:
+      1: 100224
+    second: 03 Bottom 09
+  - first:
+      1: 100226
+    second: 03 Bottom 10
+  - first:
+      1: 100228
+    second: 03 Bottom 11
+  - first:
+      1: 100230
+    second: 03 Bottom 12
+  - first:
+      1: 100232
+    second: 02 Torso 13
+  - first:
+      1: 100234
+    second: 02 Torso 14
+  - first:
+      1: 100236
+    second: 02 Torso 15
+  - first:
+      1: 100238
+    second: 02 Torso 16
+  - first:
+      1: 100240
+    second: 02 Torso 17
+  - first:
+      1: 100242
+    second: 02 Torso 18
+  - first:
+      1: 100244
+    second: 03 Bottom 13
+  - first:
+      1: 100246
+    second: 03 Bottom 14
+  - first:
+      1: 100248
+    second: Object001
+  - first:
+      1: 100250
+    second: 03 Bottom 15
+  - first:
+      1: 100252
+    second: 03 Bottom 16
+  - first:
+      1: 100254
+    second: 03 Bottom 17
+  - first:
+      1: 100256
+    second: 03 Bottom 18
+  - first:
+      1: 100258
+    second: 03 Bottom 19
+  - first:
+      1: 100260
+    second: 03 Bottom 20
+  - first:
+      4: 400000
+    second: 01 Head 01
+  - first:
+      4: 400002
+    second: 02 Torso 01
+  - first:
+      4: 400004
+    second: 02 Torso 02
+  - first:
+      4: 400006
+    second: 02 Torso 03
+  - first:
+      4: 400008
+    second: 02 Torso 04
+  - first:
+      4: 400010
+    second: 02 Torso 05
+  - first:
+      4: 400012
+    second: 02 Torso 06
+  - first:
+      4: 400014
+    second: 02 Torso 07
+  - first:
+      4: 400016
+    second: 02 Torso 08
+  - first:
+      4: 400018
+    second: 02 Torso 09
+  - first:
+      4: 400020
+    second: 02 Torso 10
+  - first:
+      4: 400022
+    second: 02 Torso 11
+  - first:
+      4: 400024
+    second: 02 Torso 12
+  - first:
+      4: 400026
+    second: 03 Bottom 01
+  - first:
+      4: 400028
+    second: 03 Bottom 02
+  - first:
+      4: 400030
+    second: 03 Bottom 03
+  - first:
+      4: 400032
+    second: 03 Bottom 04
+  - first:
+      4: 400034
+    second: 03 Bottom 05
+  - first:
+      4: 400036
+    second: 03 Bottom 06
+  - first:
+      4: 400038
+    second: 03 Bottom 07
+  - first:
+      4: 400040
+    second: 04 Feet 01
+  - first:
+      4: 400042
+    second: 04 Feet 02
+  - first:
+      4: 400044
+    second: 04 Feet 03
+  - first:
+      4: 400046
+    second: 04 Feet 04
+  - first:
+      4: 400048
+    second: 04 Feet 05
+  - first:
+      4: 400050
+    second: 04 Feet 06
+  - first:
+      4: 400052
+    second: 05 Hand 01
+  - first:
+      4: 400054
+    second: 06 Belt 01
+  - first:
+      4: 400056
+    second: //RootNode
+  - first:
+      4: 400058
+    second: Particle View 001
+  - first:
+      4: 400060
+    second: Rig
+  - first:
+      4: 400062
+    second: RigHead
+  - first:
+      4: 400064
+    second: RigHeadBone001
+  - first:
+      4: 400066
+    second: RigLCalf
+  - first:
+      4: 400068
+    second: RigLCollarbone
+  - first:
+      4: 400070
+    second: RigLFinger11
+  - first:
+      4: 400072
+    second: RigLFinger12
+  - first:
+      4: 400074
+    second: RigLFinger13
+  - first:
+      4: 400076
+    second: RigLFinger14
+  - first:
+      4: 400078
+    second: RigLFinger21
+  - first:
+      4: 400080
+    second: RigLFinger22
+  - first:
+      4: 400082
+    second: RigLFinger23
+  - first:
+      4: 400084
+    second: RigLFinger24
+  - first:
+      4: 400086
+    second: RigLFinger31
+  - first:
+      4: 400088
+    second: RigLFinger32
+  - first:
+      4: 400090
+    second: RigLFinger33
+  - first:
+      4: 400092
+    second: RigLFinger34
+  - first:
+      4: 400094
+    second: RigLFinger41
+  - first:
+      4: 400096
+    second: RigLFinger42
+  - first:
+      4: 400098
+    second: RigLFinger43
+  - first:
+      4: 400100
+    second: RigLFinger44
+  - first:
+      4: 400102
+    second: RigLFinger51
+  - first:
+      4: 400104
+    second: RigLFinger52
+  - first:
+      4: 400106
+    second: RigLFinger53
+  - first:
+      4: 400108
+    second: RigLFinger54
+  - first:
+      4: 400110
+    second: RigLFoot
+  - first:
+      4: 400112
+    second: RigLForearm
+  - first:
+      4: 400114
+    second: RigLPalm
+  - first:
+      4: 400116
+    second: RigLPlatform
+  - first:
+      4: 400118
+    second: RigLThigh
+  - first:
+      4: 400120
+    second: RigLToe11
+  - first:
+      4: 400122
+    second: RigLToe12
+  - first:
+      4: 400124
+    second: RigLUpperarm
+  - first:
+      4: 400126
+    second: RigNeck
+  - first:
+      4: 400128
+    second: RigPelvis
+  - first:
+      4: 400130
+    second: RigRCalf
+  - first:
+      4: 400132
+    second: RigRCollarbone
+  - first:
+      4: 400134
+    second: RigRFinger11
+  - first:
+      4: 400136
+    second: RigRFinger12
+  - first:
+      4: 400138
+    second: RigRFinger13
+  - first:
+      4: 400140
+    second: RigRFinger14
+  - first:
+      4: 400142
+    second: RigRFinger21
+  - first:
+      4: 400144
+    second: RigRFinger22
+  - first:
+      4: 400146
+    second: RigRFinger23
+  - first:
+      4: 400148
+    second: RigRFinger24
+  - first:
+      4: 400150
+    second: RigRFinger31
+  - first:
+      4: 400152
+    second: RigRFinger32
+  - first:
+      4: 400154
+    second: RigRFinger33
+  - first:
+      4: 400156
+    second: RigRFinger34
+  - first:
+      4: 400158
+    second: RigRFinger41
+  - first:
+      4: 400160
+    second: RigRFinger42
+  - first:
+      4: 400162
+    second: RigRFinger43
+  - first:
+      4: 400164
+    second: RigRFinger44
+  - first:
+      4: 400166
+    second: RigRFinger51
+  - first:
+      4: 400168
+    second: RigRFinger52
+  - first:
+      4: 400170
+    second: RigRFinger53
+  - first:
+      4: 400172
+    second: RigRFinger54
+  - first:
+      4: 400174
+    second: RigRFoot
+  - first:
+      4: 400176
+    second: RigRForearm
+  - first:
+      4: 400178
+    second: RigRibcage
+  - first:
+      4: 400180
+    second: RigRPalm
+  - first:
+      4: 400182
+    second: RigRPlatform
+  - first:
+      4: 400184
+    second: RigRThigh
+  - first:
+      4: 400186
+    second: RigRToe11
+  - first:
+      4: 400188
+    second: RigRToe12
+  - first:
+      4: 400190
+    second: RigRUpperarm
+  - first:
+      4: 400192
+    second: RigSpine1
+  - first:
+      4: 400194
+    second: RigSpine2
+  - first:
+      4: 400196
+    second: RigSpine3
+  - first:
+      4: 400198
+    second: 06 Belt 02
+  - first:
+      4: 400200
+    second: 06 Belt 03
+  - first:
+      4: 400202
+    second: 06 Belt 04
+  - first:
+      4: 400204
+    second: 06 Belt 05
+  - first:
+      4: 400206
+    second: 06 Belt 06
+  - first:
+      4: 400208
+    second: 06 Belt 07
+  - first:
+      4: 400210
+    second: 06 Belt 08
+  - first:
+      4: 400212
+    second: 06 Belt 09
+  - first:
+      4: 400214
+    second: 06 Belt 10
+  - first:
+      4: 400216
+    second: 05 Hand 02
+  - first:
+      4: 400218
+    second: 05 Hand 03
+  - first:
+      4: 400220
+    second: 05 Hand 04
+  - first:
+      4: 400222
+    second: 03 Bottom 08
+  - first:
+      4: 400224
+    second: 03 Bottom 09
+  - first:
+      4: 400226
+    second: 03 Bottom 10
+  - first:
+      4: 400228
+    second: 03 Bottom 11
+  - first:
+      4: 400230
+    second: 03 Bottom 12
+  - first:
+      4: 400232
+    second: 02 Torso 13
+  - first:
+      4: 400234
+    second: 02 Torso 14
+  - first:
+      4: 400236
+    second: 02 Torso 15
+  - first:
+      4: 400238
+    second: 02 Torso 16
+  - first:
+      4: 400240
+    second: 02 Torso 17
+  - first:
+      4: 400242
+    second: 02 Torso 18
+  - first:
+      4: 400244
+    second: 03 Bottom 13
+  - first:
+      4: 400246
+    second: 03 Bottom 14
+  - first:
+      4: 400248
+    second: Object001
+  - first:
+      4: 400250
+    second: 03 Bottom 15
+  - first:
+      4: 400252
+    second: 03 Bottom 16
+  - first:
+      4: 400254
+    second: 03 Bottom 17
+  - first:
+      4: 400256
+    second: 03 Bottom 18
+  - first:
+      4: 400258
+    second: 03 Bottom 19
+  - first:
+      4: 400260
+    second: 03 Bottom 20
+  - first:
+      23: 2300000
+    second: 03 Bottom 14
+  - first:
+      23: 2300002
+    second: Object001
+  - first:
+      33: 3300000
+    second: 03 Bottom 14
+  - first:
+      33: 3300002
+    second: Object001
+  - first:
+      43: 4300000
+    second: 04 Feet 01
+  - first:
+      43: 4300002
+    second: 06 Belt 01
+  - first:
+      43: 4300004
+    second: 01 Head 01
+  - first:
+      43: 4300006
+    second: 02 Torso 01
+  - first:
+      43: 4300008
+    second: 05 Hand 01
+  - first:
+      43: 4300010
+    second: 03 Bottom 01
+  - first:
+      43: 4300012
+    second: 03 Bottom 02
+  - first:
+      43: 4300014
+    second: 04 Feet 02
+  - first:
+      43: 4300016
+    second: 02 Torso 02
+  - first:
+      43: 4300018
+    second: 03 Bottom 03
+  - first:
+      43: 4300020
+    second: 04 Feet 03
+  - first:
+      43: 4300022
+    second: 03 Bottom 04
+  - first:
+      43: 4300024
+    second: 03 Bottom 05
+  - first:
+      43: 4300026
+    second: 02 Torso 03
+  - first:
+      43: 4300028
+    second: 02 Torso 04
+  - first:
+      43: 4300030
+    second: 04 Feet 04
+  - first:
+      43: 4300032
+    second: 02 Torso 05
+  - first:
+      43: 4300034
+    second: 02 Torso 06
+  - first:
+      43: 4300036
+    second: 02 Torso 07
+  - first:
+      43: 4300038
+    second: 03 Bottom 06
+  - first:
+      43: 4300040
+    second: 02 Torso 08
+  - first:
+      43: 4300042
+    second: 02 Torso 09
+  - first:
+      43: 4300044
+    second: 02 Torso 10
+  - first:
+      43: 4300046
+    second: 03 Bottom 07
+  - first:
+      43: 4300048
+    second: 04 Feet 05
+  - first:
+      43: 4300050
+    second: 04 Feet 06
+  - first:
+      43: 4300052
+    second: 02 Torso 11
+  - first:
+      43: 4300054
+    second: 02 Torso 12
+  - first:
+      43: 4300056
+    second: 06 Belt 02
+  - first:
+      43: 4300058
+    second: 06 Belt 03
+  - first:
+      43: 4300060
+    second: 06 Belt 04
+  - first:
+      43: 4300062
+    second: 06 Belt 05
+  - first:
+      43: 4300064
+    second: 06 Belt 06
+  - first:
+      43: 4300066
+    second: 06 Belt 07
+  - first:
+      43: 4300068
+    second: 06 Belt 08
+  - first:
+      43: 4300070
+    second: 06 Belt 09
+  - first:
+      43: 4300072
+    second: 06 Belt 10
+  - first:
+      43: 4300074
+    second: 05 Hand 02
+  - first:
+      43: 4300076
+    second: 05 Hand 03
+  - first:
+      43: 4300078
+    second: 05 Hand 04
+  - first:
+      43: 4300080
+    second: 03 Bottom 08
+  - first:
+      43: 4300082
+    second: 03 Bottom 09
+  - first:
+      43: 4300084
+    second: 03 Bottom 10
+  - first:
+      43: 4300086
+    second: 03 Bottom 11
+  - first:
+      43: 4300088
+    second: 03 Bottom 12
+  - first:
+      43: 4300090
+    second: 02 Torso 13
+  - first:
+      43: 4300092
+    second: 02 Torso 14
+  - first:
+      43: 4300094
+    second: 02 Torso 15
+  - first:
+      43: 4300096
+    second: 02 Torso 16
+  - first:
+      43: 4300098
+    second: 02 Torso 17
+  - first:
+      43: 4300100
+    second: 02 Torso 18
+  - first:
+      43: 4300102
+    second: 03 Bottom 13
+  - first:
+      43: 4300104
+    second: 03 Bottom 14
+  - first:
+      43: 4300106
+    second: Object001
+  - first:
+      43: 4300108
+    second: 03 Bottom 15
+  - first:
+      43: 4300110
+    second: 03 Bottom 16
+  - first:
+      43: 4300112
+    second: 03 Bottom 17
+  - first:
+      43: 4300114
+    second: 03 Bottom 18
+  - first:
+      43: 4300116
+    second: 03 Bottom 19
+  - first:
+      43: 4300118
+    second: 03 Bottom 20
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      137: 13700000
+    second: 01 Head 01
+  - first:
+      137: 13700002
+    second: 02 Torso 01
+  - first:
+      137: 13700004
+    second: 02 Torso 02
+  - first:
+      137: 13700006
+    second: 02 Torso 03
+  - first:
+      137: 13700008
+    second: 02 Torso 04
+  - first:
+      137: 13700010
+    second: 02 Torso 05
+  - first:
+      137: 13700012
+    second: 02 Torso 06
+  - first:
+      137: 13700014
+    second: 02 Torso 07
+  - first:
+      137: 13700016
+    second: 02 Torso 08
+  - first:
+      137: 13700018
+    second: 02 Torso 09
+  - first:
+      137: 13700020
+    second: 02 Torso 10
+  - first:
+      137: 13700022
+    second: 02 Torso 11
+  - first:
+      137: 13700024
+    second: 02 Torso 12
+  - first:
+      137: 13700026
+    second: 03 Bottom 01
+  - first:
+      137: 13700028
+    second: 03 Bottom 02
+  - first:
+      137: 13700030
+    second: 03 Bottom 03
+  - first:
+      137: 13700032
+    second: 03 Bottom 04
+  - first:
+      137: 13700034
+    second: 03 Bottom 05
+  - first:
+      137: 13700036
+    second: 03 Bottom 06
+  - first:
+      137: 13700038
+    second: 03 Bottom 07
+  - first:
+      137: 13700040
+    second: 04 Feet 01
+  - first:
+      137: 13700042
+    second: 04 Feet 02
+  - first:
+      137: 13700044
+    second: 04 Feet 03
+  - first:
+      137: 13700046
+    second: 04 Feet 04
+  - first:
+      137: 13700048
+    second: 04 Feet 05
+  - first:
+      137: 13700050
+    second: 04 Feet 06
+  - first:
+      137: 13700052
+    second: 05 Hand 01
+  - first:
+      137: 13700054
+    second: 06 Belt 01
+  - first:
+      137: 13700056
+    second: 06 Belt 02
+  - first:
+      137: 13700058
+    second: 06 Belt 03
+  - first:
+      137: 13700060
+    second: 06 Belt 04
+  - first:
+      137: 13700062
+    second: 06 Belt 05
+  - first:
+      137: 13700064
+    second: 06 Belt 06
+  - first:
+      137: 13700066
+    second: 06 Belt 07
+  - first:
+      137: 13700068
+    second: 06 Belt 08
+  - first:
+      137: 13700070
+    second: 06 Belt 09
+  - first:
+      137: 13700072
+    second: 06 Belt 10
+  - first:
+      137: 13700074
+    second: 05 Hand 02
+  - first:
+      137: 13700076
+    second: 05 Hand 03
+  - first:
+      137: 13700078
+    second: 05 Hand 04
+  - first:
+      137: 13700080
+    second: 03 Bottom 08
+  - first:
+      137: 13700082
+    second: 03 Bottom 09
+  - first:
+      137: 13700084
+    second: 03 Bottom 10
+  - first:
+      137: 13700086
+    second: 03 Bottom 11
+  - first:
+      137: 13700088
+    second: 03 Bottom 12
+  - first:
+      137: 13700090
+    second: 02 Torso 13
+  - first:
+      137: 13700092
+    second: 02 Torso 14
+  - first:
+      137: 13700094
+    second: 02 Torso 15
+  - first:
+      137: 13700096
+    second: 02 Torso 16
+  - first:
+      137: 13700098
+    second: 02 Torso 17
+  - first:
+      137: 13700100
+    second: 02 Torso 18
+  - first:
+      137: 13700102
+    second: 03 Bottom 13
+  - first:
+      137: 13700104
+    second: 03 Bottom 14
+  - first:
+      137: 13700106
+    second: 03 Bottom 15
+  - first:
+      137: 13700108
+    second: 03 Bottom 16
+  - first:
+      137: 13700110
+    second: 03 Bottom 17
+  - first:
+      137: 13700112
+    second: 03 Bottom 18
+  - first:
+      137: 13700114
+    second: 03 Bottom 19
+  - first:
+      137: 13700116
+    second: 03 Bottom 20
+  externalObjects: {}
   materials:
-    importMaterials: 0
+    materialImportMode: 0
     materialName: 0
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -407,6 +1180,8 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -421,30 +1196,49 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 0
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
-    normalSmoothAngle: 60
-    normalImportMode: 0
+    normalSmoothAngle: 180
+    normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human:
     - boneName: RigPelvis
       humanName: Hips
@@ -1365,14 +2159,19 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

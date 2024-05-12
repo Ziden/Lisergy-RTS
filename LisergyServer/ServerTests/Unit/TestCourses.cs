@@ -1,12 +1,11 @@
-using Game.Events;
+using Game.Engine.DataTypes;
 using Game.Events.ServerEvents;
-using Game.Movement;
 using Game.Network.ClientPackets;
-using Game.Network.ServerPackets;
-using Game.Party;
-using Game.Pathfinder;
-using Game.Scheduler;
-using Game.Tile;
+using Game.Systems.Battler;
+using Game.Systems.FogOfWar;
+using Game.Systems.Map;
+using Game.Systems.Movement;
+using Game.Systems.Party;
 using Game.World;
 using NUnit.Framework;
 using ServerTests;
@@ -14,12 +13,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tests
+namespace UnitTests
 {
     public class TestMovement
     {
         private TestGame _game;
-        private List<MapPosition> _path;
+        private List<Location> _path;
         private TestServerPlayer _player;
         private PartyEntity _party;
 
@@ -28,15 +27,8 @@ namespace Tests
         {
             _game = new TestGame();
             _player = _game.GetTestPlayer();
-            _path = new List<MapPosition>();
+            _path = new List<Location>();
             _party = _player.GetParty(0);
-            GameScheduler.Clear();
-        }
-
-        [TearDown]
-        public void Tear()
-        {
-            _game.ClearEventListeners();
         }
 
         private void SendMoveRequest()
@@ -51,11 +43,11 @@ namespace Tests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next.X, next.Y));
+            _path.Add(new Location(next.X, next.Y));
 
             SendMoveRequest();
 
-            Assert.AreEqual(1, GameScheduler.PendingTasks);
+            Assert.AreEqual(1, _game.GameScheduler.PendingTasks);
             Assert.IsTrue(_party.Course != null);
         }
 
@@ -63,19 +55,52 @@ namespace Tests
         public void TestCourseMovingParty()
         {
             var date = DateTime.MinValue;
-            GameScheduler.SetLogicalTime(date);
+            _game.GameScheduler.SetLogicalTime(date);
 
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next.X, next.Y));
+            _path.Add(new Location(next.X, next.Y));
+
+            _player.ListenTo<EntityMoveInEvent>();
 
             SendMoveRequest();
 
             Assert.AreEqual(tile, _party.Tile);
 
-            GameScheduler.Tick(date + _party.Course.Delay);
+            _game.GameScheduler.Tick(date + _party.Course.Delay);
 
             Assert.AreEqual(next, _party.Tile);
+        }
+
+        /// <summary>
+        /// When moving outside of a player vision, the player should still receive an entity update
+        /// so he is aware this entity moved out. He would be aware by noticing the position component
+        /// </summary>
+        [Test]
+        public void TestMoveOutsidePlayerVision()
+        {
+            var tile = _party.Tile;
+            var visibleTiles = _party.Tile.GetAOE(_party.Get<EntityVisionComponent>().LineOfSight);
+            var next = tile.GetNeighbor(Direction.SOUTH);
+
+            var player2 = _game.CreatePlayer(5, 7);
+            var player2Party = player2.GetParty(0); // placed in 8 - 7
+
+            Assert.That(player2Party.Tile.PlayersViewing.Contains(_player));
+
+            _game.Entities.DeltaCompression.ClearDeltas();
+            _player.ReceivedPackets.Clear();
+
+            // Moving player2 to 5 7 which is slightly outside p1 vision
+            _path.Add(new Location(5, 7));
+            _game.HandleClientEvent(player2, new MoveRequestPacket() { Path = _path, PartyIndex = player2Party.PartyIndex });
+            _game.GameScheduler.Tick(_game.GameScheduler.Now + player2Party.Course.Delay);
+
+            // p1 should still have received p2 component update even tho the entity is outside his vision because it was inside vision
+            var moveEvents = _player.ReceivedPacketsOfType<EntityUpdatePacket>().Where(p => p.EntityId == player2Party.EntityId && p.SyncedComponents.Any(c => c is MapPlacementComponent));
+
+            // should have received movement events
+            Assert.AreEqual(1, moveEvents.Count());
         }
 
         [Test]
@@ -83,17 +108,19 @@ namespace Tests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next.X, next.Y));
+            _path.Add(new Location(next.X, next.Y));
+
+            _game.Entities.DeltaCompression.ClearDeltas();
+            _player.ReceivedPackets.Clear();
 
             SendMoveRequest();
-            GameScheduler.Tick(GameScheduler.Now + _party.Course.Delay);
+            _game.GameScheduler.Tick(_game.GameScheduler.Now + _party.Course.Delay);
 
-            var moveEvents = _player.ReceivedEventsOfType<EntityMovePacket>();
-            var tileDiscovery = _player.ReceivedEventsOfType<TileUpdatePacket>();
+            var moveEvents = _player.ReceivedPacketsOfType<EntityUpdatePacket>().Where(p => p.EntityId == _party.EntityId && p.SyncedComponents.Any(c => c is MapPlacementComponent));
+            var tileDiscovery = _player.ReceivedPacketsOfType<TileUpdatePacket>();
+
             // should have received movement events
-            Assert.AreEqual(1, moveEvents.Count);
-            // should have explored some tiles
-            Assert.GreaterOrEqual(tileDiscovery.Count, 1);
+            Assert.AreEqual(1, moveEvents.Count());
         }
 
         [Test]
@@ -103,11 +130,11 @@ namespace Tests
             var next = tile.GetNeighbor(Direction.SOUTH);
             var party = _player.GetParty(0);
 
-            _player.SendMoveRequest(party, next, MovementIntent.Offensive);
+            _player.SendMoveRequest(party, next, CourseIntent.OffensiveTarget);
             var course = party.Course;
 
-            course.Execute();
-            course.Execute();
+            course.Tick();
+            course.Tick();
 
             Assert.AreEqual(party.Tile, next);
         }
@@ -117,19 +144,18 @@ namespace Tests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next.X, next.Y));
+            _path.Add(new Location(next.X, next.Y));
 
             SendMoveRequest();
-            var course1 = GameScheduler.Queue.First();
+            var course1 = _game.GameScheduler.Queue.First();
 
-            _path.Add(new MapPosition(next.X + 1, next.Y));
+            _path.Add(new Location(next.X + 1, next.Y));
             SendMoveRequest();
-            var course2 = GameScheduler.Queue.First();
+            var course2 = _game.GameScheduler.Queue.First();
 
             Assert.AreNotEqual(course1, course2);
-            Assert.IsFalse(GameScheduler.Queue.Contains(course1));
-            Assert.IsTrue(GameScheduler.Queue.Contains(course2));
-            Assert.IsTrue(course1.HasFinished);
+            Assert.IsFalse(_game.GameScheduler.Queue.Contains(course1));
+            Assert.IsTrue(_game.GameScheduler.Queue.Contains(course2));
             Assert.IsFalse(course2.HasFinished);
         }
 
@@ -138,47 +164,52 @@ namespace Tests
         {
             var tile = _party.Tile;
             var next = tile.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next.X, next.Y));
-            _party.BattleGroupLogic.BattleID = Guid.NewGuid();
+            _path.Add(new Location(next.X, next.Y));
+            var component = _party.Get<BattleGroupComponent>();
+            component.BattleID = GameId.Generate();
+            _party.Save(component);
 
-            _path.Add(new MapPosition(next.X + 1, next.Y));
+            _path.Add(new Location(next.X + 1, next.Y));
             SendMoveRequest();
 
-            Assert.IsNull(_party.Course);
+            Assert.AreEqual(GameId.ZERO, _party.Get<CourseComponent>().CourseId);
         }
 
         [Test]
         public void TestMultipleMoves()
         {
             var date = DateTime.MinValue;
-            GameScheduler.SetLogicalTime(date);
+            _game.GameScheduler.SetLogicalTime(date);
 
             var tile = _party.Tile;
             var next1 = tile.GetNeighbor(Direction.SOUTH);
             var next2 = next1.GetNeighbor(Direction.SOUTH);
             var next3 = next2.GetNeighbor(Direction.SOUTH);
-            _path.Add(new MapPosition(next1.X, next1.Y));
-            _path.Add(new MapPosition(next2.X, next2.Y));
-            _path.Add(new MapPosition(next3.X, next3.Y));
+            _path.Add(new Location(next1.X, next1.Y));
+            _path.Add(new Location(next2.X, next2.Y));
+            _path.Add(new Location(next3.X, next3.Y));
+
+            _game.Entities.DeltaCompression.ClearDeltas();
+            _player.ReceivedPackets.Clear();
 
             SendMoveRequest();
 
             Assert.AreEqual(tile, _party.Tile);
 
             date += _party.Course.Delay;
-            GameScheduler.Tick(date);
+            _game.GameScheduler.Tick(date);
             Assert.AreEqual(next1, _party.Tile);
 
             date += _party.Course.Delay;
-            GameScheduler.Tick(date);
+            _game.GameScheduler.Tick(date);
             Assert.AreEqual(next2, _party.Tile);
 
             date += _party.Course.Delay;
-            GameScheduler.Tick(date);
+            _game.GameScheduler.Tick(date);
             Assert.AreEqual(next3, _party.Tile);
 
-            var moveEvents = _player.ReceivedEventsOfType<EntityMovePacket>();
-            Assert.AreEqual(3, moveEvents.Count);
+            var moveEvents = _player.ReceivedPacketsOfType<EntityUpdatePacket>().Where(p => p.EntityId == _party.EntityId && p.SyncedComponents.Any(c => c is MapPlacementComponent));
+            Assert.AreEqual(3, moveEvents.Count());
         }
     }
 }

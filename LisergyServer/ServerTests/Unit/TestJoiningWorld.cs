@@ -1,14 +1,14 @@
 using Game;
-using Game.Building;
-using Game.Events;
+using Game.Engine;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
-using Game.Party;
+using Game.Systems.Battler;
+using Game.Systems.Map;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
 
-namespace Tests
+namespace UnitTests
 {
     public class TestJoinWorld
     {
@@ -26,10 +26,10 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var clientPlayer = new TestServerPlayer();
+            var clientPlayer = new TestServerPlayer(Game);
             Game.HandleClientEvent(clientPlayer, joinEvent);
 
-            var createdPlayer = Game.World.Players.GetPlayer(clientPlayer.UserID);
+            var createdPlayer = Game.World.Players.GetPlayer(clientPlayer.EntityId);
 
             Assert.AreEqual(1, Game.World.Players.PlayerCount);
             Assert.AreEqual(clientPlayer, createdPlayer);
@@ -42,18 +42,20 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var clientPlayer = new TestServerPlayer();
+            var clientPlayer = new TestServerPlayer(Game);
             Game.HandleClientEvent(clientPlayer, joinEvent);
 
-            var entityVisibleEvents = clientPlayer.ReceivedEventsOfType<EntityUpdatePacket>();
-            var partyEvent = entityVisibleEvents.FirstOrDefault(e => e.Entity.GetType() == typeof(PartyEntity));
-            var buildingEvent = entityVisibleEvents.FirstOrDefault(e => e.Entity.GetType() == typeof(PlayerBuildingEntity));
+            var updateEvents = clientPlayer.ReceivedPacketsOfType<EntityUpdatePacket>();
+            var partyEvent = updateEvents.FirstOrDefault(e => e.Type == EntityType.Party);
+            var buildingEvent = updateEvents.FirstOrDefault(e => e.Type == EntityType.Building);
+            var partyPosition = (MapPlacementComponent)partyEvent.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(MapPlacementComponent));
+            var buildingPosition = (MapPlacementComponent)buildingEvent.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(MapPlacementComponent));
 
-            Assert.AreEqual(2, entityVisibleEvents.Count, "Initial Party & Building should be visible");
-            Assert.AreNotEqual(partyEvent.Entity.X, 0);
-            Assert.AreNotEqual(partyEvent.Entity.Y, 0);
-            Assert.AreNotEqual(buildingEvent.Entity.X, 0);
-            Assert.AreNotEqual(buildingEvent.Entity.Y, 0);
+            Assert.AreEqual(2, updateEvents.Count, "Initial Party & Building should be visible");
+            Assert.AreNotEqual(partyPosition.Position.X, 0);
+            Assert.AreNotEqual(partyPosition.Position.Y, 0);
+            Assert.AreNotEqual(buildingPosition.Position.X, 0);
+            Assert.AreNotEqual(buildingPosition.Position.Y, 0);
         }
 
         [Test]
@@ -61,16 +63,16 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var player = new TestServerPlayer();
+            var player = new TestServerPlayer(Game);
             Game.HandleClientEvent(player, joinEvent);
 
-            var entityUpdates = player.ReceivedEventsOfType<EntityUpdatePacket>();
-            var tileUpdates = player.ReceivedEventsOfType<TileUpdatePacket>();
+            var entityUpdates = player.ReceivedPacketsOfType<EntityUpdatePacket>();
+            var tileUpdates = player.ReceivedPacketsOfType<TileUpdatePacket>();
 
             Assert.IsTrue(tileUpdates.Count > 2);
             Assert.AreEqual(2, entityUpdates.Count);
-            Assert.IsTrue(entityUpdates.Where(e => e.Entity.Id == player.GetParty(0).Id).Any());
-            Assert.IsTrue(entityUpdates.Where(e => e.Entity.Id == player.Buildings.First().Id).Any());
+            Assert.IsTrue(entityUpdates.Where(e => e.EntityId == player.GetParty(0).EntityId).Any());
+            Assert.IsTrue(entityUpdates.Where(e => e.EntityId == player.Buildings.First().EntityId).Any());
         }
 
         [Test]
@@ -78,10 +80,10 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var player = new TestServerPlayer();
+            var player = new TestServerPlayer(Game);
             Game.HandleClientEvent(player, joinEvent);
 
-            var entityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
+            var entityVisibleEvents = player.ReceivedPacketsOfType<EntityUpdatePacket>();
 
             Assert.AreEqual(2, entityVisibleEvents.Count, "Should view his castle and his party");
         }
@@ -91,19 +93,19 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var player = new TestServerPlayer();
+            var player = new TestServerPlayer(Game);
 
             Game.HandleClientEvent(player, joinEvent);
 
-            var firstEntityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
-            var firstTileVisibleEvents = player.ReceivedEventsOfType<TileUpdatePacket>();
+            var firstEntityVisibleEvents = player.ReceivedPacketsOfType<EntityUpdatePacket>();
+            var firstTileVisibleEvents = player.ReceivedPacketsOfType<TileUpdatePacket>();
 
-            player.ReceivedEvents.Clear();
+            player.ReceivedPackets.Clear();
 
             Game.HandleClientEvent(player, joinEvent);
 
-            var secondEntityVisibleEvents = player.ReceivedEventsOfType<EntityUpdatePacket>();
-            var secondTileVisibleEvents = player.ReceivedEventsOfType<TileUpdatePacket>();
+            var secondEntityVisibleEvents = player.ReceivedPacketsOfType<EntityUpdatePacket>();
+            var secondTileVisibleEvents = player.ReceivedPacketsOfType<TileUpdatePacket>();
 
             Assert.AreEqual(firstEntityVisibleEvents.Count, secondEntityVisibleEvents.Count);
             Assert.AreEqual(firstTileVisibleEvents.Count, secondTileVisibleEvents.Count);
@@ -114,10 +116,10 @@ namespace Tests
         {
             var playersBefore = Game.World.Players.PlayerCount;
             var joinEvent = new JoinWorldPacket();
-            var player = new TestServerPlayer();
+            var player = new TestServerPlayer(Game);
             Game.HandleClientEvent(player, joinEvent);
             var party = player.GetParty(0);
-            var unit = party.BattleGroupLogic.GetUnits().First();
+            var unit = party.Get<BattleGroupComponent>().Units[0];
 
             Assert.That(unit.HP == unit.MaxHP);
         }

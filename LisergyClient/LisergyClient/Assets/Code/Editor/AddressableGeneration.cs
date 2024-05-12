@@ -2,28 +2,29 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Game.DataTypes;
+using Game.Engine.DataTypes;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
-using UnityEngine;
 
 namespace Code.Editor
 {
 	public class AddressableGeneration
 	{
 		// Path Contains -> Enum Name
-		private static readonly Dictionary<string, string> CONFIG = new Dictionary<string, string>()
+		private static readonly Dictionary<string, string> CONFIG = new ()
 		{
 			{"Sfx", "SoundFX"},
 			{"Tiles", "TilePrefab"},
 			{"Buildings", "BuildingPrefab"},
 			{"Units", "UnitPrefab"},
-			{"Effects", "MapFX"},
-			{"Sprites", "SpritePrefab"},
+			{"Effects", "VfxPrefab"},
+            {"Vfx", "VfxPrefab"},
+            {"Sprites", "SpritePrefab"},
 			{"MapObjects", "MapObjectPrefab"},
 			{"Screens", "UIScreen"},
-			{"UISetting", "UISetting"},
+            {"UI/Addressables", "UIScreen"},
+            {"UISetting", "UISetting"},
 		};
 		
 		[MenuItem("Lisergy/Generate Addressable Map")]
@@ -50,7 +51,6 @@ namespace Code.Editor
 			DefaultValueDictionary<string, List<AddressableAssetEntry>> Categorized = new DefaultValueDictionary<string, List<AddressableAssetEntry>>();
 			foreach (var a in GetAddressables())
 			{
-				Debug.Log(a.AssetPath);
 				bool fit = false;
 				foreach (var cfg in CONFIG)
 				{
@@ -101,7 +101,9 @@ namespace Code.Editor
 		{
 			var x = s.Replace(" ", "");
 			x = x.Replace("-", "_");
-			if (x.Length == 0) return "null";
+			x = x.Replace(".", "_");
+            x = x.Replace("'", "");
+            if (x.Length == 0) return "null";
 			x = Regex.Replace(x, "([A-Z])([A-Z]+)($|[A-Z])",
 				m => m.Groups[1].Value + m.Groups[2].Value.ToLower() + m.Groups[3].Value);
 			var camel = char.ToLower(x[0]) + x.Substring(1);

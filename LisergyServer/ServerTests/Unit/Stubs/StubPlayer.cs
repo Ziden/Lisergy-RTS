@@ -1,70 +1,80 @@
 ﻿using Game;
-using Game.DataTypes;
-using Game.Events;
-using Game.Events.Bus;
-using Game.Movement;
+using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.Events;
+using Game.Engine.Events.Bus;
+using Game.Engine.Network;
+using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
-using Game.Party;
-using Game.Pathfinder;
+using Game.Systems.Movement;
+using Game.Systems.Party;
+using Game.Systems.Player;
 using Game.Tile;
 using Game.World;
 using LisergyServer.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ServerTests
 {
-    public class TestServerPlayer : ServerPlayer, IEventListener
+    public class TestServerPlayer : PlayerEntity, IEventListener
     {
-        public delegate void ReceiveEventHandler(BaseEvent ev);
-        public event ReceiveEventHandler OnReceiveEvent;
-        public List<BaseEvent> ReceivedEvents = new List<BaseEvent>();
+        public event Action<BasePacket> OnReceivedPacket;
+
+        public List<BasePacket> ReceivedPackets = new List<BasePacket>();
+        public List<IBaseEvent> TriggeredEvents = new List<IBaseEvent>();
 
         public bool IsOnline { get; set; }
+        private GameServerNetwork _network;
 
-        public TestServerPlayer() : base(null)
+        public TestServerPlayer(LisergyGame game) : base(new PlayerProfile(GameId.Generate()), game)
         {
             IsOnline = true;
+            _network = game.Network as GameServerNetwork;
         }
 
-        public override void Send<EventType>(EventType ev)
+        public void SendTestPacket<EventType>(EventType ev) where EventType : BasePacket, new()
         {
-            ev.Sender = this;
-            var copy = Serialization.FromEventRaw(ev);
-            var reSerialized = Serialization.ToEventRaw(copy);
-            OnReceiveEvent?.Invoke(reSerialized);
-            ReceivedEvents.Add(reSerialized);
-        }
-
-        public void ListenTo<EventType>() where EventType : GameEvent
-        {
-            StrategyGame.GlobalGameEvents.Register<EventType>(this, ev =>
+            if (ev.GetType() != typeof(TileUpdatePacket)) // avoid flood
             {
-                ReceivedEvents.Add(ev);
+                Game.Log.Debug($"Server Sent Packet {ev.GetType().Name} to Player {this}");
+            }
+            var reSerialized = Serialization.ToBasePacket(Serialization.FromBasePacket(ev));
+            PacketPool.Return(ev);
+            OnReceivedPacket?.Invoke(reSerialized);
+            ReceivedPackets.Add(reSerialized);
+        }
+
+        public void ListenTo<EventType>() where EventType : IBaseEvent
+        {
+            Game.Events.Register<EventType>(this, ev =>
+            {
+                TriggeredEvents.Add(ev.ShallowClone());
             });
         }
 
-        public void SendMoveRequest(PartyEntity p, TileEntity t, MovementIntent intent)
+        public void SendMoveRequest(PartyEntity p, TileEntity t, CourseIntent intent)
         {
-            var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new MapPosition(pa.X, pa.Y)).ToList();
+            var path = t.Chunk.Map.FindPath(p.Tile, t).Select(pa => new Location(pa.X, pa.Y)).ToList();
             var ev = new MoveRequestPacket() { Path = path, PartyIndex = p.PartyIndex, Intent = intent };
             ev.Sender = this;
-            t.Chunk.Map.World.Game.NetworkEvents.Call(ev);
+            _network.IncomingPackets.Call(ev);
         }
 
-        public List<T> ReceivedEventsOfType<T>() where T : BaseEvent
+        public List<T> ReceivedPacketsOfType<T>() where T : BasePacket
         {
-            return ReceivedEvents.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => e as T).ToList();
+            return ReceivedPackets.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => e as T).ToList();
         }
 
-        public override bool Online()
+        public List<T> TriggeredEventsOfType<T>() where T : IBaseEvent
         {
-            return this.IsOnline;
+            return TriggeredEvents.Where(e => e.GetType().IsAssignableFrom(typeof(T))).Select(e => (T)e).ToList();
         }
 
         public override string ToString()
         {
-            return $"<TestPlayer id={UserID.ToString()}>";
+            return $"<TestPlayer id={EntityId.ToString()}>";
         }
     }
 

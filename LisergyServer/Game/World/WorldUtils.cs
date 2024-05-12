@@ -1,84 +1,32 @@
-﻿using Game.Tile;
+﻿using Game.Engine.DataTypes;
+using Game.Tile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Game.World
 {
-    public static class EnumerableHelper<E>
-    {
-        static EnumerableHelper()
-        {
-            WorldUtils._random = new GameRandom();
-        }
-
-        public static T RandomElement<T>(IEnumerable<T> input)
-        {
-            return input.ElementAt(WorldUtils._random.Next(input.Count()));
-        }
-    }
-
-    public static class EnumerableExtensions
-    {
-        public static T RandomElement<T>(this IEnumerable<T> input)
-        {
-            return EnumerableHelper<T>.RandomElement(input);
-        }
-    }
-
     public static class WorldUtils
     {
-        internal static GameRandom _random = new GameRandom();
+        internal static DeterministicRandom _random = new DeterministicRandom();
 
-        public static GameRandom Random { get => _random; }
+        public static T RandomElement<T>(this IEnumerable<T> input)
+        {
+            return input.ElementAt(_random.Next(input.Count()));
+        }
+
+        public static DeterministicRandom Random { get => _random; }
 
         public static void SetRandomSeed(int seed)
         {
-            _random = new GameRandom(seed);
-        }
-
-        public static void RemoveString(this string[] array, string obj)
-        {
-            for (var i = 0; i < array.Length; i++)
-            {
-                if (array[i] == obj)
-                {
-                    array[i] = null;
-                    return;
-                }
-            }
-        }
-
-        public static int FilledSlots(this string[] array)
-        {
-            var amt = 0;
-            for (var i = 0; i < array.Length; i++)
-            {
-                if (array[i] != null)
-                {
-                    amt++;
-                }
-            }
-            return amt;
-        }
-
-        public static void AddString(this string[] array, string obj)
-        {
-            for (var i = 0; i < array.Length; i++)
-            {
-                if (array[i] == null)
-                {
-                    array[i] = obj;
-                    return;
-                }
-            }
+            _random = new DeterministicRandom(seed);
         }
 
         // Gets the amount of bits required to allocate a given number
         // This will be used to get the amount 
         public static int BitsRequired(this int num)
         {
-            const int mask = Int32.MinValue;
+            const int mask = int.MinValue;
             int leadingZeros = 0;
             for (; leadingZeros < 32; leadingZeros++)
             {
@@ -87,16 +35,6 @@ namespace Game.World
                 num <<= 1;
             }
             return 32 - leadingZeros;
-        }
-
-        public static int ToChunkCoordinate(this int num)
-        {
-            return num >> GameWorld.CHUNK_SIZE_BITSHIFT;
-        }
-
-        public static int ToTileCoordinate(this int num)
-        {
-            return num << GameWorld.CHUNK_SIZE_BITSHIFT;
         }
 
         public static void AddFlag<T>(this ref byte value, T flag)
@@ -142,16 +80,18 @@ namespace Game.World
             return Direction.NONE;
         }
 
+        private static ushort ONE = 1;
+
         public static TileEntity FindTileWithId(this Chunk chunk, byte tileID)
         {
             var tiles = chunk.Tiles;
             var tries = 10;
             while (tries > 0)
             {
-                var rndX = WorldUtils._random.Next(0, tiles.GetLength(0));
-                var rndY = WorldUtils._random.Next(0, tiles.GetLength(1));
-                TileEntity tile = tiles[rndX, rndY];
-                if (tile.TileId == tileID)
+                var rndX = _random.Next(0, tiles.GetLength(0));
+                var rndY = _random.Next(0, tiles.GetLength(1));
+                TileEntity tile = chunk.GetTile(rndX, rndY);
+                if (tile.SpecId == tileID)
                     return tile;
                 tries--;
             }
@@ -175,6 +115,11 @@ namespace Game.World
             return Math.Abs(tile.X - t2.X) + Math.Abs(tile.Y - t2.Y);
         }
 
+        public static int Distance(this Location tile, in Location t2)
+        {
+            return Math.Abs(tile.X - t2.X) + Math.Abs(tile.Y - t2.Y);
+        }
+
         public static TileEntity GetNeighborInRange(this TileEntity source, int range, Direction d)
         {
             while (range > 0)
@@ -188,10 +133,18 @@ namespace Game.World
 
         public static IEnumerable<TileEntity> GetAOE(this TileEntity tile, ushort radius)
         {
-            for (var xx = tile.X - radius; xx <= tile.X + radius; xx++)
-                for (var yy = tile.Y - radius; yy <= tile.Y + radius; yy++)
-                    if (tile.Chunk.Map.ValidCoords(xx, yy))
-                        yield return tile.Chunk.Map.GetTile(xx, yy);
+            for (var xx = -radius; xx <= radius; xx++)
+                for (var yy = -radius; yy <= radius; yy++)
+                {
+                    if (xx == -radius && yy == -radius) continue;
+                    if (xx == -radius && yy == radius) continue;
+                    if (xx == radius && yy == -radius) continue;
+                    if (xx == radius && yy == radius) continue;
+                    var x = tile.X + xx;
+                    var y = tile.Y + yy;
+                    if (tile.Chunk.Map.ValidCoords(x, y))
+                        yield return tile.Chunk.Map.GetTile(x, y);
+                }
         }
     }
 }

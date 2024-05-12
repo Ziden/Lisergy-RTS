@@ -1,4 +1,5 @@
 ﻿using Game.Entity;
+using Game.Systems.Battler;
 using GameData;
 using GameData.buffs;
 using GameData.Specs;
@@ -6,34 +7,42 @@ using System.Collections.Generic;
 
 namespace GameDataTest
 {
-    public class TestUnitData
+    public static class TestUnitData
     {
         public static string Addr(string name) => $"Assets/Addressables/Prefabs/Units/{name}.prefab";
 
         public static string AddrFace(string name) => $"Assets/Addressables/Sprites/Badges/{name}.png";
 
-        private static void AddUnit(GameSpec spec, UnitSpec unitSpec)
+        private static void AddUnit(ref GameSpec spec, UnitSpec unitSpec)
         {
-            var id = (ushort)spec.Units.Count;
-            unitSpec.UnitSpecID = id;
+            var id = (byte)spec.Units.Count;
+            unitSpec.SpecId = id;
             spec.Units[id] = unitSpec;
         }
 
-        public static readonly ushort THIEF = 0;
-        public static readonly ushort KNIGHT = 1;
-        public static readonly ushort MAGE = 2;
+        public static readonly UnitSpecId THIEF = 0;
+        public static readonly UnitSpecId KNIGHT = 1;
+        public static readonly UnitSpecId MAGE = 2;
 
-        private static UnitStats BaseStats = new UnitStats().SetStats(new Dictionary<Stat, ushort>()
+        private static UnitStats BaseStats = new UnitStats().SetStats(new Dictionary<Stat, byte>()
             {
-                    { Stat.SPEED, 5 },
-                    { Stat.ACCURACY, 5 },
-                    { Stat.DEF, 5 },
-                    { Stat.MDEF, 5 },
-                    { Stat.ATK, 5 },
-                    { Stat.MATK, 5 },
-                    { Stat.MHP, 20 },
-                    { Stat.MMP, 19 },
+                    { Stat.SPEED, 50 },
+                    { Stat.ACCURACY, 50 },
+                    { Stat.DEF, 50 },
+                    { Stat.MDEF, 50 },
+                    { Stat.ATK, 50 },
+                    { Stat.MATK, 50 },
+                    { Stat.MHP, 100 },
+                    { Stat.MMP, 30 },
         });
+
+        public static UnitStats SetStats(this UnitStats u, Dictionary<Stat, byte> stats)
+        {
+            foreach (var kp in stats)
+                u[kp.Key] = kp.Value;
+            return u;
+        }
+
 
         private static UnitStats AddToBase(params (Stat, short)[] stats)
         {
@@ -41,9 +50,9 @@ namespace GameDataTest
             st.SetStats(BaseStats);
             foreach (var item in stats)
             {
-                var value = st.GetStat(item.Item1);
-                value += (ushort)item.Item2;
-                st.SetStat(item.Item1, value);
+                short value = st.GetStat(item.Item1);
+                value += item.Item2;
+                st[item.Item1] = (byte)value;
             }
 
             return st;
@@ -51,25 +60,26 @@ namespace GameDataTest
 
         public static void Generate(ref GameSpec spec)
         {
-            AddUnit(spec, new UnitSpec()
+            AddUnit(ref spec, new UnitSpec()
             {
                 Art = new ArtSpec() { Type = ArtType.PREFAB,Address = Addr("Rogue") },
                 Name = "Rogue",
                 IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = AddrFace("Badge_rogue"),
+                    Address = "Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.2_30.png",
                 },
                 LOS = 2,
                 Stats = AddToBase(
-                    (Stat.SPEED, 2),
-                    (Stat.DEF, -2),
-                    (Stat.MDEF, -1),
-                    (Stat.ATK, 1),
-                    (Stat.MATK, -2)
+                    (Stat.ACCURACY, 20),
+                    (Stat.SPEED, 30),
+                    (Stat.DEF, -30),
+                    (Stat.MDEF, -20),
+                    (Stat.ATK, 30),
+                    (Stat.MATK, -30)
                 )
             });
-            AddUnit(spec, new UnitSpec()
+            AddUnit(ref spec, new UnitSpec()
             {
                 Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Knight") },
                 Name = "Knight",
@@ -77,37 +87,37 @@ namespace GameDataTest
                 IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = AddrFace("Badge_warrior"),
+                    Address = "Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.6_94.png",
                 },
                 Stats = AddToBase(
-                    (Stat.ATK, 1),
-                    (Stat.MDEF, -1),
-                    (Stat.SPEED, -3),
-                    (Stat.DEF, 2),
-                    (Stat.ACCURACY, 1),
-                    (Stat.MATK, -1),
-                    (Stat.MHP, 10)
+                    (Stat.ATK, 10),
+                    (Stat.MDEF, -30),
+                    (Stat.SPEED, -40),
+                    (Stat.DEF, 30),
+                    (Stat.ACCURACY, -10),
+                    (Stat.MATK, -10),
+                    (Stat.MHP, 30)
                 )
             });
-            AddUnit(spec, new UnitSpec()
+            AddUnit(ref spec, new UnitSpec()
             {
                 Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Mage") },
                 Name = "Mage",
                 IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = AddrFace("Badge_mage"),
+                    Address = "Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.2_81.png",
                 },
                 LOS = 3,
                 Stats = AddToBase(
-                    (Stat.ATK, -2),
-                    (Stat.MATK, 2),
-                    (Stat.MDEF, 1),
-                    (Stat.SPEED, -1),
-                    (Stat.DEF, -2),
-                    (Stat.ACCURACY, 2),
-                    (Stat.MHP, -5),
-                    (Stat.MMP, 10)
+                    (Stat.ATK, -30),
+                    (Stat.MATK, 30),
+                    (Stat.MDEF, 10),
+                    (Stat.SPEED, -10),
+                    (Stat.DEF, -30),
+                    (Stat.ACCURACY, 20),
+                    (Stat.MHP, -20),
+                    (Stat.MMP, 50)
                 )
             });
         }

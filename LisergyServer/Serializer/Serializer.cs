@@ -250,6 +250,9 @@ namespace NetSerializer
             }
         }
 
+        public IReadOnlyDictionary<Type, uint> TypeMap => m_runtimeTypeMap.ToDictionary();
+
+
         readonly TypeDictionary m_runtimeTypeMap;
         readonly TypeIDList m_runtimeTypeIDList;
 
@@ -433,7 +436,7 @@ namespace NetSerializer
             }
             else if (serializer is IDynamicTypeSerializer)
             {
-                // TODO: make it possible for dyn serializers to not have Serializer param
+
                 writer = Helpers.GenerateDynamicSerializerStub(type);
             }
             else
@@ -529,7 +532,6 @@ namespace NetSerializer
             }
             else if (serializer is IDynamicTypeSerializer)
             {
-                // TODO: make it possible for dyn serializers to not have Serializer param
                 reader = Helpers.GenerateDynamicDeserializerStub(type);
             }
             else

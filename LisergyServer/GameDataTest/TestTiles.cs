@@ -1,39 +1,40 @@
 ﻿using GameData;
 using GameData.Specs;
-using System.Collections.Generic;
 
 namespace GameDataTest
 {
     public class TestTiles
     {
         private static string Addr(string name) => $"Assets/Addressables/Prefabs/Tiles/{name}.prefab";
-        
+
         public static readonly TileSpec GRASS = new TileSpec(0)
         {
-            ID = 0,
             MovementFactor = 1,
-            Art = new ArtSpec() { Address = Addr("Plains"), Type=ArtType.PREFAB }
+            TilePrefab = new ArtSpec(Addr("Plains")),
         };
 
         public static readonly TileSpec MOUNTAIN = new TileSpec(1)
         {
-            ID = 1,
             MovementFactor = 0,
-            Art = new ArtSpec() { Address = Addr("Mountain"), Type=ArtType.PREFAB }
+            ResourceSpotSpecId = TestHarvestingSpots.MOUNTAIN.SpecId,
+            ChangeToTileIdWhenDepleted = GRASS.ID,
+            TilePrefab = new ArtSpec(Addr("Mountain")),
         };
 
         public static readonly TileSpec WATER = new TileSpec(2)
         {
-            ID = 2,
             MovementFactor = 0.5f,
-            Art = new ArtSpec() { Address = Addr("Water"), Type=ArtType.PREFAB }
+            ResourceSpotSpecId = TestHarvestingSpots.RIVER.SpecId,
+            ChangeToTileIdWhenDepleted = GRASS.ID,
+            TilePrefab = new ArtSpec() { Address = Addr("Water"), Type=ArtType.PREFAB }
         };
 
         public static readonly TileSpec FOREST = new TileSpec(3)
         {
             MovementFactor = 0.8f,
-            ID = 3,
-            Art =new ArtSpec() { Address = Addr("Forest"), Type=ArtType.PREFAB }
+            ResourceSpotSpecId = TestHarvestingSpots.LOGS.SpecId,
+            ChangeToTileIdWhenDepleted = GRASS.ID,
+            TilePrefab =new ArtSpec() { Address = Addr("Forest"), Type=ArtType.PREFAB }
         };
 
         public static void Generate(ref GameSpec spec)

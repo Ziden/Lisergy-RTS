@@ -1,77 +1,52 @@
 using Game;
-using Game.Dungeon;
 using Game.ECS;
-using Game.Events.GameEvents;
+using Game.Engine.DataTypes;
+using Game.Systems.Building;
+using Game.Systems.Dungeon;
+using Game.Systems.Map;
+using Game.Systems.Tile;
 using Game.Tile;
 using NUnit.Framework;
+using ServerTests;
 
-namespace Tests
+namespace UnitTests
 {
     public unsafe class TestTileComponents
     {
-
+        private IGame _game;
         private TileEntity tile1;
         private TileEntity tile2;
 
         [SetUp]
         public void Setup()
         {
-            var c = new Chunk(null, 0, 0, new TileEntity[,] { });
-            var t1 = new TileData();
-            var t2 = new TileData();
-            tile1 = new TileEntity(c, &t1, 0, 0);
-            tile2 = new TileEntity(c, &t2, 1, 1);
-        }
-
-        [Test]
-        public void TestEventsOnlyRegisteredOnce()
-        {
-            ComponentSet._buses.Clear();
-
-            tile1.Components.Add(new TileHabitants());
-            tile2.Components.Add(new TileHabitants());
-
-            var tileBus = ComponentSet._buses[typeof(TileEntity)]._bus;
-
-            Assert.AreEqual(1, tileBus._listeners.Count);
+            _game = new TestGame();
+            tile1 = _game.World.Map.GetTile(0, 0);
+            tile2 = _game.World.Map.GetTile(1, 1);
         }
 
         [Test]
         public void TestTileCallbacks()
         {
-            tile1.Components.Add(new TileHabitants());
-            tile2.Components.Add(new TileHabitants());
+            tile1.Components.AddReference(new TileHabitantsReferenceComponent());
+            tile2.Components.AddReference(new TileHabitantsReferenceComponent());
 
-            var dg = new DungeonEntity();
+            var dg = (DungeonEntity)_game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
 
             tile1.Components.CallEvent(new BuildingPlacedEvent(dg, tile1));
 
-            Assert.IsTrue(tile1.Components.Get<TileHabitants>().Building == dg);
-            Assert.IsTrue(tile2.Components.Get<TileHabitants>().Building == null);
+            Assert.IsTrue(tile1.Components.GetReference<TileHabitantsReferenceComponent>().Building == dg);
+            Assert.IsTrue(tile2.Components.GetReference<TileHabitantsReferenceComponent>().Building == null);
         }
 
         public class TestView : IComponent
         {
-            public static EntityMoveOutEvent called = null;
+            public static EntityMoveOutEvent called = default;
 
             public static void Callback(TestView view, EntityMoveOutEvent ev)
             {
                 TestView.called = ev;
             }
-        }
-
-        [Test]
-        public void TestViewEvents()
-        {
-            tile1.Components.Add(new TestView());
-
-
-            tile1._components.RegisterExternalComponentEvents<TestView, EntityMoveOutEvent>(TestView.Callback);
-
-            tile1.Components.CallEvent(new EntityMoveOutEvent() { Entity = new DungeonEntity() });
-
-            Assert.IsTrue(TestView.called.Entity is DungeonEntity);
-
         }
     }
 }

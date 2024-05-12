@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ServerTests": {
+      "commandName": "Project",
+      "commandLineArgs": "--diag"
+    }
+  }
+}

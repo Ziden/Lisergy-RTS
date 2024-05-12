@@ -1,33 +1,20 @@
-using Game;
+using Game.Engine;
 using Game.Events.ServerEvents;
 using NUnit.Framework;
 using ServerTests;
 
-namespace Tests
+namespace UnitTests
 {
     public class TestSpecSerialization
-    {
-
-        [SetUp]
-        public void Setup()
-        {
-
-        }
-
-        [TearDown]
-        public void Tear()
-        {
-
-        }
-
+    { 
         [Test]
         public void TestBasicSerialization()
         {
             var game = new TestGame();
-            //var serialized = Serialization.FromEventRaw(new GameSpecPacket(game));
-            //var deserialized = (GameSpecPacket)Serialization.ToEventRaw(serialized);
+            var serialized = Serialization.FromBasePacket(new GameSpecPacket(game));
+            var deserialized = (GameSpecPacket)Serialization.ToBasePacket(serialized);
 
-            var asd = 123;
+            Assert.AreEqual(game.Specs.Units.Count, deserialized.Spec.Units.Count);
         }
     }
 }

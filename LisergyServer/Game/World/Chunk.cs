@@ -1,12 +1,11 @@
-﻿using Game.DataTypes;
-using Game.ECS;
-using Game.Pathfinder;
+﻿using Game.Engine.DataTypes;
+using Game.Systems.Tile;
 using Game.Tile;
-using Game.World;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
-namespace Game
+namespace Game.World
 {
     [Flags]
     public enum ChunkFlag : byte
@@ -15,85 +14,71 @@ namespace Game
         OCCUPIED = 0b00000010
     }
 
-    public unsafe class Chunk : IEntity, IDisposable
+    public interface IChunk
     {
-        [NonSerialized]
-        private ChunkData _data;
+        IChunkMap Map { get; }
+        TileEntity[,] Tiles { get; }
+    }
 
-        [NonSerialized]
-        private TileEntity[,] _tiles;
-
-        [NonSerialized]
+    /// <summary>
+    /// A chunk represents a small portion of the map tiles (e.g a 8x8 tile)
+    /// All tile data of a given chunk is stored in the same memory pointer.
+    /// </summary>
+    public unsafe class Chunk : IDisposable, IChunk
+    {
+        private ChunkDataHolder _data;
+        private TileEntity[,] _tileReferences;
         private GameId _id;
 
-        public bool IsVoid()
+        public IChunkMap Map { get; private set; }
+
+        public Chunk(IChunkMap map, in int x, in int y)
         {
-            return _tiles == null;
+            _data = new ChunkDataHolder();
+            _data.Allocate(map.ChunkMapDimensions.x * map.ChunkMapDimensions.y);
+            _data.Position = new Location(x, y);
+            _id = new GameId(_data.Position);
+            _tileReferences = new TileEntity[GameWorld.CHUNK_SIZE, GameWorld.CHUNK_SIZE];
+            Map = map;
         }
 
-        public ushort X => _data.Position.X;
-        public ushort Y => _data.Position.Y;
-        public MapPosition Position => _data.Position;
+        public ref readonly ushort X => ref _data.Position.X;
+        public ref readonly ushort Y => ref _data.Position.Y;
+        public ref readonly Location Position => ref _data.Position;
+        public ref readonly byte Flags { get => ref _data.ChunkFlags; }
+        public void SetFlag(in byte flag) => _data.SetFlag(flag);
+        public TileEntity[,] Tiles { get => _tileReferences; private set => _tileReferences = value; }
+        public ref readonly GameId EntityId => ref _id;
+        public void FreeMemoryForReuse() => _data.FlagToBeReused();
+        public ref readonly ChunkDataHolder Data => ref _data;
 
-        public ChunkMap Map { get; private set; }
-        public byte Flags { get => _data._flags; }
 
-        public void SetFlag(byte flag) => _data.SetFlag(flag);
-
-        public TileEntity[,] Tiles { get => _tiles; private set => _tiles = value; }
-
-        public IComponentSet Components => throw new NotImplementedException();
-
-        public GameId EntityId => _id;
-
-        public Chunk(ChunkMap w, int x, int y, TileEntity[,] tiles)
+        public TileEntity CreateTile(in int internalTileX, in int internalTileY)
         {
-            ;
-            _id = GameId.Generate();
-            _data = new ChunkData();
-            _data.Position = new MapPosition(x, y);
-            _data.Allocate();
-            Map = w;
-            _tiles = tiles;
-        }
-
-        public void FreeMemoryForReuse()
-        {
-            _data.FlagToBeReused();
-        }
-
-        public TileEntity CreateTile(in int tileX, in int tileY)
-        {
-            var internalTileX = tileX % GameWorld.CHUNK_SIZE;
-            var internalTileY = tileY % GameWorld.CHUNK_SIZE;
-            var dataPointer = _data.GetTileData(internalTileX, internalTileY);
-            var tile = new TileEntity(this, dataPointer, tileX, tileY);
+            TileData* dataPointer = _data.GetTileData(internalTileX, internalTileY);
+            var tile = new TileEntity(this, dataPointer, X * GameWorld.CHUNK_SIZE + internalTileX, Y * GameWorld.CHUNK_SIZE + internalTileY);
+            Tiles[internalTileX, internalTileY] = tile;
             return tile;
         }
 
 
         public TileEntity GetTile(in int x, in int y)
         {
-            return Tiles[x, y];
+            var tile = Tiles[x, y];
+            if (tile == null) tile = CreateTile(x, y);
+            return tile;
         }
 
-        public override String ToString()
-        {
-            return $"<Chunk x={X} y={Y}>";
-        }
+
+        public override string ToString() => $"<Chunk x={X} y={Y}>";
+
 
         public IEnumerable<TileEntity> AllTiles()
         {
-            for (var x = 0; x < _tiles.GetLength(0); x++)
-                for (var y = 0; y < _tiles.GetLength(1); y++)
-                    yield return _tiles[x, y];
+            for (var x = 0; x < _tileReferences.GetLength(0); x++)
+                for (var y = 0; y < _tileReferences.GetLength(1); y++)
+                    yield return GetTile(x, y);
         }
-
-        public void Dispose()
-        {
-            _data.Free();
-        }
-
-
+        public void Dispose() => _data.Free();
     }
 }

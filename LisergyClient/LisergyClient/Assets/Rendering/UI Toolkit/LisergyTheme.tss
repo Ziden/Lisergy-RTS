@@ -1,0 +1,72 @@
+@import url("unity-theme://default");
+
+
+Label {
+-unity-font-definition: url(“/Assets/Resources/font/LisFont.asset”);
+}
+
+* .unity-text-field__input
+{
+  text-color: black;
+  font-family: "Arial";
+  font-style: normal;
+  font-weight: normal;
+  background-color: #ffffff;
+  border-style: none;
+  border-color: #000000;
+  border-width: 0;
+  border-radius: 0;
+  padding: 4 8;
+  placeholder-text-color: #808080;
+  selection-background-color: #ADD8E6;
+  selection-text-color: black;
+}
+
+* .unity-text-field
+{
+  text-color: black;
+  font-family: "Arial";
+  font-style: normal;
+  font-weight: normal;
+  background-color: #ffffff;
+  border-style: none;
+  border-color: #000000;
+  border-width: 0;
+  border-radius: 0;
+  padding: 4 8;
+  text-alignment: middle-left;
+  placeholder-text-color: #808080;
+  selection-background-color: #ADD8E6;
+  selection-text-color: black;
+}
+
+* .unity-text-field .unity-base-field__input
+{
+    background-image:none;
+}
+
+.button:active {
+    image-tint-color: rgb(100, 100, 100);
+}
+
+.ActionsRoot {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+    flex-direction: row;
+    align-items: auto;
+    align-self: auto;
+    justify-content: flex-start;
+    position: absolute;
+    transition-property: all rotate;
+    transition-duration: 1s 2s;
+    transition-timing-function: linear linear;
+    scale: 0 0;
+    rotate: 180;
+    transform-origin: center;
+}
+
+.ActionsRoot.animate {
+   rotate: 180;
+   scale: 1 1;
+}
+

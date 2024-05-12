@@ -7,8 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Scheduler\FastGameTask.cs" />
-    <Compile Remove="Scheduler\FastScheduler.cs" />
+    <Compile Remove="Engine\Scheduler\FastGameTask.cs" />
+    <Compile Remove="Engine\Scheduler\FastScheduler.cs" />
+    <Compile Remove="Systems\Harvesting\ResourceTypes.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="readme.md" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +22,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Condition="$([MSBuild]::IsOSPlatform('OSX'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/Game.dll" />
     <Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/Game.dll" />
     <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="xcopy /y /s /f $(TargetPath) $(SolutionDir)\..\LisergyClient\LisergyClient\Assets\Plugins\Game.dll*" />
   </Target>

@@ -1,14 +1,14 @@
-﻿using Game;
-using Game.Battle;
-using Game.DataTypes;
-using Game.ECS;
+﻿using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.Events;
+using Game.Engine.Events.Bus;
+using Game.Engine.Scheduler;
 using Game.Events;
-using Game.Events.Bus;
-using Game.Events.GameEvents;
-using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
-using Game.Player;
+using Game.Systems.Battle;
+using Game.Systems.Player;
+using Game.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,153 +16,112 @@ using System.Linq;
 namespace Game.Services
 {
     /// <summary>
-    /// Battle server. Currently runs same as map server.
-    /// Should proccess battles from a queue.
+    /// Internal Service event to tell the battle service a battle finished processing
+    /// </summary>
+    internal class BattleFinishedTaskEvent : IGameEvent
+    {
+        public BattleResultPacket ResultPacket;
+        public TurnBattle Battle;
+    }
+
+    /// <summary>
+    /// Task to proccess a battle
+    /// </summary>
+    public class BattleTaskExecutor : ITaskExecutor
+    {
+        public TurnBattle Battle;
+
+        public BattleTaskExecutor(TurnBattle battle) {  Battle = battle; }
+        
+        public void Execute(GameTask task)
+        {
+            task.Game.Events.Call(new BattleFinishedTaskEvent()
+            {
+                Battle = Battle,
+                ResultPacket = new BattleResultPacket(Battle.ID, Battle.AutoRun.RunAllRounds())
+            });
+        }
+    }
+
+    /// <summary>
+    /// Battle server. 
+    /// Proccess battles independently in an isolated environment
     /// </summary>
     public class BattleService : IEventListener
     {
-        public GameWorld World { get; private set; }
-        private Dictionary<GameId, TurnBattle> _battlesHappening = new Dictionary<GameId, TurnBattle>();
+        private IGame _game;
+        public Dictionary<GameId, GameTask> BattleTasks { get; private set; } = new Dictionary<GameId, GameTask>();
+        public Dictionary<GameId, BattleLogPacket> AllBattles { get; private set; } = new Dictionary<GameId, BattleLogPacket>();
 
-        public BattleService(StrategyGame game)
+        public BattleService(LisergyGame game)
         {
-            World = game.World;
-            game.NetworkEvents.Register<BattleLogRequestPacket>(this, OnBattleRequest);
-            game.NetworkEvents.Register<BattleStartPacket>(this, OnBattleStart);
-            game.NetworkEvents.Register<BattleResultPacket>(this, OnBattleResult);
+            _game = game;
+            game.Network.On<BattleQueuedPacket>(OnBattleTrigger);
+            game.Network.On<BattleLogRequestPacket>(OnBattleRequest);
+            game.Events.Register<BattleFinishedTaskEvent>(this, OnBattleFinishedProcessing);
         }
 
-        public void Wipe()
-        {
-            _battlesHappening.Clear();
-        }
-
-        public List<TurnBattle> GetBattles()
-        {
-            return _battlesHappening.Values.ToList();
-        }
-
-        [EventMethod]
+        /// <summary>
+        /// Called whenever a player requests for a full battle log
+        /// </summary>
         public void OnBattleRequest(BattleLogRequestPacket p)
         {
-            if(BattleHistory.TryGetLog(p.BattleId, out var log))
-            {
-                p.Sender.Send(log);
-            }
+            if (AllBattles.TryGetValue(p.BattleId, out var log)) _game.Network.SendToPlayer(log, p.Sender); 
         }
 
-        [EventMethod]
-        public void OnBattleStart(BattleStartPacket ev)
+        /// <summary>
+        /// Triggered when the service receives a new battle to be proccesed
+        /// </summary>
+        public void OnBattleTrigger(BattleQueuedPacket packet)
         {
-            Console.WriteLine($"Received {ev.Attacker} vs {ev.Defender}");
+            _game.Log.Debug($"Received {packet.Attacker} vs {packet.Defender}");
+            var battle = new TurnBattle(packet.BattleID, packet.Attacker, packet.Defender);
+            AllBattles[packet.BattleID] = new BattleLogPacket(packet);
 
-            var battle = new TurnBattle(ev.BattleID, ev.Attacker, ev.Defender);
-            battle.StartEvent = ev;
-
-            ev.Attacker.Entity.BattleGroupLogic.BattleID = ev.BattleID;
-            ev.Defender.Entity.BattleGroupLogic.BattleID = ev.BattleID;
-
-            BattleHistory.Track(ev);
-
-            _battlesHappening[battle.ID] = battle;
-            foreach (var p in GetAllPlayers(battle))
-            {
-                if(p.Online()) 
-                    p.Send(ev);
-            }
-
-            battle.Task = new BattleTask(World.Game, battle);
+            var attackerPlayer = _game.Players[packet.Attacker.OwnerID];
+            var executor = new BattleTaskExecutor(battle);
+            var task = new GameTask(_game, TimeSpan.FromSeconds(3), attackerPlayer, executor);
+            _game.Scheduler.Add(task);
+            BattleTasks[battle.ID] = task;
+            _game.Network.SendToPlayer(new BattleStartPacket(packet.BattleID, packet.Position, packet.Attacker, packet.Defender), GetAllPlayers(battle).ToArray());
         }
 
-        [EventMethod]
-        public void OnBattleResult(BattleResultPacket fullResultPacket)
+        /// <summary>
+        /// A battle finished processing from the queue. 
+        /// Needs to 
+        /// </summary>
+        /// <param name="ev"></param>
+        private void OnBattleFinishedProcessing(BattleFinishedTaskEvent ev)
         {
-            TurnBattle battle = null;
-            if (!_battlesHappening.TryGetValue(fullResultPacket.FinalStateHeader.BattleID, out battle))
+            var fullResultPacket = ev.ResultPacket;
+            if (!BattleTasks.TryGetValue(fullResultPacket.Header.BattleID, out var task))
             {
-                fullResultPacket.Sender.Send(new MessagePopupPacket(PopupType.BAD_INPUT, "Invalid battle"));
+                _game.Log.Error($"Could not find battle {fullResultPacket.Header.BattleID}");
                 return;
             }
 
-            BattleHistory.Track(fullResultPacket);
-
-            var summary = new BattleResultSummaryPacket(fullResultPacket.FinalStateHeader);
-
+            AllBattles[fullResultPacket.Header.BattleID].SetTurns(fullResultPacket);
+            var header = new BattleHeaderPacket(fullResultPacket.Header);
+            var battle = ev.Battle;
             foreach (var pl in GetAllPlayers(battle))
             {
-                pl.Send(summary);
-
-                // TODO: Send to game logic service
-                pl.BattleHeaders[fullResultPacket.FinalStateHeader.BattleID] = fullResultPacket.FinalStateHeader;
-
-                Log.Debug($"Player {pl} completed battle {battle.ID}");
+                _game.Network.SendToPlayer(header, GetAllPlayers(battle).ToArray());
+                _game.Log.Debug($"Player {pl} completed battle {battle.ID}");
             }
-
-            var atk = fullResultPacket.FinalStateHeader.Attacker.Entity;
-            var def = fullResultPacket.FinalStateHeader.Defender.Entity;
-
-            var finishEvent = new BattleFinishedEvent(battle, fullResultPacket.FinalStateHeader, fullResultPacket.Turns);
-
-            if (atk is IEntity e)
-            {
-                e.Components.CallEvent(finishEvent);
-            }
-            if (def is IEntity e2)
-            {
-                e2.Components.CallEvent(finishEvent);
-            }
-
-            var atkPacket = atk.GetStatusUpdatePacket();
-            var defPacket = def.GetStatusUpdatePacket();
-
-            if (atk.Owner.CanReceivePackets())
-            {
-                atk.Owner.Send(atkPacket);
-                if (!def.BattleGroupLogic.IsDestroyed)
-                    atk.Owner.Send(defPacket);
-            }
-
-            if (def.Owner.CanReceivePackets())
-            {
-                if (!atk.BattleGroupLogic.IsDestroyed)
-                    def.Owner.Send(atkPacket);
-                def.Owner.Send(defPacket);
-            }
-
-            _battlesHappening.Remove(fullResultPacket.FinalStateHeader.BattleID);
-        }
-        #region Battle Controller
-
-        public TurnBattle GetBattle(GameId id)
-        {
-            return _battlesHappening[id];
+            _game.Network.SendToServer(fullResultPacket, ServerType.WORLD);
+            BattleTasks.Remove(fullResultPacket.Header.BattleID);
         }
 
-        public int BattleCount()
-        {
-            return _battlesHappening.Count;
-        }
-
-        public IEnumerable<PlayerEntity> GetOnlinePlayers(TurnBattle battle)
-        {
-            PlayerEntity pl;
-            foreach (var userid in new GameId[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
-            {
-                if (World.Players.GetPlayer(userid, out pl) && pl.Online())
-                    yield return pl;
-            }
-        }
+        public TurnBattle GetRunningBattle(GameId id) => ((BattleTaskExecutor)BattleTasks[id].Executor).Battle;
 
         public IEnumerable<PlayerEntity> GetAllPlayers(TurnBattle battle)
         {
             PlayerEntity pl;
             foreach (var userid in new GameId[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
             {
-                if (World.Players.GetPlayer(userid, out pl) && !Gaia.IsGaia(pl.UserID))
+                if (_game.Players.GetPlayer(userid, out pl) && pl.EntityId != GameId.ZERO)
                     yield return pl;
             }
         }
-
-        #endregion
     }
 }

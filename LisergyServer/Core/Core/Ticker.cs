@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace BaseServer.Core
 {
@@ -10,7 +11,7 @@ namespace BaseServer.Core
         private bool _running = false;
         private DateTime _lastTick = DateTime.MinValue;
 
-        private DateTime _nextTick => _lastTick + _tick_delay;
+        public DateTime NextTick => _lastTick + _tick_delay;
 
         public double TPS => _delays.Sum() / 10;
 
@@ -19,6 +20,8 @@ namespace BaseServer.Core
             _tick_delay = TimeSpan.FromMilliseconds(1000 / ticksPerSecond);
         }
 
+        public void Stop() => _running = false;
+
         private readonly List<double> _delays = new(10);
 
         public void Run(Action tick)
@@ -26,17 +29,15 @@ namespace BaseServer.Core
             _running = true;
             while (_running)
             {
-                DateTime now = DateTime.UtcNow;
-                if (now > _nextTick)
+                if (DateTime.UtcNow > NextTick)
                 {
                     _lastTick = DateTime.UtcNow;
                     tick();
-                    if (_delays.Count == 10)
+                    var timeUntilNextTick = (NextTick - DateTime.UtcNow).TotalMilliseconds;
+                    if (timeUntilNextTick > 0)
                     {
-                        _delays.RemoveAt(0);
+                        Thread.Sleep((int)timeUntilNextTick); // finished early, sleep thread to allow others to run
                     }
-
-                    _delays.Add((DateTime.UtcNow - now).TotalMilliseconds);
                 }
             }
         }

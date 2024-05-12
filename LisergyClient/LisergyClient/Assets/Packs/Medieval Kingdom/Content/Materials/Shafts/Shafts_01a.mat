@@ -102,21 +102,21 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Emmisionlevel: 2.9
+    - _Emmisionlevel: 50
     - _Float0: 0.69
     - _Float1: 1
-    - _Frequency: 2.25
+    - _Frequency: 0
     - _FrequencyScale: 0.17
-    - _Frequency_scale: 0.066
+    - _Frequency_scale: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Maskoffon: 1
     - _Metallic: 0
     - _Mode: 0
-    - _Noise_level: 0
+    - _Noise_level: 0.018
     - _OcclusionStrength: 1
-    - _Opacity_shift: 0.775
+    - _Opacity_shift: 0.516
     - _Opacityshift: 1
     - _Parallax: 0.02
     - _Scale: 0.402
@@ -124,9 +124,9 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Texture1tiling: 1
-    - _Texture2blend: 0.992
+    - _Texture2blend: 0.701
     - _Texture2tiling: 1
-    - _Texture3blend: 0.032
+    - _Texture3blend: 0
     - _Texture3tiling: 1
     - _UVSec: 0
     - _ZWrite: 1
@@ -137,7 +137,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Noise_speed: {r: -0.02, g: 0.01, b: 0, a: 0}
     - _Noise_tilling: {r: 3, g: 3, b: 0, a: 0}
-    - _Shaftcolor: {r: 1, g: 0.8068966, b: 0, a: 0}
+    - _Shaftcolor: {r: 0.972549, g: 0.8068966, b: 0, a: 1}
     - _Texture1speed: {r: 0.08, g: 0, b: 0, a: 0}
     - _Texture1tiling: {r: 1, g: 1, b: 0, a: 0}
     - _Texture2speed: {r: 0.1, g: 0, b: 0, a: 0}

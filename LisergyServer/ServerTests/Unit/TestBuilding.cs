@@ -1,12 +1,14 @@
-using Game;
-using Game.Building;
-using Game.FogOfWar;
-using Game.Tile;
+using Game.Events.ServerEvents;
+using Game.Systems.Building;
+using Game.Systems.MapPosition;
+using Game.Systems.Tile;
 using NUnit.Framework;
 using ServerTests;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using GameDataTest;
 
-namespace Tests
+namespace UnitTests
 {
     public class TestBuilding
     {
@@ -23,13 +25,13 @@ namespace Tests
         {
             var player = Game.GetTestPlayer();
 
-            var initialBuildingSpec = StrategyGame.Specs.Buildings[StrategyGame.Specs.InitialBuilding];
+            var initialBuildingSpec = Game.Specs.InitialBuilding;
             var building = player.Buildings.FirstOrDefault();
-            var tile = building.Tile;
+            var tile = building.Components.GetReference<MapReferenceComponent>().Tile;
             Assert.IsTrue(player.Buildings.Count == 1);
-            Assert.IsTrue(player.Buildings.Any(b => b.SpecID == initialBuildingSpec.Id));
-            Assert.IsTrue(tile.Components.Get<TileHabitants>().Building == player.Buildings.First());
-            Assert.IsTrue(((PlayerBuildingEntity)tile.Components.Get<TileHabitants>().Building).SpecID == initialBuildingSpec.Id);
+            Assert.IsTrue(player.Buildings.Any(b => b.SpecId == initialBuildingSpec.SpecId));
+            Assert.IsTrue(tile.Components.GetReference<TileHabitantsReferenceComponent>().Building == player.Buildings.First());
+            Assert.IsTrue(((PlayerBuildingEntity)tile.Components.GetReference<TileHabitantsReferenceComponent>().Building).SpecId == initialBuildingSpec.SpecId);
         }
 
         [Test]
@@ -42,18 +44,35 @@ namespace Tests
         public void TestNewBuilding()
         {
             var player = Game.GetTestPlayer();
-            var initialBuildingSpec = TestGame.RandomBuildingSpec();
+            var initialBuildingSpec = Game.RandomBuildingSpec();
             var tile = Game.RandomNotBuiltTile();
-            var buildingSpec = TestGame.RandomBuildingSpec();
+            var buildingSpec = Game.RandomBuildingSpec();
 
-            player.Build(buildingSpec.Id, tile);
+            player.EntityLogic.Player.Build(buildingSpec.SpecId, tile);
 
             Assert.IsTrue(player.Buildings.Count == 2);
-            Assert.IsTrue(player.Buildings.Any(b => b.SpecID == buildingSpec.Id));
-            Assert.IsTrue(tile.Components.Get<TileHabitants>().Building == player.Buildings.Last());
-            Assert.IsTrue(((PlayerBuildingEntity)tile.Components.Get<TileHabitants>().Building).SpecID == buildingSpec.Id);
+            Assert.IsTrue(player.Buildings.Any(b => b.SpecId == buildingSpec.SpecId));
+            Assert.IsTrue(tile.Components.GetReference<TileHabitantsReferenceComponent>().Building == player.Buildings.Last());
+            Assert.IsTrue(((PlayerBuildingEntity)tile.Building).SpecId == buildingSpec.SpecId);
+            Assert.That(tile.EntitiesViewing.Contains(tile.Building));
 
-            Assert.That(tile.Components.Get<TileVisibility>().EntitiesViewing.Contains(tile.Components.Get<TileHabitants>().Building));
+        }
+
+        [Test]
+        public void TestPlacingBuildingSendingUpdateEvents()
+        {
+            var player = Game.GetTestPlayer();
+            var initialBuildingSpec = Game.RandomBuildingSpec();
+            var tile = Game.RandomNotBuiltTile();
+            var buildingSpec = Game.RandomBuildingSpec();
+            Game.Entities.DeltaCompression.ClearDeltas();
+            Game.SentServerPackets.Clear();
+
+            var building = player.EntityLogic.Player.Build(buildingSpec.SpecId, tile);
+            Game.Entities.DeltaCompression.SendDeltaPackets(player);
+            var buildingPacket = Game.SentServerPackets.First(o => o is EntityUpdatePacket p && p.EntityId == building.EntityId);
+
+            Assert.NotNull(buildingPacket);
 
         }
     }

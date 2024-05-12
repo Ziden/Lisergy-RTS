@@ -1,7 +1,6 @@
 ﻿using BaseServer.Commands;
-using Game;
-using Game.Events;
-using LisergyServer.Core;
+using Game.Engine;
+using Game.Engine.Network;
 using System;
 using Telepathy;
 
@@ -9,60 +8,49 @@ namespace BaseServer.Core
 {
     public abstract class SocketServer
     {
-        private bool _running = false;
-
-        protected readonly Server _socketServer;
-        private Message _msg;
-        private readonly CommandExecutor _commandExecutor;
-        protected StrategyGame _game;
         private readonly int _port;
+        private Message _pooledMessage;
+        private ConsoleCommandExecutor _commandExecutor;
+        protected Server _socketServer;
+        public Exception ServerError { get; private set; }
+        public Ticker Ticker { get; protected set; }
+        public IGameLog Log { get; private set; }
 
-        public SocketServer(int port)
+        private BasePacket _packet;
+
+        public SocketServer()
         {
-            _port = port;
-            _commandExecutor = new CommandExecutor();
+            _port = GetServerType().GetDefaultPort();
+            Log = new GameLog($"[Server {GetServerType()}]");
+            _commandExecutor = new ConsoleCommandExecutor(null);
             _commandExecutor.RegisterCommand(new HelpCommand(_commandExecutor));
             _socketServer = new Server();
-            Serialization.LoadSerializers();
-            _game = SetupGame();
-            SetupServices();
-            RegisterCommands(_game, _commandExecutor);
-        }
-
-        public abstract void RegisterCommands(StrategyGame game, CommandExecutor executor);
-        protected abstract ServerPlayer Auth(BaseEvent ev, int connectionID);
-        public abstract void Tick();
-        public abstract void Disconnect(int connectionID);
-        public abstract ServerType GetServerType();
-        public abstract StrategyGame SetupGame();
-
-        public abstract void SetupServices();
-
-        public static Ticker Ticker;
-
-        private static readonly int TICKS_PER_SECOND = 20;
-        private static readonly int TICK_DELAY_MS = 1000 / TICKS_PER_SECOND;
-        private readonly DateTime _lastTick = DateTime.MinValue;
-
-        public void Stop()
-        {
-            _socketServer.Stop();
-            _running = false;
+            RegisterConsoleCommands(_commandExecutor);
         }
 
         public void RunServer()
         {
+          
             _ = _socketServer.Start(_port);
             try
             {
-                Ticker = new Ticker(5);
+                Ticker = new Ticker();
+                Log.Info($"Server Started at port {GetServerType().GetDefaultPort()}");
                 Ticker.Run(RunTick);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                Console.WriteLine("Press any key to die");
+                ServerError = e;
+                Log.Error(e.ToString());
+                Log.Error("Press any key to die");
+                Console.ReadLine();
             }
+        }
+
+        public void Send<PacketType>(in int connection, PacketType ev) where PacketType : BasePacket
+        {
+            Log.Debug($"Sending {ev} to {connection}");
+            _socketServer.Send(connection, Serialization.FromPacket(ev));
         }
 
         private void RunTick()
@@ -72,28 +60,48 @@ namespace BaseServer.Core
             ReadSocketMessages();
         }
 
+        public void Stop()
+        {
+            Ticker.Stop();
+            _socketServer.Stop();
+        }
+        public abstract void RegisterConsoleCommands(ConsoleCommandExecutor executor);
+        protected abstract bool IsAuthenticated(in int connectionID);
+        protected abstract bool Authenticate(BasePacket packet, in int connectionID);
+        public abstract void Tick();
+        public abstract void Disconnect(in int connectionID);
+        public abstract void Connect(in int connectionID);
+        public abstract ServerType GetServerType();
+        public abstract void ReceivePacketFromPlayer(in int connectionId, BasePacket input);
         private void ReadSocketMessages()
         {
-            while (_socketServer.GetNextMessage(out _msg))
+            while (_socketServer.GetNextMessage(out _pooledMessage))
             {
-                switch (_msg.eventType)
+                switch (_pooledMessage.eventType)
                 {
                     case EventType.Connected:
-                        Console.WriteLine("New Connection Received");
+                        Connect(_pooledMessage.connectionId);
                         break;
                     case EventType.Data:
-                        byte[] message = _msg.data;
 
-                        BaseEvent ev = Serialization.ToEventRaw(message);
-                        Log.Debug($"Received {ev}");
-                        ServerPlayer caller = Auth(ev, _msg.connectionId);
-                        if (caller != null)
+                        Log.Debug($"Received {_pooledMessage.data.Length} bytes for {_packet} from connection {_pooledMessage.connectionId}");
+                        if (!IsAuthenticated(_pooledMessage.connectionId))
                         {
-                            _game.ReceiveInput(caller, message);
+                            // TODO: Make not need to deserialize the whole message, check if header is AuthPacket
+                            _packet = Serialization.ToCastedPacket<BasePacket>(_pooledMessage.data);
+                            _packet.ConnectionID = _pooledMessage.connectionId;
+                            if (!Authenticate(_packet, _pooledMessage.connectionId)) return;
                         }
+                        if (_packet == null)
+                        {
+                            _packet = Serialization.ToCastedPacket<BasePacket>(_pooledMessage.data);
+                            _packet.ConnectionID = _pooledMessage.connectionId;
+                        }
+                        ReceivePacketFromPlayer(_pooledMessage.connectionId, _packet);
+                        _packet = null;
                         break;
                     case EventType.Disconnected:
-                        Disconnect(_msg.connectionId);
+                        Disconnect(_pooledMessage.connectionId);
                         break;
                 }
             }

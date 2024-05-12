@@ -9,8 +9,11 @@ EditorBuildSettings:
     path: Assets/Game.unity
     guid: 423b5abe1cae9d1458221d0fcb989d81
   - enabled: 1
-    path: Assets/SubScenes/Login.unity
+    path: Assets/Addressables/Scenes/Login.unity
     guid: e65e6077626ccf748946ced4bb9a7a13
+  - enabled: 1
+    path: Assets/Addressables/Scenes/Battle.unity
+    guid: f45119a617b1a1e4d9405d98ce3eb13c
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 19513927153055546816c6e8a2c19549,
       type: 2}

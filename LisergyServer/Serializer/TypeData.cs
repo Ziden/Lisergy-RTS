@@ -12,7 +12,7 @@ using System.Reflection.Emit;
 
 namespace NetSerializer
 {
-    sealed class TypeData
+    public sealed class TypeData
     {
         public TypeData(Type type, uint typeID, ITypeSerializer typeSerializer)
         {
@@ -29,11 +29,11 @@ namespace NetSerializer
         public MethodInfo WriterMethodInfo;
         public MethodInfo ReaderMethodInfo;
 
-        public SerializeDelegate<object> WriterTrampolineDelegate;
-        public Delegate WriterDirectDelegate;
+        internal SerializeDelegate<object> WriterTrampolineDelegate;
+        internal Delegate WriterDirectDelegate;
 
-        public DeserializeDelegate<object> ReaderTrampolineDelegate;
-        public Delegate ReaderDirectDelegate;
+        internal DeserializeDelegate<object> ReaderTrampolineDelegate;
+        internal Delegate ReaderDirectDelegate;
 
         public bool WriterNeedsInstance
         {

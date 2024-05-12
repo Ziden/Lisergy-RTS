@@ -1,96 +1,107 @@
 ﻿using Game;
-using Game.DataTypes;
-using Game.Events;
-using Game.Network;
-using Game.Player;
+using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.Network;
+using Game.Engine.Scheduler;
 using Game.Services;
+using Game.Systems.Player;
 using Game.Tile;
 using Game.World;
 using GameData;
 using GameDataTest;
-using LisergyServer.Core;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Xml.Linq;
 
 namespace ServerTests
 {
-
-    public class TestGame : StrategyGame
+    public class TestGame : LisergyGame
     {
-        private bool _registered = false;
+        protected GameId _testPlayerId = GameId.Generate();
+        public GameServerNetwork TestNetwork { get; protected set; }
+        public BattleService BattleService { get; protected set; }
+        public WorldService WorldService { get; protected set; }
+        public CourseService CourseService { get; protected set; }
+        public List<BasePacket> SentServerPackets { get; protected set; } = new List<BasePacket>();
+        public GameWorld TestWorld => World as GameWorld;
+        public ServerChunkMap TestMap => TestWorld.Map as ServerChunkMap;
 
-        private GameId _testPlayerId = GameId.Generate();
+        private static GameSpec _testSpecs;
 
-        public BattleService BattleService { get; private set; }
-        public WorldService WorldService { get; private set; }
-        public CourseService CourseService { get; private set; }
-
-        private static GameWorld TestWorld;
-
-        private static GameWorld GetTestWorld(GameWorld source = null)
+        protected virtual GameWorld CreateTestWorld()
         {
+            Log.Debug("Setting Seed");
             WorldUtils.SetRandomSeed(666);
-            DeltaTracker.Clear();
-            if (source != null)
-            {
-                return source;
-            }
-            UnmanagedMemory.FlagMemoryToBeReused();
-            /*
-            if(TestWorld == null)
-            {
-                TestWorld = new GameWorld(4, 20, 20);
-            } else
-            {
-                DeltaTracker.Clear();
-                TestWorld.FreeMap();
-            }
-            return TestWorld;
-            */
-            return new GameWorld(4, 20, 20);
+            Log.Debug("Creating World");
+            var world = new GameWorld(this, 16, 16);
+            SetupWorld(world);
+            TestMap.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
+            return world;
         }
 
+        public GameScheduler GameScheduler => this.Scheduler as GameScheduler;
 
-
-        public TestGame(GameWorld world = null, bool createPlayer = true) : base(GetTestSpecs(), GetTestWorld(world))
+        private static IGameLog GetTestLog()
         {
-
-            if (!_registered)
+            var log = new GameLog("[Game]");
+            log._Debug = m =>
             {
-                _registered = true;
+                var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                if (lastLog != 0) m = $"[{now - lastLog}ms] " + m;
+                lastLog = now;
+                Console.WriteLine(m);
+            };
+            return log;
+        }
+
+        public TestGame(GameSpec specs = null, bool createWorld = true, bool createPlayer = true) : base(specs ?? GetTestSpecs(), GetTestLog())
+        {
+            GameId.DEBUG_MODE = 1;
+            if (createWorld)
+            {
+                CreateTestWorld();
+               
             }
+            Log.Debug("Setting up serializer");
             Serialization.LoadSerializers();
+            Log.Debug("Creating local services");
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
             CourseService = new CourseService(this);
-            this.World.Map.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
-            if (createPlayer)
+            TestNetwork = Network as GameServerNetwork;
+            GameScheduler.SetLogicalTime(DateTime.UtcNow);
+            TestNetwork.OnOutgoingPacket += (player, packet) => ((TestServerPlayer)Players[player]).SendTestPacket(packet);
+            if (createPlayer && createWorld)
                 CreatePlayer();
+            long originalByteCount = GC.GetTotalMemory(false) / 1000;
+            Log.Debug($"Test Game Ready: Heap Allocation Total {originalByteCount}kb");
         }
 
-        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : ClientPacket
+        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : BasePacket
         {
-            this.NetworkEvents.RunCallbacks(sender, Serialization.FromEventRaw(ev));
-            DeltaTracker.SendDeltaPackets(sender);
+            var deserialized = Serialization.ToCastedPacket<BasePacket>(Serialization.FromBasePacket(ev));
+            deserialized.Sender = sender;
+            //ev.Sender = sender;
+            TestNetwork.IncomingPackets.Call(deserialized);
+            Entities.DeltaCompression.SendDeltaPackets(sender);
         }
 
-        public TestServerPlayer CreatePlayer(int x = 10, int y = 10)
+        public TestServerPlayer CreatePlayer(in int x = 10, in int y = 10)
         {
-            var player = new TestServerPlayer();
-            player.OnReceiveEvent += ev => ReceiveEvent(ev);
-            _testPlayerId = player.UserID;
-            var tile = this.World.GetTile(x, y);
-            this.World.PlaceNewPlayer(player, this.World.GetTile(x, y));
-            DeltaTracker.SendDeltaPackets(player);
+            Log.Debug("Creating new Test Player");
+            var player = new TestServerPlayer(this);
+            player.OnReceivedPacket += ev => ReceivePacket(ev);
+            _testPlayerId = player.EntityId;
+            var tile = World.Map.GetTile(x, y);
+            player.EntityLogic.Player.PlaceNewPlayer(World.Map.GetTile(x, y));
+            Entities.DeltaCompression.SendDeltaPackets(player);
             return player;
         }
 
-        public void ReceiveEvent(BaseEvent ev)
+        public void ReceivePacket(BasePacket ev)
         {
-            ReceivedEvents.Add(ev);
+            SentServerPackets.Add(ev);
         }
-
-        public List<BaseEvent> ReceivedEvents = new List<BaseEvent>();
 
         public TestServerPlayer GetTestPlayer()
         {
@@ -99,25 +110,38 @@ namespace ServerTests
             return (TestServerPlayer)pl;
         }
 
-        private static GameSpec GetTestSpecs()
+        public static void BuildTestSpecs()
         {
-            return TestSpecs.Generate();
+            _testSpecs = TestSpecs.Generate();
+            // Allow having initial building in tests
+            _testSpecs.InitialBuildingSpecId = _testSpecs.Buildings[1].SpecId;
         }
 
-        public static BuildingSpec RandomBuildingSpec()
+        private static GameSpec GetTestSpecs()
         {
-            return StrategyGame.Specs.Buildings.Values.RandomElement();
+            if(_testSpecs == null)
+            {
+                BuildTestSpecs();
+            }
+            return _testSpecs;
+        }
+
+        public BuildingSpec RandomBuildingSpec()
+        {
+            return this.Specs.Buildings.Values.RandomElement();
         }
 
 
         public TileEntity RandomNotBuiltTile()
         {
-            var tiles = World.AllTiles();
+            var tiles = TestWorld.AllTiles();
             foreach (var tile in tiles)
-                if (tile.Components.Get<TileHabitants>().Building == null)
+                if (tile.Building == null)
                     return tile;
             throw new System.Exception("No unbuilt tile");
         }
+
+        private static long lastLog = 0;
     }
 
 }

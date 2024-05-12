@@ -12,7 +12,7 @@
         MDEF,
         SPEED,
         ACCURACY,
-        MOVE,
+        CARGO_WEIGHT,
         WEIGHT,
     }
 }

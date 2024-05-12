@@ -1,8 +1,13 @@
-﻿using Game.DataTypes;
+﻿using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Events.ServerEvents;
+using Game.Systems.Player;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Tests
+namespace UnitTests
 {
     public class TestGameIds
     {
@@ -13,6 +18,33 @@ namespace Tests
             var id2 = GameId.Generate();
 
             Assert.AreNotEqual(id1, id2);
+        }
+
+        [Test]
+        public void TestByteArrayComparisson()
+        {
+            var id1 = GameId.Generate();
+            Guid id2 = id1;
+
+            var arr1 = id1.GetBytes();
+            var arr2 = id2.ToByteArray();
+            Assert.True(arr1.SequenceEqual(arr2));
+        }
+
+        [Test]
+        public void TestReserializationAsIndex()
+        {
+            Serialization.LoadSerializers();
+
+            var p = new LoginResultPacket() { Profile = new PlayerProfile(GameId.Generate()) };
+
+            var d = new Dictionary<GameId, int>();
+
+            d[p.Profile.PlayerId] = 123;
+
+            var p2 = Serialization.ToCastedPacket<LoginResultPacket>(Serialization.FromBasePacket(p));
+
+            Assert.AreEqual(123, d[p2.Profile.PlayerId]);
         }
 
         [Test]
@@ -27,12 +59,12 @@ namespace Tests
         [Test]
         public void TestGuidBackForth()
         {
-            var guid = Guid.NewGuid();
+            var guid = GameId.Generate();
             GameId id1 = guid;
             Guid back = id1;
 
 
-            Assert.AreEqual(guid, back);
+            Assert.AreEqual(guid.GetBytes(), back.ToByteArray());
         }
 
         public class TestClass
@@ -77,6 +109,17 @@ namespace Tests
         }
 
         [Test]
+        public void TestDebugMode()
+        {
+            GameId.DEBUG_MODE = 1;
+            GameId first = GameId.Generate();
+
+            Assert.AreEqual(0, first._leftside);
+            Assert.AreEqual(2, first._rightside);
+            Assert.AreEqual("2", first.ToString());
+        }
+
+        [Test]
         public void TestNonInitialized()
         {
             GameId zero = default;
@@ -96,7 +139,7 @@ namespace Tests
         [Test]
         public void CheckEqualOperator()
         {
-            var guid = Guid.NewGuid();
+            var guid = GameId.Generate();
             GameId id1 = guid;
             GameId id2 = guid;
 
@@ -106,8 +149,8 @@ namespace Tests
         [Test]
         public void CheckNotEqualOperator()
         {
-            GameId id1 = Guid.NewGuid();
-            GameId id2 = Guid.NewGuid();
+            GameId id1 = GameId.Generate();
+            GameId id2 = GameId.Generate();
 
             Assert.IsTrue(id1 != id2);
         }

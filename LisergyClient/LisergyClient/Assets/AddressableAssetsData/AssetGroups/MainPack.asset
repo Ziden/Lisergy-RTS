@@ -17,18 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 9a87b26c44158f9438dda2dc136db3e0
   m_SerializeEntries:
-  - m_GUID: 67b2e263d6698714ebed24a1a4520bea
-    m_Address: Assets/Addressables/UIScreens/Components/HealthBar.uxml
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 74a2f0793cb29bd4cafd65a68762332b
-    m_Address: Assets/Addressables/UIScreens/Components/PartyButton.uxml
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c2d1057aebdfa034bb0943a31096f9c9
-    m_Address: Assets/Addressables/UIScreens/Components/RadialProgress.uxml
+  - m_GUID: 98beca8e06a409343beee46acf31221c
+    m_Address: Assets/Code/Runtime/ClientSystems/ClientEntity/UI/Addressables/ScreenEntityDetails.uxml
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -48,12 +38,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7605a49d87c51514b8b7d44838172917
-    m_Address: Assets/Addressables/UIScreens/UnitActions.uxml
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5311a5284c977b5409a7dca15b20c7ad
-    m_Address: Assets/Addressables/UIScreens/Notifications/BattleNotification.uxml
+    m_Address: Assets/Code/Runtime/ClientSystems/Party/UI/Addressables/ScreenPartyActions.uxml
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -89,11 +74,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6538429612df1f84db785fbf1074a1a0
     m_Address: Assets/Addressables/Prefabs/Tiles/Plains.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ef8b54e292f8de94d941c1b7878f71d8
-    m_Address: Assets/Addressables/Prefabs/Tiles/Plains_Mobile.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -279,6 +259,2151 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b22fedf1e19c5048a6ed7fba5b4fb72
     m_Address: Assets/Addressables/Prefabs/Tiles/Floor_Low.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 697b17812f44c8e4c97d08429713098f
+    m_Address: Assets/Addressables/UIScreens/TransitionScreen.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c102a999f941ae4fa70d9e3eca532a7
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/slime/slime8.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b831eb4000befd448896a980c78bec58
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/slime/slime9.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4090dd2f3480f024b87b0396a4522b8b
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/slime/slime6.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8278e06327f4b234cb9c04585f275e0d
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/slime/slime2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 22ed38ce41da5b14eb30d00aa3e1f692
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/slime/slime1.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b83f41c93085a642be64ae423ddc8fb
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/slime/slime10.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 378f93f6125009b4dbea16622441913b
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/slime/slime4.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 947499e8d729c5249ba6cdf06b0723c4
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/slime/slime5.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d48b5e2cb3dea254e95115744e9a2e1a
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/slime/slime3.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 860484836dbf66442b306728728f7563
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/slime/slime7.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7e7777fa18eddf45a65dffcf4ea804f
+    m_Address: Assets/Addressables/Audio/Sfx/gui/sharp_echo.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: daf3588d045e68a4ab9e6b1d8c05f0da
+    m_Address: Assets/Addressables/Audio/Sfx/gui/negative.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6449cbf0d637029459c95f9341dc9191
+    m_Address: Assets/Addressables/Audio/Sfx/gui/positive.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b44dec6525f2134bb9cfe7a2e0947d5
+    m_Address: Assets/Addressables/Audio/Sfx/gui/misc_menu.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6a5d30d06edf3d440940855194632c47
+    m_Address: Assets/Addressables/Audio/Sfx/gui/misc_menu_3.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64778eda5c9e94c4d8fae7eda3269fc0
+    m_Address: Assets/Addressables/Audio/Sfx/gui/negative_2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d839246f4771a745908417542354448
+    m_Address: Assets/Addressables/Audio/Sfx/gui/save.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0177c559e7640fb4392dd2fc8a8669be
+    m_Address: Assets/Addressables/Audio/Sfx/gui/load.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20d62b75dd76d2f4c84e08ae0d8ea3da
+    m_Address: Assets/Addressables/Audio/Sfx/gui/click_2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f908ffad967126409cc2720279758eb
+    m_Address: Assets/Addressables/Audio/Sfx/gui/misc_menu_4.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 535fd2725ce233f459422768d5a85ef6
+    m_Address: Assets/Addressables/Audio/Sfx/gui/misc_sound.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed4011a3ff6385341b0c4c98652b78ab
+    m_Address: Assets/Addressables/Audio/Sfx/gui/misc_menu_2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df2047199f8aa70478789b4df4289626
+    m_Address: Assets/Addressables/Audio/Sfx/gui/click.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b10c4dfe4f21ab45a6edcb15d79c9b8
+    m_Address: Assets/Addressables/Audio/Sfx/interface/interface2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a581367b8f94c84ba15b58d8cb248c8
+    m_Address: Assets/Addressables/Audio/Sfx/interface/interface1.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84d2baedd18c8184c9b735a82c3d8a31
+    m_Address: Assets/Addressables/Audio/Sfx/interface/interface6.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e62baeb966f5db49ba7b3939b792a94
+    m_Address: Assets/Addressables/Audio/Sfx/interface/interface4.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8f9998e6782788498b4ef04567256d4
+    m_Address: Assets/Addressables/Audio/Sfx/interface/interface5.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 175baceaa8a0b3b4d86a307a0b0ea897
+    m_Address: Assets/Addressables/Audio/Sfx/interface/interface3.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0283bac1316d264da86bc8f060102d6
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/bottle.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 975264e6d26f45f44a959c677249ba32
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/coin2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d30bf25874422274083ec09dcf991108
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/chainmail1.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b67a90a111026ba4da5bf490b38a4c78
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/bubble2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b409d083ef90ad4fbcb84a805a0d995
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/metal-ringing.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 863eb0a8042482c4faf672069a68406e
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/metal-small1.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ac195290e7825247a2421319c942a86
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/coin.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d29349239a0360441b08f8eecb3a42a9
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/chainmail2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ed12efc4d7fd3e4db734b72bcc64e2f
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/wood-small.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6775b13c977d6f9498d90ad17e2e82f0
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/cloth.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 00796ec4959047d409038deb9423d00f
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/metal-small3.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b292c5fd771b8524a9b4cd50938338ce
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/coin3.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fba6d941b0fbf1e4398372fc6d3d4048
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/bubble3.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 77a2dd1a681d0724ebe01e63710c41fb
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/bubble.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2499901c46217624c9ed60ae328d4871
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/beads.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20a8e81d33095f145bf897f89db2d39c
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/metal-small2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5936ded5ed5714478f627909613c2ba
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/armor-light.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7230d6afa3316c34b8444cf6927ee37d
+    m_Address: Assets/Addressables/Audio/Sfx/inventory/cloth-heavy.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dba1e1db1d58f70438f6c5b548abd64b
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/drawKnife3.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f08ad3c768eda2c4390b33c0d1d584fe
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/bookPlace2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2a7745f5f49dc447a51d4458f080217
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/cloth1.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ef4756a78bd7314fb7445f7604bc0c9
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/footstep09.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d461eb996c56396418e2687cdd072947
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/handleCoins.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f506c24776cbff48bde3a633a0b3263
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/doorClose_4.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1dd39176cefb9b419c6a7893ee9c707
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/footstep08.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41efd7ba046b2e340874c970545fdd98
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/bookPlace1.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e9b8f5d783893f4fb1798ba17d5b175
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/dropLeather.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 877b7cbf9e476474a846e8c34450b88f
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/metalClick.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f8192ea969eab141b08a43a5465e8f0
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/handleCoins2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d4902e7ad9d249459dc5cef75bf9669
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/metalLatch.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14d84fd0715efb64a8da4f7850799048
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/bookPlace3.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 04c6d46b5f5d84346a0f1b59f4164c7a
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/knifeSlice2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6367a3c0842558449a6f546bf427ad89
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/drawKnife1.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5112252571dc644468ea4751ae96e89d
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/cloth2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 841ea8bf61e937248b4b0c5e2f98e811
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/doorOpen_1.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee9f4a12ce8854a40978529004381e7c
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/creak1.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca8e6e9e09bd451408e1298089b2c662
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/cloth4.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b610c04cad097c438a3fddb0316a7b3
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/drawKnife2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d69a5f6384e3126459b87e30d96d66c7
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/metalPot3.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f450a88c4edc1848bc247cab646555e
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/clothBelt.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccfac2649e302584fa5ee3b2d08dfef8
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/knifeSlice.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 00876d283015db34d8e0b6ba59e386a1
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/doorOpen_2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac70a184639eeff42934d0a5aff92f52
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/clothBelt2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 222428cf24f7f23419b4a75dd122aa25
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/beltHandle1.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 360d87b64109c68499267972d0f96eb8
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/cloth3.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4614093e14286140b9cc75d88ae3d43
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/doorClose_2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ddd2bf89e43fa940be4f649dd252cd1
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/doorClose_1.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b119348a6dac164cb267c46158565d0
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/footstep03.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60ae9e8f0412dd049a8773f4570bae62
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/bookFlip2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02bd7f938e504874e8d068a29b335fbf
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/metalPot1.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d6294ae0eb417714595533b7079200e1
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/bookFlip1.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e9a0b36f3a085744a57816899f26ef1
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/footstep01.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 39877fdab87f24540907dc664874ac3e
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/handleSmallLeather2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e41942825aa79d04692d520c6103249f
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/footstep02.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b91826e095b89aa4b815324676c0b44a
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/footstep00.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dde1a28092666d0498c270c3d1bc40c8
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/bookClose.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9bc0272b4adbc7b4da8445fc5b27de58
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/beltHandle2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80424ced13474414aa5b977463ce6dbb
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/creak2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e967e6998d9726c43a0fb70ab822c6f3
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/metalPot2.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: afc47a26926b5474c8fc7a1ae15049fa
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/footstep06.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0cd3adc9c709b9a4cb215f4745a15e07
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/chop.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d7ac574b637cf4499640093dfe85cda
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/doorClose_3.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 35f38601d24599743851a071b73abd2c
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/bookOpen.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd09dc8bc53d3a34c9a61da27bc3efcb
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/creak3.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 373bee61f930cfc4eb3e4b74f0ae3cd2
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/footstep07.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 34b5b0090b6d6e443a45f151cf74b989
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/bookFlip3.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b6185c289b7952646818b2bf097c8eb1
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/footstep05.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d9c5a6792788414199006625b58d9a2
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/handleSmallLeather.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a39f35254fe1ccd4a8eca1f9c7bfd611
+    m_Address: Assets/Addressables/Audio/Sfx/rpg/footstep04.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b43a6b16eaf52f44dbbf3b10480d3349
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit21.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 551b7f6de3ac7864cb743d46aa5e9712
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit20.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60a5f63c45286c8428089506ad9161be
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit14.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5b8ad71f48996634dadf8003f8754490
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit02.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a242faa50817d40458d206397c12e2a9
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit10.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f95a12332efb18449a029b52f0005c3
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit11.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d67c43d8d1a5ba84c99332f73ad94139
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit28.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ccbdd4e541e13d41bad88999ca0bca3
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit17.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e3858cd7fc584449969e538a1ea2a6c
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit24.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71e25bc5e65ff0040aaccfd75ebf2e1c
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit03.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 47eb7fe463aaab4468be466b688cff36
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit06.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7696437521d181b4a827ce700e358dfe
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit12.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba77097020dbbda46b634a79069a8dbb
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit34.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d61fd0b55ce146f408dd4420ba9699b7
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit27.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 116262c69cc24264285b99215ae7398c
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit25.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd5c91889d94601498f6dbc273f8dcee
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit31.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b96ac5301f9cd742ae112815d72a9f7
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit15.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f1e203c8609b994a9eb7bc1a206a2d5
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit29.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4fa41759aa5dc5043ba15cedd95e8498
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit36.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be00b0585af511d458ed4f3e470c0c17
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit18.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 858a00516d37ff34f85c727190ae71f4
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit22.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b318421836f7894eb2c9b62f6c1a719
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit05.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50358fee7482b1841a1b99a0f985a478
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit32.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3833f22803dc9ba44856bd3cca0dfe2f
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit30.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9c7f90019322e24c801420e7a2a3c32
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit01.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b1ee585d8148aa4096c1b6537c9f702
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit08.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c3b6c80ec315604181ebb59798974e2
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit35.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91bcb201f00f9fe44b08c41262136c79
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit13.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af12ab3e5dc5a204ba8bcec8f9c8351d
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit09.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3f2d7540b45a1254d90e94df543be3ad
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit04.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec448b1cfd214da45a0a1ced9f17e83a
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit33.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b8005e038f818241a00c9679b7d0ba5
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit16.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec88cc283a722c94d8a03266c7b9d378
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit19.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c4073eebeeb932a4cbdb281be70d7053
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit37.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d3cee5d5990d9314e802ebadb55770e5
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit26.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 190af605baed7aa48aa991a902d33187
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit07.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 117c583602d8e5e4a80aaf6d1e3f9773
+    m_Address: Assets/Addressables/Audio/Sfx/hits/hit23.mp3.flac
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 66349c47818554f46846d9afbd61dd05
+    m_Address: Assets/Addressables/Audio/Sfx/battle/magic1.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5fc6e8d5059f0f44be72b5705d7b549
+    m_Address: Assets/Addressables/Audio/Sfx/battle/spell.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a285b63e7cffaee4482509d67b296e2f
+    m_Address: Assets/Addressables/Audio/Sfx/battle/swing.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68f3033da61f7914cae3aa8e66a49ac9
+    m_Address: Assets/Addressables/Audio/Sfx/battle/swing2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50eee3a7b4b79c9438ce43f2beea66be
+    m_Address: Assets/Addressables/Audio/Sfx/battle/swing3.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b175cb9767134854294d177e56e5ce0d
+    m_Address: Assets/Addressables/Audio/Sfx/battle/sword-unsheathe.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cbcb1e97b57b34d4c87af867f1cc5509
+    m_Address: Assets/Addressables/Audio/Sfx/battle/sword-unsheathe2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e42e8dd2d23d89468eb37dd56b0ae9f
+    m_Address: Assets/Addressables/Audio/Sfx/battle/sword-unsheathe3.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af6fa2f6647429048b9376f9aa629b75
+    m_Address: Assets/Addressables/Audio/Sfx/battle/sword-unsheathe4.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a953358218d1f1f489564ded4fda6476
+    m_Address: Assets/Addressables/Audio/Sfx/battle/sword-unsheathe5.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c320ce173eae6d343afbcfecf4ecc13f
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/ogre/ogre1.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: db380419be367e541b10f41fe9dd0430
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/ogre/ogre2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf647d766b5bf1344a2512f25197d8b0
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/ogre/ogre3.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 335509f0d98c0c84cbfd4f89706b3f62
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/ogre/ogre4.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acfaeb210358ef2448e40b1fc822a335
+    m_Address: Assets/Addressables/Audio/Sfx/NPC/ogre/ogre5.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8819b924b9715e445b684ac676fcff50
+    m_Address: Assets/Code/Runtime/ClientSystems/Unit/UI/Addressables/ScreenUnitDetails.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 966d0910a86086947af6f712d9c99e5b
+    m_Address: Assets/Code/Runtime/ClientSystems/Chat/UI/Addressables/ChatScreen.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e94e812bd77fdfd4e8bf58e51f3c0cfa
+    m_Address: Assets/Addressables/UIScreens/Notifications/VictoryNotification.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6e01a039b468c543813fcfce5a72f6f
+    m_Address: Assets/Addressables/UIScreens/Notifications/DefeatNotification.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5496cfa8e023dd04a9ac1eee50740e74
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/quartz_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b34181738027504180b633ffb07b67d
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/ore_01_n_t.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94eb70b64e10db542bcf1dbd85dfda9c
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/st_t_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 16197f60feb3a5140825e49ff2438904
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/st_t_06.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 718c68452caf70e4391962cfedcc5f33
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/salt_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49c1e712739480e4499311a6ea98636e
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/st_t_09.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 710b6e143cd8be641b519dd1fea6b504
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/st_t_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 193ed32830fa038419eef6b35dafa043
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/st_t_10.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce18d78da694e7640b2fe25ee50226a1
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/ore_f_t_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac9b8f89dfac52648a7d28a5e3254b80
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/st_t_02.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae4a9e192cc36cd468eff34a9374b1db
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/mtr_b_02.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3af4e8cbe31ec27488ad3d365c8ef907
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/st_t_07.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 494b9d572adcf5d4f8229341444abf50
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/st_t_04.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b4ee970a2f51e347b16c724ea9169ee
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/st_t_05.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 682a49f1d9c6492419bb19e5ed119d60
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/st_t_08.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9159b84b0957f024186009f16701cafa
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/stone/st_t_11.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e20748bc4c8d9c844942153f1a229c54
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5b47d935d377d854b906004a2a9d7c8c
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wooden_stake_t.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6792a6e8d4c573d409e74e3630d5eb80
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa30c05b654334140b82a1d3ef8b78f5
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_07.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccb63d8df299b0440b60a92478aadf13
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_04.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0245b32c464b6842a409f3320e77540
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_06.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2501d8f0888e05d42bf8ac0512fec833
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_02.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7792f635602dac34abf37eded9f86c80
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_05.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc8efbf4d23ebbf47899fb834c7af8a7
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/rod_t_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6059f5db12b43a54a8bf785d44202274
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_11.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73412abe82f7a3f4198025874a8fded4
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_11.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58862f7809d00624db26e836ef8bdcb1
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_13.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab64e33638ecf9043ab1c10a09e2a878
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/tongs_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3c274500bb24a64a9459e2e03add89f
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_14.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be773be2f5147e342b83c1fd10f143e3
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_02.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c49f0d7026e8e734eb61f878c28f2b0c
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_24.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a09e3a14c4c14de4682be2ad3bdc3745
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_04.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d6a2b8c334a9d9408d4ac14610c4271
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_05.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed7a4f7cdeb72024492eaa52748f84cb
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/saw_t_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d9fce14256deeb4eb5916908eeaf8e1
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_03.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 419b3e9a8315309489b1a5d32a710200
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_22.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 751bbfac9cd918b4dab0309ed8590c5d
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pick_t_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da2099a24f4a3a24899bb36d0a9632fe
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/t_08_a.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49f9d9e4b8bdeab4386f67636126a72a
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/tool_t_n_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef31569eeed656046abdff141387f940
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/t_04_a.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5286e8dcd82e5c49b6fa9d7903b44e0
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/loop_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 05f72fad42bdbde40862ad87c8fc0ce5
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_12.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2ea76348e7290e24d8b2ceb060f8a2d0
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23e0fd787e458b046be95ef1e198c045
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_14.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7ccf8840fff5394fbf1d1c40901c2dc
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_17.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 96f3471cb8b0df14dbbf92a4a31fdf5c
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_06.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ac5867dd67bb4a41b2fe1e60c482048
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_09.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1d7911bc3cdbe2439c46fb98c3e642c
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/cobbler's_hammer_t.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44ba01108410b37488e3e28692274be0
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_07.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed76df9fa927c2440a66ed085b8ed728
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/sp_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c436fe8008df3a458d146fc06f249cd
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/scroll_n_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 891192a7e9bf2ec4f8092bd711995bf8
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_23.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb88e95ab84c4bc4d9b4fd684d13bb2c
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_18.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23c67ce3ec743de4c94c72d9f54079d9
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ff_03_t.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5981c99252b3b54ea02055b839e9a0d
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_16.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2e93de580b6aa347b2db2ba435eab41
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 485c84f3dbfe098419fa63ea5598fda5
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_10.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4db3644bbedea7c4d8aeedae036a8719
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_19.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d99acdf8b13545045badddc845a1efc5
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_12.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce5dca4d3e044244db3f13af4135392b
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/sp_t_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6852b34a62b1f84d98299e1eae8d3bb
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_13.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 231bc387e8b6ec94badab768b23cea05
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_09.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7dca9258f3317d40ac98885ae18e684
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/bucket_t_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e3c798b0132d5634f8e750fe758b8e69
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/winch_t.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07ce2267eeccb04428afc9e0f3733011
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d81a1d6146c02d48a5e599aaec7f266
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/sickle_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78dcfff053c0ae94782727e6f3329049
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pipe_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9a34c5009716d545b528d6782b23265
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_07.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24d8136525f6acf498081f5d31d8bfc9
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_08.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3622edf977e52d4ebd35216323f8daf
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_15.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c7c22938f87a0e48a9dda6652160814
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/bs_t_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3f4e7ef73818a1644891d7b009045194
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_25.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c04259f951bd2b14183db7eacc780042
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_21.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6275ea0d07bfa334291642b4fb9ba7a4
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pick_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9a26ee2906ecec4fb107057a679faad
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_06.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33549297160071640a2619d44df7dbb1
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_10.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abb3c8beddfdfda4f8cfab588813d5a1
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/tin_tube_t.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d618007c4b1d40c43b269d3d623f6d95
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7f6a37b58e1ed7a4ea7bf829f6e1aa9e
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_04.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b6aaf6dffeaec0d4a87a16c794ceaa73
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/anvil_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8afded846257f894db78ec4351755a54
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_05.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5365013d0e2630840b845b1991db0891
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/hmm_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 27a810034fe64834dbbbfa29e32ab008
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/corn_t_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7cc760b45f0b11842a8922fe0f4da645
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/Journal_t_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 689949da11fccc244b3f431496348448
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/axe_t_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 542accd7a58646846ba54ce993780d04
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/saw_02_t.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7724e5efe74a67b4dbf167c8259517e7
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/pt_t_20.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ad4b7eb6639d244681b341df5324259
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/t_05_a.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb9f9bd65eb93ab4aaed33aa977cb9dc
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/ni_t_08.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 05cc9625d2baa9941ac9a26569558692
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/cherries.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d5ab16897291cc4b9067ba4daddfa18
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/nuts.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1910e257c90c77d4ab859eaffbbbaed8
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/beet.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9aedc6068f11e84b9e4694a25525c9e
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/dish_04.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f719e58a9fb76a345a895e72392e631d
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/berries_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70c0607f321b161458516b0bcd5a8bcf
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fr_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b57cab750c7e4794b8bbadedefbb0e07
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/agility-fruit.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 920ab29179d40bb4693648dc917cea5b
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pomegranate.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e974a5893bf8ba249a533ad1d5fd0ddb
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/peas.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f7f9f60b312e084795f7ce7eb827dd9
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mushroom_08.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 358cc7b3ddd5f744c9e066c690bcdb26
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_11.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 27cfbf2e4fe2914498bdfb897ffc25de
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/spices_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 424051460f8b96844b9f49c693eeb83b
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/gr_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80ecb61171dcc074aa2f5523c77b6f4a
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/jelly.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e11791658b96d10448799d83909a2f66
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/peach.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8aa1ee1cac47ac24b90818547074a146
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/cabbage_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 664830c517c1eed4f9c8b65abd2ac5b8
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pumpkin_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf53bfc4573dbac4087cacd13e417eee
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/berries_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b32085cf6a7018a4ebf43157da8d3ce3
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/berries_05.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 046aee5dcf36a184788f31cf3816143d
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mushroom_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5fc8686f919dfa4c81d0ca45529ff41
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/dish_03_b.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71149dd93266bc74e8be9197b4e323d5
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/milk.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 53a806210e9b4e24e81a68b91857bba1
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3832d5c85d59b294687ff0eb7fc6511b
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/jerky.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 188673c97c9a3304db03e76417ce14a1
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fruit_n.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 846522683a1a5c041ac290546e5b27df
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/cheese_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed5a0cda29f19624f99c481fa1a8574b
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/dish_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0355b850513fbbe4c8e60b537d4ee92d
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/grass.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 984157704b5386a46ad27058946f79ca
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_12.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12dac67ebbb15bf4688d817b99a26b1a
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/berries_04.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 38e95d8d1716c3146a8a3a0d5377eb39
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/coffee.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15224ad3c60df72469e72012905b57cd
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/sausages.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d27963789e85e8244ba690226f767d4a
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/vegetable_f_08.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 275af6190b87b4e49a3be712ca5f84bc
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/egg_n_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c91d9770c636e1439789fc4f7911ccf
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pineapple_b.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 642e6b9d6a632054eb40c2730591a6ee
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/berries_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5c5fe0dc8622c24792704db1bad229e
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/coconut.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3060e98d57f234948a4cda47d8eb5ecd
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mushroom_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2efe112d91e7c349ba02eea5c3235d6
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/garlic.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e751fd95e0007b34d962995473bb8a37
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fs_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c499410e6f6b5740b8f6ecbf551805e
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/dish_05.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e7be7eabd19f694c90b4e435ec0434a
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/beer.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 00afdd691fa7163478b119da231b74b0
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/grapes_f_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5de99f0c4400c14d955fc2fb74e14a2
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/onion_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed8dd1e6ba79a184a928a959c90c499f
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/cucumber.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cacca2e3a2cdeef4f972d658603c8765
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fish_bone.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a87651bd91e1064497ae393c48a540e
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mushroom_04.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e562097a35b63d4c8812807d0115df6
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mushroom_05.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3e81aff017c72b843897c4ca2fe81185
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pumpkinf_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf52302071596d34d88c4edd730773f9
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/bread.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4885a72991078114cbd3f0bba0d96873
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/dish_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c5429991ed860544b31b6d87b3412ef
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fish_04.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 30f5870849ac93b4bbe6e95a559aa4e3
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/berries_06.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fab821f07466a89488eccb7147668412
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pumpkin_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aab91ecdb7f98bd479934712c858075a
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_06.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: badd1835add442748a56bc80f1a5fa80
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/berries_05_b.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 184ee5344ea5fe2458d5cbc6693222e2
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/corn_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 936de2ef126dfce4288dc7f842c78143
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/chicken.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de940ac25b8c90d4aa499c98ca68c4d8
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pepper_n.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1319aad0976a484dbdd97732005877b
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fr_02.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b422c3661fdacbb429ddbb22becdeaca
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_05.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a919f85eea9f4ae489a83218069c7a81
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_10.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5f4fc449910b5a44be450bbc5f9bc09
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mushroom_06.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76035debf428ec84887e78972217122e
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pitcher.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b51f1bd098220fd43802542c4b673b59
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/bone.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 400d8a58a509b554c9e14bfd7f1f2b42
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/barrel.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ee5bb74e8eb05647b6696ddab7abd0d
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/melon.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6302976fd6011f45982f33467424abf
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/carrots_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5305f0a078560ae4898ffafec7611e25
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fish_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ebf6b506213f5e04ca20ac1ad23c4963
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/algae.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48e1a7d1981c7a64683de27f212043f1
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_09.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e03f41fea2b7cd847b19acf3b68cf902
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/lr_f_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5de74fbfbf6c964689bf635f42bee17
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/strawberry.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3e6388e7a952519459120434654ecbe5
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fs_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8bb39782f77b994c878afefaee03af0
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/flask.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d003f8220dcead48bc4a54a7e70b246
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mushroom_f_04.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae02e36da6092f248809249438e785ea
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/bottle_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5821994dd4343ed49abb11d770b201cc
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/candy.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d32c7d1b95cf22c46b0b8e6467692fba
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/ice.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0f1a194ce4e13a4193cd96dd96bafe9
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/wasp_jellyfish.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d966da4151bbeae47b6723b244b37967
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/chocolate.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 221cc40528745794589fa0ba87c12435
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/squash.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 412e33f89af22d843b1a1a87d4cb531e
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/sushi.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 32d0484cfbaba2d48856825c1d83789f
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/meat_f_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f20e1725abbfc94abd0ee176003f54d
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/spine.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d65e4ba6a8e2b3428a74a0b14557f9e
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/tomato.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1822d9cc970b92348933ce4ca78dab7d
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/cake.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9de6a596aa5c0314193eaf82a3ddce4b
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/jelly_b.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e55b62dc97061534883c529cae121520
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/bacon.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0478fa67ca2fba741aacd2974e149081
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_08.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8fccbcec16b89c419ad6db4e3294093
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/soup.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49a2db3d8977dad47b0258ae3b14667b
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/eggplant_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d9c9b04984eb85449fcec83415e8612
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/spicy_cheese.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2de32c867864c846a0cc2c534349e1a
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/cookies.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e3598342151a2b498dfe950e5d2c47c
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pineapple_c.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0381b6069947a054f858983a9b4cccaf
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/watermelon.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c88cf250324ff347b34825f6b4e93d2
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/spices_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9db261660c325e34583d4d351f22694e
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/meat_f_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a610d3ff6e0b82419a68507cd1164ad
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/package.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 11baed3409e454b4e8aa2962a9d3cd27
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/plums_b.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0287d6187dc7027458161a56e7592b3b
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/cheese_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dadfa80addea0ae4a92b4c8d516db741
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/baking_04.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 47ee565961b339749917bc995f1ce011
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79dd511def6687e4cbcc3597698302eb
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/gr_2.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 993f18a97bfe91f48ae5a5cccb11c579
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/lp_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 576eefb93d8ad704ea0b428100fa2814
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pumpkin_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 245f0cddeecf03643b041a7e2f011f22
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mug.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af4887523d90d644fbdce9b4f07b9b0e
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/meat_f_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98155e93246a62249a3b874c352999ef
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14222d75c58d3a94c97f9f1cb78c1bfa
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/dish_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15ae3fd9738ccfc4c8962269506bed7a
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/beet_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9d31cd202e79bd5469673e7a3d9c9af6
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/cheese_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4819143d689f0ad40ae45120d48d0cfd
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/dish_04_b.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8d82ce3061727c4386b2d26b3c46d93
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/grass_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7466df5f4b8c67f48a7ebb7c610a9a7c
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/cupcake.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 843de6dc2f6425046b22eb64b9bf59c1
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/bottle_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de71f5abc021de946978b5dfcae94cd2
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Dessert.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0b9308c8195bbc54fba86356254e21e8
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_04.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07504168cc6cac54181ab38f00f22029
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mr_02.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c10fa449a8850e4a9f1e84ed8ce7c0f
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/eggs_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 793ccd80d0c2e2d4588331498a655573
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/bananas.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 27df85fe7fdb30a4db6707eb060dfb69
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/carrots_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64d84312d7ac3844ba0aa203aef20564
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fish_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ceb2f8b1400827446bb05bf2d60593ad
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/plums.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d502089d86cc91244a21349e4c226731
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/piece_of_cake.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56e0b8f9068d64343b827e1b7c255fe5
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/acorn.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c2d41dd38c3f7141a67aab5f909ce9f
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/vegetable_f_09.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 129c31e0b434bef4ebfe91da16050c2c
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/bucket_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f25d20ae1fc48744da0ab2cffca9743c
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/bakery_f_07.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e13d4b9d97c87484e8ebba4b09b272e2
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/magma fish.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98fb638cc1b79ba418d3d464daf70ed1
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pineapple.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72668486693c4824f97c7e0698558ea7
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mana-fruit.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a33b5639f8772d8448086ea5f95ca110
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fish_f.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2f79f5115abdfb546bb2c7375f58e745
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/horn.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74df8032564551e45aca66d9d88bb4c8
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_07.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74b658bbcf9c0bd44aae30444ddf2d0d
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mr_01.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13e03f3e62de99446b9bc460d8193a36
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fish_05.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bda4fe797f7054644a368078a3a19fc5
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/eggs_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f58aee9635c0bef4298a4649722e7af5
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/potato.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc41a89ed137bea4bb5e1f86b82b3fde
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/baking_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccde3e2769cd766448726f9f3560b932
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/spices.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e76eeeded7173ff47b779ff56daf12c5
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/baking_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0aa32f653b4cfa418849be77ee7b1b8
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/baking_05.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71e811a50038ed14789e692330a3d1a5
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/wheat.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bffbebe75a7f4a04d89cf83f342d9add
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/cabbage_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c58503fc4831daa43a5b393241967cae
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/milk_b.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ecd4c366ee2ff7242a6ba2fb431b21e5
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/apple.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a4fa13b80dae4348bd478a14c4ccbe0
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/common_shell.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de0ab3db0631aeb4c940745fe7591435
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/stickjaw.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c56dd39f6144784eb12470934c88f22
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/dish_05_b.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0cf96c405edde8d4f90264ed6cb82b51
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mushroom_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fbb6792a3cea1e6429446ddc0d1880b5
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/fish_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 851857c114a36864dba63940db3f80a3
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/Meat_13.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d06ae5bbf10badf4b8d35960c8c84175
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/eggplant_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d84512d58f78524d81e3d4b217f35ef
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/root.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99a74ebfebc70024a8cc88b5d3af3f44
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/shrimp.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7cf1f54ff035efb458630ac8ed04cc95
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/bucket_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 27f0ac71a845bdf4eb0cdcdee8dc4bb7
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pepper.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2dbcd796cd5632147ad4efadec4c8ac0
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/kiwi.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4bfa9f57ac5d02f4e96858e966e2d270
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/mushroom_07.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d390a20cf0658ed419a68ed871100b66
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/baking_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3832626432da8545a22d868939f2841
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/sandwich.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b0bbfcd055700fb42bdc2d0327561a02
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/FoodIcons.PSD
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 53f7913871a9a5544ab93e801f3eaf12
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/pizza_f_06.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bcc4b6175c398e347be7fefdd547c7df
+    m_Address: Assets/Addressables/Sprites/Icons/FoodIconPack/eggs_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8709fcd3343f60d4a815e3e2d22b3c69
+    m_Address: Assets/Code/Runtime/ClientSystems/Tile/UI/Addressables/ScreenTileDetails.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5966a1919e8cbb6419b547429feb302b
+    m_Address: Assets/Code/Runtime/ClientSystems/Harvesting/Vfx/HarvestIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65718277ebaff4544bb9875c0f53c321
+    m_Address: Assets/Code/Runtime/ClientSystems/Harvesting/Vfx/HarvestEffect.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 170a0de474dcaf44f8bfcd2379cd4950
+    m_Address: Assets/Addressables/UIScreens/Notifications/HarvestFinishedNotification.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0a7d06808efbd243b4a537aa06686ef
+    m_Address: Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.2_81.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ee88bc28e40a764d9991cea4040cf18
+    m_Address: Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.6_88.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67b60d00ab3e6e0439143760fc750131
+    m_Address: Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.6_94.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 579a03a72a3a1664092f1b1df3272542
+    m_Address: Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.2_30.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a3d2ed97e45cb6468bec723fd09d606
+    m_Address: Assets/Addressables/UIScreens/MinimapTexture.renderTexture
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c4c2ffe20a401614480bdaf20402a5a2
+    m_Address: Assets/Addressables/Prefabs/Buildings/Camp.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3a553b6220f0cf142bcbbecae09dd5ce
+    m_Address: Assets/Addressables/Prefabs/Buildings/Farm.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 66d66aac1c9c2434a89033c121fa197c
+    m_Address: Assets/Addressables/UIScreens/SelectBuildingScreen.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9fbdd0376ab914cc6a1b8835495610c8
+    m_Address: Assets/Packs/UiArt/Sprites/Component/Icon_ItemIcons_(Original)/icon_itemicon_shoeswing.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d573fba858eba46919e9e2965a8c6e68
+    m_Address: Assets/Packs/UiArt/Sprites/Component/Icon_ItemIcons_(Original)/icon_itemicon_pickax.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3de0a5c20801a44d4a6acea442bc2bd4
+    m_Address: Assets/Packs/UiArt/Sprites/Component/Icon_ItemIcons_(Original)/icon_itemicon_hammer.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5193186771e11435f8761b7ece8ba3ba
+    m_Address: Assets/Packs/UiArt/Sprites/Component/Icon_ItemIcons_(Original)/icon_itemicon_battle.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a2b985356e81714f9b0306b8a028794
+    m_Address: Assets/Addressables/Sprites/Icons/Places/camp_place.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2aebd1af261c4b24cb4923b82aa28c2a
+    m_Address: Assets/Addressables/Sprites/Icons/Places/castle_place.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c14715936179504bb09216114cc72bb
+    m_Address: Assets/Addressables/Sprites/Icons/Places/farm_place.jpg
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

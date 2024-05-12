@@ -1,38 +1,46 @@
-﻿using Game.Tile;
+﻿using Game.Engine.Pathfinder;
+using Game.Tile;
 
 namespace Game.World
 {
     /// <summary>
     /// Used for pathfinding.
     /// </summary>
-    public class CachedChunkMap
+    public class CachedChunkMap : IPathfinderGridProvider
     {
-        public TileEntity[,] array;
-        private ChunkMap _chunkMap;
+        public Cell[,] CellArray;
+        private Location _size;
+        private IChunkMap _chunkMap;
 
-        public CachedChunkMap(ChunkMap chunkMap)
+        public CachedChunkMap(IChunkMap chunkMap)
         {
-            this._chunkMap = chunkMap;
-            array = new TileEntity[SizeX, SizeY];
+            _chunkMap = chunkMap;
+            _size = new Location(SizeX, SizeY);
+            CellArray = new Cell[SizeX, SizeY];
         }
 
-        public TileEntity GetTile(int x, int y)
+        public void Reset()
         {
-            var cached = array[x, y];
-            if (cached == null)
+            CellArray = new Cell[SizeX, SizeY];
+        }
+
+        public int SizeX { get => _chunkMap.TilemapDimensions.x; }
+        public int SizeY { get => _chunkMap.TilemapDimensions.y; }
+        public Location Size => _size;
+
+        public Cell this[Location position]
+        {
+            get
             {
-                cached = _chunkMap.GetTile(x, y);
-                array[x, y] = cached;
+                var cell = CellArray[position.X, position.Y];
+                if (cell == null)
+                {
+                    cell = new Cell(position);
+                    cell.Blocked = !_chunkMap.GetTile(position.X, position.Y).Passable;
+                    CellArray[position.X, position.Y] = cell;
+                }
+                return cell;
             }
-            return cached;
         }
-
-        public TileEntity this[int x, int y]
-        {
-            get => GetTile(x, y);
-        }
-
-        public int SizeX { get => _chunkMap.QtdChunksX * GameWorld.CHUNK_SIZE; }
-        public int SizeY { get => _chunkMap.QtdChunksY * GameWorld.CHUNK_SIZE; }
     }
 }

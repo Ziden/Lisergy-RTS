@@ -4,7 +4,7 @@ namespace BaseServer.Commands
 {
     public abstract class Command
     {
-        protected StrategyGame Game;
+        protected LisergyGame Game;
 
         public abstract string GetCommand();
 
@@ -12,7 +12,7 @@ namespace BaseServer.Commands
 
         public abstract void Execute(CommandSender sender, CommandArgs args);
 
-        public Command(StrategyGame game)
+        public Command(LisergyGame game)
         {
             Game = game;
         }
