@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Game.DataTypes;
+using Game.Engine.DataTypes;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
@@ -12,7 +12,7 @@ namespace Code.Editor
 	public class AddressableGeneration
 	{
 		// Path Contains -> Enum Name
-		private static readonly Dictionary<string, string> CONFIG = new Dictionary<string, string>()
+		private static readonly Dictionary<string, string> CONFIG = new ()
 		{
 			{"Sfx", "SoundFX"},
 			{"Tiles", "TilePrefab"},

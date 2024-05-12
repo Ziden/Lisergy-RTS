@@ -178,12 +178,12 @@ namespace Party.UI
             _taskIcon.SetBackground(resourceSpec.Art);
             _taskNumber.text = ev.AmountHarvestedTotal.ToString();
 
-            var totalTime = _client.Game.GameTime - ev.InitialState.TaskState.StartTime;
-            var pct = totalTime.TotalMilliseconds / ev.InitialState.TaskState.TotalTimeRequiredForTask.TotalMilliseconds;
+            var totalTime = _client.Game.GameTime - ev.InitialState.TimeSnapshot.TimeBlock.StartTime;
+            var pct = totalTime.TotalMilliseconds / ev.InitialState.TimeSnapshot.TimeBlock.TotalBlockTime.TotalMilliseconds;
             if (pct < 1)
             {
                 ShowBar();
-                UpdateBar(ev.InitialState.TaskState.StartTime, ev.InitialState.TaskState.EndTime);
+                UpdateBar(ev.InitialState.TimeSnapshot.TimeBlock.StartTime, ev.InitialState.TimeSnapshot.TimeBlock.EndTime);
             }
         }
 

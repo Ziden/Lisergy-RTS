@@ -66,7 +66,7 @@ namespace Game.Engine.ECS
         /// Will attempt to reuse any free memory if available.
         /// </summary>
 
-        public void Alloc<T>() where T : IComponent => this[typeof(T)] = UnmanagedMemory.Alloc(sizeof(T));
+        public void Alloc<T>() where T : IComponent => this[typeof(T)] = UnmanagedMemory.Alloc(Marshal.SizeOf<T>());
 
         public void Alloc(Type t) => this[t] = UnmanagedMemory.Alloc(Marshal.SizeOf(t));
 

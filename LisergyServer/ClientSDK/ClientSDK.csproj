@@ -20,9 +20,10 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Condition="$([MSBuild]::IsOSPlatform('OSX'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/ClientSDK.dll" />
     <Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/ClientSDK.dll" />
     <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="xcopy /y /s /f $(TargetPath) $(SolutionDir)\..\LisergyClient\LisergyClient\Assets\Plugins\ClientSDK.dll*" />
-	
+    <Exec Condition="$([MSBuild]::IsOSPlatform('OSX'))" Command="cp -vf $(OutDir)ClientSDK.xml $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/ClientSDK.xml" />
 	<Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))" Command="cp -vf $(OutDir)ClientSDK.xml $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/ClientSDK.xml" />
     <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="xcopy /y /s /f $(OutDir)ClientSDK.xml $(SolutionDir)\..\LisergyClient\LisergyClient\Assets\Plugins\ClientSDK.xml*" />
   </Target>

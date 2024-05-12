@@ -51,14 +51,15 @@ namespace Assets.Code
                 Datasource = GameClient.Modules.Buildings.GetBuildingsKnown().ToList(),
                 OnPreview = (item, element) =>
                 {
+                    var constructionSpec = GameClient.Game.Specs.BuildingConstructions[item.SpecId];
                     element.Description.text = item.Description;
-                    element.Time.text = item.BuildTimeSeconds + " seconds";
-                    element.CostFromResource(item.BuildingCost);
+                    element.Time.text = $"{constructionSpec.TimeToBuildSeconds} seconds";
+                    element.CostFromResource(constructionSpec.BuildingCost);
                 },
                 CreateSelection = b =>
                 {
                     var w = new WidgetSelectionItem();
-                    w.SetData(b.Name, b.Icon, b).Forget();
+                    w.SetData(b.Name, b.Art, b).Forget();
                     return w;
                 }
             });

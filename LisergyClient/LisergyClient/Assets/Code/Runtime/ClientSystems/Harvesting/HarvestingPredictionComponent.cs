@@ -60,14 +60,14 @@ public class HarvestingPredictionComponent : IReferenceComponent, IDisposable
     private async UniTaskVoid TrackerTask()
     {  
         var harvestState = _entity.EntityLogic.Harvesting.CalculateCurrentState();
-        var nextHarvest = harvestState.TaskState.StartTime + _harvestSpec.HarvestTimePerUnit;
+        var nextHarvest = harvestState.TimeSnapshot.TimeBlock.StartTime + _harvestSpec.HarvestTimePerUnit;
         _harvestedTotal = 0;
         if (nextHarvest < _client.Game.GameTime)
         {
-            _harvestedTotal = (ushort)Math.Floor((_client.Game.GameTime - harvestState.TaskState.StartTime) / _harvestSpec.HarvestTimePerUnit);
+            _harvestedTotal = (ushort)Math.Floor((_client.Game.GameTime - harvestState.TimeSnapshot.TimeBlock.StartTime) / _harvestSpec.HarvestTimePerUnit);
             if (_harvestedTotal > _initialComponent.Resource.Amount) _harvestedTotal = _initialComponent.Resource.Amount;
 
-            nextHarvest = harvestState.TaskState.StartTime + (_harvestSpec.HarvestTimePerUnit * (_harvestedTotal + 1));
+            nextHarvest = harvestState.TimeSnapshot.TimeBlock.StartTime + (_harvestSpec.HarvestTimePerUnit * (_harvestedTotal + 1));
             _client.Game.Log.Debug($"[Harvest Prediction] Was harvesting already for some time - Harvested Total Start {_harvestedTotal}");
         }
         var depleted = _harvestedTotal >= _initialComponent.Resource.Amount;
