@@ -26,7 +26,7 @@ namespace Game.Systems.Party
             Components.Add<CargoComponent>();
             Components.Add<HarvesterComponent>();
             Components.Get<CargoComponent>().MaxWeight = game.Specs.Harvesting.StartingPartyCargoWeight;
-            Components.Get<MovespeedComponent>().MoveDelay = TimeSpan.FromSeconds(0.3);
+            Components.Get<MovespeedComponent>().MoveDelay = TimeSpan.FromSeconds(1);
             Components.AddReference(new MapReferenceComponent());
         }
         

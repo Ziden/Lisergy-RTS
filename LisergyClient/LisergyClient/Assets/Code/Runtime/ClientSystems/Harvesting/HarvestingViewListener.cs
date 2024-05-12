@@ -30,7 +30,6 @@ public class HarvestingViewListener : IEventListener
             _client.Game.Log.Debug($"[Harvest Prediction] Client predicted depletion on {ev.Tile} - stopping party");
             _client.Modules.Actions.StopParty(p);
             p.Components.RemoveReference<HarvestingPredictionComponent>();
-         
         }
     }
 
