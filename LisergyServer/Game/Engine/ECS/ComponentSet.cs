@@ -106,11 +106,13 @@ namespace Game.Engine.ECLS
         {
             var t = typeof(T);
             GetComponents()[t] = t.IsValueType ? default : obj == null ? FastNew<T>.Instance() : obj;
-            CallEvent(new ComponentUpdateEvent<T>()
-            {
-                Old = default,
-                New = (T)GetComponents()[t]
-            });
+            var ev = ClassPool<ComponentUpdateEvent<T>>.Get();
+            ev.Entity = _entity;
+            ev.Old = default;
+            ev.New = (T)GetComponents()[t];
+            CallEvent(ev);
+            ClassPool<ComponentUpdateEvent<T>>.Return(ev);
+
             OnAfterAdded(t);
         }
 
@@ -158,12 +160,12 @@ namespace Game.Engine.ECLS
                     GetModified().Remove(t);
                     _entity.Game.Log.Debug($"Removed {t.Name} from {_entity}");
 
-                    CallEvent(new ComponentUpdateEvent<T>()
-                    {
-                        Entity = _entity,
-                        Old = (T)c,
-                        New = default
-                    });
+                    var ev = ClassPool<ComponentUpdateEvent<T>>.Get();
+                    ev.Entity = _entity;
+                    ev.Old = (T)c;
+                    ev.New = default;
+                    CallEvent(ev);
+                    ClassPool<ComponentUpdateEvent<T>>.Return(ev);
 
                     return true;
                 }
@@ -241,12 +243,14 @@ namespace Game.Engine.ECLS
         {
             var t = c.GetType();
             GetComponents().TryGetValue(t, out var oldValue);
-            CallEvent(new ComponentUpdateEvent<T>()
-            {
-                Entity = _entity,
-                New = c,
-                Old = (T)oldValue
-            });
+
+            var ev = ClassPool<ComponentUpdateEvent<T>>.Get();
+            ev.Entity = _entity;
+            ev.Old = (T)oldValue;
+            ev.New = c;
+            CallEvent(ev);
+            ClassPool<ComponentUpdateEvent<T>>.Return(ev);
+
             GetComponents()[t] = c;
             if (t.IsValueType)
             {

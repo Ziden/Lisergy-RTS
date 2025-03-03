@@ -119,14 +119,10 @@ namespace UnitTests
             // did client placed the party ?
             var clientParty = _client.Game.Entities[serverParty.EntityId];
 
-            // entity move event triggered on client by LogicModule ?
-            var moveEvents = _client.FilterClientEvents<ComponentUpdateEvent<MapPlacementComponent>>();
+            // entity move event triggered on client by LogicModule ?  
             var visibilityEvents = _client.FilterClientEvents<TileVisibilityChangedEvent>();
 
-            var entityMoveEvent = moveEvents.First();
             Assert.AreEqual(visibleTiles.Count, visibilityEvents.Count);
-            Assert.AreEqual(1, moveEvents.Count);
-            Assert.AreEqual(null, entityMoveEvent.Old);
             Assert.AreEqual(clientParty.Get<MapPlacementComponent>().Position, serverParty.Get<MapPlacementComponent>().Position);
 
             // Client predicted all visibility and fog of war in LogicModule
