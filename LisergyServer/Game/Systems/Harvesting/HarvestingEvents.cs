@@ -1,4 +1,4 @@
-﻿using Game.Engine.ECS;
+﻿using Game.Engine.ECLS;
 using Game.Engine.Events;
 using Game.Systems.Resources;
 using Game.Tile;
@@ -12,7 +12,7 @@ namespace Game.Systems.Harvesting
     public class HarvestingStartedEvent : IGameEvent
     {
         public IEntity Harvester;
-        public TileEntity Tile;
+        public TileModel Tile;
         public ResourceSpecId Resource;
     }
 
@@ -22,7 +22,7 @@ namespace Game.Systems.Harvesting
     public class HarvestingEndedEvent : IGameEvent
     {
         public IEntity Harvester;
-        public TileEntity Tile;
+        public TileModel Tile;
         public ResourceStackData Resource;
     }
 }

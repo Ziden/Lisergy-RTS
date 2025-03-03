@@ -11,20 +11,18 @@ using GameData;
 using GameDataTest;
 using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace ServerTests
 {
     public class TestGame : LisergyGame
     {
-        protected GameId _testPlayerId = GameId.Generate();
+        protected GameId _testPlayerId;
         public GameServerNetwork TestNetwork { get; protected set; }
         public BattleService BattleService { get; protected set; }
         public WorldService WorldService { get; protected set; }
-        public CourseService CourseService { get; protected set; }
         public List<BasePacket> SentServerPackets { get; protected set; } = new List<BasePacket>();
         public GameWorld TestWorld => World as GameWorld;
-        public ServerChunkMap TestMap => TestWorld.Map as ServerChunkMap;
+        public ServerChunkMap WorldChunks => TestWorld.Chunks;
 
         private static GameSpec _testSpecs;
 
@@ -35,55 +33,72 @@ namespace ServerTests
             Log.Debug("Creating World");
             var world = new GameWorld(this, 16, 16);
             SetupWorld(world);
-            TestMap.SetFlag(0, 0, ChunkFlag.NEWBIE_CHUNK);
+            WorldChunks.SetOccupied(0, 0, false);
             return world;
         }
 
+        public static void ValidateNoLeak(IGame game)
+        {
+            foreach (var e in game.Entities.AllEntities)
+            {
+                e.Components.ValidateComponentSetModifications();
+            }
+        }
+
+
+
         public GameScheduler GameScheduler => this.Scheduler as GameScheduler;
+
+        private static GameLog _testLog;
 
         private static IGameLog GetTestLog()
         {
-            var log = new GameLog("[Game]");
-            log._Debug = m =>
+            if (_testLog != null) return _testLog;
+
+            _testLog = new GameLog("[Game]");
+            _testLog._Debug = m =>
             {
                 var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 if (lastLog != 0) m = $"[{now - lastLog}ms] " + m;
                 lastLog = now;
                 Console.WriteLine(m);
             };
-            return log;
+            return _testLog;
         }
 
         public TestGame(GameSpec specs = null, bool createWorld = true, bool createPlayer = true) : base(specs ?? GetTestSpecs(), GetTestLog())
         {
-            GameId.DEBUG_MODE = 1;
+            GameId.INCREMENTAL_MODE = 1;
             if (createWorld)
             {
                 CreateTestWorld();
-               
             }
             Log.Debug("Setting up serializer");
             Serialization.LoadSerializers();
             Log.Debug("Creating local services");
             BattleService = new BattleService(this);
             WorldService = new WorldService(this);
-            CourseService = new CourseService(this);
             TestNetwork = Network as GameServerNetwork;
             GameScheduler.SetLogicalTime(DateTime.UtcNow);
-            TestNetwork.OnOutgoingPacket += (player, packet) => ((TestServerPlayer)Players[player]).SendTestPacket(packet);
+            TestNetwork.OnOutgoingPacket += (player, packet) => (Players[player] as TestServerPlayer)?.SendTestPacket(packet);
             if (createPlayer && createWorld)
                 CreatePlayer();
             long originalByteCount = GC.GetTotalMemory(false) / 1000;
-            Log.Debug($"Test Game Ready: Heap Allocation Total {originalByteCount}kb");
+            Log.Info($"Test Game Ready: Heap Allocation Total {originalByteCount}kb");
         }
 
-        public void HandleClientEvent<T>(PlayerEntity sender, T ev) where T : BasePacket
+        public void HandleClientEvent<T>(PlayerModel sender, T ev) where T : BasePacket
         {
-            var deserialized = Serialization.ToCastedPacket<BasePacket>(Serialization.FromBasePacket(ev));
+            //var deserialized = Serialization.ToCastedPacket<BasePacket>(Serialization.FromBasePacket(ev));
+            var deserialized = ev;
             deserialized.Sender = sender;
-            //ev.Sender = sender;
+            deserialized.SenderPlayerId = sender.EntityId;
             TestNetwork.IncomingPackets.Call(deserialized);
-            Entities.DeltaCompression.SendDeltaPackets(sender);
+            if (deserialized is IGameCommand c)
+            {
+                c.Execute(sender.Game);
+            }
+            Network.DeltaCompression.SendAllModifiedEntities(sender.EntityId);
         }
 
         public TestServerPlayer CreatePlayer(in int x = 10, in int y = 10)
@@ -92,9 +107,10 @@ namespace ServerTests
             var player = new TestServerPlayer(this);
             player.OnReceivedPacket += ev => ReceivePacket(ev);
             _testPlayerId = player.EntityId;
-            var tile = World.Map.GetTile(x, y);
-            player.EntityLogic.Player.PlaceNewPlayer(World.Map.GetTile(x, y));
-            Entities.DeltaCompression.SendDeltaPackets(player);
+            var tile = World.GetTile(x, y);
+            Players.Add(player);
+            player.EntityLogic.PlaceNewPlayer(World.GetTile(x, y));
+            Network.DeltaCompression.SendAllModifiedEntities(player.EntityId);
             return player;
         }
 
@@ -105,22 +121,27 @@ namespace ServerTests
 
         public TestServerPlayer GetTestPlayer()
         {
-            PlayerEntity pl;
+            PlayerModel pl;
             this.World.Players.GetPlayer(_testPlayerId, out pl);
             return (TestServerPlayer)pl;
         }
 
+
         public static void BuildTestSpecs()
         {
-            _testSpecs = TestSpecs.Generate();
+            if (_testSpecs == null)
+            {
+                _testSpecs = TestSpecs.Generate();
+            }
             // Allow having initial building in tests
             _testSpecs.InitialBuildingSpecId = _testSpecs.Buildings[1].SpecId;
         }
 
         private static GameSpec GetTestSpecs()
         {
-            if(_testSpecs == null)
+            if (_testSpecs == null)
             {
+                Serialization.LoadSerializers();
                 BuildTestSpecs();
             }
             return _testSpecs;
@@ -132,11 +153,11 @@ namespace ServerTests
         }
 
 
-        public TileEntity RandomNotBuiltTile()
+        public TileModel RandomNotBuiltTile()
         {
             var tiles = TestWorld.AllTiles();
             foreach (var tile in tiles)
-                if (tile.Building == null)
+                if (tile.Logic.Tile.GetBuildingOnTile() == null)
                     return tile;
             throw new System.Exception("No unbuilt tile");
         }

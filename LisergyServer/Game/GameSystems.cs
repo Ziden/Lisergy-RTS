@@ -1,43 +1,25 @@
-﻿using Game.ECS;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.ECLS;
+using Game.Engine.Events;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Dungeon;
 using Game.Systems.FogOfWar;
+using Game.Systems.Map;
 using Game.Systems.Movement;
 using Game.Systems.Party;
-using Game.Systems.Tile;
-using System.Collections.Generic;
-using System;
-using Game.Systems.Map;
 using Game.Systems.Player;
 using Game.Systems.Resources;
+using Game.Systems.Tile;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Game.Engine.Events;
-using Game.Engine.ECS;
-using Game.Engine.DataTypes;
 
 namespace Game
 {
-    public interface ISystems {
-        BuildingSystem Building { get; }
-        BattleGroupSystem BattleGroup { get; }
-        PlayerBuildingSystem PlayerBuilding { get; }
-        DungeonSystem Dungeons { get; }
-        EntityVisionSystem EntityVision { get; }
-        CourseSystem EntityMovement { get; }
-        TileVisibilitySystem TileVisibility { get; }
-        MapSystem Map { get; }
-        PartySystem Party { get; }
-        TileSystem Tile { get; }
-        PlayerSystem Players { get; }
-        HarvestingSystem Harvesting { get; }
-        ResourceSystem Resources { get; }
-        CargoSystem Cargo { get; }
-        void CallEvent(IEntity entity, IBaseEvent ev);
-    }
 
-    public class GameSystems : ISystems
+    public class GameSystems
     {
         private readonly DefaultValueDictionary<Type, List<IGameSystem>> _systems = new DefaultValueDictionary<Type, List<IGameSystem>>();
 
@@ -48,11 +30,10 @@ namespace Game
             _game = game;
             AddSystem(Building = new BuildingSystem(game));
             AddSystem(BattleGroup = new BattleGroupSystem(game));
-            AddSystem(PlayerBuilding = new PlayerBuildingSystem(game));
             AddSystem(Dungeons = new DungeonSystem(game));
+            AddSystem(Deltacompression = new DeltaCompressionSystem(game));
             AddSystem(EntityVision = new EntityVisionSystem(game));
-            AddSystem(EntityMovement = new CourseSystem(game));
-            AddSystem(TileVisibility = new TileVisibilitySystem(game));
+            AddSystem(EntityMovement = new MovementSystem(game));
             AddSystem(Party = new PartySystem(game));
             AddSystem(Tile = new TileSystem(game));
             AddSystem(Map = new MapSystem(game));
@@ -62,14 +43,13 @@ namespace Game
             AddSystem(Cargo = new CargoSystem(game));
         }
 
+        public DeltaCompressionSystem Deltacompression { get; private set; }
         public MapSystem Map { get; private set; }
         public BuildingSystem Building { get; private set; }
         public BattleGroupSystem BattleGroup { get; private set; }
-        public PlayerBuildingSystem PlayerBuilding { get; private set; }
         public DungeonSystem Dungeons { get; private set; }
         public EntityVisionSystem EntityVision { get; private set; }
-        public CourseSystem EntityMovement { get; private set; }
-        public TileVisibilitySystem TileVisibility { get; private set; }
+        public MovementSystem EntityMovement { get; private set; }
         public PartySystem Party { get; private set; }
         public TileSystem Tile { get; private set; }
         public PlayerSystem Players { get; private set; }
@@ -77,10 +57,10 @@ namespace Game
         public ResourceSystem Resources { get; private set; }
         public CargoSystem Cargo { get; private set; }
 
-        private void AddSystem<ComponentType>(GameSystem<ComponentType> system) where ComponentType : unmanaged, IComponent 
+        private void AddSystem<ComponentType>(GameSystem<ComponentType> system) where ComponentType : IComponent
         {
             _systems[typeof(ComponentType)].Add(system);
-            if(_game.IsClientGame)
+            if (_game.IsClientGame)
             {
                 var sync = system.GetType().GetCustomAttribute(typeof(SyncedSystem)) as SyncedSystem;
                 if (sync == null) return;
@@ -92,7 +72,7 @@ namespace Game
         public void CallEvent(IEntity entity, IBaseEvent ev)
         {
             _game.Events.Call(ev);
-            foreach (var componentType in entity.Components.All().ToArray())
+            foreach (var componentType in entity.Components.AllTypes().ToArray())
             {
                 CallSystemEvent(componentType, entity, ev);
             }
@@ -102,9 +82,9 @@ namespace Game
         {
             if (_systems.TryGetValue(componentType, out var systems))
             {
-                foreach(var system in systems) system.CallEvent(entity, ev);
+                foreach (var system in systems) system.CallEvent(entity, ev);
             }
-            
+
         }
     }
 }

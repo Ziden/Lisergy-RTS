@@ -1,28 +1,22 @@
-﻿using Game.ECS;
-using Game.Engine.ECS;
+﻿using Game.Engine.ECLS;
+using Game.Engine.Events;
 using Game.Systems.Map;
 
 namespace Game.Systems.Building
 {
     [SyncedSystem]
-    public class BuildingSystem : GameSystem<BuildingComponent>
+    public class BuildingSystem : LogicSystem<BuildingComponent, BuildingLogic>
     {
         public BuildingSystem(LisergyGame game) : base(game) { }
 
         public override void RegisterListeners()
         {
-            EntityEvents.On<EntityMoveInEvent>(OnPlaceBuilding);
-            EntityEvents.On<EntityMoveOutEvent>(OnRemovedBuilding);
+            //EntityEvents.On<ComponentUpdateEvent<MapPlacementComponent>>(OnPlacementUpdate);
         }
 
-        private void OnPlaceBuilding(IEntity e, EntityMoveInEvent ev)
+        private void OnPlacementUpdate(IEntity e, ComponentUpdateEvent<MapPlacementComponent> ev)
         {
-            ev.ToTile.Components.CallEvent(new BuildingPlacedEvent(e, ev.ToTile));
-        }
 
-        private void OnRemovedBuilding(IEntity e, EntityMoveOutEvent ev)
-        {
-            ev.FromTile.Components.CallEvent(new BuildingRemovedEvent(e, ev.FromTile));
         }
     }
 }

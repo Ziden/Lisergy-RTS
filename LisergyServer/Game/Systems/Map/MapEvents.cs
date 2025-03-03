@@ -1,36 +1,29 @@
-﻿using Game.Engine.ECS;
+﻿using Game.Engine.ECLS;
 using Game.Engine.Events;
 using Game.Tile;
 
 namespace Game.Systems.Map
 {
-    /// <summary>
-    /// Whenever an entity moves in a tile
-    /// </summary>
-    public class EntityMoveInEvent : IGameEvent
+
+    public class EntityPlacedInMapEvent : IGameEvent
     {
         public IEntity Entity;
-        public TileEntity ToTile;
-        public TileEntity FromTile;
+        public TileModel ToTile;
 
         public override string ToString()
         {
-            return $"<EntityMoveIn Entity={Entity} From={FromTile.Position} To={ToTile.Position}/>";
+            return $"<EntityPlaced Entity={Entity} To={ToTile.Position}/>";
         }
     }
 
-    /// <summary>
-    /// Whenever an entity steps out of a tile
-    /// </summary>
-    public class EntityMoveOutEvent : IGameEvent
+    public class EntityRemovedFromMapEvent : IGameEvent
     {
         public IEntity Entity;
-        public TileEntity ToTile;
-        public TileEntity FromTile;
+        public TileModel Tile;
 
         public override string ToString()
         {
-            return $"<EntityMoveIn Entity={Entity} From={FromTile.Position} To={ToTile.Position}/>";
+            return $"<EntityRemovedFromMapEvent Entity={Entity} To={Tile.Position}/>";
         }
     }
 }

@@ -1,9 +1,7 @@
-﻿using Game;
-using Game.Engine.DataTypes;
-using Game.Engine.ECS;
-using System;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.ECLS;
+using Game.Entities;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ClientSDK.Data
 {
@@ -13,22 +11,22 @@ namespace ClientSDK.Data
 
         public void RemoveView(IEntityView view)
         {
-            GetViews(view.BaseEntity.EntityType).Remove(view.BaseEntity.EntityId);
-        }
-
-        public T GetView<T>(IEntity e) where T : IEntityView
-        {
-            if (e == null) return default!;
-            if (GetViews(e.EntityType).TryGetValue(e.EntityId, out var v))
-            {
-                return (T)v;
-            }
-            return default(T)!;
+            GetViews(view.Entity.EntityType).Remove(view.Entity.EntityId);
         }
 
         public IEntityView GetView(IEntity e)
         {
+            if (e == null) return default!;
             if (GetViews(e.EntityType).TryGetValue(e.EntityId, out var v))
+            {
+                return v;
+            }
+            return default!;
+        }
+
+        public IEntityView GetView(EntityType t, GameId id)
+        {
+            if (GetViews(t).TryGetValue(id, out var v))
             {
                 return v;
             }

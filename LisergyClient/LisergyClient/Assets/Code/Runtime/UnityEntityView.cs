@@ -2,10 +2,10 @@
 
 using Assets.Code;
 using Assets.Code.Assets.Code.Assets;
+using ClientSDK;
 using ClientSDK.Data;
-using Game;
-using Game.ECS;
-using Game.Engine.ECS;
+using Game.Entities;
+using Game.Engine.ECLS;
 using System;
 using UnityEngine;
 
@@ -16,9 +16,11 @@ public interface IUnityEntityView : IEntityView, IGameObject {
 /// <summary>
 /// Represents a entity view that's specific for Unity game engine
 /// </summary>
-public class UnityEntityView<T> : EntityView<T>, IUnityEntityView where T : IEntity
+public class UnityEntityView : EntityView
 {
     protected event Action OnAfterRendered;
+
+    public UnityEntityView(IEntity e, IGameClient game) : base(e, game) { }
 
     private GameObject _gameObject;
     public GameObject GameObject { get => _gameObject; set
@@ -28,11 +30,12 @@ public class UnityEntityView<T> : EntityView<T>, IUnityEntityView where T : IEnt
         }
     }
 
-    public EntityType EntityType => Entity.EntityType;
     protected IAssetService Assets => Client.UnityServices().Assets;
-    private static string _containerName = typeof(T).Name + " Container";
+
+    private static string GetContainerName() => "Entity Container";
+
     private static GameObject _container;
-    protected static GameObject ViewContainer => _container = _container ?? new GameObject(_containerName);
+    protected static GameObject ViewContainer => _container = _container ?? new GameObject(GetContainerName());
 
     /// <summary>
     /// Sets the gameobject as a child of this view

@@ -1,14 +1,16 @@
-﻿using Game.Tile;
-using ClientSDK.Data;
+﻿using ClientSDK.Data;
 using UnityEngine;
-using Game;
 using System.Collections.Generic;
 using Game.Engine.DataTypes;
 using GameAssets;
+using ClientSDK;
+using Game.Engine.ECLS;
+using Game.Systems.Tile;
+using Game.Tile;
 
 namespace Assets.Code.Views
 {
-    public partial class TileView : UnityEntityView<TileEntity>
+    public partial class TileView : UnityEntityView
     {
         private static Dictionary<GameId, GameObject> _chunks = new Dictionary<GameId, GameObject>();
         private static GameObject FogContainer => _fogContainer = _fogContainer ?? new GameObject("Fog Container");
@@ -16,16 +18,21 @@ namespace Assets.Code.Views
         public GameObject FogObject { get; private set; } = null;
         public FogState FogState { get; private set; } = FogState.UNEXPLORED;
         public bool Decorated { get; set; }
+        public TileModel Tile { get; private set; }
+
+        public TileView(IGameClient client, IEntity e) : base(e, client) { }
 
         protected override void CreateView()
         {
+            Tile = Entity as TileModel;
+            var data = Entity.Get<TileDataComponent>();
             State = EntityViewState.RENDERING;
-            var tileSpec = Client.Game.Specs.Tiles[Entity.SpecId];
-            Assets.CreatePrefab(tileSpec.TilePrefab, new Vector3(Entity.X, 0, Entity.Y), Quaternion.identity, o =>
+            var tileSpec = Client.Game.Specs.Tiles[data.TileId];
+            Assets.CreatePrefab(tileSpec.TilePrefab, new Vector3(data.Position.X, 0, data.Position.Y), Quaternion.identity, o =>
             {
                 GameObject = o;
                 GameObject.transform.parent = GetChunkObject().transform;
-                GameObject.name = $"Tile_{Entity.X}-{Entity.Y}";
+                GameObject.name = $"Tile_{data.Position.X}-{data.Position.Y}";
                 GameObject.isStatic = true;
                 State = EntityViewState.RENDERED;
                 Client.ClientEvents.Call(new TileRenderedEvent() { View = this, Reactivate = false });
@@ -38,11 +45,12 @@ namespace Assets.Code.Views
         /// </summary>
         private GameObject GetChunkObject()
         {
-            var chunk = Entity.Chunk;
-            if (!_chunks.TryGetValue(chunk.EntityId, out var chunkObject))
+            var chunk = Tile.Chunk;
+            var chunkId = new GameId(chunk.Position);
+            if (!_chunks.TryGetValue(chunkId, out var chunkObject))
             {
                 chunkObject = new GameObject($"Chunk {chunk.X}-{chunk.Y}");
-                _chunks[chunk.EntityId] = chunkObject;
+                _chunks[chunkId] = chunkObject;
                 chunkObject.transform.parent = ViewContainer.transform;
                 chunkObject.isStatic = true;
             }
@@ -73,7 +81,7 @@ namespace Assets.Code.Views
 
         private void AddFogPrefabToTile(TilePrefab fogFab, FogState desiredState)
         {
-            Assets.CreateTile(fogFab, new Vector3(Entity.X, 0.1f, Entity.Y), Quaternion.identity,
+            Assets.CreateTile(fogFab, new Vector3(Tile.X, 0.1f, Tile.Y), Quaternion.identity,
             o =>
             {
                 if (FogState != desiredState || FogObject != null) // changed while asset was loading
@@ -82,7 +90,7 @@ namespace Assets.Code.Views
                     GameObject.Destroy(o);
                     return;
                 }
-                o.name = $"Fog for {Entity.X} {Entity.Y}";
+                o.name = $"Fog for {Tile.X} {Tile.Y}";
                 o.transform.parent = FogContainer.transform;
                 FogObject = o;
             });

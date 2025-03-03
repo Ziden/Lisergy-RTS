@@ -1,7 +1,5 @@
 ﻿using ClientSDK.Data;
-using Game.Engine.ECS;
-using Game.Systems.Party;
-using Game.Tile;
+using Game.Engine.ECLS;
 
 namespace ClientSDK.SDKEvents
 {
@@ -10,11 +8,11 @@ namespace ClientSDK.SDKEvents
     /// This event can be used to display own entity updates on the UI 
     /// When this event fires the entity should have all its components synced.
     /// </summary>
-    public class OwnEntityInfoReceived<EntityType> : IClientEvent where EntityType : IEntity
+    public class OwnEntityInfoReceived : IClientEvent
     {
-        public EntityType Entity;
+        public IEntity Entity;
 
-        public OwnEntityInfoReceived(EntityType e)
+        public OwnEntityInfoReceived(IEntity e)
         {
             Entity = e;
         }

@@ -1,8 +1,7 @@
 using Assets.Code;
 using Assets.Code.Assets.Code.Runtime;
 using ClientSDK;
-using Game;
-using Game.ECS;
+using Game.Entities;
 using Game.Engine.Events.Bus;
 using GameAssets;
 using UnityEngine;
@@ -32,13 +31,13 @@ public class IndicatorSelectedPartyListener : IEventListener
 
     private void OnEntitySelected(IUnityEntityView e)
     {
-        if (_selector != null && e.BaseEntity is BaseEntity be && be.Tile != null)
+        if (_selector != null && e != null)
         {
             _client.Log.Debug($"Entity Selector Moving to {e}");
             if (e.GameObject == null) return;
             _selector.gameObject.transform.SetParent(e.GameObject.transform, true);
             _selector.gameObject.transform.position = e.GameObject.transform.position;
-            if (e.BaseEntity.EntityType == EntityType.Building)
+            if (e.EntityType == EntityType.Building)
             {
                 _selector.BuildingRadial.SetActive(true);
                 _selector.UnitRadial.SetActive(false);

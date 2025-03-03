@@ -29,7 +29,7 @@ public class TileMonoComponent : MonoBehaviour
 {
     private static DeterministicRandom _rng = new DeterministicRandom();
 
-    private TileEntity _tile;
+    private TileModel _tile;
 
     public List<TileRandomizationSetup> _config = new List<TileRandomizationSetup>();
 
@@ -45,7 +45,7 @@ public class TileMonoComponent : MonoBehaviour
     public List<GameObject> RemoveWhenConnectNorth;
     public List<GameObject> RemoveWhenConnectWest;
 
-    public TileEntity Tile { get => _tile; private set => _tile = value; }
+    public TileModel Tile { get => _tile; private set => _tile = value; }
 
     /// <summary>
     /// Whenever two tiles of the same type are placed one near another they might need to connect and remove borders
@@ -72,32 +72,32 @@ public class TileMonoComponent : MonoBehaviour
     private void DecorateBoundaries(TileView currentTileView)
     {
         var modules = Assets.Code.UnityServicesContainer.Resolve<IServerModules>();
-        var tile = currentTileView.Entity;
+        var tile = currentTileView.Tile;
         var decorationComponent = currentTileView.GameObject.GetComponent<TileMonoComponent>();
-        var map = currentTileView.Entity.Chunk.Map;
+        var map = currentTileView.Tile.Game.World;
         var northTile = map.GetTile(tile.X, tile.Y - 1);
         var southTile = map.GetTile(tile.X, tile.Y + 1);
         var eastTile = map.GetTile(tile.X + 1, tile.Y);
         var westTile = map.GetTile(tile.X - 1, tile.Y);
-        TileView north = northTile == null ? null : (TileView)modules.Views.GetOrCreateView(northTile);
-        TileView south = southTile == null ? null : (TileView)modules.Views.GetOrCreateView(southTile);
-        TileView east = eastTile == null ? null : (TileView)modules.Views.GetOrCreateView(eastTile);
-        TileView west = westTile == null ? null : (TileView)modules.Views.GetOrCreateView(westTile);
+        TileView north = northTile == null ? null : (TileView)modules.Views.GetOrCreateView(northTile.TileEntity);
+        TileView south = southTile == null ? null : (TileView)modules.Views.GetOrCreateView(southTile.TileEntity);
+        TileView east = eastTile == null ? null : (TileView)modules.Views.GetOrCreateView(eastTile.TileEntity);
+        TileView west = westTile == null ? null : (TileView)modules.Views.GetOrCreateView(westTile.TileEntity);
 
-        if (decorationComponent.RemoveWhenConnectNorth.Count > 0 && (northTile != null && north.Entity.SpecId == tile.SpecId))
+        if (decorationComponent.RemoveWhenConnectNorth.Count > 0 && (northTile != null && north.Tile.SpecId == tile.SpecId))
         {
             ConnectToSameTileType(currentTileView, north, decorationComponent.RemoveWhenConnectNorth);
         }
-        if (decorationComponent.RemoveWhenConnectSouth.Count > 0 && (southTile != null && south.Entity.SpecId == tile.SpecId))
+        if (decorationComponent.RemoveWhenConnectSouth.Count > 0 && (southTile != null && south.Tile.SpecId == tile.SpecId))
         {
             ConnectToSameTileType(currentTileView, south, decorationComponent.RemoveWhenConnectSouth);
         }
-        if (decorationComponent.RemoveWhenConnectEast.Count > 0 && (eastTile != null && east.Entity.SpecId == tile.SpecId))
+        if (decorationComponent.RemoveWhenConnectEast.Count > 0 && (eastTile != null && east.Tile.SpecId == tile.SpecId))
         {
             ConnectToSameTileType(currentTileView, east, decorationComponent.RemoveWhenConnectEast);
         }
 
-        if (decorationComponent.RemoveWhenConnectWest.Count > 0 && (westTile != null && west.Entity.SpecId == tile.SpecId))
+        if (decorationComponent.RemoveWhenConnectWest.Count > 0 && (westTile != null && west.Tile.SpecId == tile.SpecId))
         {
             ConnectToSameTileType(currentTileView, west, decorationComponent.RemoveWhenConnectWest);
         }
@@ -114,8 +114,8 @@ public class TileMonoComponent : MonoBehaviour
     {
         unchecked
         {
-            _rng.Reinitialise(GetTilePositionHash(tile.Entity.X, tile.Entity.Y));
-            _tile = tile.Entity;
+            _rng.Reinitialise(GetTilePositionHash(tile.Tile.X, tile.Tile.Y));
+            _tile = tile.Tile;
             DecorateBoundaries(tile);
 
             _decorated = true;

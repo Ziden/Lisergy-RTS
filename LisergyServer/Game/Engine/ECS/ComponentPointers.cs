@@ -1,14 +1,10 @@
-﻿using Game.ECS;
-using NetSerializer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace Game.Engine.ECS
+namespace Game.Engine.ECLS
 {
     /// <summary>
     // Class to manage pointers to components.
@@ -21,7 +17,7 @@ namespace Game.Engine.ECS
         /// Try to get a pointer component as a struct
         /// </summary>
 
-        public bool TryGet<T>(out T outPtr) where T : unmanaged, IComponent
+        public bool TryGet<T>(out T outPtr) where T : IComponent
         {
             if (!TryGetValue(typeof(T), out var ptr))
             {
@@ -42,14 +38,14 @@ namespace Game.Engine.ECS
         /// If the component is assigned to another variable tho, it will copy its data.
         /// </summary>
 
-        public ref T AsReference<T>() where T : unmanaged => ref *(T*)Pointer<T>();
+        public ref T AsReference<T>() => ref *(T*)Pointer<T>();
 
         /// <summary>
         /// Gets a hard pointer to the component. Any modifications or passing down as parameters will still modify the component memory space.
         /// This is a faster operation than using the component by reference
         /// </summary>
 
-        public T* AsPointer<T>() where T : unmanaged => (T*)Pointer<T>();
+        public T* AsPointer<T>() => (T*)Pointer<T>();
 
         /// <summary>
         /// Reads the given component as IComponent base interface
@@ -74,7 +70,7 @@ namespace Game.Engine.ECS
         /// Free's allocated memory for the given component
         /// </summary>
 
-        public void Free<T>() where T : unmanaged
+        public void Free<T>()
         {
             UnmanagedMemory.FreeForReuse(Pointer<T>());
             Remove(typeof(T));

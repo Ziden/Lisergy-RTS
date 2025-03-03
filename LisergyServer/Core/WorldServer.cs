@@ -22,7 +22,6 @@ namespace MapServer
         private GameServerNetwork _network;
         private BattleService _battleService;
         private WorldService _worldService;
-        private CourseService _courseService;
         private byte[] _gameSpecs;
 
         public override ServerType GetServerType() => ServerType.WORLD;
@@ -35,7 +34,6 @@ namespace MapServer
             _network = game.Network as GameServerNetwork;
             _battleService = new BattleService(Game);
             _worldService = new WorldService(Game);
-            _courseService = new CourseService(Game);
             _gameSpecs = Serialization.FromBasePacket(new GameSpecPacket(game));
             _network.OnOutgoingPacket += SendPacketToPlayer;
         }

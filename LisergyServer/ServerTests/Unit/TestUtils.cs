@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace UnitTests
 {
     public class TestUtils
-    { 
+    {
         [Test]
         public void TestDefaultDictionary()
         {

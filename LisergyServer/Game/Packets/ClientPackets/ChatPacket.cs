@@ -2,7 +2,6 @@
 using Game.Engine.Network;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Game.Network.ClientPackets
 {

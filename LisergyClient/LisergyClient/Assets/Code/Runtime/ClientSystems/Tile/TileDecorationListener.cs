@@ -14,7 +14,7 @@ public class TileDecorationListener : IEventListener
     public TileDecorationListener(GameClient client)
     {
         _client = client;
-        client.ClientEvents.Register<TilePostRenderedEvent>(this, OnPostRender);
+        client.ClientEvents.On<TilePostRenderedEvent>(this, OnPostRender);
     }
 
     private void OnPostRender(TilePostRenderedEvent e)

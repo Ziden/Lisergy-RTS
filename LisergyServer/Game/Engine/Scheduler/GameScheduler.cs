@@ -1,5 +1,4 @@
 ﻿using Game.Engine.DataTypes;
-using Game.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +33,7 @@ namespace Game.Engine.Scheduler
             {
                 task.Tick();
             }
-            task.Game.Entities.DeltaCompression.SendDeltaPackets(task.Creator);  // TODO: Maybe not best place
+            task.Game.Network.DeltaCompression.SendAllModifiedEntities(task.Creator);  // TODO: Maybe not best place
             Cancel(task);
         }
 
@@ -74,7 +73,7 @@ namespace Game.Engine.Scheduler
             task.Tick();
             _ = Queue.Remove(task);
             _ = _tasks.Remove(task.ID);
-            task.Game.Entities.DeltaCompression.SendDeltaPackets(task.Creator); // TODO: Maybe not best place
+            task.Game.Network.DeltaCompression.SendAllModifiedEntities(task.Creator); // TODO: Maybe not best place
             if (task.Repeat)
             {
                 task.Start = Now;

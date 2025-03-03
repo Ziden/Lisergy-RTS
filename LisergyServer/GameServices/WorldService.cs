@@ -1,51 +1,93 @@
-﻿using Game.Engine.Events.Bus;
-using Game.Engine.Network;
-using Game.Network.ClientPackets;
-using Game.Systems.Player;
+﻿using Game.Engine;
+using Game.Engine.ECLS;
+using Game.Engine.Events;
+using Game.Engine.Events.Bus;
+using Game.Network.ServerPackets;
+using Game.Systems.BattleGroup;
+using Game.Systems.Battler;
+using Game.Systems.Map;
 using Game.World;
+using System.Linq;
 
 namespace Game.Services
 {
     public class WorldService : IEventListener
     {
         private GameWorld _world;
+        private IGameNetwork _network;
 
         public WorldService(LisergyGame game)
         {
             _world = (GameWorld)game.World;
-            game.Network.On<JoinWorldPacket>(JoinWorld);
-            game.Network.On<StopEntityPacket>(StopEntity);
+            _network = game.Network;
+            game.Events.On<EntityRemovedFromMapEvent>(this, OnEntityRemoved);
+            game.Events.On<BattleTriggeredEvent>(this, OnBattleTrigger);
+
+            // Coming back from battle server
+            game.Network.OnInput<BattleResultPacket>(OnBattleResultPacket);
         }
 
-        public void StopEntity(StopEntityPacket p)
+        private void OnEntityRemoved(EntityRemovedFromMapEvent ev)
         {
-            var party = p.Sender.Parties[p.PartyIndex];
-            if (party.EntityLogic.Harvesting.IsHarvesting())
-            {
-                party.EntityLogic.Harvesting.StopHarvesting();
-            }
+            _network.SendToPlayer(new EntityDestroyPacket(ev.Entity), ev.Tile.Logic.Vision.GetPlayersViewing().ToArray());
         }
+
 
         /// <summary>
-        /// Whenever a player asks to join a game world
+        /// Received from battle server
         /// </summary>
-        public void JoinWorld(JoinWorldPacket ev)
+        private void OnBattleResultPacket(BattleResultPacket packet)
         {
-            PlayerEntity player = null;
-            if (_world.Players.GetPlayer(ev.Sender.EntityId, out player))
+            var atkPlayer = _world.Game.Players[packet.Header.Attacker.OwnerID];
+            var defPlayer = _world.Game.Players[packet.Header.Defender.OwnerID];
+
+            var attackerEntity = _world.Game.Entities[packet.Header.Attacker.EntityId];
+            var defenderEntity = _world.Game.Entities[packet.Header.Defender.EntityId];
+
+            // TODO: Move to system, this is logic
+            if (atkPlayer != null) atkPlayer.EntityLogic.RecordBattleHeader(packet.Header);
+            if (defPlayer != null) defPlayer.EntityLogic.RecordBattleHeader(packet.Header);
+
+            var attackerGroup = attackerEntity.Components.Get<BattleGroupComponent>();
+            var defenderGroup = defenderEntity.Components.Get<BattleGroupComponent>();
+
+            attackerGroup.Units = packet.Header.Attacker.Units;
+            defenderGroup.Units = packet.Header.Defender.Units;
+
+            attackerEntity.Save(attackerGroup);
+            defenderEntity.Save(defenderGroup);
+
+            var finishEvent = EventPool<BattleFinishedEvent>.Get();
+            finishEvent.Battle = packet.Header.BattleID;
+            finishEvent.Header = packet.Header;
+            finishEvent.Turns = packet.Turns;
+
+            if (attackerEntity is IEntity e) e.Components.CallEvent(finishEvent);
+            if (defenderEntity is IEntity e2) e2.Components.CallEvent(finishEvent);
+
+            if (atkPlayer != null)
             {
-                _world.Game.Log.Debug($"Existing player {player.EntityId} joined");
-                foreach (var pos in player.VisibilityReferences.VisibleTiles)
-                {
-                    var tile = _world.Map.GetTile(pos.X, pos.Y);
-                    tile.SetDeltaFlag(DeltaFlag.SELF_REVEALED);
-                }
+                _network.DeltaCompression.SendEntityPacket(attackerEntity.EntityId, atkPlayer.EntityId);
+                if (!defenderEntity.Logic.BattleGroup.IsDestroyed)
+                    _network.DeltaCompression.SendEntityPacket(defenderEntity.EntityId, atkPlayer.EntityId);
             }
-            else
+
+            if (defPlayer != null)
             {
-                ev.Sender.EntityLogic.Player.PlaceNewPlayer(_world.GetUnusedStartingTile());
-                _world.Game.Log.Debug($"New player {ev.Sender.EntityId} joined the world");
+                _network.DeltaCompression.SendEntityPacket(defenderEntity.EntityId, defPlayer.EntityId);
+
+                if (!defenderEntity.Logic.BattleGroup.IsDestroyed)
+                    _network.DeltaCompression.SendEntityPacket(attackerEntity.EntityId, defPlayer.EntityId);
             }
+            EventPool<BattleFinishedEvent>.Return(finishEvent);
+        }
+
+
+        private void OnBattleTrigger(BattleTriggeredEvent ev)
+        {
+            var attackerEntity = _world.Game.Entities[ev.Attacker.EntityId];
+            var defenderEntity = _world.Game.Entities[ev.Defender.EntityId];
+            _world.Game.Network.SendToServer(new BattleQueuedPacket(ev.BattleID, attackerEntity, defenderEntity), ServerType.BATTLE);
         }
     }
 }

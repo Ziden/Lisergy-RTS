@@ -8,6 +8,6 @@ namespace Game.Systems.Tile
     /// </summary>
     public class TileUpdatedEvent : IGameEvent
     {
-        public TileEntity Tile;
+        public TileModel Tile;
     }
 }

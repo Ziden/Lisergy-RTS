@@ -1,20 +1,15 @@
+using Game.Engine.ECLS;
+using Game.Systems.Resources;
 using NUnit.Framework;
 using ServerTests;
-using Game.Systems.Player;
-using Game.Tile;
-using Game.Systems.Tile;
-using GameDataTest;
-using Game.Systems.Party;
-using Game.World;
-using Game.Systems.Resources;
 
 namespace UnitTests
 {
     public class TestCargo
     {
         private TestGame _game;
-        private PlayerEntity _player;
-        private PartyEntity _party;
+        private TestServerPlayer _player;
+        private IEntity _party;
 
         [SetUp]
         public void Setup()
@@ -27,7 +22,7 @@ namespace UnitTests
         [Test]
         public void TestAddToCargo()
         {
-            _party.EntityLogic.Cargo.AddTocargo(new ResourceStackData(0, 10));
+            _party.Logic.Cargo.AddTocargo(new ResourceStackData(0, 10));
 
             var cargo = _party.Get<CargoComponent>();
 

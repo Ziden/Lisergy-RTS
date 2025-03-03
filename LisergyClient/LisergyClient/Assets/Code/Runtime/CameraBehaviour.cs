@@ -1,9 +1,10 @@
-﻿using Game;
+﻿using Game.Entities;
 using Game.Tile;
 using System.Collections;
 using Assets.Code.Code;
 using UnityEngine;
 using Assets.Code.Assets.Code.Runtime;
+using Game.Systems.Map;
 
 public class CameraBehaviour : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class CameraBehaviour : MonoBehaviour
     public bool edgeScrolling = false;
     public Camera Camera;
     private static bool lerping = false;
-    private void FocusOnTile(TileEntity t)
+    private void FocusOnTile(TileModel t)
     {
         Debug.Log($"Focusing on tile {t}");
         var coroutine = LerpTo(new Vector3(t.X - 2, 5, t.Y - 2), 0.2f);
@@ -25,9 +26,9 @@ public class CameraBehaviour : MonoBehaviour
 
     private void OnSelectEntity(IUnityEntityView e)
     {
-        if(e.BaseEntity is BaseEntity be && be.Tile != null)
+        if(e.Entity.Components.TryGet<MapPlacementComponent>(out var placed))
         {
-            FocusOnTile(be.Tile);
+            FocusOnTile(e.Entity.GetTile());
         }
     }
 

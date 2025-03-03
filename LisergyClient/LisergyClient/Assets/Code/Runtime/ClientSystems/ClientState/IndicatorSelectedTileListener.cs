@@ -1,5 +1,5 @@
 using Game.Tile;
-using Game;
+using Game.Entities;
 using GameAssets;
 using UnityEngine;
 using Assets.Code;
@@ -13,7 +13,7 @@ using Assets.Code.Assets.Code.Runtime;
 /// </summary>
 public class IndicatorSelectedTileListener : IEventListener
 {
-    private TileEntity _selectedTile;
+    private TileModel _selectedTile;
     private GameObject _tileCursor;
     private IGameClient _client;
 
@@ -22,7 +22,7 @@ public class IndicatorSelectedTileListener : IEventListener
         _client = client;
         ClientViewState.OnSelectTile += ClickTile;
         ClientViewState.OnCameraMove += OnCameraMove;
-        _client.ClientEvents.Register<EntityMovementRequestStarted>(this, OnStartMovement);
+        _client.ClientEvents.On<EntityMovementRequestStarted>(this, OnStartMovement);
         _client.UnityServices().Assets.CreateMapObject(MapObjectPrefab.TileCursor, Vector3.zero, Quaternion.identity, o =>
         {
             o.SetActive(false);
@@ -44,9 +44,9 @@ public class IndicatorSelectedTileListener : IEventListener
         _selectedTile = null;
     }
 
-    public TileEntity SelectedTile { get => _selectedTile; }
+    public TileModel SelectedTile { get => _selectedTile; }
 
-    private void ClickTile(TileEntity tile)
+    private void ClickTile(TileModel tile)
     {
         if (tile == null) return;
         if (tile != null)
@@ -58,7 +58,7 @@ public class IndicatorSelectedTileListener : IEventListener
         }
     }
 
-    private void MoveToTile(GameObject cursor, TileEntity tile)
+    private void MoveToTile(GameObject cursor, TileModel tile)
     {
         cursor.transform.position = new Vector3(tile.X, 0, tile.Y);
     }

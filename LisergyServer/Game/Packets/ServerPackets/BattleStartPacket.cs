@@ -1,9 +1,6 @@
-﻿using Game.ECS;
-using Game.Engine.DataTypes;
+﻿using Game.Engine.DataTypes;
 using Game.Engine.Network;
 using Game.Systems.Battle.Data;
-using Game.Systems.Battler;
-using Game.Systems.Map;
 using Game.World;
 using System;
 

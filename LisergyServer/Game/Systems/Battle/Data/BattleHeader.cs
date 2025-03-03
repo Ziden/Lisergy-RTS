@@ -1,7 +1,5 @@
 ﻿using Game.Engine.DataTypes;
-using Game.Network.ServerPackets;
 using System;
-using System.Runtime.InteropServices;
 
 namespace Game.Systems.Battle.Data
 {

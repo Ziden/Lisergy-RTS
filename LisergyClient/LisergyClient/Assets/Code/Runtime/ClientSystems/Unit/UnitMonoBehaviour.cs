@@ -1,4 +1,4 @@
-using Game;
+using Game.Entities;
 using Game.Tile;
 using UnityEngine;
 

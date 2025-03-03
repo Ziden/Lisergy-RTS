@@ -1,9 +1,7 @@
 
 using ClientSDK;
 using Cysharp.Threading.Tasks;
-using Game;
-using Game.ECS;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using GameAssets;
 using GameData;
 using UnityEngine;
@@ -19,7 +17,7 @@ public class HarvestVfx
 
     public async UniTaskVoid ShowResource(IEntity entity, ResourceSpecId resource, int amount)
     {
-        var baseEntity = entity as BaseEntity;
+        var baseEntity = entity;
         var resourceSpec = _client.Game.Specs.Resources[resource];
         var sprite = await _client.UnityServices().Assets.GetSprite(resourceSpec.Art);
         var vfx = await _client.UnityServices().Vfx.Play(VfxPrefab.HarvestIcon, baseEntity.UnityPosition());

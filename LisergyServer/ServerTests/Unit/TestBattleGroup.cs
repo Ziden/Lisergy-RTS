@@ -1,5 +1,6 @@
-﻿using Game.Systems.Battler;
-using Game.Systems.Party;
+﻿using Game.Engine.DataTypes;
+using Game.Entities;
+using Game.Systems.Battler;
 using NUnit.Framework;
 using ServerTests;
 
@@ -18,10 +19,11 @@ namespace UnitTests
         [Test]
         public void TestAddSingleUnit()
         {
-            var e = new PartyEntity(Game, Game.CreatePlayer().EntityId);
+            var e = new BaseEntity(GameId.Generate(), Game, EntityType.Party);
+            e.Components.Add<BattleGroupComponent>();
             var startUnits = e.Get<BattleGroupComponent>().Units.Valids;
 
-            e.EntityLogic.BattleGroup.AddUnit(new Unit(Game.Specs.Units[1]));
+            e.Logic.BattleGroup.AddUnit(new Unit(Game.Specs.Units[1]));
 
             Assert.AreEqual(startUnits + 1, e.Get<BattleGroupComponent>().Units.Valids);
         }

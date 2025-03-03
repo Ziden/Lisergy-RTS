@@ -10,7 +10,7 @@ namespace LisergyServer.Core
     public class ConnectedPlayer : IConnectedPlayer
     {
         private GameId _playerId;
-      
+
         private Server _server { get; set; }
         public int ConnectionID { get; set; }
         public ref GameId PlayerId => ref _playerId;
@@ -35,7 +35,7 @@ namespace LisergyServer.Core
 
         public void Send(in byte[] data)
         {
-             this._server.Send(ConnectionID, data);
+            this._server.Send(ConnectionID, data);
         }
     }
 }

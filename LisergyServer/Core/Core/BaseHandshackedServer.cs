@@ -20,12 +20,12 @@ namespace MapServer
 
         public BaseHandshackedServer() : base()
         {
-            Serialization.LoadSerializers();     
-            _cryptoService = new CryptographyService(EnvironmentConfig.SECRET_KEY.ToString());  
+            Serialization.LoadSerializers();
+            _cryptoService = new CryptographyService(EnvironmentConfig.SECRET_KEY.ToString());
             _validConnections = new ConnectionService(Log);
         }
 
-        public override void Connect(in int connectionID) 
+        public override void Connect(in int connectionID)
         {
         }
 
@@ -59,7 +59,7 @@ namespace MapServer
             var connectedPlayer = _validConnections.GetConnectedPlayer(player);
             if (connectedPlayer != null)
             {
-                Log.Debug($"Sending packet {packet.GetType().Name} to player {connectedPlayer.PlayerId}");
+                //Log.Debug($"Sending packet {packet.GetType().Name} to player {connectedPlayer.PlayerId}");
                 connectedPlayer.Send(packet);
             }
             else
@@ -87,19 +87,21 @@ namespace MapServer
         {
             if (ev is HandshakePacket auth)
             {
-                if(_cryptoService.IsTokenValid(auth.PlayerId, auth.Token))
+                if (_cryptoService.IsTokenValid(auth.PlayerId, auth.Token))
                 {
                     var pl = new ConnectedPlayer(auth.PlayerId, connectionID, _socketServer);
                     _validConnections.RegisterAuthenticatedConnection(pl);
                     Log.Debug($"Player {auth.PlayerId} did a handshake and is authenticated on connection {connectionID}");
                     OnAuthenticated(pl);
                     return true;
-                } else
+                }
+                else
                 {
                     Log.Debug($"Player {auth.PlayerId} failed handshake");
                     return false;
                 }
-            } else
+            }
+            else
             {
                 return _validConnections.GetAuthenticatedConnection(connectionID) != null;
             }

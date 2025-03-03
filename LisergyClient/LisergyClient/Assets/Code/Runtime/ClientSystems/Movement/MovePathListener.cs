@@ -3,7 +3,7 @@ using Assets.Code.Views;
 using ClientSDK;
 using ClientSDK.SDKEvents;
 using Game.Engine.DataTypes;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Systems.Party;
 using Game.Tile;
@@ -25,11 +25,11 @@ namespace Assets.Code.UI
         public MovePathListener(IGameClient _client)
         {
             _gameClient = _client;
-            _client.ClientEvents.Register<EntityMovementRequestStarted>(this, OnMoveRequestStarted);
+            _client.ClientEvents.On<EntityMovementRequestStarted>(this, OnMoveRequestStarted);
             //UIEvents.OnCourseCancelled += OnCourseChanged;
         }
 
-        private void OnCourseChanged(PartyEntity p)
+        private void OnCourseChanged(IEntity p)
         {
             if(_entityPaths.TryGetValue(p.EntityId, out var path))
             {
@@ -41,7 +41,7 @@ namespace Assets.Code.UI
         private void OnMoveRequestStarted(EntityMovementRequestStarted ev)
         {
             var party = ev.Party;
-            var path = ev.Path.Select(p => _gameClient.Game.World.Map.GetTile(p.X, p.Y)).ToList();
+            var path = ev.Path.Select(p => _gameClient.Game.World.GetTile(p.X, p.Y)).ToList();
             var server = _gameClient.Modules;
             if (_entityPaths.TryGetValue(party.EntityId, out var previousPath))
             {
@@ -54,30 +54,30 @@ namespace Assets.Code.UI
             for (var x = 0; x < path.Count; x++)
             {
                 var nodeTile = path[x];
-                var view = server.Views.GetView<TileView>(nodeTile);
+                var view = nodeTile.TileEntity.GetView();
                 var hasNext = x < path.Count - 1;
                 var hasPrevious = x > 0;
                 if (hasNext)
                 {
                     var next = path[x + 1];
                     var direction = nodeTile.GetDirection(next);
-                    _ = clientPath.AddPath(server.Views.GetView<TileView>(next), view.GameObject.transform.position, direction);
+                    _ = clientPath.AddPath(server.Views.GetEntityView(next.TileEntity) as TileView, view.GameObject.transform.position, direction);
                 }
                 if (hasPrevious)
                 {
                     var previous = path[x - 1];
                     var direction = nodeTile.GetDirection(previous);
-                    _ = clientPath.AddPath(server.Views.GetView<TileView>(nodeTile), view.GameObject.transform.position, direction);
+                    _ = clientPath.AddPath(server.Views.GetEntityView(nodeTile.TileEntity) as TileView, view.GameObject.transform.position, direction);
                 }
             }
         }
 
-        public void OnFinishedMove(IEntity entity, TileEntity newTile)
+        public void OnFinishedMove(IEntity entity, TileModel newTile)
         {
             if (_entityPaths.ContainsKey(entity.EntityId))
             {
                 var partyPath = _entityPaths[entity.EntityId];
-                var pathsOnTile = partyPath.Pop(newTile);
+                var pathsOnTile = partyPath.Pop(newTile.TileEntity);
                 if (pathsOnTile != null)
                     foreach (var path in pathsOnTile)
                         partyPath.RemovePathObject(path);

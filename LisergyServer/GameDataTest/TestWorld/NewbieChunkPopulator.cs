@@ -9,19 +9,19 @@ namespace Game.Generator
 
         public override void Populate(GameWorld w, ServerChunkMap map, Chunk c)
         {
-            map.SetFlag(c.X, c.Y, ChunkFlag.NEWBIE_CHUNK);
+            map.SetOccupied(c.X, c.Y, false);
 
             for (var i = 0; i < GameWorld.CHUNK_SIZE; i++)
             {
-                c.GetTile(0, i).SpecId = 1;
-                c.GetTile(i, 0).SpecId = 2;
+                c.GetTile(0, i).Logic.Tile.SetTileId(1);
+                c.GetTile(i, 0).Logic.Tile.SetTileId(2);
             }
 
             if (ShouldPopulate(c))
             {
                 for (var i = 0; i < GameWorld.CHUNK_SIZE; i++)
                 {
-                    c.GetTile(i, i).SpecId = 3;
+                    c.GetTile(i, i).Logic.Tile.SetTileId(3);
                 }
 
                 return;

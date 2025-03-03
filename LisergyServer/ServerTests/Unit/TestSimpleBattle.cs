@@ -1,6 +1,5 @@
 using Game.Engine;
 using Game.Engine.DataTypes;
-using Game.Events;
 using Game.Network.ServerPackets;
 using Game.Systems.Battle;
 using Game.Systems.Battle.BattleActions;

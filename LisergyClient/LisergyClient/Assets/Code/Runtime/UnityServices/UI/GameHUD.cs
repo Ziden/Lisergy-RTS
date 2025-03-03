@@ -3,9 +3,9 @@ using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.UI;
 using Chat.UI;
 using Cysharp.Threading.Tasks;
+using Game.Entities;
 using Game.Engine.Events.Bus;
 using Game.Systems.Movement;
-using Game.Systems.Party;
 using Game.Tile;
 using GameAssets;
 using GameData;
@@ -40,8 +40,8 @@ namespace Assets.Code
 
         private void OnTownButtonClick()
         {
-            var center = GameClient.Modules.Player.LocalPlayer.GetCenter();
-            ClientViewState.SelectedEntityView = center.GetEntityView();
+            var center = GameClient.Modules.Player.LocalPlayer.EntityLogic.GetCenter();
+            ClientViewState.SelectedEntityView = center.GetView();
         }
 
         private async UniTaskVoid OpenBuildSelect()
@@ -90,19 +90,19 @@ namespace Assets.Code
 
         private void OnSelectEntity(IUnityEntityView entity)
         {
-            UiService.Open<ScreenEntityDetails>(new EntityDetailsParams() { Entity = entity.BaseEntity });
+            UiService.Open<ScreenEntityDetails>(new EntityDetailsParams() { Entity = entity.Entity });
         }
 
-        private void OnClickTile(TileEntity tile)
+        private void OnClickTile(TileModel tile)
         {
             UiService.Close<WidgetUnitDetails>();
             UiService.Close<ScreenPartyActions>();
             UiService.Close<ScreenEntityDetails>();
-            if (ClientViewState.SelectedEntityView != null && ClientViewState.SelectedEntityView.BaseEntity is PartyEntity party)
+            if (ClientViewState.SelectedEntityView != null && ClientViewState.SelectedEntityView.Entity.EntityType == EntityType.Party)
             {
                 UiService.Open<ScreenPartyActions>(new ActionBarParams()
                 {
-                    Party = party,
+                    Party = ClientViewState.SelectedEntityView.Entity,
                     Tile = tile,
                     OnChosenAction = OnActionChosen
                 });
@@ -117,26 +117,26 @@ namespace Assets.Code
 
         private void PerformActionWithSelectedParty(EntityAction action)
         {
-            if (ClientViewState.SelectedEntityView.BaseEntity is PartyEntity party)
+            if (ClientViewState.SelectedEntityView.Entity?.EntityType == EntityType.Party)
             {
                 var tile = ClientViewState.SelectedTile;
                 if (action == EntityAction.CHECK)
                 {
                     var selectedTile = ClientViewState.SelectedTile;
-                    if (selectedTile.Building != null)
+                    if (selectedTile.Logic.Tile.GetBuildingOnTile() != null)
                     {
-                        UiService.Open<ScreenEntityDetails>(new EntityDetailsParams() { Entity = selectedTile.Building });
+                        UiService.Open<ScreenEntityDetails>(new EntityDetailsParams() { Entity = selectedTile.Logic.Tile.GetBuildingOnTile() });
                     }
-                    else if (selectedTile.EntitiesIn.Count > 0)
+                    else if (selectedTile.Logic.Tile.GetEntitiesOnTile().Count > 0)
                     {
-                        UiService.Open<ScreenEntityDetails>(new EntityDetailsParams() { Entity = selectedTile.EntitiesIn[0] });
+                        UiService.Open<ScreenEntityDetails>(new EntityDetailsParams() { Entity = selectedTile.Logic.Tile.GetEntitiesOnTile().First() });
                     }
                     return;
                 }
                 var intent = CourseIntent.Defensive;
                 if (action == EntityAction.ATTACK) intent = CourseIntent.OffensiveTarget;
                 else if (action == EntityAction.HARVEST) intent = CourseIntent.Harvest;
-                GameClient.Modules.Actions.MoveParty(party, tile, intent);
+                GameClient.Modules.Actions.MoveEntity(ClientViewState.SelectedEntityView.Entity, tile, intent);
             }
         }
     }

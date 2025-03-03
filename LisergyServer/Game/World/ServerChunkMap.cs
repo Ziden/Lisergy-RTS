@@ -11,11 +11,6 @@ namespace Game.World
     public interface IChunkMap
     {
         /// <summary>
-        /// Gets the world this chunk map belongs to
-        /// </summary>
-        IGameWorld World { get; }
-
-        /// <summary>
         /// Checks if a given tile coordinates is valid 
         /// </summary>
         bool ValidCoords(in int tileX, in int tileY);
@@ -29,7 +24,7 @@ namespace Game.World
         /// Finds a path between source and destination.
         /// Can return an empty list if no path is found.
         /// </summary>
-        IEnumerable<Location> FindPath(TileEntity from, TileEntity to);
+        IEnumerable<Location> FindPath(TileModel from, TileModel to);
 
         /// <summary>
         /// Creates the chunk map instance and allocate needed memory
@@ -39,8 +34,17 @@ namespace Game.World
         /// <summary>
         /// Gets a given tile instance
         /// </summary>
-        TileEntity GetTile(in int tileX, in int tileY);
+        TileModel GetTile(in int tileX, in int tileY);
 
+        /// <summary>
+        /// Gets a given tile instance
+        /// </summary>
+        TileModel GetTile(in Location p);
+
+        /// <summary>
+        /// Gets the chunk of a given tile location
+        /// </summary>
+        Chunk GetTileChunk(in Location p);
         /// <summary>
         /// Gets the dimensions of the map in amount of tiles
         /// </summary>
@@ -55,12 +59,14 @@ namespace Game.World
     /// <summary>
     /// Preallocate all chunks for faster acessing
     /// </summary>
+    // TODO: Remove chunks
     public unsafe class ServerChunkMap : IChunkMap
     {
         private Chunk[,] _chunkMap;
-        private CachedChunkMap _cache;
+        private PathfindingChunkMap _cache;
         private IPathfinder _pathfinder;
-        private Dictionary<ChunkFlag, List<Chunk>> _chunksByFlags = new Dictionary<ChunkFlag, List<Chunk>>();
+        private List<Chunk> _unocuppied = new List<Chunk>();
+
         public (int x, int y) TilemapDimensions { get; private set; }
         public (int x, int y) ChunkMapDimensions { get; private set; }
         public IGameWorld World { get; private set; }
@@ -72,7 +78,7 @@ namespace Game.World
             _chunkMap = new Chunk[sizeX, sizeY];
             TilemapDimensions = (_chunkMap.GetLength(0) * GameWorld.CHUNK_SIZE, _chunkMap.GetLength(1) * GameWorld.CHUNK_SIZE);
             ChunkMapDimensions = (_chunkMap.GetLength(0), _chunkMap.GetLength(1));
-            _cache = new CachedChunkMap(this);
+            _cache = new PathfindingChunkMap(this);
             _pathfinder = new AStarSearch(_cache);
             World = world;
         }
@@ -83,45 +89,32 @@ namespace Game.World
             return tileX >= 0 && tileX < dim.Item1 && tileY >= 0 && tileY < dim.Item2;
         }
 
-
         public Chunk GetChunk(in int chunkX, in int chunkY)
         {
             var chunk = _chunkMap[chunkX, chunkY];
             if (chunk == null)
             {
-                chunk = new Chunk(this, chunkX, chunkY);
+                chunk = new Chunk(World, chunkX, chunkY);
                 _chunkMap[chunk.X, chunk.Y] = chunk;
             }
             return chunk;
         }
 
-
-        public IEnumerable<Location> FindPath(TileEntity from, TileEntity to)
+        public IEnumerable<Location> FindPath(TileModel from, TileModel to)
         {
             return _pathfinder.Find(from.Position, to.Position);
         }
 
-
         public Chunk GetUnnocupiedNewbieChunk()
         {
-            var startingChunks = _chunksByFlags[ChunkFlag.NEWBIE_CHUNK];
-            foreach (var position in startingChunks)
-            {
-                var chunk = GetChunk(position.X, position.Y);
-                if (!chunk.Flags.HasFlag(ChunkFlag.OCCUPIED))
-                    return chunk;
-            }
-            return null;
+            return _unocuppied.First();
         }
 
-
-        public void SetFlag(int chunkX, int chunkY, ChunkFlag flag)
+        public void SetOccupied(int chunkX, int chunkY, bool oc)
         {
             var chunk = GetChunk(chunkX, chunkY);
-            chunk.SetFlag((byte)flag);
-            if (!_chunksByFlags.ContainsKey(flag))
-                _chunksByFlags.Add(flag, new List<Chunk>());
-            _chunksByFlags[flag].Add(chunk);
+            if (oc) _unocuppied.Remove(chunk);
+            else _unocuppied.Add(chunk);
         }
 
 
@@ -132,6 +125,12 @@ namespace Game.World
                     yield return GetChunk(x, y);
         }
 
+        public IEnumerable<TileModel> AllTiles()
+        {
+            foreach (var chunk in AllChunks())
+                foreach (var tile in chunk.AllTiles())
+                    yield return tile;
+        }
 
         public virtual Chunk GetTileChunk(in int tileX, in int tileY)
         {
@@ -140,8 +139,7 @@ namespace Game.World
             return GetChunk(chunkX, chunkY);
         }
 
-
-        public virtual TileEntity GetTile(in int tileX, in int tileY)
+        public virtual TileModel GetTile(in int tileX, in int tileY)
         {
             if (!ValidCoords(tileX, tileY)) return null;
             var internalTileX = tileX % GameWorld.CHUNK_SIZE;
@@ -149,6 +147,8 @@ namespace Game.World
             return GetTileChunk(tileX, tileY).GetTile(internalTileX, internalTileY);
         }
 
+        public virtual TileModel GetTile(in Location p) => GetTile(p.X, p.Y);
+        public virtual Chunk GetTileChunk(in Location l) => GetTileChunk(l.X, l.Y);
 
         public virtual void CreateMap(in ushort sizeX, in ushort sizeY)
         {

@@ -28,9 +28,9 @@ namespace MapServer
             {
                 chatPacket.Owner = player;
                 chatPacket.Time = DateTime.UtcNow;
-                Log.Debug($"ChatPacket From {player}: {chatPacket.Name} "+chatPacket.Message);
+                Log.Debug($"ChatPacket From {player}: {chatPacket.Name} " + chatPacket.Message);
                 _chatLog.Add(chatPacket);
-                if(_chatLog.Count > 30) _chatLog.RemoveAt(0);
+                if (_chatLog.Count > 30) _chatLog.RemoveAt(0);
                 _validConnections.Broadcast(chatPacket);
             }
         }

@@ -30,7 +30,7 @@ namespace Chat.UI
 
         public override void OnAddedDuringGame(IGameClient client)
         {
-            client.ClientEvents.Register<ChatUpdateEvent>(this, OnChatUpdate);
+            client.ClientEvents.On<ChatUpdateEvent>(this, OnChatUpdate);
             _thumbnail.RegisterCallback<PointerDownEvent>(e => client.UnityServices().UI.Open<ChatScreen>(), TrickleDown.TrickleDown);
         }
 

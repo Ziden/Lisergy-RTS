@@ -1,5 +1,5 @@
 ﻿using Game.Engine.DataTypes;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using Game.Systems.BattleGroup;
 using System;
 
@@ -11,11 +11,11 @@ namespace Game.Systems.Battler
 
         public bool IsDestroyed => Entity.Get<BattleGroupComponent>().Units.AllDead;
 
-        public void UpdateUnits(Unit [] newUnits)
+        public void UpdateUnits(Unit[] newUnits)
         {
             if (newUnits.Length != 4) throw new Exception("Need 4 units");
             var component = Entity.Get<BattleGroupComponent>();
-            for(var x = 0; x < 4; x++)
+            for (var x = 0; x < 4; x++)
             {
                 if (component.Units[x].Valid) RemoveUnit(component.Units[x], x);
                 AddUnit(newUnits[x], x);
@@ -24,8 +24,9 @@ namespace Game.Systems.Battler
 
         public void Heal()
         {
-            var component = Entity.Components.GetPointer<BattleGroupComponent>();
-            component->Units.HealAll();
+            var component = Entity.Components.Get<BattleGroupComponent>();
+            component.Units.HealAll();
+            Entity.Save(component);
         }
 
         public virtual void ReplaceUnit(in Unit oldUnit, in Unit newUnit, in int preferAtIndex = -1)
@@ -51,9 +52,10 @@ namespace Game.Systems.Battler
 
         public virtual void AddUnit(in Unit u, in int preferAtIndex = -1)
         {
-            var component = Entity.Components.GetPointer<BattleGroupComponent>();
-            if (preferAtIndex >= 0) component->Units[preferAtIndex] = u;
-            else component->Units.Add(u);
+            var component = Entity.Components.Get<BattleGroupComponent>();
+            if (preferAtIndex >= 0) component.Units[preferAtIndex] = u;
+            else component.Units.Add(u);
+            Entity.Save(component);
             Entity.Components.CallEvent(new UnitAddToGroupEvent()
             {
                 Unit = u,
@@ -63,38 +65,45 @@ namespace Game.Systems.Battler
 
         public virtual void RemoveUnit(in Unit u, in int preferAtIndex = -1)
         {
-            var component = Entity.Components.GetPointer<BattleGroupComponent>();
-            if (!component->Units.Contains(u))
+            var component = Entity.Components.Get<BattleGroupComponent>();
+            if (!component.Units.Contains(u))
             {
                 throw new Exception($"Trying to remove unit {u} to entity {Entity} but unit was not there");
             }
             if (preferAtIndex != -1)
             {
-                if (!component->Units[preferAtIndex].Equals(u))
+                if (!component.Units[preferAtIndex].Equals(u))
                 {
                     throw new Exception("Removing unit from wrong index");
                 }
-                component->Units[preferAtIndex] = default;
+                component.Units[preferAtIndex] = default;
+                Entity.Save(component);
             }
             else
             {
-                component->Units.Remove(u);
+                component.Units.Remove(u);
+                Entity.Save(component);
             }
-            var component2 = Entity.Components.GetPointer<BattleGroupComponent>();
             Entity.Components.CallEvent(new UnitRemovedEvent(Entity, u));
         }
 
         public void ClearBattleId()
         {
-            Entity.Components.GetPointer<BattleGroupComponent>()->BattleID = GameId.ZERO;
+            var c = Entity.Components.Get<BattleGroupComponent>();
+            c.BattleID = GameId.ZERO;
+            Entity.Components.Save(c);
         }
 
         public GameId StartBattle(IEntity defender)
         {
             GameId battleID = GameId.Generate();
             var battleEvent = new BattleTriggeredEvent(battleID, Entity, defender);
-            Entity.Components.GetPointer<BattleGroupComponent>()->BattleID = battleID;
-            defender.Components.GetPointer<BattleGroupComponent>()->BattleID = battleID;
+            var c1 = Entity.Components.Get<BattleGroupComponent>();
+            c1.BattleID = battleID;
+            Entity.Save(c1);
+            var c2 = defender.Components.Get<BattleGroupComponent>();
+            c2.BattleID = battleID;
+            defender.Save(c2);
             Game.Events.Call(battleEvent);
             return battleID;
         }

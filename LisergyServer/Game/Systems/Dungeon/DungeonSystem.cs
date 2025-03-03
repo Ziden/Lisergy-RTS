@@ -1,9 +1,9 @@
-﻿using Game.Engine.ECS;
+﻿using Game.Engine.ECLS;
 using Game.Systems.BattleGroup;
 
 namespace Game.Systems.Dungeon
 {
-    public class DungeonSystem : GameSystem<DungeonComponent>
+    public class DungeonSystem : LogicSystem<DungeonComponent, DungeonLogic>
     {
         public DungeonSystem(LisergyGame game) : base(game) { }
 

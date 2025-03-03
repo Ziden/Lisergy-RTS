@@ -1,7 +1,7 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
+using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Systems.Movement;
-using Game.Systems.Party;
 using Game.Systems.Resources;
 using Game.Tile;
 using GameAssets;
@@ -13,8 +13,8 @@ namespace Assets.Code.UI
 
     public class ScreenTileDetailsParams : IGameUiParam
     {
-        public TileEntity Tile;
-        public PartyEntity Harvester;
+        public TileModel Tile;
+        public IEntity Harvester;
     }
 
     public class ScreenTileDetails : GameUi, IEventListener
@@ -49,7 +49,7 @@ namespace Assets.Code.UI
         private void OnClickHarvest()
         {
             var setup = GetParameter<ScreenTileDetailsParams>();
-            GameClient.Modules.Actions.MoveParty(setup.Harvester, setup.Tile, CourseIntent.Harvest);
+            GameClient.Modules.Actions.MoveEntity(setup.Harvester, setup.Tile, CourseIntent.Harvest);
         }
     }
 

@@ -7,8 +7,6 @@ using Game.Events;
 using Game.Network.ClientPackets;
 using Game.Network.ServerPackets;
 using Game.Systems.Battle;
-using Game.Systems.Player;
-using Game.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,8 +29,8 @@ namespace Game.Services
     {
         public TurnBattle Battle;
 
-        public BattleTaskExecutor(TurnBattle battle) {  Battle = battle; }
-        
+        public BattleTaskExecutor(TurnBattle battle) { Battle = battle; }
+
         public void Execute(GameTask task)
         {
             task.Game.Events.Call(new BattleFinishedTaskEvent()
@@ -56,9 +54,12 @@ namespace Game.Services
         public BattleService(LisergyGame game)
         {
             _game = game;
-            game.Network.On<BattleQueuedPacket>(OnBattleTrigger);
-            game.Network.On<BattleLogRequestPacket>(OnBattleRequest);
-            game.Events.Register<BattleFinishedTaskEvent>(this, OnBattleFinishedProcessing);
+
+            // packets coming from world server
+            game.Network.OnInput<BattleQueuedPacket>(OnBattleTrigger);
+            game.Network.OnInput<BattleLogRequestPacket>(OnBattleRequest);
+
+            game.Events.On<BattleFinishedTaskEvent>(this, OnBattleFinishedProcessing);
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace Game.Services
         /// </summary>
         public void OnBattleRequest(BattleLogRequestPacket p)
         {
-            if (AllBattles.TryGetValue(p.BattleId, out var log)) _game.Network.SendToPlayer(log, p.Sender); 
+            if (AllBattles.TryGetValue(p.BattleId, out var log)) _game.Network.SendToPlayer(log, p.Sender.EntityId);
         }
 
         /// <summary>
@@ -114,14 +115,12 @@ namespace Game.Services
 
         public TurnBattle GetRunningBattle(GameId id) => ((BattleTaskExecutor)BattleTasks[id].Executor).Battle;
 
-        public IEnumerable<PlayerEntity> GetAllPlayers(TurnBattle battle)
+        public IEnumerable<GameId> GetAllPlayers(TurnBattle battle)
         {
-            PlayerEntity pl;
-            foreach (var userid in new GameId[] { battle.Defender.OwnerID, battle.Attacker.OwnerID })
-            {
-                if (_game.Players.GetPlayer(userid, out pl) && pl.EntityId != GameId.ZERO)
-                    yield return pl;
-            }
+            if (battle.Attacker.OwnerID != GameId.ZERO)
+                yield return battle.Attacker.OwnerID;
+            if (battle.Defender.OwnerID != GameId.ZERO)
+                yield return battle.Defender.OwnerID;
         }
     }
 }

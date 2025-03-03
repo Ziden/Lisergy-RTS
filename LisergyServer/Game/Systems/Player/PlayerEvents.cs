@@ -7,9 +7,9 @@ namespace Game.Systems.Player
     /// </summary>
     public class PlayerJoinedEvent : IGameEvent
     {
-        public PlayerEntity Player;
+        public PlayerModel Player;
 
-        public PlayerJoinedEvent(PlayerEntity p)
+        public PlayerJoinedEvent(PlayerModel p)
         {
             Player = p;
         }

@@ -1,4 +1,4 @@
-﻿using Game.Entity;
+﻿using Game.Specs;
 using System;
 using System.Runtime.InteropServices;
 

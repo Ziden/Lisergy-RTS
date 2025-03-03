@@ -10,10 +10,14 @@ namespace GameData.Specs
     }
 
     [Serializable]
-    public struct ArtSpec
+    public class ArtSpec
     {
         public string Address;
         public ArtType Type;
+
+        public ArtSpec()
+        {
+        }
 
         public ArtSpec(string addr)
         {
@@ -28,7 +32,7 @@ namespace GameData.Specs
         }
 
         public static implicit operator string(ArtSpec d) => d.Address;
-        public static implicit operator ArtSpec(string b) => new ArtSpec() { Address = b };
+        public static implicit operator ArtSpec(string b) => new ArtSpec(b, ArtType.SPECIFIC_SPRITE);
 
         public override string ToString() => $"<Art Type={Type} Addr={Address}/>";
     }

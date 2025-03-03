@@ -1,13 +1,9 @@
 using Assets.Code.Views;
 using ClientSDK;
 using ClientSDK.Data;
-using Cysharp.Threading.Tasks;
 using Game.Engine.Events.Bus;
 using Game.Systems.FogOfWar;
-using Game.Systems.Tile;
 using Game.World;
-using System;
-using System.Collections.Generic;
 
 /// <summary>
 /// A fog of war lazy load. Instead of calculating the fog of war on every tile received from server
@@ -20,25 +16,25 @@ public class FogOfWarListener : IEventListener
     public FogOfWarListener(GameClient client)
     {
         _client = client;
-        client.ClientEvents.Register<TilePostRenderedEvent>(this, OnPostRender);
-        client.Game.Events.Register<TileVisibilityChangedForPlayerEvent>(this, OnVisibilityChange);
+        client.ClientEvents.On<TilePostRenderedEvent>(this, OnPostRender);
+        client.Game.Events.On<TileVisibilityChangedEvent>(this, OnVisibilityChange);
     }
 
-    private void OnVisibilityChange(TileVisibilityChangedForPlayerEvent ev)
+    private void OnVisibilityChange(TileVisibilityChangedEvent ev)
     {
         if (!ev.Explorer.OwnerID.IsMine()) return;
 
-        var view = ev.Tile.GetEntityView();
+        var view = ev.Tile.TileEntity.GetView();
         if (view == null || view.State != EntityViewState.RENDERED) return;
 
-        if(ev.Visible) ev.Tile.GetEntityView().SetFogState(FogState.EXPLORED);
-        else ev.Tile.GetEntityView().SetFogState(FogState.UNEXPLORED);
+        if(ev.Visible) ev.Tile.TileEntity.GetView<TileView>().SetFogState(FogState.EXPLORED);
+        else ev.Tile.TileEntity.GetView<TileView>().SetFogState(FogState.UNEXPLORED);
     }
-
+    
     private void OnPostRender(TilePostRenderedEvent e)
     {
         var view = e.View;
-        if (view.Entity.IsVisible()) view.SetFogState(FogState.EXPLORED);
+        if (view.Entity.IsTileModelVisible()) view.SetFogState(FogState.EXPLORED);
         else view.SetFogState(FogState.UNEXPLORED);
         CheckFogAround(view, Direction.EAST);
         CheckFogAround(view, Direction.WEST);
@@ -48,9 +44,9 @@ public class FogOfWarListener : IEventListener
 
     private void CheckFogAround(TileView thisView, Direction d)
     {
-        var near = thisView.Entity.GetNeighbor(d);
+        var near = thisView.Tile.GetNeighbor(d);
         if (near == null) return;
-        var view = (TileView)_client.Modules.Views.GetOrCreateView(near);
+        var view = (TileView)_client.Modules.Views.GetOrCreateView(near.TileEntity);
         if (view.State == EntityViewState.NOT_RENDERED) view.SetFogState(FogState.UNEXPLORED);
     }
 }

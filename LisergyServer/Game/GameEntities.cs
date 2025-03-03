@@ -1,104 +1,121 @@
-﻿using Game.Engine.DataTypes;
-using Game.Engine.ECS;
-using Game.Engine.Network;
-using Game.Systems.Building;
-using Game.Systems.Dungeon;
-using Game.Systems.Party;
-using Game.Systems.Player;
-using GameData.Specs;
+﻿using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.ECLS;
+using Game.Systems.DeltaTracker;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
+using System.Linq;
 
-namespace Game
+namespace Game.Entities
 {
     public enum EntityType : byte
     {
-        Player, 
-        Party, 
-        Dungeon, 
-        Building, 
+        Player,
+        Party,
+        Dungeon,
+        Building,
         Tile
     }
 
-    /// <summary>
-    /// Represents the entities that are currently in the game
-    /// </summary>
-    public interface IGameEntities : IDisposable
-    {
-        /// <summary>
-        /// Creates a new entity based on a type
-        /// </summary>
-        IEntity CreateEntity(in GameId owner, in EntityType type);
-
-        /// <summary>
-        /// Gets an entity by its given ID. Can return null if entity do not exists.
-        /// </summary>
-        IEntity this[in GameId id] {get;}
-
-        /// <summary>
-        /// Holds all modified entitie deltas for the current input cycle
-        /// </summary>
-        IDeltaCompression DeltaCompression { get; }
-    }
-
-    public class GameEntities : IGameEntities
+    public class GameEntities : IDisposable
     {
         private IGame _game;
-        internal readonly Dictionary<GameId, IEntity> _entities = new Dictionary<GameId, IEntity>();
-
-        internal DeltaCompression _deltaTracker = new DeltaCompression();
-
-        public IDeltaCompression DeltaCompression  => _deltaTracker;
+        private Dictionary<GameId, NodeTree<IEntity>> _entities = new Dictionary<GameId, NodeTree<IEntity>>();
 
         public GameEntities(IGame game)
         {
             _game = game;
         }
 
-        private void SetupEntity(IEntity entity, in EntitySpecId id)
+        private void SetupArchetype(IEntity entity, in EntityType id)
         {
-            var spec = _game.Specs.Entities[id];
-            foreach (var component in spec.Components)
+            entity.Components.Save(new NetworkedComponent()); // TODO: think better
+            var spec = _game.Specs.Entities[(int)id];
+            var components = Serialization.ToAnyTypes<IComponent>(spec.Components);
+            foreach (var component in components)
             {
-                entity.Components.Save(component);
+                entity.Components.GetComponents()[component.GetType()] = component;
+                entity.Components.OnAfterAdded(component.GetType());
             }
         }
 
-        public IEntity CreateEntity(in GameId owner, in EntityType type)
+        /// <summary>
+        /// TODO: Remove this. This is needed because client predicts creating tiles with wrong ids.
+        /// </summary>
+        public void UpdateEntityId(BaseEntity e, GameId newId)
         {
-            IEntity e = null;
-            if (type == EntityType.Dungeon) e = new DungeonEntity(_game);
-            else if (type == EntityType.Party) e = new PartyEntity(_game, owner);
-            else if (type == EntityType.Building)
+            var oldId = e.EntityId;
+            e._entityId = newId;
+            var oldNode = _entities[oldId];
+            _entities.Remove(oldId);
+            _entities.Add(newId, oldNode);
+        }
+
+        public IEntity CreateEntity(in EntityType type, GameId parent = default, GameId entityId = default)
+        {
+            if (entityId == GameId.ZERO) entityId = GameId.Generate();
+            if (parent == entityId) parent = GameId.ZERO;
+
+            IEntity e = new BaseEntity(entityId, _game, type);
+            SetupArchetype(e, type);
+            var entityNode = new NodeTree<IEntity>(e);
+            _entities[e.EntityId] = entityNode;
+
+            if (parent != GameId.ZERO)
             {
-                e = new PlayerBuildingEntity(_game, owner);
-                SetupEntity(e, 1);
+                if (!_entities.TryGetValue(parent, out var parentNode))
+                {
+                    throw new Exception("Parent entity " + parent + " not found");
+                }
+                parentNode.AddChild(entityNode);
             }
-            else throw new Exception($"Entity type {type} is not createable");
-            _entities[e.EntityId] = e;
-            if(!owner.IsZero())
-            {
-                var player = _game.World.Players[owner];
-                player.AddOwnedEntity(e);
-            }
-            e.DeltaFlags.SetFlag(DeltaFlag.CREATED);
+            e.Logic.DeltaCompression.Clear();
+            e.Logic.DeltaCompression.SetFlag(DeltaFlag.CREATED);
             return e;
         }
 
         public void Dispose()
         {
-            foreach (var e in _entities.Values) e.Components.Dispose();
+
         }
 
-        public IEntity this[in GameId id] {
+
+        public IReadOnlyList<IEntity> GetChildren(in GameId owner, EntityType type)
+        {
+            var ret = new List<IEntity>();
+            _entities[owner].Traverse(e =>
+            {
+                if (e.EntityType == type) ret.Add(e);
+                return true;
+            });
+            return ret;
+        }
+
+        public IEntity GetParent(GameId entityId)
+        {
+            return _entities[entityId]?.Parent?.Data;
+        }
+
+        public bool IsParent(in GameId owner, in GameId o)
+        {
+            var parent = GetParent(o);
+            return parent?.EntityId == owner;
+        }
+
+        public void SetParent(in GameId owner, in GameId owned)
+        {
+            _entities[owner].AddChild(_entities[owned]);
+        }
+
+        public IEntity this[in GameId id]
+        {
             get
             {
                 _entities.TryGetValue(id, out var entity);
-                return entity;
+                return entity?.Data;
             }
         }
 
-        public IReadOnlyCollection<IEntity> AllEntities => _entities.Values;
+        public IReadOnlyCollection<IEntity> AllEntities => _entities.Values.Select(e => e.Data).ToArray();
     }
 }

@@ -1,14 +1,9 @@
-﻿using Game.Network.ClientPackets;
-using Game;
-using Game.Events.ServerEvents;
-using System;
-using ClientSDK.Data;
-using Game.Systems.Player;
-using ClientSDK.SDKEvents;
-using Game.Events;
-using System.Collections.Generic;
-using Game.Systems.Battle.Data;
+﻿using ClientSDK.SDKEvents;
 using Game.Engine.DataTypes;
+using Game.Events;
+using Game.Systems.Battle.Data;
+using Game.Systems.Player;
+using System.Collections.Generic;
 
 namespace ClientSDK.Services
 {
@@ -38,12 +33,12 @@ namespace ClientSDK.Services
             _client = client;
         }
 
-        public List<BattleHeader> BattleHeaders => _client.Modules.Player.LocalPlayer.Data.BattleHeaders;
+        public List<BattleHeader> BattleHeaders => _client.Modules.Player.LocalPlayer.Components.Get<PlayerDataComponent>().BattleHeaders;
 
 
         public void Register()
         {
-            _client.Network.On<BattleHeaderPacket>(OnBattleSummary);
+            _client.Network.OnInput<BattleHeaderPacket>(OnBattleSummary);
         }
 
         public void RequestBattleLog(in GameId battleId)
@@ -53,7 +48,7 @@ namespace ClientSDK.Services
 
         private void OnBattleSummary(BattleHeaderPacket result)
         {
-            if(result.BattleHeader.Attacker.OwnerID == _client.Modules.Player.PlayerId)
+            if (result.BattleHeader.Attacker.OwnerID == _client.Modules.Player.PlayerId)
             {
                 _client.ClientEvents.Call(new OwnBattleFinishedEvent()
                 {
@@ -63,7 +58,8 @@ namespace ClientSDK.Services
                     Victory = result.BattleHeader.AttackerWins,
                     BattleId = result.BattleHeader.BattleID
                 });
-            } else if (result.BattleHeader.Defender.OwnerID == _client.Modules.Player.PlayerId)
+            }
+            else if (result.BattleHeader.Defender.OwnerID == _client.Modules.Player.PlayerId)
             {
                 _client.ClientEvents.Call(new OwnBattleFinishedEvent()
                 {

@@ -1,7 +1,6 @@
-using Game;
 using Game.Engine;
+using Game.Entities;
 using Game.Events.ServerEvents;
-using Game.Network.ClientPackets;
 using Game.Systems.Battler;
 using Game.Systems.Map;
 using NUnit.Framework;
@@ -25,7 +24,7 @@ namespace UnitTests
         public void TestJoinCreatingPlayerData()
         {
             var playersBefore = Game.World.Players.PlayerCount;
-            var joinEvent = new JoinWorldPacket();
+            var joinEvent = new JoinWorldMapCommand();
             var clientPlayer = new TestServerPlayer(Game);
             Game.HandleClientEvent(clientPlayer, joinEvent);
 
@@ -33,19 +32,19 @@ namespace UnitTests
 
             Assert.AreEqual(1, Game.World.Players.PlayerCount);
             Assert.AreEqual(clientPlayer, createdPlayer);
-            Assert.AreEqual(1, createdPlayer.Buildings.Count);  // initial building
-            Assert.IsTrue(createdPlayer.GetParty(0) != null);    // initial party
+            Assert.AreEqual(1, createdPlayer.EntityLogic.GetBuildings().Count);  // initial building
+            Assert.IsTrue(createdPlayer.EntityLogic.GetParties()[0] != null);    // initial party
         }
 
         [Test]
         public void TestJoinInitialDataEventsSent()
         {
             var playersBefore = Game.World.Players.PlayerCount;
-            var joinEvent = new JoinWorldPacket();
+            var joinEvent = new JoinWorldMapCommand();
             var clientPlayer = new TestServerPlayer(Game);
             Game.HandleClientEvent(clientPlayer, joinEvent);
 
-            var updateEvents = clientPlayer.ReceivedPacketsOfType<EntityUpdatePacket>();
+            var updateEvents = clientPlayer.ReceivedPacketsOfType<EntityUpdatePacket>().Where(e => e.Type != EntityType.Tile).ToList();
             var partyEvent = updateEvents.FirstOrDefault(e => e.Type == EntityType.Party);
             var buildingEvent = updateEvents.FirstOrDefault(e => e.Type == EntityType.Building);
             var partyPosition = (MapPlacementComponent)partyEvent.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(MapPlacementComponent));
@@ -62,12 +61,15 @@ namespace UnitTests
         public void TestNewPlayerReceivingEvents()
         {
             var playersBefore = Game.World.Players.PlayerCount;
-            var joinEvent = new JoinWorldPacket();
+            var joinEvent = new JoinWorldMapCommand();
             var player = new TestServerPlayer(Game);
+
+            var tile = player.Game.World.GetTile(0, 0);
+
             Game.HandleClientEvent(player, joinEvent);
 
-            var entityUpdates = player.ReceivedPacketsOfType<EntityUpdatePacket>();
-            var tileUpdates = player.ReceivedPacketsOfType<TileUpdatePacket>();
+            var entityUpdates = player.ReceivedPacketsOfType<EntityUpdatePacket>().Where(e => e.Type != EntityType.Tile).ToList();
+            var tileUpdates = player.ReceivedEntityUpdates(EntityType.Tile);
 
             Assert.IsTrue(tileUpdates.Count > 2);
             Assert.AreEqual(2, entityUpdates.Count);
@@ -79,11 +81,11 @@ namespace UnitTests
         public void TestJoinNewPlayer()
         {
             var playersBefore = Game.World.Players.PlayerCount;
-            var joinEvent = new JoinWorldPacket();
+            var joinEvent = new JoinWorldMapCommand();
             var player = new TestServerPlayer(Game);
             Game.HandleClientEvent(player, joinEvent);
 
-            var entityVisibleEvents = player.ReceivedPacketsOfType<EntityUpdatePacket>();
+            var entityVisibleEvents = player.ReceivedPacketsOfType<EntityUpdatePacket>().Where(e => e.Type != EntityType.Tile).ToList();
 
             Assert.AreEqual(2, entityVisibleEvents.Count, "Should view his castle and his party");
         }
@@ -92,21 +94,25 @@ namespace UnitTests
         public void TestJoinExistingPlayer()
         {
             var playersBefore = Game.World.Players.PlayerCount;
-            var joinEvent = new JoinWorldPacket();
+            var joinEvent = new JoinWorldMapCommand();
             var player = new TestServerPlayer(Game);
 
             Game.HandleClientEvent(player, joinEvent);
 
             var firstEntityVisibleEvents = player.ReceivedPacketsOfType<EntityUpdatePacket>();
-            var firstTileVisibleEvents = player.ReceivedPacketsOfType<TileUpdatePacket>();
+            var firstTileVisibleEvents = player.ReceivedEntityUpdates(EntityType.Tile);
+            var p1 = player.ReceivedEntityUpdates(EntityType.Party);
 
             player.ReceivedPackets.Clear();
 
             Game.HandleClientEvent(player, joinEvent);
 
             var secondEntityVisibleEvents = player.ReceivedPacketsOfType<EntityUpdatePacket>();
-            var secondTileVisibleEvents = player.ReceivedPacketsOfType<TileUpdatePacket>();
+            var secondTileVisibleEvents = player.ReceivedEntityUpdates(EntityType.Tile);
 
+            var p2 = player.ReceivedEntityUpdates(EntityType.Party);
+
+            Assert.AreEqual(p1.Count, p2.Count);
             Assert.AreEqual(firstEntityVisibleEvents.Count, secondEntityVisibleEvents.Count);
             Assert.AreEqual(firstTileVisibleEvents.Count, secondTileVisibleEvents.Count);
         }
@@ -115,7 +121,7 @@ namespace UnitTests
         public void TestInitialUnitStats()
         {
             var playersBefore = Game.World.Players.PlayerCount;
-            var joinEvent = new JoinWorldPacket();
+            var joinEvent = new JoinWorldMapCommand();
             var player = new TestServerPlayer(Game);
             Game.HandleClientEvent(player, joinEvent);
             var party = player.GetParty(0);

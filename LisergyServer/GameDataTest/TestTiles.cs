@@ -26,7 +26,7 @@ namespace GameDataTest
             MovementFactor = 0.5f,
             ResourceSpotSpecId = TestHarvestingSpots.RIVER.SpecId,
             ChangeToTileIdWhenDepleted = GRASS.ID,
-            TilePrefab = new ArtSpec() { Address = Addr("Water"), Type=ArtType.PREFAB }
+            TilePrefab = new ArtSpec() { Address = Addr("Water"), Type = ArtType.PREFAB }
         };
 
         public static readonly TileSpec FOREST = new TileSpec(3)
@@ -34,7 +34,7 @@ namespace GameDataTest
             MovementFactor = 0.8f,
             ResourceSpotSpecId = TestHarvestingSpots.LOGS.SpecId,
             ChangeToTileIdWhenDepleted = GRASS.ID,
-            TilePrefab =new ArtSpec() { Address = Addr("Forest"), Type=ArtType.PREFAB }
+            TilePrefab = new ArtSpec() { Address = Addr("Forest"), Type = ArtType.PREFAB }
         };
 
         public static void Generate(ref GameSpec spec)

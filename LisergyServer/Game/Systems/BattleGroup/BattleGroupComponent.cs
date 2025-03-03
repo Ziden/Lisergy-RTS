@@ -1,8 +1,7 @@
-﻿using Game.ECS;
-using Game.Engine.DataTypes;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.ECLS;
 using Game.Systems.BattleGroup;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Game.Systems.Battler
@@ -14,7 +13,7 @@ namespace Game.Systems.Battler
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
     [SyncedComponent]
-    public unsafe struct BattleGroupComponent : IComponent
+    public struct BattleGroupComponent : IComponent
     {
         public GameId BattleID;
         public UnitGroup Units;

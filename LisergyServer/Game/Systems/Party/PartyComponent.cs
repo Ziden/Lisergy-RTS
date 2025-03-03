@@ -1,4 +1,4 @@
-﻿using Game.ECS;
+﻿using Game.Engine.ECLS;
 using System;
 
 namespace Game.Systems.Party
@@ -8,7 +8,7 @@ namespace Game.Systems.Party
     /// </summary>
     [SyncedComponent]
     [Serializable]
-    public struct PartyComponent : IComponent
+    public class PartyComponent : IComponent
     {
         /// <summary>
         /// Party index on player party array

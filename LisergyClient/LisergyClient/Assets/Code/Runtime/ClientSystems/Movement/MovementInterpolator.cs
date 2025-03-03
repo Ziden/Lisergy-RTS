@@ -1,6 +1,6 @@
 ﻿using ClientSDK;
 using DG.Tweening;
-using Game;
+using Game.Engine.ECLS;
 using Game.Systems.Movement;
 using Game.Tile;
 using Game.World;
@@ -23,9 +23,9 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
     public class MovementInterpolator
     {
         private IGameClient _client;
-        private BaseEntity _entity;
+        private IEntity _entity;
         private Tweener _currentSequence;
-        private Queue<(TileEntity, TileEntity)> _queue = new Queue<(TileEntity, TileEntity)> ();
+        private Queue<(TileModel, TileModel)> _queue = new Queue<(TileModel, TileModel)> ();
 
         public bool IsInterpolating()
         {
@@ -34,7 +34,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
 
         public bool HasQueue() => _queue.Count > 0;
 
-        public MovementInterpolator(IGameClient client, BaseEntity entity)
+        public MovementInterpolator(IGameClient client, IEntity entity)
         {
             _client = client;
             _entity = entity;
@@ -43,7 +43,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
         /// <summary>
         /// Moves a single tile
         /// </summary>
-        public void InterpolateMovement(TileEntity from, TileEntity to)
+        public void InterpolateMovement(TileModel from, TileModel to)
         {
             if (from == to) return;
             _client.Log.Debug($"[MovementInterpolator] Receiving interpolation request {_entity} from {from} to {to}");
@@ -57,7 +57,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
                 _queue.Enqueue((from, to));
                 return;
             }
-            var view = _entity.GetEntityView() as IGameObject;
+            var view = _entity.GetView();
             var gameObject = view.GameObject;
             var moveComponent = _entity.Components.Get<MovespeedComponent>();
             var duration = moveComponent.MoveDelay.TotalSeconds;
@@ -75,7 +75,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
             _queue.Clear();
         }
 
-        private void OnStart(TileEntity from, TileEntity to)
+        private void OnStart(TileModel from, TileModel to)
         {
             _client.Log.Debug($"[MovementInterpolator] Interpolation Started {_entity} from {from} to {to}");
             _client.ClientEvents.Call(new MovementInterpolationStart()
@@ -86,7 +86,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
             });
         }
 
-        private void OnFinish(TileEntity from, TileEntity to)
+        private void OnFinish(TileModel from, TileModel to)
         {
             _currentSequence = null;
             _client.ClientEvents.Call(new MovementInterpolationEnd()

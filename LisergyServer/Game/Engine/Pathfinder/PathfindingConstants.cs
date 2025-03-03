@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Game.Engine.Pathfinder
+﻿namespace Game.Engine.Pathfinder
 {
     public readonly struct StepDirection
     {

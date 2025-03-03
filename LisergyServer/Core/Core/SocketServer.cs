@@ -2,6 +2,7 @@
 using Game.Engine;
 using Game.Engine.Network;
 using System;
+using System.Threading.Tasks;
 using Telepathy;
 
 namespace BaseServer.Core
@@ -28,9 +29,24 @@ namespace BaseServer.Core
             RegisterConsoleCommands(_commandExecutor);
         }
 
+        /// <summary>
+        /// Starts listening to sockets in blocking manner for single-thread runs
+        /// </summary>
+        public async Task<Server> StartListening()
+        {
+            if (!_socketServer.Start(_port))
+            {
+                throw new Exception("Error listening " + _port);
+            }
+            while (!_socketServer.Active)
+            {
+                await Task.Delay(100);
+            }
+            return _socketServer;
+        }
+
         public void RunServer()
         {
-          
             _ = _socketServer.Start(_port);
             try
             {
@@ -53,8 +69,9 @@ namespace BaseServer.Core
             _socketServer.Send(connection, Serialization.FromPacket(ev));
         }
 
-        private void RunTick()
+        public void RunTick()
         {
+
             _commandExecutor.HandleConsoleCommands();
             Tick();
             ReadSocketMessages();
@@ -62,7 +79,7 @@ namespace BaseServer.Core
 
         public void Stop()
         {
-            Ticker.Stop();
+            Ticker?.Stop();
             _socketServer.Stop();
         }
         public abstract void RegisterConsoleCommands(ConsoleCommandExecutor executor);

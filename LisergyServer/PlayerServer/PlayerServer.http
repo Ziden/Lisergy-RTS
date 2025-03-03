@@ -1,0 +1,11 @@
+@PlayerServer_HostAddress = http://localhost:5249
+
+GET {{PlayerServer_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{PlayerServer_HostAddress}}/todos/1
+Accept: application/json
+
+###

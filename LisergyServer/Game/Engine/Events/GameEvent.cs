@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Game.Engine.Events
+﻿namespace Game.Engine.Events
 {
     /// <summary>
     /// Game Logic Events

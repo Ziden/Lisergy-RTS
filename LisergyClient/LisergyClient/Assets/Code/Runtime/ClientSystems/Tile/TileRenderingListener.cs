@@ -23,7 +23,7 @@ public class TileRenderingListener : IEventListener
     public TileRenderingListener(GameClient client)
     {
         _client = client;
-        _client.ClientEvents.Register<TileRenderedEvent>(this, OnTileRendered);
+        _client.ClientEvents.On<TileRenderedEvent>(this, OnTileRendered);
     }
 
     private void OnTileRendered(TileRenderedEvent ev)

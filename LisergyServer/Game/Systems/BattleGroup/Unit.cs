@@ -1,5 +1,5 @@
 ﻿using Game.Engine.DataTypes;
-using Game.Entity;
+using Game.Specs;
 using GameData.Specs;
 using System;
 using System.Collections.Generic;

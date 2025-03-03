@@ -1,10 +1,8 @@
-﻿using Game.Tile;
-using Game;
-using System.Collections.Generic;
-using System.Linq;
-using Game.Engine.DataTypes;
-using Game.World;
+﻿using Game.Engine.DataTypes;
 using Game.Engine.Pathfinder;
+using Game.Tile;
+using Game.World;
+using System.Collections.Generic;
 
 namespace ClientSDK.Data
 {
@@ -14,8 +12,8 @@ namespace ClientSDK.Data
     public class LazyLoadChunkMap : IChunkMap
     {
         private Dictionary<GameId, Chunk> _chunks = new Dictionary<GameId, Chunk>();
-        
-        private CachedChunkMap _cache;
+
+        private PathfindingChunkMap _cache;
 
         public (int x, int y) ChunkMapDimensions { get; private set; }
 
@@ -27,7 +25,7 @@ namespace ClientSDK.Data
             var sizeY = tilesAmtY / GameWorld.CHUNK_SIZE;
             TilemapDimensions = (tilesAmtX, tilesAmtY);
             ChunkMapDimensions = (sizeX, sizeY);
-            _cache = new CachedChunkMap(this);
+            _cache = new PathfindingChunkMap(this);
             World = world;
         }
 
@@ -38,7 +36,7 @@ namespace ClientSDK.Data
             return tileX >= 0 && tileX < TilemapDimensions.x && tileY >= 0 && tileY < TilemapDimensions.y;
         }
 
-        public IEnumerable<Location> FindPath(TileEntity from, TileEntity to)
+        public IEnumerable<Location> FindPath(TileModel from, TileModel to)
         {
             return new AStarSearch(_cache).Find(from.Position, to.Position);
         }
@@ -48,7 +46,7 @@ namespace ClientSDK.Data
             var chunkId = new GameId(new Location(chunkX, chunkY));
             if (!_chunks.TryGetValue(chunkId, out var chunk))
             {
-                chunk = new Chunk(this, (ushort)chunkX, (ushort)chunkY);
+                chunk = new Chunk(World, (ushort)chunkX, (ushort)chunkY);
                 _chunks[chunkId] = chunk;
             }
             return chunk;
@@ -62,26 +60,37 @@ namespace ClientSDK.Data
             return chunk;
         }
 
-        public virtual TileEntity GetTile(in int tileX, in int tileY)
+        public virtual TileModel GetTile(in int tileX, in int tileY)
         {
             if (!ValidCoords(tileX, tileY)) return null!;
             var internalTileX = tileX % GameWorld.CHUNK_SIZE;
             var internalTileY = tileY % GameWorld.CHUNK_SIZE;
             var chunk = GetTileChunk(tileX, tileY);
             var tile = chunk.GetTile(internalTileX, internalTileY);
-            if(tile == null)
+            if (tile == null)
             {
                 tile = chunk.CreateTile(internalTileX, internalTileY);
+                tile.Logic.DeltaCompression.Clear();
             }
             return tile;
         }
 
         public virtual void CreateMap(in ushort sizeX, in ushort sizeY) { }
 
-        public virtual TileEntity GenerateTile(ref Chunk c, in int tileX, in int tileY)
+        public virtual TileModel GenerateTile(ref Chunk c, in int tileX, in int tileY)
         {
             var tile = c.CreateTile(tileX, tileY);
             return tile;
+        }
+
+        public TileModel GetTile(in Location p)
+        {
+            return GetTile(p.X, p.Y);
+        }
+
+        public Chunk GetTileChunk(in Location p)
+        {
+            return GetTileChunk(p.X, p.Y);
         }
     }
 }

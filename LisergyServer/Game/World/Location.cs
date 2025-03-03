@@ -36,7 +36,7 @@ namespace Game.World
 
         public override string ToString()
         {
-            return $"<Position X={X} Y={Y}>";
+            return $"(X={X} Y={Y})";
         }
 
         public static bool operator ==(in Location p1, in Location p2)

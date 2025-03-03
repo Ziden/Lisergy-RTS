@@ -6,11 +6,11 @@ using Game.Network.ServerPackets;
 using Game.Systems.Battle;
 using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
-using GameData.Specs;
+using Game.Systems.Tile;
 using NUnit.Framework;
 using ServerTests;
-using System;
 using System.Linq;
+using Tests.Unit.Stubs;
 
 namespace UnitTests
 {
@@ -46,16 +46,17 @@ namespace UnitTests
         {
 
             var player = _game.GetTestPlayer();
-            var tile = _game.World.Map.GetTile(1, 1);
+            var tile = _game.World.GetTile(1, 1);
 
-            Serialization.LoadSerializers(typeof(TileUpdatePacket));
+            Serialization.LoadSerializers(typeof(EntityUpdatePacket));
 
-            var serialized = Serialization.FromPacket<TileUpdatePacket>(tile.GetUpdatePacket(null) as TileUpdatePacket);
-            var unserialized = Serialization.ToPacket<TileUpdatePacket>(serialized);
+            var serialized = Serialization.FromPacket<EntityUpdatePacket>(tile.Logic.DeltaCompression.GetUpdatePacket(default) as EntityUpdatePacket);
+            var unserialized = Serialization.ToPacket<EntityUpdatePacket>(serialized);
 
-            Assert.AreEqual(tile.SpecId, unserialized.Data.TileId);
-            Assert.AreEqual(tile.X, unserialized.Position.X);
-            Assert.AreEqual(tile.Y, unserialized.Position.Y);
+            var data = unserialized.GetComponent<TileDataComponent>();
+            Assert.AreEqual((byte)tile.SpecId, data.TileId);
+            Assert.AreEqual(tile.X, data.Position.X);
+            Assert.AreEqual(tile.Y, data.Position.Y);
         }
 
         [Test]
@@ -66,7 +67,7 @@ namespace UnitTests
             var player = game.GetTestPlayer();
             var unit = player.Parties[0].Get<BattleGroupComponent>().Units.First();
             var building = player.Buildings.First();
-            var tile = player.Parties[0].Tile;
+            var tile = player.Parties[0].GetTile();
 
             var visibleEvent = game.SentServerPackets.Where(e => e is EntityUpdatePacket).FirstOrDefault() as EntityUpdatePacket;
 

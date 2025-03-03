@@ -1,6 +1,5 @@
 using ClientSDK.Data;
-using Game.ECS;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using Game.Systems.Resources;
 using Game.Tile;
 
@@ -15,7 +14,7 @@ public class HarvestingUpdateEvent : IClientEvent
     public TileResourceComponent TileResources;
     public int AmountHarvestedTotal;
     public int AmountHarvestedNow;
-    public TileEntity Tile;
+    public TileModel Tile;
     public IEntity Entity;
     public bool Depleted;
 }

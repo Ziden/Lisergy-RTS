@@ -1,7 +1,4 @@
-﻿using NUnit.Framework;
-using ServerTests;
-
-namespace UnitTests
+﻿namespace UnitTests
 {
     public class TestPerformance
     {

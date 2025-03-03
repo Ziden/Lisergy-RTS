@@ -1,7 +1,6 @@
 
 using ClientSDK.Data;
-using Game.ECS;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using Game.Tile;
 
 /// <summary>
@@ -9,8 +8,8 @@ using Game.Tile;
 /// </summary>
 public class MovementInterpolationEnd : IClientEvent
 {
-    public TileEntity From;
-    public TileEntity To;
+    public TileModel From;
+    public TileModel To;
     public IEntity Entity;
     public bool LastStep;
 }

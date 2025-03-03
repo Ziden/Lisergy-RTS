@@ -27,7 +27,7 @@ namespace GameServices
         public void Broadcast(BasePacket packet)
         {
             var bytes = Serialization.FromBasePacket(packet);
-            foreach(var u in _connectedById.Values)
+            foreach (var u in _connectedById.Values)
             {
                 _log.Debug($"Broadcasting {packet.GetType()} to player {u.PlayerId}");
                 u.Send(bytes);
@@ -43,7 +43,7 @@ namespace GameServices
 
         public void Disconnect(in int connectionId)
         {
-            if(_connectedByConnectionId.TryGetValue(connectionId, out var user))
+            if (_connectedByConnectionId.TryGetValue(connectionId, out var user))
             {
                 _log.Debug($"Player {user.PlayerId} disconnected from connection id {connectionId}");
                 _connectedById.Remove(user.PlayerId);

@@ -1,7 +1,5 @@
 using Game.Engine.Events.Bus;
-using Game.World;
 using NUnit.Framework;
-using ServerTests;
 
 namespace UnitTests
 {
@@ -12,14 +10,14 @@ namespace UnitTests
         {
 
         }
-       
+
 
         [Test]
         public void TestCallingEvent()
         {
             var bus = new EventBus<EventTest>();
             var called = false;
-            bus.Register<EventTest>(this, e => called = true);
+            bus.On<EventTest>(this, e => called = true);
 
             bus.Call(new EventTest());
 
@@ -31,7 +29,7 @@ namespace UnitTests
         {
             var bus = new EventBus<EventTest>();
             var called = false;
-            bus.Register<EventTest>(this, e => called = true);
+            bus.On<EventTest>(this, e => called = true);
             bus.RemoveListener(this);
             bus.Call(new EventTest());
 

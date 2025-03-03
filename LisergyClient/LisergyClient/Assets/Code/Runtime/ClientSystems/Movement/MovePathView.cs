@@ -2,6 +2,7 @@
 using Assets.Code.Assets.Code.Runtime.Tools;
 using Assets.Code.Views;
 using Cysharp.Threading.Tasks;
+using Game.Engine.ECLS;
 using Game.Systems.Tile;
 using Game.Tile;
 using Game.World;
@@ -19,7 +20,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
     {
         private static ActivationObjectPool _pool = new ActivationObjectPool();
 
-        internal Dictionary<TileEntity, List<GameObject>> _pathLines = new Dictionary<TileEntity, List<GameObject>>();
+        internal Dictionary<Location, List<GameObject>> _pathLines = new Dictionary<Location, List<GameObject>>();
         private IAssetService _assets;
 
         public MovePathView()
@@ -27,19 +28,20 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
             _assets = UnityServicesContainer.Resolve<IAssetService>();
         }
 
-        internal void Add(TileEntity tile, params GameObject[] pathLines)
+        internal void Add(IEntity tile, params GameObject[] pathLines)
         {
-            if (!_pathLines.ContainsKey(tile))
-                _pathLines[tile] = new List<GameObject>();
-            _pathLines[tile].AddRange(pathLines);
+            if (!_pathLines.ContainsKey(tile.GetPosition()))
+                _pathLines[tile.GetPosition()] = new List<GameObject>();
+            _pathLines[tile.GetPosition()].AddRange(pathLines);
         }
 
-        internal List<GameObject> Pop(TileEntity tile)
+        internal List<GameObject> Pop(IEntity tile)
         {
-            if (_pathLines.ContainsKey(tile))
+            var pos = tile.GetPosition();
+            if (_pathLines.ContainsKey(pos))
             {
-                var p = _pathLines[tile];
-                _pathLines.Remove(tile);
+                var p = _pathLines[pos];
+                _pathLines.Remove(pos);
                 return p;
             }
             return null;

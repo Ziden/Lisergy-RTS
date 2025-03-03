@@ -1,4 +1,5 @@
-﻿using Game.Systems.Battle.BattleActions;
+﻿using Game.Engine.DataTypes;
+using Game.Systems.Battle.BattleActions;
 using System;
 
 namespace Game.Systems.Battle.BattleEvents
@@ -6,6 +7,6 @@ namespace Game.Systems.Battle.BattleEvents
     [Serializable]
     public class UnitDeadEvent : BattleEvent
     {
-        public Guid UnitId;
+        public GameId UnitId;
     }
 }

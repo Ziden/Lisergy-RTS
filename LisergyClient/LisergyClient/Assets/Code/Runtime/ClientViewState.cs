@@ -1,5 +1,4 @@
-﻿using Game.ECS;
-using Game.Tile;
+﻿using Game.Tile;
 using System;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ namespace Assets.Code.Assets.Code.Runtime
     /// </summary>
     public class ClientStateStorage
     {
-        public TileEntity SelectedTile;
+        public TileModel SelectedTile;
         public IUnityEntityView SelectedEntity;
         public Vector3 CameraPosition;
     }
@@ -22,7 +21,7 @@ namespace Assets.Code.Assets.Code.Runtime
     public static class ClientViewState
     {
         public static event Action<Vector3> OnCameraMove;
-        public static event Action<TileEntity> OnSelectTile;
+        public static event Action<TileModel> OnSelectTile;
         public static event Action<IUnityEntityView> OnSelectEntity;
 
         private static ClientStateStorage State = new();
@@ -30,7 +29,7 @@ namespace Assets.Code.Assets.Code.Runtime
         /// <summary>
         /// Tile the player has selected and has highlight on
         /// </summary>
-        public static TileEntity SelectedTile { get
+        public static TileModel SelectedTile { get
             {
                 return State.SelectedTile;
             }

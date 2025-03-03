@@ -2,10 +2,7 @@
 using Game.Engine.DataTypes;
 using Game.Engine.Events.Bus;
 using Game.Events;
-using Game.Systems.Building;
-using Game.Systems.Party;
 using Game.Systems.Player;
-using System.IO;
 
 
 namespace ClientSDK.Services
@@ -28,44 +25,39 @@ namespace ClientSDK.Services
         /// Gets the local player reference.
         /// Shall contain all data the client is aware of
         /// </summary>
-        public PlayerEntity LocalPlayer { get; }    
+        public PlayerModel LocalPlayer { get; }
     }
 
     public class PlayerModule : IPlayerModule
     {
         private GameClient _client;
-        public PlayerEntity LocalPlayer { get; private set; }
+        public PlayerModel LocalPlayer { get; private set; }
         public GameId PlayerId => LocalPlayer.EntityId;
-
         public PlayerModule(GameClient client) { _client = client; }
 
         public void Register()
         {
-            _client.ClientEvents.Register<GameStartedEvent>(this, OnGameStart);
-            _client.ClientEvents.Register<ClientAwareOfEntityEvent>(this, OnAwareOfEntity);
-            _client.Network.On<BattleHeaderPacket>(OnBattleSummary);
+            _client.ClientEvents.On<GameStartedEvent>(this, OnGameStart);
+            _client.ClientEvents.On<EntityViewCreated>(this, OnAwareOfEntity);
+            _client.Network.OnInput<BattleHeaderPacket>(OnBattleSummary);
         }
 
         private void OnBattleSummary(BattleHeaderPacket result)
         {
-            LocalPlayer.Data.BattleHeaders.Add(result.BattleHeader);
+            LocalPlayer.Components.Get<PlayerDataComponent>().BattleHeaders.Add(result.BattleHeader);
         }
 
-        private void OnAwareOfEntity(ClientAwareOfEntityEvent ev) {
+        private void OnAwareOfEntity(EntityViewCreated ev)
+        {
             if (ev.Entity.OwnerID != PlayerId) return;
-            LocalPlayer.AddOwnedEntity(ev.Entity);
-            if(ev.Entity is PlayerBuildingEntity building)
-            {
-                _client.ClientEvents.Call(new OwnEntityInfoReceived<PlayerBuildingEntity>(building));
-            } else if(ev.Entity is PartyEntity party)
-            {
-                _client.ClientEvents.Call(new OwnEntityInfoReceived<PartyEntity>(party));
-            }
+            _client.Game.Entities.SetParent(LocalPlayer.EntityId, ev.Entity.EntityId);
+            _client.ClientEvents.Call(new OwnEntityInfoReceived(ev.Entity));
         }
 
         private void OnGameStart(GameStartedEvent gameStartedEvent)
         {
             LocalPlayer = gameStartedEvent.LocalPlayer;
+            _client.Game.Players.Add(LocalPlayer);
         }
     }
 }

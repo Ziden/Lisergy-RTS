@@ -2,7 +2,8 @@ using Assets.Code.World;
 using ClientSDK;
 using ClientSDK.SDKEvents;
 using Game.Engine.DataTypes;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
+
 using Game.Systems.Battler;
 using GameAssets;
 
@@ -15,7 +16,7 @@ public class BattleGroupListener : BaseComponentListener<BattleGroupComponent>
 {
     public BattleGroupListener(IGameClient client) : base(client)
     {
-        GameClient.ClientEvents.Register<OwnBattleFinishedEvent>(this, OnLocalPlayerBattleFinished);
+        GameClient.ClientEvents.On<OwnBattleFinishedEvent>(this, OnLocalPlayerBattleFinished);
     }
 
     private void OnLocalPlayerBattleFinished(OwnBattleFinishedEvent ev)

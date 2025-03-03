@@ -1,7 +1,5 @@
 ﻿using ClientSDK.Data;
 using Game;
-using Game.ECS;
-using Game.Events;
 using Game.Systems.Player;
 
 namespace ClientSDK.SDKEvents
@@ -13,9 +11,9 @@ namespace ClientSDK.SDKEvents
     public class GameStartedEvent : IClientEvent
     {
         public IGame Game;
-        public PlayerEntity LocalPlayer;
+        public PlayerModel LocalPlayer;
 
-        public GameStartedEvent(IGame game, PlayerEntity pl)
+        public GameStartedEvent(IGame game, PlayerModel pl)
         {
             Game = game;
             LocalPlayer = pl;

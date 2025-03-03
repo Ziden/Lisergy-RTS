@@ -2,19 +2,18 @@
 using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Game.World
 {
     public interface IGamePlayers
     {
-        bool GetPlayer(GameId id, out PlayerEntity player);
-        public void Add(PlayerEntity player);
-        PlayerEntity GetPlayer(GameId id);
+        bool GetPlayer(GameId id, out PlayerModel player);
+        public void Add(PlayerModel player);
+        PlayerModel GetPlayer(GameId id);
         public int MaxPlayers { get; }
         public int PlayerCount { get; }
-        public PlayerEntity this[GameId id] => GetPlayer(id);
-        public IReadOnlyCollection<PlayerEntity> AllPlayers();
+        public PlayerModel this[GameId id] => GetPlayer(id);
+        public IReadOnlyCollection<PlayerModel> AllPlayers();
     }
 
     /// <summary>
@@ -24,11 +23,12 @@ namespace Game.World
     {
         public int MaxPlayers { get; private set; }
 
-        protected Dictionary<GameId, PlayerEntity> _players = new Dictionary<GameId, PlayerEntity>();
+        protected Dictionary<GameId, PlayerModel> _players;
 
         public WorldPlayers(int maxPlayers)
         {
             MaxPlayers = maxPlayers;
+            _players = new Dictionary<GameId, PlayerModel>();
         }
 
         public void Free()
@@ -36,7 +36,7 @@ namespace Game.World
             _players.Clear();
         }
 
-        public void Add(PlayerEntity p)
+        public void Add(PlayerModel p)
         {
             if (_players.ContainsKey(p.EntityId))
                 return;
@@ -50,7 +50,7 @@ namespace Game.World
 
         public int PlayerCount { get => _players.Count; }
 
-        public virtual bool GetPlayer(GameId id, out PlayerEntity player)
+        public virtual bool GetPlayer(GameId id, out PlayerModel player)
         {
             if (id == GameId.ZERO)
             {
@@ -60,13 +60,13 @@ namespace Game.World
             return _players.TryGetValue(id, out player);
         }
 
-        public virtual PlayerEntity GetPlayer(GameId id)
+        public virtual PlayerModel GetPlayer(GameId id)
         {
             _players.TryGetValue(id, out var player);
             return player;
         }
 
-        public IReadOnlyCollection<PlayerEntity> AllPlayers()
+        public IReadOnlyCollection<PlayerModel> AllPlayers()
         {
             return _players.Values;
         }

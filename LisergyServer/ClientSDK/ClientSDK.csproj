@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Stateless" Version="5.17.0" />
     <PackageReference Include="Telepathy" Version="1.0.341" />
   </ItemGroup>
 

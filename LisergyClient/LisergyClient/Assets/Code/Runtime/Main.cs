@@ -8,7 +8,7 @@ using Assets.Code.Views;
 using Assets.Code.World;
 using ClientSDK;
 using ClientSDK.SDKEvents;
-using Game;
+using Game.Entities;
 using Game.Engine;
 using Game.Engine.Events.Bus;
 using Game.Engine.Scheduler;
@@ -34,7 +34,7 @@ public class Main : MonoBehaviour, IEventListener
     {
         Debug.Log("Main Awake");
         _client = new GameClient();
-        _client.ClientEvents.Register<GameStartedEvent>(this, OnGameStarted);
+        _client.ClientEvents.On<GameStartedEvent>(this, OnGameStarted);
         _network = _client.Network as ClientNetwork;
         SetupViews();
         ConfigureUnity();
@@ -92,10 +92,7 @@ public class Main : MonoBehaviour, IEventListener
 
     public void SetupViews()
     {
-        _client.Modules.Views.RegisterView<PartyEntity, PartyView>();
-        _client.Modules.Views.RegisterView<DungeonEntity, DungeonView>();
-        _client.Modules.Views.RegisterView<TileEntity, TileView>();
-        _client.Modules.Views.RegisterView<PlayerBuildingEntity, PlayerBuildingView>();
+      
     }
 
     public void SetupServices()

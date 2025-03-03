@@ -2,7 +2,7 @@ using Assets.Code.Assets.Code.Runtime;
 using Assets.Code.UI;
 using ClientSDK;
 using Game.Engine.Events.Bus;
-using Game.Systems.Party;
+using Game.Entities;
 using Game.Tile;
 
 /// <summary>
@@ -18,7 +18,7 @@ public class HarvestingViewListener : IEventListener
         _client = client;
         _vfx = new HarvestVfx(client);
         ClientViewState.OnSelectTile += OnSelectedTile;
-        _client.ClientEvents.Register<HarvestingUpdateEvent>(this, OnHarvestResources);
+        _client.ClientEvents.On<HarvestingUpdateEvent>(this, OnHarvestResources);
     }
 
     private void OnHarvestResources(HarvestingUpdateEvent ev)
@@ -26,21 +26,22 @@ public class HarvestingViewListener : IEventListener
         _ = _vfx.ShowResource(ev.Entity, ev.TileResources.Resource.ResourceId, ev.AmountHarvestedNow);
         if (ev.Depleted)
         {
-            var p = ev.Entity as PartyEntity;
+            var p = ev.Entity;
             _client.Game.Log.Debug($"[Harvest Prediction] Client predicted depletion on {ev.Tile} - stopping party");
-            _client.Modules.Actions.StopParty(p);
-            p.Components.RemoveReference<HarvestingPredictionComponent>();
+            _client.Modules.Actions.StopEntity(p);
+            p.Components.Remove<HarvestingPredictionComponent>();
         }
     }
 
-    private void OnSelectedTile(TileEntity tile)
+    private void OnSelectedTile(TileModel tile)
     {
         _client.UnityServices().UI.Close<ScreenTileDetails>();
-        if (ClientViewState.SelectedEntityView.BaseEntity is PartyEntity party)
+        var selected = ClientViewState.SelectedEntityView.Entity;
+        if (selected?.EntityType == EntityType.Party)
         {
             if (tile.HasHarvestSpot)
             {
-                _client.UnityServices().UI.Open<ScreenTileDetails>(new ScreenTileDetailsParams() { Tile = tile, Harvester = party });
+                _client.UnityServices().UI.Open<ScreenTileDetails>(new ScreenTileDetailsParams() { Tile = tile, Harvester = selected });
             }
         }
     }

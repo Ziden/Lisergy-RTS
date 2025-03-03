@@ -1,6 +1,7 @@
+using Assets.Code.World;
 using ClientSDK;
-using Game.ECS;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
+using Game.Entities;
 using Game.Systems.Battler;
 using Game.Systems.Party;
 
@@ -14,8 +15,8 @@ public class BattleGroupUnitListener : BaseComponentListener<BattleGroupComponen
 
     public override void OnUpdateComponent(IEntity entity, BattleGroupComponent oldComponent, BattleGroupComponent newComponent)
     {
-        if (!(entity is PartyEntity party)) return;
+        if (!(entity.EntityType == EntityType.Party)) return;
         if (oldComponent.Units.Equals(newComponent.Units)) return;
-        party.GetEntityView().UpdateUnits(newComponent.Units);
+        entity.GetView<PartyView>().UpdateUnits(newComponent.Units);
     }
 }

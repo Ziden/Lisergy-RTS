@@ -1,6 +1,4 @@
-﻿using Game;
-using Game.Engine.ECS;
-using System;
+﻿using Game.Engine.ECLS;
 
 namespace ClientSDK.Data
 {
@@ -9,12 +7,12 @@ namespace ClientSDK.Data
         /// <summary>
         /// When an view is created but not yet rendered
         /// </summary>
-        NOT_RENDERED, 
+        NOT_RENDERED,
 
         /// <summary>
         /// When a view is rendering at this moment
         /// </summary>
-        RENDERING, 
+        RENDERING,
 
         /// <summary>
         /// When a view is completely rendered
@@ -30,7 +28,7 @@ namespace ClientSDK.Data
         /// <summary>
         /// Gets the base entity of this view
         /// </summary>
-        IEntity BaseEntity { get; }
+        IEntity Entity { get; }
 
         /// <summary>
         /// Gets the reference of the game client
@@ -48,24 +46,20 @@ namespace ClientSDK.Data
         internal void RenderView();
     }
 
-    public interface IClientEntityView : IEntityView
+    public class EntityView : IEntityView
     {
-        void Attach(IGameClient gameClient, IEntity entity);
-    }
-
-    public class EntityView<EntityType> : IClientEntityView, IEntityView where EntityType : IEntity
-    {
-        public EntityType Entity { get; set; }
-        public IEntity BaseEntity => Entity;
+        public IEntity Entity { get; private set; }
         public IGameClient Client { get; set; }
+
+        public EntityView(IEntity entity, IGameClient client)
+        {
+            Entity = entity;
+            Client = client;
+        }
 
         public EntityViewState State { get; protected set; } = EntityViewState.NOT_RENDERED;
 
-        public void Attach(IGameClient gameClient, IEntity entity)
-        {
-            Client = gameClient;
-            Entity = (EntityType)entity;
-        }
+        IEntity IEntityView.Entity => Entity;
 
         protected virtual void CreateView() { }
 

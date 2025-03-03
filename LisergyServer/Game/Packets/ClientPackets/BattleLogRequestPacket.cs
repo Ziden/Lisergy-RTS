@@ -12,6 +12,11 @@ namespace Game.Network.ClientPackets
     public class BattleLogRequestPacket : BasePacket, IClientPacket
     {
         public GameId BattleId;
+
+        public void Execute(IGame game)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

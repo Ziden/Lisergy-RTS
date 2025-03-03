@@ -1,4 +1,3 @@
-using Game.World;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
@@ -19,13 +18,13 @@ namespace UnitTests
         [Test]
         public void TestSimplePath()
         {
-            Game.World.Map.GetTile(1, 0).SpecId = TestTiles.MOUNTAIN.ID;
-            Game.World.Map.GetTile(1, 1).SpecId = TestTiles.MOUNTAIN.ID;
-            Game.World.Map.GetTile(1, 2).SpecId = TestTiles.MOUNTAIN.ID;
+            Game.World.GetTile(1, 0).Logic.Tile.SetTileId(TestTiles.MOUNTAIN.ID);
+            Game.World.GetTile(1, 1).Logic.Tile.SetTileId(TestTiles.MOUNTAIN.ID);
+            Game.World.GetTile(1, 2).Logic.Tile.SetTileId(TestTiles.MOUNTAIN.ID);
 
-            var from = Game.World.Map.GetTile(0, 0);
-            var to = Game.World.Map.GetTile(2, 0);
-            var path = Game.World.Map.FindPath(from, to).ToList();
+            var from = Game.World.GetTile(0, 0);
+            var to = Game.World.GetTile(2, 0);
+            var path = Game.World.FindPath(from, to).ToList();
 
             Assert.NotNull(path);
             Assert.That(path.Count == 9);
@@ -43,13 +42,13 @@ namespace UnitTests
         [Test]
         public void TestSimplePath2()
         {
-            Game.World.Map.GetTile(1, 0).SpecId = TestTiles.MOUNTAIN.ID;
-            Game.World.Map.GetTile(1, 1).SpecId = TestTiles.MOUNTAIN.ID;
-            Game.World.Map.GetTile(1, 2).SpecId = TestTiles.MOUNTAIN.ID;
+            Game.World.GetTile(1, 0).Logic.Tile.SetTileId(TestTiles.MOUNTAIN.ID);
+            Game.World.GetTile(1, 1).Logic.Tile.SetTileId(TestTiles.MOUNTAIN.ID);
+            Game.World.GetTile(1, 2).Logic.Tile.SetTileId(TestTiles.MOUNTAIN.ID);
 
-            var from = Game.World.Map.GetTile(0, 0);
-            var to = Game.World.Map.GetTile(2, 0);
-            var path = Game.World.Map.FindPath(from, to).ToList();
+            var from = Game.World.GetTile(0, 0);
+            var to = Game.World.GetTile(2, 0);
+            var path = Game.World.FindPath(from, to).ToList();
 
             Assert.NotNull(path);
             Assert.That(path.Count == 9);

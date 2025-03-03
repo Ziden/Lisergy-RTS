@@ -18,7 +18,7 @@ namespace WebGameLogic
 
         [HttpPost]
         [Route("execute")]
-        private void Execute([FromBody]CloudscriptRequest<FunctionArgument> request)
+        private void Execute([FromBody] CloudscriptRequest<FunctionArgument> request)
         {
             ExecuteInternal(request.FunctionArgument);
         }

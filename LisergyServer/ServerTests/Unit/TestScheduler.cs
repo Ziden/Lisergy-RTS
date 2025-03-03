@@ -1,5 +1,5 @@
 using Game;
-using Game.Engine;
+using Game.Engine.Events;
 using Game.Engine.Scheduler;
 using NUnit.Framework;
 using ServerTests;
@@ -90,7 +90,7 @@ namespace UnitTests
             Assert.AreEqual(t2, _scheduler.NextTask);
             Assert.AreEqual(2, _scheduler.PendingTasks);
         }
-        
+
         [Test]
         public void TackingUnmanagedMemory()
         {
@@ -100,18 +100,18 @@ namespace UnitTests
 
             Assert.AreNotEqual(t1.Pointer, t2.Pointer);
             Assert.AreNotEqual(t1.Pointer, t3.Pointer);
-            
-            Assert.IsTrue(UnmanagedMemory._allocs.ContainsKey(t1.Pointer));
-            Assert.IsTrue(UnmanagedMemory._allocs.ContainsKey(t2.Pointer));
-            Assert.IsTrue(UnmanagedMemory._allocs.ContainsKey(t3.Pointer));
-            
+
+            Assert.IsTrue(ClassPool<GameTaskData>.IsUsed(t1.Pointer));
+            Assert.IsTrue(ClassPool<GameTaskData>.IsUsed(t2.Pointer));
+            Assert.IsTrue(ClassPool<GameTaskData>.IsUsed(t3.Pointer));
+
             t1.Dispose();
             t2.Dispose();
             t3.Dispose();
-            
-            Assert.IsFalse(UnmanagedMemory._allocs.ContainsKey(t1.Pointer));
-            Assert.IsFalse(UnmanagedMemory._allocs.ContainsKey(t2.Pointer));
-            Assert.IsFalse(UnmanagedMemory._allocs.ContainsKey(t3.Pointer));
+
+            Assert.IsFalse(ClassPool<GameTaskData>.IsUsed(t1.Pointer));
+            Assert.IsFalse(ClassPool<GameTaskData>.IsUsed(t2.Pointer));
+            Assert.IsFalse(ClassPool<GameTaskData>.IsUsed(t3.Pointer));
         }
 
         [Test]
@@ -158,7 +158,7 @@ namespace UnitTests
             _scheduler.SetLogicalTime(DateTime.UnixEpoch);
 
             var t1 = new TestTask(_game, TimeSpan.FromSeconds(10));
-            
+
             _scheduler.Tick(DateTime.UnixEpoch + TimeSpan.FromMilliseconds(1));
 
             Assert.AreEqual(t1, _scheduler.NextTask);

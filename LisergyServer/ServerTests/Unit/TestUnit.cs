@@ -1,9 +1,10 @@
-using Game.Entity;
 using Game.Events.ServerEvents;
+using Game.Specs;
 using Game.Systems.Battler;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
+using Tests.Unit.Stubs;
 
 namespace UnitTests
 {
@@ -23,9 +24,9 @@ namespace UnitTests
             var player = Game.GetTestPlayer();
             var party = player.Parties.First();
 
-            Assert.AreEqual(0, player.Data.StoredUnits.Count);
+            Assert.AreEqual(0, player.PlayerData.StoredUnits.Count);
             Assert.AreEqual(Game.Specs.InitialUnitSpecId, party.Get<BattleGroupComponent>().Units.Leader.SpecId);
-            Assert.That(party.Tile.EntitiesIn.Contains(party));
+            Assert.That(party.Logic.Map.GetTile().Logic.Vision.GetEntitiesViewing().Contains(party.EntityId));
         }
 
         [Test]
@@ -59,9 +60,9 @@ namespace UnitTests
 
             var party = player.Parties.First();
 
-            var tile = Game.World.Map.GetTile(party.Tile.X, party.Tile.Y);
+            var tile = Game.World.GetTile(party.GetTile().X, party.GetTile().Y);
 
-            Assert.AreEqual(tile, party.Tile);
+            Assert.AreEqual(tile, party.GetTile());
         }
 
         [Test]
@@ -83,7 +84,7 @@ namespace UnitTests
             var building = player.Buildings.First();
             var party = player.Parties.First();
 
-            var tile = party.Tile;
+            var tile = party.GetTile();
 
             var visibleEvent = Game.SentServerPackets.Where(e => e is EntityUpdatePacket && ((EntityUpdatePacket)e).EntityId == party.EntityId).FirstOrDefault() as EntityUpdatePacket;
 

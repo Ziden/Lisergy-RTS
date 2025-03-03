@@ -1,7 +1,7 @@
-﻿using MapServer;
-using Terminal.Gui;
+﻿using Game.Engine;
+using MapServer;
 using ServerTests.Integration.Stubs;
-using Game.Engine;
+using Terminal.Gui;
 
 bool UI = false;
 
@@ -35,6 +35,6 @@ AppDomain.CurrentDomain.ProcessExit += (e, a) =>
 {
     // standaloneServer.SaveWorld("TestWorld");
 };
-
+standaloneServer.Multithreaded = true;
 standaloneServer.Start();
 standaloneServer.BlockThread();

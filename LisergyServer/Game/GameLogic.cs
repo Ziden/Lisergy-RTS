@@ -1,42 +1,36 @@
-﻿using Game.Engine.ECS;
+﻿using Game.Engine.ECLS;
 using Game.Systems.Battler;
+using Game.Systems.Building;
+using Game.Systems.DeltaTracker;
+using Game.Systems.Dungeon;
+using Game.Systems.FogOfWar;
 using Game.Systems.Map;
 using Game.Systems.Movement;
 using Game.Systems.Player;
 using Game.Systems.Resources;
+using Game.Systems.Tile;
 
 namespace Game
 {
-    /// <summary>
-    /// A logic container for all the entity logic available.
-    /// </summary>
-    public interface IEntityLogic
-    {  
-        public MapLogic Map { get; }
-        public BattleGroupLogic BattleGroup { get;}
-        public PlayerLogic Player { get; }
-        public CourseLogic Movement { get; }
-        public HarvestingLogic Harvesting { get; }
-        public CargoLogic Cargo { get; }
-    }
-
-    /// <summary>
-    /// Wrapper around game logic to wrap for a specific entity
-    /// </summary>
-    public class EntityLogic : IEntityLogic
+    public class EntityLogic
     {
+        public DungeonLogic Dungeon => _systems.Dungeons.GetLogic(_entity);
+        public DeltaCompressionLogic DeltaCompression => _systems.Deltacompression.GetLogic(_entity);
         public MapLogic Map => _systems.Map.GetLogic(_entity);
         public BattleGroupLogic BattleGroup => _systems.BattleGroup.GetLogic(_entity);
+        public BuildingLogic Building => _systems.Building.GetLogic(_entity);
         public PlayerLogic Player => _systems.Players.GetLogic(_entity);
-        public CourseLogic Movement => _systems.EntityMovement.GetLogic(_entity);
+        public MovementLogic Movement => _systems.EntityMovement.GetLogic(_entity);
         public HarvestingLogic Harvesting => _systems.Harvesting.GetLogic(_entity);
         public CargoLogic Cargo => _systems.Cargo.GetLogic(_entity);
+        public EntityVisionLogic Vision => _systems.EntityVision.GetLogic(_entity);
+        public TileLogic Tile => _systems.Tile.GetLogic(_entity);
 
-        private ISystems _systems;
+        private GameSystems _systems;
         private IEntity _entity;
 
-        public EntityLogic(ISystems systems) { _systems = systems; }
-        public IEntityLogic GetLogic(IEntity entity)
+        public EntityLogic(GameSystems systems) { _systems = systems; }
+        public EntityLogic GetLogic(IEntity entity)
         {
             _entity = entity;
             return this;
@@ -45,23 +39,24 @@ namespace Game
 
     public interface IGameLogic
     {
-        public IEntityLogic GetEntityLogic(IEntity e);
+        public GameSystems Systems { get; }
+        public EntityLogic GetEntityLogic(IEntity e);
     }
 
     public class GameLogic : IGameLogic
     {
-        private ISystems _systems;
-        public EntityLogic _entityLogic;
+        public GameSystems Systems { get; set; }
+        private EntityLogic _entityLogic;
 
-        public GameLogic(ISystems systems)
+        public GameLogic(LisergyGame game)
         {
-            _systems = systems;
-            _entityLogic = new EntityLogic(systems);
+            Systems = new GameSystems(game);
+            _entityLogic = new EntityLogic(Systems);
         }
 
         /// <summary>
         /// Gets a reusable logic object for the given entity
         /// </summary>
-        public IEntityLogic GetEntityLogic(IEntity e) => _entityLogic.GetLogic(e);
+        public EntityLogic GetEntityLogic(IEntity e) => _entityLogic.GetLogic(e);
     }
 }

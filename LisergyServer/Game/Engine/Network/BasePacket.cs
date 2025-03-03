@@ -1,4 +1,5 @@
-﻿using Game.Systems.Player;
+﻿using Game.Engine.DataTypes;
+using Game.Systems.Player;
 using System;
 
 
@@ -11,6 +12,9 @@ namespace Game.Engine.Network
         public int ConnectionID;
 
         [NonSerialized]
-        public PlayerEntity Sender;
+        public GameId SenderPlayerId;
+
+        [NonSerialized]
+        public PlayerModel Sender;
     }
 }

@@ -15,6 +15,11 @@
             Instead of requiring to have all tiles generated, it will lazy generate tiles.
             </summary>
         </member>
+        <member name="T:ClientSDK.Data.LazyLoadedPlayers">
+            <summary>
+            Will create players as players are requests but not available
+            </summary>
+        </member>
         <member name="F:ClientSDK.Data.EntityViewState.NOT_RENDERED">
             <summary>
             When an view is created but not yet rendered
@@ -35,7 +40,7 @@
             Represents a graphical representation of game entity that the client is aware of
             </summary>
         </member>
-        <member name="P:ClientSDK.Data.IEntityView.BaseEntity">
+        <member name="P:ClientSDK.Data.IEntityView.Entity">
             <summary>
             Gets the base entity of this view
             </summary>
@@ -55,12 +60,6 @@
             Create the new graphical part of this view
             </summary>
         </member>
-        <member name="T:ClientSDK.Data.EntityViewRegistry">
-            <summary>
-            Handles client registration of entity view types so the sdk knows the available view objects
-            Will use them for instantiation
-            </summary>
-        </member>
         <member name="T:ClientSDK.Data.IClientEvent">
             <summary>
             To mark a game event as a only client SDK event
@@ -74,11 +73,6 @@
         <member name="T:ClientSDK.Data.LazyLoadChunkMap">
             <summary>
             Chunk map that can lazy load tiles and chunk into memory
-            </summary>
-        </member>
-        <member name="T:ClientSDK.Data.LazyLoadedPlayers">
-            <summary>
-            Will create players as players are requests but not available
             </summary>
         </member>
         <member name="T:ClientSDK.Data.OtherPlayer">
@@ -133,13 +127,13 @@
             Module for player input actions. This module encapsulates all potential actions the player can do on the game using network
             </summary>
         </member>
-        <member name="M:ClientSDK.Services.IActionModule.MoveParty(Game.Systems.Party.PartyEntity,Game.Tile.TileEntity,Game.Systems.Movement.CourseIntent)">
+        <member name="M:ClientSDK.Services.IActionModule.MoveEntity(Game.Engine.ECLS.IEntity,Game.Tile.TileModel,Game.Systems.Movement.CourseIntent)">
             <summary>
             Tries to move the given entity to the target destination.
             Will return true or false if the entity is able to move there or not.
             </summary>
         </member>
-        <member name="M:ClientSDK.Services.IActionModule.StopParty(Game.Systems.Party.PartyEntity)">
+        <member name="M:ClientSDK.Services.IActionModule.StopEntity(Game.Engine.ECLS.IEntity)">
             <summary>
             Stops the party for any actions.
             </summary>
@@ -171,25 +165,41 @@
             Expose basic entity control functionality like moving or taking entity actions.
             </summary>
         </member>
-        <member name="M:ClientSDK.Services.IGameView.GetOrCreateView(Game.Engine.ECS.IEntity)">
+        <member name="M:ClientSDK.Services.IEntityModule.OnComponentUpdate``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
+            <summary>
+            Registers a component sync. 
+            Whenever the given entity type has the given component type updated, instead of the values simply being copied
+            the sync code will be called.
+            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Services.IEntityModule.OnComponentRemoved``1(System.Action{Game.Engine.ECLS.IEntity,``0})">
+            <summary>
+            Registers a component removed callback. 
+            Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
+            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Services.IEntityModule.OnComponentAdded``1(System.Action{Game.Engine.ECLS.IEntity,``0})">
+            <summary>
+            Registers a component removed callback. 
+            Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
+            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Services.IEntityModule.RemoveListener(System.Object)">
+            <summary>
+            Removes all event callbacks from the given object
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Services.IGameView.GetOrCreateView(Game.Engine.ECLS.IEntity)">
             <summary>
             Gets or creates a given entity view
             </summary>
         </member>
-        <member name="M:ClientSDK.Services.IGameView.GetView``1(Game.Engine.ECS.IEntity)">
-            <summary>
-            Gets an entity view and casts to the given type.
-            Will throw if not existant or wrong type
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Services.IGameView.GetEntityView(Game.Engine.ECS.IEntity)">
+        <member name="M:ClientSDK.Services.IGameView.GetEntityView(Game.Engine.ECLS.IEntity)">
             <summary>
             Gets an uncasted entity view
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Services.IGameView.RegisterView``2">
-            <summary>
-            Registers a view type. Whenever the client receives an entity of the given type it will instantiate the view of that type.
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "T:ClientSDK.Services.IPlayerModule" -->
@@ -202,11 +212,6 @@
             <summary>
             Gets the local player reference.
             Shall contain all data the client is aware of
-            </summary>
-        </member>
-        <member name="T:ClientSDK.Services.IWorldModule">
-            <summary>
-            Service responsible for handling authentication and specific account and profile information
             </summary>
         </member>
         <member name="T:ClientSDK.Modules.IChatModule">
@@ -229,19 +234,19 @@
             Sends a message to chat
             </summary>
         </member>
-        <member name="T:ClientSDK.Modules.IComponentsModule">
+        <member name="T:ClientSDK.Modules.IComponentSync">
             <summary>
             Enables the game to more specifically control how to update components.
             Components can be synced automatically (just copy data) or have manual syncs to handle things manually.
             This module is able to implement callbacks from when a given component is synced so the client can react to it.
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.IComponentsModule.ProccessUpdate(Game.Engine.ECS.IEntity,Game.ECS.IComponent[],System.UInt32[])">
+        <member name="M:ClientSDK.Modules.IComponentSync.ProccessUpdate(Game.Engine.ECLS.IEntity,Game.Engine.ECLS.IComponent[],System.UInt32[])">
             <summary>
             Updates the components of the given entity
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.IComponentsModule.OnComponentUpdate``1(System.Action{Game.Engine.ECS.IEntity,``0,``0})">
+        <member name="M:ClientSDK.Modules.IComponentSync.OnComponentUpdate``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
             <summary>
             Registers a component sync. 
             Whenever the given entity type has the given component type updated, instead of the values simply being copied
@@ -249,19 +254,26 @@
             The callback has the Entity, OLD VALUE and NEW VALUE parameters.
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.IComponentsModule.OnComponentRemoved``1(System.Action{Game.Engine.ECS.IEntity,``0})">
+        <member name="M:ClientSDK.Modules.IComponentSync.OnComponentRemoved``1(System.Action{Game.Engine.ECLS.IEntity,``0})">
             <summary>
             Registers a component removed callback. 
             Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
             The callback has the Entity, OLD VALUE and NEW VALUE parameters.
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.IComponentsModule.RemoveListener(System.Object)">
+        <member name="M:ClientSDK.Modules.IComponentSync.OnComponentAdded``1(System.Action{Game.Engine.ECLS.IEntity,``0})">
+            <summary>
+            Registers a component removed callback. 
+            Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
+            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Modules.IComponentSync.RemoveListener(System.Object)">
             <summary>
             Removes all event callbacks from the given object
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.ComponentsModule.ProccessUpdate(Game.Engine.ECS.IEntity,Game.ECS.IComponent[],System.UInt32[])">
+        <member name="M:ClientSDK.Modules.ComponentSynchronizer.ProccessUpdate(Game.Engine.ECLS.IEntity,Game.Engine.ECLS.IComponent[],System.UInt32[])">
             <summary>
             Updates the components of the given entity.
             Will copy all new values to old values
@@ -275,7 +287,7 @@
             The only thing this won't keep track is the player data which is handled in <see cref="T:ClientSDK.Services.IPlayerModule"/>
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.LogicModule.OnUpdatePlacement(Game.Engine.ECS.IEntity,Game.Systems.Map.MapPlacementComponent,Game.Systems.Map.MapPlacementComponent)">
+        <member name="M:ClientSDK.Modules.LogicModule.OnUpdatePlacement(Game.Engine.ECLS.IEntity,Game.Systems.Map.MapPlacementComponent,Game.Systems.Map.MapPlacementComponent)">
             <summary>
             Whenever map placement updates are sent to the client we re-position the entity on the client logic.
             This will trigger all exploration events
@@ -291,19 +303,19 @@
             Can be null when receiving more than one
             </summary>
         </member>
-        <member name="T:ClientSDK.SDKEvents.ClientAwareOfEntityEvent">
-            <summary>
-            Triggered when the client gets aware of a new entity.
-            This is only called when the entity is created for the first time
-            So if player sees an entity, this entity goes to the fog and comes back this is not called twice
-            This is not applied to tiles or players
-            </summary>
-        </member>
         <member name="T:ClientSDK.SDKEvents.EntityMovementRequestStarted">
             <summary>
             Event triggered whenever a player attempts to move an entity and the request is sent to server.
             Server can still stop the movement, this is a client sided event.
             After this is sent the client should start to receive component updates regarding the movement.
+            </summary>
+        </member>
+        <member name="T:ClientSDK.SDKEvents.EntityViewCreated">
+            <summary>
+            Triggered when the client gets aware of a new entity.
+            This is only called when the entity is created for the first time
+            So if player sees an entity, this entity goes to the fog and comes back this is not called twice
+            This is not applied to tiles or players
             </summary>
         </member>
         <member name="T:ClientSDK.SDKEvents.GameStartedEvent">
@@ -317,17 +329,11 @@
             Called whenever a battle owned by the player is finished.
             </summary>
         </member>
-        <member name="T:ClientSDK.SDKEvents.OwnEntityInfoReceived`1">
+        <member name="T:ClientSDK.SDKEvents.OwnEntityInfoReceived">
             <summary>
             Whenever the local player receives info of his own entities
             This event can be used to display own entity updates on the UI 
             When this event fires the entity should have all its components synced.
-            </summary>
-        </member>
-        <member name="T:ClientSDK.SDKEvents.TileViewCreated">
-            <summary>
-            Called whenever a tile view is created for the first time.
-            This event is called before starting to render the tile view.
             </summary>
         </member>
         <member name="T:ClientSDK.IClientModule">

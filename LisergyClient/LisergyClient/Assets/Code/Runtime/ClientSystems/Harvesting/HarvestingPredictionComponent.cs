@@ -1,10 +1,8 @@
 
 using ClientSDK;
 using Cysharp.Threading.Tasks;
-using Game.ECS;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using Game.Engine.Events;
-using Game.Events;
 using Game.Systems.Resources;
 using Game.Tile;
 using GameData;
@@ -13,10 +11,10 @@ using System;
 /// <summary>
 /// Predicts how much and when would harvest new resources and send client events based on its predictions
 /// </summary>
-public class HarvestingPredictionComponent : IReferenceComponent, IDisposable
+public class HarvestingPredictionComponent : IComponent, IDisposable
 {
     private IEntity _entity;
-    private TileEntity _tile;
+    private TileModel _tile;
     private TileResourceComponent _initialComponent;
     private ResourceSpec _resourceSpec;
     private ResourceHarvestPointSpec _harvestSpec;
@@ -29,7 +27,7 @@ public class HarvestingPredictionComponent : IReferenceComponent, IDisposable
         _client = client;
         _entity = harvester;
         var tilePosition = _entity.Get<HarvestingComponent>().Tile;
-        _tile = client.Game.World.Map.GetTile(tilePosition.X, tilePosition.Y);
+        _tile = client.Game.World.GetTile(tilePosition.X, tilePosition.Y);
         _initialComponent = _tile.Get<TileResourceComponent>();
         _resourceSpec = _entity.Game.Specs.Resources[_initialComponent.Resource.ResourceId];
         _harvestSpec = _tile.HarvestPointSpec;
@@ -53,13 +51,13 @@ public class HarvestingPredictionComponent : IReferenceComponent, IDisposable
         _client.UnityServices().Notifications.Display<FinishedHarvestingNotification>(new FinishedHarvestingParam()
         {
             Resource = new ResourceStackData(_initialComponent.Resource.ResourceId, _harvestedTotal),
-            Entity = _entity.GetEntityView() as IUnityEntityView,
+            Entity = _entity.GetView(),
         });
     }
 
     private async UniTaskVoid TrackerTask()
     {  
-        var harvestState = _entity.EntityLogic.Harvesting.CalculateCurrentState();
+        var harvestState = _entity.Logic.Harvesting.CalculateCurrentState();
         var nextHarvest = harvestState.TimeSnapshot.TimeBlock.StartTime + _harvestSpec.HarvestTimePerUnit;
         _harvestedTotal = 0;
         if (nextHarvest < _client.Game.GameTime)

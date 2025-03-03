@@ -13,9 +13,9 @@ namespace Assets.Code.Battle
         public BattleListener(EventBus<BasePacket> networkEvents)
         {
             _screens = UnityServicesContainer.Resolve<IUiService>();
-            //networkEvents.Register<BattleLogPacket>(this, BattleLog);
-            //networkEvents.Register<BattleResultSummaryPacket>(this, BattleSummary);
-            //networkEvents.Register<BattleStartPacket>(this, BattleStart);
+            //networkEvents.On<BattleLogPacket>(this, BattleLog);
+            //networkEvents.On<BattleResultSummaryPacket>(this, BattleSummary);
+            //networkEvents.On<BattleStartPacket>(this, BattleStart);
         }
 
         /*

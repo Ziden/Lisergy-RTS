@@ -1,15 +1,14 @@
 ﻿using Assets.Code.Assets.Code.Runtime.UIScreens;
 using Assets.Code.Assets.Code.UIScreens;
 using Assets.Code.Assets.Code.UIScreens.Base;
-using Assets.Code.UI;
 using ClientSDK;
 using ClientSDK.SDKEvents;
 using Cysharp.Threading.Tasks;
 using Game.Engine.DataTypes;
 using Game.Engine.Events.Bus;
 using Game.Systems.Battle;
-using Stateless;
 using UnityEngine;
+using Stateless;
 
 namespace Assets.Code.Assets.Code
 {
@@ -21,7 +20,6 @@ namespace Assets.Code.Assets.Code
     {
         private enum State { Boot, Login, MapView, Battle };
         private enum Trigger { LoggedIn, LocalBattleStart, LocalBattleFinish };
-
         private StateMachine<State, Trigger> _stateMachine;
         private IUiService _screens;
         private IGameClient _client;
@@ -54,7 +52,7 @@ namespace Assets.Code.Assets.Code
 
         private void AddListeners()
         {
-            _client.ClientEvents.Register<GameStartedEvent>(this, e => _stateMachine.Fire(Trigger.LoggedIn));
+            _client.ClientEvents.On<GameStartedEvent>(this, e => _stateMachine.Fire(Trigger.LoggedIn));
         }
 
         private void OnEnterMapState()

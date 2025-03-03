@@ -1,5 +1,4 @@
-﻿using Game.ECS;
-using Game.Engine.ECS;
+﻿using Game.Engine.ECLS;
 using Game.Engine.Events;
 using Game.Engine.Network;
 using Game.Systems.Battle.BattleActions;
@@ -24,6 +23,13 @@ namespace Game.Engine
         {
             if (Serializer != null)
             {
+                if (extras.Length > 0)
+                {
+                    foreach (var e in extras)
+                    {
+                        Serializer.AddTypes(extras);
+                    }
+                }
                 return;
             }
             var models = GetDefaultSerializationTypes().ToList();
@@ -35,8 +41,8 @@ namespace Game.Engine
             models.Add(typeof(BattleEvent));
             models.Add(typeof(BattleAction));
             models.Add(typeof(AttackAction));
-            models.Add(typeof(TileData));
-            models.Add(typeof(PlayerProfile));
+            models.Add(typeof(TileDataComponent));
+            models.Add(typeof(PlayerProfileComponent));
             models.Add(typeof(SerializedEntity));
             models.Add(typeof(SerializedPlayer));
 
@@ -139,7 +145,7 @@ namespace Game.Engine
         }
 
         // TODO: Use serialize direct
-        public static byte[] FromAnyType<T>(T o)
+        public static byte[] FromAnyType(object o)
         {
             using (var stream = new MemoryStream())
             {

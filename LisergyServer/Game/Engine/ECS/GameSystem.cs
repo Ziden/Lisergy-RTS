@@ -1,21 +1,20 @@
-﻿using Game.ECS;
-using Game.Engine.Events;
+﻿using Game.Engine.Events;
+using Game.Engine.Events.Bus;
 using Game.World;
 using System;
 
-namespace Game.Engine.ECS
+namespace Game.Engine.ECLS
 {
     public interface IGameSystem
     {
-        void On<EventType>(Action<IEntity, EventType> cb) where EventType : IBaseEvent;
+        void OnEntityEvent<EventType>(Action<IEntity, EventType> cb) where EventType : IBaseEvent;
         void CallEvent<EventType>(IEntity entityType, EventType ev) where EventType : IBaseEvent;
     }
 
-    public abstract class GameSystem<ComponentType> : IGameSystem where ComponentType : unmanaged, IComponent
+    public abstract class GameSystem<ComponentType> : IGameSystem, IEventListener where ComponentType : IComponent
     {
         protected SystemEventBus<ComponentType> EntityEvents = new SystemEventBus<ComponentType>();
         public IGame Game { get; private set; }
-        public ISystems Systems => Game.Systems;
         public IGameLogic GameLogic => Game.Logic;
         public IGameWorld World => Game.World;
         public IGamePlayers Players => World.Players;
@@ -25,18 +24,32 @@ namespace Game.Engine.ECS
         public virtual void RegisterListeners() { }
         internal virtual void OnComponentRemoved(IEntity owner, ComponentType component) { }
 
-        public void On<EventType>(Action<IEntity, EventType> cb) where EventType : IBaseEvent
+        /// <summary>
+        /// Fired whenever an entity receives an event that matches the component defined in the system component type
+        /// </summary>
+        public void OnEntityEvent<EventType>(Action<IEntity, EventType> cb) where EventType : IBaseEvent
         {
             EntityEvents.On(cb);
+        }
+
+        // TODO: Separate better entity and global events
+        /// <summary>
+        /// Fired whenever any entity receive an event of the given type
+        /// </summary>
+        public void OnAnyEvent<EventType>(Action<EventType> cb) where EventType : IBaseEvent
+        {
+            Game.Events.On(this, cb);
         }
 
         public void CallEvent<EventType>(IEntity entityType, EventType ev) where EventType : IBaseEvent
         {
             EntityEvents.CallEntityEvent(entityType, ev);
         }
+
+        public EntityLogic GetLogic(IEntity e) => GameLogic.GetEntityLogic(e);
     }
 
-    public class LogicSystem<ComponentType, LogicType> : GameSystem<ComponentType> where ComponentType : unmanaged, IComponent where LogicType : IComponentLogic<ComponentType>
+    public class LogicSystem<ComponentType, LogicType> : GameSystem<ComponentType> where ComponentType : IComponent where LogicType : BaseEntityLogic<ComponentType>
     {
         private LogicType _logic;
 
@@ -50,10 +63,6 @@ namespace Game.Engine.ECS
         /// </summary>
         public LogicType GetLogic(IEntity entity)
         {
-            if (!entity.Components.Has<ComponentType>())
-            {
-                throw new Exception($"Entity {entity} Trying to use logic {typeof(LogicType).Name} without having component {typeof(ComponentType).Name}");
-            }
             _logic.Entity = entity;
             return _logic;
         }

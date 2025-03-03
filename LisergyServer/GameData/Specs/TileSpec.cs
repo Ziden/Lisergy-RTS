@@ -9,6 +9,7 @@ namespace GameData
     public struct TileSpecId
     {
         public byte Id;
+
         public static implicit operator byte(TileSpecId d) => d.Id;
         public static implicit operator TileSpecId(byte b) => new TileSpecId() { Id = b };
 
@@ -28,12 +29,12 @@ namespace GameData
         /// Any resources that are always present on this tile id
         /// </summary>
         public HarvestPointSpecId? ResourceSpotSpecId;
-        
+
         /// <summary>
         /// Change to tile id when resource is depleted
         /// </summary>
         public TileSpecId ChangeToTileIdWhenDepleted;
-        
+
         // 1=passable, 0=impassable, 0.5% slower
         public float MovementFactor;
 

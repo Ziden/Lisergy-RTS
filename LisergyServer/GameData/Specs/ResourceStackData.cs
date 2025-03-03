@@ -30,7 +30,7 @@ namespace Game.Systems.Resources
 
         public void Add(in ResourceStackData stack)
         {
-            if(_specId != stack._specId)
+            if (_specId != stack._specId)
             {
                 if (_amount > 0) throw new Exception("Cannot add stack to resource stack of different type when not empty");
                 _specId = stack._specId;

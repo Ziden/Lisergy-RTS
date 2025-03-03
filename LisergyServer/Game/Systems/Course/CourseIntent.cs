@@ -10,7 +10,7 @@
         /// Defensive means the entity will avoid combat at all costs and will only engage
         /// if attacked by another entity.
         /// </summary>
-        Defensive, 
+        Defensive,
 
         /// <summary>
         /// Offensive means the entity will engage in combat with the target entity on the target last

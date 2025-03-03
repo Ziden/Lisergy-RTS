@@ -1,5 +1,5 @@
-﻿using GameData;
-using System;
+﻿using Game.Engine;
+using GameData;
 
 namespace GameDataTest
 {
@@ -7,6 +7,7 @@ namespace GameDataTest
     {
         public static GameSpec Generate()
         {
+            Serialization.LoadSerializers();
             var spec = new GameSpec(1);
             TestBuildings.Generate(ref spec);
             TestTiles.Generate(ref spec);

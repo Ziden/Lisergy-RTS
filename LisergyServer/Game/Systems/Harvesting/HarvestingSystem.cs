@@ -1,5 +1,6 @@
-﻿using Game.Engine.ECS;
-using Game.Systems.Course;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.ECLS;
+using Game.Engine.Events;
 using Game.Systems.Map;
 using Game.Systems.Movement;
 
@@ -7,26 +8,34 @@ namespace Game.Systems.Resources
 {
     public unsafe class HarvestingSystem : LogicSystem<HarvesterComponent, HarvestingLogic>
     {
-        public HarvestingSystem(LisergyGame game) : base(game) {}
+        public HarvestingSystem(LisergyGame game) : base(game) { }
 
         public override void RegisterListeners()
         {
-            EntityEvents.On<CourseFinishEvent>(OnCourseFinish);
-            EntityEvents.On<EntityMoveOutEvent>(OnMoveOutTile);
+            EntityEvents.On<ComponentUpdateEvent<MapPlacementComponent>>(OnUpdatePosition);
+            EntityEvents.On<ComponentUpdateEvent<MovementComponent>>(OnUpdateMovementCourse);
         }
 
-        private void OnMoveOutTile(IEntity e, EntityMoveOutEvent ev)
+        private void OnUpdateMovementCourse(IEntity e, ComponentUpdateEvent<MovementComponent> ev)
         {
-            var logic = GetLogic(e);
-            if (logic.IsHarvesting()) logic.StopHarvesting();
+            if (ev.Old != null && ev.Old.CourseId != GameId.ZERO && ev.New?.CourseId == GameId.ZERO)
+            {
+                if (ev.Old.MovementIntent == CourseIntent.Harvest)
+                {
+                    var logic = GetLogic(e);
+                    var tile = e.Logic.Map.GetTile();
+                    if (logic.CanHarvest(tile)) logic.StartHarvesting(tile);
+                }
+            }
         }
 
-        private void OnCourseFinish(IEntity entity, CourseFinishEvent ev)
+        private void OnUpdatePosition(IEntity e, ComponentUpdateEvent<MapPlacementComponent> ev)
         {
-            if (ev.Intent != CourseIntent.Harvest) return;
-            var logic = GetLogic(entity);
-            if (logic.CanHarvest(ev.ToTile)) logic.StartHarvesting(ev.ToTile);
+            if (ev.Old != null)
+            {
+                var logic = GetLogic(e);
+                if (logic.IsHarvesting()) logic.StopHarvesting();
+            }
         }
-
     }
 }

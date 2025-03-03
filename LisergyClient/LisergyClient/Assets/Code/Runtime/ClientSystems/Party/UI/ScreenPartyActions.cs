@@ -1,8 +1,10 @@
 using Assets.Code.Assets.Code.Runtime.UIScreens.Layout;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.Views;
+using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Systems.Dungeon;
+using Game.Systems.Map;
 using Game.Systems.Party;
 using Game.Tile;
 using GameAssets;
@@ -21,8 +23,8 @@ namespace Assets.Code.UI
 
     public class ActionBarParams : IGameUiParam
     {
-        public PartyEntity Party;
-        public TileEntity Tile;
+        public IEntity Party;
+        public TileModel Tile;
         public Action<EntityAction> OnChosenAction;
     }
 
@@ -48,27 +50,32 @@ namespace Assets.Code.UI
             DisplayActionsFor(setup.Party, setup.Tile);
         }
 
-        private List<EntityAction> EvaluateActions(PartyEntity party, TileEntity tile)
+        private List<EntityAction> EvaluateActions(IEntity party, TileModel tile)
         {
-            if(party.Tile == null)
+            if(!party.Components.TryGet<MapPlacementComponent>(out var placed))
             {
                 return NoPartyActions;
             }
-            if (party.Tile == tile || tile == null)
+            var inTile = GameClient.Game.World.GetTile(placed.Position);
+            if (inTile == tile || tile == null)
             {
                 return NoPartyActions;
             }
-            var tileView = GameClient.Modules.Views.GetView<TileView>(tile);
+            var tileView = GameClient.Modules.Views.GetEntityView(tile.TileEntity);
             var actions = new List<EntityAction>();
-            if (tileView.Entity.Building is DungeonEntity)
+            var buildingOnTile = tileView.Entity.Logic.Tile.GetBuildingOnTile();
+            if (buildingOnTile != null)
             {
                 actions.Add(EntityAction.CHECK);
-                if(GameClient.Modules.Player.LocalPlayer.Buildings.Any()) actions.Add(EntityAction.ATTACK);
+                if (buildingOnTile.OwnerID.IsMine())
+                {
+                    actions.Add(EntityAction.ATTACK);
+                }
                 return actions; 
             }
   
             actions.Add(EntityAction.MOVE);
-            if(party.EntityLogic.Harvesting.GetAvailableResourcesToHarvest(tile).Amount > 0)
+            if(party.Logic.Harvesting.GetAvailableResourcesToHarvest(tile).Amount > 0)
             {
                 actions.Add(EntityAction.HARVEST);
             }        
@@ -80,14 +87,14 @@ namespace Assets.Code.UI
             GetParameter<ActionBarParams>().OnChosenAction(a);
         }
 
-        private void MoveTo(TileEntity tile)
+        private void MoveTo(TileModel tile)
         {
-            var view = GameClient.Modules.Views.GetView<TileView>(tile);
+            var view = GameClient.Modules.Views.GetEntityView(tile.TileEntity) as IGameObject;
             var newPosition = RuntimePanelUtils.CameraTransformWorldToPanel(Root.panel, view.GameObject.transform.position, Camera.main);
             Root.transform.position = newPosition;
         }
 
-        private void DisplayActionsFor(PartyEntity party, TileEntity tile)
+        private void DisplayActionsFor(IEntity party, TileModel tile)
         {
             var actions = EvaluateActions(party, tile);
             if (actions == null || actions.Count == 0)

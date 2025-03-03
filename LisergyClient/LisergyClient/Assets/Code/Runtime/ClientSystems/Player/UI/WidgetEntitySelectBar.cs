@@ -3,7 +3,9 @@ using Assets.Code.ClientSystems.Party.UI;
 using ClientSDK;
 using ClientSDK.SDKEvents;
 using ClientSDK.Services;
+using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
+using Game.Entities;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Party;
@@ -54,24 +56,27 @@ namespace Player.UI
         public override void OnAddedDuringGame(IGameClient client)
         {
             _playerModule = client.Modules.Player;
-            if (_playerModule.LocalPlayer == null || _playerModule.LocalPlayer.Parties == null) return;
+            if (_playerModule.LocalPlayer == null) return;
 
-            client.ClientEvents.Register<OwnEntityInfoReceived<PartyEntity>>(this, OnOwnPartyReceived);
-            client.ClientEvents.Register<OwnEntityInfoReceived<PlayerBuildingEntity>>(this, OnBuildingReceived);
+            client.ClientEvents.On<OwnEntityInfoReceived>(this, OnEntityReceived);
+
+            var parties = _playerModule.LocalPlayer.EntityLogic.GetParties();
+            var buildings = _playerModule.LocalPlayer.EntityLogic.GetBuildings();
+
             for (byte i = 0; i < 4; i++)
             {
-                if (i < _playerModule.LocalPlayer.Parties.Count)
+                if (i < parties.Count)
                 {
-                    var party = _playerModule.LocalPlayer.Parties[i];
+                    var party = parties[i]; ;
                     _partyButtons[i].DisplayEntity(party);
                 }
                 else _partyButtons[i].SetEmpty();
             }
-            if (ClientViewState.SelectedEntityView == null && _playerModule.LocalPlayer.Parties.Count > 0)
+            if (ClientViewState.SelectedEntityView == null && parties.Count > 0)
             {
-                SelectEntity(_playerModule.LocalPlayer.Parties[0]);
+                SelectEntity(parties[0]);
             }
-            if (_playerModule.LocalPlayer.Buildings.Count == 0)
+            if (buildings.Count == 0)
             {
                 _townButton.style.display = DisplayStyle.None;
                 _buildButton.style.display = DisplayStyle.Flex;
@@ -88,27 +93,30 @@ namespace Player.UI
             client.ClientEvents.RemoveListener(this);
         }
 
-        private void OnBuildingReceived(OwnEntityInfoReceived<PlayerBuildingEntity> ev)
+        private void OnEntityReceived(OwnEntityInfoReceived ev)
         {
-            _townButton.style.visibility = Visibility.Visible;
-        }
-
-        private void OnOwnPartyReceived(OwnEntityInfoReceived<PartyEntity> ev)
-        {
-            if (ev.Entity.Get<BattleGroupComponent>().Units.Valids == 0) return;
-
-            _partyButtons[ev.Entity.PartyIndex].DisplayEntity(ev.Entity);
-
-            if (ClientViewState.SelectedEntityView == null)
+            if(ev.Entity.EntityType == EntityType.Party)
             {
-                SelectEntity(ev.Entity);
+                if (ev.Entity.Get<BattleGroupComponent>().Units.Valids == 0) return;
+
+                _partyButtons[0].DisplayEntity(ev.Entity);
+
+                if (ClientViewState.SelectedEntityView == null)
+                {
+                    SelectEntity(ev.Entity);
+                }
+            } else
+            {
+                _townButton.style.visibility = Visibility.Visible;
             }
         }
 
         private void PartyButtonClick(int partyIndex)
         {
-            if (_playerModule.LocalPlayer.Parties.Count <= partyIndex) return;
-            var party = _playerModule.LocalPlayer.Parties[partyIndex];
+            var playerParties = _playerModule.LocalPlayer.EntityLogic.GetParties();
+            var parties = _partyButtons[partyIndex];
+            if (playerParties.Count <= partyIndex) return;
+            var party = playerParties[partyIndex];
             if (party == null) return;
             SelectEntity(party);
         }
@@ -133,11 +141,11 @@ namespace Player.UI
             _buttonCursor.style.top = on.worldBound.min.y;
         }
 
-        private void SelectEntity(PartyEntity party)
+        private void SelectEntity(IEntity party)
         {
-            var button = _partyButtons[party.PartyIndex];
+            var button = _partyButtons[0]; // TODO:
             PositionCursor(button);
-            ClientViewState.SelectedEntityView = party.GetEntityView();
+            ClientViewState.SelectedEntityView = party.GetView();
         }
 
         public new class UxmlFactory : UxmlFactory<WidgetEntitySelectBar, UxmlTraits> { }

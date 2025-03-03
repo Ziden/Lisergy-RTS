@@ -36,7 +36,7 @@ namespace UnitTests
         {
             Serialization.LoadSerializers();
 
-            var p = new LoginResultPacket() { Profile = new PlayerProfile(GameId.Generate()) };
+            var p = new LoginResultPacket() { Profile = new PlayerProfileComponent(GameId.Generate()) };
 
             var d = new Dictionary<GameId, int>();
 
@@ -111,7 +111,7 @@ namespace UnitTests
         [Test]
         public void TestDebugMode()
         {
-            GameId.DEBUG_MODE = 1;
+            GameId.INCREMENTAL_MODE = 1;
             GameId first = GameId.Generate();
 
             Assert.AreEqual(0, first._leftside);

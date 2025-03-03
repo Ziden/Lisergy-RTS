@@ -6,7 +6,7 @@ namespace GameDataTest.TestWorldGenerator
 {
     public class TestWorld : GameWorld
     {
-        public TestWorld(IGame game) : base(game, 100, 100)
+        public TestWorld(IGame game) : base(game, 20, 20)
         {
             Seed = 12345;
             ChunkPopulators.Add(new DungeonsPopulator());

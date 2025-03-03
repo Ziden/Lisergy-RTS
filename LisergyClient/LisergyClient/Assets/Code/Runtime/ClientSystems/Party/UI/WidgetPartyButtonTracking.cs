@@ -1,7 +1,7 @@
 using Assets.Code.ClientSystems.Party.UI;
 using ClientSDK;
 using Cysharp.Threading.Tasks;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Systems.Battler;
 using Game.Systems.Movement;
@@ -86,8 +86,8 @@ namespace Party.UI
 
             _client = client;
             _trackedEntity = partyWidget.PartyEntity;
-            client.ClientEvents.Register<HarvestingUpdateEvent>(this, OnHarvestUpdate);
-            client.Modules.Components.OnComponentUpdate<CourseComponent>(OnCourseUpdate);
+            client.ClientEvents.On<HarvestingUpdateEvent>(this, OnHarvestUpdate);
+            client.Modules.Entities.OnComponentUpdate<MovementComponent>(OnCourseUpdate);
 
             if (_trackedEntity != null)
             {
@@ -98,7 +98,7 @@ namespace Party.UI
         public override void OnRemovedDuringGame(IGameClient client)
         {
             client.ClientEvents.RemoveListener(this);
-            client.Modules.Components.RemoveListener(this);
+            client.Modules.Entities.RemoveListener(this);
         }
 
         private void OnHarvestUpdate(HarvestingUpdateEvent e)
@@ -108,7 +108,7 @@ namespace Party.UI
             UpdateResourceTask(e);
         }
 
-        private void OnCourseUpdate(IEntity e, CourseComponent old, CourseComponent newC)
+        private void OnCourseUpdate(IEntity e, MovementComponent old, MovementComponent newC)
         {
             if (_trackedEntity == null || e.EntityId != _trackedEntity.EntityId) return;
             UpdatePartyStateIcon();
@@ -117,7 +117,7 @@ namespace Party.UI
         private void UpdatePartyStateIcon()
         {
             _client.Log.Debug("[PartyTracking] Updating own party UI state " + _trackedEntity);
-            if (_trackedEntity.Components.TryGet<CourseComponent>(out var c) && !c.CourseId.IsZero())
+            if (_trackedEntity.Components.TryGet<MovementComponent>(out var c) && !c.CourseId.IsZero())
             {
                 SetTaskIcon(TaskIcon.MOVING).Forget();
             }

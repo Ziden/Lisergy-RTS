@@ -1,4 +1,4 @@
-﻿using Game.Engine.ECS;
+﻿using Game.Engine.ECLS;
 using Game.Systems.BattleGroup;
 using Game.Systems.Map;
 
@@ -15,9 +15,12 @@ namespace Game.Systems.Party
 
         private void OnGroupDead(IEntity e, GroupDeadEvent ev)
         {
-            e.EntityLogic.BattleGroup.Heal();
-            var center = Players.GetPlayer(e.OwnerID).GetCenter().Get<MapPlacementComponent>();
-            e.EntityLogic.Map.SetPosition(Game.World.Map.GetTile(center.Position.X, center.Position.Y));
+            e.Logic.BattleGroup.Heal();
+
+            var player = Players.GetPlayer(e.OwnerID);
+            var center = player.EntityLogic.GetCenter();
+            var centerLocation = center.Get<MapPlacementComponent>();
+            e.Logic.Map.SetPosition(Game.World.GetTile(centerLocation.Position.X, centerLocation.Position.Y));
         }
     }
 }

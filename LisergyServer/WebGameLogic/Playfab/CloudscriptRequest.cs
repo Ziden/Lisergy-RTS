@@ -1,12 +1,11 @@
-﻿using PlayFab;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WebGameLogic.Playfab
 {
     [Serializable]
     public class FunctionArgument
     {
-        
+
     }
 
     [Serializable]
@@ -19,7 +18,7 @@ namespace WebGameLogic.Playfab
 
         public string PlayfabId => CallerEntityProfile?.Lineage?.MasterPlayerAccountId!;
 
-        public CloudscriptRequest() {}
+        public CloudscriptRequest() { }
 
         public CloudscriptRequest(string userId)
         {

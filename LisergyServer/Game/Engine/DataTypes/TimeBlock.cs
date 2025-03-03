@@ -5,7 +5,7 @@ namespace Game.Engine.DataTypes
     /// <summary>
     /// Represents the time a task is due executing
     /// </summary>
-    public struct TimeBlock
+    public class TimeBlock
     {
         /// <summary>
         /// Time the task has started
@@ -27,7 +27,7 @@ namespace Game.Engine.DataTypes
     /// Snapshot of the current situation of a given time block, given time interpolations.
     /// This is to help with harvesting predictions.
     /// </summary>
-    public unsafe struct TimeBlockSnapshot
+    public class TimeBlockSnapshot
     {
         /// <summary>
         /// Time the task is to be executed
@@ -72,7 +72,7 @@ namespace Game.Engine.DataTypes
             snap.TimeInBlock = now - block.StartTime;
             snap.TimeUntilEndOfblock = block.EndTime - now;
             snap.TimeBlock = block;
-            snap.Percentagage = Math.Max(1, snap.TimeInBlock / block.TotalBlockTime);
+            snap.Percentagage = Math.Min(1, snap.TimeInBlock / block.TotalBlockTime);
             return snap;
         }
 

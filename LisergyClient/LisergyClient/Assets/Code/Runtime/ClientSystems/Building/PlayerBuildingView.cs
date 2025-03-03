@@ -1,23 +1,26 @@
 ﻿using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Views;
+using ClientSDK;
 using ClientSDK.Data;
-using Game;
+using Game.Entities;
+using Game.Engine.ECLS;
 using Game.Systems.Building;
 using Game.Systems.Map;
 using UnityEngine;
 
 namespace Assets.Code.World
 {
-    public class PlayerBuildingView : UnityEntityView<PlayerBuildingEntity>
+    public class PlayerBuildingView : UnityEntityView
     {
-
+        public PlayerBuildingView(IGameClient client, IEntity e) : base(e, client) { }
         protected override void CreateView()
         {
-            var spec = Client.Game.Specs.Buildings[Entity.SpecId];
+            var spec = Client.Game.Specs.Buildings[Entity.Get<PlayerBuildingComponent>().SpecId];
             State = EntityViewState.RENDERING;
-            UnityServicesContainer.Resolve<IAssetService>().CreatePrefab(spec.Art, new Vector3(Entity.Tile.X, 0, Entity.Tile.Y), Quaternion.Euler(0, 0, 0), o =>
+            var tile = Entity.GetTile();
+            UnityServicesContainer.Resolve<IAssetService>().CreatePrefab(spec.Art, new Vector3(tile.X, 0, tile.Y), Quaternion.Euler(0, 0, 0), o =>
             {
-                var tileView = (TileView)Client.Modules.Views.GetOrCreateView(Entity.Tile);
+                var tileView = (TileView)Client.Modules.Views.GetOrCreateView(tile.TileEntity);
                 GameObject = o;
                 GameObject.name = $"Building {Entity.EntityId} from {Entity.OwnerID}";
                 GameObject.isStatic = true;

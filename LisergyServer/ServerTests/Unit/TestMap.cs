@@ -1,17 +1,6 @@
-using Game;
-using Game.Events.ServerEvents;
-using Game.Network.ClientPackets;
-using Game.Network.ServerPackets;
-using Game.Systems.Battler;
-using Game.Systems.Dungeon;
-using Game.Systems.Movement;
-using Game.Systems.Party;
-using Game.Systems.Tile;
 using Game.World;
 using NUnit.Framework;
 using ServerTests;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace UnitTests
 {

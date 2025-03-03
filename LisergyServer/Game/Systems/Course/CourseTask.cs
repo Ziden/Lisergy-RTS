@@ -1,12 +1,9 @@
-﻿using Game.Systems.Party;
-using Game.Tile;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Game.Engine.ECS;
-using Game.Engine.DataTypes;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.ECLS;
 using Game.Engine.Scheduler;
 using Game.World;
+using System;
+using System.Collections.Generic;
 
 namespace Game.Systems.Movement
 {
@@ -28,15 +25,16 @@ namespace Game.Systems.Movement
         {
             var entity = task.Game.Entities[EntityId];
             task.Delay = entity.Components.Get<MovespeedComponent>().MoveDelay;
-            var courseId = entity.Components.Get<CourseComponent>().CourseId;
+            var courseId = entity.Components.Get<MovementComponent>().CourseId;
             var currentCourse = task.Game.Scheduler.GetTask(courseId);
             if (currentCourse == null) return;
             if (currentCourse.Executor != this)
             {
-                if(currentCourse.Start <= task.Start)
+                if (currentCourse.Start <= task.Start)
                 {
                     task.Game.Scheduler.Cancel(currentCourse);
-                } else
+                }
+                else
                 {
                     task.Repeat = false;
                     task.Game.Log.Error($"Party {entity} Had Course {currentCourse} but course {this} was trying to move the party");
@@ -44,13 +42,13 @@ namespace Game.Systems.Movement
                 }
             }
 
-            var nextTile = Path == null || Path.Count == 0 ? null : task.Game.World.Map.GetTile(Path[0].X, Path[0].Y);
-            task.Game.Systems.Map.GetLogic(entity).SetPosition(nextTile);
+            var nextTile = Path == null || Path.Count == 0 ? null : task.Game.World.GetTile(Path[0].X, Path[0].Y);
+            entity.Logic.Map.SetPosition(nextTile);
             Path.RemoveAt(0);
             task.Repeat = Path.Count > 0;
-            if(!task.Repeat)
+            if (!task.Repeat)
             {
-                task.Game.Systems.EntityMovement.GetLogic(entity).FinishCourse(nextTile);
+                entity.Logic.Movement.FinishCourse(nextTile);
             }
         }
 

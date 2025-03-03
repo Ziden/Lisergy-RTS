@@ -1,7 +1,5 @@
 ﻿using Game.Engine.DataTypes;
-using Game.Systems.Battle;
 using Game.Systems.Battler;
-using Game.Systems.Player;
 using System;
 
 namespace Game.Systems.Battle.Data

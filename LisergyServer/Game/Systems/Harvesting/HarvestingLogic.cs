@@ -1,12 +1,11 @@
-using System;
 using Game.Engine.DataTypes;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using Game.Engine.Events;
 using Game.Systems.Harvesting;
 using Game.Systems.Map;
 using Game.Tile;
 using Game.World;
-using GameData;
+using System;
 
 namespace Game.Systems.Resources
 {
@@ -44,7 +43,7 @@ namespace Game.Systems.Resources
         /// <summary>
         /// Checks if the current entity can harvest the given tile
         /// </summary>
-        public bool CanHarvest(TileEntity tile)
+        public bool CanHarvest(TileModel tile)
         {
             var harvest = GetAvailableResourcesToHarvest(tile);
             if (Entity.Components.Has<HarvestingComponent>()) return false;
@@ -60,7 +59,7 @@ namespace Game.Systems.Resources
         /// <summary>
         /// Gets the available resources to be harvested on a given tile
         /// </summary>
-        public ResourceStackData GetAvailableResourcesToHarvest(TileEntity tile)
+        public ResourceStackData GetAvailableResourcesToHarvest(TileModel tile)
         {
             if (!tile.Components.TryGet<TileResourceComponent>(out var harvest))
             {
@@ -77,20 +76,25 @@ namespace Game.Systems.Resources
         /// <summary>
         /// Starts harvesting the given tile.
         /// </summary>
-        public bool StartHarvesting(TileEntity tile)
+        public bool StartHarvesting(TileModel tile)
         {
             if (!CanHarvest(tile)) return false;
             Game.Log.Debug($"{Entity} starting harvesting on {tile}");
-            var tileResources = tile.Components.GetPointer<TileResourceComponent>();
-            tileResources->BeingHarvested = true;
+
+            var tileResources = tile.Components.Get<TileResourceComponent>();
+            tileResources.BeingHarvested = true;
+            tile.Save(tileResources);
+
             Entity.Components.Add<HarvestingComponent>();
-            var harvesting = Entity.Components.GetPointer<HarvestingComponent>();
-            harvesting->Tile = tile.Position;
-            harvesting->StartedAt = Game.GameTime.ToBinary();
+
+            var harvesting = Entity.Components.Get<HarvestingComponent>();
+            harvesting.Tile = tile.Position;
+            harvesting.StartedAt = Game.GameTime.ToBinary();
+            Entity.Save(harvesting);
             var ev = EventPool<HarvestingStartedEvent>.Get();
             ev.Tile = tile;
             ev.Harvester = Entity;
-            ev.Resource = tileResources->Resource.ResourceId;
+            ev.Resource = tileResources.Resource.ResourceId;
             Entity.Components.CallEvent(ev);
             EventPool<HarvestingStartedEvent>.Return(ev);
             return true;
@@ -100,7 +104,7 @@ namespace Game.Systems.Resources
         /// Given the current entity max cargo and resources on the given tile
         /// Gets the amount of resource that could be harvested from a given tile
         /// </summary>
-        public (TimeBlock time, ResourceStackData resource)? GetPossibleHarvest(TileEntity tile)
+        public (TimeBlock time, ResourceStackData resource)? GetPossibleHarvest(TileModel tile)
         {
             var tileSpec = Game.Specs.Tiles[tile.SpecId];
             if (!tileSpec.ResourceSpotSpecId.HasValue)
@@ -110,7 +114,7 @@ namespace Game.Systems.Resources
             var harvestSpec = Game.Specs.HarvestPoints[tileSpec.ResourceSpotSpecId.Value];
             var tileResources = tile.Components.Get<TileResourceComponent>();
             var toHarvest = tileResources.Resource;
-            Entity.EntityLogic.Cargo.TrimResourcesToMaxCargo(ref toHarvest);
+            Entity.Logic.Cargo.TrimResourcesToMaxCargo(ref toHarvest);
             var timeToHarvest = toHarvest.Amount * harvestSpec.HarvestTimePerUnit;
             var block = new TimeBlock()
             {
@@ -126,9 +130,9 @@ namespace Game.Systems.Resources
         public HarvestingTaskState CalculateCurrentState()
         {
             var harvesting = Entity.Components.Get<HarvestingComponent>();
-            var tile = Game.World.Map.GetTile(harvesting.Tile.X, harvesting.Tile.Y);
+            var tile = Game.World.GetTile(harvesting.Tile.X, harvesting.Tile.Y);
             var startTime = DateTime.FromBinary(harvesting.StartedAt);
-        
+
             //
             var tileSpec = Game.Specs.Tiles[tile.SpecId];
             if (!tileSpec.ResourceSpotSpecId.HasValue)
@@ -158,16 +162,17 @@ namespace Game.Systems.Resources
         public ResourceStackData StopHarvesting()
         {
             var harvesting = Entity.Components.Get<HarvestingComponent>();
-            var tile = Game.World.Map.GetTile(harvesting.Tile.X, harvesting.Tile.Y);
+            var tile = Game.World.GetTile(harvesting.Tile.X, harvesting.Tile.Y);
             var harvestState = CalculateCurrentState();
             var spec = Game.Specs.Resources[harvestState.Resources.Resource.ResourceId];
 
             Entity.Components.Remove<HarvestingComponent>();
-            var tileResources = tile.Components.GetPointer<TileResourceComponent>();
-            tileResources->BeingHarvested = false;
-            tileResources->Resource.Amount = (ushort)(tileResources->Resource.Amount - harvestState.AmountHarvested);
+            tile.Components.TryGet<TileResourceComponent>(out var tileResources);
+            tileResources.BeingHarvested = false;
+            tileResources.Resource.Amount = (ushort)(tileResources.Resource.Amount - harvestState.AmountHarvested);
             var finalStack = new ResourceStackData(harvestState.Resources.Resource.ResourceId, harvestState.AmountHarvested);
             var ev = EventPool<HarvestingEndedEvent>.Get();
+            tile.Save(tileResources);
             ev.Tile = tile;
             ev.Harvester = Entity;
             ev.Resource = finalStack;

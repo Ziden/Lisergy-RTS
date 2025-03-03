@@ -1,29 +1,29 @@
-﻿using Game.ECS;
-using Game.Engine.ECS;
-using Game.Systems.Tile;
+﻿using Game.Engine.ECLS;
+using Game.Engine.Events;
 
 namespace Game.Systems.Map
 {
-    [SyncedSystem]
-    public class MapSystem : LogicSystem<MapPlacementComponent, MapLogic>
+    public class MapSystem : LogicSystem<MapPlaceableComponent, MapLogic>
     {
         public MapSystem(LisergyGame game) : base(game) { }
 
         public override void RegisterListeners()
         {
-            EntityEvents.On<EntityMoveOutEvent>(OnEntityMoveOut);
-            EntityEvents.On<EntityMoveInEvent>(OnEntityMoveIn);
+            EntityEvents.On<ComponentUpdateEvent<MapPlacementComponent>>(OnPlacementUpdate);
         }
 
-        private void OnEntityMoveOut(IEntity owner, EntityMoveOutEvent ev)
+        private void OnPlacementUpdate(IEntity e, ComponentUpdateEvent<MapPlacementComponent> ev)
         {
-            ev.FromTile.Components.GetReference<TileHabitantsReferenceComponent>().EntitiesIn.Remove(ev.Entity);
-        }
-
-        private void OnEntityMoveIn(IEntity owner, EntityMoveInEvent ev)
-        {
-            var tileHabitants = ev.ToTile.Components.GetReference<TileHabitantsReferenceComponent>();
-            tileHabitants.EntitiesIn.Add(ev.Entity);
+            var oldTile = ev.Old == null ? null : Game.World.GetTile(ev.Old.Position);
+            var newTile = ev.New == null ? null : Game.World.GetTile(ev.New.Position);
+            if (oldTile != null)
+            {
+                oldTile.Logic.Map.RemoveEntityFromTile(e);
+            }
+            if (newTile != null)
+            {
+                newTile.Logic.Map.SetEntityOnTile(e);
+            }
         }
     }
 }

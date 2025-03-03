@@ -1,5 +1,6 @@
 ﻿using Game.Engine.DataTypes;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
+using Game.Entities;
 using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
 using Game.Systems.Building;
@@ -9,19 +10,18 @@ using Game.World;
 using GameData;
 using GameData.Specs;
 using System.Collections.Generic;
+using System.Linq;
+
 
 namespace Game.Systems.Player
 {
     /// <summary>
     /// Interacts with player specific data
     /// </summary>
-    public class PlayerLogic : BaseEntityLogic<PlayerComponent>
+    public class PlayerLogic : BaseEntityLogic<PlayerDataComponent>
     {
-        private PlayerData Data => Entity.Components.GetReference<PlayerData>();
- 
-        /// <summary>
-        /// Recruits a new unit for the player
-        /// </summary>
+        private PlayerDataComponent Data => Entity.Components.Get<PlayerDataComponent>();
+
         public Unit RecruitUnit(UnitSpecId unitSpecId)
         {
             var unit = new Unit(Game.Specs.Units[unitSpecId]);
@@ -30,14 +30,34 @@ namespace Game.Systems.Player
             return unit;
         }
 
+        public IReadOnlyCollection<Location> GetVisibleTiles()
+        {
+            Entity.Components.TryGet<PlayerVisibilityComponent>(out var visibilityData);
+            return visibilityData?.VisibleTiles;
+        }
+
+        public IReadOnlyList<IEntity> GetBuildings()
+        {
+            return Game.Entities.GetChildren(Entity.EntityId, EntityType.Building);
+        }
+
+        public IReadOnlyList<IEntity> GetParties()
+        {
+            return Game.Entities.GetChildren(Entity.EntityId, EntityType.Party);
+        }
+
+        public IEntity GetCenter()
+        {
+            return GetBuildings().Where(b => b.Get<PlayerBuildingComponent>().SpecId == Game.Specs.InitialBuildingSpecId).First();
+        }
+
         /// <summary>
         /// Creates a new party for the player on the given party index
         /// </summary>
-        public IEntity CreateNewParty(byte index)
+        public IEntity CreateNewParty()
         {
-            var entity = (PartyEntity)Game.Entities.CreateEntity(Entity.EntityId, EntityType.Party);
+            var entity = Game.Entities.CreateEntity(EntityType.Party, Entity.EntityId);
             var party = entity.Get<PartyComponent>();
-            party.PartyIndex = index;
             entity.Save(party);
             return entity;
         }
@@ -58,24 +78,22 @@ namespace Game.Systems.Player
         /// <summary>
         /// Adds a new player to the given tile with the initial things a new player should have
         /// </summary>
-        public void PlaceNewPlayer(TileEntity t)
+        public void PlaceNewPlayer(TileModel t)
         {
-            var p = Entity as PlayerEntity;
-            Game.Log.Debug($"Placing new player {p} on tile {t}");
-            Game.Players.Add(p);
+            Game.Log.Debug($"Placing new player {Entity.EntityId} on tile {t}");
             if (Game.Specs.InitialBuildingSpecId.HasValue)
             {
                 Build(Game.Specs.InitialBuildingSpecId.Value, t);
             }
             var initialUnit = Game.Specs.InitialUnit.SpecId;
             var unit = RecruitUnit(initialUnit);
-            var party = CreateNewParty(0);
-            PlaceUnitInParty(unit.Id, (PartyEntity)party);
+            var party = CreateNewParty();
+            PlaceUnitInParty(unit.Id, party);
             var partyTile = t.GetNeighbor(Direction.EAST);
-            if(!partyTile.Passable) partyTile = t.GetNeighbor(Direction.WEST);
-            if (!partyTile.Passable) partyTile = t.GetNeighbor(Direction.SOUTH);
-            if (!partyTile.Passable) partyTile = t.GetNeighbor(Direction.NORTH);
-            Game.Systems.Map.GetLogic(party).SetPosition(partyTile);
+            if (!partyTile.Logic.Tile.IsPassable()) partyTile = t.GetNeighbor(Direction.WEST);
+            if (!partyTile.Logic.Tile.IsPassable()) partyTile = t.GetNeighbor(Direction.SOUTH);
+            if (!partyTile.Logic.Tile.IsPassable()) partyTile = t.GetNeighbor(Direction.NORTH);
+            party.Logic.Map.SetPosition(partyTile);
             Game.Log.Debug($"Placed new player {Entity} in {t}");
             return;
         }
@@ -91,9 +109,9 @@ namespace Game.Systems.Player
         /// <summary>
         /// Moves a unit to a given party
         /// </summary>
-        public void PlaceUnitInParty(GameId unitId, PartyEntity newParty)
+        public void PlaceUnitInParty(GameId unitId, IEntity newParty)
         {
-            if(!Data.StoredUnits.TryGetValue(unitId, out var storedUnit))
+            if (!Data.StoredUnits.TryGetValue(unitId, out var storedUnit))
             {
                 Game.Log.Error($"Tried to add unity {unitId} to party but unit was not free");
                 return;
@@ -106,13 +124,13 @@ namespace Game.Systems.Player
         /// <summary>
         /// Builds a new building on the given tile
         /// </summary>
-        public PlayerBuildingEntity Build(BuildingSpecId buildingSpecId, TileEntity t)
+        public IEntity Build(BuildingSpecId buildingSpecId, TileModel t)
         {
-            var building = (PlayerBuildingEntity)Game.Entities.CreateEntity(Entity.OwnerID, EntityType.Building);
-            building.BuildFromSpec(Game.Specs.Buildings[buildingSpecId]);
-            building.EntityLogic.Map.SetPosition(t);
+            var building = Game.Entities.CreateEntity(EntityType.Building, Entity.EntityId);
+            building.Logic.Building.SetupBuildingFromSpec(buildingSpecId);
+            building.Logic.Map.SetPosition(t);
             Game.Log.Debug($"Player {Entity} built {building}");
             return building;
         }
-    } 
+    }
 }

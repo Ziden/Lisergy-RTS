@@ -18,6 +18,39 @@ namespace Game.Engine.Events
         }
     }
 
+    public struct ClassPool<T> where T : new()
+    {
+        private static Queue<T> _free = new Queue<T>();
+        private static HashSet<T> _used = new HashSet<T>();
+
+        public static int GetUsed() => _used.Count;
+
+        public static bool IsUsed(T o) => _used.Contains(o);
+
+        private static void FlagUsed(T item)
+        {
+            _used.Add(item);
+        }
+
+        public static T Get()
+        {
+            if (_free.TryDequeue(out var item))
+            {
+                FlagUsed(item);
+                return item;
+            }
+            item = FastNew<T>.Instance();
+            FlagUsed(item);
+            return item;
+        }
+
+        public static void Return(T item)
+        {
+            _free.Enqueue(item);
+            _used.Remove(item);
+        }
+    }
+
     public static class EventPool<T> where T : new()
     {
         private static Queue<T> _free = new Queue<T>();
@@ -44,7 +77,10 @@ namespace Game.Engine.Events
             }
             item = FastNew<T>.Instance();
             FlagUsed(item);
-            if (_used.Count > 1) throw new Exception($"Leak on {item?.GetType()}");
+            if (_used.Count > 1)
+            {
+                throw new Exception($"Leak on {item?.GetType()}");
+            }
             return item;
         }
 

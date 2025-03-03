@@ -1,5 +1,4 @@
-﻿using Game.Entity;
-using Game.Systems.Battler;
+﻿using Game.Specs;
 using GameData;
 using GameData.buffs;
 using GameData.Specs;
@@ -62,7 +61,7 @@ namespace GameDataTest
         {
             AddUnit(ref spec, new UnitSpec()
             {
-                Art = new ArtSpec() { Type = ArtType.PREFAB,Address = Addr("Rogue") },
+                Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Rogue") },
                 Name = "Rogue",
                 IconArt = new ArtSpec()
                 {

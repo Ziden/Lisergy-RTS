@@ -1,10 +1,9 @@
-﻿using Game.ECS;
-using Game.Engine.DataTypes;
+﻿using Game.Engine.DataTypes;
+using Game.Entities;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
-namespace Game.Engine.ECS
+namespace Game.Engine.ECLS
 {
     [Serializable]
     public class SerializedEntity
@@ -19,7 +18,7 @@ namespace Game.Engine.ECS
             EntityType = entity.EntityType;
             EntityId = entity.EntityId;
             OwnerId = entity.OwnerID;
-            Components = ((ComponentSet)entity.Components).Pointers.ToArray();
+            Components = ((ComponentSet)entity.Components).AllComponents().ToArray();
         }
     }
 }

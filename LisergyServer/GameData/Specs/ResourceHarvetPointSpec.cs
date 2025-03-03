@@ -1,5 +1,4 @@
-﻿using GameData.Specs;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
 namespace GameData
@@ -24,17 +23,17 @@ namespace GameData
         /// Spec id
         /// </summary>
         public HarvestPointSpecId SpecId;
-        
+
         /// <summary>
         /// What resource to spawn
         /// </summary>
         public ResourceSpecId ResourceId;
-        
+
         /// <summary>
         /// Max amount of resource to spawn
         /// </summary>
         public ushort ResourceAmount;
-        
+
         /// <summary>
         /// Harvest time per 1 unit of the resource
         /// </summary>
@@ -44,7 +43,7 @@ namespace GameData
         /// Time to respawn every unit of the given resource after its stopped being harvested
         /// </summary>
         public TimeSpan RespawnTime;
-        
+
         public ResourceHarvestPointSpec(in byte i)
         {
             SpecId = new HarvestPointSpecId() { Id = i };

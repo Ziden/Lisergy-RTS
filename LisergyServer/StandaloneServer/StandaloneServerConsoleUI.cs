@@ -1,9 +1,7 @@
 ﻿using Game.Engine;
 using Game.Engine.Events;
-using MapServer;
 using NServiceBus.Logging;
 using System.Collections;
-using System.Text;
 using Terminal.Gui;
 
 public class LogEntry
@@ -214,7 +212,7 @@ public class StandaloneServerConsoleUI : Window
                 Log = msg
             };
             AddLog(Tab.LOGS, _allLogs, entry);
-            if(tag.StartsWith("[Server Game]")) AddLog(Tab.GAME, _gameLogs, entry);
+            if (tag.StartsWith("[Server Game]")) AddLog(Tab.GAME, _gameLogs, entry);
             else if (tag.StartsWith("[Server WORLD]")) AddLog(Tab.WORLD, _worldLogs, entry);
             else if (tag.StartsWith("[Server ACCOUNT]")) AddLog(Tab.ACCOUNT, _accountLogs, entry);
             else if (tag.StartsWith("[Server CHAT]")) AddLog(Tab.CHAT, _chatLogs, entry);

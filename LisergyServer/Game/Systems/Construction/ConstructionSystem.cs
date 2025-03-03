@@ -1,4 +1,4 @@
-﻿using Game.Engine.ECS;
+﻿using Game.Engine.ECLS;
 
 namespace Game.Systems.Construction
 {

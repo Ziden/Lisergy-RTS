@@ -1,4 +1,4 @@
-﻿using Game.ECS;
+﻿using Game.Engine.ECLS;
 using System;
 using System.Runtime.InteropServices;
 
@@ -10,7 +10,7 @@ namespace Game.Systems.Building
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     [Serializable]
-    public struct BuildingComponent : IComponent
+    public class BuildingComponent : IComponent
     {
         public override string ToString()
         {

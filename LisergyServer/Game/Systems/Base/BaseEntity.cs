@@ -1,38 +1,31 @@
-﻿using Game.ECS;
-using Game.Network;
-using Game.Tile;
-using System;
-using Game.Systems.Player;
-using Game.Systems.MapPosition;
-using Game.Engine.ECS;
+﻿
 using Game.Engine.DataTypes;
-using Game.Engine.Network;
+using Game.Engine.ECLS;
 
-namespace Game
+namespace Game.Entities
 {
-    public abstract partial class BaseEntity : IEntity
+    public class BaseEntity : IEntity
     {
-        private GameId _entityId;
-        private GameId _ownerId;
-
+        internal GameId _entityId;
+        public ComponentSet Components { get; private set; }
+        public EntityType EntityType { get; }
         public ref readonly GameId EntityId => ref _entityId;
-        public ref readonly GameId OwnerID => ref _ownerId;
-        public IComponentSet Components { get; private set; }
         public IGame Game { get; private set; }
-
-        public BaseEntity(IGame game, GameId ownerId)
+        public BaseEntity(GameId id, IGame game, EntityType type)
         {
             Game = game;
-            _ownerId = ownerId;
-            _entityId = GameId.Generate();
-            DeltaFlags = new DeltaFlags(this);
+            _entityId = id;
+            EntityType = type;
             Components = new ComponentSet(this);
         }
 
-        public TileEntity Tile => Components.GetReference<MapReferenceComponent>().Tile;
-        public IEntityLogic EntityLogic => Game.Logic.GetEntityLogic(this);
-        public abstract EntityType EntityType { get; }
-        public ref T Get<T>() where T : unmanaged, IComponent => ref Components.Get<T>();
-        public void Save<T>(in T component) where T : unmanaged, IComponent => Components.Save(component);
+        public GameId OwnerID => Game.Entities.GetParent(EntityId)?.EntityId ?? GameId.ZERO;
+        public EntityLogic Logic => Game.Logic.GetEntityLogic(this);
+        public T Get<T>() where T : IComponent => Components.Get<T>();
+        public void Save<T>(in T component) where T : IComponent => Components.Save(component);
+        public override string ToString()
+        {
+            return $"<Entity {EntityType} {EntityId} {Components}>";
+        }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Game.ECS
+namespace Game.Engine.ECLS
 {
     /// <summary>
     /// Sends component to client whenever it sends the attached entity to client.
     /// Will serialize the whole component data.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Struct)]
+    [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
     public class SyncedComponent : Attribute
     {
         /// <summary>

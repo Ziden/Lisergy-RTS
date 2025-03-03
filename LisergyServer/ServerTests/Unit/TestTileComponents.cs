@@ -1,8 +1,7 @@
 using Game;
-using Game.ECS;
-using Game.Engine.DataTypes;
-using Game.Systems.Building;
-using Game.Systems.Dungeon;
+using Game.Engine.ECLS;
+using Game.Engine.Events;
+using Game.Entities;
 using Game.Systems.Map;
 using Game.Systems.Tile;
 using Game.Tile;
@@ -14,36 +13,43 @@ namespace UnitTests
     public unsafe class TestTileComponents
     {
         private IGame _game;
-        private TileEntity tile1;
-        private TileEntity tile2;
+        private TileModel tile1;
+        private TileModel tile2;
 
         [SetUp]
         public void Setup()
         {
             _game = new TestGame();
-            tile1 = _game.World.Map.GetTile(0, 0);
-            tile2 = _game.World.Map.GetTile(1, 1);
+            tile1 = _game.World.GetTile(0, 0);
+            tile2 = _game.World.GetTile(1, 1);
         }
 
         [Test]
         public void TestTileCallbacks()
         {
-            tile1.Components.AddReference(new TileHabitantsReferenceComponent());
-            tile2.Components.AddReference(new TileHabitantsReferenceComponent());
+            tile1.Components.Add<TileHabitantsComponent>();
+            tile2.Components.Add<TileHabitantsComponent>();
 
-            var dg = (DungeonEntity)_game.Entities.CreateEntity(GameId.ZERO, EntityType.Dungeon);
+            var dg = _game.Entities.CreateEntity(EntityType.Dungeon);
 
-            tile1.Components.CallEvent(new BuildingPlacedEvent(dg, tile1));
+            dg.Components.CallEvent(new ComponentUpdateEvent<MapPlacementComponent>()
+            {
+                Entity = dg,
+                New = new MapPlacementComponent()
+                {
+                    Position = tile1.Position
+                },
+            });
 
-            Assert.IsTrue(tile1.Components.GetReference<TileHabitantsReferenceComponent>().Building == dg);
-            Assert.IsTrue(tile2.Components.GetReference<TileHabitantsReferenceComponent>().Building == null);
+            Assert.IsTrue(tile1.Components.Get<TileHabitantsComponent>().Building == dg);
+            Assert.IsTrue(tile2.Components.Get<TileHabitantsComponent>().Building == null);
         }
 
         public class TestView : IComponent
         {
-            public static EntityMoveOutEvent called = default;
+            public static ComponentUpdateEvent<MapPlacementComponent> called = default;
 
-            public static void Callback(TestView view, EntityMoveOutEvent ev)
+            public static void Callback(TestView view, ComponentUpdateEvent<MapPlacementComponent> ev)
             {
                 TestView.called = ev;
             }

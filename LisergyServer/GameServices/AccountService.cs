@@ -2,15 +2,13 @@
 using Game.Engine.DataTypes;
 using Game.Network.ClientPackets;
 using Game.Systems.Player;
-using GameServices;
-using System;
 using System.Collections.Generic;
 
 namespace LisergyServer.Core
 {
     public class Account
     {
-        public PlayerProfile Profile;
+        public PlayerProfileComponent Profile;
         public string Login;
         public string Password;
     }
@@ -44,9 +42,9 @@ namespace LisergyServer.Core
             if (!_accounts.TryGetValue(ev.Login, out acc))
             {
                 acc = new Account();
-                acc.Profile = new PlayerProfile(GameId.Generate())
+                acc.Profile = new PlayerProfileComponent(GameId.Generate())
                 {
-                    PlayerName = ev.Login
+                    Name = ev.Login
                 };
                 acc.Login = ev.Login;
                 acc.Password = ev.Password;

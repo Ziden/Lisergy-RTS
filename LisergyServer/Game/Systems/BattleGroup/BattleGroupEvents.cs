@@ -1,5 +1,5 @@
 ﻿using Game.Engine.DataTypes;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using Game.Engine.Events;
 using Game.Network.ServerPackets;
 using Game.Systems.Battle.Data;

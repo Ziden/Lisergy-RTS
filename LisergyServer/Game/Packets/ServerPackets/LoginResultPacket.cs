@@ -9,7 +9,7 @@ namespace Game.Events.ServerEvents
     {
         public string Token;
         public bool Success;
-        public PlayerProfile Profile;
+        public PlayerProfileComponent Profile;
         public TimeSpan TokenDuration;
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Assets.Code.Assets.Code.Runtime.Tools;
 using Assets.Code.World;
 using DG.Tweening;
-using Game;
+using Game.Entities;
 using Game.Engine.DataTypes;
 using Game.Systems.Battle.BattleActions;
 using Game.Systems.Battle.BattleEvents;

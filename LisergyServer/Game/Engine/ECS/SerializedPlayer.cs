@@ -4,24 +4,23 @@ using Game.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Game.Engine.ECS
+namespace Game.Engine.ECLS
 {
     [Serializable]
     public class SerializedPlayer
     {
         public GameId PlayerId;
-        public PlayerData Data;
+        public PlayerDataComponent Data;
         public List<Location> SeenTiles;
 
         public SerializedPlayer() { }
 
-        public SerializedPlayer(PlayerEntity player)
+        public SerializedPlayer(PlayerModel player)
         {
             PlayerId = player.EntityId;
-            Data = player.Data;
-            SeenTiles = player.VisibilityReferences.OnceExplored.ToList();
+            Data = player.Components.Get<PlayerDataComponent>();
+            SeenTiles = player.Components.Get<PlayerVisibilityComponent>().OnceExplored.ToList();
         }
     }
 }

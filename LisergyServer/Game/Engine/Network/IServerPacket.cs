@@ -1,7 +1,4 @@
-﻿using System;
-using Game.Events;
-
-namespace Game.Engine.Network
+﻿namespace Game.Engine.Network
 {
     /// <summary>
     /// Networking events sent from the server

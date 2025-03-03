@@ -16,10 +16,10 @@ namespace Game.Systems.Resources
     public class RespawnTaskExecutor : ITaskExecutor
     {
         private SortedSet<ResourceRespawn> _respawnQueue = new SortedSet<ResourceRespawn>();
-      
+
         public void Execute(GameTask task)
         {
-          // _respawnQueue.
+            // _respawnQueue.
         }
     }
 }

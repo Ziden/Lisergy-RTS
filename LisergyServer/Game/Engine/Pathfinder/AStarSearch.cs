@@ -97,7 +97,7 @@ namespace Game.Engine.Pathfinder
                     if (!_open.Contains(neighbour))
                     {
                         neighbour.G = g;
-                        neighbour.H = Heuristic(neighbour, node);
+                        neighbour.H = (float)Heuristic(neighbour, node);
                         neighbour.Parent = node;
 
                         // F will be set by the queue

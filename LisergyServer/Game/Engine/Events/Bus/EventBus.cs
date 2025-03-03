@@ -8,7 +8,7 @@ namespace Game.Engine.Events.Bus
 
     public interface IEventBusRegistry<EventType>
     {
-        void Register<EvType>(IEventListener listener, Action<EvType> callback);
+        void On<EvType>(IEventListener listener, Action<EvType> callback);
     }
 
     public class EventBus<EventType> : IEventBusRegistry<EventType>
@@ -36,11 +36,10 @@ namespace Game.Engine.Events.Bus
             {
                 registeredEvent.Call(ev);
             }
-
         }
 
 
-        public virtual void Register<EvType>(IEventListener listener, Action<EvType> callback)
+        public virtual void On<EvType>(IEventListener listener, Action<EvType> callback)
         {
             var eventType = typeof(EvType);
             if (!_registeredListeners.ContainsKey(eventType))

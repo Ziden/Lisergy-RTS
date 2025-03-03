@@ -1,5 +1,5 @@
-﻿using System;
-using Game.Engine.Network;
+﻿using Game.Engine.Network;
+using System;
 
 namespace Game.Network.ClientPackets
 {

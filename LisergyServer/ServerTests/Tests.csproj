@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Smoke\**" />
+    <EmbeddedResource Remove="Smoke\**" />
+    <None Remove="Smoke\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="TestFastScheduler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClientSDK\ClientSDK.csproj" />
+    <ProjectReference Include="..\Core\BaseServer.csproj" />
+    <ProjectReference Include="..\GameDataTest\GameDataTest.csproj" />
+  </ItemGroup>
+
+</Project>

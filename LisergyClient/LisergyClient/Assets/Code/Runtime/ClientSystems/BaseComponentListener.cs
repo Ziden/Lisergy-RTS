@@ -1,6 +1,5 @@
 using ClientSDK;
-using Game.ECS;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 
 public interface IComponentListener : IEventListener { }
@@ -20,8 +19,8 @@ public abstract class BaseComponentListener<ComponentType> : ISpecificComponentL
     public BaseComponentListener(IGameClient client)
     {
         GameClient = client;
-        GameClient.Modules.Components.OnComponentUpdate<ComponentType>(OnUpdateComponent);
-        GameClient.Modules.Components.OnComponentRemoved<ComponentType>(OnComponentRemoved);
+        GameClient.Modules.Entities.OnComponentUpdate<ComponentType>(OnUpdateComponent);
+        GameClient.Modules.Entities.OnComponentRemoved<ComponentType>(OnComponentRemoved);
     }
 
     public abstract void OnUpdateComponent(IEntity entity, ComponentType oldComponent, ComponentType? newComponent);

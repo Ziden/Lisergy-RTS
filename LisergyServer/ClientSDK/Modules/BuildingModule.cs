@@ -1,9 +1,5 @@
-﻿using Game.Events.ServerEvents;
-using ClientSDK.Data;
-using Game.Tile;
-using ClientSDK.SDKEvents;
+﻿using GameData;
 using System.Collections.Generic;
-using GameData;
 
 namespace ClientSDK.Services
 {
@@ -27,7 +23,7 @@ namespace ClientSDK.Services
 
         public void Register()
         {
-            
+
         }
 
         public IReadOnlyList<BuildingSpec> GetBuildingsKnown()

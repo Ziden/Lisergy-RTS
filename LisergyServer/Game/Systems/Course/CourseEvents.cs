@@ -1,6 +1,5 @@
-﻿using Game.Engine.ECS;
+﻿using Game.Engine.ECLS;
 using Game.Engine.Events;
-using Game.Systems.Battler;
 using Game.Systems.Movement;
 using Game.Tile;
 
@@ -13,7 +12,7 @@ namespace Game.Systems.Course
     {
         public IEntity Entity;
         public CourseIntent Intent;
-        public TileEntity ToTile;
+        public TileModel ToTile;
 
         public override string ToString() => $"<CourseFinish Entity={Entity} Intent={Intent} Tile={ToTile}/>";
     }

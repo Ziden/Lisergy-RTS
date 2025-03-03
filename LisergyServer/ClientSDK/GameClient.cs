@@ -2,8 +2,7 @@
 using Game;
 using Game.Engine;
 using Game.Engine.Events.Bus;
-using Game.Network;
-using System;
+using Stateless;
 
 namespace ClientSDK
 {
@@ -48,6 +47,8 @@ namespace ClientSDK
         public IGameLog SDKLog { get; private set; }
         public IGameLog Log => Game.Log;
 
+        private StateMachine<string, string> test;
+
         public GameClient()
         {
             Serialization.LoadSerializers();
@@ -61,6 +62,7 @@ namespace ClientSDK
         public void InitializeGame(LisergyGame game)
         {
             Game = game;
+            ((ClientNetwork)Network).SetupGame(game);
         }
     }
 }

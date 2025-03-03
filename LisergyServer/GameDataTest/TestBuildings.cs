@@ -34,14 +34,14 @@ namespace GameDataTest
                 Icon = AddrIcons("Farm"),
                 SpecId = FARM,
                 TimeToBuildSeconds = 10,
-                BuildingCost = new ResourceStackData[] { 
-                    new ResourceStackData(TestResources.LOGS.SpecId, 10), 
+                BuildingCost = new ResourceStackData[] {
+                    new ResourceStackData(TestResources.LOGS.SpecId, 10),
                     new ResourceStackData(TestResources.WATER.SpecId, 3),
                     new ResourceStackData(TestResources.STONE.SpecId, 5) }
                 .ToList()
             };
         }
-       
+
         public static void Generate(ref GameSpec spec)
         {
             spec.Buildings[CAMP] = new BuildingSpec(CAMP)

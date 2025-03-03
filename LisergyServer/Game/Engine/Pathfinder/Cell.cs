@@ -7,10 +7,10 @@ namespace Game.Engine.Pathfinder
     {
         public bool Blocked;
         public bool Closed;
-        public double F;
+        public float F;
 
-        public double G;
-        public double H;
+        public float G;
+        public float H;
 
         public Location Location;
 

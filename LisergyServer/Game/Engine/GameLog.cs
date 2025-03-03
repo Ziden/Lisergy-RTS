@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace Game.Engine
 {
@@ -23,11 +22,21 @@ namespace Game.Engine
             _Debug(Tag + msg);
         }
 
-        public void Info(string msg) { _Info(Tag + msg); }
-        public void Error(string msg) { _Error(Tag + msg); }
+        public void Info(string msg)
+        {
+            _Info(Tag + msg);
+        }
+
+        public void Error(string msg)
+        {
+            _Error(Tag + msg);
+        }
 
         public Action<string> _Debug = Console.WriteLine;
-        public Action<string> _Info = Console.WriteLine;
+        public Action<string> _Info = (msg) =>
+        {
+            Console.WriteLine(msg);
+        };
         public Action<string> _Error = Console.Error.WriteLine;
     }
 }

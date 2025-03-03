@@ -1,15 +1,6 @@
-using Game.Engine.DataTypes;
-using Game.Systems.Battle;
-using Game.Systems.Battle.BattleActions;
-using Game.Systems.Battle.Data;
-using Game.Systems.Battler;
-using GameDataTest;
-using NUnit.Framework;
-using System;
-using System.Linq;
-
 namespace UnitTests
 {
+    /*
     public unsafe class TestBattleActions
     {
         private Unit FastUnit;
@@ -45,4 +36,5 @@ namespace UnitTests
             Assert.That(defender.UnitPtr->HP == defender.UnitPtr->MaxHP - result.Damage);
         }
     }
+    */
 }

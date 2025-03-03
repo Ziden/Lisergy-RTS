@@ -1,7 +1,5 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
-using Cysharp.Threading.Tasks;
-using Game.ECS;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Systems.Battler;
 using Game.Tile;

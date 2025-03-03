@@ -1,5 +1,4 @@
 ﻿using Game.Systems.Battler;
-using GameData.Specs;
 using System;
 using System.Collections;
 using System.Collections.Generic;

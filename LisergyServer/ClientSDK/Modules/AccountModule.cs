@@ -1,11 +1,13 @@
-﻿using Game.Network.ClientPackets;
-using Game;
-using Game.Events.ServerEvents;
-using System;
-using ClientSDK.Data;
-using Game.Systems.Player;
+﻿using ClientSDK.Data;
 using ClientSDK.SDKEvents;
+using Game;
 using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Entities;
+using Game.Events.ServerEvents;
+using Game.Network.ClientPackets;
+using Game.Systems.Map;
+using Game.Systems.Player;
 
 namespace ClientSDK.Services
 {
@@ -23,7 +25,7 @@ namespace ClientSDK.Services
 
     public class AccountModule : IAccountModule
     {
-        private PlayerProfile _profile;
+        private PlayerProfileComponent _profile;
         private GameClient _client;
 
         public AccountModule(GameClient client)
@@ -33,8 +35,8 @@ namespace ClientSDK.Services
 
         public void Register()
         {
-            _client.Network.On<LoginResultPacket>(OnAuthResult);
-            _client.Network.On<GameSpecPacket>(OnReceiveGameSpec);
+            _client.Network.OnInput<LoginResultPacket>(OnAuthResult);
+            _client.Network.OnInput<GameSpecPacket>(OnReceiveGameSpec);
         }
 
         public void SendAuthenticationPacket(string username, string password)
@@ -62,8 +64,15 @@ namespace ClientSDK.Services
             var world = new ClientWorld(game, (ushort)ev.MapSizeX, (ushort)ev.MapSizeY);
             game.SetupWorld(world);
             _client.InitializeGame(game);
-            _client.ClientEvents.Call(new GameStartedEvent(game, new PlayerEntity(_profile, game)));
-            _client.Network.SendToServer(new JoinWorldPacket());
+            var e = _client.Game.Entities[_profile.PlayerId];
+            if (e == null)
+            {
+                e = _client.Game.Entities.CreateEntity(EntityType.Player, GameId.ZERO, _profile.PlayerId);
+            }
+            var player = new PlayerModel(game, e);
+            e.Save(_profile);
+            _client.ClientEvents.Call(new GameStartedEvent(game, player));
+            _client.Network.SendToServer(new JoinWorldMapCommand());
         }
     }
 }

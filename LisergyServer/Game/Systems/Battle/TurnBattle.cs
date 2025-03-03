@@ -40,6 +40,7 @@ namespace Game.Systems.Battle
 
         public void Death(BattleUnit u)
         {
+
             Record.RecordEvent(new UnitDeadEvent() { UnitId = u.UnitID });
             _actionQueue.Remove(u);
             if (u.Team.AllDead) FinishBattle();

@@ -1,20 +1,20 @@
+using Game.Engine;
+using Game.Engine.DataTypes;
+using Game.Engine.ECLS;
+using Game.Engine.Scheduler;
+using Game.Entities;
+using Game.Events.ServerEvents;
+using Game.Systems.Course;
+using Game.Systems.Movement;
+using Game.Systems.Resources;
+using Game.Tile;
+using Game.World;
+using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
-using Game.Systems.Player;
-using Game.Tile;
-using GameDataTest;
-using Game.Systems.Party;
-using Game.Systems.Resources;
-using Game.Network.ClientPackets;
 using System.Collections.Generic;
-using Game.Systems.Movement;
-using Game.Events.ServerEvents;
 using System.Linq;
-using System;
-using GameDataTest.TestWorldGenerator;
-using Game.Engine.Scheduler;
-using Game.Engine;
-using Game.World;
+using Tests.Unit.Stubs;
 
 namespace UnitTests
 {
@@ -22,8 +22,8 @@ namespace UnitTests
     {
         private TestGame _game;
         private TestServerPlayer _player;
-        private PartyEntity _party;
-        private TileEntity _logs;
+        private IEntity _party;
+        private TileModel _logs;
         private GameScheduler _scheduler;
 
         [SetUp]
@@ -32,30 +32,30 @@ namespace UnitTests
             _game = new TestGame();
             _player = _game.GetTestPlayer();
             _party = _player.GetParty(0);
-            _logs = _game.TestMap.GetTile(5, 5);
-            _party.EntityLogic.Map.SetPosition(_logs.GetNeighbor(Direction.SOUTH));
+            _logs = _game.WorldChunks.GetTile(5, 5);
+            _party.Logic.Map.SetPosition(_logs.GetNeighbor(Direction.SOUTH));
             _scheduler = _game.Scheduler as GameScheduler;
-            _logs.SpecId = TestTiles.FOREST.ID;
+            _logs.Logic.Tile.SetTileId(TestTiles.FOREST.ID);
         }
 
         [Test]
         public void TestCanHarvest()
         {
-            Assert.IsTrue(_party.EntityLogic.Harvesting.CanHarvest(_logs));
+            Assert.IsTrue(_party.Logic.Harvesting.CanHarvest(_logs));
         }
 
         [Test]
         public void TestCannotHarvestIfFar()
         {
-            _party.EntityLogic.Map.SetPosition(_party.Tile.GetNeighbor(Direction.SOUTH));
+            _party.Logic.Map.SetPosition(_party.GetTile().GetNeighbor(Direction.SOUTH));
 
-            Assert.IsFalse(_party.EntityLogic.Harvesting.CanHarvest(_logs));
+            Assert.IsFalse(_party.Logic.Harvesting.CanHarvest(_logs));
         }
 
         [Test]
         public void TestBeginHarvesting()
         {
-            var harvesting = _party.EntityLogic.Harvesting.StartHarvesting(_logs);
+            var harvesting = _party.Logic.Harvesting.StartHarvesting(_logs);
 
             Assert.IsTrue(harvesting);
 
@@ -68,17 +68,31 @@ namespace UnitTests
         }
 
         [Test]
+        public void TestStartHarvestingSendingUpdatePackets()
+        {
+            _game.Network.DeltaCompression.ClearDeltas();
+            _game.SentServerPackets.Clear();
+
+            Assert.IsTrue(_party.Logic.Harvesting.StartHarvesting(_logs));
+
+            _game.Network.DeltaCompression.SendAllModifiedEntities(_party.OwnerID);
+
+            var tileUpdates = _game.SentServerPackets.Where(p => p is EntityUpdatePacket up && up.Type == EntityType.Tile && up.EntityId == _logs.EntityId).ToList();
+            Assert.AreEqual(1, tileUpdates.Count);
+        }
+
+        [Test]
         public void TestFinishHarvestingAll()
         {
-            var tileResourceBefore = _logs.Get<TileResourceComponent>();
+            var tileResourceBefore = _logs.Get<TileResourceComponent>().ShallowClone();
 
-            _party.EntityLogic.Harvesting.StartHarvesting(_logs);
+            _party.Logic.Harvesting.StartHarvesting(_logs);
             var totalTime = _logs.HarvestPointSpec.ResourceAmount * _logs.HarvestPointSpec.HarvestTimePerUnit;
 
             // Advance all harvesting time
             _scheduler.SetLogicalTime(_game.GameTime + totalTime);
 
-            var harvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
+            var harvestedStack = _party.Logic.Harvesting.StopHarvesting();
 
             var tileResourceAfter = _logs.Get<TileResourceComponent>();
             var resourcedSubtracted = tileResourceBefore.Resource.Amount - tileResourceAfter.Resource.Amount;
@@ -95,39 +109,39 @@ namespace UnitTests
         {
             var tileResourceBefore = _logs.Get<TileResourceComponent>();
 
-            _party.EntityLogic.Harvesting.StartHarvesting(_logs);
+            _party.Logic.Harvesting.StartHarvesting(_logs);
             var totalTime = _logs.HarvestPointSpec.ResourceAmount * _logs.HarvestPointSpec.HarvestTimePerUnit;
             _scheduler.SetLogicalTime(_game.GameTime + totalTime);
 
-            _game.Entities.DeltaCompression.ClearDeltas();
+            _game.Network.DeltaCompression.ClearDeltas();
             _player.ReceivedPackets.Clear();
 
-            var harvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
-            _game.Entities.DeltaCompression.SendDeltaPackets(_player);
+            var harvestedStack = _party.Logic.Harvesting.StopHarvesting();
+            _game.Network.DeltaCompression.SendAllModifiedEntities(_player.EntityId);
 
-            var tileUpdate = _player.ReceivedPacketsOfType<TileUpdatePacket>().First();
+            var tileUpdate = _player.ReceivedEntityUpdates(EntityType.Tile).First();
 
-            Assert.That(tileUpdate.Components.Any(c => c.GetType() == typeof(TileResourceComponent)));
-            
+            Assert.That(tileUpdate.SyncedComponents.Any(c => c.GetType() == typeof(TileResourceComponent)));
+
         }
 
         [Test]
         public unsafe void TestHarvestingComponentSync()
         {
             var tileResourceBefore = _logs.Get<TileResourceComponent>();
-            _game.Entities.DeltaCompression.ClearDeltas();
-            _party.EntityLogic.Harvesting.StartHarvesting(_logs);
+            _game.Network.DeltaCompression.ClearDeltas();
+            _party.Logic.Harvesting.StartHarvesting(_logs);
             var totalTime = _logs.HarvestPointSpec.ResourceAmount * _logs.HarvestPointSpec.HarvestTimePerUnit;
             var startTime = _game.GameTime;
 
-            var entityUpdate1 = _party.GetUpdatePacket(_player) as EntityUpdatePacket;
+            var entityUpdate1 = _party.Logic.DeltaCompression.GetUpdatePacket(_player.EntityId) as EntityUpdatePacket;
 
             // Advance all harvesting time
             _scheduler.SetLogicalTime(_game.GameTime + totalTime);
-            _game.Entities.DeltaCompression.ClearDeltas();
-            var harvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
+            _game.Network.DeltaCompression.ClearDeltas();
+            var harvestedStack = _party.Logic.Harvesting.StopHarvesting();
 
-            var entityUpdate2 = _party.GetUpdatePacket(_player) as EntityUpdatePacket;
+            var entityUpdate2 = _party.Logic.DeltaCompression.GetUpdatePacket(_player.EntityId) as EntityUpdatePacket;
 
             var firstUpdate = entityUpdate1.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(HarvestingComponent));
             var secondUpdate = entityUpdate2.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(HarvestingComponent));
@@ -140,17 +154,17 @@ namespace UnitTests
         public unsafe void TestHarvestingComponentRemoved()
         {
             var tileResourceBefore = _logs.Get<TileResourceComponent>();
-            _game.Entities.DeltaCompression.ClearDeltas();
-            _party.EntityLogic.Harvesting.StartHarvesting(_logs);
+            _game.Network.DeltaCompression.ClearDeltas();
+            _party.Logic.Harvesting.StartHarvesting(_logs);
             var totalTime = _logs.HarvestPointSpec.ResourceAmount * _logs.HarvestPointSpec.HarvestTimePerUnit;
             var startTime = _game.GameTime;
 
             // Advance all harvesting time
             _scheduler.SetLogicalTime(_game.GameTime + totalTime);
-            _game.Entities.DeltaCompression.ClearDeltas();
-            var harvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
+            _game.Network.DeltaCompression.ClearDeltas();
+            var harvestedStack = _party.Logic.Harvesting.StopHarvesting();
 
-            var entityUpdate = _party.GetUpdatePacket(_player) as EntityUpdatePacket;
+            var entityUpdate = _party.Logic.DeltaCompression.GetUpdatePacket(_player.EntityId) as EntityUpdatePacket;
 
             Assert.IsTrue(entityUpdate.RemovedComponentIds.First() == Serialization.GetTypeId(typeof(HarvestingComponent)));
         }
@@ -158,15 +172,15 @@ namespace UnitTests
         [Test]
         public void TestFinishHarvestingHalf()
         {
-            var tileResourceBefore = _logs.Get<TileResourceComponent>();
+            var tileResourceBefore = _logs.Get<TileResourceComponent>().ShallowClone();
 
-            _party.EntityLogic.Harvesting.StartHarvesting(_logs);
+            _party.Logic.Harvesting.StartHarvesting(_logs);
             var totalTime = _logs.HarvestPointSpec.ResourceAmount * _logs.HarvestPointSpec.HarvestTimePerUnit;
 
             // Advance half of the harvesting time
-            _scheduler.SetLogicalTime(_game.GameTime + (totalTime /2));
+            _scheduler.SetLogicalTime(_game.GameTime + (totalTime / 2));
 
-            var harvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
+            var harvestedStack = _party.Logic.Harvesting.StopHarvesting();
             var tileResourceAfter = _logs.Get<TileResourceComponent>();
             var cargo = _party.Get<CargoComponent>();
 
@@ -179,20 +193,20 @@ namespace UnitTests
         [Test]
         public void TestFinishHarvestingHalfTwice()
         {
-            var tileResourceBefore = _logs.Get<TileResourceComponent>();
+            var tileResourceBefore = _logs.Get<TileResourceComponent>().ShallowClone();
 
-            _party.EntityLogic.Harvesting.StartHarvesting(_logs);
+            _party.Logic.Harvesting.StartHarvesting(_logs);
             var totalTime = _logs.HarvestPointSpec.ResourceAmount * _logs.HarvestPointSpec.HarvestTimePerUnit;
 
             // Advance half of the harvesting time
             _scheduler.SetLogicalTime(_game.GameTime + (totalTime / 2));
 
             // Harvest the remaining half
-            var firstHarvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
+            var firstHarvestedStack = _party.Logic.Harvesting.StopHarvesting();
 
-            Assert.IsTrue(_party.EntityLogic.Harvesting.StartHarvesting(_logs));
+            Assert.IsTrue(_party.Logic.Harvesting.StartHarvesting(_logs));
             _scheduler.SetLogicalTime(_game.GameTime + totalTime);
-            var harvestedStack = _party.EntityLogic.Harvesting.StopHarvesting();
+            var harvestedStack = _party.Logic.Harvesting.StopHarvesting();
             var cargo = _party.Get<CargoComponent>();
 
             var tileResourceAfter = _logs.Get<TileResourceComponent>();
@@ -209,24 +223,26 @@ namespace UnitTests
             Assert.IsFalse(_party.Components.Has<HarvestingComponent>());
 
             // Course starts harvesting
-            var ev = new MoveRequestPacket() { Path = new List<Location>() { _logs.Position }, PartyIndex = _party.PartyIndex, Intent = CourseIntent.Harvest };
+            var ev = new MoveEntityCommand() { Path = new List<Location>() { _logs.Position }, Entity = _party.EntityId, Intent = CourseIntent.Harvest };
             ev.Sender = _player;
             _game.HandleClientEvent(_player, ev);
-            _game.GameScheduler.Tick(_game.GameTime + _party.Course.Delay);
+            _game.GameScheduler.Tick(_game.GameTime + _party.Course().Delay);
 
-            var tileResources = _logs.Components.GetPointer<TileResourceComponent>();
+            var tileResources = _logs.Components.Get<TileResourceComponent>();
 
             Assert.IsTrue(_party.Components.Has<HarvestingComponent>());
-            Assert.IsTrue(tileResources->BeingHarvested);
+            Assert.IsTrue(tileResources.BeingHarvested);
 
             // Course to end harvesting
-            ev = new MoveRequestPacket() { Path = new List<Location>() { _logs.GetNeighbor(Direction.SOUTH).Position }, PartyIndex = _party.PartyIndex };
+            ev = new MoveEntityCommand() { Path = new List<Location>() { _logs.GetNeighbor(Direction.SOUTH).Position }, Entity = _party.EntityId };
             ev.Sender = _player;
             _game.HandleClientEvent(_player, ev);
-            _game.GameScheduler.Tick(_game.GameTime + _party.Course.Delay);
+            _game.GameScheduler.Tick(_game.GameTime + _party.Course().Delay);
+
+            tileResources = _logs.Components.Get<TileResourceComponent>();
 
             Assert.IsFalse(_party.Components.Has<HarvestingComponent>());
-            Assert.IsFalse(tileResources->BeingHarvested);
+            Assert.IsFalse(tileResources.BeingHarvested);
         }
     }
 }

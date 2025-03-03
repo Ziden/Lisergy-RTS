@@ -28,7 +28,7 @@ namespace Assets.Code.UI
             _sendButton = Root.Q<Button>("SendButton").Required();
             _sendButton.clicked += OnSend;
             Root.Q<Button>("BackButton").Required().clicked += OnBack;
-            GameClient.ClientEvents.Register<ChatUpdateEvent>(this, OnChatUpdate);
+            GameClient.ClientEvents.On<ChatUpdateEvent>(this, OnChatUpdate);
             _chatLog = GameClient.Modules.Chat.GetFullChat().ToList();
             _list.selectionType = SelectionType.None;
             _list.makeItem += MakeItem;

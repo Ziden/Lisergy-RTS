@@ -1,18 +1,20 @@
 using UnityEngine;
-using Game.Systems.Party;
 using ClientSDK.Data;
 using Assets.Code.Assets.Code.Runtime.Movement;
 using ClientSDK;
 using Game.Systems.BattleGroup;
 using System.Collections.Generic;
+using Game.Engine.ECLS;
 
 namespace Assets.Code.World
 {
-    public partial class PartyView : UnityEntityView<PartyEntity>, IEntityMovementInterpolated
+    public partial class PartyView : UnityEntityView, IEntityMovementInterpolated
     {
+        public PartyView(IGameClient client, IEntity e) : base(e, client) { }
+
         public MovementInterpolator MovementInterpolator { get; private set; }
 
-        public IReadOnlyCollection<UnitView> UnitViews => Entity.Components.GetReference<BattleGroupUnitsComponent>().UnitViews.Values;
+        public IReadOnlyCollection<UnitView> UnitViews => Entity.Components.Get<BattleGroupUnitsComponent>().UnitViews.Values;
 
         protected override void CreateView()
         {
@@ -26,11 +28,11 @@ namespace Assets.Code.World
         public void UpdateUnits(UnitGroup group)
         {
             var entity = this.Entity;
-            if (!entity.Components.HasReference<BattleGroupUnitsComponent>())
+            if (!entity.Components.Has<BattleGroupUnitsComponent>())
             {
-                entity.Components.AddReference(new BattleGroupUnitsComponent());
+                entity.Components.Add<BattleGroupUnitsComponent>();
             }
-            var unitsComponent = entity.Components.GetReference<BattleGroupUnitsComponent>();
+            var unitsComponent = entity.Components.Get<BattleGroupUnitsComponent>();
             foreach (var unit in unitsComponent.UnitViews.Values) GameObject.Destroy(unit.GameObject);
             unitsComponent.UnitViews.Clear();
             foreach (var unit in group)

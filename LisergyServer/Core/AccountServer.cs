@@ -33,7 +33,7 @@ namespace MapServer
 
         public override void Tick()
         {
-           
+
         }
 
         public override void Connect(in int connectionID) { }
@@ -63,12 +63,12 @@ namespace MapServer
                 {
                     Success = connectedAccount != null,
                 };
-                if(authResult.Success)
+                if (authResult.Success)
                 {
                     authResult.Token = _cryptographyService.GenerateToken(connectedAccount.Profile.PlayerId);
                     authResult.TokenDuration = _cryptographyService.TokenDuration;
                     authResult.Profile = connectedAccount.Profile;
-                }  
+                }
                 Send(connectionID, authResult);
                 if (connectedAccount != null)
                 {

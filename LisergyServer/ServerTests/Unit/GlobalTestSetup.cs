@@ -2,10 +2,6 @@
 using Game.Engine.Events;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTests
 {
@@ -21,7 +17,7 @@ namespace UnitTests
         public void Dispose()
         {
             UnmanagedMemory.FlagMemoryToBeReused();
-            if(EventPoolValidator.Used.Count > 0)
+            if (EventPoolValidator.Used.Count > 0)
             {
                 throw new Exception("Some events have not been returned to pool: " + string.Join(',', EventPoolValidator.Used));
             }

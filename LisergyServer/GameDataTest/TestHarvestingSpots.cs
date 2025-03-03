@@ -1,12 +1,12 @@
-﻿using System;
-using GameData;
+﻿using GameData;
+using System;
 
 namespace GameDataTest
 {
     public class TestHarvestingSpots
     {
         private static string Addr(string name) => $"Assets/Addressables/Prefabs/Resources/{name}.prefab";
-        
+
         public static readonly ResourceHarvestPointSpec LOGS = new ResourceHarvestPointSpec(0)
         {
             HarvestTimePerUnit = TimeSpan.FromSeconds(1),
@@ -29,7 +29,7 @@ namespace GameDataTest
             ResourceId = TestResources.FOOD.SpecId,
             ResourceAmount = 5
         };
-        
+
         public static readonly ResourceHarvestPointSpec MOUNTAIN = new ResourceHarvestPointSpec(3)
         {
             HarvestTimePerUnit = TimeSpan.FromSeconds(5),

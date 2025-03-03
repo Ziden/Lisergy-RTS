@@ -1,16 +1,15 @@
-﻿using Game.ECS;
-using Game.Engine.Events;
+﻿using Game.Engine.Events;
 using Game.Engine.Events.Bus;
 using System;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Tests")]
-namespace Game.Engine.ECS
+namespace Game.Engine.ECLS
 {
     /// <summary>
     /// Event bus that fires specific events for the specific component. Can wrap events knowing the sender and component instance.
     /// </summary>
-    public class SystemEventBus<ComponentType> : IEventListener where ComponentType : unmanaged, IComponent
+    public class SystemEventBus<ComponentType> : IEventListener where ComponentType : IComponent
     {
         internal EventBus<IBaseEvent> _bus = new EventBus<IBaseEvent>();
         private IEntity _currentEntity;
@@ -24,7 +23,7 @@ namespace Game.Engine.ECS
             {
                 callback(_currentEntity, ev);
             }
-            _bus.Register(this, (Action<EventType>)ComponentEventWrapper);
+            _bus.On(this, (Action<EventType>)ComponentEventWrapper);
         }
 
 

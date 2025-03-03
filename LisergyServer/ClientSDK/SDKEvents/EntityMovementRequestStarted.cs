@@ -1,11 +1,9 @@
 ﻿using ClientSDK.Data;
+using Game.Engine.ECLS;
 using Game.Systems.Movement;
-using Game.Systems.Party;
 using Game.Tile;
 using Game.World;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ClientSDK.SDKEvents
 {
@@ -16,9 +14,9 @@ namespace ClientSDK.SDKEvents
     /// </summary>
     public class EntityMovementRequestStarted : IClientEvent
     {
-        public PartyEntity Party;
+        public IEntity Party;
         public IEnumerable<Location> Path;
-        public TileEntity Destination;
+        public TileModel Destination;
         public CourseIntent Intent;
     }
 }

@@ -1,7 +1,6 @@
 using Assets.Code.World;
 using ClientSDK;
-using Game.ECS;
-using Game.Engine.ECS;
+using Game.Engine.ECLS;
 using Game.Systems.Resources;
 using GameAssets;
 
@@ -12,33 +11,33 @@ public class HarvestingComponentListener : BaseComponentListener<HarvestingCompo
 {
     public HarvestingComponentListener(IGameClient client) : base(client)
     {
-        client.ClientEvents.Register<MovementInterpolationStart>(this, OnMoveStart);
+        client.ClientEvents.On<MovementInterpolationStart>(this, OnMoveStart);
     }
 
     private void OnMoveStart(MovementInterpolationStart e)
     {
-        if (e.Entity.Components.HasReference<HarvestingPredictionComponent>() && !e.Entity.Components.Has<HarvestingComponent>())
+        if (e.Entity.Components.Has<HarvestingPredictionComponent>() && !e.Entity.Components.Has<HarvestingComponent>())
         {
             GameClient.Log.Debug($"[HarvestingComponentListener] Moving from {e.From} to {e.To} while harvesting, stopping prediction");
-            e.Entity.Components.RemoveReference<HarvestingPredictionComponent>();
+            e.Entity.Components.Remove<HarvestingPredictionComponent>();
         }
     }
 
     private void OnBeginHarvesting(IEntity entity)
     {
         _ = GameClient.UnityServices().Vfx.EntityEffects.PlayEffect(entity, VfxPrefab.HarvestEffect);
-        if (entity.GetEntityView() is PartyView p)
+        if (entity.GetView() is PartyView p)
         {
             p.MovementInterpolator.ClearQueue();
         }
-        entity.Components.AddReference(new HarvestingPredictionComponent(GameClient, entity));
+        entity.Components.Add(new HarvestingPredictionComponent(GameClient, entity));
     }
 
     private void OnFinishHarvesting(IEntity entity)
     {
         GameClient.Log.Debug("[HarvestingComponentListener] Finishing harvesting");
         GameClient.UnityServices().Vfx.EntityEffects.StopEffects(entity);
-        entity.Components.RemoveReference<HarvestingPredictionComponent>();
+        entity.Components.Remove<HarvestingPredictionComponent>();
     }
 
     public override void OnUpdateComponent(IEntity entity, HarvestingComponent oldComponent, HarvestingComponent newComponent)

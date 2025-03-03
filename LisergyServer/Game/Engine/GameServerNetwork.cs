@@ -1,11 +1,9 @@
 ﻿using Game.Engine.DataTypes;
 using Game.Engine.Events.Bus;
 using Game.Engine.Network;
+using Game.Entities;
 using Game.Systems.Player;
-using Game.World;
 using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Game.Engine
 {
@@ -45,6 +43,9 @@ namespace Game.Engine
     /// </summary>
     public interface IGameNetwork
     {
+        void SetupGame(IGame game);
+
+        DeltaCompression DeltaCompression { get; }
         /// <summary>
         /// Receive and proccess an input packet
         /// </summary>
@@ -55,13 +56,13 @@ namespace Game.Engine
         /// Listens for packets being received
         /// </summary>
 
-        public void On<T>(Action<T> listener) where T : BasePacket;
+        public void OnInput<T>(Action<T> listener) where T : BasePacket;
 
         /// <summary>
         /// Sends a packet to player
         /// </summary>
 
-        public void SendToPlayer<PacketType>(PacketType p, params PlayerEntity[] players) where PacketType : BasePacket;
+        public void SendToPlayer<PacketType>(PacketType p, params GameId[] players) where PacketType : BasePacket;
 
         /// <summary>
         /// Sends a packet to server.
@@ -77,26 +78,53 @@ namespace Game.Engine
         public EventBus<BasePacket> IncomingPackets { get; } = new EventBus<BasePacket>();
 
         private IGame _game;
+        private DeltaCompression _deltas;
 
+        public DeltaCompression DeltaCompression => _deltas;
         public GameServerNetwork(IGame game)
         {
             _game = game;
+            _deltas = new DeltaCompression(game);
         }
 
 
-        public void On<T>(Action<T> listener) where T : BasePacket
+        public void OnInput<T>(Action<T> listener) where T : BasePacket
         {
-            IncomingPackets.Register(this, listener);
+            IncomingPackets.On(this, listener);
         }
 
 
         public void ReceiveInput(GameId sender, BasePacket input)
         {
-            input.Sender = _game.Players[sender] ?? new PlayerEntity(new PlayerProfile(sender), _game);
+            CheckUser(sender, input);
             IncomingPackets.Call(input);
-            _game.Entities.DeltaCompression.SendDeltaPackets(input.Sender);
+            if (input is IGameCommand command)
+            {
+                command.Execute(_game);
+            }
+            if (_game.Players[sender] != null)
+            {
+                _game.Network.DeltaCompression.SendAllModifiedEntities(sender);
+            }
         }
 
+        // TODO: Should this be here?
+        private void CheckUser(GameId sender, BasePacket input)
+        {
+            input.SenderPlayerId = sender;
+            var senderEntity = _game.Entities[sender];
+            if (senderEntity == null)
+            {
+                senderEntity = _game.Entities.CreateEntity(EntityType.Player, GameId.ZERO, sender);
+                var profile = new PlayerProfileComponent(sender);
+                senderEntity.Save(profile);
+            }
+            var senderPlayer = _game.Players[sender];
+            if (input.Sender == null && senderPlayer != null)
+            {
+                input.Sender = senderPlayer;
+            }
+        }
 
         public void SendToServer(BasePacket p, ServerType server)
         {
@@ -104,13 +132,18 @@ namespace Game.Engine
         }
 
 
-        public void SendToPlayer<PacketType>(PacketType p, params PlayerEntity[] players) where PacketType : BasePacket
+        public void SendToPlayer<PacketType>(PacketType p, params GameId[] players) where PacketType : BasePacket
         {
             foreach (var player in players)
             {
                 if (player == null) continue;
-                OnOutgoingPacket?.Invoke(player.EntityId, p);
+                OnOutgoingPacket?.Invoke(player, p);
             }
+        }
+
+        public void SetupGame(IGame game)
+        {
+            _game = game;
         }
     }
 }

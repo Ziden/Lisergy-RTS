@@ -1,11 +1,11 @@
-﻿using Game.Engine.ECS;
+﻿using Game.Engine.ECLS;
 using Game.Systems.Tile;
 
 namespace Game.Systems.Resources
 {
-    public unsafe class ResourceSystem : LogicSystem<TileComponent, ResourcesLogic>
+    public unsafe class ResourceSystem : LogicSystem<TileDataComponent, ResourcesLogic>
     {
-        public ResourceSystem(LisergyGame game) : base(game) 
+        public ResourceSystem(LisergyGame game) : base(game)
         {
             EntityEvents.On<TileUpdatedEvent>(OnTileUpdated);
         }

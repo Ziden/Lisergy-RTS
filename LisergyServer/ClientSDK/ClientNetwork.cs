@@ -1,10 +1,10 @@
-﻿using Game.Engine;
+﻿using Game;
+using Game.Engine;
 using Game.Engine.DataTypes;
 using Game.Engine.Events.Bus;
 using Game.Engine.Network;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
-using Game.Systems.Player;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -16,24 +16,35 @@ namespace ClientSDK
     public class ClientNetwork : IGameNetwork, IEventListener
     {
         public event Action<BasePacket>? OnReceiveGenericPacket;
+        public event Action<BasePacket>? OnSendGenericPacket;
 
         private bool _enabled = true;
         internal const int READS_PER_TICK = 5;
         internal Message _msg;
         private IGameLog _log;
+        internal HashSet<ServerType> _serversConnected = new HashSet<ServerType>();
         internal Dictionary<ServerType, Client> _connections = new Dictionary<ServerType, Client>();
         internal Dictionary<ServerType, Queue<byte[]>> _toSend = new Dictionary<ServerType, Queue<byte[]>>();
         internal EventBus<BasePacket> _receivedFromServer = new EventBus<BasePacket>();
         private LoginResultPacket _credentials = null!;
+        private DeltaCompression _deltas;
 
+        public IReadOnlyCollection<ServerType> ServersConnected => _serversConnected;
+
+        public DeltaCompression DeltaCompression => _deltas;
         public ClientNetwork(IGameLog log, params ServerType[] connections)
         {
             _log = log;
-            foreach(var server in connections)
+            foreach (var server in connections)
             {
                 _connections[server] = new Client();
                 _toSend[server] = new Queue<byte[]>();
             }
+        }
+
+        public void SetupGame(IGame game)
+        {
+            _deltas = new DeltaCompression(game);
         }
 
         /// <summary>
@@ -53,12 +64,12 @@ namespace ClientSDK
             SendToServer(handshake, ServerType.CHAT);
         }
 
-        public void On<T>(Action<T> listener) where T : BasePacket
+        public void OnInput<T>(Action<T> listener) where T : BasePacket
         {
-            _receivedFromServer.Register(this, listener);
+            _receivedFromServer.On(this, listener);
         }
 
-        public void ReceiveInput(GameId sender, BasePacket input) 
+        public void ReceiveInput(GameId sender, BasePacket input)
         {
             _log.Debug($"Received Packet {input}");
             _receivedFromServer.Call(input);
@@ -70,7 +81,7 @@ namespace ClientSDK
             OnReceiveGenericPacket?.Invoke(input);
         }
 
-        public void SendToPlayer<PacketType>(PacketType p, params PlayerEntity[] players) where PacketType : BasePacket
+        public void SendToPlayer<PacketType>(PacketType p, params GameId[] players) where PacketType : BasePacket
         {
             throw new Exception("P2P Not Enabled - yet");
         }
@@ -79,6 +90,7 @@ namespace ClientSDK
         {
             _enabled = true;
             _log.Debug($"Sending {p.GetType().Name} to {server}");
+            OnSendGenericPacket?.Invoke(p);
             _toSend[server].Enqueue(Serialization.FromBasePacket(p));
         }
 
@@ -86,7 +98,7 @@ namespace ClientSDK
         {
             _log.Info("Client disconnecting");
             _enabled = false;
-            foreach(var client in _connections.Values) client.Disconnect();
+            foreach (var client in _connections.Values) client.Disconnect();
         }
 
         public void Tick()
@@ -114,11 +126,13 @@ namespace ClientSDK
                     {
                         case EventType.Connected:
                             _log.Debug($"Connected to Server {server}");
+                            _serversConnected.Add(server);
                             break;
                         case EventType.Data:
                             ReceiveServerMessage(server, Serialization.ToBasePacket(_msg.data));
                             break;
                         case EventType.Disconnected:
+                            _serversConnected.Remove(server);
                             _log.Debug($"Disconnected from Server {server}");
                             break;
                     }

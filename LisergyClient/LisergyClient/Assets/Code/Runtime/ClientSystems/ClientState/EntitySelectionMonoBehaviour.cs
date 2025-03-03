@@ -1,5 +1,3 @@
-using Game;
-using Game.ECS;
 using UnityEngine;
 
 namespace Assets.Code

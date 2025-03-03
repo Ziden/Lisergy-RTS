@@ -1,16 +1,13 @@
 
 using Assets.Code;
-using Assets.Code.Views;
-using Assets.Code.World;
 using ClientSDK;
-using ClientSDK.Data;
-using Game;
 using Game.Engine.DataTypes;
-using Game.Engine.ECS;
-using Game.Systems.Building;
+using Game.Engine.ECLS;
+using Game.Entities;
 using Game.Systems.Map;
-using Game.Systems.Party;
+using Game.Systems.Tile;
 using Game.Tile;
+using Game.World;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -33,26 +30,36 @@ public static class ClientExtensions
     /// <summary>
     /// Checks if a given tile is visible to the local player
     /// </summary>
-    public static bool IsVisible(this TileEntity tile) => tile != null && tile.PlayersViewing.Any(p => p.EntityId.IsMine());
+    public static bool IsTileModelVisible(this IEntity tile) => tile != null && tile.Logic.Vision.GetEntitiesViewing().Any(p => p.IsMine());
 
     /// <summary>
     /// Gets the unity position of a given entity
     /// </summary>
-    public static Vector3 UnityPosition(this BaseEntity entity) => new Vector3(entity.Tile.X, 0, entity.Tile.Y);
+    public static Vector3 UnityPosition(this IEntity entity) => new Vector3(entity.GetTile().X, 0, entity.GetTile().Y);
 
     /// <summary>
     /// Gets the unity position of a given tile
     /// </summary>
-    public static Vector3 UnityPosition(this TileEntity entity) => new Vector3(entity.X, 0, entity.Y);
+    public static Vector3 UnityPosition(this TileModel entity) => new Vector3(entity.X, 0, entity.Y);
 
     /// <summary>
     /// Gets the tile of a given entity
     /// Entity must have <see cref="MapPlacementComponent"/> component
     /// </summary>
-    public static TileEntity GetTile(this IEntity entity)
+    public static TileModel GetTile(this IEntity entity)
     {
         var place = entity.Get<MapPlacementComponent>();
-        return entity.Game.World.Map.GetTile(place.Position.X, place.Position.Y);
+        return entity.Game.World.GetTile(place.Position.X, place.Position.Y);
+    }
+
+    /// <summary>
+    /// Gets the position of an entity
+    /// /// Entity must have <see cref="MapPlacementComponent"/> component
+    /// </summary>
+    public static Location GetPosition(this IEntity entity)
+    {
+        if (entity.EntityType == EntityType.Tile) return entity.Get<TileDataComponent>().Position;
+        return entity.Get<MapPlacementComponent>().Position;
     }
 
     /// <summary>
@@ -69,8 +76,6 @@ public static class ClientExtensions
     /// </summary>
     public static IGameClientServices UnityServices(this IGameClient client) => UnityServicesContainer.Interface;
 
-    public static IEntityView GetEntityView(this IEntity entity) => UnityServicesContainer.Interface.ServerModules.Views.GetEntityView(entity);
-    public static TileView GetEntityView(this TileEntity entity) => UnityServicesContainer.Interface.ServerModules.Views.GetView<TileView>(entity);
-    public static PlayerBuildingView GetEntityView(this PlayerBuildingEntity entity) => UnityServicesContainer.Interface.ServerModules.Views.GetView<PlayerBuildingView>(entity);
-    public static PartyView GetEntityView(this PartyEntity entity) => UnityServicesContainer.Interface.ServerModules.Views.GetView<PartyView>(entity);
+    public static IUnityEntityView GetView(this IEntity entity) => UnityServicesContainer.Interface.ServerModules.Views.GetEntityView(entity) as IUnityEntityView;
+    public static T GetView<T>(this IEntity entity) => (T)UnityServicesContainer.Interface.ServerModules.Views.GetEntityView(entity);
 }

@@ -1,6 +1,7 @@
-﻿using Game.ECS;
-using Game.Engine.DataTypes;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.ECLS;
 using Game.Engine.Network;
+using Game.Entities;
 using System;
 using System.Linq;
 
@@ -12,21 +13,26 @@ namespace Game.Events.ServerEvents
         public EntityType Type;
         public GameId EntityId;
         public GameId OwnerId;
-        public IComponent [] SyncedComponents;
+        public IComponent[] SyncedComponents;
         public uint[] RemovedComponentIds;
 
         public EntityUpdatePacket() { }
 
-        public EntityUpdatePacket(BaseEntity entity)
+        public EntityUpdatePacket(IEntity entity)
         {
             Type = entity.EntityType;
             EntityId = entity.EntityId;
             OwnerId = entity.OwnerID;
         }
 
+        public T GetComponent<T>()
+        {
+            return (T)SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(T));
+        }
+
         public override string ToString()
         {
-            return $"<EntityUpdate {EntityId} Components={string.Join(',', SyncedComponents.ToList())}>";
+            return $"<EntityUpdate {Type} {EntityId} Components={string.Join(',', SyncedComponents.ToList())}>";
         }
     }
 }

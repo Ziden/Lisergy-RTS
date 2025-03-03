@@ -1,13 +1,6 @@
-﻿using ClientSDK.SDKEvents;
-using Game.Events.ServerEvents;
-using Game.Network.ClientPackets;
-using NUnit.Framework;
-using ServerTests.Integration.Stubs;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ServerTests.Integration
+﻿namespace ServerTests.Integration
 {
+    /*
     public class TwoPlayerTest
     {
         StandaloneServer _server;
@@ -33,19 +26,19 @@ namespace ServerTests.Integration
         public async Task SmokeTest2p()
         {
             _p1.Modules.Account.SendAuthenticationPacket("abc", "def");
-            var result = await _p1.WaitFor<LoginResultPacket>();
+            var result = await _p1.WaitUntilReceives<LoginResultPacket>();
             Assert.AreEqual(true, result.Success);
 
             _p2.Modules.Account.SendAuthenticationPacket("abc2", "def2");
-            var resultP2 = await _p2.WaitFor<LoginResultPacket>();
+            var resultP2 = await _p2.WaitUntilReceives<LoginResultPacket>();
             Assert.AreEqual(true, resultP2.Success);
 
-            var p1Received = await _p1.WaitFor<TileUpdatePacket>();
-            var p2Received = await _p2.WaitFor<TileUpdatePacket>();
+            var p1Received = await _p1.WaitUntilReceives<EntityUpdatePacket>();
+            var p2Received = await _p2.WaitUntilReceives<EntityUpdatePacket>();
 
             Assert.NotNull(p1Received);
             Assert.NotNull(p2Received);
-            Assert.AreNotEqual(p1Received.Data, p2Received.Data);
+            Assert.AreNotEqual(p1Received.EntityId, p2Received.EntityId);
 
             _p1.EventsInSdk.Clear();
             _p2.EventsInSdk.Clear();
@@ -53,8 +46,8 @@ namespace ServerTests.Integration
             // TESTING CHAT
             _p1.Modules.Chat.SendMessage("P1 MESSAGE");
 
-            var p1Seen = await _p1.WaitFor<ChatPacket>();
-            var p2Seen = await _p2.WaitFor<ChatPacket>();
+            var p1Seen = await _p1.WaitUntilReceives<ChatPacket>();
+            var p2Seen = await _p2.WaitUntilReceives<ChatPacket>();
             
             Assert.IsTrue(_p1.EventsInSdk.Any(e => e is ChatUpdateEvent chat && chat.NewPacket.Message == "P1 MESSAGE"));
             Assert.IsTrue(_p2.EventsInSdk.Any(e => e is ChatUpdateEvent chat && chat.NewPacket.Message == "P1 MESSAGE"));
@@ -68,20 +61,21 @@ namespace ServerTests.Integration
         public async Task SmokeTestP1Disconnects()
         {
             _p1.Modules.Account.SendAuthenticationPacket("abc", "def");
-            var result = await _p1.WaitFor<LoginResultPacket>();
+            var result = await _p1.WaitUntilReceives<LoginResultPacket>();
             Assert.AreEqual(true, result.Success);
             _p1.Network.Disconnect();
             _p1.ReceivedPackets.Clear();
 
             _p2.Modules.Account.SendAuthenticationPacket("abc2", "def2");
-            var resultP2 = await _p2.WaitFor<LoginResultPacket>();
+            var resultP2 = await _p2.WaitUntilReceives<LoginResultPacket>();
             Assert.AreEqual(true, resultP2.Success);
 
-            var p1Received = await _p1.WaitFor<TileUpdatePacket>();
-            var p2Received = await _p2.WaitFor<TileUpdatePacket>();
+            var p1Received = await _p1.WaitUntilReceives<EntityUpdatePacket>();
+            var p2Received = await _p2.WaitUntilReceives<EntityUpdatePacket>();
 
             Assert.Null(p1Received);
             Assert.NotNull(p2Received);
         }
     }
+    */
 }

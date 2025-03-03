@@ -20,12 +20,7 @@ namespace Game.Engine.DataTypes
         /// 0 = disabled.
         /// This is just during initial development later can think a better solution for debugging
         /// </summary>
-        internal static ulong DEBUG_MODE = 0;
-
-        /// <summary>
-        /// Sets whats to be the next generated game id
-        /// </summary>
-        public static GameId NextGeneration;
+        internal static ulong INCREMENTAL_MODE = 0;
 
         public static GameId ZERO = Guid.Empty;
 
@@ -48,18 +43,10 @@ namespace Game.Engine.DataTypes
 
         public static GameId Generate()
         {
-
-            if (NextGeneration != ZERO)
+            if (INCREMENTAL_MODE > 0)
             {
-                var val = NextGeneration;
-                NextGeneration = ZERO;
-                return val;
-            }
-
-            if (DEBUG_MODE > 0)
-            {
-                DEBUG_MODE++;
-                return new GameId() { _leftside = 0, _rightside = DEBUG_MODE };
+                INCREMENTAL_MODE++;
+                return new GameId() { _leftside = 0, _rightside = INCREMENTAL_MODE };
             }
             return Guid.NewGuid();
         }
@@ -93,6 +80,17 @@ namespace Game.Engine.DataTypes
             return !g1.IsEqualsTo(g2);
         }
 
+        public bool IsEqualsTo(Guid guid)
+        {
+            if (INCREMENTAL_MODE > 0)
+            {
+                return guid == Guid.Empty && IsZero() ||
+                       !IsZero() && guid != Guid.Empty;
+            }
+            GameId otherId = guid;
+            return IsEqualsTo(otherId);
+        }
+
         public static bool operator ==(GameId g1, Guid g2)
         {
             return g1.IsEqualsTo(g2);
@@ -120,7 +118,7 @@ namespace Game.Engine.DataTypes
 
         public override string ToString()
         {
-            if (DEBUG_MODE > 0) return _rightside.ToString();
+            if (INCREMENTAL_MODE > 0) return _rightside.ToString();
             if (IsZero())
             {
                 return Guid.Empty.ToString();

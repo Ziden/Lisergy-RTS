@@ -1,17 +1,14 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
-using Game.ECS;
-using Game.Engine.ECS;
+using Game.Entities;
+using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Systems.Battler;
-using Game.Systems.Party;
 using Game.Systems.Resources;
 using GameAssets;
-using System.Linq;
 using UnityEngine.UIElements;
 
 namespace Assets.Code.UI
 {
-
     public class EntityDetailsParams : IGameUiParam
     {
         public IEntity Entity;
@@ -33,9 +30,9 @@ namespace Assets.Code.UI
             _name = Root.Q<Label>("EntityLabel").Required();
             _name.text = e.EntityType.ToString();
 
-            if (e is PartyEntity party)
+            if (e.EntityType == EntityType.Party)
             {
-                var leader = party.Components.Get<BattleGroupComponent>().Units.Leader;
+                var leader = e.Components.Get<BattleGroupComponent>().Units.Leader;
                 var leaderSpec = GameClient.Game.Specs.Units[leader.SpecId];
                 _icon.SetBackground(leaderSpec.IconArt);
             }
@@ -47,7 +44,6 @@ namespace Assets.Code.UI
                 groupWidget.DisplayComponent(setup.Entity, battleGroup);
             }
             else groupWidget.Hide();
-
 
             var cargoWidget = new WidgetCargoComponent(Root.Q("CargoComponent").Required(), GameClient);
             if (e.Components.TryGet<CargoComponent>(out var cargo) && cargo.CurrentWeight > 0)

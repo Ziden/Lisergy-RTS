@@ -1,15 +1,16 @@
-﻿using Game.Systems.Player;
-using Game;
-using System.Collections.Generic;
+﻿using Game;
 using Game.Engine.DataTypes;
+using Game.Engine.ECLS;
+using Game.Systems.Player;
+using System.Collections.Generic;
 
-public class ClientPlayer : PlayerEntity
+public class ClientPlayer : PlayerModel
 {
-    public Dictionary<GameId, BaseEntity> KnownEntities = new Dictionary<GameId, BaseEntity>();
+    public Dictionary<GameId, IEntity> KnownEntities = new Dictionary<GameId, IEntity>();
 
     public bool ViewBattles = true;
 
-    public ClientPlayer(PlayerProfile profile, IGame game) : base(profile, game)
+    public ClientPlayer(IGame game, IEntity playerEntity) : base(game, playerEntity)
     {
     }
 }

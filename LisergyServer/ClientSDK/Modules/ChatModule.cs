@@ -1,23 +1,16 @@
 ﻿using ClientSDK.SDKEvents;
-using ClientSDK.Services;
-using Game.ECS;
 using Game.Engine;
 using Game.Network.ClientPackets;
-using Game.Systems.Map;
-using System;
+using Game.Systems.Player;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Net.Sockets;
-using System.Runtime.Serialization;
-using System.Text;
 
 namespace ClientSDK.Modules
 {
     /// <summary>
     /// Allows player to send chat messages. Will handle receiving messages too.
     /// </summary>
-    public interface IChatModule : IClientModule 
+    public interface IChatModule : IClientModule
     {
         /// <summary>
         /// Gets the last two messages of the chat
@@ -69,13 +62,14 @@ namespace ClientSDK.Modules
 
         public void Register()
         {
-            _gameClient.Network.On<ChatPacket>(OnChat);
-            _gameClient.Network.On<ChatLogPacket>(OnChatLog);
+            _gameClient.Network.OnInput<ChatPacket>(OnChat);
+            _gameClient.Network.OnInput<ChatLogPacket>(OnChatLog);
         }
 
-        private void OnChatLog(ChatLogPacket chatLog) {
+        private void OnChatLog(ChatLogPacket chatLog)
+        {
             _chatLog.Clear();
-            foreach(var c in chatLog.Messages) _chatLog.Add(c);
+            foreach (var c in chatLog.Messages) _chatLog.Add(c);
             _gameClient.ClientEvents.Call(new ChatUpdateEvent());
         }
 
@@ -93,7 +87,7 @@ namespace ClientSDK.Modules
         {
             _gameClient.Network.SendToServer(new ChatPacket()
             {
-                Name = _gameClient.Modules.Player.LocalPlayer.Profile.PlayerName,
+                Name = _gameClient.Modules.Player.LocalPlayer.GetFromEntity<PlayerProfileComponent>().Name,
                 Message = message,
             }, ServerType.CHAT);
         }

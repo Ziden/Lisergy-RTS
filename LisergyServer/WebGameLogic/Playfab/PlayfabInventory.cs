@@ -39,14 +39,14 @@ namespace WebGameLogic.Playfab
         {
             var response = await PlayFabServerAPI.GetUserInventoryAsync(new GetUserInventoryRequest()
             {
-                PlayFabId = _playfabId,   
+                PlayFabId = _playfabId,
             });
             if (response.Error != null) throw new Exception(response.Error.GenerateErrorReport());
             var result = response.Result;
             var dict = new Dictionary<int, int>();
-            foreach(var i in result.VirtualCurrency)
+            foreach (var i in result.VirtualCurrency)
             {
-                var itemId = Int32.Parse(i.Key);     
+                var itemId = Int32.Parse(i.Key);
                 dict[itemId] = i.Value;
             }
             return dict;

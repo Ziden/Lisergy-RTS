@@ -1,5 +1,4 @@
 ﻿using Game.Engine.DataTypes;
-using Game.Systems.Battle;
 using Game.Systems.Battle.Data;
 using System;
 

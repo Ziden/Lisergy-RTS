@@ -1,5 +1,4 @@
 ﻿using Game.Engine;
-using Game.Entity;
 using Game.Systems.BattleGroup;
 using Game.Systems.Battler;
 using System;

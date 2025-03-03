@@ -1,8 +1,5 @@
 ﻿using ClientSDK.Data;
 using Game.Network.ClientPackets;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ClientSDK.SDKEvents
 {

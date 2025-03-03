@@ -1,4 +1,4 @@
-﻿using Game.ECS;
+﻿using Game.Engine.ECLS;
 using Game.Systems.Battler;
 using GameData.Specs;
 using System;
@@ -8,7 +8,7 @@ namespace Game.Systems.Dungeon
     [Serializable]
     [SyncedComponent]
     [RequiresComponent(typeof(BattleGroupComponent))]
-    public struct DungeonComponent : IComponent
+    public class DungeonComponent : IComponent
     {
         public DungeonSpecId SpecId;
 

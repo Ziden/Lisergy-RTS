@@ -1,11 +1,9 @@
-﻿using Game.Engine.ECS;
-using GameData;
-using System.Collections.Generic;
+﻿using Game.Engine.ECLS;
 
 namespace Game.Systems.Construction
 {
     public unsafe class ConstructionLogic : BaseEntityLogic<ConstructionComponent>
     {
-       
+
     }
 }

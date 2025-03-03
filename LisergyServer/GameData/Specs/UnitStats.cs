@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Game.Entity
+namespace Game.Specs
 {
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
@@ -13,58 +13,58 @@ namespace Game.Entity
         /// Units physical attack
         /// </summary>
         public byte Atk;
-        
+
         /// <summary>
         /// Units physical defense
         /// </summary>
         public byte Def;
-        
+
         /// <summary>
         /// Units magical attack
         /// </summary>
         public byte Matk;
-        
+
         /// <summary>
         /// Unit's magical defence
         /// </summary>
         public byte Mdef;
-        
+
         /// <summary>
         /// Unit speed in battle
         /// </summary>
         public byte Speed;
-        
+
         /// <summary>
         /// Unit chance to hit attacks & spells
         /// </summary>
         public byte Accuracy;
-        
+
         /// <summary>
         /// Current unit weight
         /// </summary>
         public byte Weight;
-        
+
         /// <summary>
         /// Unit bonus to how much weight can a party hold in cargo
         /// 10 = 10%
         /// </summary>
         public byte CargoWeightBonusPct;
-        
+
         /// <summary>
         /// Unit current hit points
         /// </summary>
         public byte HP;
-        
+
         /// <summary>
         /// Unit max hit points
         /// </summary>
         public byte MaxHP;
-        
+
         /// <summary>
         /// Units current magic points
         /// </summary>
         public byte MP;
-        
+
         /// <summary>
         /// Units max magic points
         /// </summary>

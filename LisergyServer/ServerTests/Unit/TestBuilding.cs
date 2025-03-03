@@ -1,12 +1,10 @@
 using Game.Events.ServerEvents;
 using Game.Systems.Building;
-using Game.Systems.MapPosition;
 using Game.Systems.Tile;
 using NUnit.Framework;
 using ServerTests;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using GameDataTest;
+using Tests.Unit.Stubs;
 
 namespace UnitTests
 {
@@ -21,17 +19,35 @@ namespace UnitTests
         }
 
         [Test]
+
+        public void TestRemovedBuildingTileReference()
+        {
+            Game.CreatePlayer();
+            var player = Game.GetTestPlayer();
+
+            var initialBuildingSpec = Game.Specs.InitialBuilding;
+            var building = player.Buildings.FirstOrDefault();
+
+            Assert.NotNull(building.GetTile());
+
+            building.Logic.Map.SetPosition(null);
+
+            Assert.IsNull(building.GetTile());
+        }
+
+        [Test]
         public void TestInitialBuilding()
         {
             var player = Game.GetTestPlayer();
 
             var initialBuildingSpec = Game.Specs.InitialBuilding;
             var building = player.Buildings.FirstOrDefault();
-            var tile = building.Components.GetReference<MapReferenceComponent>().Tile;
+            var tile = building.GetTile();
+            var buildingThere = tile.Components.Get<TileHabitantsComponent>().Building;
             Assert.IsTrue(player.Buildings.Count == 1);
-            Assert.IsTrue(player.Buildings.Any(b => b.SpecId == initialBuildingSpec.SpecId));
-            Assert.IsTrue(tile.Components.GetReference<TileHabitantsReferenceComponent>().Building == player.Buildings.First());
-            Assert.IsTrue(((PlayerBuildingEntity)tile.Components.GetReference<TileHabitantsReferenceComponent>().Building).SpecId == initialBuildingSpec.SpecId);
+            Assert.IsTrue(player.Buildings.Any(b => b.Get<PlayerBuildingComponent>().SpecId == initialBuildingSpec.SpecId));
+            Assert.IsTrue(buildingThere == player.Buildings.First());
+            Assert.IsTrue(buildingThere.Get<PlayerBuildingComponent>().SpecId == initialBuildingSpec.SpecId);
         }
 
         [Test]
@@ -48,13 +64,13 @@ namespace UnitTests
             var tile = Game.RandomNotBuiltTile();
             var buildingSpec = Game.RandomBuildingSpec();
 
-            player.EntityLogic.Player.Build(buildingSpec.SpecId, tile);
+            player.EntityLogic.Build(buildingSpec.SpecId, tile);
 
             Assert.IsTrue(player.Buildings.Count == 2);
-            Assert.IsTrue(player.Buildings.Any(b => b.SpecId == buildingSpec.SpecId));
-            Assert.IsTrue(tile.Components.GetReference<TileHabitantsReferenceComponent>().Building == player.Buildings.Last());
-            Assert.IsTrue(((PlayerBuildingEntity)tile.Building).SpecId == buildingSpec.SpecId);
-            Assert.That(tile.EntitiesViewing.Contains(tile.Building));
+            Assert.IsTrue(player.Buildings.Any(b => b.Get<PlayerBuildingComponent>().SpecId == initialBuildingSpec.SpecId));
+            Assert.IsTrue(tile.Components.Get<TileHabitantsComponent>().Building == player.Buildings.Last());
+            Assert.IsTrue(tile.Logic.Tile.GetBuildingOnTile().Get<PlayerBuildingComponent>().SpecId == buildingSpec.SpecId);
+            Assert.That(tile.Logic.Vision.GetEntitiesViewing().Contains(tile.Logic.Tile.GetBuildingOnTile().EntityId));
 
         }
 
@@ -65,11 +81,11 @@ namespace UnitTests
             var initialBuildingSpec = Game.RandomBuildingSpec();
             var tile = Game.RandomNotBuiltTile();
             var buildingSpec = Game.RandomBuildingSpec();
-            Game.Entities.DeltaCompression.ClearDeltas();
+            Game.Network.DeltaCompression.ClearDeltas();
             Game.SentServerPackets.Clear();
 
-            var building = player.EntityLogic.Player.Build(buildingSpec.SpecId, tile);
-            Game.Entities.DeltaCompression.SendDeltaPackets(player);
+            var building = player.EntityLogic.Build(buildingSpec.SpecId, tile);
+            Game.Network.DeltaCompression.SendAllModifiedEntities(player.EntityId);
             var buildingPacket = Game.SentServerPackets.First(o => o is EntityUpdatePacket p && p.EntityId == building.EntityId);
 
             Assert.NotNull(buildingPacket);

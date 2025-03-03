@@ -6,7 +6,7 @@ using ServerTests;
 namespace UnitTests
 {
     public class TestSpecSerialization
-    { 
+    {
         [Test]
         public void TestBasicSerialization()
         {

@@ -1,4 +1,4 @@
-﻿using Game.ECS;
+﻿using Game.Engine.ECLS;
 using System;
 
 namespace Game.Systems.Movement
@@ -8,7 +8,7 @@ namespace Game.Systems.Movement
     /// </summary>
     [Serializable]
     [SyncedComponent]
-    public struct MovespeedComponent : IComponent
+    public class MovespeedComponent : IComponent
     {
         public TimeSpan MoveDelay;
 

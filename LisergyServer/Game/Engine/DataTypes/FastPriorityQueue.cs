@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Game.Engine.DataTypes
 {
-
     public class FastPriorityQueueNode
     {
         /// <summary>

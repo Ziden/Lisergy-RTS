@@ -28,6 +28,7 @@ namespace NetSerializer
             new EnumSerializer(),
             new DictionarySerializer(),
             new NullableSerializer(),
+            new HashSetSerializer(),
             new GenericSerializer(),
         };
 

@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Game.World
+﻿namespace Game.World
 {
     public abstract class ChunkPopulator
     {

@@ -1,9 +1,6 @@
 ﻿using ClientSDK.Data;
 using Game.Engine.DataTypes;
 using Game.Systems.Battle.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ClientSDK.SDKEvents
 {

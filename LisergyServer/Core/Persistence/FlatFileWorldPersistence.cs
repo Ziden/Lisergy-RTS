@@ -1,17 +1,13 @@
-﻿using System;
+﻿using Game;
+using Game.Engine;
+using Game.Engine.ECLS;
+using Game.Entities;
+using Game.Systems.Map;
+using GameData;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Game;
-using Game.Engine;
-using Game.Engine.DataTypes;
-using Game.Engine.ECS;
-using Game.Systems.Map;
-using Game.Systems.Player;
-using Game.World;
-using GameData;
 
 namespace BaseServer.Persistence
 {
@@ -56,7 +52,13 @@ namespace BaseServer.Persistence
             await Task.WhenAll(tasks);
             _log.Info($"World Saved to {worldDir}");
         }
-        
+
+        public class MapData
+        {
+            public int SizeX;
+            public int SizeY;
+        }
+
         public async Task<LisergyGame> Load(GameSpec gameSpec, string worldName)
         {
             var currentDirectory = Directory.GetCurrentDirectory();
@@ -64,10 +66,12 @@ namespace BaseServer.Persistence
 
             var playersTask = File.ReadAllBytesAsync(worldDir + "players.data");
             var entitiesTask = File.ReadAllBytesAsync(worldDir + "entities.data");
+            var tilesTask = File.ReadAllBytesAsync(worldDir + "tiles.data");
             var mapTask = File.ReadAllBytesAsync(worldDir + "map.data");
 
-            await Task.WhenAll(playersTask, entitiesTask, mapTask);
-
+            await Task.WhenAll(playersTask, entitiesTask, mapTask, tilesTask);
+            return null;
+            /*
             var qtdChunks = mapTask.Result.Length / Marshal.SizeOf<ChunkData>();
             var chunkSize = Math.Sqrt(qtdChunks);
             var tileSize = (ushort)(chunkSize * GameWorld.CHUNK_SIZE);
@@ -79,9 +83,10 @@ namespace BaseServer.Persistence
             DeserializePlayers(game, playersTask.Result);
             DeserializeEntities(game, entitiesTask.Result);
             return game;
+            */
         }
 
-        public unsafe byte [] SerializeEntities(LisergyGame game)
+        public unsafe byte[] SerializeEntities(LisergyGame game)
         {
             return Serialization.FromAnyTypes(
                 ((GameEntities)game.Entities).AllEntities
@@ -92,17 +97,16 @@ namespace BaseServer.Persistence
         public void DeserializeEntities(LisergyGame game, byte[] entities)
         {
             var deserialized = Serialization.ToAnyTypes<SerializedEntity>(entities);
-            foreach(var e in deserialized)
+            foreach (var e in deserialized)
             {
-                GameId.NextGeneration = e.EntityId;
-                var created = game.Entities.CreateEntity(e.OwnerId, e.EntityType);
-                foreach(var component in e.Components)
+                var created = game.Entities.CreateEntity(e.EntityType, e.OwnerId, e.EntityId);
+                foreach (var component in e.Components)
                 {
                     created.Components.Save(component);
                 }
                 RepositionEntity(created);
             }
-            game.Entities.DeltaCompression.ClearDeltas();
+            game.Network.DeltaCompression.ClearDeltas();
         }
 
         public byte[] SerializePlayers(LisergyGame game)
@@ -112,69 +116,52 @@ namespace BaseServer.Persistence
 
         public void DeserializePlayers(LisergyGame game, byte[] players)
         {
+            /*
             var deserialized = Serialization.ToAnyTypes<SerializedPlayer>(players);
             foreach(var p in deserialized)
             {
                 GameId.NextGeneration = p.PlayerId;
-                var newPlayer = new PlayerEntity(new PlayerProfile(p.PlayerId), game);
-                newPlayer.Components.AddReference(p.Data);
-                newPlayer.VisibilityReferences.OnceExplored = new HashSet<Location>(p.SeenTiles);
-                game.Players.Add(newPlayer);
 
-                // We clear the owned entities because it will be filled when entities are deserialized
-                foreach(var k in p.Data.OwnedEntities.Keys)
-                {
-                    p.Data.OwnedEntities[k].Clear();
-                }
+                var newPlayer = new PlayerWrapper(game);
+                newPlayer.Save(new PlayerProfileComponent(p.PlayerId));
+                newPlayer.Components.Save(p.Data);
+                newPlayer.Components.Get<VisibilityData>().OnceExplored = new HashSet<Location>(p.SeenTiles);
+                game.Players.Add(newPlayer);
             }
+            */
         }
 
         private void RepositionEntity(IEntity entity)
         {
-            if(entity.Components.Has<MapPlacementComponent>())
+            if (entity.Components.Has<MapPlacementComponent>())
             {
                 var placement = entity.Components.Get<MapPlacementComponent>();
-                entity.EntityLogic.Map.SetPosition(entity.Game.World.Map.GetTile(placement.Position.X, placement.Position.Y));
+                var tile = entity.Game.World.GetTile(placement.Position.X, placement.Position.Y);
+                entity.Logic.Vision.UpdateVisionRange(null, tile); // because vision it's not serialized (but should)
             }
         }
 
         public unsafe void DeserializeMap(LisergyGame game, byte[] data)
         {
+            /*
             var map = (ServerChunkMap)game.World.Map;
-            var chunkSize = sizeof(ChunkData);
-            var qtdChunks = data.Length / chunkSize;
-            var qtdChunksInMap = map.ChunkMapDimensions.x * map.ChunkMapDimensions.y;
-            if (qtdChunksInMap != qtdChunks)
+            foreach(var t in Serialization.ToAnyTypes<SerializedEntity>(data))
             {
-                throw new Exception($"Byte array contains data for {qtdChunks} chunks but map has allocated only {qtdChunksInMap} chunks");
-            }
-            var offset = 0;
-            fixed (byte* buffer = data)
-            {
-                foreach (var chunk in map.AllChunks())
+                var pos = (TileDataComponent)t.Components.Where(c => c is TileDataComponent).First();
+                var existing = map.GetTile(pos.Position);
+                foreach(var c in t.Components)
                 {
-                    *chunk.Data.Pointer = *(ChunkData*)(buffer + offset);
-                    offset += chunkSize;
+                    existing.Components.Save(c);
                 }
             }
+            */
         }
 
         public unsafe byte[] SerializeMap(LisergyGame game)
         {
-            var map = (ServerChunkMap)game.World.Map;
-            var chunkSize = sizeof(ChunkData);
-            var totalChunks = map.ChunkMapDimensions.x * map.ChunkMapDimensions.y;
-            var worldData = new byte[totalChunks * chunkSize + 4];
-            var offset = 0;
-            fixed (byte* buffer = worldData)
-            {
-                foreach (var chunk in map.AllChunks())
-                {
-                    *(ChunkData*)(buffer + offset) = *chunk.Data.Pointer;
-                    offset += chunkSize;
-                }
-            }
-            return worldData;
+            //var map = (ServerChunkMap)game.World.Map;
+            //return Serialization.FromAnyTypes(map.AllTiles().Select(p => new SerializedEntity(p.TileEntity)).ToList());
+            return null;
         }
     }
 }

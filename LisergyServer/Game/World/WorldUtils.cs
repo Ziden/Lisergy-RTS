@@ -67,7 +67,7 @@ namespace Game.World
             return (value & flag) != 0;
         }
 
-        public static Direction GetDirection(this TileEntity tile, TileEntity otherTile)
+        public static Direction GetDirection(this TileModel tile, TileModel otherTile)
         {
             if (tile.X == otherTile.X - 1 && tile.Y == otherTile.Y)
                 return Direction.EAST;
@@ -82,7 +82,7 @@ namespace Game.World
 
         private static ushort ONE = 1;
 
-        public static TileEntity FindTileWithId(this Chunk chunk, byte tileID)
+        public static TileModel FindTileWithId(this Chunk chunk, byte tileID)
         {
             var tiles = chunk.Tiles;
             var tries = 10;
@@ -90,7 +90,7 @@ namespace Game.World
             {
                 var rndX = _random.Next(0, tiles.GetLength(0));
                 var rndY = _random.Next(0, tiles.GetLength(1));
-                TileEntity tile = chunk.GetTile(rndX, rndY);
+                TileModel tile = chunk.GetTile(rndX, rndY);
                 if (tile.SpecId == tileID)
                     return tile;
                 tries--;
@@ -98,19 +98,19 @@ namespace Game.World
             return null;
         }
 
-        public static TileEntity GetNeighbor(this TileEntity tile, Direction d)
+        public static TileModel GetNeighbor(this TileModel tile, Direction d)
         {
             switch (d)
             {
-                case Direction.EAST: return tile.Chunk.Map.GetTile(tile.X + 1, tile.Y);
-                case Direction.WEST: return tile.Chunk.Map.GetTile(tile.X - 1, tile.Y);
-                case Direction.SOUTH: return tile.Chunk.Map.GetTile(tile.X, tile.Y - 1);
-                case Direction.NORTH: return tile.Chunk.Map.GetTile(tile.X, tile.Y + 1);
+                case Direction.EAST: return tile?.Chunk.World.GetTile(tile.X + 1, tile.Y);
+                case Direction.WEST: return tile?.Chunk.World.GetTile(tile.X - 1, tile.Y);
+                case Direction.SOUTH: return tile?.Chunk.World.GetTile(tile.X, tile.Y - 1);
+                case Direction.NORTH: return tile?.Chunk.World.GetTile(tile.X, tile.Y + 1);
             }
             return null;
         }
 
-        public static int Distance(this TileEntity tile, TileEntity t2)
+        public static int Distance(this TileModel tile, TileModel t2)
         {
             return Math.Abs(tile.X - t2.X) + Math.Abs(tile.Y - t2.Y);
         }
@@ -120,7 +120,7 @@ namespace Game.World
             return Math.Abs(tile.X - t2.X) + Math.Abs(tile.Y - t2.Y);
         }
 
-        public static TileEntity GetNeighborInRange(this TileEntity source, int range, Direction d)
+        public static TileModel GetNeighborInRange(this TileModel source, int range, Direction d)
         {
             while (range > 0)
             {
@@ -131,7 +131,7 @@ namespace Game.World
         }
 
 
-        public static IEnumerable<TileEntity> GetAOE(this TileEntity tile, ushort radius)
+        public static IEnumerable<TileModel> GetAOE(this TileModel tile, ushort radius)
         {
             for (var xx = -radius; xx <= radius; xx++)
                 for (var yy = -radius; yy <= radius; yy++)
@@ -142,8 +142,8 @@ namespace Game.World
                     if (xx == radius && yy == radius) continue;
                     var x = tile.X + xx;
                     var y = tile.Y + yy;
-                    if (tile.Chunk.Map.ValidCoords(x, y))
-                        yield return tile.Chunk.Map.GetTile(x, y);
+                    if (tile.Chunk.World.ValidCoords(x, y))
+                        yield return tile.Chunk.World.GetTile(x, y);
                 }
         }
     }

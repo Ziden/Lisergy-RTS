@@ -13,7 +13,7 @@ namespace Game.Network.ServerPackets
     [Serializable]
     public class BattleLogPacket : BasePacket, IServerPacket
     {
-        public byte [] BattleStartHeaderData;
+        public byte[] BattleStartHeaderData;
 
         public BattleHeader DeserializeStartingState() => Serialization.ToAnyType<BattleHeader>(BattleStartHeaderData);
 
@@ -21,7 +21,7 @@ namespace Game.Network.ServerPackets
 
         public BattleLogPacket(TurnBattle battle)
         {
-            if(battle.IsOver || battle.Record.Turns.Count > 0)
+            if (battle.IsOver || battle.Record.Turns.Count > 0)
             {
                 throw new Exception("Cannot start a battle log from a battle that already started");
             }
