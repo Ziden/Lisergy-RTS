@@ -145,7 +145,8 @@ namespace Player.UI
         {
             var button = _partyButtons[0]; // TODO:
             PositionCursor(button);
-            ClientViewState.SelectedEntityView = party.GetView();
+            var partyView = party.GetView();
+            ClientViewState.SelectedEntityView = partyView;
         }
 
         public new class UxmlFactory : UxmlFactory<WidgetEntitySelectBar, UxmlTraits> { }

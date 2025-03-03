@@ -24,7 +24,7 @@ namespace Assets.Code.Views
 
         protected override void CreateView()
         {
-            Tile = Entity as TileModel;
+            Tile = Entity.GetTile();
             var data = Entity.Get<TileDataComponent>();
             State = EntityViewState.RENDERING;
             var tileSpec = Client.Game.Specs.Tiles[data.TileId];

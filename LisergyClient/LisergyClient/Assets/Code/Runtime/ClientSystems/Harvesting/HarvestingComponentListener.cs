@@ -30,7 +30,9 @@ public class HarvestingComponentListener : BaseComponentListener<HarvestingCompo
         {
             p.MovementInterpolator.ClearQueue();
         }
-        entity.Components.Add(new HarvestingPredictionComponent(GameClient, entity));
+        var c = new HarvestingPredictionComponent();
+        c.StartTracking(GameClient, entity);
+        entity.Components.Add(c);
     }
 
     private void OnFinishHarvesting(IEntity entity)

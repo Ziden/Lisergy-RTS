@@ -10,18 +10,16 @@ namespace ClientSDK.Modules
     /// This module single responsibility is to try to keep the client game in sync with server game as most as it can
     /// The only thing this won't keep track is the player data which is handled in <see cref="IPlayerModule"/>
     /// </summary>
-    public interface ILogicModule : IClientModule { }
-
-    public class LogicModule : ILogicModule
+    public class SystemSynchronizer
     {
         private GameClient _gameClient;
 
-        public LogicModule(GameClient gameClient)
+        public SystemSynchronizer(GameClient gameClient)
         {
             _gameClient = gameClient;
         }
 
-        public void Register()
+        public void ListenForRequiredSyncs()
         {
             _gameClient.Modules.Entities.OnComponentUpdate<MapPlacementComponent>(OnUpdatePlacement);
             _gameClient.Modules.Entities.OnComponentAdded<MapPlacementComponent>(OnAddPlacement);

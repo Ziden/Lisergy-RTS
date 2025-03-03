@@ -1,26 +1,17 @@
 ﻿using ClientSDK.Data;
 using Game.Engine.ECLS;
+using Game.Entities;
+using System;
+using System.Collections.Generic;
 
 namespace ClientSDK.Services
 {
-    public interface IGameView : IClientModule
-    {
-        /// <summary>
-        /// Gets or creates a given entity view
-        /// </summary>
-        IEntityView GetOrCreateView(IEntity entity);
-
-        /// <summary>
-        /// Gets an uncasted entity view
-        /// </summary>
-        IEntityView GetEntityView(IEntity entity);
-    }
-
-    public class GameViewModule : IGameView
+    public class GameViewModule
     {
         private GameClient _client;
 
         public ViewContainer _views = new ViewContainer();
+        public Func<IEntity, EntityView> CreatorFunction;
 
         public GameViewModule(GameClient client)
         {
@@ -32,7 +23,13 @@ namespace ClientSDK.Services
             var existingView = _views.GetView(entity);
             if (existingView == null)
             {
-                existingView = new EntityView(entity, _client);
+                if(CreatorFunction == null)
+                {
+                    existingView = new EntityView(entity, _client);
+                } else
+                {
+                    existingView = CreatorFunction(entity);
+                }
                 _views.AddView(entity, existingView);
                 return existingView;
             }

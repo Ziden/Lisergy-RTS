@@ -49,16 +49,19 @@ namespace ClientSDK.Services
     {
         private GameClient _client;
         public ComponentSynchronizer ComponentSync { get; private set; }
+        public SystemSynchronizer SystemSync { get; private set; }
 
         public EntityModule(GameClient client)
         {
             _client = client;
             ComponentSync = new ComponentSynchronizer(_client);
+            SystemSync = new SystemSynchronizer(_client);
         }
 
         public void Register()
         {
             _client.Network.OnInput<EntityUpdatePacket>(OnEntityUpdate);
+            SystemSync.ListenForRequiredSyncs();
         }
 
         private void OnEntityUpdate(EntityUpdatePacket packet)

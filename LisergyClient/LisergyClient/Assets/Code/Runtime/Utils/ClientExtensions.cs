@@ -48,8 +48,7 @@ public static class ClientExtensions
     /// </summary>
     public static TileModel GetTile(this IEntity entity)
     {
-        var place = entity.Get<MapPlacementComponent>();
-        return entity.Game.World.GetTile(place.Position.X, place.Position.Y);
+        return entity.Logic.Map.GetTile();
     }
 
     /// <summary>
@@ -76,6 +75,9 @@ public static class ClientExtensions
     /// </summary>
     public static IGameClientServices UnityServices(this IGameClient client) => UnityServicesContainer.Interface;
 
-    public static IUnityEntityView GetView(this IEntity entity) => UnityServicesContainer.Interface.ServerModules.Views.GetEntityView(entity) as IUnityEntityView;
+    public static IUnityEntityView GetView(this IEntity entity) {
+        var view = UnityServicesContainer.Interface.ServerModules.Views.GetEntityView(entity);
+        return (IUnityEntityView)view;
+    } 
     public static T GetView<T>(this IEntity entity) => (T)UnityServicesContainer.Interface.ServerModules.Views.GetEntityView(entity);
 }

@@ -192,16 +192,6 @@
             Removes all event callbacks from the given object
             </summary>
         </member>
-        <member name="M:ClientSDK.Services.IGameView.GetOrCreateView(Game.Engine.ECLS.IEntity)">
-            <summary>
-            Gets or creates a given entity view
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Services.IGameView.GetEntityView(Game.Engine.ECLS.IEntity)">
-            <summary>
-            Gets an uncasted entity view
-            </summary>
-        </member>
         <!-- Badly formed XML comment ignored for member "T:ClientSDK.Services.IPlayerModule" -->
         <member name="P:ClientSDK.Services.IPlayerModule.PlayerId">
             <summary>
@@ -280,14 +270,14 @@
             Any registered component sync callbacks will be called after all updates are done
             </summary>
         </member>
-        <member name="T:ClientSDK.Modules.ILogicModule">
+        <member name="T:ClientSDK.Modules.SystemSynchronizer">
             <summary>
             Module responsible for handling base component logic to keep the client logic "up to date"
             This module single responsibility is to try to keep the client game in sync with server game as most as it can
             The only thing this won't keep track is the player data which is handled in <see cref="T:ClientSDK.Services.IPlayerModule"/>
             </summary>
         </member>
-        <member name="M:ClientSDK.Modules.LogicModule.OnUpdatePlacement(Game.Engine.ECLS.IEntity,Game.Systems.Map.MapPlacementComponent,Game.Systems.Map.MapPlacementComponent)">
+        <member name="M:ClientSDK.Modules.SystemSynchronizer.OnUpdatePlacement(Game.Engine.ECLS.IEntity,Game.Systems.Map.MapPlacementComponent,Game.Systems.Map.MapPlacementComponent)">
             <summary>
             Whenever map placement updates are sent to the client we re-position the entity on the client logic.
             This will trigger all exploration events

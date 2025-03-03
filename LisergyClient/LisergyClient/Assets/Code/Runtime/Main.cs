@@ -51,7 +51,7 @@ public class Main : MonoBehaviour, IEventListener
 
     void Update()
     {
-        _network.Tick();
+        _network?.Tick();
         _scheduler?.Tick(DateTime.UtcNow);
     }
 
@@ -92,7 +92,22 @@ public class Main : MonoBehaviour, IEventListener
 
     public void SetupViews()
     {
-      
+        _client.Modules.Views.CreatorFunction = e =>
+        {
+            switch(e.EntityType)
+            {
+                case EntityType.Party:
+                    return new PartyView(_client, e);
+                case EntityType.Tile:
+                    return new TileView(_client, e);
+                case EntityType.Dungeon:
+                    return new DungeonView(_client, e);
+                case EntityType.Building:
+                    return new PlayerBuildingView(_client, e);
+                default:
+                    return new UnityEntityView(e, _client);
+            }
+        };
     }
 
     public void SetupServices()

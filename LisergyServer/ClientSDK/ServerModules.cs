@@ -22,7 +22,7 @@ namespace ClientSDK
     {
         public IAccountModule Account { get; }
         public IPlayerModule Player { get; }
-        public IGameView Views { get; }
+        public GameViewModule Views { get; }
         public IEntityModule Entities { get; }
         public IActionModule Actions { get; }
         public IChatModule Chat { get; }
@@ -34,9 +34,8 @@ namespace ClientSDK
     {
         public IAccountModule Account { get; }
         public IPlayerModule Player { get; }
-        public IGameView Views { get; }
+        public GameViewModule Views { get; }
         public IEntityModule Entities { get; }
-        private ILogicModule Logic { get; }
         public IActionModule Actions { get; }
         public IChatModule Chat { get; }
         public IBattleModule Battles { get; }
@@ -48,7 +47,6 @@ namespace ClientSDK
             Player = new PlayerModule(client);
             Views = new GameViewModule(client);
             Entities = new EntityModule(client);
-            Logic = new LogicModule(client);
             Actions = new ActionsModule(client);
             Chat = new ChatModule(client);
             Battles = new BattleModule(client);
@@ -61,7 +59,6 @@ namespace ClientSDK
             Player.Register();
             Views.Register();
             Entities.Register();
-            Logic.Register();
             Actions.Register();
             Chat.Register();
             Battles.Register();

@@ -2,6 +2,7 @@ using Assets.Code.Assets.Code.Runtime.Movement;
 using Assets.Code.UI;
 using Assets.Code.World;
 using ClientSDK;
+using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Systems.Map;
 using Game.World;
@@ -20,23 +21,25 @@ public class EntityPositionListener : IEventListener
     {
         _client = client;
         _movementPath = new MovePathListener(client);
-        client.Game.Events.On<EntityMoveInEvent>(this, OnEntityMoveIn);
+        client.Modules.Entities.OnComponentUpdate<MapPlacementComponent>(OnEntityMoveIn);
     }
 
-    private void OnEntityMoveIn(EntityMoveInEvent ev)
+    private void OnEntityMoveIn(IEntity e, MapPlacementComponent oldC, MapPlacementComponent newC)
     {
-        if (ev.ToTile == null) return;
-        _client.Game.Log.Debug($"Entity {ev.Entity} moved from {ev.FromTile} to {ev.ToTile}");
-        _movementPath.OnFinishedMove(ev.Entity, ev.ToTile);
-        var view = ev.Entity.GetView();
+        var toTile = newC == null ? null : _client.Game.World.GetTile(newC.Position);
+        var fromTile = oldC == null ? null : _client.Game.World.GetTile(oldC.Position);
+        if (toTile == null) return;
+        _client.Game.Log.Debug($"Entity {e} moved from {fromTile} to {toTile}");
+        _movementPath.OnFinishedMove(e, toTile);
+        var view = e.GetView();
         if (view == null) return;
-        if (view is IEntityMovementInterpolated i && ev.FromTile != null && ev.ToTile.Distance(ev.FromTile) <= 1)
+        if (view is IEntityMovementInterpolated i && fromTile != null && toTile.Distance(fromTile) <= 1)
         {
-            i.MovementInterpolator.InterpolateMovement(ev.FromTile, ev.ToTile);
+            i.MovementInterpolator.InterpolateMovement(fromTile, toTile);
         }
         else if(view.Entity.Components.Has<MapPlacementComponent>() && view.State == ClientSDK.Data.EntityViewState.RENDERED)
         {
-            view.GameObject.transform.position = ev.ToTile.UnityPosition();
+            view.GameObject.transform.position = toTile.UnityPosition();
         }
     }
 }

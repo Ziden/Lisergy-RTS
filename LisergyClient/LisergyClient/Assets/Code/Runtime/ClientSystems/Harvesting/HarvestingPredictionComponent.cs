@@ -11,6 +11,7 @@ using System;
 /// <summary>
 /// Predicts how much and when would harvest new resources and send client events based on its predictions
 /// </summary>
+[Serializable]
 public class HarvestingPredictionComponent : IComponent, IDisposable
 {
     private IEntity _entity;
@@ -22,7 +23,7 @@ public class HarvestingPredictionComponent : IComponent, IDisposable
     private bool _tracking = false;
     private ushort _harvestedTotal;
 
-    public HarvestingPredictionComponent(IGameClient client, IEntity harvester)
+    public void StartTracking(IGameClient client, IEntity harvester)
     {
         _client = client;
         _entity = harvester;

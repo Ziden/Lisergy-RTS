@@ -1,9 +1,11 @@
-﻿using ClientSDK.SDKEvents;
+﻿using ClientSDK.Data;
+using ClientSDK.SDKEvents;
 using Game;
 using Game.Engine;
 using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
 using Game.Engine.Events;
+using Game.Entities;
 using Game.Events.ServerEvents;
 using Game.Systems.FogOfWar;
 using Game.Systems.Map;
@@ -16,6 +18,7 @@ using ServerTests.Integration.Stubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tests.Integration.Stubs;
 
 namespace UnitTests
 {
@@ -26,10 +29,17 @@ namespace UnitTests
         LisergyGame _serverLogic;
         PlayerModel _serverPlayer;
 
+        private EntityView OnCreateView(IEntity e)
+        {
+            if (e.EntityType == EntityType.Tile) return new StubEntityView(e, _client);
+            return new EntityView(e, _client);
+        }
+
         [SetUp]
         public void Setup()
         {
             _client = new TestGameClient(null);
+            _client.Modules.Views.CreatorFunction = OnCreateView;
             _playerId = GameId.Generate();
             var specs = TestSpecs.Generate();
             var serverLog = new GameLog("[Server]");
@@ -93,6 +103,7 @@ namespace UnitTests
                 var serverTile = _serverLogic.World.GetTile(loc);
                 var clientTile = _client.Game.World.GetTile(loc);
 
+                Assert.IsTrue(_client.Modules.Views.GetEntityView(clientTile.TileEntity) is StubEntityView);
                 Assert.IsTrue(clientTile.TileEntity.Components.IsUpToDateWith(serverTile.TileEntity));
                 Assert.IsTrue(serverTile.Components.CompareWith<TileDataComponent>(clientTile.TileEntity));
                 Assert.AreEqual(serverTile.EntityId, clientTile.EntityId);

@@ -16,7 +16,7 @@ public interface IUnityEntityView : IEntityView, IGameObject {
 /// <summary>
 /// Represents a entity view that's specific for Unity game engine
 /// </summary>
-public class UnityEntityView : EntityView
+public class UnityEntityView : EntityView, IUnityEntityView
 {
     protected event Action OnAfterRendered;
 
@@ -36,6 +36,8 @@ public class UnityEntityView : EntityView
 
     private static GameObject _container;
     protected static GameObject ViewContainer => _container = _container ?? new GameObject(GetContainerName());
+
+    public EntityType EntityType => Entity.EntityType;
 
     /// <summary>
     /// Sets the gameobject as a child of this view
