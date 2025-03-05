@@ -12,7 +12,7 @@ namespace BaseServer.Commands
         private static ConsoleReader _reader;
         public static readonly char CMD_CHAR = '.';
 
-        private readonly Dictionary<string, Command> _commands = new();
+        private readonly Dictionary<string, Command> _commands = new Dictionary<string, Command>();
         private Command _cmd = null;
         private string _consoleText = null;
         private string[] _args = null;

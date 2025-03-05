@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tests.Unit.Stubs;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestHarvesting
     {
@@ -84,7 +84,7 @@ namespace UnitTests
         [Test]
         public void TestFinishHarvestingAll()
         {
-            var tileResourceBefore = _logs.Get<TileResourceComponent>().ShallowClone();
+            var tileResourceBefore = _logs.Get<TileResourceComponent>().FastShallowClone();
 
             _party.Logic.Harvesting.StartHarvesting(_logs);
             var totalTime = _logs.HarvestPointSpec.ResourceAmount * _logs.HarvestPointSpec.HarvestTimePerUnit;
@@ -172,7 +172,7 @@ namespace UnitTests
         [Test]
         public void TestFinishHarvestingHalf()
         {
-            var tileResourceBefore = _logs.Get<TileResourceComponent>().ShallowClone();
+            var tileResourceBefore = _logs.Get<TileResourceComponent>().FastShallowClone();
 
             _party.Logic.Harvesting.StartHarvesting(_logs);
             var totalTime = _logs.HarvestPointSpec.ResourceAmount * _logs.HarvestPointSpec.HarvestTimePerUnit;
@@ -193,7 +193,7 @@ namespace UnitTests
         [Test]
         public void TestFinishHarvestingHalfTwice()
         {
-            var tileResourceBefore = _logs.Get<TileResourceComponent>().ShallowClone();
+            var tileResourceBefore = _logs.Get<TileResourceComponent>().FastShallowClone();
 
             _party.Logic.Harvesting.StartHarvesting(_logs);
             var totalTime = _logs.HarvestPointSpec.ResourceAmount * _logs.HarvestPointSpec.HarvestTimePerUnit;

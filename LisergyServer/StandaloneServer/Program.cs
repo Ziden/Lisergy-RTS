@@ -1,4 +1,5 @@
 ﻿using Game.Engine;
+using Game.Engine.DataTypes;
 using MapServer;
 using ServerTests.Integration.Stubs;
 using Terminal.Gui;
@@ -15,6 +16,8 @@ if (UI)
     });
     while (!StandaloneServerConsoleUI.IsLoaded) await Task.Yield();
 }
+
+GameId.INCREMENTAL_MODE = 1;
 
 // Load standalone which runs every server in its own thread
 var standaloneServer = new StandaloneServer();

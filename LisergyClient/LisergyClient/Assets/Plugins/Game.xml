@@ -716,7 +716,7 @@
             The entity line of sight is the max group line of sight
             </summary>
         </member>
-        <member name="M:Game.Systems.FogOfWar.EntityVisionLogic.UpdateVisionRange(Game.ECS.IEntity,Game.Tile.TileEntity,Game.Tile.TileEntity)">
+        <member name="M:Game.Systems.FogOfWar.EntityVisionLogic.UpdateVisionRange(Game.ECS.IEntity,Game.Tile.Entity,Game.Tile.Entity)">
             <summary>
             Updates the tile visibility of nearby tiles according to an entity movement.
             Will unsee some tiles and see new tiles depending the from/to the entity moved
@@ -800,7 +800,7 @@
             Recruits a new unit for the player
             </summary>
         </member>
-        <member name="M:Game.Systems.Player.PlayerLogic.PlaceNewPlayer(Game.Tile.TileEntity)">
+        <member name="M:Game.Systems.Player.PlayerLogic.PlaceNewPlayer(Game.Tile.Entity)">
             <summary>
             Adds a new player to the given tile with the initial things a new player should have
             </summary>
@@ -815,7 +815,7 @@
             Moves a unit to a given party
             </summary>
         </member>
-        <member name="M:Game.Systems.Player.PlayerLogic.Build(System.UInt16,Game.Tile.TileEntity)">
+        <member name="M:Game.Systems.Player.PlayerLogic.Build(System.UInt16,Game.Tile.Entity)">
             <summary>
             Builds a new building on the given tile
             </summary>
@@ -846,7 +846,7 @@
             System that keeps track of references of which entities and which buildings are on which tiles
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Game.Tile.TileEntity.SetDeltaFlag(Game.Network.DeltaFlag)" -->
+        <!-- Badly formed XML comment ignored for member "M:Game.Tile.Entity.SetDeltaFlag(Game.Network.DeltaFlag)" -->
         <member name="T:Game.UnmanagedMemory">
             <summary>
             Main place to handle unmanaged memory. We use unmanaged memory to be reused while allowing garbage collector not need to worry about this memory.
@@ -924,7 +924,7 @@
             Gets a given chunk by its X Y coords
             </summary>
         </member>
-        <member name="M:Game.World.IChunkMap.FindPath(Game.Tile.TileEntity,Game.Tile.TileEntity)">
+        <member name="M:Game.World.IChunkMap.FindPath(Game.Tile.Entity,Game.Tile.Entity)">
             <summary>
             Finds a path between source and destination.
             Can return an empty list if no path is found.

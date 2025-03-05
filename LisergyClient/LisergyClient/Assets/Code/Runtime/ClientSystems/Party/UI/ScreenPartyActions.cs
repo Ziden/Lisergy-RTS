@@ -61,13 +61,13 @@ namespace Assets.Code.UI
             {
                 return NoPartyActions;
             }
-            var tileView = GameClient.Modules.Views.GetEntityView(tile.TileEntity);
+            var tileView = GameClient.Modules.Views.GetEntityView(tile.Entity);
             var actions = new List<EntityAction>();
             var buildingOnTile = tileView.Entity.Logic.Tile.GetBuildingOnTile();
             if (buildingOnTile != null)
             {
                 actions.Add(EntityAction.CHECK);
-                if (buildingOnTile.OwnerID.IsMine())
+                if (!buildingOnTile.OwnerID.IsMine())
                 {
                     actions.Add(EntityAction.ATTACK);
                 }
@@ -89,7 +89,7 @@ namespace Assets.Code.UI
 
         private void MoveTo(TileModel tile)
         {
-            var view = GameClient.Modules.Views.GetEntityView(tile.TileEntity) as IGameObject;
+            var view = GameClient.Modules.Views.GetEntityView(tile.Entity) as IGameObject;
             var newPosition = RuntimePanelUtils.CameraTransformWorldToPanel(Root.panel, view.GameObject.transform.position, Camera.main);
             Root.transform.position = newPosition;
         }

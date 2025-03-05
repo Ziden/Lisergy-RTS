@@ -6,7 +6,7 @@ using GameDataTest.TestWorldGenerator;
 using NUnit.Framework;
 using ServerTests.Integration.Stubs;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestNetworkSync
     {

@@ -7,6 +7,7 @@ using ClientSDK;
 using Game.Engine.ECLS;
 using Game.Systems.Tile;
 using Game.Tile;
+using System.Threading.Tasks;
 
 namespace Assets.Code.Views
 {
@@ -22,21 +23,22 @@ namespace Assets.Code.Views
 
         public TileView(IGameClient client, IEntity e) : base(e, client) { }
 
-        protected override void CreateView()
+        protected override async Task CreateView()
         {
             Tile = Entity.GetTile();
             var data = Entity.Get<TileDataComponent>();
             State = EntityViewState.RENDERING;
+
             var tileSpec = Client.Game.Specs.Tiles[data.TileId];
-            Assets.CreatePrefab(tileSpec.TilePrefab, new Vector3(data.Position.X, 0, data.Position.Y), Quaternion.identity, o =>
+            GameObject = await Assets.CreatePrefab(tileSpec.TilePrefab, new Vector3(data.Position.X, 0, data.Position.Y));
+            GameObject.transform.parent = GetChunkObject().transform;
+            GameObject.name = $"Tile_{data.Position.X}-{data.Position.Y}";
+            GameObject.isStatic = true;
+            foreach (var c in GameObject.transform)
             {
-                GameObject = o;
-                GameObject.transform.parent = GetChunkObject().transform;
-                GameObject.name = $"Tile_{data.Position.X}-{data.Position.Y}";
-                GameObject.isStatic = true;
-                State = EntityViewState.RENDERED;
-                Client.ClientEvents.Call(new TileRenderedEvent() { View = this, Reactivate = false });
-            });
+                ((Transform)c).gameObject.isStatic = true;
+            }
+            Client.ClientEvents.Call(new TileRenderedEvent() { View = this, Reactivate = false });
         }
 
         /// <summary>
@@ -81,6 +83,8 @@ namespace Assets.Code.Views
 
         private void AddFogPrefabToTile(TilePrefab fogFab, FogState desiredState)
         {
+            return;
+            /*
             Assets.CreateTile(fogFab, new Vector3(Tile.X, 0.1f, Tile.Y), Quaternion.identity,
             o =>
             {
@@ -94,6 +98,7 @@ namespace Assets.Code.Views
                 o.transform.parent = FogContainer.transform;
                 FogObject = o;
             });
+            */
         }
 
         public override string ToString() => $"<TileView {Entity}>";

@@ -1,4 +1,8 @@
-﻿using Game.Engine.ECLS;
+﻿using ClientSDK.SDKEvents;
+using Game.Engine.ECLS;
+using System;
+using System.Threading.Tasks;
+using Telepathy;
 
 namespace ClientSDK.Data
 {
@@ -43,11 +47,19 @@ namespace ClientSDK.Data
         /// <summary>
         /// Create the new graphical part of this view
         /// </summary>
-        internal void RenderView();
+        internal Task RenderView();
+
+        /// <summary>
+        /// Schedules an action to run now or later, depending if the entity is already rendered or not
+        /// If not it will run after it's rendered
+        /// </summary>
+        void RunWhenRendered(Action callback);
     }
 
     public class EntityView : IEntityView
     {
+        private event Action<EntityView> OnRendered;
+
         public IEntity Entity { get; private set; }
         public IGameClient Client { get; set; }
 
@@ -61,13 +73,30 @@ namespace ClientSDK.Data
 
         IEntity IEntityView.Entity => Entity;
 
-        protected virtual void CreateView() { }
+        public void RunWhenRendered(Action callback)
+        {
+            if(State == EntityViewState.RENDERED)
+            {
+                callback();
+                return;
+            }
+            OnRendered += (view) => callback();
+        }
 
-        void IEntityView.RenderView()
+        protected virtual Task CreateView() { return Task.FromResult(0); }
+
+        async Task IEntityView.RenderView()
         {
             if (State != EntityViewState.NOT_RENDERED) return;
             State = EntityViewState.RENDERING;
-            CreateView();
+            await CreateView();
+            State = EntityViewState.RENDERED;
+            OnRendered?.Invoke(this);
+            Client.ClientEvents.Call(new EntityViewRendered()
+            {
+                Entity = Entity,
+                View = this
+            });
         }
     }
 }

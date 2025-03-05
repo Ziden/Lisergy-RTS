@@ -13,7 +13,13 @@ public class BattleGroupUnitListener : BaseComponentListener<BattleGroupComponen
     {
     }
 
-    public override void OnUpdateComponent(IEntity entity, BattleGroupComponent oldComponent, BattleGroupComponent newComponent)
+    public override void OnComponentAdded(IEntity entity, BattleGroupComponent component)
+    {
+        if (!(entity.EntityType == EntityType.Party)) return;
+        entity.GetView<PartyView>().UpdateUnits(component.Units);
+    }
+
+    public override void OnComponentModified(IEntity entity, BattleGroupComponent oldComponent, BattleGroupComponent newComponent)
     {
         if (!(entity.EntityType == EntityType.Party)) return;
         if (oldComponent.Units.Equals(newComponent.Units)) return;

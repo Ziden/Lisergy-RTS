@@ -54,7 +54,7 @@ namespace Assets.Code.UI
     /// </summary>
     public class SelectScreen<T> : GameUi, IEventListener
     {
-        public override UIScreen UiAsset => UIScreen.SelectBuildingScreen;
+        public override UIScreen UiAsset => UIScreen.SelectScreen;
 
         private Button _select;
         private ScrollView _scroll;

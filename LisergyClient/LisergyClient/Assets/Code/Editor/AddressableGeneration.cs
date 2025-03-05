@@ -6,6 +6,7 @@ using Game.Engine.DataTypes;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.Experimental.GraphView;
 
 namespace Code.Editor
 {
@@ -26,8 +27,13 @@ namespace Code.Editor
             {"UI/Addressables", "UIScreen"},
             {"UISetting", "UISetting"},
 		};
-		
-		[MenuItem("Lisergy/Generate Addressable Map")]
+
+        private static readonly Dictionary<string, string> TYPE_CONFIG = new()
+        {
+            {".uxml", "UIScreen"},
+        };
+
+        [MenuItem("Lisergy/Generate Addressable Map")]
 		private static void GenerateAddressableIds()
 		{
 			GenerateCode();
@@ -60,7 +66,18 @@ namespace Code.Editor
 						fit = true;
 					}
 				}
-				if (!fit)
+                if(!fit)
+                {
+                    foreach(var cfg in TYPE_CONFIG)
+					{
+                        if (a.AssetPath.Contains(cfg.Key))
+                        {
+                            Categorized[cfg.Value].Add(a);
+                            fit = true;
+                        }
+                    }
+                }
+                if (!fit)
 				{
 					Categorized["Generic"].Add(a);
 				}
@@ -93,8 +110,9 @@ namespace Code.Editor
 				stringBuilder.AppendLine($"\t\t\t{{ {kp.Key}, \"{kp.Value}\"}},");
 			stringBuilder.AppendLine("\t\t};");
 			stringBuilder.AppendLine("\t}");
-			stringBuilder.AppendLine("}");
-			File.WriteAllText("Assets/Code/Runtime/Assets/Addresses.cs", stringBuilder.ToString());
+            stringBuilder.AppendLine("}");
+
+        File.WriteAllText("Assets/Code/Runtime/UnityServices/Assets/Addresses.cs", stringBuilder.ToString());
 		}
 
 		private static string Format(string s)

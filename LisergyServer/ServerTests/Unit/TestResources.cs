@@ -10,7 +10,7 @@ using NUnit.Framework;
 using ServerTests;
 using System.Linq;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestResources
     {

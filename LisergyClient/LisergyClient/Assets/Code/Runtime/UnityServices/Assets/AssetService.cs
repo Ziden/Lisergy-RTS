@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 using ClientSDK.Data;
 using Cysharp.Threading.Tasks;
 using GameAssets;
 using GameData.Specs;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,8 +14,8 @@ namespace Assets.Code.Assets.Code.Assets
         UniTask<GameObject> CreateVfx(VfxPrefab t, Vector3 pos, Quaternion rot);
         UniTaskVoid CreateMapObject(MapObjectPrefab t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
         UniTaskVoid CreateTile(TilePrefab tile, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
-        UniTaskVoid CreateBuilding(BuildingPrefab b, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
-        UniTaskVoid CreatePrefab(ArtSpec spec, Vector3 pos, Quaternion rot, Action<GameObject> onComplete);
+        UniTask<GameObject> CreateBuilding(BuildingPrefab b, Vector3 pos, Quaternion rot);
+        UniTask<GameObject> CreatePrefab(ArtSpec spec, Vector3 pos = default, Quaternion rot = default);
         UniTask PreloadAsset(ArtSpec spec);
         UniTask PreloadAsset<K>(K k) where K : IComparable, IFormattable, IConvertible;
         UniTask<Sprite> GetSprite(ArtSpec spec);
@@ -53,19 +51,17 @@ namespace Assets.Code.Assets.Code.Assets
 
         public async UniTaskVoid CreateTile(TilePrefab t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
         {
-
             await _prefabs.InstantiateAsync(t, pos, rot, onComplete);
         }
 
-        public async UniTaskVoid CreateBuilding(BuildingPrefab t, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
+        public UniTask<GameObject> CreateBuilding(BuildingPrefab t, Vector3 pos, Quaternion rot)
         {
-
-            await _prefabs.InstantiateAsync(t, pos, rot, onComplete);
+            return _prefabs.InstantiateAsync(t, pos, rot, null);
         }
 
-        public async UniTaskVoid CreatePrefab(ArtSpec spec, Vector3 pos, Quaternion rot, Action<GameObject> onComplete)
+        public UniTask<GameObject> CreatePrefab(ArtSpec spec, Vector3 pos = default, Quaternion rot = default)
         {
-            await _prefabs.InstantiateAsync(spec.Address, pos, rot, onComplete);
+            return _prefabs.InstantiateAsync(spec.Address, pos, rot, null);
         }
 
         public UniTask<VisualTreeAsset> GetScreen(UIScreen screen)
@@ -102,8 +98,9 @@ namespace Assets.Code.Assets.Code.Assets
 
         public async UniTask<Texture2D> GetPrefabIcon(ArtSpec spec)
         {
-            var prefab = await _prefabs.LoadAsync(spec.Address);
-            return AssetPreview.GetAssetPreview(prefab);
+            return null;
+            //var prefab = await _prefabs.LoadAsync(spec.Address);
+            //return AssetPreview.GetAssetPreview(prefab);
         }
     }
 }

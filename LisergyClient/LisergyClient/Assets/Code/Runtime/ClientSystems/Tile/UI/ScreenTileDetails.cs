@@ -17,6 +17,7 @@ namespace Assets.Code.UI
         public IEntity Harvester;
     }
 
+    // TODO: should be in harvesting
     public class ScreenTileDetails : GameUi, IEventListener
     {
         public override UIScreen UiAsset => UIScreen.ScreenTileDetails;
@@ -49,6 +50,10 @@ namespace Assets.Code.UI
         private void OnClickHarvest()
         {
             var setup = GetParameter<ScreenTileDetailsParams>();
+            if (!setup.Tile.Entity.CanPlayerHarvest())
+            {
+                return;
+            }
             GameClient.Modules.Actions.MoveEntity(setup.Harvester, setup.Tile, CourseIntent.Harvest);
         }
     }

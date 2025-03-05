@@ -3,7 +3,7 @@ using Game.Events.ServerEvents;
 using NUnit.Framework;
 using ServerTests;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestSpecSerialization
     {

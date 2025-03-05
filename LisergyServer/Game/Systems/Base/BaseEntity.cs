@@ -25,7 +25,7 @@ namespace Game.Entities
         public void Save<T>(in T component) where T : IComponent => Components.Save(component);
         public override string ToString()
         {
-            return $"<Entity {EntityType} {EntityId} {Components}>";
+            return $"<Entity {EntityType} {EntityId} Ct={Components.GetComponents().Count}>";
         }
     }
 }

@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tests.Unit.Stubs;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestDungeon
     {

@@ -1,6 +1,7 @@
 ﻿using Assets.Code.Assets.Code.Audio;
 using Assets.Code.Assets.Code.Runtime.Tools;
 using Assets.Code.World;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Game.Engine.DataTypes;
 using Game.Network.ServerPackets;
@@ -129,7 +130,7 @@ namespace Assets.Code.Battle
         {
             _waitingUnits++;
             var unitView = new UnitView(null, u); // TODO ADD GAME CLIENT
-            unitView.AddToScene(gameObject =>
+            unitView.AddToScene().ContinueWith(gameObject =>
             {
                 _waitingUnits--;
                 gameObject.transform.SetParent(teamTransform.transform.GetChild(index).transform);
@@ -137,7 +138,7 @@ namespace Assets.Code.Battle
                 gameObject.transform.localRotation = Quaternion.identity;
                 Units[u.Id] = unitView;
                 //_ = MainBehaviour.RunAsync(() => unitView.UnitMonoBehaviour.PlayAnimation(UnitAnimation.BattleIddle), 0.1f);
-            });
+            }).Forget();
         }
     }
 }

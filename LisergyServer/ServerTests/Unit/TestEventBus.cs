@@ -1,7 +1,7 @@
 using Game.Engine.Events.Bus;
 using NUnit.Framework;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestEventBus : IEventListener
     {

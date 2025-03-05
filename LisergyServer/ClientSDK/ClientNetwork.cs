@@ -40,11 +40,12 @@ namespace ClientSDK
                 _connections[server] = new Client();
                 _toSend[server] = new Queue<byte[]>();
             }
+            _deltas = new DeltaCompression(null);
         }
 
         public void SetupGame(IGame game)
         {
-            _deltas = new DeltaCompression(game);
+           
         }
 
         /// <summary>

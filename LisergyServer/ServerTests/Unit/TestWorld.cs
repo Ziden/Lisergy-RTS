@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using ServerTests;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestGameWorld
     {

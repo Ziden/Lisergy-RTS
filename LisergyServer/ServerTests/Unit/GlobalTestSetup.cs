@@ -3,7 +3,7 @@ using Game.Engine.Events;
 using NUnit.Framework;
 using System;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     [TestFixture]
     public class TestFixture : IDisposable

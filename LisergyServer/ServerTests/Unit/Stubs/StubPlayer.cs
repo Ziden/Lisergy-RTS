@@ -66,7 +66,7 @@ namespace ServerTests
 
         private void OnEvent(IBaseEvent e)
         {
-            TriggeredEvents.Add(e.ShallowClone());
+            TriggeredEvents.Add(e.FastShallowClone());
         }
 
         public void SendMoveRequest(IEntity p, TileModel t, CourseIntent intent)

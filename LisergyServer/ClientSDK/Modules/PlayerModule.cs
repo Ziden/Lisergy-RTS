@@ -38,7 +38,7 @@ namespace ClientSDK.Services
         public void Register()
         {
             _client.ClientEvents.On<GameStartedEvent>(this, OnGameStart);
-            _client.ClientEvents.On<EntityViewCreated>(this, OnAwareOfEntity);
+            _client.ClientEvents.On<EntityViewRendered>(this, OnAwareOfEntity);
             _client.Network.OnInput<BattleHeaderPacket>(OnBattleSummary);
         }
 
@@ -47,7 +47,7 @@ namespace ClientSDK.Services
             LocalPlayer.Components.Get<PlayerDataComponent>().BattleHeaders.Add(result.BattleHeader);
         }
 
-        private void OnAwareOfEntity(EntityViewCreated ev)
+        private void OnAwareOfEntity(EntityViewRendered ev)
         {
             if (ev.Entity.OwnerID != PlayerId) return;
             _client.Game.Entities.SetParent(LocalPlayer.EntityId, ev.Entity.EntityId);

@@ -8,7 +8,7 @@ using Game.Tile;
 using NUnit.Framework;
 using ServerTests;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public unsafe class TestTileComponents
     {

@@ -11,10 +11,10 @@ public class HarvestingComponentListener : BaseComponentListener<HarvestingCompo
 {
     public HarvestingComponentListener(IGameClient client) : base(client)
     {
-        client.ClientEvents.On<MovementInterpolationStart>(this, OnMoveStart);
+        client.ClientEvents.On<MovementInterpolationStartEvent>(this, OnMoveStart);
     }
 
-    private void OnMoveStart(MovementInterpolationStart e)
+    private void OnMoveStart(MovementInterpolationStartEvent e)
     {
         if (e.Entity.Components.Has<HarvestingPredictionComponent>() && !e.Entity.Components.Has<HarvestingComponent>())
         {
@@ -42,7 +42,7 @@ public class HarvestingComponentListener : BaseComponentListener<HarvestingCompo
         entity.Components.Remove<HarvestingPredictionComponent>();
     }
 
-    public override void OnUpdateComponent(IEntity entity, HarvestingComponent oldComponent, HarvestingComponent newComponent)
+    public override void OnComponentModified(IEntity entity, HarvestingComponent oldComponent, HarvestingComponent newComponent)
     {
         if (oldComponent.StartedAt == 0 && newComponent.StartedAt > 0) OnBeginHarvesting(entity);
         else if (oldComponent.StartedAt > 0 && newComponent.StartedAt == 0) OnFinishHarvesting(entity);

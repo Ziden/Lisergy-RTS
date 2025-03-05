@@ -9,7 +9,7 @@ using ServerTests;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestAutoBattle
     {

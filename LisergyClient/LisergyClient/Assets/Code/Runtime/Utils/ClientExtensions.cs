@@ -30,7 +30,7 @@ public static class ClientExtensions
     /// <summary>
     /// Checks if a given tile is visible to the local player
     /// </summary>
-    public static bool IsTileModelVisible(this IEntity tile) => tile != null && tile.Logic.Vision.GetEntitiesViewing().Any(p => p.IsMine());
+    public static bool IsVisible(this IEntity tile) => tile != null && tile.Logic.Vision.GetEntitiesViewing().Any(p => p.IsMine());
 
     /// <summary>
     /// Gets the unity position of a given entity

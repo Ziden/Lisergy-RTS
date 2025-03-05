@@ -19,19 +19,23 @@ using Game.Tile;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Game.Engine.DataTypes;
+using ServerTests.Integration.Stubs;
 
 public class Main : MonoBehaviour, IEventListener
 {
-    public static readonly bool OFFLINE_MODE = false;
+    public static readonly bool OFFLINE_MODE = true;
 
     private GameClient _client;
     private ClientNetwork _network;
     private GameStateMachine _stateMachine;
     private List<IEventListener> _listeners = new List<IEventListener>();
     private GameScheduler _scheduler;
+    private StandaloneServer _server;
 
     void Awake()
     {
+        GameId.INCREMENTAL_MODE = 1;
         Debug.Log("Main Awake");
         _client = new GameClient();
         _client.ClientEvents.On<GameStartedEvent>(this, OnGameStarted);
@@ -40,6 +44,13 @@ public class Main : MonoBehaviour, IEventListener
         ConfigureUnity();
         SetupServices();
         Serialization.LoadSerializers();
+
+        if (OFFLINE_MODE)
+        {
+            _server = new StandaloneServer();
+            _server.Multithreaded = false;
+            _server.Start();
+        }
     }
 
     void Start()
@@ -52,13 +63,17 @@ public class Main : MonoBehaviour, IEventListener
     void Update()
     {
         _network?.Tick();
+        if(!_server.Multithreaded)
+        {
+            _server?.SingleThreadTick();
+        }
         _scheduler?.Tick(DateTime.UtcNow);
     }
 
     private void OnApplicationQuit()
     {
-        _network.Disconnect();
-        //_client.Game.Entities.Dispose();
+        _network?.Disconnect();
+        _server?.Dispose();
     }
 
     private void SetupLog(IGameLog ilog)
@@ -75,7 +90,7 @@ public class Main : MonoBehaviour, IEventListener
     private void OnGameStarted(GameStartedEvent ev)
     {
         SetupLog(ev.Game.Log);
-        // SetupLog(_client.Log); // SDK LOGS
+        SetupLog(_client.Log); // SDK LOGS
         _listeners.Add(new TileDecorationListener(_client));
         _listeners.Add(new TileRenderingListener(_client));
         _listeners.Add(new FogOfWarListener(_client));

@@ -60,6 +60,12 @@
             Create the new graphical part of this view
             </summary>
         </member>
+        <member name="M:ClientSDK.Data.IEntityView.RunWhenRendered(System.Action)">
+            <summary>
+            Schedules an action to run now or later, depending if the entity is already rendered or not
+            If not it will run after it's rendered
+            </summary>
+        </member>
         <member name="T:ClientSDK.Data.IClientEvent">
             <summary>
             To mark a game event as a only client SDK event
@@ -165,7 +171,12 @@
             Expose basic entity control functionality like moving or taking entity actions.
             </summary>
         </member>
-        <member name="M:ClientSDK.Services.IEntityModule.OnComponentUpdate``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
+        <member name="M:ClientSDK.Services.IEntityModule.OnUpdate``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
+            <summary>
+            Will be called when any update of the given component (add, remove, change) is done
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Services.IEntityModule.OnComponentModified``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
             <summary>
             Registers a component sync. 
             Whenever the given entity type has the given component type updated, instead of the values simply being copied
@@ -224,65 +235,6 @@
             Sends a message to chat
             </summary>
         </member>
-        <member name="T:ClientSDK.Modules.IComponentSync">
-            <summary>
-            Enables the game to more specifically control how to update components.
-            Components can be synced automatically (just copy data) or have manual syncs to handle things manually.
-            This module is able to implement callbacks from when a given component is synced so the client can react to it.
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Modules.IComponentSync.ProccessUpdate(Game.Engine.ECLS.IEntity,Game.Engine.ECLS.IComponent[],System.UInt32[])">
-            <summary>
-            Updates the components of the given entity
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Modules.IComponentSync.OnComponentUpdate``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
-            <summary>
-            Registers a component sync. 
-            Whenever the given entity type has the given component type updated, instead of the values simply being copied
-            the sync code will be called.
-            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Modules.IComponentSync.OnComponentRemoved``1(System.Action{Game.Engine.ECLS.IEntity,``0})">
-            <summary>
-            Registers a component removed callback. 
-            Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
-            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Modules.IComponentSync.OnComponentAdded``1(System.Action{Game.Engine.ECLS.IEntity,``0})">
-            <summary>
-            Registers a component removed callback. 
-            Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
-            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Modules.IComponentSync.RemoveListener(System.Object)">
-            <summary>
-            Removes all event callbacks from the given object
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Modules.ComponentSynchronizer.ProccessUpdate(Game.Engine.ECLS.IEntity,Game.Engine.ECLS.IComponent[],System.UInt32[])">
-            <summary>
-            Updates the components of the given entity.
-            Will copy all new values to old values
-            Any registered component sync callbacks will be called after all updates are done
-            </summary>
-        </member>
-        <member name="T:ClientSDK.Modules.SystemSynchronizer">
-            <summary>
-            Module responsible for handling base component logic to keep the client logic "up to date"
-            This module single responsibility is to try to keep the client game in sync with server game as most as it can
-            The only thing this won't keep track is the player data which is handled in <see cref="T:ClientSDK.Services.IPlayerModule"/>
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Modules.SystemSynchronizer.OnUpdatePlacement(Game.Engine.ECLS.IEntity,Game.Systems.Map.MapPlacementComponent,Game.Systems.Map.MapPlacementComponent)">
-            <summary>
-            Whenever map placement updates are sent to the client we re-position the entity on the client logic.
-            This will trigger all exploration events
-            </summary>
-        </member>
         <member name="T:ClientSDK.SDKEvents.ChatUpdateEvent">
             <summary>
             Called when chat updates. Either when receiving a new message or chat log received.
@@ -300,7 +252,7 @@
             After this is sent the client should start to receive component updates regarding the movement.
             </summary>
         </member>
-        <member name="T:ClientSDK.SDKEvents.EntityViewCreated">
+        <member name="T:ClientSDK.SDKEvents.EntityViewRendered">
             <summary>
             Triggered when the client gets aware of a new entity.
             This is only called when the entity is created for the first time
@@ -339,6 +291,89 @@
         <member name="T:ClientSDK.IServerModules">
             <summary>
             Handles server communication and event backs.
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Sync.IComponentSync">
+            <summary>
+            Enables the game to more specifically control how to update components.
+            Components can be synced automatically (just copy data) or have manual syncs to handle things manually.
+            This module is able to implement callbacks from when a given component is synced so the client can react to it.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Sync.IComponentSync.ProccessUpdate(Game.Engine.ECLS.IEntity,Game.Engine.ECLS.IComponent[],System.UInt32[])">
+            <summary>
+            Updates the components of the given entity
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Sync.IComponentSync.OnComponentModified``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
+            <summary>
+            Registers a component sync. 
+            Whenever the given entity type has the given component type updated, instead of the values simply being copied
+            the sync code will be called.
+            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Sync.IComponentSync.OnUpdate``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
+            <summary>
+            Registers a component sync. 
+            Whenever the given entity type has the given component type updated, instead of the values simply being copied
+            the sync code will be called.
+            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Sync.IComponentSync.OnComponentRemoved``1(System.Action{Game.Engine.ECLS.IEntity,``0})">
+            <summary>
+            Registers a component removed callback. 
+            Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
+            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Sync.IComponentSync.OnComponentAdded``1(System.Action{Game.Engine.ECLS.IEntity,``0})">
+            <summary>
+            Registers a component removed callback. 
+            Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
+            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Sync.IComponentSync.RemoveListener(System.Object)">
+            <summary>
+            Removes all event callbacks from the given object
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Sync.ComponentSynchronizer.OnUpdate``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
+            <summary>
+            Tracks any updates synced of given component for given entity
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Sync.ComponentSynchronizer.ProccessUpdate(Game.Engine.ECLS.IEntity,Game.Engine.ECLS.IComponent[],System.UInt32[])">
+            <summary>
+            Updates the components of the given entity.
+            Will copy all new values to old values
+            Any registered component sync callbacks will be called after all updates are done
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Sync.MovePathListener">
+            <summary>
+            Responsible for rendering the visual representation of game paths.
+            It listens for events for when to render the movement path on the map and events for when to hide it
+            </summary>
+        </member>
+        <member name="T:ClientSDK.Sync.SystemSynchronizer">
+            <summary>
+            Module responsible for handling base component logic to keep the client logic "up to date"
+            This module single responsibility is to try to keep the client game in sync with server game as most as it can
+            The only thing this won't keep track is the player data which is handled in <see cref="T:ClientSDK.Services.IPlayerModule"/>
+            </summary>
+        </member>
+        <member name="M:ClientSDK.Sync.SystemSynchronizer.OnUpdatePlacement(Game.Engine.ECLS.IEntity,Game.Systems.Map.MapPlacementComponent,Game.Systems.Map.MapPlacementComponent)">
+            <summary>
+            Whenever map placement updates are sent to the client we re-position the entity on the client logic.
+            This will trigger all exploration events
+            </summary>
+        </member>
+        <member name="T:MovePathView">
+            <summary>
+            Visual representation of a movement path
             </summary>
         </member>
     </members>

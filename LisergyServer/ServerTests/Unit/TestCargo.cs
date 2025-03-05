@@ -3,7 +3,7 @@ using Game.Systems.Resources;
 using NUnit.Framework;
 using ServerTests;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestCargo
     {

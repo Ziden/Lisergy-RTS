@@ -60,5 +60,7 @@ namespace Game.Engine.Scheduler
             ClassPool<GameTaskData>.Return(Pointer);
             Pointer = null;
         }
+
+        public bool IsDisposed() => Pointer == null;
     }
 }

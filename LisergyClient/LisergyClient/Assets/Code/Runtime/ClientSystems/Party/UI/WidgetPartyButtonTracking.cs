@@ -87,7 +87,7 @@ namespace Party.UI
             _client = client;
             _trackedEntity = partyWidget.PartyEntity;
             client.ClientEvents.On<HarvestingUpdateEvent>(this, OnHarvestUpdate);
-            client.Modules.Entities.OnComponentUpdate<MovementComponent>(OnCourseUpdate);
+            client.Modules.Entities.OnUpdate<MovementComponent>(OnCourseUpdate);
 
             if (_trackedEntity != null)
             {

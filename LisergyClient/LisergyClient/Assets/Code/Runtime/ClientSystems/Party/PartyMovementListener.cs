@@ -15,11 +15,11 @@ public class PartyMovementListener : IEventListener
     public PartyMovementListener(IGameClient client)
     {
         _client = client;
-        _client.ClientEvents.On<MovementInterpolationStart>(this, OnMoveStart);
-        _client.ClientEvents.On<MovementInterpolationEnd>(this, OnMoveEnd);
+        _client.ClientEvents.On<MovementInterpolationStartEvent>(this, OnMoveStart);
+        _client.ClientEvents.On<MovementInterpolationEndEvent>(this, OnMoveEnd);
     }
 
-    private void OnMoveStart(MovementInterpolationStart e)
+    private void OnMoveStart(MovementInterpolationStartEvent e)
     {
         if (e.Entity.EntityType == EntityType.Party)
         {
@@ -32,7 +32,7 @@ public class PartyMovementListener : IEventListener
         }
     }
 
-    private void OnMoveEnd(MovementInterpolationEnd e)
+    private void OnMoveEnd(MovementInterpolationEndEvent e)
     {
         if (e.LastStep && e.Entity.EntityType == EntityType.Party)
         {

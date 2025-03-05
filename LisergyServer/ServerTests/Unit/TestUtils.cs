@@ -4,7 +4,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestUtils
     {

@@ -25,7 +25,7 @@ public class BattleGroupListener : BaseComponentListener<BattleGroupComponent>
         else GameClient.UnityServices().Notifications.Display<DefeatNotification>(ev);
     }
 
-    public override void OnUpdateComponent(IEntity entity, BattleGroupComponent oldComponent, BattleGroupComponent newComponent)
+    public override void OnComponentModified(IEntity entity, BattleGroupComponent oldComponent, BattleGroupComponent newComponent)
     {
         if (oldComponent.BattleID == GameId.ZERO && newComponent.BattleID != GameId.ZERO)
         {

@@ -6,7 +6,7 @@ using ServerTests;
 using System;
 using System.Linq;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestScheduler
     {

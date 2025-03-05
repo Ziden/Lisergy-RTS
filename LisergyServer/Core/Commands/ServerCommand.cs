@@ -26,7 +26,7 @@ namespace LisergyServer.Commands
             using (Process proc = Process.GetCurrentProcess())
             {
                 sender.SendMessage($"Private Allocated (MB): {proc.PrivateMemorySize64 / (1024 * 1024)}");
-                sender.SendMessage($"GC Heap Allocated (MB): {GC.GetTotalAllocatedBytes() / (1024 * 1024)}");
+                sender.SendMessage($"GC Heap Allocated (MB): {GC.GetAllocatedBytesForCurrentThread() / (1024 * 1024)}");
                 sender.SendMessage($"GC Total Memory (MB): {GC.GetTotalMemory(false) / (1024 * 1024)}");
             }
             foreach (var m in UnmanagedMemory.GetMetrics())

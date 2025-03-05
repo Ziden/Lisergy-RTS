@@ -1,4 +1,4 @@
-namespace UnitTests
+namespace GameUnitTests
 {
     /*
     public unsafe class TestBattleActions

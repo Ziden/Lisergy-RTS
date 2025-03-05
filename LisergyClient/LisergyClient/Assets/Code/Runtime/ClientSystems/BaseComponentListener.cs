@@ -9,7 +9,7 @@ public interface ISpecificComponentListener<ComponentType> : IComponentListener 
     /// <summary>
     /// Called whenever the component is updated on any given entity
     /// </summary>
-    void OnUpdateComponent(IEntity entity, ComponentType oldComponent, ComponentType? newComponent);
+    void OnComponentModified(IEntity entity, ComponentType oldComponent, ComponentType? newComponent);
 }
 
 public abstract class BaseComponentListener<ComponentType> : ISpecificComponentListener<ComponentType> where ComponentType : IComponent
@@ -19,11 +19,29 @@ public abstract class BaseComponentListener<ComponentType> : ISpecificComponentL
     public BaseComponentListener(IGameClient client)
     {
         GameClient = client;
-        GameClient.Modules.Entities.OnComponentUpdate<ComponentType>(OnUpdateComponent);
-        GameClient.Modules.Entities.OnComponentRemoved<ComponentType>(OnComponentRemoved);
+
+        GameClient.Modules.Entities.OnComponentAdded<ComponentType>(_OnComponentAdded);
+        GameClient.Modules.Entities.OnComponentModified<ComponentType>(_OnComponentModified);
+        GameClient.Modules.Entities.OnComponentRemoved<ComponentType>(_OnComponentRemoved);
     }
 
-    public abstract void OnUpdateComponent(IEntity entity, ComponentType oldComponent, ComponentType? newComponent);
+    private void _OnComponentModified(IEntity entity, ComponentType oldComponent, ComponentType? newComponent)
+    {
+        OnComponentModified(entity, oldComponent, newComponent);
+    }
+
+    private void _OnComponentRemoved(IEntity entity, ComponentType oldComponent)
+    {
+        OnComponentRemoved(entity, oldComponent);
+    }
+
+    private void _OnComponentAdded(IEntity entity, ComponentType component) {
+        OnComponentAdded(entity, component);
+    }
+
+    public abstract void OnComponentModified(IEntity entity, ComponentType oldComponent, ComponentType? newComponent);
 
     public virtual void OnComponentRemoved(IEntity entity, ComponentType oldComponent) { }
+
+    public virtual void OnComponentAdded(IEntity entity, ComponentType component) { }
 }

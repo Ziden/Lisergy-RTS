@@ -11,7 +11,7 @@ using ServerTests;
 using System;
 using System.Linq;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public unsafe class TestAutobattles
     {

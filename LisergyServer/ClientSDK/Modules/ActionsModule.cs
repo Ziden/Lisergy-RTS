@@ -80,7 +80,7 @@ namespace ClientSDK.Services
                     _client.SDKLog.Error($"Trying to walk path in {pathNode.X} {pathNode.Y} but tile was not yet received");
                     return false;
                 }
-                var tileView = _client.Modules.Views.GetEntityView(tile.TileEntity);
+                var tileView = _client.Modules.Views.GetEntityView(tile.Entity);
 
                 if (tileView == null || tileView.State == EntityViewState.NOT_RENDERED)
                 {

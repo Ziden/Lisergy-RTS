@@ -2,7 +2,7 @@ using Game.World;
 using NUnit.Framework;
 using ServerTests;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestChunk
     {

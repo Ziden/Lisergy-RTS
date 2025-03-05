@@ -3,6 +3,7 @@ using ClientSDK.Data;
 using Game.Tile;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace Assets.Code
@@ -37,8 +38,11 @@ namespace Assets.Code
         private void OnClickUpdate()
         {
             if (!_actions.Game.ClickOnScreen.WasPerformedThisFrame()) return;
+            //if (_actions.UI.Click.WasPerformedThisFrame()) return;
             if (EventSystem.current.IsPointerOverGameObject()) return;
             var a = _actions.Game.ClickOnScreen.ReadValue<Vector2>();
+
+            // TODO: We don't really need 3D physics to know which tile i clicked
             var ray = _cam.ScreenPointToRay(new Vector3(a.x, a.y));
             if (Physics.Raycast(ray, out var hit))
             {

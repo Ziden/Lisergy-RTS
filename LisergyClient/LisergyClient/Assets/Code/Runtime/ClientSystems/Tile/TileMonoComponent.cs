@@ -27,6 +27,7 @@ public class TileRandomizationSetup
 /// </summary>
 public class TileMonoComponent : MonoBehaviour
 {
+    private static bool ENABLED = true;
     private static DeterministicRandom _rng = new DeterministicRandom();
 
     private TileModel _tile;
@@ -71,6 +72,8 @@ public class TileMonoComponent : MonoBehaviour
     /// </summary>
     private void DecorateBoundaries(TileView currentTileView)
     {
+        if (!ENABLED) return;
+
         var modules = Assets.Code.UnityServicesContainer.Resolve<IServerModules>();
         var tile = currentTileView.Tile;
         var decorationComponent = currentTileView.GameObject.GetComponent<TileMonoComponent>();
@@ -79,10 +82,10 @@ public class TileMonoComponent : MonoBehaviour
         var southTile = map.GetTile(tile.X, tile.Y + 1);
         var eastTile = map.GetTile(tile.X + 1, tile.Y);
         var westTile = map.GetTile(tile.X - 1, tile.Y);
-        TileView north = northTile == null ? null : (TileView)modules.Views.GetOrCreateView(northTile.TileEntity);
-        TileView south = southTile == null ? null : (TileView)modules.Views.GetOrCreateView(southTile.TileEntity);
-        TileView east = eastTile == null ? null : (TileView)modules.Views.GetOrCreateView(eastTile.TileEntity);
-        TileView west = westTile == null ? null : (TileView)modules.Views.GetOrCreateView(westTile.TileEntity);
+        TileView north = northTile == null ? null : (TileView)modules.Views.GetOrCreateView(northTile.Entity);
+        TileView south = southTile == null ? null : (TileView)modules.Views.GetOrCreateView(southTile.Entity);
+        TileView east = eastTile == null ? null : (TileView)modules.Views.GetOrCreateView(eastTile.Entity);
+        TileView west = westTile == null ? null : (TileView)modules.Views.GetOrCreateView(westTile.Entity);
 
         if (decorationComponent.RemoveWhenConnectNorth.Count > 0 && (northTile != null && north.Tile.SpecId == tile.SpecId))
         {
@@ -120,6 +123,18 @@ public class TileMonoComponent : MonoBehaviour
 
             _decorated = true;
 
+            if(!ENABLED)
+            {
+                foreach (var r in _config)
+                {
+                    foreach (var o in r.Objects)
+                    {
+                        Destroy(o);
+                    }
+                }
+                return;
+            }
+           
             foreach (var r in _config)
             {
                 if (r.LeaveOne)

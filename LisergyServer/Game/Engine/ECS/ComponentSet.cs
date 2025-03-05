@@ -124,6 +124,7 @@ namespace Game.Engine.ECLS
 
         public bool IsSyncableComponent(Type t)
         {
+            if(!_entity.Game.Network.DeltaCompression.Enabled) return false;
             if (!_shouldSync.TryGetValue(t, out var sync)) return false;
             if (sync == null) return false;
             return true;
@@ -175,6 +176,7 @@ namespace Game.Engine.ECLS
 
         private void TrackSync(Type type)
         {
+            if (!_entity.Game.Network.DeltaCompression.Enabled) return;
             if (!_shouldSync.TryGetValue(type, out var sync))
             {
                 sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
@@ -193,7 +195,7 @@ namespace Game.Engine.ECLS
                 {
                     if (!readCopies.ContainsKey(t))
                     {
-                        readCopies[t] = currentComponent.ShallowClone();
+                        readCopies[t] = currentComponent.FastShallowClone();
                     }
                     comp = (T)readCopies[t];
                     return true;
@@ -276,7 +278,7 @@ namespace Game.Engine.ECLS
             var readCopy = GetReadCopies();
             if (IsSyncableComponent(t))
             {
-                readCopy[t] = c.ShallowClone(); // TODO: Maybe only tests always returns a copy to ensure .Save is being called ?
+                readCopy[t] = c?.FastShallowClone(); // TODO: Maybe only tests always returns a copy to ensure .Save is being called ?
                 c = readCopy[t];
             }
             return c == null ? default : c;

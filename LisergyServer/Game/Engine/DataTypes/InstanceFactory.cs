@@ -158,7 +158,7 @@ namespace Game.Engine.DataTypes
 
         private static readonly Dictionary<Type, Func<object, object>> Delegates = new Dictionary<Type, Func<object, object>>();
 
-        public static T ShallowClone<T>(this T obj)
+        public static T FastShallowClone<T>(this T obj)
         {
             if (!Delegates.TryGetValue(obj.GetType(), out var del))
             {

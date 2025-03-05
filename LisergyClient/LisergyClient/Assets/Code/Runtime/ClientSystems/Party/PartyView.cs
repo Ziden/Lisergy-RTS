@@ -5,6 +5,8 @@ using ClientSDK;
 using Game.Systems.BattleGroup;
 using System.Collections.Generic;
 using Game.Engine.ECLS;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 namespace Assets.Code.World
 {
@@ -12,15 +14,15 @@ namespace Assets.Code.World
     {
         public PartyView(IGameClient client, IEntity e) : base(e, client) { }
 
-        public MovementInterpolator MovementInterpolator { get; private set; }
+        public MovementInterpolatorLogic MovementInterpolator { get; private set; }
 
         public IReadOnlyCollection<UnitView> UnitViews => Entity.Components.Get<BattleGroupUnitsComponent>().UnitViews.Values;
 
-        protected override void CreateView()
+        protected override async Task CreateView()
         {
             GameObject = new GameObject($"Party {Entity.EntityId} from {Entity.OwnerID}");
             GameObject.transform.SetParent(ViewContainer.transform);
-            MovementInterpolator = new MovementInterpolator(Client, Entity);
+            MovementInterpolator = new MovementInterpolatorLogic(Client, Entity);
             State = EntityViewState.RENDERED;
             Client.Log.Debug($"Created new party instance {this}");
         }
@@ -38,12 +40,12 @@ namespace Assets.Code.World
             foreach (var unit in group)
             {
                 var unitObject = new UnitView(Client, unit);
-                unitObject.AddToScene(o =>
+                unitObject.AddToScene().ContinueWith(o =>
                 {
                     o.transform.SetParent(GameObject.transform);
                     o.transform.localPosition = Vector3.zero;
                     unitsComponent.UnitViews[unit] = unitObject;
-                });
+                }).Forget();
             }
         }
     }

@@ -6,7 +6,7 @@ using ServerTests;
 using System.Linq;
 using Tests.Unit.Stubs;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestBuilding
     {

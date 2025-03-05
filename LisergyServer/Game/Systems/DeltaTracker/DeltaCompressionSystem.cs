@@ -20,11 +20,11 @@ namespace Game.Systems.Dungeon
         {
             if (ev.Visible)
             {
-                GetLogic(ev.Tile.TileEntity).SetTileExplorationFlag(DeltaFlag.SELF_REVEALED);
+                GetLogic(ev.Tile.Entity).SetTileExplorationFlag(DeltaFlag.SELF_REVEALED);
             }
             else
             {
-                GetLogic(ev.Tile.TileEntity).SetTileExplorationFlag(DeltaFlag.SELF_CONCEALED);
+                GetLogic(ev.Tile.Entity).SetTileExplorationFlag(DeltaFlag.SELF_CONCEALED);
             }
         }
 

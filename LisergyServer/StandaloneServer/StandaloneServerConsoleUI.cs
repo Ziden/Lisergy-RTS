@@ -1,6 +1,5 @@
 ﻿using Game.Engine;
 using Game.Engine.Events;
-using NServiceBus.Logging;
 using System.Collections;
 using Terminal.Gui;
 
@@ -190,9 +189,9 @@ public class StandaloneServerConsoleUI : Window
     public static IGameLog HookLogs(IGameLog log)
     {
         var baseLog = (GameLog)log;
-        baseLog._Debug = m => OnReceiveLog(baseLog.Tag, LogLevel.Debug, m);
-        baseLog._Info = m => OnReceiveLog(baseLog.Tag, LogLevel.Info, m);
-        baseLog._Error = m => OnReceiveLog(baseLog.Tag, LogLevel.Error, m);
+        baseLog._Debug = m => OnReceiveLog(baseLog.Tag, 0, m);
+        baseLog._Info = m => OnReceiveLog(baseLog.Tag, 1, m);
+        baseLog._Error = m => OnReceiveLog(baseLog.Tag, 2, m);
         return log;
     }
 
@@ -203,7 +202,8 @@ public class StandaloneServerConsoleUI : Window
         if (Tab == forTab) UpdateEntryList(log);
     }
 
-    public static void OnReceiveLog(string tag, LogLevel level, string msg)
+
+    public static void OnReceiveLog(string tag, int level, string msg)
     {
         Application.MainLoop.Invoke(() =>
         {

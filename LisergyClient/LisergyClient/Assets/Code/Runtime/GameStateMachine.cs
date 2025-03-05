@@ -57,12 +57,12 @@ namespace Assets.Code.Assets.Code
 
         private void OnEnterMapState()
         {
-            _screens.Open<GameHUD>();
+            _screens.Open<GameHudScreen>();
         }
 
         private void OnLeaveMapState()
         {
-            _screens.Close<GameHUD>();
+            _screens.Close<GameHudScreen>();
         }
 
         private void OnLeaveLoginState() => _screens.Close<LoginScreen>();

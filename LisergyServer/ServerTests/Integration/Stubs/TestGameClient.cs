@@ -1,18 +1,24 @@
 ﻿using ClientSDK;
 using ClientSDK.Data;
 using ClientSDK.SDKEvents;
+using Game;
 using Game.Engine;
 using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
 using Game.Engine.Events;
 using Game.Engine.Events.Bus;
 using Game.Engine.Network;
+using Game.Entities;
 using Game.Events.ServerEvents;
+using Game.Systems.Map;
+using Game.Systems.Player;
+using Game.World;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Telepathy;
 
 
 namespace ServerTests.Integration.Stubs
@@ -35,13 +41,39 @@ namespace ServerTests.Integration.Stubs
             this.ClientEvents.On<GameStartedEvent>(this, OnGameStart);
         }
 
+        public void SyncWithServer(LisergyGame serverGame, GameId _playerId)
+        {
+            serverGame.Network.ReceiveInput(_playerId, new JoinWorldMapCommand());
+            var _serverPlayer = serverGame.Players[_playerId];
+            Network.ReceiveInput(_playerId, new LoginResultPacket()
+            {
+                Profile = new PlayerProfileComponent(_playerId),
+                Success = true
+            });
+            Network.ReceiveInput(_playerId, new GameSpecPacket(serverGame));
+            SyncAllEntitiesOfType(_playerId, serverGame, EntityType.Tile);
+            SyncAllEntitiesOfType(_playerId, serverGame, EntityType.Party);
+            EventsInSdk.Clear();
+            EventsInClientLogic.Clear();
+            ReceivedPackets.Clear();
+        }
+
+        public void SyncAllEntitiesOfType(GameId viewerId, LisergyGame server, EntityType type)
+        {
+            foreach (var e in server.Entities.AllEntities.Where(e => e.EntityType == type))
+            {
+                Network.ReceiveInput(
+                    viewerId, e.Logic.DeltaCompression.GetUpdatePacket(viewerId, false));
+            }
+        }
+
         /// <summary>
         /// When game starts we hook to game events for testing purposes
         /// </summary>
         private void OnGameStart(GameStartedEvent ev)
         {
-            ClientEvents.OnEventFired += e => EventsInSdk.Add(e.ShallowClone());
-            ev.Game.Events.OnEventFired += e => EventsInClientLogic.Add(e.ShallowClone());
+            ClientEvents.OnEventFired += e => EventsInSdk.Add(e.FastShallowClone());
+            ev.Game.Events.OnEventFired += e => EventsInClientLogic.Add(e.FastShallowClone());
         }
 
         public void ClearEvents()

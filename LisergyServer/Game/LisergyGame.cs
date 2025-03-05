@@ -48,6 +48,11 @@ namespace Game
             Entities = new GameEntities(this);
             Logic = new GameLogic(this);
             Scheduler = new GameScheduler();
+            if (IsClientGame)
+            {
+                Network.DeltaCompression.Enabled = false;
+                Log.Info("Disabled delta compression");
+            }
         }
 
         public void SetupWorld(GameWorld world)
@@ -57,10 +62,7 @@ namespace Game
             World.Populate();
             Network.SetupGame(world.Game);
             Network.DeltaCompression.ClearDeltas();
-            if (IsClientGame)
-            {
-                Network.DeltaCompression.Enabled = false;
-            }
+           
             Log.Debug($"World {World.TilemapDimensions.x}x{World.TilemapDimensions.y} ready");
         }
     }

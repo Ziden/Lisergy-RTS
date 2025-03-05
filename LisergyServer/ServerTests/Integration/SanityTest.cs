@@ -59,6 +59,9 @@ namespace SmokeTests
             Assert.NotNull(_client.Game.Players[_playerId]);
             Assert.AreEqual(_client.Modules.Player.LocalPlayer, _client.Game.Players[_playerId]);
 
+            Assert.IsFalse(_client.Game.Network.DeltaCompression.Enabled);
+            Assert.IsTrue(_server.Game.Network.DeltaCompression.Enabled);
+
             await ValidateMapTiles();
             await ValidateEntities();
             await ValidateMapResources();
@@ -141,7 +144,7 @@ namespace SmokeTests
             var tileUpdatesReceived = _client.ReceivedPackets.Where(p => p is EntityUpdatePacket e && e.Type == EntityType.Tile).Cast<EntityUpdatePacket>();
             var visibilityEvents = _client.FilterClientEvents<TileVisibilityChangedEvent>();
             var entityUpdates = _client.FilterReceivedPackets<EntityUpdatePacket>();
-            var tileViewsCreated = _client.EventsInSdk.Count(e => e is EntityViewCreated c && c.Entity.EntityType == EntityType.Tile);
+            var tileViewsCreated = _client.EventsInSdk.Count(e => e is EntityViewRendered c && c.Entity.EntityType == EntityType.Tile);
             var tileVisibleEvents = _client.EventsInClientLogic.Count(e => e is TileVisibilityChangedEvent);
             Assert.NotNull(firstReceived);
             Assert.NotNull(firstEntityReceived);
@@ -153,7 +156,7 @@ namespace SmokeTests
                 var clientTile = _client.Game.World.GetTile(tileData.Position);
                 var serverTile = _server.Game.World.GetTile(tileData.Position);
 
-                Assert.IsTrue(clientTile.Components.IsUpToDateWith(serverTile.TileEntity));
+                Assert.IsTrue(clientTile.Components.IsUpToDateWith(serverTile.Entity));
                 Assert.AreEqual(clientTile.X, tileData.Position.X);
                 Assert.AreEqual(clientTile.Y, tileData.Position.Y);
                 Assert.AreEqual((byte)clientTile.SpecId, tileData.TileId);
@@ -190,6 +193,35 @@ namespace SmokeTests
                 var serverPlacement = serverEntity.Get<MapPlacementComponent>().Position;
 
                 Assert.AreEqual(clientPlacement, serverPlacement);
+            }
+
+            foreach (var serverEntity in _server.Game.Entities.AllEntities)
+            {
+                if (serverEntity.EntityType == EntityType.Player) continue;
+
+                if (!serverEntity.Logic.Vision.IsVisibleFor(_server.Game.Players[_playerId].PlayerEntity))
+                {
+                    Assert.IsNull(_client.Game.Entities[serverEntity.EntityId]);
+                }
+                else
+                {
+                    Assert.NotNull(_client.Game.Entities[serverEntity.EntityId]);
+
+                    var clientEntity = _client.Game.Entities[serverEntity.EntityId];
+                    var serverTile = serverEntity.GetTile();
+                    var clientTile = clientEntity.GetTile();
+                    if (serverEntity.EntityType == EntityType.Party)
+                    {
+                        Assert.IsTrue(clientTile.Logic.Tile.GetEntitiesOnTile().Contains(clientEntity));
+                    }
+                    else if (serverEntity.EntityType == EntityType.Building)
+                    {
+                        Assert.AreEqual(clientEntity, clientTile.Logic.Tile.GetBuildingOnTile());
+                    }
+
+                    Assert.AreEqual(clientEntity.Get<MapPlacementComponent>()?.Position, serverEntity.Get<MapPlacementComponent>()?.Position);
+
+                }
             }
             TestGame.ValidateNoLeak(_server.Game);
         }

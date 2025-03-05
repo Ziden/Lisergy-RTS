@@ -3,6 +3,7 @@ using Game.Engine.Events;
 
 namespace Game.Systems.Map
 {
+    [SyncedSystem]
     public class MapSystem : LogicSystem<MapPlaceableComponent, MapLogic>
     {
         public MapSystem(LisergyGame game) : base(game) { }

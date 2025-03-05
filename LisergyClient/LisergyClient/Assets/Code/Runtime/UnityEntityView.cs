@@ -35,7 +35,7 @@ public class UnityEntityView : EntityView, IUnityEntityView
     private static string GetContainerName() => "Entity Container";
 
     private static GameObject _container;
-    protected static GameObject ViewContainer => _container = _container ?? new GameObject(GetContainerName());
+    public static GameObject ViewContainer => _container = _container ?? new GameObject(GetContainerName());
 
     public EntityType EntityType => Entity.EntityType;
 
@@ -46,5 +46,10 @@ public class UnityEntityView : EntityView, IUnityEntityView
     {
         if (State == EntityViewState.RENDERED) child.transform.parent = GameObject.transform;
         else OnAfterRendered += () => child.transform.parent = GameObject.transform;
+    }
+
+    public void SyncLocation()
+    {
+
     }
 }

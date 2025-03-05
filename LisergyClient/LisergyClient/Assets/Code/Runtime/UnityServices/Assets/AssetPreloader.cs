@@ -20,6 +20,7 @@ public class AssetPreloader
             await client.UnityServices().Assets.PreloadAsset(u.Art);
         }
 
+        await client.UnityServices().Assets.PreloadAsset(VfxPrefab.HalfPath);
         await client.UnityServices().Assets.PreloadAsset(TilePrefab.FogBlack);
         await client.UnityServices().Assets.PreloadAsset(MapObjectPrefab.TileCursor);
         await client.UnityServices().Assets.GetScreen(UIScreen.GameHud);

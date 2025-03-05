@@ -4,7 +4,7 @@ using Game.Systems.Battler;
 using NUnit.Framework;
 using ServerTests;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public class TestBattleGroup
     {

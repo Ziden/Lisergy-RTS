@@ -2,7 +2,7 @@
 using Game.Systems.BattleGroup;
 using NUnit.Framework;
 
-namespace UnitTests
+namespace GameUnitTests
 {
     public unsafe class TestBattleMemory
     {
