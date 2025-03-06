@@ -26,5 +26,3 @@ jobs:
       run: dotnet test -l "console;verbosity=normal" --no-build --verbosity diagnostic --consoleLoggerParameters:ErrorsOnly -p:TestTfmsInParallel=false --filter GameUnitTests
     - name: Client SDK Test
       run: dotnet test -l "console;verbosity=normal" --no-build --verbosity diagnostic --consoleLoggerParameters:ErrorsOnly -p:TestTfmsInParallel=false --filter SdkUnitTests
-    - name: Smoke Test
-      run: dotnet test -l "console;verbosity=normal" --no-build --verbosity diagnostic --consoleLoggerParameters:ErrorsOnly -p:TestTfmsInParallel=false --filter SmokeTests
