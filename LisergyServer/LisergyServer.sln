@@ -28,8 +28,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebPlayerLogic", "WebGameLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameServices", "GameServices\GameServices.csproj", "{849FC0A5-04E4-46E3-A314-5C27040153A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAssembly", "..\LisergyClient\LisergyClient\GameAssembly.csproj", "{71794947-77B9-5A10-63FE-6F4231420764}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
