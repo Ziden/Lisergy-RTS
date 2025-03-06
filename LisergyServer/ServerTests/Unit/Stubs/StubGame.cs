@@ -66,10 +66,12 @@ namespace ServerTests
             _testLog = new GameLog("[Game]");
             _testLog._Debug = m =>
             {
+                /*
                 var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 if (lastLog != 0) m = $"[{now - lastLog}ms] " + m;
                 lastLog = now;
                 Console.WriteLine(m);
+                */
             };
             return _testLog;
         }
@@ -92,7 +94,7 @@ namespace ServerTests
             if (createPlayer && createWorld)
                 CreatePlayer();
             long originalByteCount = GC.GetTotalMemory(false) / 1000;
-            Log.Info($"Test Game Ready: Heap Allocation Total {originalByteCount}kb");
+            Log.Debug($"Test Game Ready: Heap Allocation Total {originalByteCount}kb");
         }
 
         public void HandleClientEvent<T>(PlayerModel sender, T ev) where T : BasePacket

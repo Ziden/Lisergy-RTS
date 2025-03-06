@@ -74,7 +74,6 @@ namespace Game.Systems.FogOfWar
         /// </summary>
         public void UpdateGroupLineOfSight()
         {
-            Console.WriteLine("UpdateGroupLineOfSight " + CurrentEntity);
             var group = CurrentEntity.Get<BattleGroupComponent>();
             if (group.Units.Empty)
             {
@@ -97,7 +96,6 @@ namespace Game.Systems.FogOfWar
         /// </summary>
         public void UpdateVisionRange(TileModel from, TileModel to)
         {
-            Console.WriteLine($"UpdateVisionRange {CurrentEntity} {from} {to}");
             var explorer = CurrentEntity;
             var los = explorer.Components.Get<EntityVisionComponent>().LineOfSight;
             Game.Log.Debug($"Updating entity {explorer} vision range of {los}");
