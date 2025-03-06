@@ -2,8 +2,6 @@
 
 [![LisergyPipeline](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/Ziden/Lisergy/actions/workflows/dotnet.yml)
 
-# Lisergy Project
-
 ## Overview
 
 The Lisergy Project is an ambitious MMO RTS game framework built with a modular and data-driven architecture. It leverages .NET technologies to provide a robust and scalable solution for both client and server-side game logic. The project is divided into several key components, each with its own dedicated functionality and purpose.
