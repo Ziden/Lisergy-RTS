@@ -8,7 +8,7 @@ namespace Game.Systems.Building
     [Serializable]
     public class BuildCommand : BasePacket, IGameCommand
     {
-        public byte BuilderPartyIndex;
+        public byte BuilderUnitIndex;
         public BuildingSpecId Building;
         public Location Location;
 

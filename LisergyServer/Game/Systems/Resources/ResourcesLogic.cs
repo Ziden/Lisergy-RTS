@@ -13,7 +13,7 @@ namespace Game.Systems.Resources
         /// </summary>
         public void SetTileResourcesFromHarvestSpec()
         {
-            var tile = Entity.Logic.Map.GetTile();
+            var tile = CurrentEntity.Logic.Map.GetTile();
             var harvestPoint = tile.HarvestPointSpec;
             if (harvestPoint == null)
             {

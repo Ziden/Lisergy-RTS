@@ -63,7 +63,7 @@ namespace Game.Engine.ECLS
         /// </summary>
         public LogicType GetLogic(IEntity entity)
         {
-            _logic.Entity = entity;
+            _logic.CurrentEntity = entity;
             return _logic;
         }
     }

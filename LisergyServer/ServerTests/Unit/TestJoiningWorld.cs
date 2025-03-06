@@ -6,6 +6,7 @@ using Game.Systems.Map;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
+using Tests.Unit.Stubs;
 
 namespace GameUnitTests
 {
@@ -128,6 +129,21 @@ namespace GameUnitTests
             var unit = party.Get<BattleGroupComponent>().Units[0];
 
             Assert.That(unit.HP == unit.MaxHP);
+        }
+
+        [Test]
+        public void TestTwoPlayerJoinSeparately()
+        {
+            var joinEvent = new JoinWorldMapCommand();
+            var p1 = new TestServerPlayer(Game);
+            Game.HandleClientEvent(p1, joinEvent);
+
+            var joinEvent2 = new JoinWorldMapCommand();
+            var p2 = new TestServerPlayer(Game);
+            Game.HandleClientEvent(p2, joinEvent2);
+
+            Assert.AreNotEqual(p1, p2);
+            Assert.AreNotEqual(p1.EntityLogic.GetParties()[0].GetTile(), p2.EntityLogic.GetParties()[0].GetTile());
         }
     }
 }

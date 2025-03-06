@@ -10,7 +10,7 @@ namespace Game.Systems.Castle
         {
             var c = GetComponent();
             c.DungeonLevel = level;
-            Entity.Save(c);
+            CurrentEntity.Save(c);
         }
     }
 }

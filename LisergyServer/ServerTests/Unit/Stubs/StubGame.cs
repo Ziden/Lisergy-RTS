@@ -45,7 +45,15 @@ namespace ServerTests
             }
         }
 
-
+        public TileModel FindTile(Func<TileModel, bool> filter)
+        {
+            foreach(var t in ((GameWorld)World).AllTiles())
+            {
+                if (filter(t))
+                    return t;
+            }
+            return null;
+        }
 
         public GameScheduler GameScheduler => this.Scheduler as GameScheduler;
 

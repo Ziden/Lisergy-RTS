@@ -4,8 +4,8 @@
     /// <inheritdoc/>
     public class BaseEntityLogic<ComponentType> where ComponentType : IComponent
     {
-        protected IGame Game => Entity.Game;
-        public IEntity Entity { get; set; }
-        public ComponentType GetComponent() => Entity.Get<ComponentType>();
+        protected IGame Game => CurrentEntity.Game;
+        public IEntity CurrentEntity { get; set; } // TODO: Think about this.
+        public ComponentType GetComponent() => CurrentEntity.Get<ComponentType>();
     }
 }

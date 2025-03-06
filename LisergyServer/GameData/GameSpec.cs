@@ -31,10 +31,10 @@ namespace GameData
             HarvestPoints = new Dictionary<HarvestPointSpecId, ResourceHarvestPointSpec>();
             Entities = new Dictionary<int, EntitySpec>();
             Harvesting = new HarvestingSpec();
-            Construction = new ConstructionTreeSpec();
+            ConstructionTechTree = new ConstructionTreeSpec();
         }
 
-        public ConstructionTreeSpec Construction;
+        public ConstructionTreeSpec ConstructionTechTree;
         public HarvestingSpec Harvesting;
         public Dictionary<BuildingSpecId, BuildingSpec> Buildings;
         public Dictionary<BuildingSpecId, BuildingConstructionSpec> BuildingConstructions;

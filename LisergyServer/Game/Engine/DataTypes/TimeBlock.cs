@@ -5,6 +5,7 @@ namespace Game.Engine.DataTypes
     /// <summary>
     /// Represents the time a task is due executing
     /// </summary>
+    [Serializable]
     public class TimeBlock
     {
         /// <summary>

@@ -13,7 +13,7 @@ namespace Game.Systems.Resources
         /// </summary>
         public int GetAvailableSpace(in ResourceStackData resource)
         {
-            var cargo = Entity.Get<CargoComponent>();
+            var cargo = CurrentEntity.Get<CargoComponent>();
             var slot = cargo.GetRoomFor(resource.ResourceId);
             if (slot == -1) return -1;
             var spec = Game.Specs.Resources[resource.ResourceId];
@@ -28,7 +28,7 @@ namespace Game.Systems.Resources
         /// </summary>
         public int TrimResourcesToMaxCargo(ref ResourceStackData resource)
         {
-            var cargo = Entity.Get<CargoComponent>();
+            var cargo = CurrentEntity.Get<CargoComponent>();
             var spec = Game.Specs.Resources[resource.ResourceId];
             var canCarry = cargo.RemainingWeight / spec.WeightPerUnit;
             var excess = resource.Amount - canCarry;
@@ -48,16 +48,16 @@ namespace Game.Systems.Resources
             var slot = GetAvailableSpace(resource);
             if (slot == -1)
             {
-                Game.Log.Error($"Cargo capacity rached for {resource} to cargo {Entity.Get<CargoComponent>()} from {Entity}");
+                Game.Log.Error($"Cargo capacity rached for {resource} to cargo {CurrentEntity.Get<CargoComponent>()} from {CurrentEntity}");
                 return false;
             }
             var spec = Game.Specs.Resources[resource.ResourceId];
             var totalWeight = (ushort)(spec.WeightPerUnit * resource.Amount);
-            var cargo = Entity.Components.Get<CargoComponent>();
+            var cargo = CurrentEntity.Components.Get<CargoComponent>();
             cargo.Add(resource);
             cargo.CurrentWeight += totalWeight;
-            Entity.Save(cargo);
-            Game.Log.Debug($"Added {resource} to cargo {cargo} from {Entity}");
+            CurrentEntity.Save(cargo);
+            Game.Log.Debug($"Added {resource} to cargo {cargo} from {CurrentEntity}");
             return true;
         }
     }

@@ -16,7 +16,7 @@ namespace GameDataTest
 
         public static void GenerateConstruction(ref GameSpec spec)
         {
-            spec.Construction.Root = new BuildingTechTreeNode()
+            spec.ConstructionTechTree.Root = new BuildingTechTreeNode()
             {
                 Building = CAMP
             };
@@ -65,6 +65,7 @@ namespace GameDataTest
                 Art = new ArtSpec() { Address = Addr("Farm") },
                 Description = "Produces food over time. Best near water.",
             };
+            GenerateConstruction(ref spec);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Game.Engine.ECLS;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.ECLS;
 using Game.Engine.Events;
 using Game.Engine.Network;
 using Game.Systems.Battle.BattleActions;
@@ -45,6 +46,7 @@ namespace Game.Engine
             models.Add(typeof(PlayerProfileComponent));
             models.Add(typeof(SerializedEntity));
             models.Add(typeof(SerializedPlayer));
+            models.Add(typeof(TimeBlock));
 
             // Game
             models.Add(typeof(GameSpec));

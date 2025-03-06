@@ -50,7 +50,7 @@ namespace GameUnitTests
             Game.World.Players.Add(player);
             var tile = newbieChunk.FindTileWithId(0);
             var castleID = Game.Specs.InitialBuilding.SpecId;
-            player.EntityLogic.Build(castleID, tile);
+            tile.Logic.Building.ForceBuild(castleID, player.EntityId);
 
             Game.Network.DeltaCompression.SendAllModifiedEntities(player.EntityId);
 

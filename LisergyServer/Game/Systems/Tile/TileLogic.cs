@@ -10,7 +10,7 @@ namespace Game.Systems.Tile
     {
         public IReadOnlyCollection<IEntity> GetEntitiesOnTile()
         {
-            var tile = Game.World.GetTile(Entity.Get<TileDataComponent>().Position);
+            var tile = Game.World.GetTile(CurrentEntity.Get<TileDataComponent>().Position);
             var habitants = tile.Components.Get<TileHabitantsComponent>();
             if (habitants != null) return habitants.EntitiesIn;
             return Array.Empty<IEntity>();
@@ -18,7 +18,7 @@ namespace Game.Systems.Tile
 
         public void SetTileId(TileSpecId id)
         {
-            var data = Entity.Get<TileDataComponent>();
+            var data = CurrentEntity.Get<TileDataComponent>();
             var tile = Game.World.GetTile(data.Position);
             data.TileId = id;
             tile.Save(data);
@@ -29,11 +29,11 @@ namespace Game.Systems.Tile
         }
 
         public bool IsPassable() => GetMovementFactor() > 0;
-        public float GetMovementFactor() => Game.Specs.Tiles[Entity.Get<TileDataComponent>().TileId].MovementFactor;
+        public float GetMovementFactor() => Game.Specs.Tiles[CurrentEntity.Get<TileDataComponent>().TileId].MovementFactor;
 
         public IEntity GetBuildingOnTile()
         {
-            var tile = Game.World.GetTile(Entity.Get<TileDataComponent>().Position);
+            var tile = Game.World.GetTile(CurrentEntity.Get<TileDataComponent>().Position);
             var habitants = tile.Components.Get<TileHabitantsComponent>();
             return habitants?.Building;
         }

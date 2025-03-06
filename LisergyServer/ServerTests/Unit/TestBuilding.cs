@@ -22,7 +22,6 @@ namespace GameUnitTests
 
         public void TestRemovedBuildingTileReference()
         {
-            Game.CreatePlayer();
             var player = Game.GetTestPlayer();
 
             var initialBuildingSpec = Game.Specs.InitialBuilding;
@@ -64,7 +63,7 @@ namespace GameUnitTests
             var tile = Game.RandomNotBuiltTile();
             var buildingSpec = Game.RandomBuildingSpec();
 
-            player.EntityLogic.Build(buildingSpec.SpecId, tile);
+            tile.Logic.Building.ForceBuild(initialBuildingSpec.SpecId, player.EntityId);
 
             Assert.IsTrue(player.Buildings.Count == 2);
             Assert.IsTrue(player.Buildings.Any(b => b.Get<PlayerBuildingComponent>().SpecId == initialBuildingSpec.SpecId));
@@ -84,7 +83,7 @@ namespace GameUnitTests
             Game.Network.DeltaCompression.ClearDeltas();
             Game.SentServerPackets.Clear();
 
-            var building = player.EntityLogic.Build(buildingSpec.SpecId, tile);
+            var building = tile.Logic.Building.ForceBuild(buildingSpec.SpecId, player.EntityId);
             Game.Network.DeltaCompression.SendAllModifiedEntities(player.EntityId);
             var buildingPacket = Game.SentServerPackets.First(o => o is EntityUpdatePacket p && p.EntityId == building.EntityId);
 

@@ -45,11 +45,11 @@ namespace Game.Systems.FogOfWar
 
         public TileVisibilityComponent GetVisibility()
         {
-            if (Entity.EntityType == EntityType.Tile)
+            if (CurrentEntity.EntityType == EntityType.Tile)
             {
-                return Entity.Components.Get<TileVisibilityComponent>();
+                return CurrentEntity.Components.Get<TileVisibilityComponent>();
             }
-            else if (Entity.Components.TryGet<MapPlacementComponent>(out var c))
+            else if (CurrentEntity.Components.TryGet<MapPlacementComponent>(out var c))
             {
                 var tile = Game.World.GetTile(c.Position);
                 return tile.Components.Get<TileVisibilityComponent>();
@@ -74,20 +74,20 @@ namespace Game.Systems.FogOfWar
         /// </summary>
         public void UpdateGroupLineOfSight()
         {
-            Console.WriteLine("UpdateGroupLineOfSight " + Entity);
-            var group = Entity.Get<BattleGroupComponent>();
+            Console.WriteLine("UpdateGroupLineOfSight " + CurrentEntity);
+            var group = CurrentEntity.Get<BattleGroupComponent>();
             if (group.Units.Empty)
             {
-                var c = Entity.Components.Get<EntityVisionComponent>();
+                var c = CurrentEntity.Components.Get<EntityVisionComponent>();
                 c.LineOfSight = 0;
-                Entity.Save(c);
+                CurrentEntity.Save(c);
             }
             else
             {
                 var lineOfSight = group.Units.Max(u => Game.Specs.Units[u.SpecId].LOS);
-                var c = Entity.Components.Get<EntityVisionComponent>();
+                var c = CurrentEntity.Components.Get<EntityVisionComponent>();
                 c.LineOfSight = lineOfSight;
-                Entity.Save(c);
+                CurrentEntity.Save(c);
             }
         }
 
@@ -97,8 +97,8 @@ namespace Game.Systems.FogOfWar
         /// </summary>
         public void UpdateVisionRange(TileModel from, TileModel to)
         {
-            Console.WriteLine($"UpdateVisionRange {Entity} {from} {to}");
-            var explorer = Entity;
+            Console.WriteLine($"UpdateVisionRange {CurrentEntity} {from} {to}");
+            var explorer = CurrentEntity;
             var los = explorer.Components.Get<EntityVisionComponent>().LineOfSight;
             Game.Log.Debug($"Updating entity {explorer} vision range of {los}");
             if (los > 0)
@@ -135,7 +135,7 @@ namespace Game.Systems.FogOfWar
             if (explored)
             {
                 tileVisComp.EntitiesViewing.Add(explorer.EntityId);
-                if (!tileVisComp.PlayersViewing.Contains(explorer.OwnerID))
+                if (owner != null && !tileVisComp.PlayersViewing.Contains(explorer.OwnerID))
                 {
                     tileVisComp.PlayersViewing.Add(explorer.OwnerID);
                     var e = EventPool<TileVisibilityChangedEvent>.Get();
@@ -152,7 +152,7 @@ namespace Game.Systems.FogOfWar
                 tileVisComp.EntitiesViewing.Remove(explorer.EntityId);
                 if (!tileVisComp.EntitiesViewing.Any(e => Game.Entities[e].OwnerID == explorer.OwnerID))
                 {
-                    if (tileVisComp.PlayersViewing.Remove(owner.EntityId))
+                    if (owner != null && tileVisComp.PlayersViewing.Remove(owner.EntityId))
                     {
                         var e = EventPool<TileVisibilityChangedEvent>.Get();
                         e.Explorer = explorer;

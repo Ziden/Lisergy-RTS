@@ -8,21 +8,21 @@ namespace Game.Systems.Dungeon
     {
         public void SetUnitsFromSpec(DungeonSpec spec)
         {
-            var group = Entity.Components.Get<BattleGroupComponent>();
+            var group = CurrentEntity.Components.Get<BattleGroupComponent>();
             for (var s = 0; s < spec.BattleSpecs.Count; s++)
             {
                 var battle = spec.BattleSpecs[s];
                 var units = new Unit[battle.UnitSpecIDS.Length];
                 for (var i = 0; i < battle.UnitSpecIDS.Length; i++)
                 {
-                    units[i] = new Unit(Entity.Game.Specs.Units[battle.UnitSpecIDS[i]]);
+                    units[i] = new Unit(CurrentEntity.Game.Specs.Units[battle.UnitSpecIDS[i]]);
                     group.Units.Add(units[i]);
                 }
             }
-            Entity.Save(group);
-            var dg = Entity.Components.Get<DungeonComponent>();
+            CurrentEntity.Save(group);
+            var dg = CurrentEntity.Components.Get<DungeonComponent>();
             dg.SpecId = spec.SpecId;
-            Entity.Save(dg);
+            CurrentEntity.Save(dg);
         }
     }
 }

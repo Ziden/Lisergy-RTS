@@ -26,7 +26,7 @@ namespace GameDataTest
                 Components = Serialization.FromAnyTypes(new IComponent[] {
                     new MapPlaceableComponent(), new BattleGroupComponent(), new PartyComponent(), new EntityVisionComponent(),
                     new MovementComponent(), new MovespeedComponent(), new HarvesterComponent(),
-                    new MovespeedComponent() {MoveDelay = TimeSpan.FromSeconds(0.3)},
+                    new MovespeedComponent() {MoveDelay = TimeSpan.FromSeconds(1)},
                     new CargoComponent() { MaxWeight = 100 }
                 }),
                 Icon = new ArtSpec("Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png"),

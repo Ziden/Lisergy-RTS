@@ -112,7 +112,6 @@ namespace Game.Engine.ECLS
             ev.New = (T)GetComponents()[t];
             CallEvent(ev);
             ClassPool<ComponentUpdateEvent<T>>.Return(ev);
-
             OnAfterAdded(t);
         }
 

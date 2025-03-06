@@ -352,12 +352,6 @@
             Any registered component sync callbacks will be called after all updates are done
             </summary>
         </member>
-        <member name="T:ClientSDK.Sync.MovePathListener">
-            <summary>
-            Responsible for rendering the visual representation of game paths.
-            It listens for events for when to render the movement path on the map and events for when to hide it
-            </summary>
-        </member>
         <member name="T:ClientSDK.Sync.SystemSynchronizer">
             <summary>
             Module responsible for handling base component logic to keep the client logic "up to date"
@@ -369,11 +363,6 @@
             <summary>
             Whenever map placement updates are sent to the client we re-position the entity on the client logic.
             This will trigger all exploration events
-            </summary>
-        </member>
-        <member name="T:MovePathView">
-            <summary>
-            Visual representation of a movement path
             </summary>
         </member>
     </members>
