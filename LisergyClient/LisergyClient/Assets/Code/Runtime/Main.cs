@@ -135,6 +135,7 @@ public class Main : MonoBehaviour, IEventListener
 
     public static void ConfigureUnity()
     {
+        Application.targetFrameRate = 60;
         Application.runInBackground = true;
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
