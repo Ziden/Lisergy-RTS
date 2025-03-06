@@ -293,65 +293,6 @@
             Handles server communication and event backs.
             </summary>
         </member>
-        <member name="T:ClientSDK.Sync.IComponentSync">
-            <summary>
-            Enables the game to more specifically control how to update components.
-            Components can be synced automatically (just copy data) or have manual syncs to handle things manually.
-            This module is able to implement callbacks from when a given component is synced so the client can react to it.
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Sync.IComponentSync.ProccessUpdate(Game.Engine.ECLS.IEntity,Game.Engine.ECLS.IComponent[],System.UInt32[])">
-            <summary>
-            Updates the components of the given entity
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Sync.IComponentSync.OnComponentModified``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
-            <summary>
-            Registers a component sync. 
-            Whenever the given entity type has the given component type updated, instead of the values simply being copied
-            the sync code will be called.
-            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Sync.IComponentSync.OnUpdate``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
-            <summary>
-            Registers a component sync. 
-            Whenever the given entity type has the given component type updated, instead of the values simply being copied
-            the sync code will be called.
-            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Sync.IComponentSync.OnComponentRemoved``1(System.Action{Game.Engine.ECLS.IEntity,``0})">
-            <summary>
-            Registers a component removed callback. 
-            Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
-            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Sync.IComponentSync.OnComponentAdded``1(System.Action{Game.Engine.ECLS.IEntity,``0})">
-            <summary>
-            Registers a component removed callback. 
-            Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
-            The callback has the Entity, OLD VALUE and NEW VALUE parameters.
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Sync.IComponentSync.RemoveListener(System.Object)">
-            <summary>
-            Removes all event callbacks from the given object
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Sync.ComponentSynchronizer.OnUpdate``1(System.Action{Game.Engine.ECLS.IEntity,``0,``0})">
-            <summary>
-            Tracks any updates synced of given component for given entity
-            </summary>
-        </member>
-        <member name="M:ClientSDK.Sync.ComponentSynchronizer.ProccessUpdate(Game.Engine.ECLS.IEntity,Game.Engine.ECLS.IComponent[],System.UInt32[])">
-            <summary>
-            Updates the components of the given entity.
-            Will copy all new values to old values
-            Any registered component sync callbacks will be called after all updates are done
-            </summary>
-        </member>
         <member name="T:ClientSDK.Sync.SystemSynchronizer">
             <summary>
             Module responsible for handling base component logic to keep the client logic "up to date"

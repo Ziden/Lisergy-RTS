@@ -1,72 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Tests")]
 namespace Game.Engine.Events.Bus
 {
-
-    public interface IEventBusRegistry<EventType>
+    public class EventBus<T>
     {
-        void On<EvType>(IEventListener listener, Action<EvType> callback);
-    }
+        public event Action<T> OnEventFired;
 
-    public class EventBus<EventType> : IEventBusRegistry<EventType>
-    {
-        public event Action<EventType> OnEventFired;
+        private readonly Dictionary<Type, List<ListenerWrapper>> _listeners = new Dictionary<Type, List<ListenerWrapper>>();
 
-        internal List<RegisteredListener> _allListeners = new List<RegisteredListener>();
-        internal Dictionary<Type, List<RegisteredListener>> _registeredListeners = new Dictionary<Type, List<RegisteredListener>>();
-
-
-        public virtual void Call(EventType ev)
+        public void Call(T ev)
         {
             OnEventFired?.Invoke(ev);
-
-            if (!_registeredListeners.ContainsKey(ev.GetType()))
+            var eventType = ev.GetType();
+            if (_listeners.TryGetValue(eventType, out var listeners))
             {
-                if (!_registeredListeners.ContainsKey(ev.GetType().BaseType))
+                foreach (var listenerWrapper in listeners)
                 {
-                    return;
+                    ((Action<object>)listenerWrapper.Callback)(ev);
                 }
-            }
-
-            List<RegisteredListener> registeredEvents = _registeredListeners[ev.GetType()];
-            foreach (RegisteredListener registeredEvent in registeredEvents)
-            {
-                registeredEvent.Call(ev);
             }
         }
 
-
-        public virtual void On<EvType>(IEventListener listener, Action<EvType> callback)
+        public void On<EvType>(IEventListener listener, Action<EvType> callback)
         {
             var eventType = typeof(EvType);
-            if (!_registeredListeners.ContainsKey(eventType))
+            if (!_listeners.ContainsKey(eventType))
             {
-                _registeredListeners.Add(eventType, new List<RegisteredListener>());
+                _listeners[eventType] = new List<ListenerWrapper>();
             }
-            List<RegisteredListener> eventList = _registeredListeners[eventType];
-            var registry = new RegisteredListener()
-            {
-                Method = callback,
-                Listener = listener,
-                Type = eventType
-            };
-            eventList.Add(registry);
-            _allListeners.Add(registry);
+            _listeners[eventType].Add(new ListenerWrapper(listener, (Action<object>)(ev => callback((EvType)ev))));
         }
 
-
-        public virtual void RemoveListener(IEventListener listener)
+        public void RemoveListener(IEventListener listener)
         {
-            foreach (var l in new List<RegisteredListener>(_allListeners))
+            foreach (var key in _listeners.Keys)
             {
-                if (l.Listener == listener)
-                {
-                    _registeredListeners[l.Type].Remove(l);
-                    _allListeners.Remove(l);
-                }
+                _listeners[key].RemoveAll(l => l.Listener == listener);
             }
         }
     }

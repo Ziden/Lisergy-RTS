@@ -2,15 +2,15 @@
 
 namespace Game.Engine.Events.Bus
 {
-    public class RegisteredListener
+    public class ListenerWrapper
     {
-        public IEventListener Listener;
-        public Delegate Method;
-        public Type Type;
+        public IEventListener Listener { get; }
+        public Delegate Callback { get; }
 
-        public void Call<T>(T ev)
+        public ListenerWrapper(IEventListener listener, Delegate callback)
         {
-            _ = Method.DynamicInvoke(ev);
+            Listener = listener;
+            Callback = callback;
         }
     }
 }
