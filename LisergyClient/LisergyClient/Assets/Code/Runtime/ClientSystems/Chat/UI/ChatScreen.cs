@@ -1,6 +1,7 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Chat.UI;
 using ClientSDK.SDKEvents;
+using Cysharp.Threading.Tasks;
 using Game.Engine.Events.Bus;
 using Game.Network.ClientPackets;
 using GameAssets;

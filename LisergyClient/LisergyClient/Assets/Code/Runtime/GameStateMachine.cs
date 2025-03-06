@@ -2,6 +2,7 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
 using ClientSDK;
 using ClientSDK.SDKEvents;
+using Cysharp.Threading.Tasks;
 using Game.Engine.DataTypes;
 using Game.Engine.Events.Bus;
 using Game.Systems.Battle;
