@@ -10,9 +10,9 @@ The Lisergy Project is an ambitious MMO RTS game framework built with a modular 
 
 The Lisergy Project is organized into three main components:
 
-1. **BaseServer**: A versatile server framework designed to run game servers, supporting both offline and online modes. [BaseServer README](Core/readme.md)
-2. **Lisergy Game Engine**: An innovative ECSL (Entity-Component-System-Logic) game engine tailored for an exploration-oriented MMO RTS. [Lisergy Game Engine README](Game/readme.md)
-3. **ClientSDK**: A .NET Standard library designed to facilitate communication between game clients and the server, with seamless integration into game engines like Unity. [ClientSDK README](ClientSDK/readme.md)
+1. **BaseServer**: A versatile server framework designed to run game servers, supporting both offline and online modes. [BaseServer README](LisergyServer/Core/readme.md)
+2. **Lisergy Game Engine**: An innovative ECSL (Entity-Component-System-Logic) game engine tailored for an exploration-oriented MMO RTS. [Lisergy Game Engine README](LisergyServer/Game/readme.md)
+3. **ClientSDK**: A .NET Standard library designed to facilitate communication between game clients and the server, with seamless integration into game engines like Unity. [ClientSDK README](LisergyServer/ClientSDK/readme.md)
 
 ## BaseServer
 
@@ -34,7 +34,7 @@ BaseServer is a versatile server framework built in .NET Standard 2.1, designed 
 - **Multi-threading**: Utilizes .NET's threading capabilities to support concurrent server operations.
 - **Telepathy**: A simple, message-based networking library used for communication between the server and clients.
 
-For more detailed information, refer to the [BaseServer README](Core/readme.md).
+For more detailed information, refer to the [BaseServer README](LisergyServer/Core/readme.md).
 
 ## Lisergy Game Engine
 
@@ -75,7 +75,7 @@ Instead of a traditional update loop, Lisergy uses a task-based scheduler, enabl
 
 The engine supports a robust networked multiplayer implementation with TCP-based networking, delta compression, and client prediction.
 
-For more detailed information, refer to the [Lisergy Game Engine README](Game/readme.md).
+For more detailed information, refer to the [Lisergy Game Engine README](LisergyServer/Game/readme.md).
 
 ## ClientSDK
 
@@ -95,7 +95,7 @@ The ClientSDK includes mechanisms for client-side prediction to enhance the resp
 
 The ClientSDK includes robust mechanisms for synchronizing data between the client and server. This ensures that the game state remains consistent across all clients and the server. The synchronization process involves delta compression, component synchronization, and efficient network communication.
 
-For more detailed information, refer to the [ClientSDK README](ClientSDK/readme.md).
+For more detailed information, refer to the [ClientSDK README](LisergyServer/ClientSDK/readme.md).
 
 ## Conclusion
 
