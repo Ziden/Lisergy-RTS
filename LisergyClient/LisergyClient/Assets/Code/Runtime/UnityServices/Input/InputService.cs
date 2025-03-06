@@ -1,9 +1,6 @@
 using Assets.Code.Assets.Code.Runtime;
 using ClientSDK.Data;
-using Game.Tile;
-using System;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace Assets.Code
@@ -25,7 +22,7 @@ namespace Assets.Code
             _actions.Enable();
             _actions.UI.Enable();
             _cam = Camera.main;
-            _gameCamera = _cam.GetComponent<CameraBehaviour>(); 
+            _gameCamera = _cam.GetComponent<CameraBehaviour>();
         }
 
         private void Update()

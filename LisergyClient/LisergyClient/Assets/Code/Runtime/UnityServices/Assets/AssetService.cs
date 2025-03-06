@@ -1,8 +1,7 @@
-﻿using System;
-using ClientSDK.Data;
-using Cysharp.Threading.Tasks;
+﻿using ClientSDK.Data;
 using GameAssets;
 using GameData.Specs;
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 

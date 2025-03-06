@@ -3,8 +3,6 @@ using ClientSDK;
 using Game.Engine.DataTypes;
 using Game.Tile;
 using System;
-using System.Buffers;
-using System.Buffers.Binary;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -123,7 +121,7 @@ public class TileMonoComponent : MonoBehaviour
 
             _decorated = true;
 
-            if(!ENABLED)
+            if (!ENABLED)
             {
                 foreach (var r in _config)
                 {
@@ -134,7 +132,7 @@ public class TileMonoComponent : MonoBehaviour
                 }
                 return;
             }
-           
+
             foreach (var r in _config)
             {
                 if (r.LeaveOne)
@@ -143,10 +141,10 @@ public class TileMonoComponent : MonoBehaviour
                     for (var x = 0; x < r.Objects.Count; x++)
                     {
                         var o = r.Objects[x];
-                        if(o != chosen) Destroy(o);
+                        if (o != chosen) Destroy(o);
                     }
                     r.Objects.Clear();
-                    r.Objects.Add(chosen); 
+                    r.Objects.Add(chosen);
                     chosen.SetActive(true);
                 }
 

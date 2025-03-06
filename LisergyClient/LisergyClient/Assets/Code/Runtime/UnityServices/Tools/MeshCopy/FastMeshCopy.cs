@@ -2,18 +2,18 @@
 
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
-using UnityUnsafeUtility = Unity.Collections.LowLevel.Unsafe.UnsafeUtility;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static Code.Tools.MeshCopy.Runtime.MeshConstants;
+using UnityUnsafeUtility = Unity.Collections.LowLevel.Unsafe.UnsafeUtility;
 
 namespace Code.Tools.MeshCopy.Runtime
 {
     public static class FastMeshCopyUtility
     {
-    #if UNITY_2020_1_OR_NEWER
+#if UNITY_2020_1_OR_NEWER
         /// <summary>
         /// Attempts to copy the data of the current <see cref="Mesh"/> to another one, as fast as possible,
         /// with minimal allocations (a few tens of bytes in scenarios with very large meshes).
@@ -31,7 +31,7 @@ namespace Code.Tools.MeshCopy.Runtime
                 outMesh.Clear();
             }
 
-            outMesh.name   = inMesh.name;
+            outMesh.name = inMesh.name;
             outMesh.bounds = inMesh.bounds;
 
             using (var readArray = Mesh.AcquireReadOnlyMeshData(inMesh))
@@ -43,7 +43,7 @@ namespace Code.Tools.MeshCopy.Runtime
 
                 // Formats
                 var vertexFormat = inMesh.GetVertexAttributes();
-                var indexFormat  = inMesh.indexFormat;
+                var indexFormat = inMesh.indexFormat;
                 var isIndexShort = indexFormat == IndexFormat.UInt16;
 
                 // Counts
@@ -52,7 +52,7 @@ namespace Code.Tools.MeshCopy.Runtime
                         isIndexShort ? readData.GetIndexData<ushort>().Length : readData.GetIndexData<uint>().Length;
 
                 // Element Size in bytes
-                var indexSize  = isIndexShort ? SHORT_SIZE : INT_SIZE;
+                var indexSize = isIndexShort ? SHORT_SIZE : INT_SIZE;
                 var vertexSize = 0;
 
                 for (var i = 0; i < vertexFormat.Length; i++)
@@ -85,7 +85,7 @@ namespace Code.Tools.MeshCopy.Runtime
                 // OUTPUT SETUP
                 //-------------------------------------------------------------
                 var writeArray = Mesh.AllocateWritableMeshData(1);
-                var writeData  = writeArray[0];
+                var writeData = writeArray[0];
                 writeData.SetVertexBufferParams(vertexCount, vertexFormat);
                 writeData.SetIndexBufferParams(indexCount, indexFormat);
 
@@ -96,33 +96,33 @@ namespace Code.Tools.MeshCopy.Runtime
                 NativeArray<byte> outData;
 
                 // Vertices
-                inData  = readData.GetVertexData<byte>();
+                inData = readData.GetVertexData<byte>();
                 outData = writeData.GetVertexData<byte>();
 
-            #if USE_UNSAFE
+#if USE_UNSAFE
                 unsafe
                 {
                     UnityUnsafeUtility.MemCpy(outData.GetUnsafePtr(), inData.GetUnsafeReadOnlyPtr(),
                                               vertexCount * vertexSize);
                 }
-            #else
+#else
             inData.CopyTo(outData);
-            #endif
+#endif
 
 
                 // Indices
-                inData  = readData.GetIndexData<byte>();
+                inData = readData.GetIndexData<byte>();
                 outData = writeData.GetIndexData<byte>();
 
-            #if USE_UNSAFE
+#if USE_UNSAFE
                 unsafe
                 {
                     UnityUnsafeUtility.MemCpy(outData.GetUnsafePtr(), inData.GetUnsafeReadOnlyPtr(),
                                               indexCount * indexSize);
                 }
-            #else
+#else
             inData.CopyTo(outData);
-            #endif
+#endif
 
                 //-------------------------------------------------------------
                 // FINALIZATION
@@ -133,8 +133,8 @@ namespace Code.Tools.MeshCopy.Runtime
                 for (var i = 0; i < inMesh.subMeshCount; i++)
                 {
                     writeData.SetSubMesh(i,
-                                         new SubMeshDescriptor((int) inMesh.GetIndexStart(i),
-                                                               (int) inMesh.GetIndexCount(i)));
+                                         new SubMeshDescriptor((int)inMesh.GetIndexStart(i),
+                                                               (int)inMesh.GetIndexCount(i)));
                 }
 
 
@@ -151,8 +151,8 @@ namespace Code.Tools.MeshCopy.Runtime
             {
                 var m = new Mesh
                 {
-                        subMeshCount = 1,
-                        indexFormat  = IndexFormat.UInt32
+                    subMeshCount = 1,
+                    indexFormat = IndexFormat.UInt32
                 };
 
                 //-------------------------------------------------------------
@@ -162,18 +162,18 @@ namespace Code.Tools.MeshCopy.Runtime
                 var readData = readArray[0];
 
                 // Formats
-                var sourceVertexSize  = mesh.SizeOfVertex();
+                var sourceVertexSize = mesh.SizeOfVertex();
                 var sourceIndexFormat = mesh.indexFormat;
 
                 // Counts
                 var sourceVertexCount = readData.vertexCount;
-                var sourceIndexCount  = readData.GetIndexCount();
+                var sourceIndexCount = readData.GetIndexCount();
 
                 // Destination -----------------------------------------------------
-                var destIndexFormat  = IndexFormat.UInt32;
+                var destIndexFormat = IndexFormat.UInt32;
                 var destVertexFormat = mesh.CopyVertexFormat(0, 1);
-                var destIndexCount   = sourceIndexCount  * matrices.Length;
-                var destVertexCount  = sourceVertexCount * matrices.Length;
+                var destIndexCount = sourceIndexCount * matrices.Length;
+                var destVertexCount = sourceVertexCount * matrices.Length;
 
                 var hasStream1 = !mesh.IsVertexPositionOnly();
 
@@ -182,7 +182,7 @@ namespace Code.Tools.MeshCopy.Runtime
                 // OUTPUT SETUP
                 //-------------------------------------------------------------
                 var writeArray = Mesh.AllocateWritableMeshData(1);
-                var writeData  = writeArray[0];
+                var writeData = writeArray[0];
 
                 writeData.SetVertexBufferParams(destVertexCount, destVertexFormat);
                 writeData.SetIndexBufferParams(destIndexCount, destIndexFormat);
@@ -198,13 +198,13 @@ namespace Code.Tools.MeshCopy.Runtime
                 {
                     if (hasStream1)
                     {
-                        var inData  = readData.GetVertexData<byte>();
+                        var inData = readData.GetVertexData<byte>();
                         var outData = writeData.GetVertexData<byte>(1); // Notice that we write to stream 1!
 
                         var destElementSize = sourceVertexSize - FLOAT3_SIZE;
                         var source =
                                 FLOAT3_SIZE +
-                                (byte*) inData.GetUnsafeReadOnlyPtr(); // Begin after the first vertex = first 12 bytes
+                                (byte*)inData.GetUnsafeReadOnlyPtr(); // Begin after the first vertex = first 12 bytes
                         var copies = matrices.Length;
 
                         var noPosition =
@@ -227,41 +227,41 @@ namespace Code.Tools.MeshCopy.Runtime
 
 
                     // Transform Vertices ----------------------------------------
-                    var inVertices  = new NativeArray<Vector3>(sourceVertexCount, Allocator.TempJob);
+                    var inVertices = new NativeArray<Vector3>(sourceVertexCount, Allocator.TempJob);
                     var outVertices = writeData.GetVertexData<float3>(0);
 
                     readData.GetVertices(inVertices);
 
                     new HelperJobs.TransformVerticesJob
                     {
-                            inputVertices  = inVertices.Reinterpret<float3>(),
-                            matrices       = matrices,
-                            outputVertices = outVertices
+                        inputVertices = inVertices.Reinterpret<float3>(),
+                        matrices = matrices,
+                        outputVertices = outVertices
                     }.Schedule(destVertexCount, 128).Complete();
 
 
                     //Indices ---------------------------------------------------
-                    var inData2  = readData.GetIndexData<byte>().GetUnsafeReadOnlyPtr();
+                    var inData2 = readData.GetIndexData<byte>().GetUnsafeReadOnlyPtr();
                     var outData2 = writeData.GetIndexData<int>();
 
                     if (sourceIndexFormat == IndexFormat.UInt16)
                     {
                         new HelperJobs.OffsetReplicateIndicesJob<ushort>
                         {
-                                inputIndices        = inData2,
-                                outputIndices       = outData2,
-                                originalVertexCount = sourceVertexCount,
-                                originalIndexCount  = sourceIndexCount
+                            inputIndices = inData2,
+                            outputIndices = outData2,
+                            originalVertexCount = sourceVertexCount,
+                            originalIndexCount = sourceIndexCount
                         }.Schedule(destIndexCount, 128).Complete();
                     }
                     else
                     {
                         new HelperJobs.OffsetReplicateIndicesJob<uint>
                         {
-                                inputIndices        = inData2,
-                                outputIndices       = outData2,
-                                originalVertexCount = sourceVertexCount,
-                                originalIndexCount  = sourceIndexCount
+                            inputIndices = inData2,
+                            outputIndices = outData2,
+                            originalVertexCount = sourceVertexCount,
+                            originalIndexCount = sourceIndexCount
                         }.Schedule(destIndexCount, 128).Complete();
                     }
 
@@ -276,7 +276,7 @@ namespace Code.Tools.MeshCopy.Runtime
                 return m;
             }
 
-        #else
+#else
             /// <summary>
             /// Attempts to copy the data of the current <see cref="Mesh"/> to another one, as fast as possible,
             /// with minimal allocations (a few tens of bytes in scenarios with very large meshes).
@@ -291,7 +291,7 @@ namespace Code.Tools.MeshCopy.Runtime
                     outMesh.SetIndices(inMesh.GetIndices(0), inMesh.GetTopology(0), 0);
                     outMesh.SetColors(inMesh.colors);
             }
-        #endif
+#endif
         }
     }
 }

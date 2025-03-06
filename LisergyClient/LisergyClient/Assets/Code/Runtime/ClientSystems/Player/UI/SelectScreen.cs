@@ -23,7 +23,7 @@ namespace Assets.Code.UI
     {
         public Label Time { get; private set; }
         public Label Description { get; private set; }
-        public WidgetResourceDisplay [] Cost { get; private set; }
+        public WidgetResourceDisplay[] Cost { get; private set; }
 
         public PreviewContainer(VisualElement Root)
         {

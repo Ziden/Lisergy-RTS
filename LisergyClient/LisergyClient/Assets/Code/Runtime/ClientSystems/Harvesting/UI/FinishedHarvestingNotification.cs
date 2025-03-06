@@ -22,8 +22,9 @@ public class FinishedHarvestingNotification : Notification
         base.OnOpen();
         var param = GetParameter<FinishedHarvestingParam>();
         var view = Root.Q<Button>("ViewButton").Required();
-        view.clicked += () => { 
-            ClientViewState.SelectedEntityView = param.Entity; 
+        view.clicked += () =>
+        {
+            ClientViewState.SelectedEntityView = param.Entity;
         };
         _resource = Root.Q<WidgetResourceDisplay>("ResourceDisplayWidget").Required();
         _resource.SetData(param.Resource.ResourceId, param.Resource.Amount);

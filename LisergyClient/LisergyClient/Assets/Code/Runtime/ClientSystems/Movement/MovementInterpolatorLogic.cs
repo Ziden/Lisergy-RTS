@@ -25,7 +25,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
         private IGameClient _client;
         private IEntity _entity;
         private Tweener _currentSequence;
-        private Queue<(TileModel, TileModel)> _queue = new Queue<(TileModel, TileModel)> ();
+        private Queue<(TileModel, TileModel)> _queue = new Queue<(TileModel, TileModel)>();
 
         public bool IsInterpolating()
         {
@@ -95,7 +95,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
                 LastStep = _queue.Count == 0,
                 From = from,
                 To = to,
-                
+
             });
             if (_queue.TryDequeue(out var newMove))
             {

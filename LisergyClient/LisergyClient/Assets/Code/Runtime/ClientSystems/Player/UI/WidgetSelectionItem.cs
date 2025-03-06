@@ -1,10 +1,6 @@
 using Assets.Code.ClientSystems.Party.UI;
-using ClientSDK;
-using Cysharp.Threading.Tasks;
 using GameData.Specs;
-using Resource.UI;
 using System;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Player.UI
@@ -33,7 +29,7 @@ public class WidgetSelectionItem : WidgetElement
         _card.clicked += () => OnClicked?.Invoke();
     }
 
-    public async UniTaskVoid SetData(string name, ArtSpec art, object data) 
+    public async UniTaskVoid SetData(string name, ArtSpec art, object data)
     {
         var sprite = await GameClient.UnityServices().Assets.GetSprite(art);
         _icon.style.backgroundImage = new StyleBackground(sprite);

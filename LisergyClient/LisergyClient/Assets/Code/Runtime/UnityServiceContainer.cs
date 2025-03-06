@@ -5,7 +5,6 @@ using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.World;
 using ClientSDK;
 using ClientSDK.Data;
-using Game.Engine.DataTypes;
 using System;
 using System.Collections.Generic;
 
@@ -36,7 +35,7 @@ namespace Assets.Code
     /// <summary>
     /// Static place where all unity services can be accessed.
     /// </summary>
-    internal static class UnityServicesContainer 
+    internal static class UnityServicesContainer
     {
         private static Dictionary<Type, object> _services = new();
         internal static IGameClient Client;
@@ -46,7 +45,7 @@ namespace Assets.Code
         {
             if (_services.TryGetValue(typeof(T), out var dependency))
             {
-                t =  (T)dependency;
+                t = (T)dependency;
                 return true;
             }
             t = default;
@@ -59,7 +58,7 @@ namespace Assets.Code
             {
                 throw new Exception("Service not registered " + typeof(T).Name);
             }
-           return t;
+            return t;
         }
 
         public static bool Has<T>()
@@ -77,18 +76,18 @@ namespace Assets.Code
             return (T)dependency;
         }
 
-        public static void Register<T,V>(V value) 
-            where T: IGameService 
-            where V: T
+        public static void Register<T, V>(V value)
+            where T : IGameService
+            where V : T
         {
             _services[typeof(T)] = value;
         }
 
         public static void OnSceneLoaded()
         {
-            foreach(var s in _services.Values)
+            foreach (var s in _services.Values)
             {
-                if(s is IGameService igs) igs.OnSceneLoaded();
+                if (s is IGameService igs) igs.OnSceneLoaded();
             }
         }
     }

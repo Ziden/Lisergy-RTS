@@ -1,7 +1,6 @@
 ﻿using Assets.Code.Assets.Code.Audio;
 using Assets.Code.Assets.Code.Runtime.Tools;
 using Assets.Code.World;
-using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Game.Engine.DataTypes;
 using Game.Network.ServerPackets;
@@ -62,7 +61,7 @@ namespace Assets.Code.Battle
                 Main.Destroy(container.GetChild(0).gameObject);
                 unitIndex++;
                 if (battleUnit == null) continue;
-               // AddUnit(battleUnit.UnitReference, defendersObject, teamSlot);
+                // AddUnit(battleUnit.UnitReference, defendersObject, teamSlot);
             }
             _damageNumber = root.Find("DamageNumber").gameObject;
             await WaitUnitsLoaded();
@@ -87,7 +86,7 @@ namespace Assets.Code.Battle
         {
             await WaitUnitsLoaded();
 
-            while(_currentTurnNumber < _log.Turns.Length)
+            while (_currentTurnNumber < _log.Turns.Length)
             {
                 _currentTurn = _log.Turns[_currentTurnNumber];
                 await PlayTurn(_currentTurn);
@@ -97,7 +96,7 @@ namespace Assets.Code.Battle
 
         private async Task PlayTurn(BattleTurnLog turn)
         {
-            foreach(var ev in turn.Events)
+            foreach (var ev in turn.Events)
             {
                 await PlayEvent(ev);
             }
@@ -107,7 +106,7 @@ namespace Assets.Code.Battle
         {
             TextMeshPro text = null;
             var damageObject = _damageNumberPool.Obtain();
-            if(damageObject == null)
+            if (damageObject == null)
             {
                 damageObject = Main.Instantiate(_damageNumber);
                 damageObject.transform.localScale = new Vector3(0.02912701f, 0.02912701f, 0.02912701f);

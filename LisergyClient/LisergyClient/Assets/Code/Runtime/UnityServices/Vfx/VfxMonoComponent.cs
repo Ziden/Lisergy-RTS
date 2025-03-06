@@ -1,8 +1,4 @@
-using Assets.Code;
-using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Triggers;
 using GameAssets;
-using System;
 using UnityEngine;
 
 public class VfxMonoComponent : MonoBehaviour
@@ -25,7 +21,7 @@ public class VfxMonoComponent : MonoBehaviour
         var rootParticle = GetComponent<ParticleSystem>();
         if (rootParticle == null) return;
         rootParticle.Stop();
-        rootParticle.gameObject.SetActive(true);   
+        rootParticle.gameObject.SetActive(true);
         var rootMain = rootParticle.main;
         rootMain.stopAction = ParticleSystemStopAction.Disable;
         rootParticle.time = 0;

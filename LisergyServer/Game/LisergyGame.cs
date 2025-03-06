@@ -62,7 +62,7 @@ namespace Game
             World.Populate();
             Network.SetupGame(world.Game);
             Network.DeltaCompression.ClearDeltas();
-           
+
             Log.Debug($"World {World.TilemapDimensions.x}x{World.TilemapDimensions.y} ready");
         }
     }

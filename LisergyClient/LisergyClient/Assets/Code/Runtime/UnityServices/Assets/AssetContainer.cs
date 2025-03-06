@@ -1,24 +1,23 @@
-﻿using System;
+﻿using GameAssets;
+using System;
 using System.Collections.Generic;
-using GameAssets;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Cysharp.Threading.Tasks;
 
-public class AssetContainer<K, T> where K: IComparable, IFormattable, IConvertible
+public class AssetContainer<K, T> where K : IComparable, IFormattable, IConvertible
 {
     private Dictionary<string, AsyncOperationHandle<T>> _loaded = new Dictionary<string, AsyncOperationHandle<T>>();
 
-    public async UniTask<T> LoadAsync(K key, Action<T> onComplete) 
+    public async UniTask<T> LoadAsync(K key, Action<T> onComplete)
     {
         if (!typeof(K).IsEnum)
             throw new Exception("Not enum parameter");
-        
+
         var i = Convert.ToInt32(key);
         if (!AddressIdMap.IdMap.TryGetValue(i, out var addr))
         {
-            throw new Exception("Could not find asset address for "+key);
+            throw new Exception("Could not find asset address for " + key);
         }
         return await LoadAsync(addr, onComplete);
     }
@@ -67,7 +66,7 @@ public class PrefabContainer
         return handle.Result;
     }
 
-    public async UniTask<GameObject> LoadAsync(string addr) 
+    public async UniTask<GameObject> LoadAsync(string addr)
     {
         return await Addressables.LoadAssetAsync<GameObject>(addr).Task;
     }

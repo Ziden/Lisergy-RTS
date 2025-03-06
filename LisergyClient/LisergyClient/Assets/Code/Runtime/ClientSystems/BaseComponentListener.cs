@@ -4,7 +4,7 @@ using Game.Engine.Events.Bus;
 
 public interface IComponentListener : IEventListener { }
 
-public interface ISpecificComponentListener<ComponentType> : IComponentListener where ComponentType : IComponent 
+public interface ISpecificComponentListener<ComponentType> : IComponentListener where ComponentType : IComponent
 {
     /// <summary>
     /// Called whenever the component is updated on any given entity
@@ -35,7 +35,8 @@ public abstract class BaseComponentListener<ComponentType> : ISpecificComponentL
         OnComponentRemoved(entity, oldComponent);
     }
 
-    private void _OnComponentAdded(IEntity entity, ComponentType component) {
+    private void _OnComponentAdded(IEntity entity, ComponentType component)
+    {
         OnComponentAdded(entity, component);
     }
 

@@ -40,38 +40,38 @@ namespace Code.Tools.MeshCopy.Runtime
                 outputVertices[index] = math.mul(matrices[index / inputVertices.Length], new float4(vertex.xyz, 1)).xyz;
             }
         }
-        
-        
+
+
         /// <summary>
         /// Replicate a collection of indices, while incrementing each batch 
         /// </summary>
         [BurstCompile]
-        public unsafe struct OffsetReplicateIndicesJob<T> : IJobParallelFor where T:unmanaged
+        public unsafe struct OffsetReplicateIndicesJob<T> : IJobParallelFor where T : unmanaged
         {
             [NativeDisableUnsafePtrRestriction]
             public void* inputIndices;
 
             public int originalIndexCount;
-        
+
             public int originalVertexCount;
-        
+
             [WriteOnly]
             public NativeArray<int> outputIndices;
-        
+
             public void Execute(int index)
             {
-                var offset        = (index / originalIndexCount) * originalVertexCount;
-                var originalIndex = index                        % originalIndexCount;
-          
+                var offset = (index / originalIndexCount) * originalVertexCount;
+                var originalIndex = index % originalIndexCount;
+
                 var inputIndex = index;
-            
+
                 switch (sizeof(T))
                 {
                     case 4:
-                        inputIndex = (int) *((uint*) inputIndices + originalIndex) + offset;
+                        inputIndex = (int)*((uint*)inputIndices + originalIndex) + offset;
                         break;
                     case 2:
-                        inputIndex = *((ushort*) inputIndices + originalIndex) + offset;
+                        inputIndex = *((ushort*)inputIndices + originalIndex) + offset;
                         break;
                 }
 

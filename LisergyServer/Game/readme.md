@@ -1,110 +1,135 @@
-﻿# Lisergy
+﻿# Lisergy Game Engine
 
-The infinite chunk based map loaded from tiled will be serve for this exploration oriented mmo rts, where players will kill, harvest and craft to gain power and items. 
-The idea is to enable a simple mmo rts engine.
+An innovative entity-component-system-ish (ECS) game engine built with C# 8.0 targeting .NET Standard 2.1, designed for an exploration-oriented MMO RTS.
 
-# Game Engine
+## Architecture Overview
 
-Basic toolkit for the game to implement its logic.
+Lisergy implements a unique variation of the ECS pattern called ECSL (Entity-Component-System-Logic) with a clear separation of concerns:
 
-# Gameplay Features Roadmap:
+- **Entities**: Game objects that act as containers for components and have a unique identity
+- **Components**: Pure data structures defining entity properties (e.g., `BuildingComponent`, `CargoComponent`)
+- **Systems**: Process entities with specific components and implement game rules
+- **Logic Classes**: Stateless behavior implementations that operate on entity data
 
-- ~~Harvesting~~ (Done)
-- ~~Cargo~~ (Done)
-- ~~Battles~~ (Done)
-- ~~Dungeons~~ (Done)
-- ~~Fog of War~~ (Done)
-- Building (WIP)
-- Monsters
-- Crafting
-- Raiding (PvP)
-- Recruiting
-- Harvesting Buildings
-- Workers
-- Battle AI Crystals
-- Guilds
-- Guild Wars
+### Core Concepts
 
-## Running:
+The engine organizes game elements through:
 
-You will require:
+- **GameSystems**: Central registry managing all systems
+- **EventBus**: Pub/sub mechanism for cross-domain communication
+- **EntityLogic**: Access layer to all entity-specific logic
+- **Entity Views**: Visual representations of entities in the rendering world
 
-- [Unity3d](https://unity3d.com/pt/get-unity/download) 
-- [.NET Core 6 SDK](https://www.microsoft.com/net/download)
-- [Microsoft .NET Framework 4.8](https://www.microsoft.com/pt-br/download/details.aspx?id=21)
-- [Redis Database](https://redis.io/download) (Optional)
+## Implemented Systems
 
-To run the client, simply run the Unity project.
+The engine features numerous specialized systems supporting a rich MMO RTS experience:
 
-To run the server, simply run the "StandaloneServer" project on your favorite .net IDE.
-If there's any errors when running the server to open the port, ensure the port is opened in your firewall settings.
+### Building System 
+- Handles creation and management of in-game structures
+- Supports instant building and multi-stage construction processes
+- Manages building specifications and placement on the tile-based world
 
-You can use any login/password as that account will be created if those credentials are not existant.
+### Battle Group System 
+- Manages groups of units for combat
+- Handles unit recruitment, battle initialization, and combat resolution
+- Processes group-related events and battle outcomes
 
-### Namings
+### Dungeon System
+- Manages procedural dungeon entities and their behavior
+- Populates dungeons from specifications 
+- Responds to group death events to clean up defeated dungeons
 
-- Game, or Game.dll refers to the dll that contains the game logic that's shared in client and server.
-- GameData refers to the data that populates the game (aka game configs)
-- Server refers to the backend that runs the game world in an authoritative manner
-- Client refers to Unity3D, who runs the game and renders its views
-- Client SDK refers to the SDK Unity imports to integrate with the game which pre-handles most of the logical connection to the game.
+### Delta Compression System
+- Optimizes network traffic by tracking entity state changes
+- Sends only modified components to reduce bandwidth usage
+- Core to the game's networking architecture
 
-### Core Structure
+### Entity Vision System 
+- Implements Fog of War mechanics
+- Manages visibility calculations based on entity line of sight
+- Updates discovery state as entities explore the world
 
-Game logic uses a odd implementation of ECS we abbreviated ECSL, which is a modification of ECS introducing the Logic layer.
+### Movement System 
+- Handles entity movement through the infinite chunk-based world
+- Manages movement paths, courses, and waypoints
+- Interacts with the map system for position updates
 
-The game pieces are divided in 4 main parts:
+### Party System
+- Manages groups of entities that act as a cohesive unit
+- Facilitates unit management within parties
+- Responds to group-related events
 
-- Entities: 
-     The component holder.
-     Identified pieces of data that can have components attached to them.
-     Can be superclassed for hard-typed creation with specific components as a form of typing the entity.
+### Tile System 
+- Manages the infinite chunk-based map loaded from Tiled
+- Tracks entity and building placement
+- Provides spatial queries for the game world
 
-- Components: 
-     Components are little pieces of data that can be added to entities. When a component is added to an entity, now its system starts picking events that component is interested in to 
-     alter that entity's behaviour.
+### Map System 
+- Coordinates positioning of entities on the game map
+- Handles chunk loading and unloading
+- Synchronizes position data between server and client
 
-- Systems: 
-     Systems are event listeners for entities that have specific components. Whenever something specific a component is interested in happens, the system will pick it up and perform
-     entity updates. To read entity data or perform the updates on entities, systems will call that entity logic to do so.
+### Player System 
+- Manages player entities and their state
+- Tracks discovered areas through fog of war
+- Handles player-specific actions and recruiting
 
-- Logic:
-     Instead of systems updating the entity, the code that actually performs the updates or reads data is isolated in another layer - the logic.
-     The logic is stateless in itself, that means any updates are done in the entity components where the logic itself will never hold any state
-     the logic objects are shared among entities.
+### Harvesting System
+- Implements resource gathering mechanics
+- Tracks harvesting progress and resource collection
+- Handles harvesting interruptions
 
-- Entity Views:
-     Every entity has a corresponding view. The view is how this entity is perceived outside the logic world, that means, in the rendering world.
-     The view is who handles animations, mesh etc.
+### Resource System
+- Manages resources throughout the game world
+- Sets up resource points on tiles based on specifications
+- Critical for the game's economy
 
-### Tasks & Scheduler
+### Cargo System 
+- Implements inventory management for entities
+- Processes harvested resources
+- Manages cargo capacity and contents
 
-On top of running a standard ticking update mechanic under the hood, all operations on server are based towards a single task scheduler.
-Movement, battles, or anything that's required to happen is a task scheduled to happen in the future as opposed to the common update loop that would iterate over
-entities. 
-This is a tradeoff chosen for enabling scalability options on the server while loosing a bit the realtime precision aspect of the game.
+## System Integration and Task Scheduler
 
-### Events
+Instead of a traditional update loop, Lisergy uses a task-based scheduler:
 
-Events are the baseline of how systems communicate with themselves. They are in-memory, pooled, fire-and-forget classes.
+- Operations are scheduled tasks rather than immediate updates
+- Enables better server scalability at a slight cost to realtime precision
+- Movement, battles, and other time-sensitive operations are managed as future tasks
 
-### Services
+## Client-Server Architecture
 
-Systems listen for game events. 
-Services are a level above, they listen for packets, so only required for systems that contains specific networking communication.
-Services will alter the game state by using logic the same way systems do.
+The engine supports a robust networked multiplayer implementation:
 
-### Networking
+- TCP-based networking with packet classes
+- Delta compression for efficient state synchronization
+- Components marked for network synchronization
+- Client prediction and server reconciliation
 
-Client and server communicate trought TCP packets, either by specific packets being sent or, more commonly, updates from server driven from updates to entities which are tracked with delta compression then sent.
-Every packet is represented by a class that will extend `IServerPacket` if is sent from server to clients, or `IClientPacket` if its sent from client to server.
+## Usage Example
 
-### Delta Compression & Components
 
-Whenever an entity component get's updated, the server will track that update happened - however it will not do anything at that point.
-After the server finishes processing the current tick, it will get all modifications done to all entities and send the necessary packets to the necessary viewers.
+```csharp
+// Creating a new game instance
+var game = new LisergyGame(gameSpecs, logger);
 
-### Persistence
+// Building a structure at a specific tile
+var player = game.Players[playerId];
+var targetTile = game.World.GetTile(location);
+var building = player.Entity.Logic.Building.InstantBuild(buildingSpecId, targetTile);
 
-The game can serialize its entities and its entire world very fast. Basic storage should be handled with flat files and/or Redis.
+// Moving a party to a location
+var party = player.EntityLogic.GetParties()[0];
+var path = game.Logic.Systems.Map.FindPath(party.GetTile(), destinationTile);
+party.Logic.Movement.TryStartMovement(path, CourseIntent.Move);
 
+// Harvesting resources
+var resourceTile = game.World.GetTile(resourceLocation);
+if (party.Logic.Harvesting.GetPossibleHarvest(resourceTile) != null)
+{
+    party.Logic.Harvesting.StartHarvesting(resourceTile);
+}
+
+```
+
+The Lisergy engine combines performance optimization techniques like unsafe code and memory management with a flexible architecture designed for an ambitious MMO RTS experience.

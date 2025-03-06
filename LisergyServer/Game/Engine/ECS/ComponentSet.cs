@@ -123,7 +123,7 @@ namespace Game.Engine.ECLS
 
         public bool IsSyncableComponent(Type t)
         {
-            if(!_entity.Game.Network.DeltaCompression.Enabled) return false;
+            if (!_entity.Game.Network.DeltaCompression.Enabled) return false;
             if (!_shouldSync.TryGetValue(t, out var sync)) return false;
             if (sync == null) return false;
             return true;

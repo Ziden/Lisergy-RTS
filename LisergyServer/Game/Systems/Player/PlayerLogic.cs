@@ -121,6 +121,6 @@ namespace Game.Systems.Player
             Game.Log.Debug($"{CurrentEntity} moved unit {storedUnit} to party {newParty}");
         }
 
-      
+
     }
 }

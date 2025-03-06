@@ -1,13 +1,9 @@
 using Assets.Code.Assets.Code.Assets;
 using Assets.Code.Assets.Code.Runtime.Tools;
 using Assets.Code.Views;
-using Cysharp.Threading.Tasks;
 using Game.Engine.ECLS;
-using Game.Systems.Tile;
-using Game.Tile;
 using Game.World;
 using GameAssets;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 

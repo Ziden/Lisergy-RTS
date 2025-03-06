@@ -1,8 +1,6 @@
 ﻿using ClientSDK.Data;
 using Game.Engine.ECLS;
-using Game.Entities;
 using System;
-using System.Collections.Generic;
 
 namespace ClientSDK.Services
 {
@@ -23,10 +21,11 @@ namespace ClientSDK.Services
             var existingView = _views.GetView(entity);
             if (existingView == null)
             {
-                if(CreatorFunction == null)
+                if (CreatorFunction == null)
                 {
                     existingView = new EntityView(entity, _client);
-                } else
+                }
+                else
                 {
                     existingView = CreatorFunction(entity);
                 }

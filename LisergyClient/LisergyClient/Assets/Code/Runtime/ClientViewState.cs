@@ -29,11 +29,13 @@ namespace Assets.Code.Assets.Code.Runtime
         /// <summary>
         /// Tile the player has selected and has highlight on
         /// </summary>
-        public static TileModel SelectedTile { get
+        public static TileModel SelectedTile
+        {
+            get
             {
                 return State.SelectedTile;
             }
-            set 
+            set
             {
                 OnSelectTile?.Invoke(value);
                 State.SelectedTile = value;

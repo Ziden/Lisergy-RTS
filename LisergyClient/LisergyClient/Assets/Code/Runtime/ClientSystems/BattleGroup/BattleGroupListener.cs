@@ -1,4 +1,3 @@
-using Assets.Code.World;
 using ClientSDK;
 using ClientSDK.SDKEvents;
 using Game.Engine.DataTypes;

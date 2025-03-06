@@ -13,7 +13,7 @@ namespace ServerTests.Utils
     {
         private GameId _entityId;
         private IGame _game;
-        
+
         public ComponentSet Components { get; private set; }
         public EntityType EntityType { get; }
         public ref readonly GameId EntityId => ref _entityId;
@@ -30,9 +30,9 @@ namespace ServerTests.Utils
         }
 
         public T Get<T>() where T : IComponent => Components.Get<T>();
-        
+
         public void Save<T>(in T component) where T : IComponent => Components.Save(component);
-        
+
         public override string ToString()
         {
             return $"<MockEntity {EntityType} {EntityId} {Components}>";

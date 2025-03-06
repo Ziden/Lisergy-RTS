@@ -4,12 +4,13 @@ using Assets.Code;
 using Assets.Code.Assets.Code.Assets;
 using ClientSDK;
 using ClientSDK.Data;
-using Game.Entities;
 using Game.Engine.ECLS;
+using Game.Entities;
 using System;
 using UnityEngine;
 
-public interface IUnityEntityView : IEntityView, IGameObject {
+public interface IUnityEntityView : IEntityView, IGameObject
+{
     public EntityType EntityType { get; }
 }
 
@@ -23,7 +24,9 @@ public class UnityEntityView : EntityView, IUnityEntityView
     public UnityEntityView(IEntity e, IGameClient game) : base(e, game) { }
 
     private GameObject _gameObject;
-    public GameObject GameObject { get => _gameObject; set
+    public GameObject GameObject
+    {
+        get => _gameObject; set
         {
             _gameObject = value;
             OnAfterRendered?.Invoke();

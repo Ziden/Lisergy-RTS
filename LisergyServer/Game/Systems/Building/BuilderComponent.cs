@@ -1,8 +1,6 @@
-﻿using Game.Engine.DataTypes;
-using Game.Engine.ECLS;
+﻿using Game.Engine.ECLS;
 using Game.World;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Game.Systems.Building

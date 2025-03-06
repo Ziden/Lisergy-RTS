@@ -2,9 +2,8 @@ using Assets.Code.Assets.Code.Runtime;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.UI;
 using Chat.UI;
-using Cysharp.Threading.Tasks;
-using Game.Entities;
 using Game.Engine.Events.Bus;
+using Game.Entities;
 using Game.Systems.Movement;
 using Game.Tile;
 using GameAssets;
@@ -139,14 +138,14 @@ namespace Assets.Code
                 {
                     if (GameClient.Modules.Player.LocalPlayer.EntityLogic.GetBuildings().Count == 0)
                     {
-                        if(!tile.Entity.CanBattle()) return;
+                        if (!tile.Entity.CanBattle()) return;
                         return;
                     }
                     intent = CourseIntent.OffensiveTarget;
                 }
                 else if (action == EntityAction.HARVEST)
                 {
-                    if(!tile.Entity.CanPlayerHarvest()) return;
+                    if (!tile.Entity.CanPlayerHarvest()) return;
                     intent = CourseIntent.Harvest;
                 }
                 GameClient.Modules.Actions.MoveEntity(ClientViewState.SelectedEntityView.Entity, tile, intent);

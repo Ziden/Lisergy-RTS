@@ -43,14 +43,16 @@ namespace Assets.Code.ClientSystems.Party.UI
 
         public WidgetElement()
         {
-            this.RegisterCallback<AttachToPanelEvent>(e => {
+            this.RegisterCallback<AttachToPanelEvent>(e =>
+            {
                 if (UnityServicesContainer.Client != null)
                 {
                     OnAddedDuringGame(GameClient = UnityServicesContainer.Client);
                 }
             });
-            this.RegisterCallback<DetachFromPanelEvent>(e => {
-                if(UnityServicesContainer.Client != null) OnRemovedDuringGame(UnityServicesContainer.Client);
+            this.RegisterCallback<DetachFromPanelEvent>(e =>
+            {
+                if (UnityServicesContainer.Client != null) OnRemovedDuringGame(UnityServicesContainer.Client);
             });
         }
 

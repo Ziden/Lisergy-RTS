@@ -1,7 +1,7 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
-using Game.Entities;
 using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
+using Game.Entities;
 using Game.Systems.Battler;
 using Game.Systems.Resources;
 using GameAssets;
@@ -50,7 +50,8 @@ namespace Assets.Code.UI
             {
                 cargoWidget.Show();
                 cargoWidget.DisplayComponent(cargo);
-            } else cargoWidget.Hide();
+            }
+            else cargoWidget.Hide();
         }
     }
 }

@@ -1,9 +1,5 @@
-using Assets.Code.Assets.Code.UIScreens;
 using Assets.Code.Assets.Code.UIScreens.Base;
-using Game.Entities;
 using Game.Engine.Events.Bus;
-using Game.Events.ServerEvents;
-using Game.Network.ClientPackets;
 using GameAssets;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;

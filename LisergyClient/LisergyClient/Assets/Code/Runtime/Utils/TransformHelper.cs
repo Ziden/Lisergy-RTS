@@ -1,10 +1,6 @@
-﻿using Game.Tile;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Code
@@ -28,7 +24,7 @@ namespace Assets.Code
                 throw new Exception($"Could not find {name} child of {t.name} in scene");
 
             var component = obj.GetComponent<T>();
-            if(component == null)
+            if (component == null)
                 throw new Exception($"{name} child of {t.name} does not have component {typeof(T).Name}");
             return component;
         }

@@ -12,13 +12,11 @@ using Game.Entities;
 using Game.Events.ServerEvents;
 using Game.Systems.Map;
 using Game.Systems.Player;
-using Game.World;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Telepathy;
 
 
 namespace ServerTests.Integration.Stubs

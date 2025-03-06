@@ -1,8 +1,8 @@
 using Assets.Code;
 using Assets.Code.World;
 using ClientSDK;
-using Game.Entities;
 using Game.Engine.Events.Bus;
+using Game.Entities;
 using UnityEngine;
 
 /// <summary>

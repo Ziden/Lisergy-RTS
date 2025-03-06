@@ -173,7 +173,7 @@ namespace ClientSDK.Sync
         public void ProccessUpdate(IEntity currentEntity, IComponent[] updated, uint[] removed)
         {
             var view = _client.Modules.Views.GetEntityView(currentEntity);
-            
+
             _toSync.Clear();
             _added.Clear();
 

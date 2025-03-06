@@ -4,7 +4,6 @@ using ClientSDK.Data;
 using Game.Engine.Events.Bus;
 using Game.Systems.FogOfWar;
 using Game.World;
-using System.Diagnostics;
 
 /// <summary>
 /// A fog of war lazy load. Instead of calculating the fog of war on every tile received from server
@@ -44,7 +43,7 @@ public class FogOfWarListener : IEventListener
         _client.Log.Debug("Post render " + e.View.Entity);
         var view = e.View;
 
-      
+
     }
 
     private void CheckFogAround(TileView thisView, Direction d)

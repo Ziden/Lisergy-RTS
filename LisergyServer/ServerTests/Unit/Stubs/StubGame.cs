@@ -47,7 +47,7 @@ namespace ServerTests
 
         public TileModel FindTile(Func<TileModel, bool> filter)
         {
-            foreach(var t in ((GameWorld)World).AllTiles())
+            foreach (var t in ((GameWorld)World).AllTiles())
             {
                 if (filter(t))
                     return t;

@@ -2,7 +2,6 @@
 using Game.Engine.ECLS;
 using System;
 using System.Threading.Tasks;
-using Telepathy;
 
 namespace ClientSDK.Data
 {
@@ -75,7 +74,7 @@ namespace ClientSDK.Data
 
         public void RunWhenRendered(Action callback)
         {
-            if(State == EntityViewState.RENDERED)
+            if (State == EntityViewState.RENDERED)
             {
                 callback();
                 return;

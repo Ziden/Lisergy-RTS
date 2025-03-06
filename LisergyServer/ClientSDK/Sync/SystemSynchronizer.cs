@@ -2,7 +2,6 @@
 using Game.Engine.ECLS;
 using Game.Systems.FogOfWar;
 using Game.Systems.Map;
-using System.ComponentModel;
 
 namespace ClientSDK.Sync
 {
@@ -28,7 +27,7 @@ namespace ClientSDK.Sync
 
         private void OnAddPlacement(IEntity entity, MapPlacementComponent component)
         {
-         
+
             var tile = _gameClient.Game.World.GetTile(component.Position);
             entity.Logic.Map.SetPosition(tile);
             if (entity.Components.Has<EntityVisionComponent>() && entity.OwnerID == _gameClient.Modules.Player.PlayerId)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace Game.Engine
 {
@@ -21,7 +20,7 @@ namespace Game.Engine
         public void Debug(string msg)
         {
 #if DEBUG
-           _Debug(Tag + msg);
+            _Debug(Tag + msg);
 #endif
         }
 

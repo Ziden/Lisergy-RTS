@@ -1,13 +1,7 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
-using Cysharp.Threading.Tasks;
 using GameAssets;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Assets.Code.Assets.Code.Runtime.UIScreens
@@ -27,7 +21,7 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens
             FillScreen();
         }
 
-        public async UniTask RunWhenScreenFilled(Action a) 
+        public async UniTask RunWhenScreenFilled(Action a)
         {
             while (_x != 200) await Task.Delay(2);
             a();
@@ -64,7 +58,7 @@ namespace Assets.Code.Assets.Code.Runtime.UIScreens
         public void FillScreen()
         {
             _root.schedule.Execute(MoveRight).Every(2).Until(() => _x >= 200);
-        } 
+        }
 
         public void FadeAway()
         {

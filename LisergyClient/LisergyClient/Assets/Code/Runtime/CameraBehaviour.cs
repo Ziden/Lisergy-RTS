@@ -1,10 +1,9 @@
-﻿using Game.Entities;
+﻿using Assets.Code.Assets.Code.Runtime;
+using Assets.Code.Code;
+using Game.Systems.Map;
 using Game.Tile;
 using System.Collections;
-using Assets.Code.Code;
 using UnityEngine;
-using Assets.Code.Assets.Code.Runtime;
-using Game.Systems.Map;
 
 public class CameraBehaviour : MonoBehaviour
 {
@@ -26,7 +25,7 @@ public class CameraBehaviour : MonoBehaviour
 
     private void OnSelectEntity(IUnityEntityView e)
     {
-        if(e.Entity.Components.TryGet<MapPlacementComponent>(out var placed))
+        if (e.Entity.Components.TryGet<MapPlacementComponent>(out var placed))
         {
             FocusOnTile(e.Entity.GetTile());
         }
@@ -64,7 +63,7 @@ public class CameraBehaviour : MonoBehaviour
         Vector3 pos = transform.position;
         var old = pos;
         velocity = velocity.Rotate(315);
-        pos += new Vector3(velocity.x,0,velocity.y) * panSpeed * Time.deltaTime;
+        pos += new Vector3(velocity.x, 0, velocity.y) * panSpeed * Time.deltaTime;
         if (old != pos)
         {
             transform.position = pos;

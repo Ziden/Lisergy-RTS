@@ -1,5 +1,4 @@
 using Assets.Code.ClientSystems.Party.UI;
-using Cysharp.Threading.Tasks;
 using Game.Engine.ECLS;
 using Game.Systems.Battler;
 using System;
@@ -16,7 +15,7 @@ namespace Party.UI
         private WidgetPartyButtonTracking _tracking;
 
         public IEntity PartyEntity;
-      
+
         public Action OnClick;
 
         public WidgetPartyButton()

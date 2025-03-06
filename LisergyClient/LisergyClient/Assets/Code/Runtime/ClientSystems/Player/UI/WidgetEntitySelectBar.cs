@@ -7,11 +7,8 @@ using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Entities;
 using Game.Systems.Battler;
-using Game.Systems.Building;
-using Game.Systems.Party;
 using Party.UI;
 using System;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Player.UI
@@ -95,7 +92,7 @@ namespace Player.UI
 
         private void OnEntityReceived(OwnEntityInfoReceived ev)
         {
-            if(ev.Entity.EntityType == EntityType.Party)
+            if (ev.Entity.EntityType == EntityType.Party)
             {
                 if (ev.Entity.Get<BattleGroupComponent>().Units.Valids == 0) return;
 
@@ -105,7 +102,8 @@ namespace Player.UI
                 {
                     SelectEntity(ev.Entity);
                 }
-            } else
+            }
+            else
             {
                 _townButton.style.visibility = Visibility.Visible;
             }
@@ -129,7 +127,7 @@ namespace Player.UI
 
         private void TownButtonClick()
         {
-            
+
             PositionCursor(_townButton.parent);
             OnTownClicked?.Invoke();
         }

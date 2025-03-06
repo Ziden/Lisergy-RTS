@@ -75,9 +75,10 @@ public static class ClientExtensions
     /// </summary>
     public static IGameClientServices UnityServices(this IGameClient client) => UnityServicesContainer.Interface;
 
-    public static IUnityEntityView GetView(this IEntity entity) {
+    public static IUnityEntityView GetView(this IEntity entity)
+    {
         var view = UnityServicesContainer.Interface.ServerModules.Views.GetEntityView(entity);
         return (IUnityEntityView)view;
-    } 
+    }
     public static T GetView<T>(this IEntity entity) => (T)UnityServicesContainer.Interface.ServerModules.Views.GetEntityView(entity);
 }

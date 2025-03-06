@@ -1,14 +1,12 @@
 ﻿using Assets.Code.Assets.Code.Runtime.UIScreens;
-using Assets.Code.Assets.Code.UIScreens;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using ClientSDK;
 using ClientSDK.SDKEvents;
-using Cysharp.Threading.Tasks;
 using Game.Engine.DataTypes;
 using Game.Engine.Events.Bus;
 using Game.Systems.Battle;
-using UnityEngine;
 using Stateless;
+using UnityEngine;
 
 namespace Assets.Code.Assets.Code
 {
@@ -66,29 +64,31 @@ namespace Assets.Code.Assets.Code
         }
 
         private void OnLeaveLoginState() => _screens.Close<LoginScreen>();
-        private void OnEnterLoginState() {
+        private void OnEnterLoginState()
+        {
             _screens.Open<LoginScreen>();
             AssetPreloader.StartPreload(_client, GameDataTest.TestSpecs.Generate()).Forget();
         }
 
-        private void OnEnterBattleState() {}
+        private void OnEnterBattleState() { }
 
         private void OnLeaveBattleState()
         {
             _screens.Close<BattleScreen>();
             var transition = _screens.Get<TransitionScreen>();
-            if(transition != null)
+            if (transition != null)
                 transition.CloseTransition();
         }
 
         private void OnBattleStartEvent(GameId battleId, BattleTeam attacker, BattleTeam defender)
         {
             Debug.Log("Battle start event received on state machine");
-            if(attacker.OwnerID.IsMine())
+            if (attacker.OwnerID.IsMine())
             {
                 _stateMachine.Fire(Trigger.LocalBattleStart);
                 var transition = _screens.Open<TransitionScreen>();
-                _ = transition.RunWhenScreenFilled(() => {             
+                _ = transition.RunWhenScreenFilled(() =>
+                {
                     _screens.Open<BattleScreen>(new BattleScreenParam()
                     {
                         Attacker = attacker,

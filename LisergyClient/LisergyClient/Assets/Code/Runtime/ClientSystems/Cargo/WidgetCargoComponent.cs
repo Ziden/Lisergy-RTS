@@ -14,7 +14,7 @@ public class WidgetCargoComponent : VisualStruct
         var list = root.Q("ResourceList").Required();
         _wt = root.Q<Label>("Weight").Required();
 
-        foreach(var c in list.Children())
+        foreach (var c in list.Children())
         {
             _resources.Add((WidgetResourceDisplay)c);
         }
@@ -22,7 +22,7 @@ public class WidgetCargoComponent : VisualStruct
 
     public void DisplayComponent(in CargoComponent cargo)
     {
-        if(cargo.Slot1.Amount > 0)
+        if (cargo.Slot1.Amount > 0)
         {
             _resources[0].Show();
             _resources[0].SetData(cargo.Slot1.ResourceId, cargo.Slot1.Amount);
@@ -41,6 +41,6 @@ public class WidgetCargoComponent : VisualStruct
 
     public override void Dispose()
     {
-        
+
     }
 }

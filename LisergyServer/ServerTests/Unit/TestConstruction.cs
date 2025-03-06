@@ -1,20 +1,11 @@
-using Game.Engine;
 using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
 using Game.Engine.Scheduler;
-using Game.Entities;
-using Game.Events.ServerEvents;
 using Game.Systems.Building;
-using Game.Systems.Course;
-using Game.Systems.Movement;
-using Game.Systems.Resources;
-using Game.Tile;
 using Game.World;
 using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
-using System.Collections.Generic;
-using System.Linq;
 using Tests.Unit.Stubs;
 
 namespace GameUnitTests
@@ -77,7 +68,7 @@ namespace GameUnitTests
         public void TestStartBuilding()
         {
             var blockedTile = _party.GetTile().GetNeighbor(Direction.NORTH);
-            
+
             var construction = blockedTile.Logic.Building.StartConstruction(TestBuildings.CAMP, _player.EntityId);
 
             var spec = _game.Specs.BuildingConstructions[TestBuildings.CAMP];
@@ -85,7 +76,7 @@ namespace GameUnitTests
             var component = construction.Get<ConstructionComponent>();
 
             Assert.NotNull(component);
-            Assert.IsNull(component.TimeBlock); 
+            Assert.IsNull(component.TimeBlock);
         }
 
         [Test]

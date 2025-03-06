@@ -12,7 +12,7 @@ public class HarvestingViewListener : IEventListener
 {
     private IGameClient _client;
     private HarvestVfx _vfx;
-    
+
     public HarvestingViewListener(IGameClient client)
     {
         _client = client;

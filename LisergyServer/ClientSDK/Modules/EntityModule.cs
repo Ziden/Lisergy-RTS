@@ -1,5 +1,4 @@
 ﻿using ClientSDK.Data;
-using ClientSDK.SDKEvents;
 using ClientSDK.Sync;
 using Game.Engine.ECLS;
 using Game.Entities;

@@ -1,5 +1,4 @@
 using Assets.Code.Assets.Code.Runtime.UIScreens;
-using ClientSDK.SDKEvents;
 using GameAssets;
 using System;
 using UnityEngine.UIElements;

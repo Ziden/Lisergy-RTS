@@ -15,7 +15,7 @@ namespace Code.Tools.MeshCopy.Runtime
         public static int SizeOfVertex(this Mesh mesh)
         {
             var sourceVertexFormat = mesh.GetVertexAttributes();
-            var sourceVertexSize   = 0;
+            var sourceVertexSize = 0;
 
             for (var i = 0; i < sourceVertexFormat.Length; i++)
             {
@@ -50,9 +50,9 @@ namespace Code.Tools.MeshCopy.Runtime
         /// </summary>
         public static bool EqualsVertexFormat(this Mesh mesh, Mesh other)
         {
-            var format  = mesh.GetVertexAttributes();
+            var format = mesh.GetVertexAttributes();
             var format2 = other.GetVertexAttributes();
-            
+
             if (format.Length != format2.Length)
                 return false;
 
@@ -67,7 +67,7 @@ namespace Code.Tools.MeshCopy.Runtime
 
             return true;
         }
-        
+
         /// <summary>
         /// Extract the <see cref="VertexAttributeDescriptor"/> of a <see cref="Mesh"/> by optionally storing
         /// every attribute that is NOT position in a separate vertex stream.
@@ -75,18 +75,18 @@ namespace Code.Tools.MeshCopy.Runtime
         public static VertexAttributeDescriptor[] CopyVertexFormat(this Mesh mesh, int positionStream = 0, int otherStream = 1)
         {
             var sourceVertexFormat = mesh.GetVertexAttributes();
-            var destVertexFormat   = new VertexAttributeDescriptor[sourceVertexFormat.Length];
+            var destVertexFormat = new VertexAttributeDescriptor[sourceVertexFormat.Length];
 
             for (var i = 0; i < sourceVertexFormat.Length; i++)
             {
 
                 // CREATE THE NEW VERTEX FORMAT
                 // Assign stream 0 only to VertexPosition, and stream 1 to everything else
-                var stream           = sourceVertexFormat[i].attribute == VertexAttribute.Position ? 
+                var stream = sourceVertexFormat[i].attribute == VertexAttribute.Position ?
                         positionStream : otherStream;
-                
-                destVertexFormat[i] = new VertexAttributeDescriptor(sourceVertexFormat[i].attribute, 
-                                                                    sourceVertexFormat[i].format, 
+
+                destVertexFormat[i] = new VertexAttributeDescriptor(sourceVertexFormat[i].attribute,
+                                                                    sourceVertexFormat[i].format,
                                                                     sourceVertexFormat[i].dimension, stream);
             }
 
@@ -99,7 +99,7 @@ namespace Code.Tools.MeshCopy.Runtime
         public static bool IsVertexPositionOnly(this Mesh mesh)
         {
             var sourceVertexFormat = mesh.GetVertexAttributes();
-            
+
             var positionOnly = true;
 
             for (var i = 0; i < sourceVertexFormat.Length; i++)

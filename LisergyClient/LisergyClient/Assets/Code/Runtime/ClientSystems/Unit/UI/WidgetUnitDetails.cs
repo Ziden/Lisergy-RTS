@@ -2,7 +2,6 @@ using Assets.Code.Assets.Code.UIScreens.Base;
 using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Systems.Battler;
-using Game.Tile;
 using GameAssets;
 using UnityEngine.UIElements;
 

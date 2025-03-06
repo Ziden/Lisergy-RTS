@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="readme.md" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GameData\GameData.csproj" />
     <ProjectReference Include="..\Serializer\Serializer.csproj" />
   </ItemGroup>

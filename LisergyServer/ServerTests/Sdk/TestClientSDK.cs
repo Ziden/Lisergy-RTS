@@ -4,7 +4,6 @@ using Game;
 using Game.Engine;
 using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
-using Game.Engine.Events;
 using Game.Entities;
 using Game.Events.ServerEvents;
 using Game.Systems.FogOfWar;
@@ -17,7 +16,6 @@ using GameDataTest.TestWorldGenerator;
 using NUnit.Framework;
 using ServerTests.Integration.Stubs;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Tests.Integration.Stubs;
 using Tests.Unit.Stubs;
@@ -110,8 +108,8 @@ namespace SdkUnitTests
             foreach (var serverTile in (_serverLogic.World as GameWorld).AllTiles())
             {
                 var serverBuilding = serverTile.Logic.Tile.GetBuildingOnTile();
-                if (serverBuilding == null) 
-                { 
+                if (serverBuilding == null)
+                {
                     continue;
                 }
 

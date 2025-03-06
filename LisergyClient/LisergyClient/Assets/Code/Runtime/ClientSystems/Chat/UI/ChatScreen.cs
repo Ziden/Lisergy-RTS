@@ -1,7 +1,6 @@
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Chat.UI;
 using ClientSDK.SDKEvents;
-using Cysharp.Threading.Tasks;
 using Game.Engine.Events.Bus;
 using Game.Network.ClientPackets;
 using GameAssets;
@@ -48,7 +47,7 @@ namespace Assets.Code.UI
             var packet = _chatLog[index];
             var messageBox = (WidgetMsgbox)e;
             messageBox.SetMessage(packet.Owner.IsMine(), packet.Name, packet.Message);
-            if(index == _chatLog.Count - 1 && _newMessage == packet)
+            if (index == _chatLog.Count - 1 && _newMessage == packet)
             {
                 _newMessage = null;
                 e.AnimateFadeInFromLeft();

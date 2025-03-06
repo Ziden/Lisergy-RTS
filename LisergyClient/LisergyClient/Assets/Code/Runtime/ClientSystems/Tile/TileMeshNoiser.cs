@@ -21,7 +21,7 @@ public class TileMeshNoiser : MonoBehaviour
 
         var _verticles = new Vector3[(xSize + 1) * (ySize + 1)];
         var uv = new Vector2[_verticles.Length];
-        var vertexBuffer = new byte[6, 6]; 
+        var vertexBuffer = new byte[6, 6];
         for (int i = 0, y = 0; y <= ySize; y++)
         {
             for (int x = 0; x <= xSize; x++, i++)

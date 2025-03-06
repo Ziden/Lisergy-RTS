@@ -1,11 +1,8 @@
 using Assets.Code.Assets.Code.Runtime.UIScreens.Layout;
 using Assets.Code.Assets.Code.UIScreens.Base;
-using Assets.Code.Views;
 using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
-using Game.Systems.Dungeon;
 using Game.Systems.Map;
-using Game.Systems.Party;
 using Game.Tile;
 using GameAssets;
 using System;
@@ -52,7 +49,7 @@ namespace Assets.Code.UI
 
         private List<EntityAction> EvaluateActions(IEntity party, TileModel tile)
         {
-            if(!party.Components.TryGet<MapPlacementComponent>(out var placed))
+            if (!party.Components.TryGet<MapPlacementComponent>(out var placed))
             {
                 return NoPartyActions;
             }
@@ -71,14 +68,14 @@ namespace Assets.Code.UI
                 {
                     actions.Add(EntityAction.ATTACK);
                 }
-                return actions; 
+                return actions;
             }
-  
+
             actions.Add(EntityAction.MOVE);
-            if(party.Logic.Harvesting.GetAvailableResourcesToHarvest(tile).Amount > 0)
+            if (party.Logic.Harvesting.GetAvailableResourcesToHarvest(tile).Amount > 0)
             {
                 actions.Add(EntityAction.HARVEST);
-            }        
+            }
             return actions;
         }
 

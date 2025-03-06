@@ -31,9 +31,9 @@ namespace Assets.Code.UI
             var tileSpec = GameClient.Game.Specs.Tiles[setup.Tile.SpecId];
             var tileResources = setup.Tile.Get<TileResourceComponent>();
             var resourceSpec = GameClient.Game.Specs.Resources[tileResources.Resource.ResourceId];
-            var resourceSpotSpec = GameClient.Game.Specs.HarvestPoints[tileSpec.ResourceSpotSpecId.Value];       
+            var resourceSpotSpec = GameClient.Game.Specs.HarvestPoints[tileSpec.ResourceSpotSpecId.Value];
             var button = Root.Q<Button>("HarvestButton");
-            button.Required().clicked += OnClickHarvest;     
+            button.Required().clicked += OnClickHarvest;
             var cargo = party.Get<CargoComponent>();
             var resourcesAmount = tileResources.Resource.Amount;
             var unitsCanCarry = (ushort)(cargo.RemainingWeight / resourceSpec.WeightPerUnit);

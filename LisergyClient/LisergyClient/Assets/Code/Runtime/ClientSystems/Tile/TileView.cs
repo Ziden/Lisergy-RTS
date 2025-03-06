@@ -1,13 +1,13 @@
-﻿using ClientSDK.Data;
-using UnityEngine;
-using System.Collections.Generic;
+﻿using ClientSDK;
+using ClientSDK.Data;
 using Game.Engine.DataTypes;
-using GameAssets;
-using ClientSDK;
 using Game.Engine.ECLS;
 using Game.Systems.Tile;
 using Game.Tile;
+using GameAssets;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Code.Views
 {

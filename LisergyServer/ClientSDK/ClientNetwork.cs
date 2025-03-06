@@ -45,7 +45,7 @@ namespace ClientSDK
 
         public void SetupGame(IGame game)
         {
-           
+
         }
 
         /// <summary>

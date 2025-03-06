@@ -10,7 +10,7 @@ namespace Game.World
     /// A chunk represents a small portion of the map tiles (e.g a 8x8 tile)
     /// All tile data of a given chunk is stored in the same memory pointer.
     /// </summary>
-    public unsafe class Chunk 
+    public unsafe class Chunk
     {
         private TileModel[,] _tileReferences;
         private Location _position;

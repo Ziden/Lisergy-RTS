@@ -1,5 +1,4 @@
 using Assets.Code;
-using ClientSDK;
 using Game.Engine.ECLS;
 
 public static class HarvestingExtensions

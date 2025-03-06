@@ -28,7 +28,9 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         internal IGameClient GameClient;
 
 
-        internal bool FinishedLoading { get => _loaded; set
+        internal bool FinishedLoading
+        {
+            get => _loaded; set
             {
                 _loaded = value;
                 OnLoad?.Invoke();
@@ -56,7 +58,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         public bool IsHidden() => Root.style.visibility == Visibility.Hidden;
         public T GetParameter<T>()
         {
-            if(_param is T casted)
+            if (_param is T casted)
             {
                 return casted;
             }

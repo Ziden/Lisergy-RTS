@@ -24,7 +24,7 @@ public class WidgetBattleGroup : VisualStruct
 
     public void DisplayComponent(IEntity owner, in BattleGroupComponent component)
     {
-        for(int x = 0; x < 4; x++)
+        for (int x = 0; x < 4; x++)
         {
             var unit = component.Units[x];
             if (!unit.Valid)
@@ -47,6 +47,6 @@ public class WidgetBattleGroup : VisualStruct
 
     public override void Dispose()
     {
-        
+
     }
 }

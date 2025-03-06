@@ -8,19 +8,15 @@ using Assets.Code.Views;
 using Assets.Code.World;
 using ClientSDK;
 using ClientSDK.SDKEvents;
-using Game.Entities;
 using Game.Engine;
+using Game.Engine.DataTypes;
 using Game.Engine.Events.Bus;
 using Game.Engine.Scheduler;
-using Game.Systems.Building;
-using Game.Systems.Dungeon;
-using Game.Systems.Party;
-using Game.Tile;
+using Game.Entities;
+using ServerTests.Integration.Stubs;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.Engine.DataTypes;
-using ServerTests.Integration.Stubs;
 
 public class Main : MonoBehaviour, IEventListener
 {
@@ -63,7 +59,7 @@ public class Main : MonoBehaviour, IEventListener
     void Update()
     {
         _network?.Tick();
-        if(!_server.Multithreaded)
+        if (!_server.Multithreaded)
         {
             _server?.SingleThreadTick();
         }
@@ -109,7 +105,7 @@ public class Main : MonoBehaviour, IEventListener
     {
         _client.Modules.Views.CreatorFunction = e =>
         {
-            switch(e.EntityType)
+            switch (e.EntityType)
             {
                 case EntityType.Party:
                     return new PartyView(_client, e);

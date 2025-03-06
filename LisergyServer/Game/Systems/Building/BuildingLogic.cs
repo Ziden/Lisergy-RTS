@@ -34,7 +34,7 @@ namespace Game.Systems.Building
             var building = StartConstruction(buildingSpecId, owner);
             building.Components.Remove<ConstructionComponent>();
             Game.Log.Debug($"Player {CurrentEntity} insta-built {building}");
-          
+
             return building;
         }
 
@@ -67,7 +67,7 @@ namespace Game.Systems.Building
 
         public BuildResult CanBuildOnTile(BuildingSpecId id, TileModel tile)
         {
-            if (!tile.Logic.Tile.IsPassable()) return BuildResult.Blocked;;
+            if (!tile.Logic.Tile.IsPassable()) return BuildResult.Blocked; ;
             if (tile.Logic.Tile.GetBuildingOnTile() != null) return BuildResult.HasBuilding;
             if (tile.Logic.Harvesting.HasHarvestingResources()) return BuildResult.HasResource;
             return BuildResult.Ok;
@@ -78,7 +78,7 @@ namespace Game.Systems.Building
             var building = CurrentEntity;
             var buildingTile = building.Logic.Map.GetTile();
             var builderTile = builder.Logic.Map.GetTile();
-            if(buildingTile.Distance(builderTile) > 1)
+            if (buildingTile.Distance(builderTile) > 1)
             {
                 Game.Log.Error($"{builder} is too far from {building}");
                 return false;
@@ -119,13 +119,15 @@ namespace Game.Systems.Building
             if (c.TimeBlock != null)
             {
                 var snapShot = c.TimeBlock.GetCurrentSnapshot(Game.Scheduler.Now);
-                if(snapShot.Percentagage > 1)
+                if (snapShot.Percentagage > 1)
                 {
                     c.Percentage = 100;
-                } else c.Percentage = (byte)(snapShot.Percentagage * 100);
+                }
+                else c.Percentage = (byte)(snapShot.Percentagage * 100);
             }
             var b = CurrentEntity.Components.Get<PlayerBuildingComponent>();
-            if(c.EntitiesBuilding.Count > 0) {
+            if (c.EntitiesBuilding.Count > 0)
+            {
                 var constructionSpec = Game.Specs.BuildingConstructions[b.SpecId];
                 var startTime = Game.Scheduler.Now;
                 var endTime = startTime + TimeSpan.FromSeconds(constructionSpec.TimeToBuildSeconds);
@@ -134,7 +136,8 @@ namespace Game.Systems.Building
                     StartTime = startTime,
                     EndTime = endTime
                 };
-            } else
+            }
+            else
             {
                 c.TimeBlock = null; // no one building
             }

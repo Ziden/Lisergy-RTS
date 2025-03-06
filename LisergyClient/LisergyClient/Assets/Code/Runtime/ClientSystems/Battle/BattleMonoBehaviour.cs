@@ -1,13 +1,3 @@
-using Assets.Code.Assets.Code.Assets;
-using Assets.Code.Assets.Code.Audio;
-using Assets.Code.Assets.Code.Runtime.UIScreens;
-using Assets.Code.Assets.Code.UIScreens.Base;
-using Assets.Code.Battle;
-using Game.Entities;
-using Game.Network.ServerPackets;
-using GameDataTest;
-using System;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets.Code

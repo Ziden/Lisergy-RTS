@@ -1,5 +1,4 @@
 using Assets.Code;
-using Cysharp.Threading.Tasks;
 using GameData.Specs;
 using System;
 using UnityEngine.UIElements;

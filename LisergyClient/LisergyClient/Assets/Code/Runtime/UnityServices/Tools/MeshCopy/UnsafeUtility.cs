@@ -2,9 +2,8 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
-using UnityUnsafeUtility = Unity.Collections.LowLevel.Unsafe.UnsafeUtility;
-
 using Unity.Jobs;
+using UnityUnsafeUtility = Unity.Collections.LowLevel.Unsafe.UnsafeUtility;
 
 namespace Code.Tools.MeshCopy.Runtime
 {
@@ -13,7 +12,7 @@ namespace Code.Tools.MeshCopy.Runtime
         /// <summary>
         /// Parallel version of <see cref="Unity.Collections.LowLevel.Unsafe.UnsafeUtility.MemCpyReplicate"/>
         /// </summary>
-        public static unsafe void MemCpyReplicate<T>(NativeArray<T> destination, NativeArray<T> source, int count) where T:unmanaged
+        public static unsafe void MemCpyReplicate<T>(NativeArray<T> destination, NativeArray<T> source, int count) where T : unmanaged
         {
             if (destination.Length < source.Length * count)
             {
@@ -23,26 +22,26 @@ namespace Code.Tools.MeshCopy.Runtime
             }
             new MemCpyReplicateJob<T>
             {
-                    sourcePtr    = (T*) source.GetUnsafeReadOnlyPtr(),
-                    destPtr      = (T*) destination.GetUnsafePtr(),
-                    sourceLength = source.Length
-                       
+                sourcePtr = (T*)source.GetUnsafeReadOnlyPtr(),
+                destPtr = (T*)destination.GetUnsafePtr(),
+                sourceLength = source.Length
+
             }.Schedule(count, 64).Complete();
         }
 
         [BurstCompile]
-        private unsafe struct MemCpyReplicateJob <T>: IJobParallelFor where T:unmanaged
+        private unsafe struct MemCpyReplicateJob<T> : IJobParallelFor where T : unmanaged
         {
             [NativeDisableUnsafePtrRestriction]
             public T* sourcePtr;
-           
+
             [NativeDisableUnsafePtrRestriction]
             public T* destPtr;
-            
+
             public int sourceLength;
-            
+
             public void Execute(int index)
-            { 
+            {
                 UnityUnsafeUtility.MemCpy(destPtr + index * sourceLength, sourcePtr, sourceLength * UnityUnsafeUtility.SizeOf<T>());
             }
         }

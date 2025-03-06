@@ -1,15 +1,13 @@
-﻿using Assets.Code.Assets.Code.Audio;
-using System;
-using System.Collections.Generic;
-using GameAssets;
-using UnityEngine;
-using UnityEngine.UIElements;
-using Assets.Code.Assets.Code.Assets;
+﻿using Assets.Code.Assets.Code.Assets;
+using Assets.Code.Assets.Code.Audio;
 using ClientSDK;
 using ClientSDK.Data;
 using Game.Engine.DataTypes;
-using Cysharp.Threading.Tasks;
-using Assets.Code.ClientSystems.Party.UI;
+using GameAssets;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Assets.Code.Assets.Code.UIScreens.Base
 {
@@ -149,7 +147,8 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
             if (_loadedScreens.TryGetValue(typeof(T), out var obj))
             {
                 return ReOpen<T>(obj, param);
-            } else
+            }
+            else
             {
                 return Instantiate<T>(param);
             }
@@ -169,7 +168,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         {
             if (_loadedScreens.TryGetValue(t, out var obj))
             {
-                if(obj.ScreenLogicClass.FinishedLoading)
+                if (obj.ScreenLogicClass.FinishedLoading)
                 {
                     obj.ScreenLogicClass.OnClose();
                 }

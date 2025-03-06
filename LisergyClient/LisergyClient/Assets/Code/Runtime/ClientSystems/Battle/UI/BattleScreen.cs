@@ -1,14 +1,13 @@
 using Assets.Code.Assets.Code.Assets;
-using Assets.Code.Assets.Code.Runtime.UIScreens.Base;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.Battle;
 using Assets.Code.World;
-using Game.Systems.Battle;
-using Game.Systems.Battle.BattleActions;
-using Game.Systems.Battle.Data;
 using Game.Engine.DataTypes;
 using Game.Engine.Events.Bus;
 using Game.Network.ServerPackets;
+using Game.Systems.Battle;
+using Game.Systems.Battle.BattleActions;
+using Game.Systems.Battle.Data;
 using GameAssets;
 using System;
 using System.Collections.Generic;
@@ -42,7 +41,7 @@ namespace Assets.Code
         private BattlePlayback _battlePlayback;
         private BattleLogPacket _log;
         private Camera _battleCamera;
-       // public BattleHeaderData ResultHeader { get; private set; }
+        // public BattleHeaderData ResultHeader { get; private set; }
 
         private async Task AddHealthbar(UnitView view)
         {/*
@@ -117,7 +116,7 @@ namespace Assets.Code
         {
 
             _log = log;
-            if(_battlePlayback != null && !_battlePlayback.Playing)
+            if (_battlePlayback != null && !_battlePlayback.Playing)
             {
                 _battlePlayback.PlayBattle(_log);
             }
@@ -139,7 +138,7 @@ namespace Assets.Code
 
         public void TakeDamage(GameId unitId, ushort damage)
         {
-      
+
         }
 
         void ToggleBar(GameId unitId, bool visible) => UnitHealthBars[unitId].style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;

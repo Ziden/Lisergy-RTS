@@ -1,14 +1,9 @@
 using Assets.Code.Assets.Code.Runtime.Movement;
 using ClientSDK;
 using ClientSDK.SDKEvents;
-using ClientSDK.Sync;
-using Cysharp.Threading.Tasks;
 using Game.Engine.ECLS;
-using Game.Systems.Course;
 using Game.Systems.Map;
 using Game.World;
-using System.Threading.Tasks;
-using UnityEngine;
 
 /// <summary>
 /// We listen for placement updates to also move the entity on the scene
@@ -38,7 +33,7 @@ public class EntityPositionListener : BaseComponentListener<MapPlacementComponen
         UpdateEntityPosition(entity, oldComponent, newComponent);
     }
 
-    public override void OnComponentAdded(IEntity entity , MapPlacementComponent newComponent)
+    public override void OnComponentAdded(IEntity entity, MapPlacementComponent newComponent)
     {
         UpdateEntityPosition(entity, null, newComponent);
     }
@@ -60,7 +55,7 @@ public class EntityPositionListener : BaseComponentListener<MapPlacementComponen
         {
             i.MovementInterpolator.InterpolateMovement(fromTile, toTile);
         }
-        else if(view.Entity.Components.Has<MapPlacementComponent>() && view.State == ClientSDK.Data.EntityViewState.RENDERED)
+        else if (view.Entity.Components.Has<MapPlacementComponent>() && view.State == ClientSDK.Data.EntityViewState.RENDERED)
         {
             view.GameObject.transform.position = toTile.UnityPosition();
         }

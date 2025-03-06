@@ -1,6 +1,5 @@
 using Assets.Code.ClientSystems.Party.UI;
 using ClientSDK;
-using Cysharp.Threading.Tasks;
 using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Systems.Battler;
@@ -121,9 +120,9 @@ namespace Party.UI
             {
                 SetTaskIcon(TaskIcon.MOVING).Forget();
             }
-            else if (_trackedEntity.Components.Has<HarvestingComponent>()) 
+            else if (_trackedEntity.Components.Has<HarvestingComponent>())
                 SetTaskIcon(TaskIcon.HARVESTING).Forget();
-            else 
+            else
                 SetTaskIcon(TaskIcon.IDDLE).Forget();
         }
 
@@ -158,7 +157,8 @@ namespace Party.UI
         {
             if (_progressBar != null && _progressBar.isActive) return;
 
-            _progressBar = _greenHpBar.schedule.Execute(a => {
+            _progressBar = _greenHpBar.schedule.Execute(a =>
+            {
                 var totalMsElapsed = _client.Game.GameTime - start;
                 var totalMsNeeded = end - start;
                 var pct = (float)(totalMsElapsed.TotalMilliseconds / (float)totalMsNeeded.TotalMilliseconds);

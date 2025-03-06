@@ -15,7 +15,7 @@ namespace Assets.Code.Assets.Code.Runtime.Tools
 
         public void Release(GameObject obj)
         {
-            if(_active.Remove(obj))
+            if (_active.Remove(obj))
             {
                 _inactive.Add(obj);
                 obj.SetActive(false);
@@ -24,7 +24,7 @@ namespace Assets.Code.Assets.Code.Runtime.Tools
 
         public GameObject Obtain()
         {
-            if(_inactive.Count > 0)
+            if (_inactive.Count > 0)
             {
                 var pooled = _inactive[0];
                 _inactive.RemoveAt(0);

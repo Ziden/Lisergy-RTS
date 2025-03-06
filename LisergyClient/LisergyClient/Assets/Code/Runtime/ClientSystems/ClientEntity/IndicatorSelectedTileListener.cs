@@ -1,10 +1,10 @@
-using Game.Tile;
-using GameAssets;
-using UnityEngine;
+using Assets.Code.Assets.Code.Runtime;
 using ClientSDK;
 using ClientSDK.SDKEvents;
 using Game.Engine.Events.Bus;
-using Assets.Code.Assets.Code.Runtime;
+using Game.Tile;
+using GameAssets;
+using UnityEngine;
 
 /// <summary>
 /// Listens for click events to draw the tile selection indicator

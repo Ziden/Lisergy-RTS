@@ -1,10 +1,7 @@
 ﻿using Assets.Code.Assets.Code.Runtime.UIScreens;
-using Assets.Code.Assets.Code.UIScreens.Base;
 using ClientSDK;
 using ClientSDK.Data;
-using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Assets.Code.Assets.Code.Runtime
@@ -12,7 +9,8 @@ namespace Assets.Code.Assets.Code.Runtime
     /// <summary>
     /// For displaying the little popups on the screen
     /// </summary>
-    public interface INotificationService : IGameService {
+    public interface INotificationService : IGameService
+    {
 
         /// <summary>
         /// Display the notification on the screen for a couple seconds.
@@ -38,7 +36,7 @@ namespace Assets.Code.Assets.Code.Runtime
             {
                 OpenNotificationPopup<T>(param);
             }
-            else _notifications.Enqueue(() => OpenNotificationPopup<T>(param)); 
+            else _notifications.Enqueue(() => OpenNotificationPopup<T>(param));
         }
 
         private void OpenNotificationPopup<T>(object param = null) where T : Notification
@@ -52,7 +50,7 @@ namespace Assets.Code.Assets.Code.Runtime
             await UniTask.Delay(4000);
             _client.UnityServices().UI.Close(_open);
             _open = null;
-            if(_notifications.TryDequeue(out var next))
+            if (_notifications.TryDequeue(out var next))
             {
                 await UniTask.Delay(1000);
                 next();

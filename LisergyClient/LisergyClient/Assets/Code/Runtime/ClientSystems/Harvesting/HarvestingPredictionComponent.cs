@@ -1,6 +1,5 @@
 
 using ClientSDK;
-using Cysharp.Threading.Tasks;
 using Game.Engine.ECLS;
 using Game.Engine.Events;
 using Game.Systems.Resources;
@@ -57,7 +56,7 @@ public class HarvestingPredictionComponent : IComponent, IDisposable
     }
 
     private async UniTaskVoid TrackerTask()
-    {  
+    {
         var harvestState = _entity.Logic.Harvesting.CalculateCurrentState();
         var nextHarvest = harvestState.TimeSnapshot.TimeBlock.StartTime + _harvestSpec.HarvestTimePerUnit;
         _harvestedTotal = 0;
@@ -85,7 +84,7 @@ public class HarvestingPredictionComponent : IComponent, IDisposable
             _client.Game.Log.Debug($"[Harvest Prediction] Harvested 1 -> {_harvestedTotal}/{_initialComponent.Resource.Amount}");
         }
     }
-    
+
     private void SendEvent(int amountHarvested, int harvestedTotal, bool depleted, in HarvestingTaskState initialState)
     {
         var ev = EventPool<HarvestingUpdateEvent>.Get();

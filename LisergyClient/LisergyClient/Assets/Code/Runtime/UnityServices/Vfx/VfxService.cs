@@ -1,7 +1,6 @@
 ﻿using Assets.Code.Assets.Code.Assets;
 using ClientSDK;
 using ClientSDK.Data;
-using Cysharp.Threading.Tasks;
 using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
 using GameAssets;
@@ -52,7 +51,7 @@ namespace Assets.Code.World
             {
                 var o = await _client.UnityServices().Assets.CreateVfx(effect, position, Quaternion.identity);
                 var fx = o.GetComponent<VfxMonoComponent>();
-                if(fx == null) fx = o.AddComponent<VfxMonoComponent>();
+                if (fx == null) fx = o.AddComponent<VfxMonoComponent>();
                 var firstChildren = o.GetComponentInChildren<ParticleSystem>();
                 var cbs = firstChildren.gameObject.AddComponent<CallbacksMonoComponent>();
                 cbs.OnDisabled += () => _ = ReturnToPool(fx);

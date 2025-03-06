@@ -1,8 +1,4 @@
-﻿using Assets.Code.Assets.Code.Runtime.Tools;
-using Assets.Code.World;
-using DG.Tweening;
-using Game.Entities;
-using Game.Engine.DataTypes;
+﻿using DG.Tweening;
 using Game.Systems.Battle.BattleActions;
 using Game.Systems.Battle.BattleEvents;
 using Game.Systems.Battle.Data;
@@ -51,9 +47,10 @@ namespace Assets.Code.Battle
                 sequence.Append(
                     attackerView.GameObject.transform.DOMove(dest, 0.5f)
                     .OnStart(() => attackerView.Animations.PlayAnimation(UnitAnimation.Running))
-                    .OnComplete(() => {
+                    .OnComplete(() =>
+                    {
                         _audio.PlaySoundEffect(SoundFX.Swing);
-                        attackerView.Animations.PlayAnimation(UnitAnimation.MeleeAttack); 
+                        attackerView.Animations.PlayAnimation(UnitAnimation.MeleeAttack);
 
                     }));
                 sequence.AppendInterval(0.3f);
