@@ -28,7 +28,7 @@ namespace GameDataTest
                     new MovementComponent(), new MovespeedComponent(), new HarvesterComponent(),
                     new MovespeedComponent() {MoveDelay = TimeSpan.FromSeconds(1)},
                     new CargoComponent() { MaxWeight = 100 }
-                }),
+                }).ToArray(),
                 Icon = new ArtSpec("Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png"),
             };
 
@@ -38,7 +38,7 @@ namespace GameDataTest
                 Components = Serialization.FromAnyTypes(new IComponent[] {
                     new MapPlaceableComponent(), new BuildingComponent(), new PlayerBuildingComponent(),
                     new EntityVisionComponent(),
-                }),
+                }).ToArray(),
                 Icon = new ArtSpec("Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png"),
             };
 
@@ -50,7 +50,7 @@ namespace GameDataTest
                     new BuildingComponent(),
                     new MapPlaceableComponent(),
                     new BattleGroupComponent()
-                }),
+                }).ToArray(),
                 Icon = new ArtSpec("Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png"),
             };
 
@@ -60,7 +60,7 @@ namespace GameDataTest
                 Components = Serialization.FromAnyTypes(new IComponent[] {
                     new PlayerDataComponent(),
                     new PlayerVisibilityComponent(),
-                }),
+                }).ToArray(),
             };
 
             spec.Entities[(int)EntityType.Tile] = new EntitySpec()
@@ -68,7 +68,7 @@ namespace GameDataTest
                 Name = "Tile",
                 Components = Serialization.FromAnyTypes(new IComponent[] {
 
-                }),
+                }).ToArray(),
             };
         }
     }

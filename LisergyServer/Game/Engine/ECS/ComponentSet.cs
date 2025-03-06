@@ -216,7 +216,7 @@ namespace Game.Engine.ECLS
             var mine = Get<T>();
             var myBytes = Serialization.FromAnyType(mine);
             var hisBytes = Serialization.FromAnyType(other); // TODO: implement fast comparison in components
-            return myBytes.SequenceEqual(hisBytes);
+            return myBytes.ToArray().SequenceEqual(hisBytes.ToArray());
         }
 
         public bool IsUpToDateWith(IEntity otherEntity)
@@ -229,7 +229,7 @@ namespace Game.Engine.ECLS
                 var mine = c.Value;
                 var myBytes = Serialization.FromAnyType(mine);
                 var hisBytes = Serialization.FromAnyType(other); // TODO: implement fast comparison in components
-                var equal = myBytes.SequenceEqual(hisBytes);
+                var equal = myBytes.ToArray().SequenceEqual(hisBytes.ToArray());
                 if (!equal)
                 {
                     _entity.Game.Log.Error($"{_entity} desync component: {c.Value}");

@@ -124,8 +124,8 @@ namespace GameUnitTests
 
             var ev = new BattleResultPacket(battle.ID, result);
 
-            var bytes = Serialization.FromPacket(ev);
-            ev = Serialization.ToPacket<BattleResultPacket>(bytes);
+            var bytes = Serialization.FromAnyType(ev);
+            ev = Serialization.ToAnyType<BattleResultPacket>(bytes);
 
             Assert.AreEqual(ev.Header.Attacker.Units[0].Id, result.Attacker.Units.First().UnitID);
         }

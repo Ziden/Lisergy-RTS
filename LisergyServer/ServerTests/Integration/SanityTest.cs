@@ -3,6 +3,7 @@ using Game.Engine;
 using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
 using Game.Engine.Events;
+using Game.Engine.Network;
 using Game.Entities;
 using Game.Events.ServerEvents;
 using Game.Network.ClientPackets;
@@ -87,6 +88,13 @@ namespace SmokeTests
 
             await ValidateMapTiles();
             await ValidateEntities();
+
+            var used = PacketPool.GetUsed();
+            var free = PacketPool.GetFree();
+
+            // Assert zero packet leaks
+            Assert.AreEqual(0, used[typeof(EntityUpdatePacket)].Count);
+            Assert.AreEqual(1, free[typeof(EntityUpdatePacket)].Count);
         }
 
         private async Task Disconnect()

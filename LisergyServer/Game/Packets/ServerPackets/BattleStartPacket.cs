@@ -17,6 +17,8 @@ namespace Game.Network.ServerPackets
         public BattleTeamData Attacker;
         public BattleTeamData Defender;
 
+        public BattleStartPacket() { }
+
         public BattleStartPacket(in GameId battleId, in Location position, in BattleTeamData attacker, in BattleTeamData defender)
         {
             BattleID = battleId;

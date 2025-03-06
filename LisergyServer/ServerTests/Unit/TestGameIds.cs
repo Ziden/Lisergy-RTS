@@ -42,7 +42,7 @@ namespace GameUnitTests
 
             d[p.Profile.PlayerId] = 123;
 
-            var p2 = Serialization.ToCastedPacket<LoginResultPacket>(Serialization.FromBasePacket(p));
+            var p2 = Serialization.ToAnyType<LoginResultPacket>(Serialization.FromAnyType((object)p));
 
             Assert.AreEqual(123, d[p2.Profile.PlayerId]);
         }

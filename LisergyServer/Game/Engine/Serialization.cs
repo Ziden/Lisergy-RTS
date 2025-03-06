@@ -10,15 +10,17 @@ using Game.Systems.Tile;
 using GameData;
 using NetSerializer;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Threading;
 
 namespace Game.Engine
 {
     public static class Serialization
     {
         private static Serializer Serializer;
+        private static readonly ThreadLocal<MemoryStream> Buffer = new ThreadLocal<MemoryStream>(() => new MemoryStream());
 
         public static void LoadSerializers(params Type[] extras)
         {
@@ -26,31 +28,30 @@ namespace Game.Engine
             {
                 if (extras.Length > 0)
                 {
-                    foreach (var e in extras)
-                    {
-                        Serializer.AddTypes(extras);
-                    }
+                    Serializer.AddTypes(extras);
                 }
                 return;
             }
-            var models = GetDefaultSerializationTypes().ToList();
+            var models = new List<Type>(GetDefaultSerializationTypes());
 
-            models.Add(typeof(Unit));
-            models.Add(typeof(AttackActionResult));
-            models.Add(typeof(ActionResult));
-            models.Add(typeof(UnitDeadEvent));
-            models.Add(typeof(BattleEvent));
-            models.Add(typeof(BattleAction));
-            models.Add(typeof(AttackAction));
-            models.Add(typeof(TileDataComponent));
-            models.Add(typeof(PlayerProfileComponent));
-            models.Add(typeof(SerializedEntity));
-            models.Add(typeof(SerializedPlayer));
-            models.Add(typeof(TimeBlock));
+            models.AddRange(new[]
+            {
+                typeof(Unit),
+                typeof(AttackActionResult),
+                typeof(ActionResult),
+                typeof(UnitDeadEvent),
+                typeof(BattleEvent),
+                typeof(BattleAction),
+                typeof(AttackAction),
+                typeof(TileDataComponent),
+                typeof(PlayerProfileComponent),
+                typeof(SerializedEntity),
+                typeof(SerializedPlayer),
+                typeof(TimeBlock),
+                typeof(GameSpec),
+                typeof(IBaseEvent)
+            });
 
-            // Game
-            models.Add(typeof(GameSpec));
-            models.Add(typeof(IBaseEvent));
             if (extras != null)
             {
                 models.AddRange(extras);
@@ -62,118 +63,73 @@ namespace Game.Engine
 
         public static Type GetType(uint id)
         {
-            foreach (var kp in Serializer.GetTypeMap())
+            foreach (var kvp in Serializer.GetTypeMap())
             {
-                if (kp.Value == id) return kp.Key;
+                if (kvp.Value == id)
+                {
+                    return kvp.Key;
+                }
             }
             return null;
         }
 
         public static IEnumerable<Type> GetDefaultSerializationTypes()
         {
+            var basePacketType = typeof(BasePacket);
+            var iComponentType = typeof(IComponent);
+
             foreach (Type type in typeof(IBaseEvent).Assembly.GetTypes())
             {
-                var validEvent = typeof(BasePacket).IsAssignableFrom(type) && type != typeof(BasePacket);
-                validEvent = validEvent || typeof(IComponent).IsAssignableFrom(type) && type != typeof(IComponent);
-                if (validEvent && type.IsSerializable && !type.IsInterface)
-                {
-                    yield return type;
-                }
-            }
-            foreach (Type type in typeof(IComponent).Assembly.GetTypes())
-            {
-                var validEvent = typeof(IComponent).IsAssignableFrom(type);
-                if (validEvent && type.IsSerializable)
+                if ((basePacketType.IsAssignableFrom(type) && type != basePacketType ||
+                     iComponentType.IsAssignableFrom(type) && type != iComponentType) &&
+                    type.IsSerializable && !type.IsInterface)
                 {
                     yield return type;
                 }
             }
         }
 
-
-        public static BasePacket ToBasePacket(byte[] message)
+        public static ReadOnlyMemory<byte> FromAnyTypes<T>(IReadOnlyCollection<T> list)
         {
-            using (var stream = new MemoryStream(message))
+            var buffer = Buffer.Value;
+            buffer.SetLength(0);
+            foreach (var o in list)
             {
-                BasePacket ev;
-                ev = (BasePacket)Serializer.Deserialize(stream);
-                return ev;
+                Serializer.Serialize(buffer, o);
             }
+            return new ReadOnlyMemory<byte>(buffer.GetBuffer(), 0, (int)buffer.Length);
         }
 
-        public static byte[] FromBasePacket(BasePacket ev)
-        {
-            using (var stream = new MemoryStream())
-            {
-                Serializer.Serialize(stream, ev);
-                return stream.ToArray();
-            }
-        }
-
-
-        public static T ToCastedPacket<T>(byte[] message)
-        {
-            using (var stream = new MemoryStream(message))
-            {
-                T ev;
-                ev = (T)Serializer.Deserialize(stream);
-                return ev;
-            }
-        }
-
-        public static byte[] FromAnyTypes<T>(IReadOnlyCollection<T> list)
-        {
-            using (var stream = new MemoryStream())
-            {
-                foreach (var o in list)
-                {
-                    Serializer.Serialize(stream, o);
-                }
-                return stream.ToArray();
-            }
-        }
-
-        public static List<T> ToAnyTypes<T>(byte[] data)
+        public static List<T> ToAnyTypes<T>(ReadOnlyMemory<byte> data)
         {
             var l = new List<T>();
-            using (var stream = new MemoryStream(data))
+            var buffer = Buffer.Value;
+            buffer.SetLength(0);
+            buffer.Write(data.Span);
+            buffer.Position = 0;
+            while (buffer.Position < data.Length)
             {
-                while (stream.Position < data.Length)
-                {
-                    l.Add((T)Serializer.Deserialize(stream));
-                }
-                return l;
+                l.Add((T)Serializer.Deserialize(buffer));
             }
+            return l;
         }
 
-        // TODO: Use serialize direct
-        public static byte[] FromAnyType(object o)
+        public static ReadOnlyMemory<byte> FromAnyType<T>(T o)
         {
-            using (var stream = new MemoryStream())
-            {
-                Serializer.Serialize(stream, o);
-                return stream.ToArray();
-            }
+            var buffer = Buffer.Value;
+            buffer.SetLength(0);
+            Serializer.Serialize(buffer, o);
+            return new ReadOnlyMemory<byte>(buffer.GetBuffer(), 0, (int)buffer.Length);
         }
 
-        public static T ToAnyType<T>(byte[] message)
+        public static T ToAnyType<T>(ReadOnlyMemory<byte> message)
         {
-            using (var stream = new MemoryStream(message))
-            {
-                T ev;
-                ev = (T)Serializer.Deserialize(stream);
-                return ev;
-            }
-        }
-
-        public static T ToPacket<T>(byte[] message) where T : BasePacket
-        {
-            return ToCastedPacket<T>(message);
-        }
-
-        public static byte[] FromPacket<T>(T ev) where T : BasePacket
-        {
-            return FromBasePacket(ev);
+            var buffer = Buffer.Value;
+            buffer.SetLength(0);
+            buffer.Write(message.Span);
+            buffer.Position = 0;
+            return (T)Serializer.Deserialize(buffer);
         }
     }
 }
+

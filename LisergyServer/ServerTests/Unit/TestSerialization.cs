@@ -7,13 +7,23 @@ using Game.Systems.Battle;
 using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
 using Game.Systems.Tile;
+using Game.World;
+using MemoryPack;
 using NUnit.Framework;
 using ServerTests;
+using System;
 using System.Linq;
 using Tests.Unit.Stubs;
 
 namespace GameUnitTests
 {
+    [MemoryPackable]
+    [Serializable]
+    public partial class MapPlacement2Component
+    {
+        public Location Location;
+    }
+
     public class TestSerialization
     {
 
@@ -26,6 +36,23 @@ namespace GameUnitTests
         }
 
         [Test]
+        public void TestMemoryPack()
+        {
+            Serialization.LoadSerializers(typeof(MapPlacement2Component));
+
+            var p = new MapPlacement2Component
+            {
+                Location = new Location(1, 2)
+            };
+
+            var s1 = Serialization.FromAnyType(p);
+            var s2 = MemoryPackSerializer.Serialize(p);
+
+            var u1 = Serialization.ToAnyType<MapPlacement2Component>(s1.GetArrayNoCopy());
+            var u2 = MemoryPackSerializer.Deserialize<MapPlacement2Component>(s2);
+        }
+
+        [Test]
         public void TestSimpleSerialization()
         {
             Serialization.LoadSerializers();
@@ -34,8 +61,8 @@ namespace GameUnitTests
                 Login = "wololo",
                 Password = "walala"
             };
-            var bytes = Serialization.FromPacket<LoginPacket>(authEvent);
-            var event2 = Serialization.ToPacket<LoginPacket>(bytes);
+            var bytes = Serialization.FromAnyType<LoginPacket>(authEvent);
+            var event2 = Serialization.ToAnyType<LoginPacket>(bytes);
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);
@@ -50,8 +77,8 @@ namespace GameUnitTests
 
             Serialization.LoadSerializers(typeof(EntityUpdatePacket));
 
-            var serialized = Serialization.FromPacket<EntityUpdatePacket>(tile.Logic.DeltaCompression.GetUpdatePacket(default) as EntityUpdatePacket);
-            var unserialized = Serialization.ToPacket<EntityUpdatePacket>(serialized);
+            var serialized = Serialization.FromAnyType<EntityUpdatePacket>(tile.Logic.DeltaCompression.GetUpdatePacket(default) as EntityUpdatePacket);
+            var unserialized = Serialization.ToAnyType<EntityUpdatePacket>(serialized);
 
             var data = unserialized.GetComponent<TileDataComponent>();
             Assert.AreEqual((byte)tile.SpecId, data.TileId);
@@ -71,8 +98,8 @@ namespace GameUnitTests
 
             var visibleEvent = game.SentServerPackets.Where(e => e is EntityUpdatePacket).FirstOrDefault() as EntityUpdatePacket;
 
-            var serialized = Serialization.FromPacket<EntityUpdatePacket>(visibleEvent);
-            var unserialized = Serialization.ToPacket<EntityUpdatePacket>(serialized);
+            var serialized = Serialization.FromAnyType<EntityUpdatePacket>(visibleEvent);
+            var unserialized = Serialization.ToAnyType<EntityUpdatePacket>(serialized);
 
             Assert.AreEqual(visibleEvent.EntityId, unserialized.EntityId);
         }
@@ -87,8 +114,8 @@ namespace GameUnitTests
 
             var entityUpdate = new EntityUpdatePacket(party);
 
-            var serialized = Serialization.FromPacket<EntityUpdatePacket>(entityUpdate);
-            var unserialized = Serialization.ToPacket<EntityUpdatePacket>(serialized);
+            var serialized = Serialization.FromAnyType<EntityUpdatePacket>(entityUpdate);
+            var unserialized = Serialization.ToAnyType<EntityUpdatePacket>(serialized);
 
             Assert.AreEqual(unserialized.EntityId, party.EntityId);
         }
@@ -102,8 +129,8 @@ namespace GameUnitTests
                 Login = "wololo",
                 Password = "walala"
             };
-            var bytes = Serialization.FromBasePacket(authEvent);
-            var event2 = (LoginPacket)Serialization.ToBasePacket(bytes);
+            var bytes = Serialization.FromAnyType((object)authEvent);
+            var event2 = Serialization.ToAnyType<LoginPacket>(bytes);
 
             Assert.AreEqual(authEvent.Login, event2.Login);
             Assert.AreEqual(authEvent.Password, event2.Password);

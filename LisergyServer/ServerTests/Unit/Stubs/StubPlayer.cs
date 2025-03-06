@@ -50,7 +50,7 @@ namespace ServerTests
             {
                 Game.Log.Debug($"Server Sent Packet {ev.GetType().Name} to Player {this}");
             }
-            var reSerialized = Serialization.ToBasePacket(Serialization.FromBasePacket(ev));
+            var reSerialized = Serialization.ToAnyType<BasePacket>(Serialization.FromAnyType(ev));
             PacketPool.Return(ev);
             OnReceivedPacket?.Invoke(reSerialized);
             ReceivedPackets.Add(reSerialized);

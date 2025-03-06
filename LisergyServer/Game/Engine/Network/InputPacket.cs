@@ -1,11 +1,11 @@
 ﻿namespace Game.Engine.Network
 {
-    public interface IGameCommand
+    public interface IGameCommand : IPacket
     {
         void Execute(IGame game);
     }
 
-    public interface IClientPacket
+    public interface IClientPacket : IPacket
     {
 
     }

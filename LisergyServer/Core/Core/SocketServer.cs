@@ -12,7 +12,7 @@ namespace BaseServer.Core
         private readonly int _port;
         private Message _pooledMessage;
         private ConsoleCommandExecutor _commandExecutor;
-        protected Server _socketServer;
+        public Server _socketServer;
         public Exception ServerError { get; private set; }
         public Ticker Ticker { get; protected set; }
         public IGameLog Log { get; private set; }
@@ -66,7 +66,7 @@ namespace BaseServer.Core
         public void Send<PacketType>(in int connection, PacketType ev) where PacketType : BasePacket
         {
             Log.Debug($"Sending {ev} to {connection}");
-            _socketServer.Send(connection, Serialization.FromPacket(ev));
+            _socketServer.Send(connection, Serialization.FromAnyType(ev).ToArray());
         }
 
         public void RunTick()
@@ -105,13 +105,13 @@ namespace BaseServer.Core
                         if (!IsAuthenticated(_pooledMessage.connectionId))
                         {
                             // TODO: Make not need to deserialize the whole message, check if header is AuthPacket
-                            _packet = Serialization.ToCastedPacket<BasePacket>(_pooledMessage.data);
+                            _packet = Serialization.ToAnyType<BasePacket>(_pooledMessage.data);
                             _packet.ConnectionID = _pooledMessage.connectionId;
                             if (!Authenticate(_packet, _pooledMessage.connectionId)) return;
                         }
                         if (_packet == null)
                         {
-                            _packet = Serialization.ToCastedPacket<BasePacket>(_pooledMessage.data);
+                            _packet = Serialization.ToAnyType<BasePacket>(_pooledMessage.data);
                             _packet.ConnectionID = _pooledMessage.connectionId;
                         }
                         ReceivePacketFromPlayer(_pooledMessage.connectionId, _packet);

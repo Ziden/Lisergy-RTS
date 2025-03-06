@@ -92,7 +92,7 @@ namespace ClientSDK
             _enabled = true;
             _log.Debug($"Sending {p.GetType().Name} to {server}");
             OnSendGenericPacket?.Invoke(p);
-            _toSend[server].Enqueue(Serialization.FromBasePacket(p));
+            _toSend[server].Enqueue(Serialization.FromAnyType(p).ToArray());
         }
 
         public void Disconnect()
@@ -130,7 +130,7 @@ namespace ClientSDK
                             _serversConnected.Add(server);
                             break;
                         case EventType.Data:
-                            ReceiveServerMessage(server, Serialization.ToBasePacket(_msg.data));
+                            ReceiveServerMessage(server, Serialization.ToAnyType<BasePacket>(_msg.data));
                             break;
                         case EventType.Disconnected:
                             _serversConnected.Remove(server);

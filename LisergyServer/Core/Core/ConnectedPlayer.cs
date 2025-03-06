@@ -2,7 +2,8 @@
 using Game.Engine.DataTypes;
 using Game.Engine.Network;
 using GameServices;
-
+using System;
+using System.Runtime.InteropServices;
 using Telepathy;
 
 namespace LisergyServer.Core
@@ -24,18 +25,17 @@ namespace LisergyServer.Core
 
         public void Send<PacketType>(PacketType ev) where PacketType : BasePacket, new()
         {
-            var bytes = Serialization.FromBasePacket(ev);
+            var bytes = Serialization.FromAnyType(ev);
             PacketPool.Return(ev);
-            this._server.Send(ConnectionID, bytes);
+            SendBytes(bytes);
         }
 
-
-
+     
         public virtual bool Online() => _server.GetClientAddress(ConnectionID) != "";
 
-        public void Send(in byte[] data)
+        public void SendBytes(in ReadOnlyMemory<byte> data)
         {
-            this._server.Send(ConnectionID, data);
+            this._server.Send(ConnectionID, data.ToArray());
         }
     }
 }

@@ -73,7 +73,7 @@ namespace Game.Engine
 
     public class GameServerNetwork : IGameNetwork, IEventListener
     {
-        public Action<GameId, BasePacket> OnOutgoingPacket;
+        public event Action<GameId, BasePacket> OnOutgoingPacket;
 
         public EventBus<BasePacket> IncomingPackets { get; } = new EventBus<BasePacket>();
 
@@ -92,7 +92,6 @@ namespace Game.Engine
         {
             IncomingPackets.On(this, listener);
         }
-
 
         public void ReceiveInput(GameId sender, BasePacket input)
         {

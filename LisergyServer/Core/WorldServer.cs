@@ -34,7 +34,7 @@ namespace MapServer
             _network = game.Network as GameServerNetwork;
             _battleService = new BattleService(Game);
             _worldService = new WorldService(Game);
-            _gameSpecs = Serialization.FromBasePacket(new GameSpecPacket(game));
+            _gameSpecs = Serialization.FromAnyType(new GameSpecPacket(game)).ToArray();
             _network.OnOutgoingPacket += SendPacketToPlayer;
         }
 
@@ -58,7 +58,7 @@ namespace MapServer
 
         public override void OnAuthenticated(ConnectedPlayer player)
         {
-            player.Send(_gameSpecs);
+            player.SendBytes(_gameSpecs);
         }
     }
 }

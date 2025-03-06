@@ -1,11 +1,13 @@
-﻿using System;
+﻿
+using MemoryPack;
+using System;
 using System.Runtime.InteropServices;
 
 namespace Game.World
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Location
+    public partial struct Location
     {
         public ushort X;
         public ushort Y;

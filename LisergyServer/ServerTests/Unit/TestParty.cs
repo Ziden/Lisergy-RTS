@@ -165,8 +165,8 @@ namespace GameUnitTests
 
             var update = party.Logic.DeltaCompression.GetUpdatePacket(_player.EntityId);
 
-            var serialize = Serialization.FromBasePacket(update);
-            var deserialize = Serialization.ToPacket<EntityUpdatePacket>(serialize);
+            var serialize = Serialization.FromAnyType((object)update);
+            var deserialize = Serialization.ToAnyType<EntityUpdatePacket>(serialize);
 
             var unitsComponent = (BattleGroupComponent)deserialize.SyncedComponents.FirstOrDefault(c => c.GetType() == typeof(BattleGroupComponent));
 
@@ -190,8 +190,8 @@ namespace GameUnitTests
 
             var update = party.Logic.DeltaCompression.GetUpdatePacket(_player.EntityId);
 
-            var serialize = Serialization.FromBasePacket(update);
-            var deserialize = Serialization.ToPacket<EntityUpdatePacket>(serialize);
+            var serialize = Serialization.FromAnyType((object)update);
+            var deserialize = Serialization.ToAnyType<EntityUpdatePacket>(serialize);
 
             Assert.IsTrue(deserialize.SyncedComponents.Any(c => c is PartyComponent));
             Assert.AreEqual(2, ((PartyComponent)deserialize.SyncedComponents.First(c => c is PartyComponent)).PartyIndex);

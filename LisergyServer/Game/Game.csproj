@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MemoryPack" Version="1.21.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GameData\GameData.csproj" />
     <ProjectReference Include="..\Serializer\Serializer.csproj" />
   </ItemGroup>

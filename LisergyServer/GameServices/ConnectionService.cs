@@ -1,6 +1,7 @@
 ﻿using Game.Engine;
 using Game.Engine.DataTypes;
 using Game.Engine.Network;
+using System;
 using System.Collections.Generic;
 
 namespace GameServices
@@ -9,7 +10,7 @@ namespace GameServices
     {
         public ref GameId PlayerId { get; }
         void Send<PacketType>(PacketType ev) where PacketType : BasePacket, new();
-        void Send(in byte[] data);
+        void SendBytes(in ReadOnlyMemory<byte> data);
         int ConnectionID { get; }
     }
 
@@ -26,11 +27,11 @@ namespace GameServices
 
         public void Broadcast(BasePacket packet)
         {
-            var bytes = Serialization.FromBasePacket(packet);
+            var bytes = Serialization.FromAnyType((object)packet).ToArray();
             foreach (var u in _connectedById.Values)
             {
                 _log.Debug($"Broadcasting {packet.GetType()} to player {u.PlayerId}");
-                u.Send(bytes);
+                u.SendBytes(bytes);
             }
         }
 

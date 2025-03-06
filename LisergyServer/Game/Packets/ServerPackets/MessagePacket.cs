@@ -12,6 +12,8 @@ namespace Game.Events.ServerEvents
     [Serializable]
     public class MessagePacket : BasePacket, IServerPacket
     {
+        public MessagePacket() { }
+
         public MessagePacket(MessageType type, string args)
         {
             Type = type;

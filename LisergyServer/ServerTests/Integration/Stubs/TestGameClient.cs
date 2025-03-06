@@ -202,25 +202,25 @@ namespace ServerTests.Integration.Stubs
 
         public void Tick()
         {
-            Network.Tick();
             _server?.SingleThreadTick();
+            Network.Tick();
         }
 
         public async Task<T> WaitUntilReceives<T>(Func<T, bool> validate = null, int timeout = 20) where T : BasePacket
         {
-            Network.Tick();
             _server?.SingleThreadTick();
+            Network.Tick();
+         
             var p = ReceivedPackets.FirstOrDefault(p => p.GetType() == typeof(T) && (validate == null || validate((T)p)));
             while (p == null && timeout >= 0)
             {
                 timeout--;
                 await Task.Delay(100);
-                Network.Tick();
                 _server?.SingleThreadTick();
+                Network.Tick();
                 p = ReceivedPackets.FirstOrDefault(p => p.GetType() == typeof(T) && (validate == null || validate((T)p)));
             }
             if (timeout == 0) p = null;
-            Network.Tick();
             return (T)p;
         }
 

@@ -14,6 +14,19 @@ namespace Game.Engine
     /// </summary>
     public static class UnmanagedMemory
     {
+        public static byte[] GetArrayNoCopy(this ReadOnlyMemory<byte> memory)
+        {
+            if (MemoryMarshal.TryGetArray(memory, out ArraySegment<byte> segment))
+            {
+                return segment.Array;
+            }
+            else
+            {
+                throw new Exception("Trying to get array from memory failed");
+            }
+        }
+
+
         internal static readonly Dictionary<IntPtr, int> _allocs = new Dictionary<IntPtr, int>();
 
         internal static Dictionary<IntPtr, int> _available = new Dictionary<IntPtr, int>();

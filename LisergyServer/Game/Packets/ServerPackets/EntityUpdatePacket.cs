@@ -8,7 +8,7 @@ using System.Linq;
 namespace Game.Events.ServerEvents
 {
     [Serializable]
-    public class EntityUpdatePacket : BasePacket, IServerPacket, IPooledPacket
+    public class EntityUpdatePacket : BasePacket, IServerPacket
     {
         public EntityType Type;
         public GameId EntityId;

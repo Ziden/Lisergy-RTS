@@ -91,7 +91,7 @@ namespace BaseServer.Persistence
             return Serialization.FromAnyTypes(
                 ((GameEntities)game.Entities).AllEntities
                 .Select(e => new SerializedEntity(e))
-                .ToList());
+                .ToList()).ToArray();
         }
 
         public void DeserializeEntities(LisergyGame game, byte[] entities)
@@ -111,7 +111,7 @@ namespace BaseServer.Persistence
 
         public byte[] SerializePlayers(LisergyGame game)
         {
-            return Serialization.FromAnyTypes(game.World.Players.AllPlayers().Select(p => new SerializedPlayer(p)).ToList());
+            return Serialization.FromAnyTypes(game.World.Players.AllPlayers().Select(p => new SerializedPlayer(p)).ToList()).ToArray();
         }
 
         public void DeserializePlayers(LisergyGame game, byte[] players)

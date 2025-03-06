@@ -31,7 +31,7 @@ namespace Game.Network.ServerPackets
                 BattleTime = DateTime.UtcNow,
                 Attacker = battle.Attacker.TeamData,
                 Defender = battle.Defender.TeamData
-            });
+            }).ToArray();
         }
 
         public BattleLogPacket(BattleQueuedPacket start)
@@ -42,7 +42,7 @@ namespace Game.Network.ServerPackets
                 BattleTime = DateTime.UtcNow,
                 Attacker = start.Attacker,
                 Defender = start.Defender
-            });
+            }).ToArray();
         }
 
         public void SetTurns(TurnBattleRecord result)
