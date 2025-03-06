@@ -28,7 +28,7 @@ namespace Game
         public GameSystems(LisergyGame game)
         {
             _game = game;
-            AddSystem(Building = new BuildingSystem(game));
+            AddSystem(Building = new ConstructionSystem(game));
             AddSystem(BattleGroup = new BattleGroupSystem(game));
             AddSystem(Dungeons = new DungeonSystem(game));
             AddSystem(Deltacompression = new DeltaCompressionSystem(game));
@@ -45,7 +45,7 @@ namespace Game
 
         public DeltaCompressionSystem Deltacompression { get; private set; }
         public MapSystem Map { get; private set; }
-        public BuildingSystem Building { get; private set; }
+        public ConstructionSystem Building { get; private set; }
         public BattleGroupSystem BattleGroup { get; private set; }
         public DungeonSystem Dungeons { get; private set; }
         public EntityVisionSystem EntityVision { get; private set; }

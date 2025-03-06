@@ -24,7 +24,7 @@ namespace Game.Systems.Map
         {
             if (CurrentEntity.Components.TryGet<TileHabitantsComponent>(out var habitants))
             {
-                if (e.Components.Has<BuildingComponent>())
+                if (e.Components.Has<ConstructionComponent>())
                 {
                     habitants.Building = null;
                 }
@@ -42,7 +42,7 @@ namespace Game.Systems.Map
             {
                 habitants = new TileHabitantsComponent();
             }
-            if (steppingOn.Components.Has<BuildingComponent>())
+            if (steppingOn.Components.Has<ConstructionComponent>())
             {
                 habitants.Building = steppingOn;
             }

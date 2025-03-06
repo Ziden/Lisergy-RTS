@@ -12,7 +12,7 @@ namespace Game.Engine.Scheduler
     /// </summary>
     public interface IGameScheduler
     {
-        public DateTime Now { get; }
+        public DateTime LogicalTime { get; }
         public GameTask GetTask(GameId id);
         public void Add(GameTask task);
         void Cancel(GameTask task);
@@ -23,8 +23,8 @@ namespace Game.Engine.Scheduler
         private readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private Dictionary<GameId, GameTask> _tasks = new Dictionary<GameId, GameTask>();
 
-        public DateTime Now { get; private set; }
-        internal TimeSpan NowTimespan => Now - Epoch;
+        public DateTime LogicalTime { get; private set; }
+        internal TimeSpan NowTimespan => LogicalTime - Epoch;
         internal GameTask NextTask { get; private set; }
         internal SortedSet<GameTask> Queue { get; private set; } = new SortedSet<GameTask>();
         internal void ForceComplete(GameTask task)
@@ -49,7 +49,7 @@ namespace Game.Engine.Scheduler
 
         internal void Clear()
         {
-            Now = DateTime.MinValue;
+            LogicalTime = DateTime.MinValue;
             _tasks = new Dictionary<GameId, GameTask>();
             Queue = new SortedSet<GameTask>();
             NextTask = null;
@@ -57,7 +57,7 @@ namespace Game.Engine.Scheduler
 
         internal void SetLogicalTime(DateTime time)
         {
-            Now = time;
+            LogicalTime = time;
         }
 
         public void Cancel(GameTask task)
@@ -76,7 +76,7 @@ namespace Game.Engine.Scheduler
             task.Game.Network.DeltaCompression.SendAllModifiedEntities(task.Creator); // TODO: Maybe not best place
             if (task.Repeat)
             {
-                task.Start = Now;
+                task.Start = LogicalTime;
                 Add(task);
             }
             else
@@ -89,7 +89,7 @@ namespace Game.Engine.Scheduler
         public void Tick(DateTime time)
         {
             SetLogicalTime(time);
-            _ = Now;
+            _ = LogicalTime;
             if (NextTask == null)
             {
                 NextTask = Queue.FirstOrDefault();
@@ -103,7 +103,7 @@ namespace Game.Engine.Scheduler
 
         public void Add(GameTask task)
         {
-            task.Start = Now;
+            task.Start = LogicalTime;
             _tasks[task.ID] = task;
             _ = Queue.Add(task);
         }

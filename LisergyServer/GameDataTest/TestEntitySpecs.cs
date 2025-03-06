@@ -36,7 +36,7 @@ namespace GameDataTest
             {
                 Name = "Building",
                 Components = Serialization.FromAnyTypes(new IComponent[] {
-                    new MapPlaceableComponent(), new BuildingComponent(), new PlayerBuildingComponent(),
+                    new MapPlaceableComponent(), new ConstructionComponent(), new PlayerBuildingComponent(),
                     new EntityVisionComponent(),
                 }).ToArray(),
                 Icon = new ArtSpec("Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png"),
@@ -47,7 +47,7 @@ namespace GameDataTest
                 Name = "Dungeon",
                 Components = Serialization.FromAnyTypes(new IComponent[] {
                     new DungeonComponent(),
-                    new BuildingComponent(),
+                    new ConstructionComponent(),
                     new MapPlaceableComponent(),
                     new BattleGroupComponent()
                 }).ToArray(),

@@ -94,7 +94,7 @@ namespace GameUnitTests
             // Moving player2 to 5 7 which is slightly outside p1 vision
             _path.Add(new Location(5, 7));
             _game.HandleClientEvent(player2, new MoveEntityCommand() { Path = _path, Entity = player2Party.EntityId });
-            _game.GameScheduler.Tick(_game.GameScheduler.Now + player2Party.Course().Delay);
+            _game.GameScheduler.Tick(_game.GameScheduler.LogicalTime + player2Party.Course().Delay);
 
             // p1 should still have received p2 component update even tho the entity is outside his vision because it was inside vision
             var moveEvents = _player.ReceivedPacketsOfType<EntityUpdatePacket>().Where(p => p.EntityId == player2Party.EntityId && p.SyncedComponents.Any(c => c is MapPlacementComponent));
@@ -114,7 +114,7 @@ namespace GameUnitTests
             _player.ReceivedPackets.Clear();
 
             SendMoveRequest();
-            _game.GameScheduler.Tick(_game.GameScheduler.Now + _party.Course().Delay);
+            _game.GameScheduler.Tick(_game.GameScheduler.LogicalTime + _party.Course().Delay);
 
             var moveEvents = _player.ReceivedPacketsOfType<EntityUpdatePacket>().Where(p => p.EntityId == _party.EntityId && p.SyncedComponents.Any(c => c is MapPlacementComponent));
             var tileDiscovery = _player.ReceivedEntityUpdates(EntityType.Tile);

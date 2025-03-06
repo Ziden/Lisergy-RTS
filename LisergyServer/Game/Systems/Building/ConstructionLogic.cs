@@ -6,12 +6,13 @@ using Game.Tile;
 using Game.World;
 using GameData;
 using System;
+using System.Collections.Generic;
 
 namespace Game.Systems.Building
 {
     public enum BuildResult { Ok, Blocked, HasResource, HasBuilding }
 
-    public unsafe class BuildingLogic : BaseEntityLogic<BuildingComponent>
+    public unsafe class ConstructionLogic : BaseEntityLogic<ConstructionWorkerComponent>
     {
         public BuildingSpec SetupBuildingFromSpec(IEntity building, BuildingSpecId specId)
         {
@@ -31,17 +32,17 @@ namespace Game.Systems.Building
         {
             var t = CurrentEntity.Logic.Map.GetTile();
             t.Logic.Tile.SetTileId(0);
-            var building = StartConstruction(buildingSpecId, owner);
-            building.Components.Remove<ConstructionComponent>();
+            var building = PlaceConstruction(buildingSpecId, owner);
+            building.Components.Remove<ConstructionSiteComponent>();
             Game.Log.Debug($"Player {CurrentEntity} insta-built {building}");
 
             return building;
         }
 
-        public IEntity StartConstruction(BuildingSpecId buildingSpecId, GameId owner)
+        public IEntity PlaceConstruction(BuildingSpecId buildingSpecId, GameId owner)
         {
             var t = CurrentEntity.Logic.Map.GetTile();
-            var canBuild = CanBuildOnTile(buildingSpecId, t);
+            var canBuild = IsTileFreeForBuilding(buildingSpecId);
             if (canBuild != BuildResult.Ok)
             {
                 Game.Log.Error($"Cannot build building spec {buildingSpecId} at {t}: {canBuild}");
@@ -51,7 +52,7 @@ namespace Game.Systems.Building
             var spec = SetupBuildingFromSpec(building, buildingSpecId);
             if (Game.Specs.BuildingConstructions.TryGetValue(buildingSpecId, out var constructionSpec) && constructionSpec.TimeToBuildSeconds > 0)
             {
-                var c = new ConstructionComponent();
+                var c = new ConstructionSiteComponent();
                 building.Components.Add(c);
                 building.Save(c);
             }
@@ -62,18 +63,18 @@ namespace Game.Systems.Building
 
         public bool IsConstruction()
         {
-            return CurrentEntity.Components.Has<ConstructionComponent>();
+            return CurrentEntity.Components.Has<ConstructionSiteComponent>();
         }
 
-        public BuildResult CanBuildOnTile(BuildingSpecId id, TileModel tile)
+        public BuildResult IsTileFreeForBuilding(BuildingSpecId id)
         {
-            if (!tile.Logic.Tile.IsPassable()) return BuildResult.Blocked; ;
-            if (tile.Logic.Tile.GetBuildingOnTile() != null) return BuildResult.HasBuilding;
-            if (tile.Logic.Harvesting.HasHarvestingResources()) return BuildResult.HasResource;
+            if (!CurrentEntity.Logic.Tile.IsPassable()) return BuildResult.Blocked; ;
+            if (CurrentEntity.Logic.Tile.GetBuildingOnTile() != null) return BuildResult.HasBuilding;
+            if (CurrentEntity.Logic.Harvesting.HasHarvestingResources()) return BuildResult.HasResource;
             return BuildResult.Ok;
         }
 
-        public bool AddBuilderToConstruction(IEntity builder)
+        public bool AddBuilder(IEntity builder)
         {
             var building = CurrentEntity;
             var buildingTile = building.Logic.Map.GetTile();
@@ -83,9 +84,10 @@ namespace Game.Systems.Building
                 Game.Log.Error($"{builder} is too far from {building}");
                 return false;
             }
-            var c = building.Components.Get<ConstructionComponent>();
+            var c = building.Components.Get<ConstructionSiteComponent>();
+            c.EntitiesBuilding = c.EntitiesBuilding ?? new List<GameId>();
             c.EntitiesBuilding.Add(builder.EntityId);
-            builder.Components.Add(new BuilderComponent()
+            builder.Components.Add(new ConstructionWorkerComponent()
             {
                 BuildingAt = buildingTile.Position,
             });
@@ -95,15 +97,15 @@ namespace Game.Systems.Building
             return true;
         }
 
-        public void RemoveBuilderToConstruction(IEntity builder)
+        public void RemoveBuilder(IEntity builder)
         {
-            var c = CurrentEntity.Components.Get<ConstructionComponent>();
+            var c = CurrentEntity.Components.Get<ConstructionSiteComponent>();
             c.EntitiesBuilding.Remove(builder.EntityId);
-            builder.Components.Remove<BuilderComponent>();
+            builder.Components.Remove<ConstructionWorkerComponent>();
             UpdateBuildingConstructionState(c);
             if (c.Percentage >= 100)
             {
-                CurrentEntity.Components.Remove<ConstructionComponent>();
+                CurrentEntity.Components.Remove<ConstructionSiteComponent>();
                 Game.Log.Debug($"{builder} finished building {c}");
             }
             else
@@ -113,12 +115,12 @@ namespace Game.Systems.Building
             }
         }
 
-        public void UpdateBuildingConstructionState(ConstructionComponent c = null)
+        public void UpdateBuildingConstructionState(ConstructionSiteComponent c = null)
         {
-            c = c ?? CurrentEntity.Components.Get<ConstructionComponent>();
-            if (c.TimeBlock != null)
+            c = c ?? CurrentEntity.Components.Get<ConstructionSiteComponent>();
+            if (c.BuildingWorkPrediction != null)
             {
-                var snapShot = c.TimeBlock.GetCurrentSnapshot(Game.Scheduler.Now);
+                var snapShot = c.BuildingWorkPrediction.GetCurrentSnapshot(Game.Scheduler.LogicalTime);
                 if (snapShot.Percentagage > 1)
                 {
                     c.Percentage = 100;
@@ -129,9 +131,9 @@ namespace Game.Systems.Building
             if (c.EntitiesBuilding.Count > 0)
             {
                 var constructionSpec = Game.Specs.BuildingConstructions[b.SpecId];
-                var startTime = Game.Scheduler.Now;
+                var startTime = Game.Scheduler.LogicalTime;
                 var endTime = startTime + TimeSpan.FromSeconds(constructionSpec.TimeToBuildSeconds);
-                c.TimeBlock = new TimeBlock()
+                c.BuildingWorkPrediction = new TimeBlock()
                 {
                     StartTime = startTime,
                     EndTime = endTime
@@ -139,7 +141,7 @@ namespace Game.Systems.Building
             }
             else
             {
-                c.TimeBlock = null; // no one building
+                c.BuildingWorkPrediction = null; // no one building
             }
         }
     }

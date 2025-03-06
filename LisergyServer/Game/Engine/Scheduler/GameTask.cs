@@ -45,7 +45,7 @@ namespace Game.Engine.Scheduler
         }
 
         public virtual void Tick() => Executor.Execute(this);
-        public bool IsDue() => Finish <= Game.Scheduler.Now;
+        public bool IsDue() => Finish <= Game.Scheduler.LogicalTime;
         public void Cancel() => Game.Scheduler.Cancel(this);
         public int CompareTo(GameTask other)
         {

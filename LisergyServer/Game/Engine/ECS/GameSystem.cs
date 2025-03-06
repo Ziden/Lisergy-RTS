@@ -13,7 +13,7 @@ namespace Game.Engine.ECLS
 
     public abstract class GameSystem<ComponentType> : IGameSystem, IEventListener where ComponentType : IComponent
     {
-        protected SystemEventBus<ComponentType> EntityEvents = new SystemEventBus<ComponentType>();
+        protected ComponentEventBus<ComponentType> EntityEvents = new ComponentEventBus<ComponentType>();
         public IGame Game { get; private set; }
         public IGameLogic GameLogic => Game.Logic;
         public IGameWorld World => Game.World;

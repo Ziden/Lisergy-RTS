@@ -1,4 +1,5 @@
-﻿using Game.Engine.Network;
+﻿using Game.Engine.DataTypes;
+using Game.Engine.Network;
 using Game.World;
 using GameData;
 using System;
@@ -8,13 +9,16 @@ namespace Game.Systems.Building
     [Serializable]
     public class BuildCommand : BasePacket, IGameCommand
     {
-        public byte BuilderUnitIndex;
         public BuildingSpecId Building;
         public Location Location;
 
         public void Execute(IGame game)
         {
-            throw new NotImplementedException();
+            var tile = game.World.GetTile(Location);
+            if(tile.Logic.Building.IsTileFreeForBuilding(Building) != BuildResult.Ok)
+            {
+                throw new Exception("Bad tile");
+            }
         }
     }
 

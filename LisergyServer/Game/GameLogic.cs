@@ -18,7 +18,7 @@ namespace Game
         public DeltaCompressionLogic DeltaCompression => _systems.Deltacompression.GetLogic(_entity);
         public MapLogic Map => _systems.Map.GetLogic(_entity);
         public BattleGroupLogic BattleGroup => _systems.BattleGroup.GetLogic(_entity);
-        public BuildingLogic Building => _systems.Building.GetLogic(_entity);
+        public ConstructionLogic Building => _systems.Building.GetLogic(_entity);
         public PlayerLogic Player => _systems.Players.GetLogic(_entity);
         public MovementLogic Movement => _systems.EntityMovement.GetLogic(_entity);
         public HarvestingLogic Harvesting => _systems.Harvesting.GetLogic(_entity);

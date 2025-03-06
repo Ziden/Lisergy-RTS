@@ -5,9 +5,13 @@ using System.Runtime.InteropServices;
 
 namespace Game.Systems.Building
 {
+    /// <summary>
+    /// Added to entities that are building something
+    /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     [Serializable]
-    public class BuilderComponent : IComponent
+    [SyncedComponent]
+    public class ConstructionWorkerComponent : IComponent
     {
         public Location BuildingAt;
 
