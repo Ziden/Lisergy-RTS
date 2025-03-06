@@ -10,6 +10,7 @@ namespace Game.Engine.DataTypes
     /// </summary>
     public static class FastNew<T> where T : new()
     {
-        public static readonly Func<T> Instance = Expression.Lambda<Func<T>>(Expression.New(typeof(T))).Compile();
+        public static readonly Func<T> Instance =
+            () => new T();
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Game.Engine.DataTypes
 {
-    public class DefaultValueDictionary<TKey, TValue> : IDictionary<TKey, TValue>
+    public class DefaultValueDictionary<TKey, TValue> : IDictionary<TKey, TValue> where TValue : new()
     {
         private readonly IDictionary<TKey, TValue> _dict = new Dictionary<TKey, TValue>();
 
@@ -13,7 +13,7 @@ namespace Game.Engine.DataTypes
             {
                 if (!TryGetValue(key, out TValue val))
                 {
-                    this[key] = (TValue)InstanceFactory.CreateInstance(typeof(TValue));
+                    this[key] = FastNew<TValue>.Instance();
                     return this[key];
                 }
                 return val;

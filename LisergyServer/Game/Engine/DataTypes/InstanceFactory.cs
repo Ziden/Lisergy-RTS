@@ -22,6 +22,11 @@ namespace Game.Engine.DataTypes
             return InstanceFactoryGeneric<TypeToIgnore, TypeToIgnore, TypeToIgnore>.CreateInstance(type, null, null, null);
         }
 
+        public static object CreateInstance<T>()
+        {
+            return InstanceFactoryGeneric<TypeToIgnore, TypeToIgnore, TypeToIgnore>.CreateInstance(typeof(T), null, null, null);
+        }
+
         public static object CreateInstance<TArg1>(Type type, TArg1 arg1)
         {
             return InstanceFactoryGeneric<TArg1, TypeToIgnore, TypeToIgnore>.CreateInstance(type, arg1, null, null);
