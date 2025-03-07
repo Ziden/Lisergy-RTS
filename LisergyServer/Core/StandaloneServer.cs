@@ -10,7 +10,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 
-namespace ServerTests.Integration.Stubs
+namespace BaseServer
 {
     /// <summary>
     /// Allows to run multiple servers in the same proccess using multiple threads.
@@ -28,7 +28,7 @@ namespace ServerTests.Integration.Stubs
 
         public LisergyGame Game;
 
-        private void SetupServer(SocketServer server)
+        public void SetupServer(SocketServer server)
         {
 
             _servers[server.GetServerType()] = new RunningServer()

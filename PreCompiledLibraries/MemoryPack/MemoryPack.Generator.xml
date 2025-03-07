@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MemoryPack.Generator</name>
+    </assembly>
+    <members>
+        <member name="P:MemoryPack.Generator.TypeMeta.TypeName">
+            <summary>MinimallyQualifiedFormat(include generics T)</summary>
+        </member>
+    </members>
+</doc>

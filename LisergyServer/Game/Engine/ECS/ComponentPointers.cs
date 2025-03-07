@@ -64,7 +64,7 @@ namespace Game.Engine.ECLS
 
         public void Alloc<T>() where T : IComponent => this[typeof(T)] = UnmanagedMemory.Alloc(Marshal.SizeOf<T>());
 
-        public void Alloc(Type t) => this[t] = UnmanagedMemory.Alloc(Marshal.SizeOf(t));
+        public IntPtr Alloc(Type t) => this[t] = UnmanagedMemory.Alloc(Marshal.SizeOf(t));
 
         /// <summary>
         /// Free's allocated memory for the given component

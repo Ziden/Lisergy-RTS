@@ -1,6 +1,7 @@
 ﻿using Game.Engine;
 using Game.Engine.Events;
 using System.Collections;
+using System.Collections.Generic;
 using Terminal.Gui;
 
 public class LogEntry
@@ -33,12 +34,12 @@ public class StandaloneServerConsoleUI : Window
     /// <summary>
     /// TYPES OF LOGS
     /// </summary>
-    private static List<LogEntry> _accountLogs = new();
-    private static List<LogEntry> _worldLogs = new();
-    private static List<LogEntry> _chatLogs = new();
-    private static List<LogEntry> _gameLogs = new();
-    private static List<EventEntry> _events = new();
-    private static List<LogEntry> _allLogs = new();
+    private static List<LogEntry> _accountLogs = new List<LogEntry>();
+    private static List<LogEntry> _worldLogs = new List<LogEntry>();
+    private static List<LogEntry> _chatLogs = new List<LogEntry>();
+    private static List<LogEntry> _gameLogs = new List<LogEntry>();
+    private static List<EventEntry> _events = new List<EventEntry>();
+    private static List<LogEntry> _allLogs = new List<LogEntry>();
 
 
     public static bool IsLoaded = false;

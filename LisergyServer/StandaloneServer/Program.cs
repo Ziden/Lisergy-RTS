@@ -1,43 +1,13 @@
-﻿using Game.Engine;
-using Game.Engine.DataTypes;
-using MapServer;
-using ServerTests.Integration.Stubs;
-using Terminal.Gui;
+﻿
+using BaseServer;
 
-bool UI = false;
-
-// Load Console UI on its own thread
-if (UI)
+public static class StandaloneProgram
 {
-    _ = Task.Run(() =>
+    public static void Main(string[] args)
     {
-        Application.Run<StandaloneServerConsoleUI>();
-        Application.Shutdown();
-    });
-    while (!StandaloneServerConsoleUI.IsLoaded) await Task.Yield();
+        var standaloneServer = new StandaloneServer();
+        standaloneServer.Multithreaded = true;
+        standaloneServer.Start();
+        standaloneServer.BlockThread();
+    }
 }
-
-GameId.INCREMENTAL_MODE = 1;
-
-// Load standalone which runs every server in its own thread
-var standaloneServer = new StandaloneServer();
-var world = standaloneServer.GetInstance<WorldServer>(ServerType.WORLD);
-var account = standaloneServer.GetInstance<AccountServer>(ServerType.ACCOUNT);
-var chat = standaloneServer.GetInstance<ChatServer>(ServerType.CHAT);
-
-// hook all server logs to the console ui
-if (UI)
-{
-    StandaloneServerConsoleUI.HookLogs(world.Log);
-    StandaloneServerConsoleUI.HookLogs(account.Log);
-    StandaloneServerConsoleUI.HookLogs(chat.Log);
-    world.Game.Events.OnEventFired += StandaloneServerConsoleUI.OnReceiveEvent;
-}
-
-AppDomain.CurrentDomain.ProcessExit += (e, a) =>
-{
-    // standaloneServer.SaveWorld("TestWorld");
-};
-standaloneServer.Multithreaded = true;
-standaloneServer.Start();
-standaloneServer.BlockThread();
