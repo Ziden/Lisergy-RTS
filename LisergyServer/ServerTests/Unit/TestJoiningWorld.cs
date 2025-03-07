@@ -128,7 +128,7 @@ namespace GameUnitTests
             var party = player.GetParty(0);
             var unit = party.Get<BattleGroupComponent>().Units[0];
 
-            Assert.That(unit.HP == unit.MaxHP);
+            Assert.That(unit.Stats.HP == unit.Stats.MaxHP);
         }
 
         [Test]

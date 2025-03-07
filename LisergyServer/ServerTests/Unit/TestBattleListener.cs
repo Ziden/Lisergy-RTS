@@ -43,7 +43,7 @@ namespace GameUnitTests
             _dungeon.Logic.Map.SetPosition(dungeonTile);
             var component = party.Get<BattleGroupComponent>();
             var unit = component.Units[0];
-            unit.Atk = 255;
+            unit.Stats.Atk = 255;
             component.Units[0] = unit;
             party.Save(component);
             _player.SendMoveRequest(party, dungeonTile, CourseIntent.OffensiveTarget);

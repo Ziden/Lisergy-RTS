@@ -14,20 +14,20 @@ namespace Game.Systems.Battle.Data
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct BattleTeamData
+    public class BattleGroupData
     {
         public GameId EntityId;
         public GameId OwnerID;
         public UnitGroup Units;
 
-        public BattleTeamData(IEntity entity)
+        public BattleGroupData(IEntity entity)
         {
             EntityId = entity.EntityId;
             OwnerID = entity.OwnerID;
             Units = entity.Get<BattleGroupComponent>().Units;
         }
 
-        public BattleTeamData(params Unit[] units)
+        public BattleGroupData(params Unit[] units)
         {
             EntityId = GameId.ZERO;
             OwnerID = GameId.ZERO;

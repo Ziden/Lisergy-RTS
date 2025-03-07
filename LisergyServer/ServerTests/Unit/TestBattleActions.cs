@@ -13,10 +13,10 @@ namespace GameUnitTests
             var specs = TestSpecs.Generate();
 
             FastUnit = new Unit(specs.Units[1]);
-            FastUnit.Speed *= 2;
+            Fastunit.Stats.Speed *= 2;
 
             SlowUnit = new Unit(specs.Units[1]);
-            SlowUnit.Speed /= 2;
+            Slowunit.Stats.Speed /= 2;
 
             Battle = new TurnBattle(GameId.Generate(), new BattleTeamData(FastUnit), new BattleTeamData(SlowUnit));
         }

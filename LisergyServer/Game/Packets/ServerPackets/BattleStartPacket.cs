@@ -14,12 +14,12 @@ namespace Game.Network.ServerPackets
     {
         public Location Position;
         public GameId BattleID;
-        public BattleTeamData Attacker;
-        public BattleTeamData Defender;
+        public BattleGroupData Attacker;
+        public BattleGroupData Defender;
 
         public BattleStartPacket() { }
 
-        public BattleStartPacket(in GameId battleId, in Location position, in BattleTeamData attacker, in BattleTeamData defender)
+        public BattleStartPacket(in GameId battleId, in Location position, in BattleGroupData attacker, in BattleGroupData defender)
         {
             BattleID = battleId;
             Attacker = attacker;

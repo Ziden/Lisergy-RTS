@@ -11,17 +11,15 @@ namespace Game.Systems.Battle.Data
     /// </summary>
     public unsafe class BattleUnit : IComparable<BattleUnit>
     {
-        public Unit* UnitPtr { get; private set; }
-        public BattleUnitState* StatePtr { get; private set; }
+        public Unit UnitData { get; private set; }
         public BattleTeam Team { get; private set; }
-        public ref ushort RT => ref StatePtr->RT;
-        public bool Dead => UnitPtr->HP <= 0;
-        public ref readonly GameId UnitID => ref UnitPtr->Id;
-        public BattleUnit(BattleTeam team, in Unit* unit, in BattleUnitState* state)
+        public ushort RT { get; set; }
+        public bool Dead => UnitData.Stats.HP <= 0;
+        public GameId UnitID => UnitData.Id;
+        public BattleUnit(BattleTeam team, in Unit unit)
         {
             Team = team;
-            UnitPtr = unit;
-            StatePtr = state;
+            UnitData = unit;
             RT = MaxRT;
         }
 
@@ -30,7 +28,7 @@ namespace Game.Systems.Battle.Data
         /// This is to be used in sorted sets to decide which battle unit acts first
         /// </summary>
         public int CompareTo(BattleUnit obj) => obj == this ? 0 : obj.RT >= RT ? -1 : 1;
-        public ushort MaxRT => (ushort)Math.Max(1, 255 - UnitPtr->Speed);
-        public override string ToString() => $"<BattleUnit RT={RT} {UnitPtr->ToString()}>";
+        public ushort MaxRT => (ushort)Math.Max(1, 255 - UnitData.Stats.Speed);
+        public override string ToString() => $"<BattleUnit RT={RT} {UnitData.ToString()}>";
     }
 }

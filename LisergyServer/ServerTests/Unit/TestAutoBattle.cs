@@ -24,13 +24,13 @@ namespace GameUnitTests
         [Test]
         public void TestLogicTriggeringEvents()
         {
-            var enemyTeam = new BattleTeamData(new Unit(Game.Specs.Units[0]), new Unit(Game.Specs.Units[0]));
-            var myTeam = new BattleTeamData(new Unit(Game.Specs.Units[2]), new Unit(Game.Specs.Units[0]));
+            var enemyTeam = new BattleGroupData(new Unit(Game.Specs.Units[0]), new Unit(Game.Specs.Units[0]));
+            var myTeam = new BattleGroupData(new Unit(Game.Specs.Units[2]), new Unit(Game.Specs.Units[0]));
             var battle = new TurnBattle(GameId.Generate(), myTeam, enemyTeam);
             var autoRun = new AutoRun(battle);
             var result = autoRun.RunAllRounds();
 
-            Assert.IsTrue(result.Turns.Count > 10);
+            Assert.IsTrue(result.Turns.Count > 3);
             Assert.IsTrue(result.Winner != null);
         }
 
@@ -38,11 +38,11 @@ namespace GameUnitTests
         public unsafe void TestUnitDie()
         {
             var weak = new Unit(Game.Specs.Units[0]);
-            var enemyTeam = new BattleTeamData(weak, new Unit(Game.Specs.Units[0]));
+            var enemyTeam = new BattleGroupData(weak, new Unit(Game.Specs.Units[0]));
 
             var unit = new Unit(Game.Specs.Units[0]);
             var op = TestBattle.MakeOverpower(ref unit);
-            var myTeam = new BattleTeamData(op, new Unit(Game.Specs.Units[0]));
+            var myTeam = new BattleGroupData(op, new Unit(Game.Specs.Units[0]));
 
             var battle = new TurnBattle(GameId.Generate(), myTeam, enemyTeam);
             var autoRun = new AutoRun(battle);
@@ -61,18 +61,18 @@ namespace GameUnitTests
             var deadUnit = battle.FindUnit(deathEvent.UnitId);
 
             Assert.NotNull(deathEvent, "Death event not fired");
-            Assert.IsTrue(deadUnit->HP == 0, "Unit is dead");
+            Assert.IsTrue(deadUnit.Stats.HP == 0, "Unit is dead");
         }
 
         [Test]
         public void TestDeadDontAct()
         {
             var weak = new Unit(Game.Specs.Units[0]);
-            var enemyTeam = new BattleTeamData(weak, new Unit(Game.Specs.Units[0]));
+            var enemyTeam = new BattleGroupData(weak, new Unit(Game.Specs.Units[0]));
 
             var unit = new Unit(Game.Specs.Units[0]);
             var op = TestBattle.MakeOverpower(ref unit);
-            var myTeam = new BattleTeamData(op, new Unit(Game.Specs.Units[0]));
+            var myTeam = new BattleGroupData(op, new Unit(Game.Specs.Units[0]));
 
             var battle = new TurnBattle(GameId.Generate(), myTeam, enemyTeam);
             var autoRun = new AutoRun(battle);

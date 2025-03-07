@@ -78,7 +78,7 @@ namespace GameUnitTests
 
             var component = party.Components.Get<BattleGroupComponent>();
             var unit = component.Units[0];
-            unit.Atk = 255;
+            unit.Stats.Atk = 255;
             component.Units[0] = unit;
             party.Save(component);
 
@@ -118,7 +118,7 @@ namespace GameUnitTests
 
             var unit = team[0];
 
-            Assert.That(unit.HP == unit.MaxHP && unit.HP > 0);
+            Assert.That(unit.Stats.HP == unit.Stats.MaxHP && unit.Stats.HP > 0);
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace GameUnitTests
 
             var component = party.Components.Get<BattleGroupComponent>();
             var unit = component.Units[0];
-            unit.Atk = 255;
+            unit.Stats.Atk = 255;
             component.Units[0] = unit;
             party.Save(component);
 
@@ -164,8 +164,8 @@ namespace GameUnitTests
 
             var component = _dungeon.Components.Get<BattleGroupComponent>();
             var unit = component.Units[0];
-            unit.Atk = 255;
-            unit.Speed = 255;
+            unit.Stats.Atk = 255;
+            unit.Stats.Speed = 255;
             component.Units[0] = unit;
             _dungeon.Save(component);
 
@@ -214,7 +214,7 @@ namespace GameUnitTests
             _dungeon = _game.Entities.CreateEntity(EntityType.Dungeon);
             _dungeon.Get<BattleGroupComponent>().Units.Add(new Unit(_game.Specs.Units[1]));
 
-            var battleTeam = new BattleTeam(new BattleTeamData(_dungeon));
+            var battleTeam = new BattleTeam(new BattleGroupData(_dungeon));
             Assert.AreNotEqual(battleTeam.Units.Length, 0);
         }
 
@@ -245,8 +245,8 @@ namespace GameUnitTests
 
             var component = party.Components.Get<BattleGroupComponent>();
             var unit = component.Units[0];
-            unit.Atk = 1;
-            unit.HP = 1;
+            unit.Stats.Atk = 1;
+            unit.Stats.HP = 1;
             component.Units[0] = unit;
             party.Save(component);
 

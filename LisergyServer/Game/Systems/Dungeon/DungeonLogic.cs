@@ -1,4 +1,5 @@
 ﻿using Game.Engine.ECLS;
+using Game.Systems.BattleGroup;
 using Game.Systems.Battler;
 using GameData.Specs;
 
@@ -16,6 +17,7 @@ namespace Game.Systems.Dungeon
                 for (var i = 0; i < battle.UnitSpecIDS.Length; i++)
                 {
                     units[i] = new Unit(CurrentEntity.Game.Specs.Units[battle.UnitSpecIDS[i]]);
+                    group.Units = group.Units ?? new UnitGroup();
                     group.Units.Add(units[i]);
                 }
             }

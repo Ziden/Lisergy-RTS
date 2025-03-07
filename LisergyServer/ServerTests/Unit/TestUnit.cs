@@ -25,7 +25,7 @@ namespace GameUnitTests
             var party = player.Parties.First();
 
             Assert.AreEqual(0, player.PlayerData.StoredUnits.Count);
-            Assert.AreEqual(Game.Specs.InitialUnitSpecId, party.Get<BattleGroupComponent>().Units.Leader.SpecId);
+            Assert.AreEqual(Game.Specs.InitialUnitSpecId, party.Get<BattleGroupComponent>().Units[0].SpecId);
             Assert.That(party.Logic.Map.GetTile().Logic.Vision.GetEntitiesViewing().Contains(party.EntityId));
         }
 
@@ -70,11 +70,11 @@ namespace GameUnitTests
         {
             var unit = new Unit(Game.Specs.Units[0]);
 
-            unit.MaxHP = 50;
-            unit.Speed = 55;
+            unit.Stats.MaxHP = 50;
+            unit.Stats.Speed = 55;
 
-            Assert.AreEqual(50, unit.MaxHP);
-            Assert.AreEqual(55, unit.Speed);
+            Assert.AreEqual(50, unit.Stats.MaxHP);
+            Assert.AreEqual(55, unit.Stats.Speed);
         }
 
         [Test]

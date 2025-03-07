@@ -13,23 +13,55 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Game.Engine
 {
+    public enum SerializationType
+    {
+        NetSerializer,
+        BinaryFormatter,
+        Json
+    }
+
     public static class Serialization
     {
-        private static Serializer Serializer;
+        private static SerializationType Type = SerializationType.NetSerializer; // test
+        private static JsonSerializerOptions options = new JsonSerializerOptions
+        {
+            IncludeFields = true,
+        };
+        private static uint _max = 1;
+        private static IReadOnlyDictionary<uint, Type> _TYPE_MAP = new Dictionary<uint, Type>();
+        private static IReadOnlyDictionary<Type, uint> _REVERSE_MAP = new Dictionary<Type, uint>();
+
+        private static BinaryFormatter BinarySerializer = new BinaryFormatter();
+        private static Serializer NetSerializer;
         private static readonly ThreadLocal<MemoryStream> Buffer = new ThreadLocal<MemoryStream>(() => new MemoryStream());
+
+        private static void AddType(Type t)
+        {
+            var next = _max++;
+            ((Dictionary<uint, Type>)_TYPE_MAP)[next] = t;
+            ((Dictionary<Type, uint>)_REVERSE_MAP)[t] = next;
+        }
 
         public static void LoadSerializers(params Type[] extras)
         {
-            if (Serializer != null)
+            if (NetSerializer != null)
             {
                 if (extras.Length > 0)
                 {
-                    Serializer.AddTypes(extras);
+                    NetSerializer.AddTypes(extras);
                 }
+                return;
+            }
+            if(_TYPE_MAP.Count > 0)
+            {
                 return;
             }
             var models = new List<Type>(GetDefaultSerializationTypes());
@@ -56,23 +88,23 @@ namespace Game.Engine
             {
                 models.AddRange(extras);
             }
-            Serializer = new Serializer(models);
-        }
-
-        public static uint GetTypeId(Type t) => Serializer.GetTypeMap()[t];
-
-        public static Type GetType(uint id)
-        {
-            foreach (var kvp in Serializer.GetTypeMap())
+            if (Type!=SerializationType.NetSerializer)
             {
-                if (kvp.Value == id)
+                foreach (var t in models)
                 {
-                    return kvp.Key;
+                    AddType(t);
                 }
             }
-            return null;
+            else
+            {
+                NetSerializer = new Serializer(models);
+                _TYPE_MAP = NetSerializer.TypeMap.ToDictionary(kp => kp.Value, kp => kp.Key);
+                _REVERSE_MAP = NetSerializer.TypeMap;
+            }
         }
 
+        public static uint GetTypeId(Type t) => _REVERSE_MAP[t];
+        public static Type GetType(uint id) => _TYPE_MAP[id];
         public static IEnumerable<Type> GetDefaultSerializationTypes()
         {
             var basePacketType = typeof(BasePacket);
@@ -89,36 +121,61 @@ namespace Game.Engine
             }
         }
 
-        public static ReadOnlyMemory<byte> FromAnyTypes<T>(IReadOnlyCollection<T> list)
+        public static ReadOnlyMemory<byte> FromAnyTypes<T>(T [] list)
         {
             var buffer = Buffer.Value;
             buffer.SetLength(0);
-            foreach (var o in list)
+            if(Type==SerializationType.BinaryFormatter)
             {
-                Serializer.Serialize(buffer, o);
+                BinarySerializer.Serialize(buffer, list);
+            } else if (Type == SerializationType.NetSerializer)
+            {
+                NetSerializer.Serialize(buffer, list);
+            }
+            else if (Type == SerializationType.Json)
+            {
+                JsonSerializer.Serialize(buffer, list, options);
             }
             return new ReadOnlyMemory<byte>(buffer.GetBuffer(), 0, (int)buffer.Length);
         }
 
-        public static List<T> ToAnyTypes<T>(ReadOnlyMemory<byte> data)
+        public static T[] ToAnyTypes<T>(ReadOnlyMemory<byte> data)
         {
-            var l = new List<T>();
             var buffer = Buffer.Value;
             buffer.SetLength(0);
             buffer.Write(data.Span);
             buffer.Position = 0;
-            while (buffer.Position < data.Length)
+            if(Type == SerializationType.BinaryFormatter)
             {
-                l.Add((T)Serializer.Deserialize(buffer));
+                return (T[])BinarySerializer.Deserialize(buffer);
             }
-            return l;
+            else if (Type == SerializationType.Json)
+            {
+                return JsonSerializer.Deserialize<T[]>(buffer, options);
+            }
+            else if (Type == SerializationType.NetSerializer)
+            {
+                return (T[])NetSerializer.Deserialize(buffer);
+            }
+            return null;
         }
 
         public static ReadOnlyMemory<byte> FromAnyType<T>(T o)
         {
             var buffer = Buffer.Value;
             buffer.SetLength(0);
-            Serializer.Serialize(buffer, o);
+            if (Type == SerializationType.BinaryFormatter)
+            {
+                BinarySerializer.Serialize(buffer, o);
+            }
+            else if (Type == SerializationType.NetSerializer)
+            {
+                NetSerializer.Serialize(buffer, o);
+            }
+            else if (Type == SerializationType.Json)
+            {
+                JsonSerializer.Serialize(buffer, o, options);
+            }
             return new ReadOnlyMemory<byte>(buffer.GetBuffer(), 0, (int)buffer.Length);
         }
 
@@ -128,7 +185,19 @@ namespace Game.Engine
             buffer.SetLength(0);
             buffer.Write(message.Span);
             buffer.Position = 0;
-            return (T)Serializer.Deserialize(buffer);
+            if (Type == SerializationType.BinaryFormatter)
+            {
+                return (T)BinarySerializer.Deserialize(buffer);
+            }
+            else if (Type == SerializationType.Json)
+            {
+                return JsonSerializer.Deserialize<T>(buffer, options);
+            }
+            else if (Type == SerializationType.NetSerializer)
+            {
+                return (T)NetSerializer.Deserialize(buffer);
+            }
+            return default;
         }
     }
 }

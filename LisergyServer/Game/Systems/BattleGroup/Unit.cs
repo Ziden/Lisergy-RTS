@@ -9,11 +9,15 @@ namespace Game.Systems.Battler
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public unsafe struct Unit : IEquatable<Unit>, IEqualityComparer<Unit>
+    public class Unit : IEquatable<Unit>, IEqualityComparer<Unit>
     {
         public GameId Id;
         public UnitSpecId SpecId;
         public UnitStats Stats;
+
+        public Unit()
+        {
+        }
 
         public Unit(UnitSpec spec)
         {
@@ -24,38 +28,15 @@ namespace Game.Systems.Battler
             HealAll();
         }
 
-        public byte Atk { get => Stats.Atk; set => Stats.Atk = value; }
-        public byte Def { get => Stats.Def; set => Stats.Def = value; }
-        public byte Matk { get => Stats.Matk; set => Stats.Matk = value; }
-        public byte Mdef { get => Stats.Mdef; set => Stats.Mdef = value; }
-        public byte Speed { get => Stats.Speed; set => Stats.Speed = value; }
-        public byte Accuracy { get => Stats.Accuracy; set => Stats.Accuracy = value; }
-        public byte Weight { get => Stats.Weight; set => Stats.Weight = value; }
-        public byte CargoWeight { get => Stats.CargoWeightBonusPct; set => Stats.CargoWeightBonusPct = value; }
-        public byte HP { get => Stats.HP; set => Stats.HP = value; }
-        public byte MaxHP { get => Stats.MaxHP; set => Stats.MaxHP = value; }
-        public byte MP { get => Stats.MP; set => Stats.MP = value; }
-        public byte MaxMP { get => Stats.MaxMP; set => Stats.MaxHP = value; }
-
         /// <summary>
         /// Gets the unit HP ratio from 1 (100%) to 0 (no HP)
         /// </summary>
-        public float HpRatio => HP / (float)MaxHP;
-
-        public void CopyFrom(Unit u)
-        {
-            var size = sizeof(Unit);
-            var sourcePtr = &u;
-            fixed (Unit* thisPtr = &this)
-            {
-                Buffer.MemoryCopy(sourcePtr, thisPtr, size, size);
-            }
-        }
+        public double HpRatio => Stats.HP / (double)Stats.MaxHP;
 
         public void HealAll()
         {
-            HP = MaxHP;
-            MP = MaxMP;
+            Stats.HP = Stats.MaxHP;
+            Stats.MP = Stats.MaxMP;
         }
 
         public override string ToString()
@@ -67,22 +48,12 @@ namespace Game.Systems.Battler
 
         public bool Equals(Unit other)
         {
-            return other.Valid == Valid && SpecId == other.SpecId && Stats.Equals(other.Stats);
+            return other != null && other.Valid == Valid && SpecId == other.SpecId && Stats.Equals(other.Stats);
         }
 
         public bool Equals(Unit x, Unit y)
         {
-            return x.Valid == y.Valid && x.Equals(y);
-        }
-
-        public static bool operator ==(Unit c1, Unit c2)
-        {
-            return c1.Equals(c2);
-        }
-
-        public static bool operator !=(Unit c1, Unit c2)
-        {
-            return !c1.Equals(c2);
+            return x?.Valid == y?.Valid && x.Equals(y);
         }
 
         public override int GetHashCode()

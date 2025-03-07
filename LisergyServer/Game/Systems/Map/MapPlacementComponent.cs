@@ -1,5 +1,6 @@
 ﻿using Game.Engine.ECLS;
 using Game.World;
+using MemoryPack;
 using System;
 
 namespace Game.Systems.Map

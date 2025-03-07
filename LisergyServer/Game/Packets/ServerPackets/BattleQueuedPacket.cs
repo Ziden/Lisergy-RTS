@@ -16,15 +16,15 @@ namespace Game.Network.ServerPackets
     {
         public Location Position;
         public GameId BattleID;
-        public BattleTeamData Attacker;
-        public BattleTeamData Defender;
+        public BattleGroupData Attacker;
+        public BattleGroupData Defender;
 
         public BattleQueuedPacket(GameId battleId, IEntity attacker, IEntity defender)
         {
             var pos = attacker.Get<MapPlacementComponent>();
             BattleID = battleId;
-            Attacker = new BattleTeamData(attacker);
-            Defender = new BattleTeamData(defender);
+            Attacker = new BattleGroupData(attacker);
+            Defender = new BattleGroupData(defender);
             Position = pos.Position;
         }
     }

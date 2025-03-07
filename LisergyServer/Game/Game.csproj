@@ -14,11 +14,24 @@
 
   <ItemGroup>
     <PackageReference Include="MemoryPack" Version="1.21.4" />
+    <PackageReference Include="System.Text.Json" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GameData\GameData.csproj" />
     <ProjectReference Include="..\Serializer\Serializer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MemoryPack">
+      <HintPath>..\..\PreCompiledLibraries\MemoryPack\MemoryPack.dll</HintPath>
+    </Reference>
+    <Reference Include="MemoryPack.Core">
+      <HintPath>..\..\PreCompiledLibraries\MemoryPack\MemoryPack.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MemoryPack.Generator">
+      <HintPath>..\..\PreCompiledLibraries\MemoryPack\MemoryPack.Generator.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

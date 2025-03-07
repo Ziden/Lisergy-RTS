@@ -140,8 +140,8 @@ namespace GameUnitTests
         public void TestBattleLogSerialization()
         {
             Serialization.LoadSerializers();
-            var enemyTeam = new BattleTeamData(new Unit(_game.Specs.Units[0]), new Unit(_game.Specs.Units[0]));
-            var myTeam = new BattleTeamData(new Unit(_game.Specs.Units[2]), new Unit(_game.Specs.Units[0]));
+            var enemyTeam = new BattleGroupData(new Unit(_game.Specs.Units[0]), new Unit(_game.Specs.Units[0]));
+            var myTeam = new BattleGroupData(new Unit(_game.Specs.Units[2]), new Unit(_game.Specs.Units[0]));
             var battle = new TurnBattle(GameId.Generate(), myTeam, enemyTeam);
             var log = new BattleLogPacket(battle);
             var autoRun = new AutoRun(battle);

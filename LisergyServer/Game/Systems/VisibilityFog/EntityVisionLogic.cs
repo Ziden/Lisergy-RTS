@@ -75,7 +75,7 @@ namespace Game.Systems.FogOfWar
         public void UpdateGroupLineOfSight()
         {
             var group = CurrentEntity.Get<BattleGroupComponent>();
-            if (group.Units.Empty)
+            if (group.Units?.Empty ?? true)
             {
                 var c = CurrentEntity.Components.Get<EntityVisionComponent>();
                 c.LineOfSight = 0;
@@ -83,9 +83,9 @@ namespace Game.Systems.FogOfWar
             }
             else
             {
-                var lineOfSight = group.Units.Max(u => Game.Specs.Units[u.SpecId].LOS);
+                var lineOfSight = group.Units.Max(u => u == null ? 0 : Game.Specs.Units[u.SpecId].LOS);
                 var c = CurrentEntity.Components.Get<EntityVisionComponent>();
-                c.LineOfSight = lineOfSight;
+                c.LineOfSight = (byte)lineOfSight;
                 CurrentEntity.Save(c);
             }
         }

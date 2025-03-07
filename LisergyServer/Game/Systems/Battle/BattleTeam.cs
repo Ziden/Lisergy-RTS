@@ -15,31 +15,26 @@ namespace Game.Systems.Battle
         /// Struct representing the battle input.
         /// Will be updated only in the end of the battle.
         /// </summary>
-        public BattleTeamData TeamData;
-        private BattleTeamMemory _memory;
-        public ref readonly GameId OwnerID => ref TeamData.OwnerID;
+        public BattleGroupData TeamData;
+        public GameId OwnerID => TeamData.OwnerID;
         public BattleUnit[] Units { get; private set; }
-        public BattleTeam(in BattleTeamData data)
+        public BattleTeam(in BattleGroupData data)
         {
             TeamData = data;
-            _memory = new BattleTeamMemory(TeamData);
-            Units = new BattleUnit[] {
-                new BattleUnit(this, _memory.GetUnit(0), _memory.GetUnitState(0)),
-                new BattleUnit(this, _memory.GetUnit(1), _memory.GetUnitState(1)),
-                new BattleUnit(this, _memory.GetUnit(2), _memory.GetUnitState(2)),
-                new BattleUnit(this, _memory.GetUnit(3), _memory.GetUnitState(3))
-            };
+            Units = data.Units.Select(u => new BattleUnit(this, u)).ToArray();
         }
 
         /// <summary>
         /// Updates the team data with the result of the battle
         /// </summary>
-        public ref BattleTeamData UpdateTeamData()
+        public void UpdateTeamData()
         {
+            /*
             if (_memory == null) throw new Exception("Can only copy data once");
             _memory.FreeAndCopyResults(ref TeamData);
             _memory = null;
             return ref TeamData;
+            */
         }
 
         public BattleUnit[] Alive => Units.Where(u => !u.Dead).ToArray();

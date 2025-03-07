@@ -13,10 +13,10 @@ namespace Game.Systems.Battler
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
     [SyncedComponent]
-    public struct BattleGroupComponent : IComponent
+    public class BattleGroupComponent : IComponent
     {
         public GameId BattleID;
-        public UnitGroup Units;
+        public UnitGroup Units = new UnitGroup();
 
         public override string ToString() => $"<BattleGroup Units={Units} BattleId={BattleID}>";
     }

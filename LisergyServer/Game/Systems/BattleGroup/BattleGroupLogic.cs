@@ -53,6 +53,7 @@ namespace Game.Systems.Battler
         public virtual void AddUnit(in Unit u, in int preferAtIndex = -1)
         {
             var component = CurrentEntity.Components.Get<BattleGroupComponent>();
+            component.Units = component.Units ?? new UnitGroup();
             if (preferAtIndex >= 0) component.Units[preferAtIndex] = u;
             else component.Units.Add(u);
             CurrentEntity.Save(component);

@@ -20,7 +20,7 @@ namespace Game.Systems.Battle
         public BattleUnit CurrentActingUnit => _actionQueue.First();
         public bool IsOver { get; set; }
 
-        public TurnBattle(GameId id, in BattleTeamData attacker, in BattleTeamData defender)
+        public TurnBattle(GameId id, in BattleGroupData attacker, in BattleGroupData defender)
         {
             ID = id;
             Attacker = Record.Attacker = new BattleTeam(attacker);
@@ -86,15 +86,14 @@ namespace Game.Systems.Battle
             return $"<Battle ID={ID} Atk={Attacker} Def={Defender}/>";
         }
 
-        public Unit* FindUnit(GameId id)
+        public Unit FindUnit(GameId id)
         {
             BattleUnit unit = Attacker.Units.FirstOrDefault(u => u != null && u.UnitID == id);
             if (unit == null)
             {
                 unit = Defender.Units.FirstOrDefault(u => u != null && u.UnitID == id);
             }
-
-            return unit.UnitPtr;
+            return unit.UnitData;
         }
 
         public BattleUnit FindBattleUnit(GameId id)

@@ -12,8 +12,8 @@ namespace Game.Systems.Battle.Data
     {
         public bool AttackerWins;
         public GameId BattleID;
-        public BattleTeamData Attacker;
-        public BattleTeamData Defender;
+        public BattleGroupData Attacker;
+        public BattleGroupData Defender;
         public DateTime BattleTime;
     }
 }

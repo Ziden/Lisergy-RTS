@@ -57,9 +57,9 @@ namespace GameUnitTests
             var team = _player.GetParty(0).Get<BattleGroupComponent>().Units;
 
             var unit = team[0];
-            var mhp = unit.MaxHP;
+            var mhp = unit.Stats.MaxHP;
 
-            Assert.That(unit.HP == unit.MaxHP && unit.HP > 0);
+            Assert.That(unit.Stats.HP == unit.Stats.MaxHP && unit.Stats.HP > 0);
         }
 
         [Test]
@@ -172,7 +172,7 @@ namespace GameUnitTests
 
             var u1 = unitsComponent.Units[0];
             var u2 = party.Get<BattleGroupComponent>().Units[0];
-            Assert.IsTrue(u1 == u2);
+            Assert.IsTrue(u1.Equals(u2));
         }
 
         private void UpdateParty(ref PartyComponent c)

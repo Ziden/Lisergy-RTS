@@ -88,10 +88,13 @@ namespace BaseServer.Persistence
 
         public unsafe byte[] SerializeEntities(LisergyGame game)
         {
+            return null;
+            /*
             return Serialization.FromAnyTypes(
                 ((GameEntities)game.Entities).AllEntities
                 .Select(e => new SerializedEntity(e))
                 .ToList()).ToArray();
+            */
         }
 
         public void DeserializeEntities(LisergyGame game, byte[] entities)
@@ -111,7 +114,7 @@ namespace BaseServer.Persistence
 
         public byte[] SerializePlayers(LisergyGame game)
         {
-            return Serialization.FromAnyTypes(game.World.Players.AllPlayers().Select(p => new SerializedPlayer(p)).ToList()).ToArray();
+            return null; // Serialization.FromAnyTypes(game.World.Players.AllPlayers().Select(p => new SerializedPlayer(p)).ToList()).ToArray();
         }
 
         public void DeserializePlayers(LisergyGame game, byte[] players)
