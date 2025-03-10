@@ -16,6 +16,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
@@ -51,7 +52,6 @@ namespace Game.Engine
         private static IReadOnlyDictionary<uint, Type> _TYPE_MAP = new Dictionary<uint, Type>();
         private static IReadOnlyDictionary<Type, uint> _REVERSE_MAP = new Dictionary<Type, uint>();
 
-        private static BinaryFormatter BinarySerializer = new BinaryFormatter();
         private static Serializer NetSerializer;
         private static readonly ThreadLocal<MemoryStream> Buffer = new ThreadLocal<MemoryStream>(() => new MemoryStream());
 
@@ -139,7 +139,7 @@ namespace Game.Engine
             buffer.SetLength(0);
             if(Type==SerializationType.BinaryFormatter)
             {
-                BinarySerializer.Serialize(buffer, list);
+                //BinarySerializer.Serialize(buffer, list);
             } else if (Type == SerializationType.NetSerializer)
             {
                 NetSerializer.Serialize(buffer, list);
@@ -161,7 +161,7 @@ namespace Game.Engine
             buffer.Position = 0;
             if(Type == SerializationType.BinaryFormatter)
             {
-                return (T[])BinarySerializer.Deserialize(buffer);
+                //return (T[])BinarySerializer.Deserialize(buffer);
             }
             else if (Type == SerializationType.Json)
             {
@@ -180,7 +180,7 @@ namespace Game.Engine
             buffer.SetLength(0);
             if (Type == SerializationType.BinaryFormatter)
             {
-                BinarySerializer.Serialize(buffer, o);
+                //BinarySerializer.Serialize(buffer, o);
             }
             else if (Type == SerializationType.NetSerializer)
             {
@@ -202,7 +202,7 @@ namespace Game.Engine
             buffer.Position = 0;
             if (Type == SerializationType.BinaryFormatter)
             {
-                return (T)BinarySerializer.Deserialize(buffer);
+                //return (T)BinarySerializer.Deserialize(buffer);
             }
             else if (Type == SerializationType.Json)
             {

@@ -17,7 +17,7 @@ namespace Game.Engine.ECLS
         /// Try to get a pointer component as a struct
         /// </summary>
 
-        public bool TryGet<T>(out T outPtr) where T : IComponent
+        public bool TryGet<T>(out T outPtr)
         {
             if (!TryGetValue(typeof(T), out var ptr))
             {
@@ -62,7 +62,7 @@ namespace Game.Engine.ECLS
         /// Will attempt to reuse any free memory if available.
         /// </summary>
 
-        public void Alloc<T>() where T : IComponent => this[typeof(T)] = UnmanagedMemory.Alloc(Marshal.SizeOf<T>());
+        public void Alloc<T>() => this[typeof(T)] = UnmanagedMemory.Alloc(Marshal.SizeOf<T>());
 
         public IntPtr Alloc(Type t) => this[t] = UnmanagedMemory.Alloc(Marshal.SizeOf(t));
 

@@ -2,7 +2,7 @@
 {
 
     /// <inheritdoc/>
-    public class BaseEntityLogic<ComponentType> where ComponentType : IComponent
+    public class BaseEntityLogic<ComponentType>
     {
         protected IGame Game => CurrentEntity.Game;
         public IEntity CurrentEntity { get; set; } // TODO: Think about this.

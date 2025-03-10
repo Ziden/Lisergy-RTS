@@ -8,7 +8,6 @@ using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
 using Game.Systems.Tile;
 using Game.World;
-using MemoryPack;
 using NUnit.Framework;
 using ServerTests;
 using System;
@@ -17,7 +16,6 @@ using Tests.Unit.Stubs;
 
 namespace GameUnitTests
 {
-    [MemoryPackable]
     [Serializable]
     public partial class MapPlacement2Component
     {

@@ -13,10 +13,10 @@ namespace Game.Engine.ECLS
     public class ComponentSet
     {
         private static Dictionary<Type, SyncedComponent> _shouldSync = new Dictionary<Type, SyncedComponent>();
-        private static List<IComponent> _returnBuffer = new List<IComponent>(); // TODO: Multi-thread
-        internal Dictionary<Type, IComponent> _components;
+        private static List<object> _returnBuffer = new List<object>(); // TODO: Multi-thread
+        internal Dictionary<Type, object> _components;
         internal HashSet<Type> _saved;
-        internal Dictionary<Type, IComponent> _read;
+        internal Dictionary<Type, object> _read;
         internal HashSet<Type> _removed;
         internal IEntity _entity;
 
@@ -43,7 +43,7 @@ namespace Game.Engine.ECLS
         /// <summary>
         /// TODO: Use proper buffers for performance
         /// </summary>
-        public (List<IComponent> updated, HashSet<Type> removed) GetComponentDeltas(GameId receiver = default, bool deltaCompression = true)
+        public (List<object> updated, HashSet<Type> removed) GetComponentDeltas(GameId receiver = default, bool deltaCompression = true)
         {
             _returnBuffer.Clear();
             var toSync = GetComponentsToSync(deltaCompression);
@@ -65,15 +65,15 @@ namespace Game.Engine.ECLS
             _removed = _removed ?? new HashSet<Type>();
             return _removed;
         }
-        public Dictionary<Type, IComponent> GetComponents()
+        public Dictionary<Type, object> GetComponents()
         {
-            _components = _components ?? new Dictionary<Type, IComponent>();
+            _components = _components ?? new Dictionary<Type, object>();
             return _components;
         }
 
-        public Dictionary<Type, IComponent> GetReadCopies()
+        public Dictionary<Type, object> GetReadCopies()
         {
-            _read = _read ?? new Dictionary<Type, IComponent>();
+            _read = _read ?? new Dictionary<Type, object>();
             return _read;
         }
 
@@ -89,20 +89,20 @@ namespace Game.Engine.ECLS
             return GetComponents().Keys;
         }
 
-        public IReadOnlyCollection<IComponent> AllComponents()
+        public IReadOnlyCollection<object> AllComponents()
         {
             return GetComponents().Values;
         }
 
         public bool HasDeltas() => GetModified().Count > 0 || GetRemoved().Count > 0;
 
-        public bool Has<T>() where T : IComponent
+        public bool Has<T>()
         {
             var t = typeof(T);
             return GetComponents().ContainsKey(t);
         }
 
-        public void Add<T>(T obj = default) where T : IComponent, new()
+        public void Add<T>(T obj = default) where T : new()
         {
             var t = typeof(T);
             GetComponents()[t] = t.IsValueType ? default : obj == null ? FastNew<T>.Instance() : obj;
@@ -146,7 +146,7 @@ namespace Game.Engine.ECLS
             }
         }
 
-        public bool Remove<T>() where T : IComponent
+        public bool Remove<T>()
         {
             var t = typeof(T);
             if (GetComponents().TryGetValue(t, out var c))
@@ -183,7 +183,7 @@ namespace Game.Engine.ECLS
             }
         }
 
-        public bool TryGet<T>(out T comp) where T : IComponent
+        public bool TryGet<T>(out T comp)
         {
             var t = typeof(T);
             var readCopies = GetReadCopies();
@@ -210,7 +210,7 @@ namespace Game.Engine.ECLS
 
         public void CallEvent(IBaseEvent ev) => _entity.Game.Logic.Systems.CallEvent(_entity, ev);
 
-        public bool CompareWith<T>(IEntity otherEntity) where T : IComponent
+        public bool CompareWith<T>(IEntity otherEntity)
         {
             var other = otherEntity.Get<T>();
             var mine = Get<T>();
@@ -240,7 +240,7 @@ namespace Game.Engine.ECLS
 
         }
 
-        public void Save<T>(in T c) where T : IComponent
+        public void Save<T>(in T c)
         {
             var t = c.GetType();
             GetComponents().TryGetValue(t, out var oldValue);
@@ -265,13 +265,13 @@ namespace Game.Engine.ECLS
             FlagCompnentHasDelta(t);
         }
 
-        public T Get<T>() where T : IComponent
+        public T Get<T>()
         {
             var r = GetByType(typeof(T));
             return r == null ? default : (T)r;
         }
 
-        public IComponent GetByType(Type t)
+        public object GetByType(Type t)
         {
             GetComponents().TryGetValue(t, out var c);
             var readCopy = GetReadCopies();
@@ -293,7 +293,7 @@ namespace Game.Engine.ECLS
                 {
                     var currentBytes = Serialization.FromAnyType(current);
                     var previousBytes = _read[currentType];
-                    var previous = Serialization.ToAnyType<IComponent>(previousBytes);
+                    var previous = Serialization.ToAnyType<object>(previousBytes);
                     if (!currentBytes.SequenceEqual(previousBytes))
                     {
                         throw new Exception($"Entity {_entity} had modified component {previous} that was not properly saved");

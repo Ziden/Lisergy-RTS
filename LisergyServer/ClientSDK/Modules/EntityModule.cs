@@ -18,7 +18,7 @@ namespace ClientSDK.Services
         /// <summary>
         /// Will be called when any update of the given component (add, remove, change) is done
         /// </summary>
-        void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync) where ComponentType : IComponent;
+        void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync);
 
         /// <summary>
         /// Registers a component sync. 
@@ -26,14 +26,14 @@ namespace ClientSDK.Services
         /// the sync code will be called.
         /// The callback has the Entity, OLD VALUE and NEW VALUE parameters.
         /// </summary>
-        void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync) where ComponentType : IComponent;
+        void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync);
 
         /// <summary>
         /// Registers a component removed callback. 
         /// Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
         /// The callback has the Entity, OLD VALUE and NEW VALUE parameters.
         /// </summary>
-        void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnRemoved) where ComponentType : IComponent;
+        void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnRemoved);
 
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ClientSDK.Services
         /// Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
         /// The callback has the Entity, OLD VALUE and NEW VALUE parameters.
         /// </summary>
-        void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnAdded) where ComponentType : IComponent;
+        void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnAdded);
 
         /// <summary>
         /// Removes all event callbacks from the given object
@@ -100,22 +100,22 @@ namespace ClientSDK.Services
             }
         }
 
-        public void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync) where ComponentType : IComponent
+        public void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync)
         {
             ComponentSync.OnComponentModified(OnSync);
         }
 
-        public void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnRemoved) where ComponentType : IComponent
+        public void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnRemoved)
         {
             ComponentSync.OnComponentRemoved(OnRemoved);
         }
 
-        public void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnUpdated) where ComponentType : IComponent
+        public void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnUpdated)
         {
             ComponentSync.OnUpdate(OnUpdated);
         }
 
-        public void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnAdded) where ComponentType : IComponent
+        public void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnAdded)
         {
             ComponentSync.OnComponentAdded(OnAdded);
         }

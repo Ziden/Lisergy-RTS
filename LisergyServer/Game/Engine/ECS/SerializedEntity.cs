@@ -11,7 +11,7 @@ namespace Game.Engine.ECLS
         public EntityType EntityType;
         public GameId EntityId;
         public GameId OwnerId;
-        public IComponent[] Components;
+        public object[] Components;
 
         public SerializedEntity(IEntity entity)
         {

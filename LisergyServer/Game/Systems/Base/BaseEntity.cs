@@ -21,8 +21,8 @@ namespace Game.Entities
 
         public GameId OwnerID => Game.Entities.GetParent(EntityId)?.EntityId ?? GameId.ZERO;
         public EntityLogic Logic => Game.Logic.GetEntityLogic(this);
-        public T Get<T>() where T : IComponent => Components.Get<T>();
-        public void Save<T>(in T component) where T : IComponent => Components.Save(component);
+        public T Get<T>() => Components.Get<T>();
+        public void Save<T>(in T component) => Components.Save(component);
         public override string ToString()
         {
             return $"<Entity {EntityType} {EntityId} Ct={Components.GetComponents().Count}>";

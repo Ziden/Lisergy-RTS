@@ -2,7 +2,7 @@
 
 namespace Game.Engine.Events
 {
-    public class ComponentUpdateEvent<T> : IBaseEvent where T : IComponent
+    public class ComponentUpdateEvent<T> : IBaseEvent
     {
         public IEntity Entity;
         public T Old;

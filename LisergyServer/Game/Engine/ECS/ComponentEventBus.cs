@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Tests")]
 namespace Game.Engine.ECLS
 {
-    public class ComponentEventBus<ComponentType> : IEventListener where ComponentType : IComponent
+    public class ComponentEventBus<ComponentType> : IEventListener
     {
         internal EventBus<IBaseEvent> _bus = new EventBus<IBaseEvent>();
         private IEntity _currentEntity;

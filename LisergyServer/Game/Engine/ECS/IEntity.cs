@@ -12,8 +12,8 @@ namespace Game.Engine.ECLS
     {
         public EntityType EntityType { get; }
         public ComponentSet Components { get; }
-        public T Get<T>() where T : IComponent;
-        public void Save<T>(in T c) where T : IComponent;
+        public T Get<T>();
+        public void Save<T>(in T c);
         public ref readonly GameId EntityId { get; }
         public IGame Game { get; }
         public GameId OwnerID { get; }

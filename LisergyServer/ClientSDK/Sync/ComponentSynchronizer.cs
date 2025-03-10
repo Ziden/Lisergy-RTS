@@ -7,23 +7,23 @@ namespace ClientSDK.Sync
 {
     public interface IComponentSync
     {
-        void ProccessUpdate(IEntity entity, IComponent[] updated, uint[] removed);
-        void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync) where ComponentType : IComponent;
-        void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync) where ComponentType : IComponent;
-        void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnRemoved) where ComponentType : IComponent;
-        void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnAdded) where ComponentType : IComponent;
+        void ProccessUpdate(IEntity entity, object[] updated, uint[] removed);
+        void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync);
+        void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync);
+        void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnRemoved);
+        void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnAdded);
         void RemoveListener(object listener);
     }
 
     public class ComponentSynchronizer : IComponentSync
     {
-        private Dictionary<Type, List<Action<IEntity, IComponent>>> _componentRemovals = new Dictionary<Type, List<Action<IEntity, IComponent>>>();
-        private Dictionary<Type, List<Action<IEntity, IComponent>>> _componentAdded = new Dictionary<Type, List<Action<IEntity, IComponent>>>();
-        private Dictionary<Type, List<Action<IEntity, IComponent, IComponent>>> _componentSyncs = new Dictionary<Type, List<Action<IEntity, IComponent, IComponent>>>();
+        private Dictionary<Type, List<Action<IEntity, object>>> _componentRemovals = new Dictionary<Type, List<Action<IEntity, object>>>();
+        private Dictionary<Type, List<Action<IEntity, object>>> _componentAdded = new Dictionary<Type, List<Action<IEntity, object>>>();
+        private Dictionary<Type, List<Action<IEntity, object, object>>> _componentSyncs = new Dictionary<Type, List<Action<IEntity, object, object>>>();
         private Dictionary<Type, List<Type>> _listeners = new Dictionary<Type, List<Type>>();
 
-        private List<(IComponent, IComponent)> _toSync = new List<(IComponent, IComponent)>();
-        private List<IComponent> _added = new List<IComponent>();
+        private List<(object, object)> _toSync = new List<(object, object)>();
+        private List<object> _added = new List<object>();
 
         private IGameClient _client;
 
@@ -51,12 +51,12 @@ namespace ClientSDK.Sync
             }
         }
 
-        public void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnSync) where ComponentType : IComponent
+        public void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnSync)
         {
             var t = typeof(ComponentType);
             if (!_componentRemovals.TryGetValue(t, out var syncList))
             {
-                syncList = new List<Action<IEntity, IComponent>>();
+                syncList = new List<Action<IEntity, object>>();
                 _componentRemovals[t] = syncList;
             }
             if (!_listeners.TryGetValue(OnSync.Target.GetType(), out var listeners))
@@ -68,19 +68,19 @@ namespace ClientSDK.Sync
             syncList.Add((entity, component) => OnSync(entity, (ComponentType)component));
         }
 
-        public void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync) where ComponentType : IComponent
+        public void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync)
         {
             OnComponentAdded<ComponentType>((e, c) => OnSync(e, default!, c));
             OnComponentModified(OnSync);
             OnComponentAdded<ComponentType>((e, c) => OnSync(e, c, default!));
         }
 
-        public void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnSync) where ComponentType : IComponent
+        public void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnSync)
         {
             var t = typeof(ComponentType);
             if (!_componentAdded.TryGetValue(t, out var syncList))
             {
-                syncList = new List<Action<IEntity, IComponent>>();
+                syncList = new List<Action<IEntity, object>>();
                 _componentAdded[t] = syncList;
             }
             if (!_listeners.TryGetValue(OnSync.Target.GetType(), out var listeners))
@@ -92,12 +92,12 @@ namespace ClientSDK.Sync
             syncList.Add((entity, component) => OnSync(entity, (ComponentType)component));
         }
 
-        public void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync) where ComponentType : IComponent
+        public void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync)
         {
             var t = typeof(ComponentType);
             if (!_componentSyncs.TryGetValue(t, out var syncList))
             {
-                syncList = new List<Action<IEntity, IComponent, IComponent>>();
+                syncList = new List<Action<IEntity, object, object>>();
                 _componentSyncs[t] = syncList;
             }
             if (!_listeners.TryGetValue(OnSync.Target.GetType(), out var listeners))
@@ -109,7 +109,7 @@ namespace ClientSDK.Sync
             syncList.Add((entity, oldComponent, newComponent) => OnSync(entity, (ComponentType)oldComponent, (ComponentType)newComponent));
         }
 
-        public void ProccessUpdate(IEntity currentEntity, IComponent[] updated, uint[] removed)
+        public void ProccessUpdate(IEntity currentEntity, object[] updated, uint[] removed)
         {
             var view = _client.Modules.Views.GetEntityView(currentEntity);
 

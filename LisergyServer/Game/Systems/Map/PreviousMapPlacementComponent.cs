@@ -1,6 +1,8 @@
 ﻿using Game.Engine.ECLS;
 using Game.World;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Game.Systems.Map
 {
@@ -9,10 +11,10 @@ namespace Game.Systems.Map
     /// </summary>
     [Serializable]
     [SyncedComponent]
-    public class MapPlacementComponent 
+    public class PreviousMapPlacementComponent : IComponent
     {
         public Location Position;
 
-        public override string ToString() => $"<MapPlacementComponent {Position}>";
+        public override string ToString() => $"<PreviousMapPlacement {Position}>";
     }
 }
