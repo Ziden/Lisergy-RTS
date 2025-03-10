@@ -14,10 +14,9 @@ namespace Game.Network.ServerPackets
     public class BattleLogPacket : BasePacket, IServerPacket
     {
         public byte[] BattleStartHeaderData;
-
         public BattleHeader DeserializeStartingState() => Serialization.ToAnyType<BattleHeader>(BattleStartHeaderData);
-
         public BattleTurnLog[] Turns;
+        public BattleLogPacket() { }
 
         public BattleLogPacket(TurnBattle battle)
         {
@@ -29,8 +28,8 @@ namespace Game.Network.ServerPackets
             {
                 BattleID = battle.ID,
                 BattleTime = DateTime.UtcNow,
-                Attacker = battle.Attacker.TeamData,
-                Defender = battle.Defender.TeamData
+                Attacker = battle.Attacker.GroupData,
+                Defender = battle.Defender.GroupData
             }).ToArray();
         }
 
@@ -68,6 +67,8 @@ namespace Game.Network.ServerPackets
     public class BattleTurnLog
     {
         public BattleEvent[] Events;
+
+        public BattleTurnLog() { }
 
         public BattleTurnLog(TurnLog turnLog)
         {

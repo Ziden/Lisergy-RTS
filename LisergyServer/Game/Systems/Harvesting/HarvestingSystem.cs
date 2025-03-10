@@ -18,7 +18,7 @@ namespace Game.Systems.Resources
 
         private void OnUpdateMovementCourse(IEntity e, ComponentUpdateEvent<MovementComponent> ev)
         {
-            if (ev.Old != null && ev.Old.CourseId != GameId.ZERO && ev.New?.CourseId == GameId.ZERO)
+            if (ev.Old.CourseId != GameId.ZERO && ev.New.CourseId == GameId.ZERO)
             {
                 if (ev.Old.MovementIntent == CourseIntent.Harvest)
                 {

@@ -12,6 +12,11 @@ namespace GameData.Specs
         public static implicit operator byte(DungeonSpecId d) => d.Id;
         public static implicit operator DungeonSpecId(byte b) => new DungeonSpecId() { Id = b };
         public override string ToString() => Id.ToString();
+
+        public DungeonSpecId(byte id)
+        {
+            Id = id;
+        }
     }
 
     [Serializable]

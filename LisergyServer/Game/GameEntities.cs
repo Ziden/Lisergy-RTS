@@ -31,10 +31,10 @@ namespace Game.Entities
         {
             entity.Components.Save(new NetworkedComponent()); // TODO: think better
             var spec = _game.Specs.Entities[(int)id];
-            var components = Serialization.ToAnyTypes<IComponent>(spec.Components);
+            var components = Serialization.ToAnyTypes<object>(spec.Components);
             foreach (var component in components)
             {
-                entity.Components.GetComponents()[component.GetType()] = component;
+                entity.Components.GetComponents()[component.GetType()] = (IComponent)component;
                 entity.Components.OnAfterAdded(component.GetType());
             }
         }

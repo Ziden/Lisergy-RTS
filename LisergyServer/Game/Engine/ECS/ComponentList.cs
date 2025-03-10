@@ -7,13 +7,13 @@ namespace Game.Engine.ECS
     public class ComponentList
     {
         private ComponentPointers _pointers = new ComponentPointers();
-        private Dictionary<Type, IGameComponent> _references = new Dictionary<Type, IGameComponent>();
+        private Dictionary<Type, IComponent> _references = new Dictionary<Type, IComponent>();
 
         public IEnumerable<Type> Keys => _references.Keys;
 
-        public IEnumerable<IGameComponent> Values => _references.Values;
+        public IEnumerable<IComponent> Values => _references.Values;
 
-        public IGameComponent this[Type t]
+        public IComponent this[Type t]
         {
             get
             {
@@ -38,7 +38,7 @@ namespace Game.Engine.ECS
 
         public bool ContainsKey(Type t) => _references.ContainsKey(t);
 
-        public bool TryGetValue(Type t, out IGameComponent c)
+        public bool TryGetValue(Type t, out IComponent c)
         {
             return _references.TryGetValue(t, out c);
         }

@@ -1,5 +1,6 @@
 ﻿using Game.Engine.DataTypes;
 using Game.Systems.Battle.Data;
+using Newtonsoft.Json;
 using System;
 
 namespace Game.Systems.Battle.BattleActions
@@ -10,6 +11,7 @@ namespace Game.Systems.Battle.BattleActions
         public GameId DefenderID;
 
         [NonSerialized]
+        [JsonIgnore]
         private BattleUnit _defender;
 
         public BattleUnit Defender
@@ -23,7 +25,7 @@ namespace Game.Systems.Battle.BattleActions
 
                 return _defender;
             }
-            set { _defender = value; DefenderID = value.UnitID; }
+            set { _defender = value; DefenderID = value?.UnitID ?? GameId.ZERO; }
         }
 
         public AttackAction(TurnBattle battle, BattleUnit atk, BattleUnit def) : base(battle, atk)

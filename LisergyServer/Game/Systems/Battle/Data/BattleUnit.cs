@@ -1,5 +1,6 @@
 ﻿using Game.Engine.DataTypes;
 using Game.Systems.Battler;
+using Newtonsoft.Json;
 using System;
 
 namespace Game.Systems.Battle.Data
@@ -12,6 +13,7 @@ namespace Game.Systems.Battle.Data
     public unsafe class BattleUnit : IComparable<BattleUnit>
     {
         public Unit UnitData { get; private set; }
+        [JsonIgnore]
         public BattleTeam Team { get; private set; }
         public ushort RT { get; set; }
         public bool Dead => UnitData.Stats.HP <= 0;
@@ -28,7 +30,7 @@ namespace Game.Systems.Battle.Data
         /// This is to be used in sorted sets to decide which battle unit acts first
         /// </summary>
         public int CompareTo(BattleUnit obj) => obj == this ? 0 : obj.RT >= RT ? -1 : 1;
-        public ushort MaxRT => (ushort)Math.Max(1, 255 - UnitData.Stats.Speed);
+        public ushort MaxRT => (ushort)Math.Max(1, 255 - UnitData?.Stats.Speed ?? 0);
         public override string ToString() => $"<BattleUnit RT={RT} {UnitData.ToString()}>";
     }
 }

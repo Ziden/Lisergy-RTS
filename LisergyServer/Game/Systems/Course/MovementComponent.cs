@@ -11,7 +11,7 @@ namespace Game.Systems.Movement
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     [Serializable]
     [SyncedComponent]
-    public class MovementComponent : IComponent
+    public struct MovementComponent : IComponent
     {
         public GameId CourseId;
         public CourseIntent MovementIntent;

@@ -11,8 +11,7 @@ namespace Game.Systems.BattleGroup
     /// Unmanaged reference of a unit group
     /// </summary>
     [Serializable]
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public class UnitGroup : IEnumerable<Unit>, IComparable<UnitGroup>, IEqualityComparer<UnitGroup>
+    public class UnitGroup : IComparable<UnitGroup>, IEqualityComparer<UnitGroup>
     {
         public List<Unit> Group = new List<Unit>();
 
@@ -48,12 +47,12 @@ namespace Game.Systems.BattleGroup
         /// <summary>
         /// Gets amount of valid (non null) units in a group
         /// </summary>
-        public int Valids => this.Count(u => u?.Valid ?? false);
+        public int Valids => Group.Count(u => u?.Valid ?? false);
 
         /// <summary>
         /// Checks if a group has no units
         /// </summary>
-        public bool Empty => this.All(u => !u?.Valid ?? false);
+        public bool Empty => Group.All(u => !u?.Valid ?? false);
 
         public Unit this[int x]
         {
@@ -77,11 +76,6 @@ namespace Game.Systems.BattleGroup
             return Group.GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return Group.GetEnumerator();
-        }
-
         public UnitGroup()
         {
         }
@@ -93,7 +87,7 @@ namespace Game.Systems.BattleGroup
 
         public override string ToString()
         {
-            return $"{string.Join(" ", this.Where(u => u.Valid))}";
+            return $"{string.Join(" ", Group.Where(u => u != null && u.Valid))}";
         }
 
         public int CompareTo(UnitGroup other)

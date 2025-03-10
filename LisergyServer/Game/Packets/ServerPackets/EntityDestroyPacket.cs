@@ -8,6 +8,8 @@ namespace Game.Network.ServerPackets
     [Serializable]
     public class EntityDestroyPacket : BasePacket, IServerPacket
     {
+
+        public EntityDestroyPacket() { }
         public EntityDestroyPacket(IEntity entity)
         {
             OwnerID = entity.OwnerID;

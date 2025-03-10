@@ -15,13 +15,13 @@ namespace Game.Systems.Battle
         /// Struct representing the battle input.
         /// Will be updated only in the end of the battle.
         /// </summary>
-        public BattleGroupData TeamData;
-        public GameId OwnerID => TeamData.OwnerID;
+        public BattleGroupData GroupData;
+        public GameId OwnerID => GroupData.OwnerID;
         public BattleUnit[] Units { get; private set; }
         public BattleTeam(in BattleGroupData data)
         {
-            TeamData = data;
-            Units = data.Units.Select(u => new BattleUnit(this, u)).ToArray();
+            GroupData = data;
+            Units = data.Units.Group.Select(u => new BattleUnit(this, u)).ToArray();
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Game.Systems.Battle
         public bool AllDead => !Units.Any(u => !u.Dead);
         public override string ToString()
         {
-            return $"<Team Owner={TeamData.OwnerID} Units={string.Join(",", Units.Select(u => u.ToString()).ToArray())}";
+            return $"<Team Owner={GroupData.OwnerID} Units={string.Join(",", Units.Select(u => u.ToString()).ToArray())}";
         }
     }
 }

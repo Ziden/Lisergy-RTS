@@ -8,16 +8,17 @@ using Game.Systems.Battler;
 using Game.Systems.Player;
 using Game.Systems.Tile;
 using GameData;
+using GameData.Specs;
 using NetSerializer;
+using Newtonsoft.Json;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Threading;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Game.Engine
 {
@@ -28,12 +29,23 @@ namespace Game.Engine
         Json
     }
 
+
+
     public static class Serialization
     {
-        private static SerializationType Type = SerializationType.NetSerializer; // test
-        private static JsonSerializerOptions options = new JsonSerializerOptions
+        private static SerializationType Type = SerializationType.Json; // test
+        private static JsonSerializerSettings _jsonSettings = new JsonSerializerSettings()
         {
-            IncludeFields = true,
+            PreserveReferencesHandling = PreserveReferencesHandling.None,
+            NullValueHandling = NullValueHandling.Ignore,
+            TypeNameHandling = TypeNameHandling.All,
+            ContractResolver = new FieldsOnlyContractResolver(),
+            Converters = new List<JsonConverter> { 
+                new ByteBackedStructConverter<UnitSpecId>() ,
+                 new ByteBackedStructConverter<BuildingSpecId>(),
+                  new ByteBackedStructConverter<TileSpecId>(),
+                 new ByteBackedStructConverter<DungeonSpecId>(),
+            }
         };
         private static uint _max = 1;
         private static IReadOnlyDictionary<uint, Type> _TYPE_MAP = new Dictionary<uint, Type>();
@@ -134,7 +146,9 @@ namespace Game.Engine
             }
             else if (Type == SerializationType.Json)
             {
-                JsonSerializer.Serialize(buffer, list, options);
+                var str = JsonConvert.SerializeObject(list, _jsonSettings);
+                var bytes = Encoding.UTF8.GetBytes(str);
+                buffer.Write(bytes);
             }
             return new ReadOnlyMemory<byte>(buffer.GetBuffer(), 0, (int)buffer.Length);
         }
@@ -151,7 +165,7 @@ namespace Game.Engine
             }
             else if (Type == SerializationType.Json)
             {
-                return JsonSerializer.Deserialize<T[]>(buffer, options);
+                return JsonConvert.DeserializeObject<T[]>(Encoding.UTF8.GetString(buffer.ToArray()), _jsonSettings);
             }
             else if (Type == SerializationType.NetSerializer)
             {
@@ -174,7 +188,8 @@ namespace Game.Engine
             }
             else if (Type == SerializationType.Json)
             {
-                JsonSerializer.Serialize(buffer, o, options);
+                var str = JsonConvert.SerializeObject(o, _jsonSettings);
+                buffer.Write(Encoding.UTF8.GetBytes(str));
             }
             return new ReadOnlyMemory<byte>(buffer.GetBuffer(), 0, (int)buffer.Length);
         }
@@ -191,7 +206,7 @@ namespace Game.Engine
             }
             else if (Type == SerializationType.Json)
             {
-                return JsonSerializer.Deserialize<T>(buffer, options);
+                return JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(buffer.ToArray()), _jsonSettings);
             }
             else if (Type == SerializationType.NetSerializer)
             {

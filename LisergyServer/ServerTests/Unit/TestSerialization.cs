@@ -34,24 +34,7 @@ namespace GameUnitTests
         {
             _game = new TestGame();
         }
-
-        [Test]
-        public void TestMemoryPack()
-        {
-            Serialization.LoadSerializers(typeof(MapPlacement2Component));
-
-            var p = new MapPlacement2Component
-            {
-                Location = new Location(1, 2)
-            };
-
-            var s1 = Serialization.FromAnyType(p);
-            var s2 = MemoryPackSerializer.Serialize(p);
-
-            var u1 = Serialization.ToAnyType<MapPlacement2Component>(s1.GetArrayNoCopy());
-            var u2 = MemoryPackSerializer.Deserialize<MapPlacement2Component>(s2);
-        }
-
+     
         [Test]
         public void TestSimpleSerialization()
         {
@@ -92,7 +75,7 @@ namespace GameUnitTests
             var game = new TestGame();
 
             var player = game.GetTestPlayer();
-            var unit = player.Parties[0].Get<BattleGroupComponent>().Units.First();
+            var unit = player.Parties[0].Get<BattleGroupComponent>().Units.Group.First();
             var building = player.Buildings.First();
             var tile = player.Parties[0].GetTile();
 
@@ -152,8 +135,8 @@ namespace GameUnitTests
 
             var header = log.BattleStartHeaderData;
 
-            Assert.AreEqual(deserializedHeader.Attacker.Units[0].Id, myTeam.Units.First().Id);
-            Assert.AreEqual(deserializedHeader.Defender.Units[0].Id, enemyTeam.Units.First().Id);
+            Assert.AreEqual(deserializedHeader.Attacker.Units[0].Id, myTeam.Units.Group.First().Id);
+            Assert.AreEqual(deserializedHeader.Defender.Units[0].Id, enemyTeam.Units.Group.First().Id);
         }
     }
 }

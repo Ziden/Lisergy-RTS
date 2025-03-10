@@ -55,8 +55,9 @@ namespace Game.Systems.Map
 
         public void SetPosition(TileModel newTile)
         {
-            var wasPlaced = CurrentEntity.Components.TryGet<MapPlacementComponent>(out var placement);
-            var hasPreviousTile = CurrentEntity.Components.TryGet<PreviousMapPlacementComponent>(out var previous);
+            var moving = CurrentEntity;
+            var wasPlaced = moving.Components.TryGet<MapPlacementComponent>(out var placement);
+            var hasPreviousTile = moving.Components.TryGet<PreviousMapPlacementComponent>(out var previous);
 
             placement = placement ?? new MapPlacementComponent();
             previous = previous ?? new PreviousMapPlacementComponent();
@@ -65,7 +66,7 @@ namespace Game.Systems.Map
 
             if (previousTile == null || newTile == null)
             {
-                CurrentEntity.Logic.DeltaCompression.SetFlag(DeltaFlag.CREATED);
+                moving.Logic.DeltaCompression.SetFlag(DeltaFlag.CREATED);
             }
             if (newTile != null)
             {
@@ -73,28 +74,28 @@ namespace Game.Systems.Map
                 if (wasPlaced)
                 {
                     previous.Position = previousTile.Position;
-                    CurrentEntity.Save(previous);
+                    moving.Save(previous);
                 }
-                CurrentEntity.Save(placement);
+                moving.Save(placement);
             }
             else
             {
-                CurrentEntity.Components.Remove<MapPlacementComponent>();
+                moving.Components.Remove<MapPlacementComponent>();
                 if (hasPreviousTile)
                 {
-                    CurrentEntity.Components.Remove<PreviousMapPlacementComponent>();
+                    moving.Components.Remove<PreviousMapPlacementComponent>();
                 }
                 if (previousTile != null)
                 {
                     var ev = EventPool<EntityRemovedFromMapEvent>.Get();
-                    ev.Entity = CurrentEntity;
+                    ev.Entity = moving;
                     ev.Tile = previousTile;
-                    CurrentEntity.Components.CallEvent(ev);
+                    moving.Components.CallEvent(ev);
                     EventPool<EntityRemovedFromMapEvent>.Return(ev);
                 }
             }
 
-            Game.Log.Debug($"MapLogic - Set {CurrentEntity} position to {newTile?.Position}");
+            Game.Log.Debug($"MapLogic - Set {moving} position to {newTile?.Position}");
         }
     }
 }

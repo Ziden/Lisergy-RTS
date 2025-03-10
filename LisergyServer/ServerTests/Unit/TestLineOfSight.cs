@@ -117,7 +117,7 @@ namespace GameUnitTests
             var los = party.Components.Get<EntityVisionComponent>().LineOfSight;
 
             Assert.AreEqual(los, Game.Specs.Units[party.Get<BattleGroupComponent>().Units[0].SpecId].LOS);
-            Assert.AreEqual(los, party.Get<BattleGroupComponent>().Units.Max(u => Game.Specs.Units[u.SpecId].LOS));
+            Assert.AreEqual(los, party.Get<BattleGroupComponent>().Units.Group.Max(u => Game.Specs.Units[u.SpecId].LOS));
         }
 
         [Test]

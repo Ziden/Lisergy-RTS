@@ -16,7 +16,7 @@ namespace Game.Systems.Resources
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     [SyncedComponent]
-    public class CargoComponent : IComponent, IEnumerable<ResourceStackData>
+    public class CargoComponent : IComponent
     {
         public ushort CurrentWeight;
         public ushort MaxWeight;
@@ -71,12 +71,6 @@ namespace Game.Systems.Resources
             yield return Slot2;
             yield return Slot3;
         }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
         public override string ToString()
         {
             return $"<Cargo Weight={CurrentWeight}/{MaxWeight} S1={Slot1} S2={Slot2} S3={Slot3}>";

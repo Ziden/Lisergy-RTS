@@ -20,6 +20,8 @@ namespace Game.Systems.Battle.Data
         public GameId OwnerID;
         public UnitGroup Units;
 
+        public BattleGroupData() { }
+     
         public BattleGroupData(IEntity entity)
         {
             EntityId = entity.EntityId;

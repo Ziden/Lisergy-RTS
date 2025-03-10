@@ -27,7 +27,7 @@ namespace Game.Engine.DataTypes
         /// <summary>
         /// Actual data of the game id is 2 ulongs (16 bytes)
         /// </summary>
-        public ulong _leftside { get; set; }
+        public ulong _leftside;
         public ulong _rightside;
 
         public byte[] GetBytes()

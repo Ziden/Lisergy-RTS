@@ -59,7 +59,7 @@ namespace Party.UI
             if (_greenHpBar != null)
             {
                 var hpRatio = unit.HpRatio;
-                _greenHpBar.style.width = Length.Percent(hpRatio * 100);
+                _greenHpBar.style.width = Length.Percent((float)(hpRatio) * 100);
             }
         }
 

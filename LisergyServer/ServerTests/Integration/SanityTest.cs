@@ -262,7 +262,12 @@ namespace SmokeTests
             Assert.IsTrue(_client.Modules.Actions.MoveEntity(party, resourceTile, intent));
 
             // Course id updating correctly
-            var moveComponent = await _client.WaitForEntityComponentUpdate<MovementComponent>(party);
+            await _client.WaitForEntityComponentUpdate<MovementComponent>(party);
+            var moveComponent = _client.FilterReceivedPackets<EntityUpdatePacket>().First(p =>
+            {
+                var c = p.GetComponent<MovementComponent>();
+                return p.EntityId == party.EntityId && c.CourseId != GameId.ZERO;
+            }).GetComponent<MovementComponent>();
             Assert.AreNotEqual(GameId.ZERO, moveComponent.CourseId);
 
             while (party.GetTile() != resourceTile)

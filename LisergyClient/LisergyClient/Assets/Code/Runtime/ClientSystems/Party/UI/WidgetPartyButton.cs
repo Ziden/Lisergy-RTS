@@ -34,7 +34,7 @@ namespace Party.UI
         {
             PartyEntity = entity;
             var group = entity.Get<BattleGroupComponent>();
-            _ = DisplayUnit(group.Units.Leader);
+            _ = DisplayUnit(group.Units[0]);
             _tracking?.Track(entity);
         }
 
@@ -49,7 +49,7 @@ namespace Party.UI
             if (_greenHpBar?.style.display == DisplayStyle.Flex)
             {
                 var hpRatio = leader.HpRatio;
-                _greenHpBar.style.width = Length.Percent(hpRatio * 100);
+                _greenHpBar.style.width = Length.Percent((float)hpRatio * 100);
             }
             if (leader.Valid)
             {

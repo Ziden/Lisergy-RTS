@@ -27,7 +27,7 @@ namespace Game.Systems.Battle.BattleActions
 
                 return _unit;
             }
-            set { _unit = value; UnitID = value.UnitID; }
+            set { _unit = value; UnitID = value?.UnitID ?? GameId.ZERO; }
         }
 
         public ActionResult Result { get => _result; set => _result = value; }

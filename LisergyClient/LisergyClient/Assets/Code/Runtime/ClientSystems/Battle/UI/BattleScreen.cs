@@ -129,10 +129,10 @@ namespace Assets.Code
         {
             var unit = Units[atk.Defender.UnitID].Unit;
             var result = atk.Result as AttackActionResult;
-            if (unit.HP - result.Damage <= 0)
-                unit.HP = 0;
+            if (unit.Stats.HP - result.Damage <= 0)
+                unit.Stats.HP = 0;
             else
-                unit.HP -= (byte)result.Damage;
+                unit.Stats.HP -= (byte)result.Damage;
             // PartyButton.UpdateHealth(UnitHealthBars[unit.Id], unit);
         }
 

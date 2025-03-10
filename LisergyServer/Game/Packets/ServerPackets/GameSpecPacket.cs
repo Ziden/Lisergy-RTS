@@ -13,7 +13,8 @@ namespace Game.Events.ServerEvents
 
         public GameSpecPacket(LisergyGame game)
         {
-            this.Spec = game.Specs;
+            if (game == null) return;
+            this.Spec = game?.Specs;
             (MapSizeX, MapSizeY) = game.World.TilemapDimensions;
         }
     }

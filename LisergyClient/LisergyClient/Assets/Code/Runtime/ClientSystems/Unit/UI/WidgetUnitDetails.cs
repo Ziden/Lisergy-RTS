@@ -45,14 +45,14 @@ namespace Assets.Code.UI
             Root.Q<Label>("UnitLabel").Required().text = spec.Name;
             var icon = Root.Q("Icon").Required();
             icon.SetBackground(spec.IconArt);
-            Root.Q("HP").Q("GreenBar").Required().style.width = Length.Percent(setup.Unit.HpRatio * 100);
-            Root.Q("HP").Q<Label>("StatValue").Required().text = $"{setup.Unit.HP} / {setup.Unit.MaxHP}";
-            new UnitStatBar(Root.Q("Attack").Required()).SetValue(setup.Unit.Atk);
-            new UnitStatBar(Root.Q("Defense").Required()).SetValue(setup.Unit.Def);
-            new UnitStatBar(Root.Q("Matk").Required()).SetValue(setup.Unit.Matk);
-            new UnitStatBar(Root.Q("Mdef").Required()).SetValue(setup.Unit.Mdef);
-            new UnitStatBar(Root.Q("Speed").Required()).SetValue(setup.Unit.Speed);
-            new UnitStatBar(Root.Q("Accuracy").Required()).SetValue(setup.Unit.Accuracy);
+            Root.Q("HP").Q("GreenBar").Required().style.width = Length.Percent((float)(setup.Unit.HpRatio * 100d));
+            Root.Q("HP").Q<Label>("StatValue").Required().text = $"{setup.Unit.Stats.HP} / {setup.Unit.Stats.MaxHP}";
+            new UnitStatBar(Root.Q("Attack").Required()).SetValue(setup.Unit.Stats.Atk);
+            new UnitStatBar(Root.Q("Defense").Required()).SetValue(setup.Unit.Stats.Def);
+            new UnitStatBar(Root.Q("Matk").Required()).SetValue(setup.Unit.Stats.Matk);
+            new UnitStatBar(Root.Q("Mdef").Required()).SetValue(setup.Unit.Stats.Mdef);
+            new UnitStatBar(Root.Q("Speed").Required()).SetValue(setup.Unit.Stats.Speed);
+            new UnitStatBar(Root.Q("Accuracy").Required()).SetValue(setup.Unit.Stats.Accuracy);
         }
     }
 }

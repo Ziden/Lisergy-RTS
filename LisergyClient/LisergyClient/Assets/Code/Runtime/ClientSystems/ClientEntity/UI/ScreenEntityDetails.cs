@@ -32,7 +32,7 @@ namespace Assets.Code.UI
 
             if (e.EntityType == EntityType.Party)
             {
-                var leader = e.Components.Get<BattleGroupComponent>().Units.Leader;
+                var leader = e.Components.Get<BattleGroupComponent>().Units[0];
                 var leaderSpec = GameClient.Game.Specs.Units[leader.SpecId];
                 _icon.SetBackground(leaderSpec.IconArt);
             }

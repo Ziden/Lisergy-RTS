@@ -26,6 +26,11 @@ public class WidgetBattleGroup : VisualStruct
     {
         for (int x = 0; x < 4; x++)
         {
+            if(component.Units.Group.Count <= x)
+            {
+                _parties[x].style.display = DisplayStyle.None;
+                continue;
+            }
             var unit = component.Units[x];
             if (!unit.Valid)
             {

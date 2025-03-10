@@ -17,6 +17,8 @@ namespace Game.Network.ServerPackets
 
         public BattleTurnLog[] Turns;
 
+        public BattleResultPacket() { }
+
         public BattleResultPacket(in GameId battleID, TurnBattleRecord result)
         {
             //result.Attacker.AllDead
@@ -24,8 +26,8 @@ namespace Game.Network.ServerPackets
             {
                 BattleID = battleID,
                 BattleTime = DateTime.UtcNow,
-                Attacker = result.Attacker.TeamData,
-                Defender = result.Defender.TeamData
+                Attacker = result.Attacker.GroupData,
+                Defender = result.Defender.GroupData
             };
             Turns = new BattleTurnLog[result.Turns.Count];
             Header.AttackerWins = result.Attacker == result.Winner;

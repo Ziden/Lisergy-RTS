@@ -13,7 +13,7 @@ public class VictoryNotification : Notification
         var param = GetParameter<OwnBattleFinishedEvent>();
         var mine = Root.Q<Label>("Mine").Required();
         var enemy = Root.Q<Label>("Enemy").Required();
-        mine.text = GameClient.Game.Specs.Units[param.MyTeam.Units.Leader.SpecId].Name;
-        enemy.text = GameClient.Game.Specs.Units[param.EnemyTeam.Units.Leader.SpecId].Name;
+        mine.text = GameClient.Game.Specs.Units[param.MyTeam.Units[0].SpecId].Name;
+        enemy.text = GameClient.Game.Specs.Units[param.EnemyTeam.Units[0].SpecId].Name;
     }
 }
