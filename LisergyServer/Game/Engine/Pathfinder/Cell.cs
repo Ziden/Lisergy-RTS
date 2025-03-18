@@ -16,7 +16,7 @@ namespace Game.Engine.Pathfinder
 
         public Cell Parent;
 
-        public int QueueIndex;
+        public new int QueueIndex;
 
         public Cell(Location location) => Location = location;
 

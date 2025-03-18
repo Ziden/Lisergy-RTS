@@ -47,7 +47,6 @@ namespace GameUnitTests
             var battle = new TurnBattle(GameId.Generate(), myTeam, enemyTeam);
             var autoRun = new AutoRun(battle);
 
-            List<BattleEvent> events = null;
             UnitDeadEvent deathEvent = null;
             var turn = 0;
 
@@ -77,7 +76,6 @@ namespace GameUnitTests
             var battle = new TurnBattle(GameId.Generate(), myTeam, enemyTeam);
             var autoRun = new AutoRun(battle);
 
-            List<BattleEvent> events = null;
             UnitDeadEvent deathEvent = null;
             var turn = 0;
 

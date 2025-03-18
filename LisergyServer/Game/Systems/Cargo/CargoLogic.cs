@@ -54,7 +54,48 @@ namespace Game.Systems.Resources
             var spec = Game.Specs.Resources[resource.ResourceId];
             var totalWeight = (ushort)(spec.WeightPerUnit * resource.Amount);
             var cargo = CurrentEntity.Components.Get<CargoComponent>();
-            cargo.Add(resource);
+            
+            // Update the appropriate slot directly
+            if (slot == 0)
+            {
+                if (cargo.Slot1.Empty)
+                {
+                    cargo.Slot1 = new ResourceStackData(resource.ResourceId, resource.Amount);
+                }
+                else
+                {
+                    var updatedSlot = cargo.Slot1;
+                    updatedSlot.Amount += resource.Amount;
+                    cargo.Slot1 = updatedSlot;
+                }
+            }
+            else if (slot == 1)
+            {
+                if (cargo.Slot2.Empty)
+                {
+                    cargo.Slot2 = new ResourceStackData(resource.ResourceId, resource.Amount);
+                }
+                else
+                {
+                    var updatedSlot = cargo.Slot2;
+                    updatedSlot.Amount += resource.Amount;
+                    cargo.Slot2 = updatedSlot;
+                }
+            }
+            else if (slot == 2)
+            {
+                if (cargo.Slot3.Empty)
+                {
+                    cargo.Slot3 = new ResourceStackData(resource.ResourceId, resource.Amount);
+                }
+                else
+                {
+                    var updatedSlot = cargo.Slot3;
+                    updatedSlot.Amount += resource.Amount;
+                    cargo.Slot3 = updatedSlot;
+                }
+            }
+            
             cargo.CurrentWeight += totalWeight;
             CurrentEntity.Save(cargo);
             Game.Log.Debug($"Added {resource} to cargo {cargo} from {CurrentEntity}");

@@ -171,8 +171,6 @@ namespace ServerTests
                     return tile;
             throw new System.Exception("No unbuilt tile");
         }
-
-        private static long lastLog = 0;
     }
 
 }

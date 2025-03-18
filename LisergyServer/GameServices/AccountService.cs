@@ -8,9 +8,9 @@ namespace LisergyServer.Core
 {
     public class Account
     {
-        public PlayerProfileComponent Profile;
-        public string Login;
-        public string Password;
+        public PlayerProfileComponent? Profile;
+        public string? Login;
+        public string? Password;
     }
 
     public class AccountService

@@ -80,8 +80,6 @@ namespace Game.World
             return Direction.NONE;
         }
 
-        private static ushort ONE = 1;
-
         public static TileModel FindTileWithId(this Chunk chunk, byte tileID)
         {
             var tiles = chunk.Tiles;

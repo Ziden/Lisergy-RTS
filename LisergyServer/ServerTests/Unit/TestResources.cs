@@ -15,8 +15,6 @@ namespace GameUnitTests
     public class TestResources
     {
         private TestGame _game;
-        private IEntity _party;
-        private TileModel _logs;
 
         [SetUp]
         public void Setup()

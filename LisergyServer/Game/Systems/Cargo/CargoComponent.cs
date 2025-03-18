@@ -62,7 +62,7 @@ namespace Game.Systems.Resources
             if (i == 0) stack = Slot1;
             else if (i == 1) stack = Slot2;
             else if (i == 2) stack = Slot3;
-            throw new ArgumentOutOfRangeException();
+            else throw new ArgumentOutOfRangeException();
         }
 
         public IEnumerator<ResourceStackData> GetEnumerator()

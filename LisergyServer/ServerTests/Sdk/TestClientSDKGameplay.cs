@@ -87,6 +87,8 @@ namespace SdkUnitTests
 
             Assert.IsTrue(clientParty.Components.Has<HarvestingComponent>());
             Assert.IsTrue(clientParty.GetTile().Components.Get<TileResourceComponent>().BeingHarvested);
+
+            await Task.CompletedTask;
         }
     }
 }

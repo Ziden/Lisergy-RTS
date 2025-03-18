@@ -18,8 +18,8 @@ namespace Game.Services
     /// </summary>
     internal class BattleFinishedTaskEvent : IGameEvent
     {
-        public BattleResultPacket ResultPacket;
-        public TurnBattle Battle;
+        public BattleResultPacket? ResultPacket;
+        public TurnBattle? Battle;
     }
 
     /// <summary>
@@ -95,15 +95,20 @@ namespace Game.Services
         private void OnBattleFinishedProcessing(BattleFinishedTaskEvent ev)
         {
             var fullResultPacket = ev.ResultPacket;
-            if (!BattleTasks.TryGetValue(fullResultPacket.Header.BattleID, out var task))
+            if (fullResultPacket == null || !BattleTasks.TryGetValue(fullResultPacket.Header.BattleID, out var task))
             {
-                _game.Log.Error($"Could not find battle {fullResultPacket.Header.BattleID}");
+                _game.Log.Error($"Could not find battle {fullResultPacket?.Header.BattleID}");
                 return;
             }
 
             AllBattles[fullResultPacket.Header.BattleID].SetTurns(fullResultPacket);
             var header = new BattleHeaderPacket(fullResultPacket.Header);
             var battle = ev.Battle;
+            if (battle == null)
+            {
+                _game.Log.Error("Battle is null.");
+                return;
+            }
             foreach (var pl in GetAllPlayers(battle))
             {
                 _game.Network.SendToPlayer(header, GetAllPlayers(battle).ToArray());

@@ -1,4 +1,5 @@
-﻿using Game.Engine.DataTypes;
+﻿#nullable enable
+using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
 using Game.Engine.Events;
 using Game.Engine.Scheduler;

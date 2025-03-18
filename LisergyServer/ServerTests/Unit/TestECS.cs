@@ -107,8 +107,6 @@ namespace GameUnitTests
             clientEntity.Save(c);
 
             var deltas = clientEntity.Components.GetComponentDeltas();
-
-            var asd = 123;
         }
 
         [Test]
