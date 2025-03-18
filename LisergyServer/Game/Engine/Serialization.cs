@@ -126,7 +126,7 @@ namespace Game.Engine
             {
                 if ((basePacketType.IsAssignableFrom(type) && type != basePacketType ||
                      iComponentType.IsAssignableFrom(type) && type != iComponentType) &&
-                    type.IsSerializable && !type.IsInterface)
+                    type.GetCustomAttributes(typeof(SerializableAttribute), false).Length > 0 && !type.IsInterface)
                 {
                     yield return type;
                 }

@@ -89,9 +89,9 @@ namespace Game.Services
 
         /// <summary>
         /// A battle finished processing from the queue. 
-        /// Needs to 
+        /// Needs to update battle results and notify relevant players.
         /// </summary>
-        /// <param name="ev"></param>
+        /// <param name="ev">The event containing battle result information</param>
         private void OnBattleFinishedProcessing(BattleFinishedTaskEvent ev)
         {
             var fullResultPacket = ev.ResultPacket;

@@ -14,7 +14,6 @@ namespace Game.World
     {
         private TileModel[,] _tileReferences;
         private Location _position;
-        private IGameWorld _world;
 
         public IGameWorld World { get; }
 

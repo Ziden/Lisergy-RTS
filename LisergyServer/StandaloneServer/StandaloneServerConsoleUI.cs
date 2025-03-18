@@ -6,17 +6,16 @@ using Terminal.Gui;
 
 public class LogEntry
 {
-    public string Log;
+    public string Log = string.Empty;
 
     public override string ToString() => Log;
 }
 
 public class EventEntry
 {
-    public IBaseEvent Event;
+    public IBaseEvent Event = null!;
 
-    public override string ToString() => Event.ToString();
-
+    public override string ToString() => Event?.ToString() ?? string.Empty;
 }
 
 public enum Tab { LOGS, EVENTS, GAME, ACCOUNT, WORLD, CHAT }
@@ -27,20 +26,19 @@ public enum Tab { LOGS, EVENTS, GAME, ACCOUNT, WORLD, CHAT }
 /// </summary>
 public class StandaloneServerConsoleUI : Window
 {
-    private static ListView List;
-    private static ScrollBarView ScrollView;
-    private static TextView TextView;
+    private static ListView? List;
+    private static ScrollBarView? ScrollView;
+    private static TextView? TextView;
 
     /// <summary>
     /// TYPES OF LOGS
     /// </summary>
-    private static List<LogEntry> _accountLogs = new List<LogEntry>();
-    private static List<LogEntry> _worldLogs = new List<LogEntry>();
-    private static List<LogEntry> _chatLogs = new List<LogEntry>();
-    private static List<LogEntry> _gameLogs = new List<LogEntry>();
-    private static List<EventEntry> _events = new List<EventEntry>();
-    private static List<LogEntry> _allLogs = new List<LogEntry>();
-
+    private static readonly List<LogEntry> _accountLogs = new List<LogEntry>();
+    private static readonly List<LogEntry> _worldLogs = new List<LogEntry>();
+    private static readonly List<LogEntry> _chatLogs = new List<LogEntry>();
+    private static readonly List<LogEntry> _gameLogs = new List<LogEntry>();
+    private static readonly List<EventEntry> _events = new List<EventEntry>();
+    private static readonly List<LogEntry> _allLogs = new List<LogEntry>();
 
     public static bool IsLoaded = false;
     private static Tab Tab = Tab.LOGS;
@@ -114,9 +112,12 @@ public class StandaloneServerConsoleUI : Window
         };
         List.DrawContent += (e) =>
         {
-            ScrollView.Size = List.Source.Count - 1;
-            ScrollView.Position = List.TopItem;
-            ScrollView.Refresh();
+            if (ScrollView != null && List != null)
+            {
+                ScrollView.Size = List.Source.Count - 1;
+                ScrollView.Position = List.TopItem;
+                ScrollView.Refresh();
+            }
         };
         frame.Add(List);
 
@@ -147,35 +148,37 @@ public class StandaloneServerConsoleUI : Window
     private void ViewEvents()
     {
         Tab = Tab.EVENTS;
-        List.SetSource(_events);
-        if (_events.Count > List.Bounds.Height)
+        List?.SetSource(_events);
+        if (List != null && _events.Count > List.Bounds.Height)
         {
             List.TopItem = _events.Count - List.Bounds.Height;
             List.SelectedItem = List.TopItem;
         }
-        List.SetNeedsDisplay();
+        List?.SetNeedsDisplay();
     }
 
     private void ViewLogs(Tab tab, List<LogEntry> logs)
     {
         Tab = tab;
-        List.SetSource(logs);
+        List?.SetSource(logs);
         UpdateEntryList(logs);
-        List.SetNeedsDisplay();
+        List?.SetNeedsDisplay();
     }
 
     private static void UpdateEntryList(ICollection source)
     {
-        if (source.Count > List.Bounds.Height)
+        if (List != null && source.Count > List.Bounds.Height)
         {
             List.TopItem = source.Count - List.Bounds.Height;
             List.SelectedItem = List.TopItem;
+            List.SetNeedsDisplay();
         }
-        List.SetNeedsDisplay();
     }
 
     public static void OnReceiveEvent(IBaseEvent ev)
     {
+        if (Application.MainLoop == null) return;
+        
         Application.MainLoop.Invoke(() =>
         {
             _events.Add(new EventEntry()
@@ -183,12 +186,14 @@ public class StandaloneServerConsoleUI : Window
                 Event = ev,
             });
             if (_events.Count > 100) _events.RemoveAt(0);
-            if (Tab == Tab.EVENTS) UpdateEntryList(_events);
+            if (Tab == Tab.EVENTS && List != null) UpdateEntryList(_events);
         });
     }
 
     public static IGameLog HookLogs(IGameLog log)
     {
+        if (log == null) return null!;
+        
         var baseLog = (GameLog)log;
         baseLog._Debug = m => OnReceiveLog(baseLog.Tag, 0, m);
         baseLog._Info = m => OnReceiveLog(baseLog.Tag, 1, m);
@@ -198,21 +203,27 @@ public class StandaloneServerConsoleUI : Window
 
     private static void AddLog(Tab forTab, List<LogEntry> log, LogEntry newLog)
     {
+        if (log == null || newLog == null) return;
+        
         log.Add(newLog);
         if (log.Count > 500) log.RemoveAt(0);
-        if (Tab == forTab) UpdateEntryList(log);
+        if (Tab == forTab && List != null) UpdateEntryList(log);
     }
-
 
     public static void OnReceiveLog(string tag, int level, string msg)
     {
+        if (Application.MainLoop == null) return;
+        
         Application.MainLoop.Invoke(() =>
         {
             var entry = new LogEntry()
             {
-                Log = msg
+                Log = msg ?? string.Empty
             };
             AddLog(Tab.LOGS, _allLogs, entry);
+            
+            tag = tag ?? string.Empty;
+            
             if (tag.StartsWith("[Server Game]")) AddLog(Tab.GAME, _gameLogs, entry);
             else if (tag.StartsWith("[Server WORLD]")) AddLog(Tab.WORLD, _worldLogs, entry);
             else if (tag.StartsWith("[Server ACCOUNT]")) AddLog(Tab.ACCOUNT, _accountLogs, entry);

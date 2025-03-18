@@ -48,14 +48,26 @@ namespace Game.Services
             if (atkPlayer != null) atkPlayer.EntityLogic.RecordBattleHeader(packet.Header);
             if (defPlayer != null) defPlayer.EntityLogic.RecordBattleHeader(packet.Header);
 
+            if (attackerEntity == null || defenderEntity == null)
+            {
+                _world.Game.Log.Error($"Battle result received for non-existent entities: Attacker={packet.Header.Attacker.EntityId}, Defender={packet.Header.Defender.EntityId}");
+                return;
+            }
+
             var attackerGroup = attackerEntity.Components.Get<BattleGroupComponent>();
             var defenderGroup = defenderEntity.Components.Get<BattleGroupComponent>();
 
-            attackerGroup.Units = packet.Header.Attacker.Units;
-            defenderGroup.Units = packet.Header.Defender.Units;
-
-            attackerEntity.Save(attackerGroup);
-            defenderEntity.Save(defenderGroup);
+            if (attackerGroup != null) 
+            {
+                attackerGroup.Units = packet.Header.Attacker.Units;
+                attackerEntity.Save(attackerGroup);
+            }
+            
+            if (defenderGroup != null)
+            {
+                defenderGroup.Units = packet.Header.Defender.Units;
+                defenderEntity.Save(defenderGroup);
+            }
 
             var finishEvent = EventPool<BattleFinishedEvent>.Get();
             finishEvent.Battle = packet.Header.BattleID;
@@ -68,15 +80,15 @@ namespace Game.Services
             if (atkPlayer != null)
             {
                 _network.DeltaCompression.SendEntityPacket(attackerEntity.EntityId, atkPlayer.EntityId);
-                if (!defenderEntity.Logic.BattleGroup.IsDestroyed)
+                if (defenderEntity != null && defenderEntity.Logic.BattleGroup != null && !defenderEntity.Logic.BattleGroup.IsDestroyed)
                     _network.DeltaCompression.SendEntityPacket(defenderEntity.EntityId, atkPlayer.EntityId);
             }
 
-            if (defPlayer != null)
+            if (defPlayer != null && defenderEntity != null)
             {
                 _network.DeltaCompression.SendEntityPacket(defenderEntity.EntityId, defPlayer.EntityId);
 
-                if (!defenderEntity.Logic.BattleGroup.IsDestroyed)
+                if (attackerEntity != null && attackerEntity.Logic.BattleGroup != null && !attackerEntity.Logic.BattleGroup.IsDestroyed)
                     _network.DeltaCompression.SendEntityPacket(attackerEntity.EntityId, defPlayer.EntityId);
             }
             EventPool<BattleFinishedEvent>.Return(finishEvent);
@@ -87,6 +99,13 @@ namespace Game.Services
         {
             var attackerEntity = _world.Game.Entities[ev.Attacker.EntityId];
             var defenderEntity = _world.Game.Entities[ev.Defender.EntityId];
+            
+            if (attackerEntity == null || defenderEntity == null)
+            {
+                _world.Game.Log.Error($"Battle triggered for non-existent entities: Attacker={ev.Attacker.EntityId}, Defender={ev.Defender.EntityId}");
+                return;
+            }
+            
             _world.Game.Network.SendToServer(new BattleQueuedPacket(ev.BattleID, attackerEntity, defenderEntity), ServerType.BATTLE);
         }
     }

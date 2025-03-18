@@ -144,7 +144,7 @@ namespace SmokeTests
                 }
             }
             Assert.NotNull(resourceTile);
-            return resourceTile;
+            return await Task.FromResult(resourceTile);
         }
 
         private async Task ValidateMapTiles()
@@ -204,6 +204,7 @@ namespace SmokeTests
                 var serverPlacement = serverEntity.Get<MapPlacementComponent>().Position;
 
                 Assert.AreEqual(clientPlacement, serverPlacement);
+                return;
             }
 
             foreach (var serverEntity in _server.Game.Entities.AllEntities)
@@ -235,6 +236,7 @@ namespace SmokeTests
                 }
             }
             TestGame.ValidateNoLeak(_server.Game);
+            await Task.CompletedTask;
         }
 
 

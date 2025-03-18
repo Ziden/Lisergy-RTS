@@ -50,7 +50,10 @@ namespace GameServices
                 _connectedById.Remove(user.PlayerId);
                 _connectedByConnectionId.Remove(user.ConnectionID);
             }
-            _log.Error($"Error disconnecting connection {connectionId} - unknown user");
+            else
+            {
+                _log.Error($"Error disconnecting connection {connectionId} - unknown user");
+            }
         }
 
         public bool IsConnectionAuthenticated(in int connection)
@@ -59,7 +62,7 @@ namespace GameServices
         }
 
         public IConnectedPlayer GetAuthenticatedConnection(in int connection) => _connectedByConnectionId[connection];
-        public IConnectedPlayer GetConnectedPlayer(in GameId id)
+        public IConnectedPlayer? GetConnectedPlayer(in GameId id)
         {
             _connectedById.TryGetValue(id, out var connected);
             return connected;

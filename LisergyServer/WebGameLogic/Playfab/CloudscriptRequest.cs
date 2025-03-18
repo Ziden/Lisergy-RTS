@@ -1,27 +1,35 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WebGameLogic.Playfab
 {
     [Serializable]
     public class FunctionArgument
     {
-
+        // Empty implementation
     }
 
     [Serializable]
-    public class CloudscriptRequest<T>
+    public class CloudscriptRequest<T> where T : FunctionArgument, new()
     {
         [Required(ErrorMessage = "Caller entity profile is required")]
         public PlayfabEntityProfile? CallerEntityProfile { get; set; }
 
-        public FunctionArgument FunctionArgument { get; set; }
+        [DisallowNull]
+        public T FunctionArgument { get; set; } = new T();
 
-        public string PlayfabId => CallerEntityProfile?.Lineage?.MasterPlayerAccountId!;
+        public string PlayfabId => CallerEntityProfile?.Lineage?.MasterPlayerAccountId ?? string.Empty;
 
         public CloudscriptRequest() { }
 
         public CloudscriptRequest(string userId)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException("User ID cannot be null or empty", nameof(userId));
+            }
+            
             CallerEntityProfile = new PlayfabEntityProfile()
             {
                 Lineage = new PlayfabLineage()

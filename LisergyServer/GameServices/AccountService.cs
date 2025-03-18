@@ -29,7 +29,7 @@ namespace LisergyServer.Core
             _authenticatedConnections.Remove(connectionId);
         }
 
-        public Account GetAuthenticatedConnection(int connectionId)
+        public Account? GetAuthenticatedConnection(int connectionId)
         {
             _authenticatedConnections.TryGetValue(connectionId, out var acc);
             return acc;
@@ -38,8 +38,8 @@ namespace LisergyServer.Core
         public Account? Authenticate(LoginPacket ev)
         {
             _log.Debug($"Authenticating account {ev.Login}");
-            Account acc;
-            if (!_accounts.TryGetValue(ev.Login, out acc))
+            
+            if (!_accounts.TryGetValue(ev.Login, out var acc))
             {
                 acc = new Account();
                 acc.Profile = new PlayerProfileComponent(GameId.Generate())
@@ -48,7 +48,7 @@ namespace LisergyServer.Core
                 };
                 acc.Login = ev.Login;
                 acc.Password = ev.Password;
-                _accounts[acc.Login] = acc;
+                _accounts[acc.Login!] = acc;
                 _authenticatedConnections[ev.ConnectionID] = acc;
                 _log.Info($"Registered new account {acc.Login} with playerId {acc.Profile.PlayerId}");
                 return acc;

@@ -29,8 +29,6 @@ namespace BaseServer.Persistence
     {
         public SaveState State { get; private set; }
 
-        private bool _world = false;
-        private bool _entities = false;
         private IGameLog _log;
 
         public FlatFileWorldPersistence(IGameLog log)

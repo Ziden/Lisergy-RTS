@@ -52,9 +52,8 @@ namespace GameUnitTests
         {
             GameId nu = GameId.Generate();
 
-            Assert.IsTrue(nu != null);
+            Assert.IsFalse(nu.IsZero());
         }
-
 
         [Test]
         public void TestGuidBackForth()

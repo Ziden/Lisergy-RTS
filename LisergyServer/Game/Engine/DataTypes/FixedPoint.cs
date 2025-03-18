@@ -1161,7 +1161,7 @@ namespace Game.Engine.DataTypes
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static FP operator +(FP a)
         {
-            a.RawValue = a.RawValue;
+            a.RawValue += a.RawValue;
             return a;
         }
 

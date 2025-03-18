@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebGameLogic.Playfab;
 
 namespace WebGameLogic
@@ -9,26 +10,26 @@ namespace WebGameLogic
     [Consumes("application/json")]
     public class CloudscriptController : Controller
     {
-        private ILogger _log;
+        private readonly ILogger<CloudscriptController> _log;
 
-        public CloudscriptController(ILogger log)
+        public CloudscriptController(ILogger<CloudscriptController> log)
         {
             _log = log;
         }
 
         [HttpPost]
         [Route("execute")]
-        private void Execute([FromBody] CloudscriptRequest<FunctionArgument> request)
+        public IActionResult Execute([FromBody] CloudscriptRequest<FunctionArgument> request)
         {
-            ExecuteInternal(request.FunctionArgument);
+            return ExecuteInternal(request.FunctionArgument);
         }
 
         [HttpPost]
         [Route("executeinternal")]
-        private void ExecuteInternal([FromBody] FunctionArgument request)
+        public IActionResult ExecuteInternal([FromBody] FunctionArgument request)
         {
             _log.LogInformation("Starting execution");
-
+            return Ok("Execution completed successfully");
         }
     }
 }

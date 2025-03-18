@@ -12,7 +12,7 @@ namespace ClientSDK.Services
     /// Keeps track of the local player data.
     /// Will listen to events and packets to enrich the local player data.
     /// Responsibility of this module is to listen to game events and keep local player data up-to date
-    /// Will also fire events such as <see cref="OwnEntityInfoReceived<T>"/> for local player data updates
+    /// Will also fire events such as OwnEntityInfoReceived for local player data updates
     /// </summary>
     public interface IPlayerModule : IClientModule, IEventListener
     {

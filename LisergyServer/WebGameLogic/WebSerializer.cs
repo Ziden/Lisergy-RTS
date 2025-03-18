@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace WebGameLogic
 {
@@ -8,14 +9,19 @@ namespace WebGameLogic
     /// </summary>
     public static class WebSerializer
     {
-        public static T Deserialize<T>(string value)
+        public static T? Deserialize<T>(string? value)
         {
-            return JsonConvert.DeserializeObject<T>(value)!;
+            if (string.IsNullOrEmpty(value))
+            {
+                return default;
+            }
+            
+            return JsonConvert.DeserializeObject<T>(value);
         }
 
-        public static string Serialize(object o)
+        public static string Serialize(object? o)
         {
-            return JsonConvert.SerializeObject(o);
+            return JsonConvert.SerializeObject(o ?? new object());
         }
     }
 }

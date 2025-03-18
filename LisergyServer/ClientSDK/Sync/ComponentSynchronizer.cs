@@ -59,6 +59,10 @@ namespace ClientSDK.Sync
                 syncList = new List<Action<IEntity, object>>();
                 _componentRemovals[t] = syncList;
             }
+            if(OnSync.Target == null)
+            {
+                throw new Exception("Target is null");
+            }
             if (!_listeners.TryGetValue(OnSync.Target.GetType(), out var listeners))
             {
                 listeners = new List<Type>();
@@ -83,6 +87,13 @@ namespace ClientSDK.Sync
                 syncList = new List<Action<IEntity, object>>();
                 _componentAdded[t] = syncList;
             }
+            
+            if (OnSync.Target == null)
+            {
+                syncList.Add((entity, component) => OnSync(entity, (ComponentType)component));
+                return;
+            }
+            
             if (!_listeners.TryGetValue(OnSync.Target.GetType(), out var listeners))
             {
                 listeners = new List<Type>();
@@ -100,6 +111,13 @@ namespace ClientSDK.Sync
                 syncList = new List<Action<IEntity, object, object>>();
                 _componentSyncs[t] = syncList;
             }
+            
+            if (OnSync.Target == null)
+            {
+                syncList.Add((entity, oldComponent, newComponent) => OnSync(entity, (ComponentType)oldComponent, (ComponentType)newComponent));
+                return;
+            }
+            
             if (!_listeners.TryGetValue(OnSync.Target.GetType(), out var listeners))
             {
                 listeners = new List<Type>();

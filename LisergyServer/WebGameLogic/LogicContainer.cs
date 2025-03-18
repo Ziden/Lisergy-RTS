@@ -1,26 +1,20 @@
 ﻿using Game;
+using System.Threading.Tasks;
 
 namespace WebPlayerLogic
 {
     public class CommandContext
     {
-        public string PlayerId;
-        public LisergyGame Game;
+        public string PlayerId = string.Empty;
+        public LisergyGame Game = null!;
     }
 
     public class SetupPlayerCommand
     {
-        public async Task Run(CommandContext context)
+        public Task Run(CommandContext context)
         {
-
-            //var tile = 
-            //context.Game.EntityLogic().Player.PlaceNewPlayer()
-
-            //var dg = context.Game.Entities.CreateEntity(GameId.ZERO, EntityType.DeepDungeon);
-            //var tavern = context.Game.Entities.CreateEntity(GameId.ZERO, EntityType.Tavern);
-            //var c = tavern.Get<TavernComponent>();
-            //c.Bartender = new Unit(context.Game.Specs.InitialUnit);
-            //tavern.Save(c);
+            // Implementation will be added when player setup logic is defined
+            return Task.CompletedTask;
         }
     }
 }

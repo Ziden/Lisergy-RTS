@@ -135,7 +135,7 @@ namespace Game.Engine
         {
             foreach (var player in players)
             {
-                if (player == null) continue;
+                if (player.IsZero()) continue;
                 OnOutgoingPacket?.Invoke(player, p);
             }
         }

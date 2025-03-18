@@ -194,7 +194,6 @@ namespace Game.Engine.DataTypes
         //			this.x=x; this.y=y; this.z=z; this.w=w;
         //		}
 
-        [CLSCompliant(false)]
         public uint NextUInt()
         {
             uint t = x ^ x << 11;

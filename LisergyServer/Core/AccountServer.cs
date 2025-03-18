@@ -55,7 +55,7 @@ namespace MapServer
 
         protected override bool Authenticate(BasePacket ev, in int connectionID)
         {
-            Account? connectedAccount;
+            Account connectedAccount = null;
             if (ev is LoginPacket auth)
             {
                 connectedAccount = _accountService.Authenticate(auth);

@@ -23,12 +23,19 @@ app.UseCors(x => x
 app.MapControllers();
 app.UseHttpsRedirection();
 
-var serverConfig = app.Services.GetService(typeof(IServerConfig)) as IServerConfig;
+var serverConfig = app.Services.GetRequiredService<IServerConfig>();
+if (serverConfig != null)
+{
+    PlayFabSettings.staticSettings.TitleId = serverConfig.Title;
+    PlayFabSettings.staticSettings.DeveloperSecretKey = serverConfig.TitleKey;
 
-PlayFabSettings.staticSettings.TitleId = serverConfig.Title;
-PlayFabSettings.staticSettings.DeveloperSecretKey = serverConfig.TitleKey;
-
-var setup = new PlayfabSetup(TestSpecs.Generate());
-await setup.SetupPlayfab();
+    var setup = new PlayfabSetup(TestSpecs.Generate());
+    await setup.SetupPlayfab();
+}
+else
+{
+    // Log error or throw exception
+    throw new InvalidOperationException("Server configuration could not be loaded.");
+}
 
 app.Run();

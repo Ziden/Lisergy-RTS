@@ -47,8 +47,6 @@ namespace ClientSDK
         public IGameLog SDKLog { get; private set; }
         public IGameLog Log => Game.Log;
 
-        private StateMachine<string, string> test;
-
         public GameClient()
         {
             Serialization.LoadSerializers();
