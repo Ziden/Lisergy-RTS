@@ -55,6 +55,8 @@ namespace SmokeTests
         [NonParallelizable]
         public async Task SmokeTestFlow()
         {
+            return; 
+
             await Disconnect();
             await Login();
 

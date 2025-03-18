@@ -1,0 +1,39 @@
+[33m38ae94770[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: reset: moving to origin/master
+[33mcb7610cb0[m HEAD@{1}: commit: Wip
+[33mff2a46683[m HEAD@{2}: reset: moving to HEAD
+[33mff2a46683[m HEAD@{3}: reset: moving to HEAD
+[33mff2a46683[m HEAD@{4}: commit: Fix json
+[33m38ae94770[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{5}: commit: Demyst
+[33m572a0dd2c[m HEAD@{6}: commit: Tidy ups
+[33m9c81de2dd[m[33m ([m[1;32mecs-proper[m[33m)[m HEAD@{7}: checkout: moving from ecs-proper to master
+[33m9c81de2dd[m[33m ([m[1;32mecs-proper[m[33m)[m HEAD@{8}: reset: moving to HEAD
+[33m9c81de2dd[m[33m ([m[1;32mecs-proper[m[33m)[m HEAD@{9}: checkout: moving from master to ecs-proper
+[33m9c81de2dd[m[33m ([m[1;32mecs-proper[m[33m)[m HEAD@{10}: reset: moving to HEAD
+[33m9c81de2dd[m[33m ([m[1;32mecs-proper[m[33m)[m HEAD@{11}: reset: moving to HEAD
+[33m9c81de2dd[m[33m ([m[1;32mecs-proper[m[33m)[m HEAD@{12}: reset: moving to HEAD
+[33m9c81de2dd[m[33m ([m[1;32mecs-proper[m[33m)[m HEAD@{13}: checkout: moving from test-components-again to master
+[33m531d61158[m[33m ([m[1;32mtest-components-again[m[33m)[m HEAD@{14}: commit: Test
+[33m9c81de2dd[m[33m ([m[1;32mecs-proper[m[33m)[m HEAD@{15}: checkout: moving from master to test-components-again
+[33m9c81de2dd[m[33m ([m[1;32mecs-proper[m[33m)[m HEAD@{16}: commit: Wipa
+[33m6c6a9ee5a[m HEAD@{17}: commit: Optimizations
+[33mdcafeade8[m HEAD@{18}: commit: More AOT friendly
+[33mb73e7149a[m HEAD@{19}: commit: Cleanups
+[33mc0f0f1186[m HEAD@{20}: commit: Removed lots of unused assets
+[33mc10b2a8a2[m HEAD@{21}: reset: moving to HEAD
+[33mc10b2a8a2[m HEAD@{22}: reset: moving to HEAD
+[33mc10b2a8a2[m HEAD@{23}: commit: Fix client imports
+[33m77a85384d[m HEAD@{24}: reset: moving to HEAD
+[33m77a85384d[m HEAD@{25}: commit: Removed game ass link
+[33m84174786b[m HEAD@{26}: pull origin master: Fast-forward
+[33m595912274[m HEAD@{27}: commit: Update readme
+[33m6f0e75b3c[m HEAD@{28}: commit: Updated readmes
+[33m3dd0586b5[m HEAD@{29}: commit: Removed smoke for now
+[33ma99afd5aa[m HEAD@{30}: commit: Pipe up
+[33m161fd0c79[m HEAD@{31}: commit: Improved pipeline
+[33mc8c2f9646[m HEAD@{32}: commit: Updated pipeline version
+[33m4a11565b4[m HEAD@{33}: commit: Remove unused folders, building logic, pipeline potential fix
+[33m1383ab4bf[m HEAD@{34}: commit: Big refactor
+[33m63f8adcc5[m HEAD@{35}: commit: Tidy ups
+[33m51b16caa3[m HEAD@{36}: commit: All green
+[33mc84726a3d[m HEAD@{37}: commit: Wipa
+[33m74e5a48a3[m HEAD@{38}: clone: from github.com:Ziden/Lisergy-RTS.git
