@@ -15,24 +15,24 @@ public class BattleGroupListener : BaseComponentListener<BattleGroupComponent>
 {
     public BattleGroupListener(IGameClient client) : base(client)
     {
-        GameClient.ClientEvents.On<OwnBattleFinishedEvent>(this, OnLocalPlayerBattleFinished);
+        ClientSdk.ClientEvents.On<OwnBattleFinishedEvent>(this, OnLocalPlayerBattleFinished);
     }
 
     private void OnLocalPlayerBattleFinished(OwnBattleFinishedEvent ev)
     {
-        if (ev.Victory) GameClient.UnityServices().Notifications.Display<VictoryNotification>(ev);
-        else GameClient.UnityServices().Notifications.Display<DefeatNotification>(ev);
+        if (ev.Victory) ClientSdk.UnityServices().Notifications.Display<VictoryNotification>(ev);
+        else ClientSdk.UnityServices().Notifications.Display<DefeatNotification>(ev);
     }
 
     public override void OnComponentModified(IEntity entity, BattleGroupComponent oldComponent, BattleGroupComponent newComponent)
     {
         if (oldComponent.BattleID == GameId.ZERO && newComponent.BattleID != GameId.ZERO)
         {
-            _ = GameClient.UnityServices().Vfx.EntityEffects.PlayEffect(entity, VfxPrefab.BattleEffect);
+            _ = ClientSdk.UnityServices().Vfx.EntityEffects.PlayEffect(entity, VfxPrefab.BattleEffect);
         }
         else if (oldComponent.BattleID != GameId.ZERO && newComponent.BattleID == GameId.ZERO)
         {
-            GameClient.UnityServices().Vfx.EntityEffects.StopEffects(entity);
+            ClientSdk.UnityServices().Vfx.EntityEffects.StopEffects(entity);
         }
     }
 

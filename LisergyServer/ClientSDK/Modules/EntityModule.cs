@@ -51,11 +51,11 @@ namespace ClientSDK.Services
 
     public class EntityModule : IEntityModule
     {
-        private GameClient _client;
+        private ClientSDK _client;
         public ComponentSynchronizer ComponentSync { get; private set; }
         public SystemSynchronizer SystemSync { get; private set; }
 
-        public EntityModule(GameClient client)
+        public EntityModule(ClientSDK client)
         {
             _client = client;
             ComponentSync = new ComponentSynchronizer(_client);

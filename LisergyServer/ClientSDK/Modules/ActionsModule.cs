@@ -29,9 +29,9 @@ namespace ClientSDK.Services
 
     public class ActionsModule : IActionModule
     {
-        private GameClient _client;
+        private ClientSDK _client;
 
-        public ActionsModule(GameClient client)
+        public ActionsModule(ClientSDK client)
         {
             _client = client;
         }

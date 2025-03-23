@@ -6,12 +6,12 @@ namespace ClientSDK.Services
 {
     public class GameViewModule
     {
-        private GameClient _client;
+        private ClientSDK _client;
 
         public ViewContainer _views = new ViewContainer();
         public Func<IEntity, EntityView> CreatorFunction;
 
-        public GameViewModule(GameClient client)
+        public GameViewModule(ClientSDK client)
         {
             _client = client;
         }

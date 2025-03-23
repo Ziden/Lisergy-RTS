@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -41,16 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Game\Game.csproj" />
+    <ProjectReference Include="..\Game\GameLogic.csproj" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Condition="$([MSBuild]::IsOSPlatform('OSX'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/ClientSDK.dll" />
-    <Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/ClientSDK.dll" />
-    <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="xcopy /y /s /f $(TargetPath) $(SolutionDir)\..\LisergyClient\LisergyClient\Assets\Plugins\ClientSDK.dll*" />
-    <Exec Condition="$([MSBuild]::IsOSPlatform('OSX'))" Command="cp -vf $(OutDir)ClientSDK.xml $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/ClientSDK.xml" />
-	<Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))" Command="cp -vf $(OutDir)ClientSDK.xml $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/ClientSDK.xml" />
-    <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="xcopy /y /s /f $(OutDir)ClientSDK.xml $(SolutionDir)\..\LisergyClient\LisergyClient\Assets\Plugins\ClientSDK.xml*" />
-  </Target>
 
 </Project>

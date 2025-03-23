@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -27,18 +27,5 @@
   <ItemGroup>
     <PackageReference Include="Telepathy" Version="1.0.341" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\GameDataTest\GameDataTest.csproj" />
-    <ProjectReference Include="..\GameData\GameData.csproj" />
-    <ProjectReference Include="..\GameServices\GameServices.csproj" />
-    <ProjectReference Include="..\Game\Game.csproj" />
-  </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Condition="$([MSBuild]::IsOSPlatform('OSX'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/BaseServer.dll" />
-    <Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/BaseServer.dll" />
-    <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="xcopy /y /s /f $(TargetPath) $(SolutionDir)\..\LisergyClient\LisergyClient\Assets\Plugins\BaseServer.dll*" />
-  </Target>
 
 </Project>

@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace ServerTests.Integration.Stubs
 {
-    internal class TestGameClient : GameClient, IDisposable, IEventListener
+    internal class TestGameClient : ClientSDK.ClientSDK, IDisposable, IEventListener
     {
         private StandaloneServer _server;
 

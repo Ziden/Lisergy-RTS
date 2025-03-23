@@ -9,6 +9,37 @@
             Whenever we receive credentials we use it to handshake with the servers
             </summary>
         </member>
+        <member name="T:ClientSDK.IClientSDK">
+            <summary>
+            Main client SDK. Should be imported by the game client and consumed to run and display the game
+            Contains all base functionality to run parts of the game client-side more easily.
+            </summary>
+        </member>
+        <member name="P:ClientSDK.IClientSDK.Game">
+            <summary>
+            Main game instance, where entities, networking and the world data are handled
+            </summary>
+        </member>
+        <member name="P:ClientSDK.IClientSDK.Modules">
+            <summary>
+            Client SDK modules that can perform server specific interactions
+            </summary>
+        </member>
+        <member name="P:ClientSDK.IClientSDK.Network">
+            <summary>
+            Exposed network to be used. References to Game.Network
+            </summary>
+        </member>
+        <member name="P:ClientSDK.IClientSDK.ClientEvents">
+            <summary>
+            Client specific triggered event bus
+            </summary>
+        </member>
+        <member name="P:ClientSDK.IClientSDK.Log">
+            <summary>
+            General client SDK log
+            </summary>
+        </member>
         <member name="T:ClientSDK.Data.IClientWorld">
             <summary>
             Implementation of the game world for the client SDK.
@@ -84,37 +115,6 @@
         <member name="T:ClientSDK.Data.OtherPlayer">
             <summary>
             Represents another player thats not the local player
-            </summary>
-        </member>
-        <member name="T:ClientSDK.IGameClient">
-            <summary>
-            Main client SDK. Should be imported by the game client and consumed to run and display the game
-            Contains all base functionality to run parts of the game client-side more easily.
-            </summary>
-        </member>
-        <member name="P:ClientSDK.IGameClient.Game">
-            <summary>
-            Main game instance, where entities, networking and the world data are handled
-            </summary>
-        </member>
-        <member name="P:ClientSDK.IGameClient.Modules">
-            <summary>
-            Client SDK modules that can perform server specific interactions
-            </summary>
-        </member>
-        <member name="P:ClientSDK.IGameClient.Network">
-            <summary>
-            Exposed network to be used. References to Game.Network
-            </summary>
-        </member>
-        <member name="P:ClientSDK.IGameClient.ClientEvents">
-            <summary>
-            Client specific triggered event bus
-            </summary>
-        </member>
-        <member name="P:ClientSDK.IGameClient.Log">
-            <summary>
-            General client SDK log
             </summary>
         </member>
         <member name="T:ClientSDK.Services.IAccountModule">

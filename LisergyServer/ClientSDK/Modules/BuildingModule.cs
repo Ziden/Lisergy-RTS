@@ -13,10 +13,10 @@ namespace ClientSDK.Services
 
     public class BuildingModule : IBuildingModule
     {
-        private GameClient _client;
+        private ClientSDK _client;
         private List<BuildingSpec> _known = new List<BuildingSpec>();
 
-        public BuildingModule(GameClient client)
+        public BuildingModule(ClientSDK client)
         {
             _client = client;
         }

@@ -25,9 +25,9 @@ namespace ClientSDK.Sync
         private List<(object, object)> _toSync = new List<(object, object)>();
         private List<object> _added = new List<object>();
 
-        private IGameClient _client;
+        private IClientSDK _client;
 
-        public ComponentSynchronizer(IGameClient client)
+        public ComponentSynchronizer(IClientSDK client)
         {
             _client = client;
         }

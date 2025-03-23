@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <LangVersion>8</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -51,11 +51,5 @@
       <HintPath>..\..\PreCompiledLibraries\MemoryPack\MemoryPack.Generator.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Condition="$([MSBuild]::IsOSPlatform('OSX'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/Game.dll" />
-    <Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/Game.dll" />
-    <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="xcopy /y /s /f $(TargetPath) $(SolutionDir)\..\LisergyClient\LisergyClient\Assets\Plugins\Game.dll*" />
-  </Target>
 
 </Project>

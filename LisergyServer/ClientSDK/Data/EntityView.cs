@@ -36,7 +36,7 @@ namespace ClientSDK.Data
         /// <summary>
         /// Gets the reference of the game client
         /// </summary>
-        IGameClient Client { get; }
+        IClientSDK Client { get; }
 
         /// <summary>
         /// Current client state of this view
@@ -59,10 +59,11 @@ namespace ClientSDK.Data
     {
         private event Action<EntityView> OnRendered;
 
+        public IGameObject ArtObject { get; protected set; }
         public IEntity Entity { get; private set; }
-        public IGameClient Client { get; set; }
+        public IClientSDK Client { get; set; }
 
-        public EntityView(IEntity entity, IGameClient client)
+        public EntityView(IEntity entity, IClientSDK client)
         {
             Entity = entity;
             Client = client;

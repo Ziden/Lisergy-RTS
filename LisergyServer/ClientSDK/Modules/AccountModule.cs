@@ -26,9 +26,9 @@ namespace ClientSDK.Services
     public class AccountModule : IAccountModule
     {
         private PlayerProfileComponent _profile;
-        private GameClient _client;
+        private ClientSDK _client;
 
-        public AccountModule(GameClient client)
+        public AccountModule(ClientSDK client)
         {
             _client = client;
         }

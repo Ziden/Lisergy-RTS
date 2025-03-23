@@ -26,9 +26,9 @@ namespace ClientSDK.Services
 
     public class BattleModule : IBattleModule
     {
-        private GameClient _client;
+        private ClientSDK _client;
 
-        public BattleModule(GameClient client)
+        public BattleModule(ClientSDK client)
         {
             _client = client;
         }

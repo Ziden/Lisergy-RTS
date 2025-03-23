@@ -41,7 +41,7 @@ namespace ClientSDK
         public IBattleModule Battles { get; }
         public IBuildingModule Buildings { get; }
 
-        public ServerModules(GameClient client)
+        public ServerModules(ClientSDK client)
         {
             Account = new AccountModule(client);
             Player = new PlayerModule(client);

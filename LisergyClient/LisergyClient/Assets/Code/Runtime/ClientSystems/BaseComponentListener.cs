@@ -14,15 +14,15 @@ public interface ISpecificComponentListener<ComponentType> : IComponentListener 
 
 public abstract class BaseComponentListener<ComponentType> : ISpecificComponentListener<ComponentType> where ComponentType : IComponent
 {
-    protected IGameClient GameClient { get; private set; }
+    protected IClientSDK ClientSdk { get; private set; }
 
-    public BaseComponentListener(IGameClient client)
+    public BaseComponentListener(IClientSDK client)
     {
-        GameClient = client;
+        ClientSdk = client;
 
-        GameClient.Modules.Entities.OnComponentAdded<ComponentType>(_OnComponentAdded);
-        GameClient.Modules.Entities.OnComponentModified<ComponentType>(_OnComponentModified);
-        GameClient.Modules.Entities.OnComponentRemoved<ComponentType>(_OnComponentRemoved);
+        ClientSdk.Modules.Entities.OnComponentAdded<ComponentType>(_OnComponentAdded);
+        ClientSdk.Modules.Entities.OnComponentModified<ComponentType>(_OnComponentModified);
+        ClientSdk.Modules.Entities.OnComponentRemoved<ComponentType>(_OnComponentRemoved);
     }
 
     private void _OnComponentModified(IEntity entity, ComponentType oldComponent, ComponentType? newComponent)

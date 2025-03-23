@@ -30,10 +30,10 @@ namespace ClientSDK.Services
 
     public class PlayerModule : IPlayerModule
     {
-        private GameClient _client;
+        private ClientSDK _client;
         public PlayerModel LocalPlayer { get; private set; }
         public GameId PlayerId => LocalPlayer.EntityId;
-        public PlayerModule(GameClient client) { _client = client; }
+        public PlayerModule(ClientSDK client) { _client = client; }
 
         public void Register()
         {

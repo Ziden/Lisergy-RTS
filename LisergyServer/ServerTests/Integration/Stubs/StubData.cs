@@ -7,7 +7,7 @@ namespace Tests.Integration.Stubs
 {
     public class StubEntityView : EntityView
     {
-        public StubEntityView(IEntity entity, IGameClient client) : base(entity, client)
+        public StubEntityView(IEntity entity, IClientSDK client) : base(entity, client)
         {
         }
     }

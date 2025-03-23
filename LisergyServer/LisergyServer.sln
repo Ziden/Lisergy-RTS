@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseServer", "Core\BaseServer.csproj", "{832E3691-6476-49E5-B6FA-2175A8CEE8D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game", "Game\Game.csproj", "{1C33B0EC-B723-4230-A084-FD876AABD11B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic", "Game\GameLogic.csproj", "{1C33B0EC-B723-4230-A084-FD876AABD11B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameData", "GameData\GameData.csproj", "{5B793397-7989-4CAE-A572-5AC909B8F91F}"
 EndProject
@@ -22,11 +22,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{195A9534-0588-4274-913A-72F715ED332B}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		NewSerializer.Generator\NewSerializer.Generator.csproj = NewSerializer.Generator\NewSerializer.Generator.csproj
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebPlayerLogic", "WebGameLogic\WebPlayerLogic.csproj", "{34D5EFFA-50B4-45B2-A681-19F15839844A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameServices", "GameServices\GameServices.csproj", "{849FC0A5-04E4-46E3-A314-5C27040153A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GodotClient", "GodotClient\GodotClient.csproj", "{9360B0F6-2DB3-569E-BBC4-A8230892EB55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +77,10 @@ Global
 		{849FC0A5-04E4-46E3-A314-5C27040153A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{849FC0A5-04E4-46E3-A314-5C27040153A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{849FC0A5-04E4-46E3-A314-5C27040153A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9360B0F6-2DB3-569E-BBC4-A8230892EB55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9360B0F6-2DB3-569E-BBC4-A8230892EB55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9360B0F6-2DB3-569E-BBC4-A8230892EB55}.Release|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{9360B0F6-2DB3-569E-BBC4-A8230892EB55}.Release|Any CPU.Build.0 = ExportDebug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

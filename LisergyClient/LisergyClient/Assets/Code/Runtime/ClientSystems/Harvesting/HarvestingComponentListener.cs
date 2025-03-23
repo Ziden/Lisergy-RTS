@@ -18,27 +18,27 @@ public class HarvestingComponentListener : BaseComponentListener<HarvestingCompo
     {
         if (e.Entity.Components.Has<HarvestingPredictionComponent>() && !e.Entity.Components.Has<HarvestingComponent>())
         {
-            GameClient.Log.Debug($"[HarvestingComponentListener] Moving from {e.From} to {e.To} while harvesting, stopping prediction");
+            ClientSdk.Log.Debug($"[HarvestingComponentListener] Moving from {e.From} to {e.To} while harvesting, stopping prediction");
             e.Entity.Components.Remove<HarvestingPredictionComponent>();
         }
     }
 
     private void OnBeginHarvesting(IEntity entity)
     {
-        _ = GameClient.UnityServices().Vfx.EntityEffects.PlayEffect(entity, VfxPrefab.HarvestEffect);
+        _ = ClientSdk.UnityServices().Vfx.EntityEffects.PlayEffect(entity, VfxPrefab.HarvestEffect);
         if (entity.GetView() is PartyView p)
         {
             p.MovementInterpolator.ClearQueue();
         }
         var c = new HarvestingPredictionComponent();
-        c.StartTracking(GameClient, entity);
+        c.StartTracking(ClientSdk, entity);
         entity.Components.Add(c);
     }
 
     private void OnFinishHarvesting(IEntity entity)
     {
-        GameClient.Log.Debug("[HarvestingComponentListener] Finishing harvesting");
-        GameClient.UnityServices().Vfx.EntityEffects.StopEffects(entity);
+        ClientSdk.Log.Debug("[HarvestingComponentListener] Finishing harvesting");
+        ClientSdk.UnityServices().Vfx.EntityEffects.StopEffects(entity);
         entity.Components.Remove<HarvestingPredictionComponent>();
     }
 

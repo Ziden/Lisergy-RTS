@@ -12,9 +12,9 @@ namespace ClientSDK.Sync
     /// </summary>
     public class SystemSynchronizer
     {
-        private GameClient _gameClient;
+        private ClientSDK _gameClient;
 
-        public SystemSynchronizer(GameClient gameClient)
+        public SystemSynchronizer(ClientSDK gameClient)
         {
             _gameClient = gameClient;
         }

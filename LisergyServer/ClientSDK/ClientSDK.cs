@@ -10,7 +10,7 @@ namespace ClientSDK
     /// Main client SDK. Should be imported by the game client and consumed to run and display the game
     /// Contains all base functionality to run parts of the game client-side more easily.
     /// </summary>
-    public interface IGameClient
+    public interface IClientSDK
     {
         /// <summary>
         /// Main game instance, where entities, networking and the world data are handled
@@ -38,7 +38,7 @@ namespace ClientSDK
         public IGameLog Log { get; }
     }
 
-    public class GameClient : IGameClient
+    public class ClientSDK : IClientSDK
     {
         public IGameNetwork Network { get; private set; }
         public IGame Game { get; private set; } = null!;
@@ -47,7 +47,7 @@ namespace ClientSDK
         public IGameLog SDKLog { get; private set; }
         public IGameLog Log => Game.Log;
 
-        public GameClient()
+        public ClientSDK()
         {
             Serialization.LoadSerializers();
             SDKLog = new GameLog("[Client SDK]");
