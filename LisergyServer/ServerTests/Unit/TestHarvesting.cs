@@ -213,8 +213,8 @@ namespace GameUnitTests
 
             Assert.AreEqual(harvestedStack.Amount, tileResourceBefore.Resource.Amount / 2);
             Assert.AreEqual(0, tileResourceAfter.Resource.Amount);
-            Assert.AreEqual(cargo.Slot1.Amount, tileResourceBefore.Resource.Amount);
-            Assert.AreEqual(cargo.CurrentWeight, cargo.Slot1.Amount * _game.Specs.Resources[_logs.HarvestPointSpec.ResourceId].WeightPerUnit);
+            Assert.AreEqual(cargo.Items.First().Value, tileResourceBefore.Resource.Amount);
+            Assert.AreEqual(cargo.CurrentWeight, cargo.Items.First().Value * _game.Specs.Resources[_logs.HarvestPointSpec.ResourceId].WeightPerUnit);
         }
 
         [Test]

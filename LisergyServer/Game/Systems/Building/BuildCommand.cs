@@ -1,5 +1,4 @@
-﻿using Game.Engine.DataTypes;
-using Game.Engine.Network;
+﻿using Game.Engine.Network;
 using Game.World;
 using GameData;
 using System;
@@ -19,6 +18,16 @@ namespace Game.Systems.Building
             {
                 throw new Exception("Bad tile");
             }
+            var tech = Sender.EntityLogic.CheckTechTree(Building);
+            if (tech.Status != BuildingTechStatus.Available)
+            {
+                throw new Exception("Blocked by spec "+tech.BlockedBy);
+            }
+            if(tile.Logic.Building.PlaceConstruction(Building, SenderPlayerId) == null)
+            {
+                throw new Exception("Failed to place building");
+            }
+
         }
     }
 

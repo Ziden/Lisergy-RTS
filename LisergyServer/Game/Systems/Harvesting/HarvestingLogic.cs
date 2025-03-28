@@ -49,7 +49,8 @@ namespace Game.Systems.Resources
             if (CurrentEntity.Components.Has<HarvestingComponent>()) return false;
             if (harvest.Amount <= 0) return false;
             var cargo = CurrentEntity.Get<CargoComponent>();
-            if (cargo.GetRoomFor(harvest.ResourceId) == -1) return false;
+           ;
+            if (!CurrentEntity.Logic.Cargo.HasRoomFor(harvest)) return false;
             var resourceSpec = Game.Specs.Resources[harvest.ResourceId];
             if (cargo.RemainingWeight < resourceSpec.WeightPerUnit) return false;
             var pos = CurrentEntity.Get<MapPlacementComponent>();

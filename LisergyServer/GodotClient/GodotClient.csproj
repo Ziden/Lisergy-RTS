@@ -1,4 +1,4 @@
-<Project Sdk="Godot.NET.Sdk/4.4.0">
+﻿<Project Sdk="Godot.NET.Sdk/4.4.0">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -7,4 +7,11 @@
     <StartProgram>C:\Users\gabri\Desktop\Godot\Godot.exe</StartProgram>
     <StartWorkingDirectory>C:/Users/gabri/Desktop/LisClone/Lisergy-RTS/LisergyServer/GodotClient</StartWorkingDirectory>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClientSDK\ClientSDK.csproj" />
+    <ProjectReference Include="..\Core\BaseServer.csproj" />
+    <ProjectReference Include="..\GameData\GameData.csproj" />
+    <ProjectReference Include="..\Game\GameLogic.csproj" />
+  </ItemGroup>
 </Project>

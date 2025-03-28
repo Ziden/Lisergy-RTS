@@ -22,7 +22,7 @@ namespace MapServer
         private GameServerNetwork _network;
         private BattleService _battleService;
         private WorldService _worldService;
-        private byte[] _gameSpecs;
+        private byte[] _gameSpecs; // MOVE to a data service
 
         public override ServerType GetServerType() => ServerType.WORLD;
 
@@ -34,7 +34,9 @@ namespace MapServer
             _network = game.Network as GameServerNetwork;
             _battleService = new BattleService(Game);
             _worldService = new WorldService(Game);
-            _gameSpecs = Serialization.FromAnyType(new GameSpecPacket(game)).ToArray();
+            var specPacket = new GameSpecPacket(game);
+            specPacket.OnBeforeSerialize();
+            _gameSpecs = Serialization.FromAnyType(specPacket).ToArray();
             _network.OnOutgoingPacket += SendPacketToPlayer;
         }
 

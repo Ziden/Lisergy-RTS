@@ -1,6 +1,7 @@
 using Game.Events.ServerEvents;
 using Game.Systems.Building;
 using Game.Systems.Tile;
+using GameDataTest;
 using NUnit.Framework;
 using ServerTests;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace GameUnitTests
             var player = Game.GetTestPlayer();
             var initialBuildingSpec = Game.RandomBuildingSpec();
             var tile = Game.RandomNotBuiltTile();
-            var buildingSpec = Game.RandomBuildingSpec();
+            var buildingSpec = Game.Specs.Buildings[TestBuildings.CAMP];
 
             tile.Logic.Building.ForceBuild(initialBuildingSpec.SpecId, player.EntityId);
 

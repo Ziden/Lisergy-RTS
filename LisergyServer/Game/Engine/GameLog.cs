@@ -20,17 +20,20 @@ namespace Game.Engine
         public void Debug(string msg)
         {
 #if DEBUG
+            Console.ForegroundColor = ConsoleColor.White;
             _Debug(Tag + msg);
 #endif
         }
 
         public void Info(string msg)
         {
+            Console.ForegroundColor = ConsoleColor.White;
             _Info(Tag + msg);
         }
 
         public void Error(string msg)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             _Error(Tag + msg);
         }
 

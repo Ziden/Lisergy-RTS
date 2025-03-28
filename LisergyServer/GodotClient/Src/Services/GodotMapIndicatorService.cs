@@ -1,0 +1,112 @@
+﻿using ClientSDK;
+using ClientSDK.SDKEvents;
+using Cysharp.Threading.Tasks;
+using Game.Engine.ECLS;
+using Game.Engine.Events.Bus;
+using Game.Tile;
+using Game.World;
+using Godot;
+
+namespace LisergyGodotClient.Src.Services
+{
+    /// <summary>
+    /// This service is responsible for moving the tile and unit selectors on the map
+    /// </summary>
+    public interface IMapIndicatorService
+    {
+
+    }
+
+    public class GodotMapIndicatorService : IMapIndicatorService, IEventListener
+    {
+        private IClientSDK _sdk;
+        private IClientStateService _state;
+        private IAssetService _assets;
+
+        private IGameObject _tileSelector;
+        private IGameObject _unitSelector;
+
+        public GodotMapIndicatorService(IClientSDK sdk, IAssetService assets, IClientStateService state)
+        {
+            _sdk = sdk;
+            _assets = assets;
+            _state = state;
+
+            state.OnTileSelected += OnTileSelected;
+            state.OnCameraMoved += OnCameraMoved;
+            state.OnPartySelected += OnPartySelected;
+            _sdk.ClientEvents.On<GameStartedEvent>(this, OnGameStarted);
+        }
+
+        private void OnGameStarted(GameStartedEvent e)
+        {
+            Initialize().Forget();
+        }
+
+        private async UniTaskVoid Initialize()
+        {
+            var art = await _assets.LoadGetArt(ClientConstants.MODEL_TILE_SELECTOR);
+            _assets.AddToScene(art);
+            _tileSelector = art;
+            if (_state.SelectedTile != null)
+            {
+                MoveTileSelector(_state.SelectedTile.Position);
+            } else
+            {
+                MoveTileSelector(new Location(-999, -999));
+            }
+
+            var art2 = await _assets.LoadGetArt(ClientConstants.MODEL_UNIT_SELECTOR);
+            _assets.AddToScene(art2);
+            _unitSelector = art2;
+            if (_state.SelectedParty != null)
+            {
+                MovePartySelector(_state.SelectedParty, _state.SelectedTile.Position);
+            } else
+            {
+                MovePartySelector(null, new Location(-999, -999));
+            }
+        }
+
+
+        private void OnPartySelected(IEntity e)
+        {
+            if(e == null)
+            {
+                MovePartySelector(null, new Location(-999, -999));
+            } else
+            {
+                MovePartySelector(e, e.GetTile().Position);
+            }
+        }
+
+        private void MoveTileSelector(Location tile)
+        {
+            if (_tileSelector == null) return;
+            _tileSelector.Location = tile;
+        }
+
+        private void MovePartySelector(IEntity entity, Location tile)
+        {
+            if (_unitSelector == null) return;
+
+            if(entity == null)
+            {
+                _unitSelector.Visible = false;
+            } else
+            {
+                _unitSelector.Visible = true;
+                entity.GetView().GameObject.AddChild(_unitSelector);
+            }
+        }
+
+        private void OnTileSelected(TileModel tile)
+        {
+            MoveTileSelector(ClientServices.State.SelectedTile.Position);
+        }
+
+        private void OnCameraMoved(Vector3 pos)
+        {
+        }
+    }
+}

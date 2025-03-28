@@ -5,6 +5,7 @@ using Game.Engine.Network;
 using Game.Systems.Battle.BattleActions;
 using Game.Systems.Battle.BattleEvents;
 using Game.Systems.Battler;
+using Game.Systems.Map;
 using Game.Systems.Player;
 using Game.Systems.Tile;
 using GameData;
@@ -34,7 +35,7 @@ namespace Game.Engine
 
     public static class Serialization
     {
-        private static SerializationType Type = SerializationType.Json; // test
+        private static SerializationType Type = SerializationType.NetSerializer; // test
         private static JsonSerializerSettings _jsonSettings = new JsonSerializerSettings()
         {
             PreserveReferencesHandling = PreserveReferencesHandling.None,
@@ -76,7 +77,7 @@ namespace Game.Engine
             {
                 return;
             }
-            var models = new List<Type>(GetDefaultSerializationTypes());
+            var models = new List<Type>(GetDefaultSerializationTypes()).ToList();
 
             models.AddRange(new[]
             {
@@ -93,7 +94,8 @@ namespace Game.Engine
                 typeof(SerializedPlayer),
                 typeof(TimeBlock),
                 typeof(GameSpec),
-                typeof(IBaseEvent)
+                typeof(IBaseEvent),
+                typeof(IComponent[])
             });
 
             if (extras != null)
@@ -122,7 +124,7 @@ namespace Game.Engine
             var basePacketType = typeof(BasePacket);
             var iComponentType = typeof(IComponent);
 
-            foreach (Type type in typeof(IBaseEvent).Assembly.GetTypes())
+            foreach (Type type in typeof(MapPlacementComponent).Assembly.GetTypes())
             {
                 if ((basePacketType.IsAssignableFrom(type) && type != basePacketType ||
                      iComponentType.IsAssignableFrom(type) && type != iComponentType) &&

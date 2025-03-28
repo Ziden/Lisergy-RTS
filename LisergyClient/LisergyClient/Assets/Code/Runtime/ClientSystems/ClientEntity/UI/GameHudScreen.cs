@@ -2,7 +2,6 @@ using Assets.Code.Assets.Code.Runtime;
 using Assets.Code.Assets.Code.UIScreens.Base;
 using Assets.Code.UI;
 using Chat.UI;
-using Cysharp.Threading.Tasks;
 using Game.Engine.Events.Bus;
 using Game.Entities;
 using Game.Systems.Movement;
@@ -28,7 +27,7 @@ namespace Assets.Code
 
         public override void OnOpen()
         {
-            var service = UnityServicesContainer.Resolve<IUiService>();
+            var service = UnityServicesContainer.Resolve<IUiService>(); 
             _selectBar = Root.Q<WidgetEntitySelectBar>("WidgetEntitySelectBar").Required();
             _chatSummary = Root.Q<WidgetChatSummary>("WidgetChatSummary").Required();
             _selectBar.OnTownClicked += OnTownButtonClick;

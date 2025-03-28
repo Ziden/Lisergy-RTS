@@ -26,9 +26,9 @@ namespace ClientSDK.Services
     public class AccountModule : IAccountModule
     {
         private PlayerProfileComponent _profile;
-        private ClientSDK _client;
+        private LisergySDK _client;
 
-        public AccountModule(ClientSDK client)
+        public AccountModule(LisergySDK client)
         {
             _client = client;
         }
@@ -59,6 +59,7 @@ namespace ClientSDK.Services
 
         private void OnReceiveGameSpec(GameSpecPacket ev)
         {
+            ev.OnBeforeSerialize();
             _client.SDKLog.Debug("Initialized Specs");
             var game = new LisergyGame(ev.Spec, new GameLog("[Client Game]"), _client.Network, isClientGame: true);
             var world = new ClientWorld(game, (ushort)ev.MapSizeX, (ushort)ev.MapSizeY);

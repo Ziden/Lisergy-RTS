@@ -8,9 +8,9 @@ namespace GameDataTest
 {
     public static class TestUnitData
     {
-        public static string Addr(string name) => $"Assets/Addressables/Prefabs/Units/{name}.prefab";
+        public static string Addr(string name) => $"res://Content/Units/{name}.tscn";
 
-        public static string AddrFace(string name) => $"Assets/Addressables/Sprites/Badges/{name}.png";
+        public static string AddrFace(string name) => $"";
 
         private static void AddUnit(ref GameSpec spec, UnitSpec unitSpec)
         {
@@ -66,7 +66,7 @@ namespace GameDataTest
                 IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = "Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.2_30.png",
+                    Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.pngpng",
                 },
                 LOS = 2,
                 Stats = AddToBase(
@@ -86,7 +86,7 @@ namespace GameDataTest
                 IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = "Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.6_94.png",
+                    Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.png",
                 },
                 Stats = AddToBase(
                     (Stat.ATK, 10),
@@ -105,7 +105,7 @@ namespace GameDataTest
                 IconArt = new ArtSpec()
                 {
                     Type = ArtType.SPECIFIC_SPRITE,
-                    Address = "Assets/Addressables/Sprites/Icons/GrayscaleIcons/Icon.2_81.png",
+                    Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.png",
                 },
                 LOS = 3,
                 Stats = AddToBase(

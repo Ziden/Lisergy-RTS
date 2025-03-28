@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bh6yy5wkcf1hs"]
+
+[ext_resource type="Texture2D" uid="uid://3h3x2ytyv64i" path="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_PictoIcons_(Original)/btn_icon_more.png" id="1_qtar8"]
+
+[node name="HalfPath" type="Node3D"]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.283367, 0, 0)
+texture = ExtResource("1_qtar8")

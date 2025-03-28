@@ -47,9 +47,9 @@ namespace ClientSDK.Modules
 
         private SortedSet<ChatPacket> _chatLog = new SortedSet<ChatPacket>(new ChatSorter());
 
-        private ClientSDK _gameClient;
+        private LisergySDK _gameClient;
 
-        public ChatModule(ClientSDK gameClient)
+        public ChatModule(LisergySDK gameClient)
         {
             _gameClient = gameClient;
         }
@@ -94,7 +94,7 @@ namespace ClientSDK.Modules
         {
             _gameClient.Network.SendToServer(new ChatPacket()
             {
-                Name = _gameClient.Modules.Player.LocalPlayer.GetFromEntity<PlayerProfileComponent>().Name,
+                Name = _gameClient.Server.Player.LocalPlayer.GetFromEntity<PlayerProfileComponent>().Name,
                 Message = message,
             }, ServerType.CHAT);
         }

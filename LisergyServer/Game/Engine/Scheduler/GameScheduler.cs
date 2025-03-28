@@ -66,6 +66,10 @@ namespace Game.Engine.Scheduler
             _ = Queue.Remove(task);
             task.Delay = TimeSpan.FromSeconds(0);
             task.Dispose();
+            if(NextTask == task)
+            {
+                NextTask = Queue.FirstOrDefault();
+            }
         }
 
         internal void RunTask(GameTask task)

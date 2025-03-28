@@ -13,10 +13,10 @@ namespace ClientSDK.Services
 
     public class BuildingModule : IBuildingModule
     {
-        private ClientSDK _client;
+        private LisergySDK _client;
         private List<BuildingSpec> _known = new List<BuildingSpec>();
 
-        public BuildingModule(ClientSDK client)
+        public BuildingModule(LisergySDK client)
         {
             _client = client;
         }

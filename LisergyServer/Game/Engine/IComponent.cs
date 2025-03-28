@@ -1,6 +1,4 @@
-﻿using MemoryPack;
-
-namespace Game.Engine.ECLS
+﻿namespace Game.Engine.ECLS
 {
     /// <summary>
     /// Basic component interface. Will likely implement component as an unmanaged struct with

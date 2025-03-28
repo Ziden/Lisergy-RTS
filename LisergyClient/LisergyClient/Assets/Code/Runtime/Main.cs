@@ -22,7 +22,7 @@ public class Main : MonoBehaviour, IEventListener
 {
     public static readonly bool OFFLINE_MODE = true;
 
-    private GameClient _client;
+    private IClientSDK _client;
     private ClientNetwork _network;
     private GameStateMachine _stateMachine;
     private List<IEventListener> _listeners = new List<IEventListener>();
@@ -33,7 +33,7 @@ public class Main : MonoBehaviour, IEventListener
     {
         GameId.INCREMENTAL_MODE = 1;
         Debug.Log("Main Awake");
-        _client = new GameClient();
+        _client = new LisergySDK();
         _client.ClientEvents.On<GameStartedEvent>(this, OnGameStarted);
         _network = _client.Network as ClientNetwork;
         SetupViews();

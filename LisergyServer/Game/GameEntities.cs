@@ -79,6 +79,16 @@ namespace Game.Entities
 
         }
 
+        public IReadOnlyList<IEntity> GetChildren(in GameId owner)
+        {
+            var ret = new List<IEntity>();
+            _entities[owner].Traverse(e =>
+            {
+                ret.Add(e);
+                return true;
+            });
+            return ret;
+        }
 
         public IReadOnlyList<IEntity> GetChildren(in GameId owner, EntityType type)
         {

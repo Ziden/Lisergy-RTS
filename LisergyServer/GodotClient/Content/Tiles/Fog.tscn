@@ -1,0 +1,61 @@
+[gd_scene load_steps=3 format=3 uid="uid://ntbn2naavsr7"]
+
+[ext_resource type="Material" uid="uid://bjabnvm8t22ta" path="res://Content/Art/Models/fogmaterial.tres" id="1_wi7i8"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_1wqdr"]
+
+[node name="Fog" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.824609, 0, 0, 0, -2.11823e-08, 1, 0, -0.484595, -4.37114e-08, 0, 0, 0.262685)
+material_override = ExtResource("1_wi7i8")
+mesh = SubResource("SphereMesh_1wqdr")
+skeleton = NodePath("")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.824609, 0, 0, 0, -2.11823e-08, 1, 0, -0.484595, -4.37114e-08, 0, 0, -0.36185)
+material_override = ExtResource("1_wi7i8")
+mesh = SubResource("SphereMesh_1wqdr")
+skeleton = NodePath("")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.0419782, -0.483967, -4.36547e-08, 0, -2.11823e-08, 1, -0.82354, 0.0246692, 2.22521e-09, 0.269432, 0, -0.00517786)
+material_override = ExtResource("1_wi7i8")
+mesh = SubResource("SphereMesh_1wqdr")
+skeleton = NodePath("")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.0419782, -0.483967, -4.36547e-08, 0, -2.11823e-08, 1, -0.82354, 0.0246692, 2.22521e-09, -0.336972, 0, -0.0404845)
+material_override = ExtResource("1_wi7i8")
+mesh = SubResource("SphereMesh_1wqdr")
+skeleton = NodePath("")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="MeshInstance3D5"]
+transform = Transform3D(-0.119997, 0.0381972, -0.628566, 0.643409, -0.0524591, -0.121442, -0.0767627, -0.499411, -0.035319, -0.035184, -0.666842, 0.402379)
+material_override = ExtResource("1_wi7i8")
+mesh = SubResource("SphereMesh_1wqdr")
+skeleton = NodePath("../MeshInstance3D2")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.119997, 0.0381972, -0.628566, 0.643409, -0.0524591, -0.121442, -0.0767627, -0.499411, -0.035319, 0.241974, 0.0207005, 0.280454)
+material_override = ExtResource("1_wi7i8")
+mesh = SubResource("SphereMesh_1wqdr")
+skeleton = NodePath("")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="MeshInstance3D6"]
+transform = Transform3D(-0.119996, 0.0381972, -0.628566, 0.643409, -0.0524591, -0.121442, -0.0767628, -0.499411, -0.0353191, 0.152745, -0.253739, 0.876649)
+material_override = ExtResource("1_wi7i8")
+mesh = SubResource("SphereMesh_1wqdr")
+skeleton = NodePath("../MeshInstance3D2")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.119996, 0.0381972, -0.628566, 0.643409, -0.0524591, -0.121442, -0.0767628, -0.499411, -0.0353191, -0.288042, -0.253739, -0.323561)
+material_override = ExtResource("1_wi7i8")
+mesh = SubResource("SphereMesh_1wqdr")
+skeleton = NodePath("")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.119996, 0.0381972, -0.628566, 0.643409, -0.0524591, -0.121442, -0.0767628, -0.499411, -0.0353191, 0.222121, -0.121793, -0.300452)
+material_override = ExtResource("1_wi7i8")
+mesh = SubResource("SphereMesh_1wqdr")
+skeleton = NodePath("")

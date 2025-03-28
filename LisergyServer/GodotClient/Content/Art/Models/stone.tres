@@ -1,0 +1,20 @@
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://dl4tes8io52uf"]
+
+[ext_resource type="Texture2D" uid="uid://bpbjc0udd27p7" path="res://Content/Art/Sprites/Pack/textures/block/red_sandstone.png" id="1_i38f1"]
+[ext_resource type="Texture2D" uid="uid://bmxc7o0v0i51t" path="res://Content/Art/Sprites/Pack/textures/block/cobblestone.png" id="2_gc8bo"]
+[ext_resource type="Texture2D" uid="uid://m3iu843tr2xs" path="res://Content/Art/Sprites/Pack/textures/block/pale_oak_leaves.png" id="3_p5jrm"]
+
+[resource]
+shading_mode = 2
+specular_mode = 2
+albedo_texture = ExtResource("1_i38f1")
+metallic_specular = 0.61
+roughness = 0.0
+roughness_texture_channel = 4
+rim = 0.0
+rim_tint = 0.45
+heightmap_scale = 16.0
+heightmap_texture = ExtResource("3_p5jrm")
+detail_mask = ExtResource("2_gc8bo")
+detail_albedo = ExtResource("1_i38f1")
+texture_filter = 5

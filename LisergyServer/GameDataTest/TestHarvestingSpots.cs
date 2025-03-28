@@ -5,7 +5,7 @@ namespace GameDataTest
 {
     public class TestHarvestingSpots
     {
-        private static string Addr(string name) => $"Assets/Addressables/Prefabs/Resources/{name}.prefab";
+        private static string Addr(string name) => $"res://Content/Art/Prefabs/Resources/{name}.prefab";
 
         public static readonly ResourceHarvestPointSpec LOGS = new ResourceHarvestPointSpec(0)
         {

@@ -29,9 +29,9 @@ namespace ClientSDK.Services
 
     public class ActionsModule : IActionModule
     {
-        private ClientSDK _client;
+        private LisergySDK _client;
 
-        public ActionsModule(ClientSDK client)
+        public ActionsModule(LisergySDK client)
         {
             _client = client;
         }
@@ -49,7 +49,7 @@ namespace ClientSDK.Services
                 return false;
             }
             var entityId = entity.EntityId;
-            if (entity.OwnerID != _client.Modules.Player.PlayerId)
+            if (entity.OwnerID != _client.Server.Player.PlayerId)
             {
                 _client.SDKLog.Error($"Cannot Move Entity {entityId} is not own entity");
                 return false;
@@ -80,7 +80,7 @@ namespace ClientSDK.Services
                     _client.SDKLog.Error($"Trying to walk path in {pathNode.X} {pathNode.Y} but tile was not yet received");
                     return false;
                 }
-                var tileView = _client.Modules.Views.GetEntityView(tile.Entity);
+                var tileView = _client.Server.Views.GetEntityView(tile.Entity);
 
                 if (tileView == null || tileView.State == EntityViewState.NOT_RENDERED)
                 {

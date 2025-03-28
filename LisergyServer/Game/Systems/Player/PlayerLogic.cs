@@ -70,7 +70,9 @@ namespace Game.Systems.Player
             var list = new List<BuildingConstructionSpec>();
             foreach (var kp in Game.Specs.BuildingConstructions)
             {
-                list.Add(kp.Value);
+                var canBuild = CheckTechTree(kp.Key);
+                if(canBuild.Status == BuildingTechStatus.Available)
+                    list.Add(kp.Value);
             }
             return list;
         }
@@ -121,6 +123,37 @@ namespace Game.Systems.Player
             Game.Log.Debug($"{CurrentEntity} moved unit {storedUnit} to party {newParty}");
         }
 
+        #region TechTree
+        /// <summary>
+        /// Checks if a building can be constructed based on tech tree prerequisites
+        /// </summary>
+        public BuildingTechResult CheckTechTree(BuildingSpecId buildingToCheck)
+        {
+            var finishedBuildings = GetBuildings()
+                .Where(b => !b.Components.Has<ConstructionSiteComponent>())
+                .Select(b => b.Get<PlayerBuildingComponent>().SpecId)
+                .ToHashSet();
+
+            var techTree = Game.Specs.ConstructionTechTree;
+            var node = techTree.Root.FindElement(e => e.Id == buildingToCheck);
+            if(node == null)
+            {
+                return new BuildingTechResult { Status = BuildingTechStatus.NotInTechTree };
+            }
+            if(node.Parent == null)
+            {
+                return new BuildingTechResult { Status = BuildingTechStatus.Available };
+            } else if(finishedBuildings.Contains(node.Parent.Data))
+            {
+                return new BuildingTechResult { Status = BuildingTechStatus.Available };
+            }
+            else
+            {
+                return new BuildingTechResult { Status = BuildingTechStatus.NotResearched, BlockedBy = node.Parent.Data };
+            }
+        }
+
+        #endregion
 
     }
 }

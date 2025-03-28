@@ -6,7 +6,7 @@ namespace GameDataTest
 {
     public class TestDungeons
     {
-        private static string Addr(string name) => $"Assets/Addressables/Prefabs/Buildings/{name}.prefab";
+        private static string Addr(string name) => $"res://Content/Buildings/{name}.tscn";
 
         public static DungeonSpec EASY = new DungeonSpec()
         {

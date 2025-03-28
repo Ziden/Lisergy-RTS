@@ -6,17 +6,9 @@ using System.Collections.Generic;
 namespace GameData
 {
     [Serializable]
-    public class BuildingTechTreeNode
-    {
-        public List<BuildingTechTreeNode> Children = new List<BuildingTechTreeNode>();
-
-        public BuildingSpecId? Building;
-    }
-
-    [Serializable]
     public class ConstructionTreeSpec
     {
-        public BuildingTechTreeNode Root;
+        public NodeTree<BuildingSpecId> Root;
     }
 
     [Serializable]

@@ -17,5 +17,23 @@ namespace Game.Events.ServerEvents
             this.Spec = game?.Specs;
             (MapSizeX, MapSizeY) = game.World.TilemapDimensions;
         }
+
+        public void OnBeforeSerialize()
+        {
+            Spec.ConstructionTechTree.Root.TraverseNodes(node =>
+            {
+                node.OnSerializing();
+                return true;
+            });
+        }
+
+        public void OnAfterDeserialize()
+        {
+            Spec.ConstructionTechTree.Root.TraverseNodes(node =>
+            {
+                node.OnDeserialized();
+                return true;
+            });
+        }
     }
 }

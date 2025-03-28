@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://ci5gwyy2nnw36"]
+
+[ext_resource type="Texture2D" uid="uid://8nafgc7dde5t" path="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_PictoIcons_(Original)/btn_icon_arrow_down.png" id="1_bmup5"]
+[ext_resource type="Texture2D" uid="uid://d4bhrrwxq575i" path="res://Content/Art/Ui/UiArt/Sprites/Component/Frame/frame_iconframe_circle_00.png" id="2_bmup5"]
+
+[node name="UnitIndicator" type="Node3D"]
+transform = Transform3D(0.805602, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Arrow" type="Sprite3D" parent="."]
+transform = Transform3D(-0.229216, 0, -0.958069, 0.892387, 0.358466, -0.213502, 0.348627, -0.917572, -0.0834084, 0, 1.83676, 0)
+modulate = Color(0.459068, 0.956309, 0, 1)
+billboard = 1
+double_sided = false
+no_depth_test = true
+alpha_cut = 1
+alpha_scissor_threshold = 0.0
+alpha_hash_scale = 2.0
+alpha_antialiasing_mode = 1
+alpha_antialiasing_edge = 0.48
+texture_filter = 1
+texture = ExtResource("1_bmup5")
+
+[node name="Ring" type="Sprite3D" parent="."]
+transform = Transform3D(0.680746, 0, 0, 0, -2.52315e-08, 0.968104, 0, -0.577228, -4.23172e-08, 0, 0.0133608, 0)
+modulate = Color(0.459068, 0.956309, 0, 1)
+double_sided = false
+alpha_scissor_threshold = 0.684
+alpha_hash_scale = 0.0
+texture = ExtResource("2_bmup5")

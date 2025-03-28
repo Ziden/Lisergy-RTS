@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://domtethfxdr67"]
+
+[ext_resource type="SpriteFrames" uid="uid://cwo2gsselpdyp" path="res://Content/Units/unitSpriteFrames.tres" id="2_tiohi"]
+
+[node name="Mage" type="Node3D"]
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(3.99679, 0, 0, 0, 3.01387, 0, 0, 0, 1, 0, 0.765023, 0)
+billboard = 1
+alpha_cut = 1
+alpha_scissor_threshold = 0.018
+alpha_hash_scale = 0.21
+alpha_antialiasing_mode = 2
+alpha_antialiasing_edge = 0.13
+texture_filter = 5
+sprite_frames = ExtResource("2_tiohi")
+animation = &"walk_nw"
+frame_progress = 0.993882

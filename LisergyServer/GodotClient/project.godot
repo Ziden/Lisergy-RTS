@@ -10,15 +10,19 @@ config_version=5
 
 [application]
 
-config/name="LisTest"
+config/name="LisergyGodotClient"
 run/main_scene="uid://2lgoeafwg77h"
 config/features=PackedStringArray("4.4", "C#", "Mobile")
 config/icon="res://icon.svg"
 
 [dotnet]
 
-project/assembly_name="LisTest"
+project/assembly_name="LisergyGodotClient"
 
 [rendering]
 
 renderer/rendering_method="mobile"
+textures/default_filters/anisotropic_filtering_level=1
+anti_aliasing/quality/msaa_2d=3
+anti_aliasing/quality/msaa_3d=3
+anti_aliasing/quality/screen_space_aa=1

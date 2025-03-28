@@ -47,7 +47,6 @@ namespace Game.Scheduler
 
         internal static void RunTask(FastGameTask task)
         {
-            Log.Debug($"Running task {task}");
             _currentMinuteSet.Remove(task);
             _tasks.Remove(task.ID);
             task.Execute();
@@ -65,8 +64,6 @@ namespace Game.Scheduler
             if (_nextTask == null)
             {
                 _nextTask = GetUpdatedCurrentMinuteQueue(CurrentMinute)?.FirstOrDefault();
-                if(_nextTask != null)
-                    Log.Debug($"[{time}] Set new next task: {_nextTask}");
             }
             RunTasks();
         }
@@ -121,7 +118,6 @@ namespace Game.Scheduler
         {
             if (newCurrentMinute != _currentMinute)
             {
-                Log.Debug($"Minute {_currentMinute} is now {newCurrentMinute}");
                 RunPastTasks(newCurrentMinute);
                 _currentMinute = newCurrentMinute;
                 if(!_minuteQueues.TryGetValue(_currentMinute, out _currentMinuteSet))
@@ -138,7 +134,6 @@ namespace Game.Scheduler
             var minuteToFinish = (long)Math.Floor((task.Finish - Epoch).TotalMinutes);
             var queue = GetMinuteQueue(minuteToFinish);
             queue.Add(task);
-            Log.Debug($"{Now} Registered new task {task} to finish in minute {minuteToFinish} - current {CurrentMinute}");
         }
     }
 }

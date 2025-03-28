@@ -41,6 +41,7 @@ namespace ClientSDK
                 _toSend[server] = new Queue<byte[]>();
             }
             _deltas = new DeltaCompression(null);
+            log.Info("Created client network");
         }
 
         public void SetupGame(IGame game)

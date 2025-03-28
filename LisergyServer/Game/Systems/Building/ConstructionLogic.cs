@@ -7,10 +7,24 @@ using Game.World;
 using GameData;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game.Systems.Building
 {
     public enum BuildResult { Ok, Blocked, HasResource, HasBuilding }
+
+    public enum BuildingTechStatus
+    {
+        Available,
+        NotResearched,
+        NotInTechTree
+    }
+
+    public class BuildingTechResult
+    {
+        public BuildingTechStatus Status { get; set; }
+        public BuildingSpecId? BlockedBy { get; set; }
+    }
 
     public unsafe class ConstructionLogic : BaseEntityLogic<ConstructionWorkerComponent>
     {

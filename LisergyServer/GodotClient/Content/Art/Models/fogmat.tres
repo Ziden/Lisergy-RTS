@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cx4ye1h7c4g2y"]
+
+[ext_resource type="Texture2D" uid="uid://dfmsrsk3twa8n" path="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_PictoIcons_(Original)/btn_icon_cloud_2.png" id="1_o4clx"]
+
+[resource]
+albedo_texture = ExtResource("1_o4clx")

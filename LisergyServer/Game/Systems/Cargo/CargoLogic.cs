@@ -1,4 +1,6 @@
 using Game.Engine.ECLS;
+using GameData;
+using System.Collections.Generic;
 
 namespace Game.Systems.Resources
 {
@@ -11,15 +13,15 @@ namespace Game.Systems.Resources
         /// Checks if there's room on the given unit cargo to store 
         /// Returns the cargo slot available
         /// </summary>
-        public int GetAvailableSpace(in ResourceStackData resource)
+        public bool HasRoomFor(in ResourceStackData resource)
         {
             var cargo = CurrentEntity.Get<CargoComponent>();
-            var slot = cargo.GetRoomFor(resource.ResourceId);
-            if (slot == -1) return -1;
+            if (cargo.Items == null) return true;
+            if (!cargo.Items.ContainsKey(resource.ResourceId) && cargo.Items.Count >= cargo.MaxItems) return false;
             var spec = Game.Specs.Resources[resource.ResourceId];
             var totalWeight = spec.WeightPerUnit * resource.Amount;
-            if (totalWeight > cargo.RemainingWeight) return -1;
-            return slot;
+            if (totalWeight > cargo.RemainingWeight) return false;
+            return true;
         }
 
         /// <summary>
@@ -45,8 +47,7 @@ namespace Game.Systems.Resources
         /// </summary>
         public bool AddTocargo(in ResourceStackData resource)
         {
-            var slot = GetAvailableSpace(resource);
-            if (slot == -1)
+            if (!HasRoomFor(resource))
             {
                 Game.Log.Error($"Cargo capacity rached for {resource} to cargo {CurrentEntity.Get<CargoComponent>()} from {CurrentEntity}");
                 return false;
@@ -54,48 +55,19 @@ namespace Game.Systems.Resources
             var spec = Game.Specs.Resources[resource.ResourceId];
             var totalWeight = (ushort)(spec.WeightPerUnit * resource.Amount);
             var cargo = CurrentEntity.Components.Get<CargoComponent>();
-            
-            // Update the appropriate slot directly
-            if (slot == 0)
+
+            if(cargo.Items == null)
             {
-                if (cargo.Slot1.Empty)
-                {
-                    cargo.Slot1 = new ResourceStackData(resource.ResourceId, resource.Amount);
-                }
-                else
-                {
-                    var updatedSlot = cargo.Slot1;
-                    updatedSlot.Amount += resource.Amount;
-                    cargo.Slot1 = updatedSlot;
-                }
+                cargo.Items = new Dictionary<ResourceSpecId, ushort>();
             }
-            else if (slot == 1)
+            if (cargo.Items.TryGetValue(resource.ResourceId, out var amt))
             {
-                if (cargo.Slot2.Empty)
-                {
-                    cargo.Slot2 = new ResourceStackData(resource.ResourceId, resource.Amount);
-                }
-                else
-                {
-                    var updatedSlot = cargo.Slot2;
-                    updatedSlot.Amount += resource.Amount;
-                    cargo.Slot2 = updatedSlot;
-                }
+                cargo.Items[resource.ResourceId] = (ushort)(amt + resource.Amount);
             }
-            else if (slot == 2)
+            else
             {
-                if (cargo.Slot3.Empty)
-                {
-                    cargo.Slot3 = new ResourceStackData(resource.ResourceId, resource.Amount);
-                }
-                else
-                {
-                    var updatedSlot = cargo.Slot3;
-                    updatedSlot.Amount += resource.Amount;
-                    cargo.Slot3 = updatedSlot;
-                }
+                cargo.Items.Add(resource.ResourceId, resource.Amount);
             }
-            
             cargo.CurrentWeight += totalWeight;
             CurrentEntity.Save(cargo);
             Game.Log.Debug($"Added {resource} to cargo {cargo} from {CurrentEntity}");

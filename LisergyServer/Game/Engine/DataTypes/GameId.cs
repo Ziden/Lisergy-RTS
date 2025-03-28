@@ -148,6 +148,12 @@ namespace Game.Engine.DataTypes
             _rightside = pos.Y;
         }
 
+        public GameId(int l)
+        {
+            _leftside = (ulong)l;
+            _rightside = 0;
+        }
+
         public GameId(ulong l, ulong l2)
         {
             _leftside = l;

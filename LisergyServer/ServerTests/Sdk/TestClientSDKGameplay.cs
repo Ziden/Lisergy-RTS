@@ -71,7 +71,7 @@ namespace SdkUnitTests
             var clientTile = map.AllTiles().Where(t => t != null && t.Components.Has<TileResourceComponent>()).First();
             var serverTile = _serverLogic.World.GetTile(clientTile.Position);
             var serverParty = _serverLogic.Players[_playerId].EntityLogic.GetParties()[0];
-            var clientParty = _client.Modules.Player.LocalPlayer.EntityLogic.GetParties()[0];
+            var clientParty = _client.Server.Player.LocalPlayer.EntityLogic.GetParties()[0];
 
             serverParty.Logic.Map.SetPosition(serverTile);
             serverParty.Logic.Harvesting.StartHarvesting(serverTile);

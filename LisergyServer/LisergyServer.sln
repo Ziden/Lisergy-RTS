@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebPlayerLogic", "WebGameLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameServices", "GameServices\GameServices.csproj", "{849FC0A5-04E4-46E3-A314-5C27040153A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GodotClient", "GodotClient\GodotClient.csproj", "{9360B0F6-2DB3-569E-BBC4-A8230892EB55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LisergyGodotClient", "GodotClient\LisergyGodotClient.csproj", "{9CABBDC6-E8A6-832A-56EE-3F0E0B4434E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,10 +77,10 @@ Global
 		{849FC0A5-04E4-46E3-A314-5C27040153A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{849FC0A5-04E4-46E3-A314-5C27040153A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{849FC0A5-04E4-46E3-A314-5C27040153A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9360B0F6-2DB3-569E-BBC4-A8230892EB55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9360B0F6-2DB3-569E-BBC4-A8230892EB55}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9360B0F6-2DB3-569E-BBC4-A8230892EB55}.Release|Any CPU.ActiveCfg = ExportDebug|Any CPU
-		{9360B0F6-2DB3-569E-BBC4-A8230892EB55}.Release|Any CPU.Build.0 = ExportDebug|Any CPU
+		{9CABBDC6-E8A6-832A-56EE-3F0E0B4434E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CABBDC6-E8A6-832A-56EE-3F0E0B4434E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CABBDC6-E8A6-832A-56EE-3F0E0B4434E4}.Release|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{9CABBDC6-E8A6-832A-56EE-3F0E0B4434E4}.Release|Any CPU.Build.0 = ExportDebug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

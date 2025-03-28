@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <Description>A very fast and minimal serializer</Description>
     <Company>Tomi Valkeinen</Company>
     <Copyright>Copyright © 2012-2022 Tomi Valkeinen</Copyright>

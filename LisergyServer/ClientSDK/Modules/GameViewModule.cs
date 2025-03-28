@@ -1,17 +1,27 @@
 ﻿using ClientSDK.Data;
 using Game.Engine.ECLS;
+using Game.Entities;
 using System;
+using System.Collections.Generic;
 
 namespace ClientSDK.Services
 {
     public class GameViewModule
     {
-        private ClientSDK _client;
+        public event Action<EntityView> OnViewCreated;
+
+        private Dictionary<EntityType, Func<IEntity, EntityView>> _creators = new();
+
+        private LisergySDK _client;
 
         public ViewContainer _views = new ViewContainer();
-        public Func<IEntity, EntityView> CreatorFunction;
 
-        public GameViewModule(ClientSDK client)
+        public void RegisterView(EntityType t, Func<IEntity, EntityView> creator)
+        {
+            _creators[t] = creator; 
+        }
+
+        public GameViewModule(LisergySDK client)
         {
             _client = client;
         }
@@ -21,16 +31,18 @@ namespace ClientSDK.Services
             var existingView = _views.GetView(entity);
             if (existingView == null)
             {
-                if (CreatorFunction == null)
+                EntityView v;
+                if (_creators.TryGetValue(entity.EntityType, out var creator))
                 {
-                    existingView = new EntityView(entity, _client);
-                }
-                else
+                    v = creator(entity);
+
+                } else
                 {
-                    existingView = CreatorFunction(entity);
+                    v = new EntityView(entity, _client);
                 }
-                _views.AddView(entity, existingView);
-                return existingView;
+                _views.AddView(entity, v);
+                OnViewCreated?.Invoke(v);
+                return v;
             }
             return existingView;
         }

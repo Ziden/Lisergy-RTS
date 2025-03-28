@@ -26,14 +26,14 @@ namespace ClientSDK.Services
 
     public class BattleModule : IBattleModule
     {
-        private ClientSDK _client;
+        private LisergySDK _client;
 
-        public BattleModule(ClientSDK client)
+        public BattleModule(LisergySDK client)
         {
             _client = client;
         }
 
-        public List<BattleHeader> BattleHeaders => _client.Modules.Player.LocalPlayer.Components.Get<PlayerDataComponent>().BattleHeaders;
+        public List<BattleHeader> BattleHeaders => _client.Server.Player.LocalPlayer.Components.Get<PlayerDataComponent>().BattleHeaders;
 
 
         public void Register()
@@ -48,7 +48,7 @@ namespace ClientSDK.Services
 
         private void OnBattleSummary(BattleHeaderPacket result)
         {
-            if (result.BattleHeader.Attacker.OwnerID == _client.Modules.Player.PlayerId)
+            if (result.BattleHeader.Attacker.OwnerID == _client.Server.Player.PlayerId)
             {
                 _client.ClientEvents.Call(new OwnBattleFinishedEvent()
                 {
@@ -59,7 +59,7 @@ namespace ClientSDK.Services
                     BattleId = result.BattleHeader.BattleID
                 });
             }
-            else if (result.BattleHeader.Defender.OwnerID == _client.Modules.Player.PlayerId)
+            else if (result.BattleHeader.Defender.OwnerID == _client.Server.Player.PlayerId)
             {
                 _client.ClientEvents.Call(new OwnBattleFinishedEvent()
                 {

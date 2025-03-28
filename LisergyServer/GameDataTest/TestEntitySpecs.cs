@@ -29,7 +29,7 @@ namespace GameDataTest
                     new MovespeedComponent() {MoveDelay = TimeSpan.FromSeconds(1)},
                     new CargoComponent() { MaxWeight = 100 }
                 }).ToArray(),
-                Icon = new ArtSpec("Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png"),
+                Icon = new ArtSpec("res://Content/Art/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png"),
             };
 
             spec.Entities[(int)EntityType.Building] = new EntitySpec()
@@ -39,7 +39,7 @@ namespace GameDataTest
                     new MapPlaceableComponent(), new ConstructionComponent(), new PlayerBuildingComponent(),
                     new EntityVisionComponent(),
                 }).ToArray(),
-                Icon = new ArtSpec("Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png"),
+                Icon = new ArtSpec("res://Content/Art/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png"),
             };
 
             spec.Entities[(int)EntityType.Dungeon] = new EntitySpec()
@@ -51,7 +51,7 @@ namespace GameDataTest
                     new MapPlaceableComponent(),
                     new BattleGroupComponent()
                 }).ToArray(),
-                Icon = new ArtSpec("Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png"),
+                Icon = new ArtSpec("res://Content/Art/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png"),
             };
 
             spec.Entities[(int)EntityType.Player] = new EntitySpec()

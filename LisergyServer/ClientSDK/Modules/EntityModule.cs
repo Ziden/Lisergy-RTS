@@ -1,4 +1,5 @@
 ﻿using ClientSDK.Data;
+using ClientSDK.SDKEvents;
 using ClientSDK.Sync;
 using Game.Engine.ECLS;
 using Game.Entities;
@@ -51,11 +52,11 @@ namespace ClientSDK.Services
 
     public class EntityModule : IEntityModule
     {
-        private ClientSDK _client;
+        private LisergySDK _client;
         public ComponentSynchronizer ComponentSync { get; private set; }
         public SystemSynchronizer SystemSync { get; private set; }
 
-        public EntityModule(ClientSDK client)
+        public EntityModule(LisergySDK client)
         {
             _client = client;
             ComponentSync = new ComponentSynchronizer(_client);
@@ -70,6 +71,7 @@ namespace ClientSDK.Services
 
         private void OnEntityUpdate(EntityUpdatePacket packet)
         {
+            var created = false;
             var existingEntity = _client.Game.Entities[packet.EntityId];
             if (existingEntity == null)
             {
@@ -85,18 +87,30 @@ namespace ClientSDK.Services
                         existing = chunk.CreateTile(internalTileX, internalTileY, packet.EntityId);
                     }
                     existingEntity = existing.Entity;
+                    created = true;
                 }
                 else
                 {
+                    created = true;
                     existingEntity = _client.Game.Entities.CreateEntity(packet.Type, packet.OwnerId, packet.EntityId);
                 }
             }
             _client.SDKLog.Debug($"Received entity update for {existingEntity}");
-            var view = _client.Modules.Views.GetOrCreateView(existingEntity);
+            var view = _client.Server.Views.GetOrCreateView(existingEntity);
             ComponentSync.ProccessUpdate(existingEntity, packet.SyncedComponents, packet.RemovedComponentIds);
             if (view.State == EntityViewState.NOT_RENDERED)
             {
                 view.RenderView();
+            }
+            if (created)
+            {
+                view.RunWhenRendered(() =>
+                {
+                    if (packet.Type != EntityType.Tile)
+                        _client.ClientEvents.Call(new EntitySeenEvent(existingEntity));
+                    else
+                        _client.ClientEvents.Call(new TileSeenEvent(existingEntity));
+                });
             }
         }
 

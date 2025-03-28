@@ -12,17 +12,17 @@ namespace ClientSDK.Sync
     /// </summary>
     public class SystemSynchronizer
     {
-        private ClientSDK _gameClient;
+        private LisergySDK _gameClient;
 
-        public SystemSynchronizer(ClientSDK gameClient)
+        public SystemSynchronizer(LisergySDK gameClient)
         {
             _gameClient = gameClient;
         }
 
         public void ListenForRequiredSyncs()
         {
-            _gameClient.Modules.Entities.OnComponentModified<MapPlacementComponent>(OnUpdatePlacement);
-            _gameClient.Modules.Entities.OnComponentAdded<MapPlacementComponent>(OnAddPlacement);
+            _gameClient.Server.Entities.OnComponentModified<MapPlacementComponent>(OnUpdatePlacement);
+            _gameClient.Server.Entities.OnComponentAdded<MapPlacementComponent>(OnAddPlacement);
         }
 
         private void OnAddPlacement(IEntity entity, MapPlacementComponent component)
@@ -30,7 +30,7 @@ namespace ClientSDK.Sync
 
             var tile = _gameClient.Game.World.GetTile(component.Position);
             entity.Logic.Map.SetPosition(tile);
-            if (entity.Components.Has<EntityVisionComponent>() && entity.OwnerID == _gameClient.Modules.Player.PlayerId)
+            if (entity.Components.Has<EntityVisionComponent>() && entity.OwnerID == _gameClient.Server.Player.PlayerId)
             {
                 entity.Logic.Vision.UpdateVisionRange(null, tile);
             }
@@ -43,7 +43,7 @@ namespace ClientSDK.Sync
         /// </summary>
         private void OnUpdatePlacement(IEntity entity, MapPlacementComponent oldValue, MapPlacementComponent newValue)
         {
-            if (!entity.Components.Has<EntityVisionComponent>() || entity.OwnerID != _gameClient.Modules.Player.PlayerId)
+            if (!entity.Components.Has<EntityVisionComponent>() || entity.OwnerID != _gameClient.Server.Player.PlayerId)
             {
                 return;
             }

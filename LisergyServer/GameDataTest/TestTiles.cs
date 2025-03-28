@@ -5,36 +5,58 @@ namespace GameDataTest
 {
     public class TestTiles
     {
-        private static string Addr(string name) => $"Assets/Addressables/Prefabs/Tiles/{name}.prefab";
+        private static string Addr(string name) => $"res://Content/Tiles/{name}.tscn";
 
         public static readonly TileSpec GRASS = new TileSpec(0)
         {
+            Name = "Plains",
             MovementFactor = 1,
-            Art = new ArtSpec(Addr("Plains")),
+            Model = new ArtSpec(Addr("Plains")),
+            Icon = new ArtSpec("res://Content/Art/Sprites/Icons/FoodIconPack/grass_01.png")
+            {
+                Type = ArtType.SPECIFIC_SPRITE
+            }
         };
 
         public static readonly TileSpec MOUNTAIN = new TileSpec(1)
         {
+            Name = "Rocks",
             MovementFactor = 0,
             ResourceSpotSpecId = TestHarvestingSpots.MOUNTAIN.SpecId,
             ChangeToTileIdWhenDepleted = GRASS.ID,
-            Art = new ArtSpec(Addr("Mountain")),
+            Model = new ArtSpec(Addr("Mountain")),
+            Icon = new ArtSpec("res://Content/Art/Ui/UiArt/Sprites/Component/Icon_EquipmentIcons_(Original)/equip_stone.png")
+            {
+                Type = ArtType.SPECIFIC_SPRITE
+            }
         };
 
         public static readonly TileSpec WATER = new TileSpec(2)
         {
+            Name = "Water",
             MovementFactor = 0.5f,
             ResourceSpotSpecId = TestHarvestingSpots.RIVER.SpecId,
             ChangeToTileIdWhenDepleted = GRASS.ID,
-            Art = new ArtSpec() { Address = Addr("Water"), Type = ArtType.PREFAB }
+            Model = new ArtSpec() { Address = Addr("Water"), Type = ArtType.PREFAB },
+            Icon = new ArtSpec()
+            {
+                Address = "res://Content/Art/Sprites/Icons/FoodIconPack/water_01.png",
+                Type = ArtType.SPECIFIC_SPRITE
+            }
         };
 
         public static readonly TileSpec FOREST = new TileSpec(3)
         {
+            Name = "Forest",
             MovementFactor = 0.8f,
             ResourceSpotSpecId = TestHarvestingSpots.LOGS.SpecId,
             ChangeToTileIdWhenDepleted = GRASS.ID,
-            Art = new ArtSpec() { Address = Addr("Forest"), Type = ArtType.PREFAB }
+            Model = new ArtSpec() { Address = Addr("Forest"), Type = ArtType.PREFAB },
+            Icon = new ArtSpec()
+            {
+                Address = "res://Content/Art/Sprites/Blocks/item/acacia_sapling.png",
+                Type = ArtType.SPECIFIC_SPRITE
+            }
         };
 
         public static void Generate(ref GameSpec spec)

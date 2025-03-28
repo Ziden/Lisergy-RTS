@@ -41,7 +41,7 @@ namespace ClientSDK
         public IBattleModule Battles { get; }
         public IBuildingModule Buildings { get; }
 
-        public ServerModules(ClientSDK client)
+        public ServerModules(LisergySDK client)
         {
             Account = new AccountModule(client);
             Player = new PlayerModule(client);

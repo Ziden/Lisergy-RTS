@@ -1,9 +1,36 @@
-[gd_scene format=3 uid="uid://2lgoeafwg77h"]
+[gd_scene load_steps=4 format=3 uid="uid://2lgoeafwg77h"]
 
-[node name="MainNode" type="Node2D"]
+[ext_resource type="Script" uid="uid://c12maw4ydpdva" path="res://Src/MainNode.cs" id="1_lwogq"]
+[ext_resource type="Script" uid="uid://wbd7ghqglvc8" path="res://Src/Nodes/CameraNode.cs" id="2_dhalm"]
 
-[node name="Control" type="Control" parent="."]
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_dhalm"]
+
+[node name="MainScene" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("1_lwogq")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.605696, -0.648371, 0.461245, 0.00256977, 0.581266, 0.813709, -0.795692, -0.491675, 0.353737, 15.4594, 30, 13.1091)
+attributes = SubResource("CameraAttributesPractical_dhalm")
+fov = 21.7
+size = 0.298
+script = ExtResource("2_dhalm")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.636937, -0.41833, 0.647542, 0.0103832, 0.835234, 0.549797, -0.770846, 0.35691, -0.527648, 0.0629177, 0.0199051, -0.122785)
+light_bake_mode = 1
+shadow_enabled = true
+directional_shadow_mode = 1
+directional_shadow_split_1 = 0.01
+directional_shadow_blend_splits = true
+directional_shadow_fade_start = 0.696
+directional_shadow_max_distance = 2525.2
+directional_shadow_pancake_size = 2.3

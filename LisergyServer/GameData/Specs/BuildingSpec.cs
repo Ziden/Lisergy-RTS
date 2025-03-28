@@ -13,6 +13,11 @@ namespace GameData
         public static implicit operator byte(BuildingSpecId d) => d.Id;
         public static implicit operator BuildingSpecId(byte b) => new BuildingSpecId() { Id = b };
 
+        public override string ToString()
+        {
+            return Id.ToString();
+        }
+
         public BuildingSpecId(byte id)
         {
             Id = id;

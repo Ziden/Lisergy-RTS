@@ -28,4 +28,11 @@
     <PackageReference Include="Telepathy" Version="1.0.341" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GameDataTest\GameDataTest.csproj" />
+    <ProjectReference Include="..\GameData\GameData.csproj" />
+    <ProjectReference Include="..\GameServices\GameServices.csproj" />
+    <ProjectReference Include="..\Game\GameLogic.csproj" />
+  </ItemGroup>
+
 </Project>

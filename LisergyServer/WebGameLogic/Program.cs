@@ -1,41 +1,35 @@
-using GameDataTest;
-using PlayFab;
-using WebGameLogic;
-using WebGameLogic.Playfab;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IServerConfig, ServerConfig>();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Game Spec Editor API", Version = "v1" });
+});
+
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-app.UseCors(x => x
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .SetIsOriginAllowed(origin => true)
-    .AllowCredentials());
 
-app.MapControllers();
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
+
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
 
-var serverConfig = app.Services.GetRequiredService<IServerConfig>();
-if (serverConfig != null)
-{
-    PlayFabSettings.staticSettings.TitleId = serverConfig.Title;
-    PlayFabSettings.staticSettings.DeveloperSecretKey = serverConfig.TitleKey;
+app.UseSwagger();
+app.UseSwaggerUI();
 
-    var setup = new PlayfabSetup(TestSpecs.Generate());
-    await setup.SetupPlayfab();
-}
-else
-{
-    // Log error or throw exception
-    throw new InvalidOperationException("Server configuration could not be loaded.");
-}
+app.MapBlazorHub();
+app.MapControllers();
+app.MapFallbackToPage("/_Host");
 
 app.Run();

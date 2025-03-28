@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://bgo57v1ro4eww"]
+
+[ext_resource type="Material" uid="uid://pko07ce8e5de" path="res://Content/Art/Models/leafs.tres" id="1_gq6y8"]
+[ext_resource type="QuadMesh" uid="uid://yesrrh1sqxe7" path="res://Content/Art/Models/quad.tres" id="2_322g6"]
+[ext_resource type="Texture2D" uid="uid://dss1fdjiql6qs" path="res://Content/Art/Sprites/Pack/textures/item/oak_sapling.png" id="3_322g6"]
+
+[node name="Tree" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0140315, 1.19209e-07, -0.00207138)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+material_override = ExtResource("1_gq6y8")
+mesh = ExtResource("2_322g6")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.010113, 0, 0, 0, 0.0108952, 0, 0, 0, 0.0286803, 0.304751, 0.576855, -0.0648907)
+lod_bias = 0.001
+pixel_size = 1.0
+billboard = 1
+alpha_scissor_threshold = 0.714
+alpha_antialiasing_mode = 2
+alpha_antialiasing_edge = 0.18
+texture_filter = 5
+texture = ExtResource("3_322g6")
+
+[node name="Sprite3D2" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.164437, 0.526992, 0.412934)
+lod_bias = 0.001
+flip_h = true
+billboard = 1
+alpha_scissor_threshold = 0.714
+alpha_antialiasing_mode = 2
+alpha_antialiasing_edge = 0.18
+texture_filter = 5
+texture = ExtResource("3_322g6")

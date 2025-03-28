@@ -1,7 +1,10 @@
 {
   "profiles": {
     "GodotClient": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "--path . --verbose",
+      "workingDirectory": ".",
+      "nativeDebugging": false
     }
   }
 }

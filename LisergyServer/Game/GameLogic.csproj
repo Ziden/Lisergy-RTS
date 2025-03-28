@@ -25,31 +25,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Engine\Scheduler\FastGameTask.cs" />
-    <Compile Remove="Engine\Scheduler\FastScheduler.cs" />
-    <Compile Remove="Systems\Harvesting\ResourceTypes.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MemoryPack" Version="1.21.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GameData\GameData.csproj" />
     <ProjectReference Include="..\Serializer\Serializer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="MemoryPack">
-      <HintPath>..\..\PreCompiledLibraries\MemoryPack\MemoryPack.dll</HintPath>
-    </Reference>
-    <Reference Include="MemoryPack.Core">
-      <HintPath>..\..\PreCompiledLibraries\MemoryPack\MemoryPack.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="MemoryPack.Generator">
-      <HintPath>..\..\PreCompiledLibraries\MemoryPack\MemoryPack.Generator.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

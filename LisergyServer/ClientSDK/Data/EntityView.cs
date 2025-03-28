@@ -28,6 +28,7 @@ namespace ClientSDK.Data
     /// </summary>
     public interface IEntityView
     {
+        public IGameObject GameObject { get; }
         /// <summary>
         /// Gets the base entity of this view
         /// </summary>
@@ -59,7 +60,7 @@ namespace ClientSDK.Data
     {
         private event Action<EntityView> OnRendered;
 
-        public IGameObject ArtObject { get; protected set; }
+        public IGameObject GameObject { get; protected set; }
         public IEntity Entity { get; private set; }
         public IClientSDK Client { get; set; }
 

@@ -9,7 +9,7 @@ namespace Game.Systems.Map
     /// </summary>
     [Serializable]
     [SyncedComponent]
-    public class MapPlacementComponent 
+    public class MapPlacementComponent : IComponent
     {
         public Location Position;
 
