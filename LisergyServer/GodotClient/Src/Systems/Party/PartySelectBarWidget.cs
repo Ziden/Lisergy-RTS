@@ -49,7 +49,7 @@ namespace LisergyGodotClient.Src.Systems.Party
             {
                 _missingUnitIcon = asset;
             });
-            _state.OnPartySelected += OnSelectParty;
+            _state.SelectedParty.OnChanged += OnSelectParty;
             ClientServices.ServerSdk.ClientEvents.On<EntitySeenEvent>(this, OnSeeEntity);
         }
 
@@ -61,7 +61,7 @@ namespace LisergyGodotClient.Src.Systems.Party
             }
             button.Button.ButtonPressed = true;
             var party = ClientServices.ServerSdk.Game.Entities[button.EntityId];
-            _state.SetSelectedParty(party);
+            _state.SelectedParty.Value = party;
         }
 
         private void OnSelectParty(IEntity e)
@@ -82,7 +82,7 @@ namespace LisergyGodotClient.Src.Systems.Party
 
         public void Close()
         {
-            _state.OnPartySelected -= OnSelectParty;
+            _state.SelectedParty.OnChanged -= OnSelectParty;
             ClientServices.ServerSdk.ClientEvents.RemoveListener(this);
         }
 
@@ -130,7 +130,7 @@ namespace LisergyGodotClient.Src.Systems.Party
             var unitSpec = ClientServices.Get<IClientSDK>().Game.Specs.Units[group.Units[0].SpecId];
             b.Icon.Texture = await _assets.LoadGetTexture(unitSpec.IconArt);
             b.Label.Text = unitSpec.Name;
-            if (_state.SelectedParty == party)
+            if (_state.SelectedParty.Value == party)
             {
                 b.Button.ButtonPressed = true;
             }

@@ -32,9 +32,9 @@ namespace LisergyGodotClient.Src.Services
             _assets = assets;
             _state = state;
 
-            state.OnTileSelected += OnTileSelected;
-            state.OnCameraMoved += OnCameraMoved;
-            state.OnPartySelected += OnPartySelected;
+            state.SelectedTile.OnChanged += OnTileSelected;
+            state.CameraPosition.OnChanged += OnCameraMoved;
+            state.SelectedParty.OnChanged += OnPartySelected;
             _sdk.ClientEvents.On<GameStartedEvent>(this, OnGameStarted);
         }
 
@@ -48,9 +48,9 @@ namespace LisergyGodotClient.Src.Services
             var art = await _assets.LoadGetArt(AssetConfigs.MODEL_TILE_SELECTOR);
             _assets.AddToScene(art);
             _tileSelector = art;
-            if (_state.SelectedTile != null)
+            if (_state.SelectedTile.Value != null)
             {
-                MoveTileSelector(_state.SelectedTile.Position);
+                MoveTileSelector(_state.SelectedTile.Value.Position);
             } else
             {
                 MoveTileSelector(new Location(-999, -999));
@@ -59,9 +59,9 @@ namespace LisergyGodotClient.Src.Services
             var art2 = await _assets.LoadGetArt(AssetConfigs.MODEL_UNIT_SELECTOR);
             _assets.AddToScene(art2);
             _unitSelector = art2;
-            if (_state.SelectedParty != null)
+            if (_state.SelectedParty.Value != null)
             {
-                MovePartySelector(_state.SelectedParty, _state.SelectedTile.Position);
+                MovePartySelector(_state.SelectedParty.Value, _state.SelectedTile.Value.Position);
             } else
             {
                 MovePartySelector(null, new Location(-999, -999));
@@ -102,7 +102,7 @@ namespace LisergyGodotClient.Src.Services
 
         private void OnTileSelected(TileModel tile)
         {
-            MoveTileSelector(ClientServices.State.SelectedTile.Position);
+            MoveTileSelector(ClientServices.State.SelectedTile.Value.Position);
         }
 
         private void OnCameraMoved(Vector3 pos)

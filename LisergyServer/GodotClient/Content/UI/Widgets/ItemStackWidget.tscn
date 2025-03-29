@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://md0d40kqp8ei"]
+[gd_scene load_steps=6 format=3 uid="uid://md0d40kqp8ei"]
 
 [ext_resource type="Script" uid="uid://ds71l4q1lon86" path="res://Src/Systems/Tiles/UI/ItemStackWidget.cs" id="1_4plhn"]
 [ext_resource type="Theme" uid="uid://bmf31mho1mjjt" path="res://addons/Theme/content/sprout_lands_theme.tres" id="1_7c8ti"]
-[ext_resource type="Texture2D" uid="uid://dewp1t1ddv5ak" path="res://Content/Art/Sprites/Icons/FoodIconPack/grass_01.png" id="2_7c8ti"]
-[ext_resource type="Texture2D" uid="uid://dc5q55x253657" path="res://Content/Art/Sprites/Pack/textures/block/dripstone_block_top.png" id="3_5pqye"]
+[ext_resource type="Texture2D" uid="uid://74ef6fm24ueg" path="res://Content/Art/Sprites/Icons/LootIcons/LootIcons_png/black/mug_b_01.png" id="3_sxn3y"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ljm1k"]
 content_margin_left = 5.0
@@ -11,24 +10,27 @@ content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
 bg_color = Color(0, 0, 0, 1)
-border_width_left = 10
-border_width_top = 10
-border_width_right = 10
-border_width_bottom = 10
-border_color = Color(0.628282, 0.476893, 0.308991, 1)
+border_width_left = 15
+border_width_top = 15
+border_width_right = 15
+border_width_bottom = 15
+border_color = Color(0.111154, 0.481604, 0.779332, 1)
 border_blend = true
-corner_detail = 1
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+anti_aliasing_size = 1.779
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7c8ti"]
-bg_color = Color(0.862099, 0.723122, 0.569705, 1)
-draw_center = false
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3u6v5"]
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+anti_aliasing_size = 6.82
 
 [node name="ItemStackPanel" type="Panel"]
+texture_filter = 2
 custom_minimum_size = Vector2(120, 120)
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -37,53 +39,35 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ljm1k")
 script = ExtResource("1_4plhn")
 NamePath = NodePath("ItemTitle")
 Amount = NodePath("ItemAmount")
-Icon = NodePath("Bg/ItemIcon")
+Icon = NodePath("MarginContainer/Panel/ItemIcon")
 InvisibleButton = NodePath("InvisibleButton")
 
-[node name="Bg" type="Panel" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 7.0
-offset_top = 8.0
-offset_right = -7.0
-offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_7c8ti")
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
 
-[node name="ItemIcon" type="TextureRect" parent="Bg"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 15.0
-offset_bottom = 15.0
+[node name="Panel" type="Panel" parent="MarginContainer"]
+clip_children = 1
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3u6v5")
+
+[node name="ItemIcon" type="TextureRect" parent="MarginContainer/Panel"]
+clip_contents = true
+layout_mode = 2
+offset_right = 108.0
+offset_bottom = 108.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.879995, 0.88)
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("2_7c8ti")
+texture = ExtResource("3_sxn3y")
 expand_mode = 3
-
-[node name="Bg" type="TextureRect" parent="Bg"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 15.0
-offset_bottom = 15.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.879995, 0.88)
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("3_5pqye")
-expand_mode = 2
-stretch_mode = 1
 
 [node name="ItemTitle" type="Label" parent="."]
 layout_mode = 1

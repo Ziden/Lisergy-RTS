@@ -12,7 +12,12 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 {
     public enum EntityAction
     {
-        NONE, MOVE, ATTACK, CHECK, HARVEST
+        NONE,
+        MOVE,
+        ATTACK,
+        CHECK,
+        HARVEST,
+        BUILD
     }
 
     public partial class PartyActionBarWidget : GameUi
@@ -53,7 +58,7 @@ namespace LisergyGodotClient.Src.Systems.GameHud
             _attackButton = GetNode<Button>(AttackButton);
             _checkButton = GetNode<Button>(CheckButton);
             _harvestButton = GetNode<Button>(HarvestButton);
-            ClientServices.State.OnCameraMoved += State_OnCameraMoved;
+            ClientServices.State.CameraPosition.OnChanged += State_OnCameraMoved;
 
             _moveButton.ButtonDown += () => OnActionChosen(EntityAction.MOVE);
             _attackButton.ButtonDown += () => OnActionChosen(EntityAction.ATTACK);
@@ -74,7 +79,7 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 
         public override void OnClose()
         {
-            ClientServices.State.OnCameraMoved -= State_OnCameraMoved;
+            ClientServices.State.CameraPosition.OnChanged -= State_OnCameraMoved;
         }
 
         private void State_OnCameraMoved(Vector3 vector)
@@ -114,6 +119,10 @@ namespace LisergyGodotClient.Src.Systems.GameHud
                 if (!buildingOnTile.OwnerID.IsMine())
                 {
                     actions.Add(EntityAction.ATTACK);
+                }
+                else if (buildingOnTile.Logic.Building.IsConstruction())
+                {
+                    actions.Add(EntityAction.BUILD);
                 }
                 return actions.ToArray();
             }

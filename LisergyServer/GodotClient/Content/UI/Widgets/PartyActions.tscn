@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dir7h1c0xq1yw"]
+[gd_scene load_steps=9 format=3 uid="uid://dir7h1c0xq1yw"]
 
 [ext_resource type="Theme" uid="uid://bmf31mho1mjjt" path="res://addons/Theme/content/sprout_lands_theme.tres" id="1_34jwj"]
 [ext_resource type="Script" uid="uid://cpbr373oebvqc" path="res://Src/Systems/Party/PartyActionBarWidget.cs" id="2_ytvvl"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://ckslu8hs0lshc" path="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_ItemIcons_(Original)/icon_itemicon_scroll1.png" id="5_g0te8"]
 [ext_resource type="Texture2D" uid="uid://dhvafvwrt1fa0" path="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_ItemIcons_(Original)/icon_itemicon_sword.png" id="6_jfq5p"]
 [ext_resource type="Texture2D" uid="uid://biuhxyc5p6qq4" path="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_ItemIcons_(Original)/icon_itemicon_pickax.png" id="7_ipxmd"]
+[ext_resource type="Texture2D" uid="uid://c6w3lqhhfti2v" path="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_ItemIcons_(Original)/icon_itemicon_hammer.png" id="8_ytvvl"]
 
 [node name="Screen" type="Control"]
 texture_filter = 4
@@ -126,4 +127,19 @@ offset_right = 77.0
 offset_bottom = 74.0
 scale = Vector2(0.706897, 0.695652)
 texture = ExtResource("7_ipxmd")
+expand_mode = 1
+
+[node name="BuildButton" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/BuildButton"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 5.0
+offset_right = 77.0
+offset_bottom = 74.0
+scale = Vector2(0.706897, 0.695652)
+texture = ExtResource("8_ytvvl")
 expand_mode = 1

@@ -42,7 +42,7 @@ namespace LisergyGodotClient.Src.Systems.Tiles.UI
             _resourceWidget.SetData(tileResources.Resource);
             var resourceSpec = tile.Game.Specs.Resources[tileResources.Resource.ResourceId];
             var resourceSpotSpec = tile.Game.Specs.HarvestPoints[tileSpec.ResourceSpotSpecId.Value];
-            var party = ClientServices.Get<IClientStateService>().SelectedParty;
+            var party = ClientServices.Get<IClientStateService>().SelectedParty.Value;
             var leader = party.Get<BattleGroupComponent>().Units[0];
             var unitSpec = tile.Game.Specs.Units[leader.SpecId];
 

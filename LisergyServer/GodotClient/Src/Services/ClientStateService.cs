@@ -5,6 +5,7 @@ using Game.Engine.Events.Bus;
 using Game.Entities;
 using Game.Tile;
 using Godot;
+using LisergyGodotClient.Src.Data;
 using LisergyGodotClient.Src.Services.LisergyGodotClient.Src.Controllers;
 using System;
 
@@ -13,25 +14,18 @@ namespace LisergyGodotClient.Src.Services
 {
     public interface IClientStateService
     {
-        IEntity SelectedParty { get; }
-        TileModel SelectedTile { get; }
-        Vector3 CameraPosition { get; }
-
-        event Action<TileModel> OnTileSelected;
-        event Action<Vector3> OnCameraMoved;
-        event Action<IEntity> OnPartySelected;
-
-        void SetSelectedTile(TileModel e);
-        void SetCameraPosition(Vector3 e);
-        void SetSelectedParty(IEntity e);
+        ObservableProperty<IEntity> SelectedParty { get; }
+        ObservableProperty<TileModel> SelectedTile { get; }
+        ObservableProperty<Vector3> CameraPosition { get; }
         void ReceiveTapInput(Vector2 pos);
     }
     public class ClientStateService : IClientStateService, IEventListener
     {
         private IClientSDK _sdk;
-        public event Action<TileModel> OnTileSelected;
-        public event Action<Vector3> OnCameraMoved;
-        public event Action<IEntity> OnPartySelected;
+
+        public ObservableProperty<IEntity> SelectedParty { get; } = new();
+        public ObservableProperty<TileModel> SelectedTile { get; } = new();
+        public ObservableProperty<Vector3> CameraPosition { get; } = new();
 
         public ClientStateService(IClientSDK sdk)
         {
@@ -42,11 +36,11 @@ namespace LisergyGodotClient.Src.Services
 
         private void OnGameStart(GameStartedEvent ev)
         {
-            if (SelectedParty == null)
+            if (SelectedParty.Value == null)
             {
                 var parties = ev.LocalPlayer.EntityLogic.GetParties();
                 if (parties.Count == 0) return;
-                SetSelectedParty(parties[0]);
+                SelectedParty.Value = parties[0];
             }
         }
 
@@ -55,40 +49,17 @@ namespace LisergyGodotClient.Src.Services
             var e = ev.Entity;
             if(e.IsMine() 
                 && e.EntityType == EntityType.Party 
-                && SelectedParty == null)
+                && SelectedParty.Value == null)
             {
-                SetSelectedParty(e);
+                SelectedParty.Value = e;
             }
         }
 
         public void ReceiveTapInput(Vector2 pos)
         {
             var tile = _sdk.Game.World.GetTile(pos.ToLocation());
-            if (tile == null) return; // TODO: Check || !tile.Entity.IsVisible()
-            SetSelectedTile(tile);
-        }
-
-        public TileModel SelectedTile { get; private set; }
-
-        public Vector3 CameraPosition { get; private set; }
-        public IEntity SelectedParty { get; private set; }
-
-        public void SetSelectedTile(TileModel e)
-        {
-            SelectedTile = e;
-            OnTileSelected?.Invoke(e);
-        }
-
-        public void SetCameraPosition(Vector3 e)
-        {
-            CameraPosition = e;
-            OnCameraMoved?.Invoke(e);
-        }
-
-        public void SetSelectedParty(IEntity e)
-        {
-            SelectedParty = e;
-            OnPartySelected?.Invoke(e);
+            if (tile == null) return;
+            SelectedTile.Value = tile;
         }
     }
 }

@@ -24,6 +24,7 @@ namespace Game.Systems.Building
     {
         public BuildingTechStatus Status { get; set; }
         public BuildingSpecId? BlockedBy { get; set; }
+        public bool IsAvailable => Status == BuildingTechStatus.Available;
     }
 
     public unsafe class ConstructionLogic : BaseEntityLogic<ConstructionWorkerComponent>

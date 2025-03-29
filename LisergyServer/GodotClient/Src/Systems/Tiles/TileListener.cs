@@ -22,8 +22,8 @@ namespace LisergyGodotClient.Src.Systems.Tiles
             _ui = ClientServices.Get<IUiService>();
             _state = ClientServices.Get<IClientStateService>();
             _sdk = ClientServices.Get<IClientSDK>();
-            _state.OnTileSelected += State_OnTileSelected;    
-            _state.OnCameraMoved += State_OnCameraMoved;
+            _state.SelectedTile.OnChanged += State_OnTileSelected;    
+            _state.CameraPosition.OnChanged += State_OnCameraMoved;
             _sdk.ClientEvents.On<ClientPartyActionEvent>(this, OnPartyAction);
             _sdk.Game.Events.On<TileVisibilityChangedEvent>(this, OnTileVisibility);
         }

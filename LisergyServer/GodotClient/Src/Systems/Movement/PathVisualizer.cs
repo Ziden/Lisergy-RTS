@@ -16,8 +16,8 @@ namespace LisergyGodotClient.Src.Systems.Visualization
     public partial class PathVisualizer : Node3D
     {
         [Export] public float LineHeight = 0.1f;         // Height above the tilemap
-        [Export] public float DotSize = 0.1f;            // Size of each dot
-        [Export] public float DotSpacing = 0.4f;         // Space between dots
+        [Export] public float DotSize = 0.05f;            // Size of each dot
+        [Export] public float DotSpacing = 0.2f;         // Space between dots
         [Export] public Color PathColor = Colors.Yellow; // Color of the path
 
         public int Remaining => _dots.Count;

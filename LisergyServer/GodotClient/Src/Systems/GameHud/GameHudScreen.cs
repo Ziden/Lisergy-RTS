@@ -26,7 +26,7 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 
 		public override void OnBuild()
 		{
-			ClientServices.State.OnTileSelected += State_OnTileSelected;
+			ClientServices.State.SelectedTile.OnChanged += State_OnTileSelected;
 			ClientServices.ServerSdk.ClientEvents.On<GameStartedEvent>(this, OnGameStarted);
 			_unitSelection = new PartySelectBarWidget(
 				GetNode<Button>(_partyButton1),GetNode<Button>(_partyButton2),
@@ -44,10 +44,10 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 
 		private void State_OnTileSelected(TileModel obj)
 		{
-			if (obj == null || ClientServices.State.SelectedParty == null) return;
+			if (obj == null || ClientServices.State.SelectedParty.Value == null) return;
 			ClientServices.Ui.Open<PartyActionBarWidget>().Then(ui =>
 			{
-				ui.SetData(ClientServices.State.SelectedParty, obj);
+				ui.SetData(ClientServices.State.SelectedParty.Value, obj);
 			});
 		}
 

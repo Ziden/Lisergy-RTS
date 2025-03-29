@@ -1,26 +1,65 @@
 ﻿using Godot;
 using LisergyGodotClient.Src;
+using System;
 using System.Collections.Generic;
 
 public class CachedFogMaterials
 {
-    public StandardMaterial3D WithFog;
-    public StandardMaterial3D WithoutFog;
-}
-
-public class CachedFogSprites
-{
-    public Sprite3D WithFog;
-    public Sprite3D WithoutFog;
-
-    public CachedFogMaterials Materials;
+    public BaseMaterial3D WithFog;
+    public BaseMaterial3D WithoutFog;
 }
 
 public class TileFog
 {
     public Dictionary<string, CachedFogMaterials> _originals = new Dictionary<string, CachedFogMaterials>();
-    public Dictionary<string, CachedFogSprites> _spriteOriginals = new Dictionary<string, CachedFogSprites>();
+    public Dictionary<BaseMaterial3D, BaseMaterial3D> _shaded = new Dictionary<BaseMaterial3D, BaseMaterial3D>();
+    public Dictionary<string, Color> _colors = new Dictionary<string, Color>();
 
+    private void HandleMaterial(MeshInstance3D mesh, BaseMaterial3D mat, bool visible, int surface)
+    {
+        if(_shaded.TryGetValue(mat, out var original) && visible)
+        {
+            mesh.MaterialOverride = original;
+            return;
+        }
+
+        var key = mat.ResourcePath;
+        if (!_originals.TryGetValue(key, out var cached))
+        {
+            var prevColor = mat.AlbedoColor;
+            cached = new CachedFogMaterials()
+            {
+                WithoutFog = mat,
+                WithFog = mat.Duplicate() as StandardMaterial3D
+            };
+            cached.WithFog.AlbedoColor = new Color(0.25f, 0.25f, 0.25f, 1);
+            cached.WithoutFog.AlbedoColor = prevColor;
+            _originals[key] = cached;
+            _shaded[cached.WithFog] = cached.WithoutFog;
+        }
+        if (visible)
+        {
+            if (mesh.MaterialOverride is BaseMaterial3D std)
+            {
+                std.AlbedoColor = cached.WithoutFog.AlbedoColor;
+            }
+            else if(cached.WithoutFog != null )
+            {
+                if(surface == 1)
+                {
+                    mesh.MaterialOverride = cached.WithoutFog;
+                } else
+                {
+                    mesh.SetSurfaceOverrideMaterial(surface, cached.WithoutFog);
+                }
+               
+            } 
+        }
+        else
+        {
+            mesh.MaterialOverride = cached.WithFog;
+        }
+    }
 
     public void SetVisible(Node n, bool visible)
     {
@@ -29,40 +68,38 @@ public class TileFog
         {
             if (visible)
             {
-                //sprite.MaterialOverride = cached.WithoutFog.MaterialOverride;
-                sprite.Modulate = new Color(1, 1, 1, 1);
+                if (!_colors.TryGetValue(sprite.Name, out var color))
+                {
+                    color = sprite.Modulate;
+                    _colors[sprite.Name] = color;
+                }
+                sprite.Modulate = _colors[sprite.Name];
             }
             else
             {
-                //sprite.MaterialOverride = cached.WithFog.MaterialOverride; ;
+                if(!_colors.TryGetValue(sprite.Name, out var color))
+                {
+                    color = sprite.Modulate;
+                    _colors[sprite.Name] = color;
+                }
                 sprite.Modulate = new Color(0.25f, 0.25f, 0.25f, 1);
             }
         }
-
         var mesh = n as MeshInstance3D;
         if (mesh != null)
         {
-            var mat = mesh.GetActiveMaterial(0) as StandardMaterial3D;
-            var key = mat.AlbedoTexture.ResourcePath;
-            if (!_originals.TryGetValue(key, out var cached))
+            try
             {
-                var prevColor = mat.AlbedoColor;
-                cached = new CachedFogMaterials()
+                var ct = mesh.GetSurfaceOverrideMaterialCount();
+                for (var c = 0; c < ct; c++)
                 {
-                    WithoutFog = mat,
-                    WithFog = mat.Duplicate() as StandardMaterial3D
-                };
-                cached.WithFog.AlbedoColor = new Color(0.25f, 0.25f, 0.25f, 1);
-                cached.WithoutFog.AlbedoColor = prevColor;
-                _originals[key] = cached;
+                    var activeMat = mesh.GetActiveMaterial(c) as BaseMaterial3D;
+                    HandleMaterial(mesh, activeMat, visible, c);
+                }
             }
-            if (visible)
+            catch (Exception e)
             {
-                mesh.MaterialOverride = cached.WithoutFog;
-            }
-            else
-            {
-                mesh.MaterialOverride = cached.WithFog;
+                ClientServices.Analytics.TrackError(e);
             }
         }
         foreach(var child in n.GetChildren())

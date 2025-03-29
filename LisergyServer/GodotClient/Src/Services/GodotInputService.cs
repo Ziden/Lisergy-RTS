@@ -35,7 +35,7 @@
                 _isDragging = false;
                 _cameraPosition = _cameraDelta = new Vector3(10, 30, 10);
                 _sdk.ClientEvents.On<GameStartedEvent>(this, OnGameStart);
-                _state.OnPartySelected += CenterCameraOn;
+                _state.SelectedParty.OnChanged += CenterCameraOn;
             }
 
             private void OnGameStart(GameStartedEvent ev)
@@ -49,20 +49,17 @@
 
                 var godotObject = entity.GetView().GameObject;
                 var objectPosition = godotObject.Location.ToGodotVector3();
+                GD.Print(objectPosition);
                 float currentHeight = _cameraPosition.Y;
 
-                // Get the camera's forward direction for proper positioning
-
-                // Keep the current height but update X and Z
                 _cameraPosition = new Vector3(
                     objectPosition.X + 16,
                     currentHeight,
                     objectPosition.Z + 18
                 );
 
-                // Update the camera transform first
-                _state.SetCameraPosition(_cameraPosition);
                 UpdateCameraTransform();
+                _state.CameraPosition.Value = _cameraPosition;
             }
 
             private Vector3? IntersectsGroundPlane(Vector3 from, Vector3 to)
@@ -76,22 +73,23 @@
                 _camera.GlobalTransform = new Transform3D(_camera.GlobalTransform.Basis, _cameraPosition);
             }
 
-
             public void ReceiveClickDown(Vector2 mousePosition)
             {
-                Vector3 from = _camera.ProjectRayOrigin(mousePosition);
-                Vector3 to = from + _camera.ProjectRayNormal(mousePosition) * 1000;
-
-                // Calculate intersection with the ground plane (y = 0)
-                var intersection = IntersectsGroundPlane(from, to);
-                if (intersection.HasValue)
-                {
-                    Vector3 tilePosition = new Vector3(Mathf.Round(intersection.Value.X), 0, Mathf.Round(intersection.Value.Z));
-                    GD.Print($"Clicked on tile at: {tilePosition}");
-                }
                 _isDragging = true;
                 _lastMousePosition = mousePosition;
                 _lastDown = DateTime.Now;
+            }
+
+            public Vector2 GetClickedTile(Vector2 position)
+            {
+                Vector3 from = _camera.ProjectRayOrigin(position);
+                Vector3 to = from + _camera.ProjectRayNormal(position) * 1000;
+                var intersection = IntersectsGroundPlane(from, to);
+                if (intersection.HasValue)
+                {
+                    return new Vector2(Mathf.Round(intersection.Value.X), Mathf.Round(intersection.Value.Z));
+                }
+                return default;
             }
 
             public void ReceiveClickUp(Vector2 position)
@@ -100,14 +98,7 @@
                 _lastUp = DateTime.Now;
                 if (_lastUp - _lastDown < AssetConfigs.TAP_TIME)
                 {
-                    Vector3 from = _camera.ProjectRayOrigin(position);
-                    Vector3 to = from + _camera.ProjectRayNormal(position) * 1000;
-                    var intersection = IntersectsGroundPlane(from, to);
-                    if (intersection.HasValue)
-                    {
-                        Vector2 tilePosition = new Vector2(Mathf.Round(intersection.Value.X), Mathf.Round(intersection.Value.Z));
-                        _state.ReceiveTapInput(tilePosition);
-                    }
+                    _state.ReceiveTapInput(GetClickedTile(position));
                 }
             }
 
@@ -126,10 +117,10 @@
 
                     _cameraPosition -= right * delta.X * 0.015f;
                     _cameraPosition -= forward * delta.Y * 0.015f;
-
+                    _cameraPosition.Y = old.Y;
                     if (old != _cameraPosition)
                     {
-                        ClientServices.State.SetCameraPosition(_cameraPosition);
+                        ClientServices.State.CameraPosition.Value = _cameraPosition;
                     }
                     UpdateCameraTransform();
                 }
