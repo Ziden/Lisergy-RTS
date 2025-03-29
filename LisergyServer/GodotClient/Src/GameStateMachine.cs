@@ -3,8 +3,6 @@ using Game.Engine.Events.Bus;
 using Game.Engine.DataTypes;
 using Game.Systems.Battle;
 using LisergyGodotClient.Systems.Login;
-using Cysharp.Threading.Tasks;
-using Godot;
 using ClientSDK.SDKEvents;
 using LisergyGodotClient.Src.Systems.GameHud;
 
@@ -50,7 +48,7 @@ namespace LisergyGodotClient.Src
 
 		private void OnEnterMapState()
 		{
-            ClientServices.Ui.Open<GameHudScreen>().ForgetHandled();
+			_ = ClientServices.Ui.Open<GameHudScreen>();
         }
 
 		private void OnLeaveMapState()
@@ -65,7 +63,7 @@ namespace LisergyGodotClient.Src
 
 		private void OnEnterLoginState()
 		{
-            ClientServices.Ui.Open<LoginScreen>().ForgetHandled();
+            _ = ClientServices.Ui.Open<LoginScreen>();
 		}
 
 		private void OnEnterBattleState() { }

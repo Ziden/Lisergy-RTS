@@ -1,11 +1,11 @@
 ﻿using ClientSDK;
 using ClientSDK.SDKEvents;
-using Cysharp.Threading.Tasks;
 using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Tile;
 using Game.World;
 using Godot;
+using System.Threading.Tasks;
 
 namespace LisergyGodotClient.Src.Services
 {
@@ -40,12 +40,12 @@ namespace LisergyGodotClient.Src.Services
 
         private void OnGameStarted(GameStartedEvent e)
         {
-            Initialize().Forget();
+            _ = Initialize();
         }
 
-        private async UniTaskVoid Initialize()
+        private async Task Initialize()
         {
-            var art = await _assets.LoadGetArt(ClientConstants.MODEL_TILE_SELECTOR);
+            var art = await _assets.LoadGetArt(AssetConfigs.MODEL_TILE_SELECTOR);
             _assets.AddToScene(art);
             _tileSelector = art;
             if (_state.SelectedTile != null)
@@ -56,7 +56,7 @@ namespace LisergyGodotClient.Src.Services
                 MoveTileSelector(new Location(-999, -999));
             }
 
-            var art2 = await _assets.LoadGetArt(ClientConstants.MODEL_UNIT_SELECTOR);
+            var art2 = await _assets.LoadGetArt(AssetConfigs.MODEL_UNIT_SELECTOR);
             _assets.AddToScene(art2);
             _unitSelector = art2;
             if (_state.SelectedParty != null)

@@ -15,7 +15,7 @@ namespace GameData
     public class BuildingConstructionSpec
     {
         public BuildingSpecId SpecId;
-        public List<ResourceStackData> BuildingCost;
+        public List<ResourceStackData> Costs;
         public ArtSpec Icon;
         public ushort TimeToBuildSeconds;
 

@@ -19,12 +19,12 @@ namespace LisergyGodotClient.Src.Systems.Tiles.UI
 		[Export] public NodePath NamePath;
 		[Export] public NodePath ItemPath;
 
-		private ResourceStackWidget _resourceWidget;
+		private ItemStackWidget _resourceWidget;
 		public Control Root => this;
 
 		public override void _Ready()
 		{
-			_resourceWidget = Root.GetNode<ResourceStackWidget>(ItemPath);
+			_resourceWidget = Root.GetNode<ItemStackWidget>(ItemPath);
 		}
 
 		public void SetData(IEntity tile)

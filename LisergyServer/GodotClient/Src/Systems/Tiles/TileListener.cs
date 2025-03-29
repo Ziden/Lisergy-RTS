@@ -1,5 +1,4 @@
 ﻿using ClientSDK;
-using Cysharp.Threading.Tasks;
 using Game.Engine.Events.Bus;
 using Game.Systems.FogOfWar;
 using Game.Tile;
@@ -51,7 +50,7 @@ namespace LisergyGodotClient.Src.Systems.Tiles
         {
             if(e.Action == EntityAction.CHECK && e.TargetTile != null)
             {
-                _ui.Open<TileDetailsScreen>().ContinueWith(screen =>
+                _ui.Open<TileDetailsScreen>().Then(screen =>
                 {
                     screen.SetData(e.TargetTile);
                 });

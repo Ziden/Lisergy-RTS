@@ -1,17 +1,14 @@
 ﻿using Game.Systems.Building;
 using Game.Systems.Player;
 using GameData;
-using GameData.Specs;
 using NUnit.Framework;
-using System.Collections.Generic;
 using Game.Entities;
-using Game.Engine.DataTypes;
 using ServerTests;
 using GameDataTest;
 using System.Linq;
 using Game.World;
 
-namespace Game.Tests.Systems.Building
+namespace GameUnitTests
 {
     [TestFixture]
     public class TechTreeTests
@@ -53,8 +50,8 @@ namespace Game.Tests.Systems.Building
 
             // Assert
             Assert.AreEqual(BuildingTechStatus.NotResearched, result.Status);
-            Assert.AreEqual(TestBuildings.WELL, result.BlockedBy);
-            Assert.AreEqual((byte)TestBuildings.WELL, requirement);
+            Assert.AreEqual(TestBuildings.LUMBER_CAMP, result.BlockedBy);
+            Assert.AreEqual((byte)TestBuildings.LUMBER_CAMP, requirement);
         }
 
         [Test]
@@ -63,7 +60,7 @@ namespace Game.Tests.Systems.Building
             // Arrange - Build Camp
             var tile = _player.GetParty(0).Logic.Map.GetTile();
             tile.Logic.Building.ForceBuild(TestBuildings.CAMP, _player.EntityId);
-            tile.GetNeighbor(Direction.NORTH).Logic.Building.ForceBuild(TestBuildings.WELL, _player.EntityId);
+            tile.GetNeighbor(Direction.NORTH).Logic.Building.ForceBuild(TestBuildings.LUMBER_CAMP, _player.EntityId);
 
             // Act
             var result = _logic.CheckTechTree(TestBuildings.FARM);
@@ -81,7 +78,7 @@ namespace Game.Tests.Systems.Building
             tile.Logic.Building.ForceBuild(TestBuildings.CAMP, _player.EntityId);
 
             // Act - Try to check Castle without having Farm
-            var result = _logic.CheckTechTree(TestBuildings.CASTLE);
+            var result = _logic.CheckTechTree(TestBuildings.FORT);
 
             // Assert
             Assert.AreEqual(BuildingTechStatus.NotResearched, result.Status);
@@ -112,7 +109,7 @@ namespace Game.Tests.Systems.Building
             }
 
             // Act
-            var result = _logic.CheckTechTree(TestBuildings.CASTLE);
+            var result = _logic.CheckTechTree(TestBuildings.FORT);
 
             // Assert
             Assert.AreEqual(BuildingTechStatus.Available, result.Status);
@@ -142,7 +139,7 @@ namespace Game.Tests.Systems.Building
 
             // Assert
             Assert.AreEqual(BuildingTechStatus.NotResearched, result.Status);
-            Assert.AreEqual((byte)TestBuildings.WELL, (byte)result.BlockedBy);
+            Assert.AreEqual((byte)TestBuildings.LUMBER_CAMP, (byte)result.BlockedBy);
         }
 
         [Test]
@@ -151,7 +148,7 @@ namespace Game.Tests.Systems.Building
             // Arrange
             // Build Camp but leave it under construction
             var tile = _player.GetParty(0).Logic.Map.GetTile();
-            var campBuilding = tile.Logic.Building.PlaceConstruction(TestBuildings.WELL, _player.EntityId);
+            var campBuilding = tile.Logic.Building.PlaceConstruction(TestBuildings.LUMBER_CAMP, _player.EntityId);
 
             // Verify it's under construction
             Assert.IsTrue(campBuilding.Components.Has<ConstructionSiteComponent>());
@@ -161,7 +158,7 @@ namespace Game.Tests.Systems.Building
 
             // Assert
             Assert.AreEqual(BuildingTechStatus.NotResearched, result.Status);
-            Assert.AreEqual((byte)TestBuildings.WELL, (byte)result.BlockedBy);
+            Assert.AreEqual((byte)TestBuildings.LUMBER_CAMP, (byte)result.BlockedBy);
         }
 
 
@@ -178,10 +175,10 @@ namespace Game.Tests.Systems.Building
             // Assert
             Assert.IsNotNull(buildingOptions);
             Assert.AreEqual(2, buildingOptions.Count);
-            Assert.IsTrue(buildingOptions.Any(b => b.SpecId.Equals(TestBuildings.WELL)));
+            Assert.IsTrue(buildingOptions.Any(b => b.SpecId.Equals(TestBuildings.LUMBER_CAMP)));
             Assert.IsTrue(buildingOptions.Any(b => b.SpecId.Equals(TestBuildings.CAMP)));
             Assert.IsFalse(buildingOptions.Any(b => b.SpecId.Equals(TestBuildings.FARM)));
-            Assert.IsFalse(buildingOptions.Any(b => b.SpecId.Equals(TestBuildings.CASTLE)));
+            Assert.IsFalse(buildingOptions.Any(b => b.SpecId.Equals(TestBuildings.FORT)));
         }
 
         [Test]
@@ -200,7 +197,7 @@ namespace Game.Tests.Systems.Building
 
             if (tile2 != null)
             {
-                tile2.Logic.Building.ForceBuild(TestBuildings.WELL, _player.EntityId);
+                tile2.Logic.Building.ForceBuild(TestBuildings.LUMBER_CAMP, _player.EntityId);
             }
             else
             {
@@ -229,7 +226,7 @@ namespace Game.Tests.Systems.Building
 
             // Act - Test the dependency path for Castle
             // First check without Farm - should require Farm
-            var initialResult = _logic.CheckTechTree(TestBuildings.CASTLE);
+            var initialResult = _logic.CheckTechTree(TestBuildings.FORT);
 
             // Then build Farm
             var tile2 = _game.FindTile(t =>
@@ -245,7 +242,7 @@ namespace Game.Tests.Systems.Building
             tile2.Logic.Building.ForceBuild(TestBuildings.FARM, _player.EntityId);
 
             // Now check again, should be available
-            var finalResult = _logic.CheckTechTree(TestBuildings.CASTLE);
+            var finalResult = _logic.CheckTechTree(TestBuildings.FORT);
 
             // Assert
             Assert.AreEqual(BuildingTechStatus.NotResearched, initialResult.Status);

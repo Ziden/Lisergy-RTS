@@ -18,7 +18,7 @@ namespace LisergyGodotClient.Systems.Login
 		private LineEdit _passwordField;
 		private Button _loginButton;
 
-		public override ArtSpec GetArt() => "res://Content/Screens/LoginScreen.tscn";
+		public override ArtSpec GetArt() => "res://Content/UI/Screens/LoginScreen.tscn";
 
 		public override void _Ready()
 		{

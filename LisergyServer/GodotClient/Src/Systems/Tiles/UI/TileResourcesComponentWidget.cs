@@ -20,14 +20,14 @@ namespace LisergyGodotClient.Src.Systems.Tiles.UI
 
         private Label _rate;
         private Label _total;
-        private ResourceStackWidget _resourceWidget;
+        private ItemStackWidget _resourceWidget;
         private Button _harvestButton;
 
         public Control Root => this;
 
         public override void _Ready()
         {
-            _resourceWidget = Root.GetNode<ResourceStackWidget>(ResourcePath);
+            _resourceWidget = Root.GetNode<ItemStackWidget>(ResourcePath);
             _rate = Root.GetNode<Label>(RatePath);
             _total = Root.GetNode<Label>(TotalPath);
             _harvestButton = Root.GetNode<Button>(HarvestButton);

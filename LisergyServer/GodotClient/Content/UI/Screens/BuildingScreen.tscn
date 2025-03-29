@@ -1,0 +1,249 @@
+[gd_scene load_steps=10 format=3 uid="uid://cmg4ng50ymu8k"]
+
+[ext_resource type="Theme" uid="uid://bmf31mho1mjjt" path="res://addons/Theme/content/sprout_lands_theme.tres" id="1_akbt5"]
+[ext_resource type="Script" uid="uid://dkiu17kg2kh17" path="res://Src/Systems/Building/BuildingScreen.cs" id="2_avrgw"]
+[ext_resource type="Texture2D" uid="uid://4ir7as58qwrw" path="res://Content/Art/Sprites/Pack/textures/block/stripped_acacia_log.png" id="3_pfju5"]
+[ext_resource type="PackedScene" uid="uid://md0d40kqp8ei" path="res://Content/UI/Widgets/ItemStackWidget.tscn" id="4_g3py7"]
+[ext_resource type="Texture2D" uid="uid://5oukh7dmtrnk" path="res://Content/Art/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/cobbler's_hammer_t.png" id="5_1m15g"]
+[ext_resource type="Texture2D" uid="uid://cefshgx65srel" path="res://Content/Art/Ui/UiArt/Sprites/Demo/Demo_Icon/icon_white_arrow_back.png" id="6_0vsye"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cw3gj"]
+bg_color = Color(0.768627, 0.603922, 0.423529, 1)
+border_color = Color(0.450603, 0.333692, 0.203491, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+anti_aliasing_size = 1.843
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56pc0"]
+bg_color = Color(0.650474, 0.496218, 0.325024, 1)
+border_color = Color(0.356324, 0.260322, 0.152446, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_usfgp"]
+bg_color = Color(0.614255, 0.465691, 0.30038, 1)
+border_color = Color(0.450603, 0.333692, 0.203491, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+anti_aliasing_size = 1.843
+
+[node name="BuildingScreen" type="Control"]
+texture_filter = 6
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_akbt5")
+script = ExtResource("2_avrgw")
+Bg = NodePath("Bg")
+BackButton = NodePath("Header/Panel/BackButton")
+CostsGrid = NodePath("RightBar/VBoxContainer/CostsContainer/VBoxContainer/CostGrid")
+NameLabel = NodePath("RightBar/VBoxContainer/Desc/VBoxContainer/GridContainer/PanelContainer/NameLabel")
+DescLabel = NodePath("RightBar/VBoxContainer/Desc/VBoxContainer/GridContainer/PanelContainer2/DescLabel")
+BuildTimeLabel = NodePath("RightBar/VBoxContainer/Info/VBoxContainer/GridContainer/PanelContainer2/BuildTime")
+
+[node name="Bg" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_pfju5")
+stretch_mode = 1
+
+[node name="RightBar" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -242.0
+offset_top = 43.0
+offset_right = -1.0
+offset_bottom = 43.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RightBar"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -117.5
+offset_top = 6.0
+offset_right = 142.5
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.9, 0.9)
+
+[node name="Desc" type="PanelContainer" parent="RightBar/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cw3gj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RightBar/VBoxContainer/Desc"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="GridContainer" type="GridContainer" parent="RightBar/VBoxContainer/Desc/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 5
+
+[node name="PanelContainer" type="PanelContainer" parent="RightBar/VBoxContainer/Desc/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_56pc0")
+
+[node name="NameLabel" type="Label" parent="RightBar/VBoxContainer/Desc/VBoxContainer/GridContainer/PanelContainer"]
+layout_mode = 2
+text = "Castle"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="RightBar/VBoxContainer/Desc/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_56pc0")
+
+[node name="DescLabel" type="Label" parent="RightBar/VBoxContainer/Desc/VBoxContainer/GridContainer/PanelContainer2"]
+layout_mode = 2
+text = " 20 Seconds asd asd as das da sda s asd asd asd asd asd a"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="CostsContainer" type="PanelContainer" parent="RightBar/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_usfgp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RightBar/VBoxContainer/CostsContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="CostTitle" type="Label" parent="RightBar/VBoxContainer/CostsContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "Costs"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CostGrid" type="GridContainer" parent="RightBar/VBoxContainer/CostsContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="ItemStackPanel" parent="RightBar/VBoxContainer/CostsContainer/VBoxContainer/CostGrid" instance=ExtResource("4_g3py7")]
+layout_mode = 2
+
+[node name="ItemStackPanel2" parent="RightBar/VBoxContainer/CostsContainer/VBoxContainer/CostGrid" instance=ExtResource("4_g3py7")]
+layout_mode = 2
+
+[node name="ItemStackPanel3" parent="RightBar/VBoxContainer/CostsContainer/VBoxContainer/CostGrid" instance=ExtResource("4_g3py7")]
+layout_mode = 2
+
+[node name="ItemStackPanel4" parent="RightBar/VBoxContainer/CostsContainer/VBoxContainer/CostGrid" instance=ExtResource("4_g3py7")]
+layout_mode = 2
+
+[node name="Info" type="PanelContainer" parent="RightBar/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_cw3gj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RightBar/VBoxContainer/Info"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="GridContainer" type="GridContainer" parent="RightBar/VBoxContainer/Info/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 5
+
+[node name="PanelContainer" type="PanelContainer" parent="RightBar/VBoxContainer/Info/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_56pc0")
+
+[node name="Label" type="Label" parent="RightBar/VBoxContainer/Info/VBoxContainer/GridContainer/PanelContainer"]
+layout_mode = 2
+text = " Construction Time "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="RightBar/VBoxContainer/Info/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_56pc0")
+
+[node name="BuildTime" type="Label" parent="RightBar/VBoxContainer/Info/VBoxContainer/GridContainer/PanelContainer2"]
+layout_mode = 2
+text = " 20 Seconds"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="RightBar/VBoxContainer"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "
+"
+
+[node name="TextureRect" type="TextureRect" parent="RightBar/VBoxContainer/Button"]
+layout_mode = 0
+offset_left = 5.55556
+offset_top = 3.22225
+offset_right = 45.5556
+offset_bottom = 43.2222
+scale = Vector2(2.53523, 2.34534)
+texture = ExtResource("5_1m15g")
+expand_mode = 3
+
+[node name="Header" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="Panel" type="Panel" parent="Header"]
+texture_filter = 6
+layout_mode = 0
+offset_top = -1.0
+offset_right = 40.0
+offset_bottom = 39.0
+scale = Vector2(1.43085, 1.27093)
+
+[node name="BackButton" type="TextureButton" parent="Header/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.52878
+offset_top = 3.22485
+offset_right = 2.52878
+offset_bottom = 3.22485
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.864129, 0.856588)
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("6_0vsye")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="Header"]
+layout_mode = 0
+offset_left = 61.0
+offset_top = 7.0
+offset_right = 248.0
+offset_bottom = 42.0
+text = "Building"
+vertical_alignment = 1

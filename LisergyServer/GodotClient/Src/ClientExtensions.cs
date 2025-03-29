@@ -11,7 +11,7 @@ using System;
 using System.Linq;
 using ClientSDK.Data;
 using GodotClient;
-using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace LisergyGodotClient.Src
 {
@@ -208,45 +208,6 @@ namespace LisergyGodotClient.Src
         }
         #endregion
 
-        #region UniTask
-        public static void ForgetHandled(this UniTask task)
-        {
-            try
-            {
-                task.Forget();
-            }
-            catch (Exception e)
-            {
-                ClientServices.Analytics.TrackError(e);
-            }
-        }
-
-        public static void ForgetHandled<T>(this UniTask<T> task)
-        {
-            try
-            {
-                task.Forget();
-            }
-            catch (Exception e)
-            {
-                ClientServices.Analytics.TrackError(e);
-            }
-        }
-
-
-        public static void ForgetHandled(this UniTaskVoid task)
-        {
-            try
-            {
-                task.Forget();
-            }
-            catch (Exception e)
-            {
-                ClientServices.Analytics.TrackError(e);
-            }
-        }
-        #endregion
-
         #region Position Conversions
         /// <summary>
         /// Converts a Location to a Vector2.
@@ -296,6 +257,14 @@ namespace LisergyGodotClient.Src
             return new Location((int)transform.Origin.X, (int)transform.Origin.X);
         }
         #endregion
+
+        public static void Then<T>(this Task<T> task, Action<T> callback)
+        {
+            task.ContinueWith(task =>
+            {
+                callback(task.Result);
+            },TaskContinuationOptions.ExecuteSynchronously);
+        }
 
         #region Node
         public static Vector2 WorldToScreenPosition(this Camera3D camera, Vector3 worldPosition)

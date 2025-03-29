@@ -54,7 +54,7 @@ namespace GameDataTest
             Model = new ArtSpec() { Address = Addr("Forest"), Type = ArtType.PREFAB },
             Icon = new ArtSpec()
             {
-                Address = "res://Content/Art/Sprites/Blocks/item/acacia_sapling.png",
+                Address = "res://Content/Art/Sprites/Pack/textures/item/acacia_sapling.png",
                 Type = ArtType.SPECIFIC_SPRITE
             }
         };

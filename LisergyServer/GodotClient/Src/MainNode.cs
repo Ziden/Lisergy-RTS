@@ -12,10 +12,10 @@ using Game.Entities;
 using LisergyGodotClient.Src;
 using LisergyGodotClient.Src.Platform;
 using LisergyGodotClient.Src.Systems;
-using Cysharp.Threading.Tasks;
 using System.Linq;
 using LisergyGodotClient.Src.Systems.Tiles;
 using LisergyGodotClient.Src.Systems.Movement;
+using System.Threading.Tasks;
 
 namespace GodotClient
 {
@@ -31,19 +31,16 @@ namespace GodotClient
         private GameStateMachine _stateMachine;
         private ClientServices _services;
         private IGamePlatform _platform;
-        private Camera3D _camera;
 
         public override void _Ready()
         {
             GameId.INCREMENTAL_MODE = 1;
-            var log = new GameLog("[GodotClient]");
-            SetupLog(log, ConsoleColor.Green);
+
             _platform = new Windows();
             _platform.Initialize();
 
-            _camera = GetViewport().GetCamera3D();
             _rootObject = new GodotGameObject(this);
-            _services = new ClientServices(_rootObject, _camera, log);
+            _services = new ClientServices(_rootObject);
             SetupViews();
             ConfigureGodot();
             ClientServices.ServerSdk.ClientEvents.On<GameStartedEvent>(this, OnGameStarted);
@@ -80,30 +77,10 @@ namespace GodotClient
             _server?.Dispose();
         }
 
-        private void SetupLog(IGameLog ilog, ConsoleColor color)
-        {
-            GameLog log = (GameLog)ilog;
-            log._Debug = m =>
-            {
-                Console.ForegroundColor = color;
-                GD.Print(m);
-            };
-            log._Info = m =>
-            {
-                Console.ForegroundColor = color;
-                GD.Print(m);
-            };
-            log._Error = m =>
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                GD.PrintErr(m);
-            };
-        }
-
         private void OnGameStarted(GameStartedEvent ev)
         {
-            SetupLog(ev.Game.Log, ConsoleColor.Yellow);
-            SetupLog(ClientServices.ServerSdk.Log, ConsoleColor.Gray);
+            GodotLog.SetupLog(ev.Game.Log, ConsoleColor.Yellow);
+            GodotLog.SetupLog(ClientServices.ServerSdk.Log, ConsoleColor.Gray);
             _listeners.Add(new EntityPositionListener());
             _listeners.Add(new TileListener());
             _listeners.Add(new TileRenderingListener());
@@ -131,14 +108,18 @@ namespace GodotClient
 
         public static void ConfigureGodot()
         {
-            UniTaskScheduler.UnobservedTaskException += e =>
+            TaskScheduler.UnobservedTaskException += (sender, e) =>
             {
-                ClientServices.Analytics.TrackError(e);
+                ClientServices.Analytics.TrackError(e.Exception);
+                throw e.Exception;
             };
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
-                ClientServices.Analytics.TrackError(e.ExceptionObject as Exception);
+                var ex = e.ExceptionObject as Exception;
+                ClientServices.Analytics.TrackError(ex);
+                throw ex;
             };
+            Engine.PrintErrorMessages = true;
             Engine.MaxFps = 60;
             OS.SetLowProcessorUsageMode(true);
             Telepathy.Logger.Log = ClientServices.Log.Info;

@@ -98,7 +98,7 @@
             {
                 _isDragging = false;
                 _lastUp = DateTime.Now;
-                if (_lastUp - _lastDown < ClientConstants.TAP_TIME)
+                if (_lastUp - _lastDown < AssetConfigs.TAP_TIME)
                 {
                     Vector3 from = _camera.ProjectRayOrigin(position);
                     Vector3 to = from + _camera.ProjectRayNormal(position) * 1000;

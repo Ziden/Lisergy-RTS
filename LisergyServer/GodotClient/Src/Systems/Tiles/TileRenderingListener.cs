@@ -1,5 +1,4 @@
 using ClientSDK;
-using Cysharp.Threading.Tasks;
 using Game.Engine.Events;
 using Game.Engine.Events.Bus;
 using LisergyGodotClient.Src;
@@ -42,7 +41,7 @@ public class TileRenderingListener : IEventListener
         else _bufferExpireTime = DateTime.UtcNow + _bufferTime;
     }
 
-    private async UniTask WaitForNextBatch()
+    private async Task WaitForNextBatch()
     {
         _bufferExpireTime = DateTime.UtcNow + _bufferTime;
         while (DateTime.UtcNow < _bufferExpireTime)

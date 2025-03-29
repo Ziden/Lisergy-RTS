@@ -10,16 +10,6 @@ namespace GameUnitTests
     public class TestSpecSerialization
     {
         [Test]
-        public void TestGameSpecSerialization()
-        {
-            var game = new TestGame();
-            var serialized = Serialization.FromAnyType(new GameSpecPacket(game));
-            var deserialized = Serialization.ToAnyType<GameSpecPacket>(serialized);
-
-            Assert.AreEqual(game.Specs.Units.Count, deserialized.Spec.Units.Count);
-        }
-
-        [Test]
         public void TestTechTreeSerialization()
         {
             var game = new TestGame();

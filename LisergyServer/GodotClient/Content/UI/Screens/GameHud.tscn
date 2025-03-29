@@ -1,0 +1,254 @@
+[gd_scene load_steps=6 format=3 uid="uid://vshs5i0wo60p"]
+
+[ext_resource type="Theme" uid="uid://bmf31mho1mjjt" path="res://addons/Theme/content/sprout_lands_theme.tres" id="1_ebinm"]
+[ext_resource type="Script" uid="uid://4647300eeixs" path="res://Src/Systems/GameHud/GameHudScreen.cs" id="2_vee5o"]
+[ext_resource type="Texture2D" uid="uid://cvjcj7k4gtaed" path="res://Content/Art/Ui/UiArt/Sprites/Demo/Demo_Icon/set_icon_role_wizard.png" id="3_62g7y"]
+[ext_resource type="Texture2D" uid="uid://5oukh7dmtrnk" path="res://Content/Art/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/parts/cobbler's_hammer_t.png" id="4_7wpl3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6gf8w"]
+bg_color = Color(0, 0, 0, 0.219608)
+
+[node name="GameHud" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme = ExtResource("1_ebinm")
+script = ExtResource("2_vee5o")
+_partyButton1 = NodePath("PartySelect/HBoxContainer/Button")
+_partyButton2 = NodePath("PartySelect/HBoxContainer/Button2")
+_partyButton3 = NodePath("PartySelect/HBoxContainer/Button3")
+_partyButton4 = NodePath("PartySelect/HBoxContainer/Button4")
+_buildingButton = NodePath("IconButton")
+
+[node name="PartySelect" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -294.0
+offset_top = -115.0
+offset_right = 294.0
+grow_horizontal = 2
+grow_vertical = 0
+localize_numeral_system = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PartySelect"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 7.0
+offset_right = 2.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="PartySelect/HBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="PartyButtonIcon1" type="TextureRect" parent="PartySelect/HBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -40.0
+offset_right = 30.3973
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_62g7y")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="PartySelect/HBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -35.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Knight"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button2" type="Button" parent="PartySelect/HBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="PartyButtonIcon1" type="TextureRect" parent="PartySelect/HBoxContainer/Button2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -40.0
+offset_right = 30.3973
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_62g7y")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="PartySelect/HBoxContainer/Button2"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -35.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Knight"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button3" type="Button" parent="PartySelect/HBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="PartyButtonIcon1" type="TextureRect" parent="PartySelect/HBoxContainer/Button3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -40.0
+offset_right = 30.3973
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_62g7y")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="PartySelect/HBoxContainer/Button3"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -35.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Knight"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button4" type="Button" parent="PartySelect/HBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="PartyButtonIcon1" type="TextureRect" parent="PartySelect/HBoxContainer/Button4"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -40.0
+offset_right = 30.3973
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_62g7y")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="PartySelect/HBoxContainer/Button4"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -35.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Knight"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IconButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -103.0
+offset_right = 109.0
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="IconButton"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -31.0
+offset_top = -40.0
+offset_right = 31.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Build"
+
+[node name="Icon" type="TextureRect" parent="IconButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.5
+offset_top = -49.5
+offset_right = 51.5
+offset_bottom = 14.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_7wpl3")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 332.0
+offset_top = 3.0
+offset_right = 828.0
+offset_bottom = 121.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_6gf8w")
+
+[node name="ItemList" type="ItemList" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+item_count = 5
+item_0/text = "Msg 1"
+item_1/text = "Msg 2"
+item_2/text = "Msg 3"
+item_3/text = "Msg 4"
+item_4/text = "Msg 5"

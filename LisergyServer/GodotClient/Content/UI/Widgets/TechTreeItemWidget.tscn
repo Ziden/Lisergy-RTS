@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3 uid="uid://ckq4ddoex5oru"]
+
+[ext_resource type="Theme" uid="uid://bmf31mho1mjjt" path="res://addons/Theme/content/sprout_lands_theme.tres" id="1_unobs"]
+[ext_resource type="PackedScene" uid="uid://md0d40kqp8ei" path="res://Content/UI/Widgets/ItemStackWidget.tscn" id="2_2g4p0"]
+[ext_resource type="Script" uid="uid://b11a6mkaaliiu" path="res://Src/Systems/TechTree/TechTreeItemWidget.cs" id="2_yo66k"]
+[ext_resource type="Texture2D" uid="uid://crb4dwelrm4yh" path="res://Content/Art/Sprites/Pack/textures/block/item_frame.png" id="4_0t6sd"]
+[ext_resource type="Texture2D" uid="uid://c8rn4r3pce6r1" path="res://Content/Art/Ui/UiArt/Sprites/Component/Frame/frame_cardframe_02_front.png" id="4_xwr1n"]
+
+[node name="TechTreeItemWidget" type="MarginContainer"]
+custom_minimum_size = Vector2(150, 150)
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme = ExtResource("1_unobs")
+theme_override_constants/margin_left = -5
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = -5
+theme_override_constants/margin_bottom = -5
+script = ExtResource("2_yo66k")
+ItemWidgetPath = NodePath("Panel/VBoxContainer/ItemPanel")
+ButtonPath = NodePath("TextureButton")
+InactivePath = NodePath("Panel/InactiveImage")
+BorderPath = NodePath("Panel/TextureRect")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -76.5
+offset_bottom = 89.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 0.92)
+mouse_filter = 2
+
+[node name="ItemPanel" parent="Panel/VBoxContainer" instance=ExtResource("2_2g4p0")]
+layout_mode = 2
+size_flags_vertical = 6
+mouse_filter = 2
+
+[node name="InactiveImage" type="TextureRect" parent="Panel"]
+modulate = Color(0, 0, 0, 0.596078)
+layout_mode = 0
+offset_top = -2.0
+offset_right = 159.0
+offset_bottom = 153.0
+mouse_filter = 2
+texture = ExtResource("4_0t6sd")
+expand_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Panel"]
+layout_mode = 0
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 170.0
+offset_bottom = 166.0
+texture = ExtResource("4_xwr1n")
+expand_mode = 2
+
+[node name="TextureButton" type="TextureButton" parent="."]
+layout_mode = 2
+mouse_default_cursor_shape = 2

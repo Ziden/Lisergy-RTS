@@ -1,73 +1,132 @@
-﻿using Godot;
+using Godot;
 using GameData;
-using GameDataTest;
-using LisergyGodotClient.Src.Services;
 using GodotClient;
-using Cysharp.Threading.Tasks;
-using Game.Engine;
+using System;
+using LisergyGodotClient.Src.Systems.TechTree;
+using GodotClient.Services;
+using GameData.Specs;
+using Game.Systems.Building;
+using LisergyGodotClient.Src.Data;
+using System.Threading.Tasks;
+using ClientSDK;
+using LisergyGodotClient.Src.Systems.Tiles.UI;
+
 
 namespace LisergyGodotClient.Src.Systems.Building
 {
-    public partial class BuildingScreen : Control
-    {
-        private ScrollContainer _scrollContainer;
-        private GridContainer _techTreeContainer;
+	public partial class BuildingScreen : GameUi
+	{
+		[Export] public NodePath Bg;
+		[Export] public NodePath BackButton;
+		[Export] public NodePath CostsGrid;
+		[Export] public NodePath NameLabel;
+		[Export] public NodePath DescLabel;
+		[Export] public NodePath BuildTimeLabel;
 
-        private IAssetService _assets;
-        private GameSpec _specs;
+		public override ArtSpec GetArt() => AssetConfigs.SCREEN_BUILDING;
 
-        public override void _Ready()
-        {
-            // Create the scroll container
-            _assets = new GodotAssetService(new GodotGameObject(this), new GameLog("Test"));
-            _scrollContainer = new ScrollContainer();
-            _scrollContainer.CustomMinimumSize = new Vector2(1000, 600); // Adjust size as needed
-            _scrollContainer.AnchorRight = 1.0f;
-            _scrollContainer.AnchorBottom = 1.0f;
-            AddChild(_scrollContainer);
+		private IGameObject _root;
+		private TechTreeVisualLayout<BuildingSpecId> _tree;
+		private GameSpec _specs;
+		private bool _isDragging;
+		private Vector2 _dragStartPos;
+		private TechTreeItemWidget _selected;
+		private Label _buildTime;
+		private Label _desc;
+		private Label _name;
+		private GridContainer _costsGrid;
 
-            // Create the container for the tech tree
-            _techTreeContainer = new GridContainer();
-            _techTreeContainer.Columns = 3; // Adjust the number of columns as needed
-            _scrollContainer.AddChild(_techTreeContainer);
+		public override void OnBuild()
+		{
+			_buildTime = GetNode<Label>(BuildTimeLabel);
+			_desc = GetNode<Label>(DescLabel);
+			_name = GetNode<Label>(NameLabel);
+			_costsGrid = GetNode<GridContainer>(CostsGrid);
+			var back = GetNode<TextureButton>(BackButton);
+			back.ButtonDown += () => { ClientServices.Ui.Destroy<BuildingScreen>(); };
+			_root = new GodotGameObject(GetNode<TextureRect>(Bg));
+			_specs = ClientServices.GameSpecs;
+		}
 
-            // Populate the tech tree
-            PopulateTechTree(GetBuildingConstructionSpecs());
-        }
+		public override void OnClose()
+		{
+			_tree.ScrollContainer.QueueFree();
+			_tree = null;
+			_selected = null;
+			_dragStartPos = Vector2.Zero;
+			_isDragging = false;
+		}
 
-        private void PopulateTechTree(NodeTree<BuildingSpecId> root)
-        {
-            PopulateTreeItem(root);
-        }
+		public override void OnOpen()
+		{
+			_tree = new TechTreeVisualLayout<BuildingSpecId>();
+			_tree.CreateWidget = CreateWidget;
+			_ = _tree.Draw(_root, _specs.ConstructionTechTree.Root);
+		}
 
-        private void PopulateTreeItem(NodeTree<BuildingSpecId> node)
-        {
-            var spec = _specs.BuildingConstructions[node.Data];
-            _assets.LoadGetTexture(spec.Icon).ContinueWith(texture =>
-            {
-                var textureRect = new TextureRect
-                {
-                    Texture = texture,
-                    CustomMinimumSize = new Vector2(150, 150) // Adjust size as needed
-                };
-                _techTreeContainer.AddChild(textureRect);
-            });
-            foreach (var child in node.ChildrenNodes())
-            {
-                PopulateTreeItem(child);
-            }
-        }
+		private async Task<TechTreeItemWidget> CreateWidget(NodeTree<BuildingSpecId> node)
+		{
+			var buildingSpec = _specs.Buildings[node.Data];
+			var constructionSpec = _specs.BuildingConstructions[node.Data];
+			var container = await ClientServices.Ui.CreateWidget<TechTreeItemWidget>();
+			container.SetData(node.Data, constructionSpec.Icon, buildingSpec.Name);
+			var tech = ClientServices.LocalPlayer.EntityLogic.CheckTechTree(node.Data);
+			container.SetActive(tech.Status == BuildingTechStatus.Available);
+			container.OnClick = OnSelect;
+			return container;
+		}
 
-        private Texture LoadTexture(string path)
-        {
-            var texture = (Texture)GD.Load(path);
-            return texture;
-        }
+		private void OnSelect(TechTreeItemWidget widget)
+		{
+			if(_selected != null)
+			{
+				_selected.SetBorder(HtmlColors.White);
+			}
+			widget.SetBorder(HtmlColors.LightGreen);
+			_selected = widget;
+			var id = (BuildingSpecId)widget.Item;
+			var buildingSpec = _specs.Buildings[id];
+			var constructionSpec = _specs.BuildingConstructions[id];
+			_name.Text = buildingSpec.Name;
+			_desc.Text = buildingSpec.Description;
+			_buildTime.Text = constructionSpec.TimeToBuildSeconds+" Seconds";
+			foreach(var c in _costsGrid.GetChildren())
+			{
+				_costsGrid.RemoveChild(c);
+				c.QueueFree();
+			}
+			foreach (var cost in constructionSpec.Costs)
+			{
+				ClientServices.Ui.CreateWidget<ItemStackWidget>().Then(item =>
+				{
+					item.SetData(cost);
+					_costsGrid.AddChild(item);
+				});
+			}
+		}
 
-        private NodeTree<BuildingSpecId> GetBuildingConstructionSpecs()
-        {
-            _specs = TestSpecs.Generate();
-            return _specs.ConstructionTechTree.Root;
-        }
-    }
+		public override void _Input(InputEvent @event)
+		{
+			if(_tree == null) return;
+			if (@event is InputEventMouseButton mouseEvent)
+			{
+				if (mouseEvent.ButtonIndex == MouseButton.Left)
+				{
+					if (mouseEvent.Pressed)
+					{
+						_isDragging = true;
+						_dragStartPos = mouseEvent.Position;
+					}
+					else _isDragging = false;
+				}
+			}
+			else if (@event is InputEventMouseMotion motionEvent && _isDragging)
+			{
+				Vector2 delta = _dragStartPos - motionEvent.Position;
+				_tree.ScrollContainer.ScrollHorizontal += (int)Math.Round(delta.X);
+				_tree.ScrollContainer.ScrollVertical += (int)Math.Round(delta.Y);
+				_dragStartPos = motionEvent.Position;
+			}
+		}
+	}
 }

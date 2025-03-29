@@ -17,7 +17,7 @@ namespace LisergyGodotClient.Src.Systems.Tiles
 
 		private List<IEntityComponentTab> _componentWidgets = new List<IEntityComponentTab>();
 
-		public override ArtSpec GetArt() => "res://Content/Screens/TileDetails.tscn";
+		public override ArtSpec GetArt() => "res://Content/UI/Screens/TileDetails.tscn";
 
 		public override void OnBuild()
 		{

@@ -34,7 +34,7 @@ namespace LisergyGodotClient.Src.Systems.GameHud
         private TileModel _targetTile;
         private Camera3D _camera;
 
-        public override ArtSpec GetArt() => "res://Content/Widgets/PartyActions.tscn";
+        public override ArtSpec GetArt() => AssetConfigs.WIDGET_PARTY_ACTIONS;
 
         public override void _Process(double delta)
         {

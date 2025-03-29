@@ -1,6 +1,5 @@
 ﻿using ClientSDK;
 using ClientSDK.SDKEvents;
-using Cysharp.Threading.Tasks;
 using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
@@ -11,6 +10,7 @@ using Godot;
 using LisergyGodotClient.Src.Services;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace LisergyGodotClient.Src.Systems.Party
 {
@@ -45,7 +45,7 @@ namespace LisergyGodotClient.Src.Systems.Party
             }
             _assets = ClientServices.Get<IAssetService>();
             _state = ClientServices.Get<IClientStateService>();
-            _assets.LoadGetTexture(ClientConstants.ICON_MISSING_UNIT).ContinueWith(asset =>
+            _assets.LoadGetTexture(AssetConfigs.ICON_MISSING_UNIT).Then(asset =>
             {
                 _missingUnitIcon = asset;
             });
@@ -111,7 +111,7 @@ namespace LisergyGodotClient.Src.Systems.Party
                 button.Button.ButtonPressed = false;
                 if (i < parties.Length)
                 {
-                    SetIcon(parties[i], button).ForgetHandled();
+                    _ = SetIcon(parties[i], button);
                 }
                 else
                 {
@@ -123,7 +123,7 @@ namespace LisergyGodotClient.Src.Systems.Party
             }
         }
 
-        private async UniTaskVoid SetIcon(IEntity party, PartyButton b)
+        private async Task SetIcon(IEntity party, PartyButton b)
         {
             b.EntityId = party.EntityId;
             var group = party.Get<BattleGroupComponent>();

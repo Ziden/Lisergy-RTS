@@ -1,6 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using GameData;
-using Godot;
+﻿using Godot;
 using LisergyGodotClient.Src;
 using System.Collections.Generic;
 
@@ -29,27 +27,15 @@ public class TileFog
         var sprite = n as Sprite3D;
         if(sprite != null)
         {
-            var key = sprite.Texture.ResourcePath;
-            if (!_spriteOriginals.TryGetValue(key, out var cached))
-            {
-                cached = new CachedFogSprites()
-                {
-                    WithoutFog = sprite,
-                    WithFog = sprite.Duplicate() as Sprite3D,
-                    Materials = new()
-                };
-                cached.WithFog.Modulate = new Color(0.25f, 0.25f, 0.25f, 1);
-                _spriteOriginals[key] = cached;
-            }
             if (visible)
             {
-                sprite.MaterialOverride = cached.WithoutFog.MaterialOverride; ;
-                sprite.Modulate = cached.WithoutFog.Modulate;
+                //sprite.MaterialOverride = cached.WithoutFog.MaterialOverride;
+                sprite.Modulate = new Color(1, 1, 1, 1);
             }
             else
             {
-                sprite.MaterialOverride = cached.WithFog.MaterialOverride; ;
-                sprite.Modulate = cached.WithFog.Modulate;
+                //sprite.MaterialOverride = cached.WithFog.MaterialOverride; ;
+                sprite.Modulate = new Color(0.25f, 0.25f, 0.25f, 1);
             }
         }
 

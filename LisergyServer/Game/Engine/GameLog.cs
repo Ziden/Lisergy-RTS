@@ -4,6 +4,10 @@ namespace Game.Engine
 {
     public interface IGameLog
     {
+        public ConsoleColor DebugColor { get; set; }
+        public ConsoleColor InfoColor { get; set; }
+        public ConsoleColor ErrorColor { get; set; }
+
         public void Debug(string msg);
         public void Info(string msg);
         public void Error(string msg);
@@ -11,6 +15,9 @@ namespace Game.Engine
     public class GameLog : IGameLog
     {
         public string Tag { get; private set; }
+        public ConsoleColor DebugColor { get; set; } = ConsoleColor.Gray;
+        public ConsoleColor InfoColor { get; set; } = ConsoleColor.White;
+        public ConsoleColor ErrorColor { get; set; } = ConsoleColor.Red;
 
         public GameLog(string tag)
         {
@@ -20,20 +27,20 @@ namespace Game.Engine
         public void Debug(string msg)
         {
 #if DEBUG
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = DebugColor;
             _Debug(Tag + msg);
 #endif
         }
 
         public void Info(string msg)
         {
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = InfoColor;
             _Info(Tag + msg);
         }
 
         public void Error(string msg)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ErrorColor;
             _Error(Tag + msg);
         }
 

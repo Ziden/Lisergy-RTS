@@ -7,23 +7,24 @@
 transform = Transform3D(0.805602, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Arrow" type="Sprite3D" parent="."]
-transform = Transform3D(-0.229216, 0, -0.958069, 0.892387, 0.358466, -0.213502, 0.348627, -0.917572, -0.0834084, 0, 1.83676, 0)
+transform = Transform3D(0.892387, 0.358466, -0.213502, 0.229216, 1.73053e-08, 0.958069, 0.348627, -0.917572, -0.0834083, 0, 1.83676, 0)
 modulate = Color(0.459068, 0.956309, 0, 1)
-billboard = 1
+billboard = 2
 double_sided = false
 no_depth_test = true
 alpha_cut = 1
-alpha_scissor_threshold = 0.0
+alpha_scissor_threshold = 0.248
 alpha_hash_scale = 2.0
-alpha_antialiasing_mode = 1
+alpha_antialiasing_mode = 2
 alpha_antialiasing_edge = 0.48
-texture_filter = 1
+texture_filter = 5
 texture = ExtResource("1_bmup5")
 
 [node name="Ring" type="Sprite3D" parent="."]
 transform = Transform3D(0.680746, 0, 0, 0, -2.52315e-08, 0.968104, 0, -0.577228, -4.23172e-08, 0, 0.0133608, 0)
 modulate = Color(0.459068, 0.956309, 0, 1)
 double_sided = false
-alpha_scissor_threshold = 0.684
+alpha_scissor_threshold = 0.385
 alpha_hash_scale = 0.0
+texture_filter = 5
 texture = ExtResource("2_bmup5")

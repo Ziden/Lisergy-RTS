@@ -10,5 +10,5 @@ modulate = Color(0.327912, 0.864176, 2.31028e-06, 1)
 alpha_scissor_threshold = 0.995
 alpha_hash_scale = 0.74
 alpha_antialiasing_mode = 2
-texture_filter = 1
+texture_filter = 5
 texture = ExtResource("2_2b8wi")
