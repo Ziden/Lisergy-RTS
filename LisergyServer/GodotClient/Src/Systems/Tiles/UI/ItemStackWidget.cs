@@ -4,7 +4,6 @@ using GameData.Specs;
 using Godot;
 using GodotClient.Services;
 using System;
-using System.Threading.Tasks;
 
 namespace LisergyGodotClient.Src.Systems.Tiles.UI
 {
@@ -36,6 +35,28 @@ namespace LisergyGodotClient.Src.Systems.Tiles.UI
 			{
 				_btn ??= GetNode<TextureButton>(InvisibleButton);
 				_btn.ButtonDown += () => { OnClick?.Invoke(); };
+			}
+		}
+
+		public void SetColor(Color c)
+		{
+			Load();
+			// Get the current theme stylebox if it exists, otherwise create a new one
+			var currentStyle = GetThemeStylebox("panel", "");
+			StyleBoxFlat styleBox;
+			if (currentStyle is StyleBoxFlat existingStyle)
+			{
+				// Clone the existing style to preserve other properties
+				styleBox = existingStyle.Duplicate() as StyleBoxFlat;
+				// Update just the border color
+				styleBox.BorderColor = c;
+
+				// Apply the modified style
+				AddThemeStyleboxOverride("panel", styleBox);
+			}
+			else
+			{
+				GD.PrintErr(GetArt().ToString() + " does not have a panel stylebox");
 			}
 		}
 

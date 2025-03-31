@@ -11,7 +11,7 @@ namespace LisergyGodotClient.Src
 {
 	public class GameStateMachine : IEventListener
 	{
-		private enum State { Boot, Login, MapView, Battle };
+		private enum State { Boot, Login, MapView, Building, Battle };
 		private enum Trigger { LoggedIn, LocalBattleStart, LocalBattleFinish };
 		private StateMachine<State, Trigger> _stateMachine;
 

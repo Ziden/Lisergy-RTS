@@ -42,6 +42,16 @@ namespace Game.Systems.Resources
             return 0;
         }
 
+        public ushort GetAmount(ResourceSpecId id)
+        {
+            var cargo = CurrentEntity.Get<CargoComponent>();
+            if (cargo.Items.TryGetValue(id, out var amount))
+            {
+                return amount;
+            }
+            return 0;
+        }
+
         /// <summary>
         /// Adds the given resource stack to the entity cargo
         /// </summary>

@@ -9,6 +9,7 @@ namespace GameDataTest
         {
             Name = "Logs",
             WeightPerUnit = 5,
+            ShowInUi = true,
             Art = new ArtSpec() { Address = "res://Content/Art/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png", Type = ArtType.SPECIFIC_SPRITE }
         };
 
@@ -22,6 +23,7 @@ namespace GameDataTest
         public static readonly ResourceSpec FOOD = new ResourceSpec(2)
         {
             Name = "Food",
+            ShowInUi = true,
             WeightPerUnit = 2,
             Art = new ArtSpec() { Address = "res://Content/Art/Sprites/Icons/FoodIconPack/baking_04.png", Type = ArtType.SPECIFIC_SPRITE }
         };
@@ -39,6 +41,9 @@ namespace GameDataTest
             spec.Resources[1] = WATER;
             spec.Resources[2] = FOOD;
             spec.Resources[3] = STONE;
+
+            spec.StartingResources[LOGS.SpecId] = 10;
+            spec.StartingResources[FOOD.SpecId] = 10;
         }
     }
 }

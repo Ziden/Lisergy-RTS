@@ -24,11 +24,6 @@ namespace Game.Systems.Player
         /// Battle headers of this player battles
         /// </summary>
         public List<BattleHeader> BattleHeaders = new List<BattleHeader>();
-
-        /// <summary>
-        /// Current resources this player have
-        /// </summary>
-        public Dictionary<ResourceSpecId, ushort> Resources = new Dictionary<ResourceSpecId, ushort>();
     }
 
     [Serializable]

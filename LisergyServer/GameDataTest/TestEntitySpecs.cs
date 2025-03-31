@@ -60,6 +60,10 @@ namespace GameDataTest
                 Components = Serialization.FromAnyTypes(new IComponent[] {
                     new PlayerDataComponent(),
                     new PlayerVisibilityComponent(),
+                    new CargoComponent()
+                    {
+                        Items = spec.StartingResources
+                    },
                 }).ToArray(),
             };
 

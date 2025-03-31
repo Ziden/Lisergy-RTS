@@ -19,9 +19,14 @@ namespace LisergyGodotClient.Src
         public static readonly ArtSpec SHADER_FOG_OF_WAR = "res://Src/Shaders/fow.gdshader";
         public static readonly ArtSpec THEME_UI = "res://addons/Theme/content/sprout_lands_theme.tres";
 
+        public static readonly ArtSpec WIDGET_RESOURCES_AMOUNT = "res://Content/UI/Widgets/ResourceAmountUI.tscn";
         public static readonly ArtSpec WIDGET_TECH_TREE_ITEM = "res://Content/UI/Widgets/TechTreeItemWidget.tscn";
         public static readonly ArtSpec WIDGET_ITEM_STACK = "res://Content/UI/Widgets/ItemStackWidget.tscn";
-        public static readonly ArtSpec SCREEN_BUILDING = "res://Content/UI/Screens/BuildingScreen.tscn";
         public static readonly ArtSpec WIDGET_PARTY_ACTIONS = "res://Content/UI/Widgets/PartyActions.tscn";
+        public static readonly ArtSpec WIDGET_BUILDING_INFO = "res://Content/UI/Widgets/BuildingInfo.tscn";
+
+        public static readonly ArtSpec SCREEN_BUILDING = "res://Content/UI/Screens/BuildingScreen.tscn";
+
+        public static readonly ArtSpec DIALOG_CONFIRM_BUILDING = "res://Content/UI/Widgets/ConfirmBuildingDialog.tscn";
     }
 }

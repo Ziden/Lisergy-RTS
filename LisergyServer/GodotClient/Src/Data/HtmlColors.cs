@@ -11,5 +11,7 @@ namespace LisergyGodotClient.Src.Data
     {
         public static readonly Color LightGreen = Color.FromHtml("#b3ff00");
         public static readonly Color White = Color.FromHtml("#FFFFFF");
+        public static readonly Color Red = Color.FromHtml("#b60020");
+        public static readonly Color Blue = Color.FromHtml("#1c7bc7");
     }
 }

@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4kb78b8yhut2"]
+
+[ext_resource type="Texture2D" uid="uid://dyqh7dt0ecaya" path="res://Content/Art/Ui/UiArt/Sprites/Demo/Demo_Icon/icon_white_close.png" id="1_c3ulx"]
+
+[node name="CloseButton" type="Button"]
+offset_left = 649.0
+offset_top = -9.0
+offset_right = 710.0
+offset_bottom = 54.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 9.0
+offset_top = 7.0
+offset_right = 53.0
+offset_bottom = 55.0
+texture = ExtResource("1_c3ulx")

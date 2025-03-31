@@ -40,7 +40,7 @@ namespace GameDataTest
                 Icon = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/bg/bag_09_b.PNG",
                 SpecId = CAMP,
                 TimeToBuildSeconds = 10,
-                Costs = new ResourceStackData[] { new ResourceStackData(TestResources.LOGS.SpecId, 20) }.ToList()
+                Costs = new ResourceStackData[] { new ResourceStackData(TestResources.LOGS.SpecId, 10) }.ToList()
             };
 
             spec.BuildingConstructions[FARM] = new BuildingConstructionSpec(FARM)

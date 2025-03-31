@@ -17,6 +17,7 @@ namespace GameData
     [Serializable]
     public class ResourceSpec
     {
+        public bool ShowInUi = false;
         public ResourceSpecId SpecId;
         public ArtSpec Art;
         public string Name;

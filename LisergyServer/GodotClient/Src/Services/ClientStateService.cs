@@ -4,25 +4,27 @@ using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Entities;
 using Game.Tile;
+using GameData;
 using Godot;
 using LisergyGodotClient.Src.Data;
-using LisergyGodotClient.Src.Services.LisergyGodotClient.Src.Controllers;
-using System;
 
 
 namespace LisergyGodotClient.Src.Services
 {
     public interface IClientStateService
     {
+        ObservableProperty<BuildingSpecId> PlacingBuilding { get; }
         ObservableProperty<IEntity> SelectedParty { get; }
         ObservableProperty<TileModel> SelectedTile { get; }
         ObservableProperty<Vector3> CameraPosition { get; }
         void ReceiveTapInput(Vector2 pos);
     }
+
     public class ClientStateService : IClientStateService, IEventListener
     {
         private IClientSDK _sdk;
 
+        public ObservableProperty<BuildingSpecId> PlacingBuilding { get; } = new();
         public ObservableProperty<IEntity> SelectedParty { get; } = new();
         public ObservableProperty<TileModel> SelectedTile { get; } = new();
         public ObservableProperty<Vector3> CameraPosition { get; } = new();

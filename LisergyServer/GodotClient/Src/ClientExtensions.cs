@@ -269,7 +269,6 @@ namespace LisergyGodotClient.Src
         #region Node
         public static Vector2 WorldToScreenPosition(this Camera3D camera, Vector3 worldPosition)
         {
-            // Convert the 3D world position to a 2D screen position
             return camera.UnprojectPosition(worldPosition);
         }
 

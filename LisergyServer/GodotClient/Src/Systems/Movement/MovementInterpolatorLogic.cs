@@ -29,7 +29,7 @@ namespace LisergyGodotClient.Src.Systems.Movement
 
         public bool IsInterpolating()
         {
-            return _currentTween != null && _currentTween.IsRunning();
+            return _currentTween != null && _currentTween.IsRunning() && _queue.Count > 0;
         }
 
         public bool HasQueue() => _queue.Count > 0;
@@ -77,7 +77,7 @@ namespace LisergyGodotClient.Src.Systems.Movement
             }
 
             _currentTween = node3D.CreateTween();
-            _currentTween.SetEase(Tween.EaseType.InOut);
+            _currentTween.SetEase(Tween.EaseType.In);
             _currentTween.TweenProperty(node3D, "global_position", finalPos, (float)duration);
             _currentTween.Finished += () => OnFinish(from, to);
             _currentTween.Play();

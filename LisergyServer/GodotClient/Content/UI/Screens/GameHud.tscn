@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://vshs5i0wo60p"]
+[gd_scene load_steps=7 format=3 uid="uid://vshs5i0wo60p"]
 
 [ext_resource type="Theme" uid="uid://bmf31mho1mjjt" path="res://addons/Theme/content/sprout_lands_theme.tres" id="1_ebinm"]
 [ext_resource type="Script" uid="uid://4647300eeixs" path="res://Src/Systems/GameHud/GameHudScreen.cs" id="2_vee5o"]
 [ext_resource type="Texture2D" uid="uid://cvjcj7k4gtaed" path="res://Content/Art/Ui/UiArt/Sprites/Demo/Demo_Icon/set_icon_role_wizard.png" id="3_62g7y"]
+[ext_resource type="PackedScene" uid="uid://df221dxl1n1r7" path="res://Content/UI/Widgets/ResourceAmountUI.tscn" id="3_vee5o"]
 [ext_resource type="PackedScene" uid="uid://c7redcv7amjwl" path="res://Content/UI/Structure/IconButton.tscn" id="4_ebinm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6gf8w"]
@@ -25,6 +26,11 @@ _partyButton2 = NodePath("PartySelect/HBoxContainer/Button2")
 _partyButton3 = NodePath("PartySelect/HBoxContainer/Button3")
 _partyButton4 = NodePath("PartySelect/HBoxContainer/Button4")
 _buildingButton = NodePath("IconButton")
+_resources = NodePath("ResourcesDisplay")
+
+[node name="ResourcesDisplay" parent="." instance=ExtResource("3_vee5o")]
+layout_mode = 1
+scale = Vector2(1.79255, 1.85097)
 
 [node name="PartySelect" type="Panel" parent="."]
 layout_mode = 1
@@ -191,6 +197,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="IconButton" parent="." instance=ExtResource("4_ebinm")]
+visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0

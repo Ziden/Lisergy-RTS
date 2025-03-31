@@ -17,9 +17,11 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 		[Export] public NodePath _partyButton3;
 		[Export] public NodePath _partyButton4;
 		[Export] public NodePath _buildingButton;
-
+		[Export] public NodePath _resources;
+		
 		private PartyActionBarWidget _actionBar;
 		private PartySelectBarWidget _unitSelection;
+		private ResourcesDisplayWidget _resourcesDisplay;
 		private Button _buildButton;
 
 		public override ArtSpec GetArt() => "res://Content/UI/Screens/GameHud.tscn";
@@ -27,6 +29,7 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 		public override void OnBuild()
 		{
 			ClientServices.State.SelectedTile.OnChanged += State_OnTileSelected;
+			ClientServices.ServerSdk.ClientEvents.On<ClientPartyActionEvent>(this, OnPartyActions);
 			ClientServices.ServerSdk.ClientEvents.On<GameStartedEvent>(this, OnGameStarted);
 			_unitSelection = new PartySelectBarWidget(
 				GetNode<Button>(_partyButton1),GetNode<Button>(_partyButton2),
@@ -35,6 +38,8 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 			_buildButton = GetNode<Button>(_buildingButton);
 			_buildButton.ButtonUp += OnClickBuild;
 			_unitSelection.UpdateData();
+			_resourcesDisplay = GetNode<ResourcesDisplayWidget>(_resources);
+			_resourcesDisplay.OnBuild();
 		}
 		
 		private void OnClickBuild()
@@ -59,6 +64,12 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 		private void OnGameStarted(GameStartedEvent @event)
 		{
 			//_unitSelection.OnGameStarted(@event);
+		}
+
+		private void OnPartyActions(ClientPartyActionEvent e)
+		{
+			if (e.Action != EntityAction.BUILD) return;
+			_ = ClientServices.Ui.Open<BuildingScreen>();
 		}
 	}
 }

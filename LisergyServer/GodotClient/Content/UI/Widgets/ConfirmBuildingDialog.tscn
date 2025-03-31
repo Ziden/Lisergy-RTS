@@ -1,0 +1,141 @@
+[gd_scene load_steps=7 format=3 uid="uid://ngl5goknv3fb"]
+
+[ext_resource type="Theme" uid="uid://bmf31mho1mjjt" path="res://addons/Theme/content/sprout_lands_theme.tres" id="1_btqlg"]
+[ext_resource type="Script" uid="uid://dg60a5vwugte1" path="res://Src/Systems/Tiles/UI/TileDataComponentWidget.cs" id="2_vbr07"]
+[ext_resource type="PackedScene" uid="uid://md0d40kqp8ei" path="res://Content/UI/Widgets/ItemStackWidget.tscn" id="3_k50x2"]
+[ext_resource type="Texture2D" uid="uid://xcm8eg2r587d" path="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_PictoIcons_(Original)/btn_icon_arrow_go.png" id="4_sy312"]
+[ext_resource type="Texture2D" uid="uid://cu840dm3hctiy" path="res://Content/Art/Ui/UiArt/Sprites/Demo/Demo_Icon/icon_color_check_01_s.png" id="5_hrkkq"]
+[ext_resource type="Texture2D" uid="uid://dyqh7dt0ecaya" path="res://Content/Art/Ui/UiArt/Sprites/Demo/Demo_Icon/icon_white_close.png" id="6_s5ipw"]
+
+[node name="TileData" type="Control"]
+texture_filter = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme = ExtResource("1_btqlg")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(400, 350)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -408.0
+offset_top = 4.0
+offset_right = -8.0
+offset_bottom = 354.0
+grow_horizontal = 0
+metadata/_edit_group_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Building" type="Control" parent="Panel/MarginContainer"]
+layout_mode = 2
+script = ExtResource("2_vbr07")
+NamePath = NodePath("")
+ItemPath = NodePath("DataTab/ConfirmBuild/BuildingIcon")
+
+[node name="DataTab" type="VBoxContainer" parent="Panel/MarginContainer/Building"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Panel" type="Panel" parent="Panel/MarginContainer/Building/DataTab"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="TileTitle" type="Label" parent="Panel/MarginContainer/Building/DataTab/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(0.00392157, 1, 0, 1)
+theme_override_font_sizes/font_size = 26
+text = "Confirm Construction"
+horizontal_alignment = 1
+
+[node name="ConfirmBuild" type="GridContainer" parent="Panel/MarginContainer/Building/DataTab"]
+layout_mode = 2
+size_flags_vertical = 6
+columns = 3
+
+[node name="BuildingIcon" parent="Panel/MarginContainer/Building/DataTab/ConfirmBuild" instance=ExtResource("3_k50x2")]
+layout_mode = 2
+
+[node name="Arrow" type="TextureRect" parent="Panel/MarginContainer/Building/DataTab/ConfirmBuild"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("4_sy312")
+
+[node name="TileIcon" parent="Panel/MarginContainer/Building/DataTab/ConfirmBuild" instance=ExtResource("3_k50x2")]
+layout_mode = 2
+
+[node name="BuildingName" type="Label" parent="Panel/MarginContainer/Building/DataTab/ConfirmBuild"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "CASTLE"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Label3" type="Label" parent="Panel/MarginContainer/Building/DataTab/ConfirmBuild"]
+layout_mode = 2
+text = "on"
+
+[node name="TileName" type="Label" parent="Panel/MarginContainer/Building/DataTab/ConfirmBuild"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "PLAINS"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/Building/DataTab"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="Panel/MarginContainer/Building/DataTab/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Cancel"
+icon = ExtResource("6_s5ipw")
+flat = true
+
+[node name="ConfirmButton" type="Button" parent="Panel/MarginContainer/Building/DataTab/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Confirm"
+icon = ExtResource("5_hrkkq")

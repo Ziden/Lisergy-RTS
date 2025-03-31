@@ -14,7 +14,7 @@ namespace LisergyGodotClient.Src.Systems.TechTree
 		[Export] public NodePath InactivePath;
 		[Export] public NodePath BorderPath;
 
-		private ItemStackWidget _itemWidget;
+		public ItemStackWidget ItemWidget { get; private set; }
 		private TextureButton _btn;
 		private TextureRect _inactiveOverlay;
 		private TextureRect _border;
@@ -29,10 +29,10 @@ namespace LisergyGodotClient.Src.Systems.TechTree
 			_inactiveOverlay ??= GetNode<TextureRect>(InactivePath);
 			_border ??= GetNode<TextureRect>(BorderPath);
 
-			if (_itemWidget == null)
+			if (ItemWidget == null)
 			{
-				_itemWidget ??= GetNode<ItemStackWidget>(ItemWidgetPath);
-				_itemWidget.OnClick = Clicked;
+				ItemWidget ??= GetNode<ItemStackWidget>(ItemWidgetPath);
+				ItemWidget.OnClick = Clicked;
 			}
 
 			if (_btn == null)
@@ -64,7 +64,7 @@ namespace LisergyGodotClient.Src.Systems.TechTree
 		{
 			Load();
 			Item = item;
-			_itemWidget.SetData(icon, name, -1);
+			ItemWidget.SetData(icon, name, -1);
 		}
 
 		public override ArtSpec GetArt() => AssetConfigs.WIDGET_TECH_TREE_ITEM;

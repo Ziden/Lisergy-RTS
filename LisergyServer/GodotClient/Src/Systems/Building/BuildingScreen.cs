@@ -11,12 +11,15 @@ using System.Threading.Tasks;
 using ClientSDK;
 using LisergyGodotClient.Src.Systems.Tiles.UI;
 using LisergyGodotClient.Src.Systems.UiStructure;
+using LisergyGodotClient.Src.Systems.GameHud;
 
 
 namespace LisergyGodotClient.Src.Systems.Building
 {
 	public partial class BuildingScreen : GameUi
 	{
+		[Export] public NodePath CloseButton;
+		[Export] public NodePath RightBar;
 		[Export] public NodePath HeaderPath;
 		[Export] public NodePath Bg;
 		[Export] public NodePath CostsGrid;
@@ -25,6 +28,7 @@ namespace LisergyGodotClient.Src.Systems.Building
 		[Export] public NodePath BuildTimeLabel;
 		[Export] public NodePath BuildButton;
 		[Export] public NodePath MissingRequirement;
+		[Export] public NodePath ResourcesDisplayWidget;
 
 		public override ArtSpec GetArt() => AssetConfigs.SCREEN_BUILDING;
 
@@ -41,21 +45,48 @@ namespace LisergyGodotClient.Src.Systems.Building
 		private ScreenHeader _header;
 		private Button _buildButton;
 		private Control _requirement;
+		private Control _rightBar;
+		private Button _closeButton;
+		private ResourcesDisplayWidget _resourceDisplay;
 
 		public override void OnBuild()
 		{
+			_resourceDisplay = GetNode<ResourcesDisplayWidget>(ResourcesDisplayWidget);
+			_closeButton = GetNode<Button>(CloseButton);
+			_rightBar = GetNode<Control>(RightBar);
 			_requirement = GetNode<Control>(MissingRequirement);
 			_buildButton = GetNode<Button>(BuildButton);
+			_buildButton.ButtonDown += () =>
+			{
+				if (_selected != null)
+				{
+					var spec = (BuildingSpecId)_selected.Item;
+					ClientServices.State.PlacingBuilding.Value = spec;
+					ClientServices.Ui.Close<BuildingScreen>();
+					_selected = null;
+				}
+			};
 			_header = GetNode<ScreenHeader>(HeaderPath);
 			_buildTime = GetNode<Label>(BuildTimeLabel);
 			_desc = GetNode<Label>(DescLabel);
 			_name = GetNode<Label>(NameLabel);
 			_costsGrid = GetNode<GridContainer>(CostsGrid);
-			_header.SetData("Building Construction", () => { 
-				ClientServices.Ui.Destroy<BuildingScreen>(); 
+			_header.SetData("Building Construction", () =>
+			{
+				ClientServices.Ui.Destroy<BuildingScreen>();
 			});
+			_closeButton.ButtonDown += () =>
+			{
+				_rightBar.Visible = false;
+				if (_selected != null)
+				{
+					_selected.SetBorder(HtmlColors.White);
+					_selected = null;
+				}
+			};
 			_root = new GodotGameObject(GetNode<TextureRect>(Bg));
 			_specs = ClientServices.GameSpecs;
+			_resourceDisplay.OnBuild();
 		}
 
 		public override void OnClose()
@@ -69,6 +100,7 @@ namespace LisergyGodotClient.Src.Systems.Building
 
 		public override void OnOpen()
 		{
+			_rightBar.Visible = false;
 			_tree = new TechTreeVisualLayout<BuildingSpecId>();
 			_tree.CreateWidget = CreateWidget;
 			_ = _tree.Draw(_root, _specs.ConstructionTechTree.Root);
@@ -82,6 +114,14 @@ namespace LisergyGodotClient.Src.Systems.Building
 			container.SetData(node.Data, constructionSpec.Icon, buildingSpec.Name);
 			var tech = ClientServices.LocalPlayer.EntityLogic.CheckTechTree(node.Data);
 			container.SetActive(tech.Status == BuildingTechStatus.Available);
+			if (tech.Status == BuildingTechStatus.NotResearched)
+			{
+				container.ItemWidget.SetColor(HtmlColors.Red);
+			}
+			else
+			{
+				container.ItemWidget.SetColor(HtmlColors.LightGreen);
+			}
 			container.OnClick = OnSelect;
 			return container;
 		}
@@ -90,7 +130,7 @@ namespace LisergyGodotClient.Src.Systems.Building
 		{
 			req.Visible = true;
 			var lbl = req.GetNode<Label>("ReqDesc");
-			var img = req.GetNode<TextureRect>("ReqImage");
+			var img = req.GetNode<TextureRect>("Panel/ReqImage");
 			ClientServices.Assets.LoadGetTexture(icon).Then(tex => { img.Texture = tex; });
 			lbl.Text = text;
 			return req;
@@ -98,7 +138,7 @@ namespace LisergyGodotClient.Src.Systems.Building
 
 		private void OnSelect(TechTreeItemWidget widget)
 		{
-			if(_selected != null)
+			if (_selected != null)
 			{
 				_selected.SetBorder(HtmlColors.White);
 			}
@@ -109,6 +149,7 @@ namespace LisergyGodotClient.Src.Systems.Building
 			var constructionSpec = _specs.BuildingConstructions[id];
 			var buildStatus = ClientServices.LocalPlayer.EntityLogic.CheckTechTree(id);
 
+			_rightBar.Visible = true;
 			_buildButton.Disabled = !buildStatus.IsAvailable;
 			_requirement.Visible = !buildStatus.IsAvailable;
 
@@ -116,16 +157,18 @@ namespace LisergyGodotClient.Src.Systems.Building
 			{
 				var blocker = _specs.Buildings[buildStatus.BlockedBy.Value];
 				var blockerConstruction = _specs.BuildingConstructions[buildStatus.BlockedBy.Value];
-				SetRequirement(_requirement, "Needs "+ blocker.Name, blockerConstruction.Icon);
-			} else {
+				SetRequirement(_requirement, "Needs " + blocker.Name, blockerConstruction.Icon);
+			}
+			else
+			{
 				_requirement.Visible = false;
 			}
 
 			constructionSpec.Costs.ForEach(cost => { }); // TODO:
 			_name.Text = buildingSpec.Name;
 			_desc.Text = buildingSpec.Description;
-			_buildTime.Text = constructionSpec.TimeToBuildSeconds+" Seconds";
-			foreach(var c in _costsGrid.GetChildren())
+			_buildTime.Text = constructionSpec.TimeToBuildSeconds + " Seconds";
+			foreach (var c in _costsGrid.GetChildren())
 			{
 				_costsGrid.RemoveChild(c);
 				c.QueueFree();
@@ -142,7 +185,7 @@ namespace LisergyGodotClient.Src.Systems.Building
 
 		public override void _Input(InputEvent @event)
 		{
-			if(_tree == null) return;
+			if (_tree == null) return;
 			if (@event is InputEventMouseButton mouseEvent)
 			{
 				if (mouseEvent.ButtonIndex == MouseButton.Left)

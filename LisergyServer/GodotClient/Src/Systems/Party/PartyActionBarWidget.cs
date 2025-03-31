@@ -27,12 +27,14 @@ namespace LisergyGodotClient.Src.Systems.GameHud
         [Export] public NodePath AttackButton;
         [Export] public NodePath CheckButton;
         [Export] public NodePath HarvestButton;
+        [Export] public NodePath BuildButton;
 
         private Control _centerNode;
         private Button _moveButton;
         private Button _attackButton;
         private Button _checkButton;
         private Button _harvestButton;
+        private Button _buildButton;
 
         private IEntity _targetEntity;
         private Node3D _targetEntityNode;
@@ -52,6 +54,7 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 
         public override void OnBuild()
         {
+            _buildButton = GetNode<Button>(BuildButton);
             _centerNode = GetNode<Control>(Center);
             _camera = ClientServices.Get<Camera3D>();
             _moveButton = GetNode<Button>(MoveButton);
@@ -60,6 +63,7 @@ namespace LisergyGodotClient.Src.Systems.GameHud
             _harvestButton = GetNode<Button>(HarvestButton);
             ClientServices.State.CameraPosition.OnChanged += State_OnCameraMoved;
 
+            _buildButton.ButtonDown += () => OnActionChosen(EntityAction.BUILD);
             _moveButton.ButtonDown += () => OnActionChosen(EntityAction.MOVE);
             _attackButton.ButtonDown += () => OnActionChosen(EntityAction.ATTACK);
             _checkButton.ButtonDown += () => OnActionChosen(EntityAction.CHECK);
@@ -96,6 +100,7 @@ namespace LisergyGodotClient.Src.Systems.GameHud
             _targetTile = tile;
             _targetEntity = party;
             var actions = EvaluateActions(party, tile);
+            _moveButton.Visible = actions.Contains(EntityAction.BUILD);
             _moveButton.Visible = actions.Contains(EntityAction.MOVE);
             _attackButton.Visible = actions.Contains(EntityAction.ATTACK);
             _checkButton.Visible = actions.Contains(EntityAction.CHECK);

@@ -12,6 +12,7 @@ using System.Linq;
 using LisergyGodotClient.Src.Systems.Animation;
 using LisergyGodotClient.Src.Systems.GameHud;
 using System;
+using Game.Systems.Movement;
 
 /// <summary>
 /// We listen for placement updates to also move the entity on the scene
@@ -49,7 +50,8 @@ public class EntityPositionListener : IEventListener
     private void OnMoveRequestStarted(EntityMovementRequestStarted e)
     {
         var path = e.Path.Select(p => p.ToGodotVector2()).ToHashSet().ToArray();
-        _pathVisualizer.DrawPath(path);
+        
+        _pathVisualizer.DrawPath(path, e.Party.Get<MovespeedComponent>().MoveDelay);
     }
 
     private void InterpolationStart(MovementInterpolationStartEvent e)
@@ -59,11 +61,12 @@ public class EntityPositionListener : IEventListener
         {
             anim.UpdateAnimation(e.From.GetDirection(e.To), true);
         }
+        _pathVisualizer.StartMovement();
     }
 
     private void InterpolationEnd(MovementInterpolationEndEvent e)
     {
-        _pathVisualizer.FinishMovement(e.From.Position.ToGodotVector2());
+       // _pathVisualizer.FinishMovement(e.From.Position.ToGodotVector2());
         var view = e.Entity.GetView();
         if (view is IAnimatedSpriteEntity anim)
         {

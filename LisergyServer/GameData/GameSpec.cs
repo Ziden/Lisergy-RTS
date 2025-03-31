@@ -26,6 +26,7 @@ namespace GameData
             Units = new Dictionary<byte, UnitSpec>();
             Items = new Dictionary<ushort, ItemSpec>();
             Loots = new Dictionary<ushort, LootSpec>();
+            StartingResources = new Dictionary<ResourceSpecId, ushort>();
             Dungeons = new Dictionary<byte, DungeonSpec>();
             Resources = new Dictionary<byte, ResourceSpec>();
             HarvestPoints = new Dictionary<byte, ResourceHarvestPointSpec>();
@@ -34,6 +35,7 @@ namespace GameData
             ConstructionTechTree = new ConstructionTreeSpec();
         }
 
+        public Dictionary<ResourceSpecId, ushort> StartingResources;
         public ConstructionTreeSpec ConstructionTechTree;
         public HarvestingSpec Harvesting;
         public Dictionary<byte, BuildingSpec> Buildings;
