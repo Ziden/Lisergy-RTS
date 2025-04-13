@@ -24,21 +24,14 @@ namespace ClientSDK.Services
         List<BattleHeader> BattleHeaders { get; }
     }
 
-    public class BattleModule : IBattleModule
+    public class BattleModule(LisergySDK client) : IBattleModule
     {
-        private LisergySDK _client;
-
-        public BattleModule(LisergySDK client)
-        {
-            _client = client;
-        }
-
-        public List<BattleHeader> BattleHeaders => _client.Server.Player.LocalPlayer.Components.Get<PlayerDataComponent>().BattleHeaders;
+        public List<BattleHeader> BattleHeaders => client.Server.Player.LocalPlayer.Components.Get<PlayerDataComponent>().BattleHeaders;
 
 
         public void Register()
         {
-            _client.Network.OnInput<BattleHeaderPacket>(OnBattleSummary);
+            client.Network.OnInput<BattleHeaderPacket>(OnBattleSummary);
         }
 
         public void RequestBattleLog(in GameId battleId)
@@ -48,9 +41,9 @@ namespace ClientSDK.Services
 
         private void OnBattleSummary(BattleHeaderPacket result)
         {
-            if (result.BattleHeader.Attacker.OwnerID == _client.Server.Player.PlayerId)
+            if (result.BattleHeader.Attacker.OwnerID == client.Server.Player.PlayerId)
             {
-                _client.ClientEvents.Call(new OwnBattleFinishedEvent()
+                client.ClientEvents.Call(new OwnBattleFinishedEvent()
                 {
                     ImAttacker = true,
                     MyTeam = result.BattleHeader.Attacker,
@@ -59,9 +52,9 @@ namespace ClientSDK.Services
                     BattleId = result.BattleHeader.BattleID
                 });
             }
-            else if (result.BattleHeader.Defender.OwnerID == _client.Server.Player.PlayerId)
+            else if (result.BattleHeader.Defender.OwnerID == client.Server.Player.PlayerId)
             {
-                _client.ClientEvents.Call(new OwnBattleFinishedEvent()
+                client.ClientEvents.Call(new OwnBattleFinishedEvent()
                 {
                     ImAttacker = false,
                     MyTeam = result.BattleHeader.Defender,

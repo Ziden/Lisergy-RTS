@@ -103,7 +103,7 @@ namespace LisergyGodotClient.Src.Systems.Party
         public void SetData(params IEntity[] parties)
         {
             var allP = parties.ToList();
-            var sdk = ClientServices.Get<IClientSDK>();
+            var sdk = ClientServices.Get<IClientSdk>();
 
             for (int i = 0; i < _buttons.Count; i++)
             {
@@ -127,7 +127,7 @@ namespace LisergyGodotClient.Src.Systems.Party
         {
             b.EntityId = party.EntityId;
             var group = party.Get<BattleGroupComponent>();
-            var unitSpec = ClientServices.Get<IClientSDK>().Game.Specs.Units[group.Units[0].SpecId];
+            var unitSpec = ClientServices.Get<IClientSdk>().Game.Specs.Units[group.Units[0].SpecId];
             b.Icon.Texture = await _assets.LoadGetTexture(unitSpec.IconArt);
             b.Label.Text = unitSpec.Name;
             if (_state.SelectedParty.Value == party)

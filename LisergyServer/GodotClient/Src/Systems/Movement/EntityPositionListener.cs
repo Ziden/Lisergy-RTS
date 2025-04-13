@@ -22,7 +22,7 @@ using Game.Systems.Movement;
 public class EntityPositionListener : IEventListener
 {
     private PathVisualizer _pathVisualizer;
-    private IClientSDK _client;
+    private IClientSdk _client;
 
     public EntityPositionListener()
     {

@@ -13,7 +13,7 @@ namespace LisergyGodotClient.Src.Systems.Tiles
     {
         private IClientStateService _state;
         private IUiService _ui;
-        private IClientSDK _sdk;
+        private IClientSdk _sdk;
         private TileFog _fog;
 
         public TileListener()
@@ -21,7 +21,7 @@ namespace LisergyGodotClient.Src.Systems.Tiles
             _fog = new TileFog(100, 100, ClientServices.Get<IGameObject>().GetNode<Node>());
             _ui = ClientServices.Get<IUiService>();
             _state = ClientServices.Get<IClientStateService>();
-            _sdk = ClientServices.Get<IClientSDK>();
+            _sdk = ClientServices.Get<IClientSdk>();
             _state.SelectedTile.OnChanged += State_OnTileSelected;    
             _state.CameraPosition.OnChanged += State_OnCameraMoved;
             _sdk.ClientEvents.On<ClientPartyActionEvent>(this, OnPartyAction);

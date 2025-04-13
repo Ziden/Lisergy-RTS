@@ -13,7 +13,7 @@ namespace LisergyGodotClient.Src.Systems.Movement
 {
     public class MovablevView : GodotSpriteEntityView, IEntityMovementInterpolated
     {
-        public MovablevView(IEntity entity, IClientSDK client) : base(entity, client)
+        public MovablevView(IEntity entity, IClientSdk client) : base(entity, client)
         {
         }
 

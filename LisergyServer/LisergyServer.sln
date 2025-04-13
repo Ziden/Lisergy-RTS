@@ -19,12 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExecutableServer", "Standal
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSDK", "ClientSDK\ClientSDK.csproj", "{409F85B9-CD4F-43D3-8A4A-9CE23F25BDBD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{195A9534-0588-4274-913A-72F715ED332B}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		NewSerializer.Generator\NewSerializer.Generator.csproj = NewSerializer.Generator\NewSerializer.Generator.csproj
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebPlayerLogic", "WebGameLogic\WebPlayerLogic.csproj", "{34D5EFFA-50B4-45B2-A681-19F15839844A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameServices", "GameServices\GameServices.csproj", "{849FC0A5-04E4-46E3-A314-5C27040153A9}"

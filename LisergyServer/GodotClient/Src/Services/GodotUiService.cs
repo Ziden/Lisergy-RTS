@@ -37,14 +37,14 @@ namespace GodotClient.Services
 	public class GodotUiService : IUiService
 	{
 		private IGameObject _root;
-		private IClientSDK _client;
+		private IClientSdk _client;
 		private IAssetService _assets;
 		private IGameLog _log;
 
 		private Dictionary<Type, GameUi> _loadedScreens = new Dictionary<Type, GameUi>();
 		private Dictionary<Type, GameUi> _openScreens = new Dictionary<Type, GameUi>();
 
-		public GodotUiService(IClientSDK client, IAssetService assets, IGameObject root, IGameLog log)
+		public GodotUiService(IClientSdk client, IAssetService assets, IGameObject root, IGameLog log)
 		{
 			_log = log;
 			_client = client;

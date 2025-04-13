@@ -10,8 +10,8 @@ namespace ClientSDK.SDKEvents
     public class OwnBattleFinishedEvent : IClientEvent
     {
         public bool ImAttacker;
-        public BattleGroupData MyTeam;
-        public BattleGroupData EnemyTeam;
+        public required BattleGroupData MyTeam;
+        public required BattleGroupData EnemyTeam;
         public bool Victory;
         public GameId BattleId;
     }

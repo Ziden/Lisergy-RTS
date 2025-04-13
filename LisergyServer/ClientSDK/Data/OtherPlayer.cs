@@ -8,10 +8,5 @@ namespace ClientSDK.Data
     /// <summary>
     /// Represents another player thats not the local player
     /// </summary>
-    public class OtherPlayer : PlayerModel
-    {
-        public OtherPlayer(IGame game, IEntity e) : base(game, e)
-        {
-        }
-    }
+    public class OtherPlayer(IGame game, IEntity e) : PlayerModel(game, e);
 }

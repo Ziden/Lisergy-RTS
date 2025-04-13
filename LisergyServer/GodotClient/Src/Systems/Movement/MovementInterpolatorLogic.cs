@@ -22,7 +22,7 @@ namespace LisergyGodotClient.Src.Systems.Movement
     /// </summary>
     public class MovementInterpolatorLogic
     {
-        private IClientSDK _client;
+        private IClientSdk _client;
         private IEntity _entity;
         private Tween _currentTween;
         private Queue<(TileModel, TileModel)> _queue = new Queue<(TileModel, TileModel)>();
@@ -34,7 +34,7 @@ namespace LisergyGodotClient.Src.Systems.Movement
 
         public bool HasQueue() => _queue.Count > 0;
 
-        public MovementInterpolatorLogic(IClientSDK client, IEntity entity)
+        public MovementInterpolatorLogic(IClientSdk client, IEntity entity)
         {
             _client = client;
             _entity = entity;

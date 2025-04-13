@@ -17,7 +17,7 @@
         public class GodotCameraInputService : IInputService, IEventListener
         {
 
-            private IClientSDK _sdk;
+            private IClientSdk _sdk;
             private IClientStateService _state;
             private Camera3D _camera;
             private Vector3 _cameraPosition;
@@ -27,7 +27,7 @@
             private DateTime _lastUp;
             private Vector3 _cameraDelta;
 
-            public GodotCameraInputService(Camera3D camera, IClientSDK sdk, IClientStateService state)
+            public GodotCameraInputService(Camera3D camera, IClientSdk sdk, IClientStateService state)
             {
                 _state = state;
                 _camera = camera;

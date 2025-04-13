@@ -2,8 +2,5 @@
 
 namespace ClientSDK.Data
 {
-    public class SDKMissconfiguredException : Exception
-    {
-        public SDKMissconfiguredException(string msg) : base(msg) { }
-    }
+    public class SDKMissconfiguredException(string msg) : Exception(msg);
 }

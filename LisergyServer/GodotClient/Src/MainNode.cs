@@ -36,7 +36,11 @@ namespace GodotClient
         {
             GameId.INCREMENTAL_MODE = 1;
 
+#if WINDOWS
             _platform = new Windows();
+#elif OSX 
+            _platform = new Osx();
+#endif
             _platform.Initialize();
 
             _rootObject = new GodotGameObject(this);

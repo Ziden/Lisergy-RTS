@@ -6,7 +6,6 @@ using Game.World;
 
 namespace ClientSDK.Data
 {
-
     /// <summary>
     /// Implementation of the game world for the client SDK.
     /// Instead of requiring to have all tiles generated, it will lazy generate tiles.
@@ -19,7 +18,7 @@ namespace ClientSDK.Data
     public class LazyLoadedPlayers : WorldPlayers
     {
         private IGame _game;
-
+        
         public LazyLoadedPlayers(IGame game) : base(int.MaxValue)
         {
             _game = game;

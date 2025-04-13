@@ -11,7 +11,7 @@ namespace LisergyGodotClient.Src.Systems
 {
     public class DungeonView : EntityView
     {
-        public DungeonView(IEntity entity, IClientSDK client) : base(entity, client)
+        public DungeonView(IEntity entity, IClientSdk client) : base(entity, client)
         {
         }
         protected override async Task CreateView()

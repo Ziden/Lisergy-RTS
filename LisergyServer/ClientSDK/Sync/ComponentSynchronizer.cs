@@ -25,9 +25,9 @@ namespace ClientSDK.Sync
         private List<(object, object)> _toSync = new List<(object, object)>();
         private List<object> _added = new List<object>();
 
-        private IClientSDK _client;
+        private IClientSdk _client;
 
-        public ComponentSynchronizer(IClientSDK client)
+        public ComponentSynchronizer(IClientSdk client)
         {
             _client = client;
         }

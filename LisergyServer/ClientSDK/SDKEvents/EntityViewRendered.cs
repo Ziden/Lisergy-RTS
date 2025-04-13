@@ -9,9 +9,9 @@ namespace ClientSDK.SDKEvents
     /// So if player sees an entity, this entity goes to the fog and comes back this is not called twice
     /// This is not applied to tiles or players
     /// </summary>
-    public class EntityViewRendered : IClientEvent
+    public class EntityViewRendered() : IClientEvent
     {
-        public IEntity Entity;
-        public IEntityView View;
+        public required IEntity Entity;
+        public required IEntityView View;
     }
 }

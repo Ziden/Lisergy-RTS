@@ -14,9 +14,9 @@ namespace ClientSDK.SDKEvents
     /// </summary>
     public class EntityMovementRequestStarted : IClientEvent
     {
-        public IEntity Party;
-        public IEnumerable<Location> Path;
-        public TileModel Destination;
+        public required IEntity Party;
+        public required IEnumerable<Location> Path;
+        public required TileModel Destination;
         public CourseIntent Intent;
     }
 }

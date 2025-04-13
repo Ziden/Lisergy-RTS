@@ -16,14 +16,14 @@ namespace LisergyGodotClient.Src.Services
 
 	public class GodotMapIndicatorService : IMapIndicatorService, IEventListener
 	{
-		private IClientSDK _sdk;
+		private IClientSdk _sdk;
 		private IClientStateService _state;
 		private IAssetService _assets;
 
 		private IGameObject _tileSelector;
 		private IGameObject _unitSelector;
 
-		public GodotMapIndicatorService(IClientSDK sdk, IAssetService assets, IClientStateService state)
+		public GodotMapIndicatorService(IClientSdk sdk, IAssetService assets, IClientStateService state)
 		{
 			_sdk = sdk;
 			_assets = assets;

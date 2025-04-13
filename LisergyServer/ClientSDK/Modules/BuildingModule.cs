@@ -11,15 +11,9 @@ namespace ClientSDK.Services
         IReadOnlyList<BuildingSpec> GetBuildingsKnown();
     }
 
-    public class BuildingModule : IBuildingModule
+    public class BuildingModule(LisergySDK client) : IBuildingModule
     {
-        private LisergySDK _client;
         private List<BuildingSpec> _known = new List<BuildingSpec>();
-
-        public BuildingModule(LisergySDK client)
-        {
-            _client = client;
-        }
 
         public void Register()
         {
@@ -29,7 +23,7 @@ namespace ClientSDK.Services
         public IReadOnlyList<BuildingSpec> GetBuildingsKnown()
         {
             _known.Clear();
-            foreach (var b in _client.Game.Specs.Buildings.Values)
+            foreach (var b in client.Game.Specs.Buildings.Values)
             {
                 _known.Add(b);
             }

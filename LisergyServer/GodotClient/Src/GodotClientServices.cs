@@ -16,7 +16,7 @@ namespace LisergyGodotClient.Src
 		private static ClientServices _services;
 		public static T Get<T>() => _services._serviceProvider.GetRequiredService<T>();
 		public static IUiService Ui => Get<IUiService>();
-		public static IClientSDK ServerSdk => Get<IClientSDK>();
+		public static IClientSdk ServerSdk => Get<IClientSdk>();
 		public static IAssetService Assets => Get<IAssetService>();
 		public static IGameLog Log => Get<IGameLog>();
 		public static IClientStateService State => Get<IClientStateService>();
@@ -39,7 +39,7 @@ namespace LisergyGodotClient.Src
 			var camera = rootNode.GetNode().GetViewport().GetCamera3D();
 
 			camera = camera ?? new Camera3D();
-			services.AddSingleton<IClientSDK, LisergySDK>();
+			services.AddSingleton<IClientSdk, LisergySDK>();
 			services.AddSingleton(rootNode);
 			services.AddSingleton(camera);
 			services.AddSingleton<IGameLog>(log);

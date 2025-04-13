@@ -22,14 +22,14 @@ namespace LisergyGodotClient.Src.Services
 
     public class ClientStateService : IClientStateService, IEventListener
     {
-        private IClientSDK _sdk;
+        private IClientSdk _sdk;
 
         public ObservableProperty<BuildingSpecId> PlacingBuilding { get; } = new();
         public ObservableProperty<IEntity> SelectedParty { get; } = new();
         public ObservableProperty<TileModel> SelectedTile { get; } = new();
         public ObservableProperty<Vector3> CameraPosition { get; } = new();
 
-        public ClientStateService(IClientSDK sdk)
+        public ClientStateService(IClientSdk sdk)
         {
             _sdk = sdk;
             _sdk.ClientEvents.On<EntitySeenEvent>(this, OnSeeEntity);

@@ -13,7 +13,7 @@ namespace LisergyGodotClient.Src.Systems.Animation
     {
         private AnimatedSprite3D _sprite;
 
-        public GodotSpriteEntityView(IEntity entity, IClientSDK client) : base(entity, client)
+        public GodotSpriteEntityView(IEntity entity, IClientSdk client) : base(entity, client)
         {
             this.RunWhenRendered(() =>
             {

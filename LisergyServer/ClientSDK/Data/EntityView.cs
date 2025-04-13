@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace ClientSDK.Data
 {
+    /// <summary>
+    /// Represents the current state of a view rendering 
+    /// </summary>
     public enum EntityViewState
     {
         /// <summary>
@@ -28,7 +31,11 @@ namespace ClientSDK.Data
     /// </summary>
     public interface IEntityView
     {
-        public IGameObject GameObject { get; }
+        /// <summary>
+        /// The view object that represents the client game engine object
+        /// </summary>
+        public IGameObject? GameObject { get; }
+        
         /// <summary>
         /// Gets the base entity of this view
         /// </summary>
@@ -37,7 +44,7 @@ namespace ClientSDK.Data
         /// <summary>
         /// Gets the reference of the game client
         /// </summary>
-        IClientSDK Client { get; }
+        IClientSdk Client { get; }
 
         /// <summary>
         /// Current client state of this view
@@ -56,20 +63,13 @@ namespace ClientSDK.Data
         void RunWhenRendered(Action callback);
     }
 
-    public class EntityView : IEntityView
+    public class EntityView(IEntity entity, IClientSdk client) : IEntityView
     {
-        private event Action<EntityView> OnRendered;
+        private event Action<EntityView>? OnRendered;
 
-        public IGameObject GameObject { get; protected set; }
-        public IEntity Entity { get; private set; }
-        public IClientSDK Client { get; set; }
-
-        public EntityView(IEntity entity, IClientSDK client)
-        {
-            Entity = entity;
-            Client = client;
-        }
-
+        public IGameObject? GameObject { get; protected set; }
+        public IEntity Entity { get; private set; } = entity;
+        public IClientSdk Client { get; set; } = client;
         public EntityViewState State { get; protected set; } = EntityViewState.NOT_RENDERED;
 
         IEntity IEntityView.Entity => Entity;

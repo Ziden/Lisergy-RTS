@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 /// </summary>
 public class TileRenderingListener : IEventListener
 {
-    public IClientSDK _client;
+    public IClientSdk _client;
 
     private HashSet<TileRenderedEvent> _queued = new HashSet<TileRenderedEvent>();
     private DateTime _bufferExpireTime = DateTime.MinValue;
@@ -21,7 +21,7 @@ public class TileRenderingListener : IEventListener
 
     public TileRenderingListener()
     {
-        _client = ClientServices.Get<IClientSDK>();;
+        _client = ClientServices.Get<IClientSdk>();;
         _client.ClientEvents.On<TileRenderedEvent>(this, OnTileRendered);
     }
 

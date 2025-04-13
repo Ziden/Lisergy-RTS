@@ -13,7 +13,7 @@ namespace LisergyGodotClient.Src.Systems.Tiles
 
         private Node _tileNode;
 
-        public TileView(IEntity entity, IClientSDK client) : base(entity, client)
+        public TileView(IEntity entity, IClientSdk client) : base(entity, client)
         {
             
         }
