@@ -13,9 +13,9 @@ public class IndicatorSelectedTileListener : IEventListener
 {
     private TileModel _selectedTile;
     private GameObject _tileCursor;
-    private IGameClient _client;
+    private IClientSDK _client;
 
-    public IndicatorSelectedTileListener(IGameClient client)
+    public IndicatorSelectedTileListener(IClientSDK client)
     {
         _client = client;
         ClientViewState.OnSelectTile += ClickTile;

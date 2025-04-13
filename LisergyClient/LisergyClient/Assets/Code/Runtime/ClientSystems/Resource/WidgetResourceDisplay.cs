@@ -20,7 +20,7 @@ namespace Resource.UI
             _text = this.Q<Label>("ItemQtd").Required();
         }
 
-        public override void OnAddedDuringGame(IGameClient client)
+        public override void OnAddedDuringGame(IClientSDK client)
         {
             _specs = client.Game.Specs;
         }

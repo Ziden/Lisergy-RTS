@@ -29,9 +29,9 @@ namespace Assets.Code.World
     {
         public EntityEffects EntityEffects { get; private set; }
         private Dictionary<VfxPrefab, List<VfxMonoComponent>> _pool = new();
-        private IGameClient _client;
+        private IClientSDK _client;
 
-        public VfxService(IGameClient client)
+        public VfxService(IClientSDK client)
         {
             _client = client;
             EntityEffects = new EntityEffects();

@@ -9,7 +9,7 @@ using GameAssets;
 /// </summary>
 public class HarvestingComponentListener : BaseComponentListener<HarvestingComponent>
 {
-    public HarvestingComponentListener(IGameClient client) : base(client)
+    public HarvestingComponentListener(IClientSDK client) : base(client)
     {
         client.ClientEvents.On<MovementInterpolationStartEvent>(this, OnMoveStart);
     }

@@ -12,7 +12,7 @@ namespace Assets.Code.World
 {
     public partial class PartyView : UnityEntityView, IEntityMovementInterpolated
     {
-        public PartyView(IGameClient client, IEntity e) : base(e, client) { }
+        public PartyView(IClientSDK client, IEntity e) : base(e, client) { }
 
         public MovementInterpolatorLogic MovementInterpolator { get; private set; }
 

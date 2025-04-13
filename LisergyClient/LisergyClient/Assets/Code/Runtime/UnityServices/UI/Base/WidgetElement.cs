@@ -17,7 +17,7 @@ namespace Assets.Code.ClientSystems.Party.UI
         /// Will be null when not running the game (e.g document editor).
         /// Avoid using on element constructors
         /// </summary>
-        protected IGameClient? GameClient { get; private set; }
+        protected IClientSDK? GameClient { get; private set; }
 
         protected VisualTreeAsset LoadUxmlFromResource(string path)
         {
@@ -56,9 +56,9 @@ namespace Assets.Code.ClientSystems.Party.UI
             });
         }
 
-        public virtual void OnAddedDuringGame(IGameClient client) { }
+        public virtual void OnAddedDuringGame(IClientSDK client) { }
 
-        public virtual void OnRemovedDuringGame(IGameClient client) { }
+        public virtual void OnRemovedDuringGame(IClientSDK client) { }
 
         public Rect Bounds => worldBound;
     }

@@ -21,7 +21,7 @@ public class UnityEntityView : EntityView, IUnityEntityView
 {
     protected event Action OnAfterRendered;
 
-    public UnityEntityView(IEntity e, IGameClient game) : base(e, game) { }
+    public UnityEntityView(IEntity e, IClientSDK game) : base(e, game) { }
 
     private GameObject _gameObject;
     public GameObject GameObject

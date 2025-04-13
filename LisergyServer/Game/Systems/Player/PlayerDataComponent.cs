@@ -3,7 +3,6 @@ using Game.Engine.ECLS;
 using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
 using Game.World;
-using GameData;
 using System;
 using System.Collections.Generic;
 

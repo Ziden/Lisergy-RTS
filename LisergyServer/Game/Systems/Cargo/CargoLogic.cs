@@ -52,6 +52,18 @@ namespace Game.Systems.Resources
             return 0;
         }
 
+        public bool TrySpend(ResourceSpecId resource, ushort amt)
+        {
+            var cargo = CurrentEntity.Get<CargoComponent>();
+            if (cargo.GetAmount(resource) < amt)
+            {
+                return false;
+            }
+            cargo.Items[resource] -= amt;
+            CurrentEntity.Save(cargo);
+            return true;
+        }
+
         /// <summary>
         /// Adds the given resource stack to the entity cargo
         /// </summary>

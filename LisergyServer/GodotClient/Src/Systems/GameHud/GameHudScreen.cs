@@ -1,11 +1,13 @@
 using ClientSDK.SDKEvents;
 using Game.Engine.Events.Bus;
 using Game.Tile;
+using GameData;
 using GameData.Specs;
 using Godot;
 using GodotClient.Services;
 using LisergyGodotClient.Src.Systems.Building;
 using LisergyGodotClient.Src.Systems.Party;
+using System;
 
 
 namespace LisergyGodotClient.Src.Systems.GameHud
@@ -28,6 +30,7 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 
 		public override void OnBuild()
 		{
+			ClientServices.State.PlacingBuilding.OnChanged += State_OnPlacingBuilding;
 			ClientServices.State.SelectedTile.OnChanged += State_OnTileSelected;
 			ClientServices.ServerSdk.ClientEvents.On<ClientPartyActionEvent>(this, OnPartyActions);
 			ClientServices.ServerSdk.ClientEvents.On<GameStartedEvent>(this, OnGameStarted);
@@ -41,7 +44,22 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 			_resourcesDisplay = GetNode<ResourcesDisplayWidget>(_resources);
 			_resourcesDisplay.OnBuild();
 		}
-		
+
+		private void State_OnPlacingBuilding(BuildingSpecId id)
+		{
+			if(id == default)
+			{
+				ClientServices.Ui.Close<ConfirmBuildingDialog>();
+			} else
+			{
+				ClientServices.Ui.Open<ConfirmBuildingDialog>().Then(ui =>
+				{
+					var selectedTile = ClientServices.State.SelectedTile.Value.SpecId;
+					ui.SetData(id, selectedTile);
+				});
+			}
+		}
+
 		private void OnClickBuild()
 		{
 			_ = ClientServices.Ui.Open<BuildingScreen>();
@@ -50,6 +68,9 @@ namespace LisergyGodotClient.Src.Systems.GameHud
 		private void State_OnTileSelected(TileModel obj)
 		{
 			if (obj == null || ClientServices.State.SelectedParty.Value == null) return;
+
+			if (ClientServices.State.PlacingBuilding.Value != default) return;
+
 			ClientServices.Ui.Open<PartyActionBarWidget>().Then(ui =>
 			{
 				ui.SetData(ClientServices.State.SelectedParty.Value, obj);

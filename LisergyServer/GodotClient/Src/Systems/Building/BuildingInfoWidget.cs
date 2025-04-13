@@ -24,7 +24,6 @@ namespace LisergyGodotClient.Src.Systems.Building
         private GridContainer _costsGrid;
         private Button _buildButton;
         private Control _requirement;
-        private Control _rightBar;
         private Button _closeButton;
 
         public Action OnClickBuild;
@@ -32,7 +31,6 @@ namespace LisergyGodotClient.Src.Systems.Building
 
         public override void OnBuild()
         {
-          
             _closeButton = GetNode<Button>(CloseButton);
             _requirement = GetNode<Control>(MissingRequirement);
             _buildButton = GetNode<Button>(BuildButton);
@@ -67,7 +65,6 @@ namespace LisergyGodotClient.Src.Systems.Building
             var constructionSpec = ClientServices.GameSpecs.BuildingConstructions[id];
             var buildStatus = ClientServices.LocalPlayer.EntityLogic.CheckTechTree(id);
 
-            _rightBar.Visible = true;
             _buildButton.Disabled = !buildStatus.IsAvailable;
             _requirement.Visible = !buildStatus.IsAvailable;
 

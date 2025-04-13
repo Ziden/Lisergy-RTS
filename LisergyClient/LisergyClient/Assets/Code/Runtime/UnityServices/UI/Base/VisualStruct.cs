@@ -6,10 +6,10 @@ public abstract class VisualStruct : IDisposable
 {
     public abstract void Dispose();
 
-    protected IGameClient _client;
+    protected IClientSDK _client;
     protected VisualElement _root;
 
-    public VisualStruct(VisualElement root, IGameClient client)
+    public VisualStruct(VisualElement root, IClientSDK client)
     {
         _client = client;
         _root = root;

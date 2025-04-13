@@ -19,7 +19,7 @@ namespace GodotClient
         /// <summary>
         /// Checks if the given id is the id of the local player
         /// </summary>
-        public static bool IsMine(this GameId id) => ClientSer.Interface.ServerModules.Player.PlayerId == id;
+        public static bool IsMine(this GameId id) => UnityServicesContainer.Interface.ServerModules.Player.PlayerId == id;
 
         /// <summary>
         /// Checks if a given entity belongs to the local player
@@ -72,7 +72,7 @@ namespace GodotClient
         /// <summary>
         /// Accesses game specific services
         /// </summary>
-        public static IGameClientServices GodotServices(this IGameClient client) => GodotServicesContainer.Interface;
+        public static IClientSDKServices GodotServices(this IClientSDK client) => GodotServicesContainer.Interface;
 
         public static IGodotEntityView GetView(this IEntity entity)
         {

@@ -8,7 +8,7 @@ using Game.Systems.Battler;
 
 public class BattleGroupUnitListener : BaseComponentListener<BattleGroupComponent>
 {
-    public BattleGroupUnitListener(IGameClient client) : base(client)
+    public BattleGroupUnitListener(IClientSDK client) : base(client)
     {
     }
 

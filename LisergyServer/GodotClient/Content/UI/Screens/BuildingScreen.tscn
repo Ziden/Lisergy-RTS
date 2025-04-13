@@ -1,73 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://cmg4ng50ymu8k"]
+[gd_scene load_steps=7 format=3 uid="uid://cmg4ng50ymu8k"]
 
 [ext_resource type="Theme" uid="uid://bmf31mho1mjjt" path="res://addons/Theme/content/sprout_lands_theme.tres" id="1_akbt5"]
 [ext_resource type="Script" uid="uid://dkiu17kg2kh17" path="res://Src/Systems/Building/BuildingScreen.cs" id="2_avrgw"]
 [ext_resource type="Texture2D" uid="uid://4ir7as58qwrw" path="res://Content/Art/Sprites/Pack/textures/block/stripped_acacia_log.png" id="3_pfju5"]
 [ext_resource type="PackedScene" uid="uid://df221dxl1n1r7" path="res://Content/UI/Widgets/ResourceAmountUI.tscn" id="4_1m15g"]
-[ext_resource type="PackedScene" uid="uid://md0d40kqp8ei" path="res://Content/UI/Widgets/ItemStackWidget.tscn" id="4_g3py7"]
-[ext_resource type="PackedScene" uid="uid://c7redcv7amjwl" path="res://Content/UI/Structure/IconButton.tscn" id="5_akbt5"]
-[ext_resource type="Texture2D" uid="uid://bn4vjd2aa01ce" path="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_PictoIcons_(Original)/btn_icon_mark_exclamation.png" id="5_pfju5"]
+[ext_resource type="PackedScene" uid="uid://cu6ooikgfkniq" path="res://Content/UI/Widgets/BuildingInfo.tscn" id="4_akbt5"]
 [ext_resource type="PackedScene" uid="uid://bg4s03yb78uyc" path="res://Content/UI/Structure/ScreenHeader.tscn" id="6_akbt5"]
-[ext_resource type="Texture2D" uid="uid://74ef6fm24ueg" path="res://Content/Art/Sprites/Icons/LootIcons/LootIcons_png/black/mug_b_01.png" id="6_g3py7"]
-[ext_resource type="PackedScene" uid="uid://b4kb78b8yhut2" path="res://Content/UI/Widgets/close_button.tscn" id="8_g3py7"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cw3gj"]
-bg_color = Color(0.768627, 0.603922, 0.423529, 1)
-border_color = Color(0.450603, 0.333692, 0.203491, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-anti_aliasing_size = 1.843
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56pc0"]
-bg_color = Color(0.650474, 0.496218, 0.325024, 1)
-border_color = Color(0.356324, 0.260322, 0.152446, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_usfgp"]
-bg_color = Color(0.614255, 0.465691, 0.30038, 1)
-border_color = Color(0.450603, 0.333692, 0.203491, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-anti_aliasing_size = 1.843
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pfju5"]
-bg_color = Color(0.650474, 0.496218, 0.325024, 1)
-border_color = Color(0.356324, 0.260322, 0.152446, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1m15g"]
-bg_color = Color(0.817895, 0.384794, 0.187531, 1)
-border_color = Color(0.356324, 0.260322, 0.152446, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_color = Color(0, 0, 0, 0.188235)
-shadow_size = 3
-shadow_offset = Vector2(0, 2)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0vsye"]
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-corner_detail = 20
-anti_aliasing = false
 
 [node name="BuildingScreen" type="Control"]
 texture_filter = 6
@@ -79,16 +17,9 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_akbt5")
 script = ExtResource("2_avrgw")
-CloseButton = NodePath("RightBar/CloseButton")
-RightBar = NodePath("RightBar")
+RightBar = NodePath("BuildingInfo")
 HeaderPath = NodePath("Header")
 Bg = NodePath("Bg")
-CostsGrid = NodePath("RightBar/MarginContainer/VBoxContainer/CostsContainer/VBoxContainer/MarginContainer/CostGrid")
-NameLabel = NodePath("RightBar/MarginContainer/VBoxContainer/Desc/VBoxContainer/GridContainer/PanelContainer/NameLabel")
-DescLabel = NodePath("RightBar/MarginContainer/VBoxContainer/Desc/VBoxContainer/GridContainer/PanelContainer2/DescLabel")
-BuildTimeLabel = NodePath("RightBar/MarginContainer/VBoxContainer/Info/VBoxContainer/GridContainer/PanelContainer2/BuildTime")
-BuildButton = NodePath("RightBar/MarginContainer/VBoxContainer/Info2/VBoxContainer/BuildButton")
-MissingRequirement = NodePath("RightBar/MarginContainer/VBoxContainer/Info2/VBoxContainer/RequirementsGrid/PanelContainer/MissingRequirement")
 ResourcesDisplayWidget = NodePath("Control")
 
 [node name="Bg" type="TextureRect" parent="."]
@@ -101,219 +32,18 @@ grow_vertical = 2
 texture = ExtResource("3_pfju5")
 stretch_mode = 1
 
+[node name="BuildingInfo" parent="." instance=ExtResource("4_akbt5")]
+layout_mode = 1
+offset_left = -18.0
+offset_top = -338.0
+offset_right = 582.0
+offset_bottom = 362.0
+
 [node name="Control" parent="." instance=ExtResource("4_1m15g")]
 layout_mode = 1
 offset_top = 49.0
 offset_bottom = 49.0
 scale = Vector2(1.94813, 2.00549)
-
-[node name="RightBar" type="Panel" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -332.0
-offset_right = 580.0
-offset_bottom = 368.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="RightBar"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="VBoxContainer" type="VBoxContainer" parent="RightBar/MarginContainer"]
-layout_mode = 2
-
-[node name="Desc" type="PanelContainer" parent="RightBar/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_cw3gj")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="RightBar/MarginContainer/VBoxContainer/Desc"]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="GridContainer" type="GridContainer" parent="RightBar/MarginContainer/VBoxContainer/Desc/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/h_separation = 5
-
-[node name="PanelContainer" type="PanelContainer" parent="RightBar/MarginContainer/VBoxContainer/Desc/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_56pc0")
-
-[node name="NameLabel" type="Label" parent="RightBar/MarginContainer/VBoxContainer/Desc/VBoxContainer/GridContainer/PanelContainer"]
-layout_mode = 2
-text = "Castle"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PanelContainer2" type="PanelContainer" parent="RightBar/MarginContainer/VBoxContainer/Desc/VBoxContainer/GridContainer"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_56pc0")
-
-[node name="DescLabel" type="Label" parent="RightBar/MarginContainer/VBoxContainer/Desc/VBoxContainer/GridContainer/PanelContainer2"]
-layout_mode = 2
-text = " 20 Seconds asd asd as das da sda s asd asd asd asd asd a"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="CostsContainer" type="PanelContainer" parent="RightBar/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_usfgp")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="RightBar/MarginContainer/VBoxContainer/CostsContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="CostTitle" type="Label" parent="RightBar/MarginContainer/VBoxContainer/CostsContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 6
-text = "Costs"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="RightBar/MarginContainer/VBoxContainer/CostsContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 15
-
-[node name="CostGrid" type="GridContainer" parent="RightBar/MarginContainer/VBoxContainer/CostsContainer/VBoxContainer/MarginContainer"]
-layout_mode = 2
-columns = 4
-
-[node name="ItemStackPanel" parent="RightBar/MarginContainer/VBoxContainer/CostsContainer/VBoxContainer/MarginContainer/CostGrid" instance=ExtResource("4_g3py7")]
-layout_mode = 2
-
-[node name="ItemStackPanel2" parent="RightBar/MarginContainer/VBoxContainer/CostsContainer/VBoxContainer/MarginContainer/CostGrid" instance=ExtResource("4_g3py7")]
-layout_mode = 2
-
-[node name="ItemStackPanel3" parent="RightBar/MarginContainer/VBoxContainer/CostsContainer/VBoxContainer/MarginContainer/CostGrid" instance=ExtResource("4_g3py7")]
-layout_mode = 2
-
-[node name="ItemStackPanel4" parent="RightBar/MarginContainer/VBoxContainer/CostsContainer/VBoxContainer/MarginContainer/CostGrid" instance=ExtResource("4_g3py7")]
-layout_mode = 2
-
-[node name="Info" type="PanelContainer" parent="RightBar/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_cw3gj")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="RightBar/MarginContainer/VBoxContainer/Info"]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="GridContainer" type="GridContainer" parent="RightBar/MarginContainer/VBoxContainer/Info/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/h_separation = 5
-columns = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="RightBar/MarginContainer/VBoxContainer/Info/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_56pc0")
-
-[node name="Label" type="Label" parent="RightBar/MarginContainer/VBoxContainer/Info/VBoxContainer/GridContainer/PanelContainer"]
-layout_mode = 2
-text = " Construction Time "
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PanelContainer2" type="PanelContainer" parent="RightBar/MarginContainer/VBoxContainer/Info/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_pfju5")
-
-[node name="BuildTime" type="Label" parent="RightBar/MarginContainer/VBoxContainer/Info/VBoxContainer/GridContainer/PanelContainer2"]
-layout_mode = 2
-text = " 20 Seconds"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Info2" type="PanelContainer" parent="RightBar/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 6
-theme_override_styles/panel = SubResource("StyleBoxFlat_cw3gj")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="RightBar/MarginContainer/VBoxContainer/Info2"]
-layout_mode = 2
-
-[node name="RequirementsGrid" type="GridContainer" parent="RightBar/MarginContainer/VBoxContainer/Info2/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/h_separation = 5
-
-[node name="PanelContainer" type="PanelContainer" parent="RightBar/MarginContainer/VBoxContainer/Info2/VBoxContainer/RequirementsGrid"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_1m15g")
-
-[node name="MissingRequirement" type="HBoxContainer" parent="RightBar/MarginContainer/VBoxContainer/Info2/VBoxContainer/RequirementsGrid/PanelContainer"]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="RightBar/MarginContainer/VBoxContainer/Info2/VBoxContainer/RequirementsGrid/PanelContainer/MissingRequirement"]
-modulate = Color(1, 1, 0, 1)
-texture_filter = 2
-layout_mode = 2
-texture = ExtResource("5_pfju5")
-expand_mode = 3
-
-[node name="ReqDesc" type="Label" parent="RightBar/MarginContainer/VBoxContainer/Info2/VBoxContainer/RequirementsGrid/PanelContainer/MissingRequirement"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Requires a mill"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="Panel" type="Panel" parent="RightBar/MarginContainer/VBoxContainer/Info2/VBoxContainer/RequirementsGrid/PanelContainer/MissingRequirement"]
-clip_children = 1
-clip_contents = true
-custom_minimum_size = Vector2(35, 35)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_0vsye")
-
-[node name="ReqImage" type="TextureRect" parent="RightBar/MarginContainer/VBoxContainer/Info2/VBoxContainer/RequirementsGrid/PanelContainer/MissingRequirement/Panel"]
-modulate = Color(1, 1, 0, 1)
-texture_filter = 2
-clip_contents = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_g3py7")
-expand_mode = 1
-
-[node name="BuildButton" parent="RightBar/MarginContainer/VBoxContainer/Info2/VBoxContainer" instance=ExtResource("5_akbt5")]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-disabled = true
-
-[node name="CloseButton" parent="RightBar" instance=ExtResource("8_g3py7")]
-layout_mode = 0
-offset_left = 552.0
-offset_top = 0.0
-offset_right = 613.0
-offset_bottom = 63.0
 
 [node name="Header" parent="." instance=ExtResource("6_akbt5")]
 layout_mode = 1

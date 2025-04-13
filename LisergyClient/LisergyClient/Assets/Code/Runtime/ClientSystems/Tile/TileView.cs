@@ -21,7 +21,7 @@ namespace Assets.Code.Views
         public bool Decorated { get; set; }
         public TileModel Tile { get; private set; }
 
-        public TileView(IGameClient client, IEntity e) : base(e, client) { }
+        public TileView(IClientSDK client, IEntity e) : base(e, client) { }
 
         protected override async Task CreateView()
         {

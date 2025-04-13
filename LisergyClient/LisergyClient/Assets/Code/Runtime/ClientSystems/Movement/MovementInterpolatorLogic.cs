@@ -22,7 +22,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
     /// </summary>
     public class MovementInterpolatorLogic
     {
-        private IGameClient _client;
+        private IClientSDK _client;
         private IEntity _entity;
         private Tweener _currentSequence;
         private Queue<(TileModel, TileModel)> _queue = new Queue<(TileModel, TileModel)>();
@@ -34,7 +34,7 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
 
         public bool HasQueue() => _queue.Count > 0;
 
-        public MovementInterpolatorLogic(IGameClient client, IEntity entity)
+        public MovementInterpolatorLogic(IClientSDK client, IEntity entity)
         {
             _client = client;
             _entity = entity;

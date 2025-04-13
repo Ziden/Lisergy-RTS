@@ -15,6 +15,7 @@ namespace ClientSDK
         public bool Visible { get; set; }
         void AddChild(IGameObject child);
         void DestroyChild(IGameObject child);
+        void Destroy();
         T Get<T>() where T : class;
     }
 }

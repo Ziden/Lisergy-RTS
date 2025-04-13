@@ -8,11 +8,11 @@ using UnityEngine.UIElements;
 public class WidgetBattleGroup : VisualStruct
 {
     private VisualElement _root;
-    private IGameClient _client;
+    private IClientSDK _client;
 
     private WidgetPartyButton[] _parties = new WidgetPartyButton[4];
 
-    public WidgetBattleGroup(IGameClient client, VisualElement root) : base(root, client)
+    public WidgetBattleGroup(IClientSDK client, VisualElement root) : base(root, client)
     {
         _client = client;
         _root = root;

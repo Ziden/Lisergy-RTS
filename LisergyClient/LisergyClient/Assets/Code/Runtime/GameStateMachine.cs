@@ -21,9 +21,9 @@ namespace Assets.Code.Assets.Code
         private enum Trigger { LoggedIn, LocalBattleStart, LocalBattleFinish };
         private StateMachine<State, Trigger> _stateMachine;
         private IUiService _screens;
-        private IGameClient _client;
+        private IClientSDK _client;
 
-        public GameStateMachine(IGameClient client)
+        public GameStateMachine(IClientSDK client)
         {
             _client = client;
             _screens = UnityServicesContainer.Resolve<IUiService>();

@@ -39,9 +39,9 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         private GameObject _screensContainer;
         private IAssetService _assets;
         private GenericSetup _noSetup;
-        private IGameClient _client;
+        private IClientSDK _client;
 
-        public UiService(IGameClient client)
+        public UiService(IClientSDK client)
         {
             _client = client;
         }

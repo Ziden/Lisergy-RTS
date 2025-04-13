@@ -10,10 +10,10 @@ using Game.Tile;
 /// </summary>
 public class HarvestingViewListener : IEventListener
 {
-    private IGameClient _client;
+    private IClientSDK _client;
     private HarvestVfx _vfx;
 
-    public HarvestingViewListener(IGameClient client)
+    public HarvestingViewListener(IClientSDK client)
     {
         _client = client;
         _vfx = new HarvestVfx(client);

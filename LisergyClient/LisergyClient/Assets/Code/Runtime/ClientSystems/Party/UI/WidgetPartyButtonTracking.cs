@@ -35,7 +35,7 @@ namespace Party.UI
         private VisualElement _taskSymbol;
         private IVisualElementScheduledItem _progressBar;
 
-        private IGameClient? _client;
+        private IClientSDK? _client;
 
         public WidgetPartyButtonTracking()
         {
@@ -79,7 +79,7 @@ namespace Party.UI
             _hpBarContainer.style.display = DisplayStyle.Flex;
         }
 
-        public override void OnAddedDuringGame(IGameClient client)
+        public override void OnAddedDuringGame(IClientSDK client)
         {
             var partyWidget = this.parent as WidgetPartyButton;
             if (partyWidget == null) return;
@@ -95,7 +95,7 @@ namespace Party.UI
             }
         }
 
-        public override void OnRemovedDuringGame(IGameClient client)
+        public override void OnRemovedDuringGame(IClientSDK client)
         {
             client.ClientEvents.RemoveListener(this);
             client.Modules.Entities.RemoveListener(this);

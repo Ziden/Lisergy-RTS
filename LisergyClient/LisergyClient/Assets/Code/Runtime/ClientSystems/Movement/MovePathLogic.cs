@@ -16,10 +16,10 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
     /// </summary>
     public class MovePathLogic
     {
-        private IGameClient _gameClient;
+        private IClientSDK _gameClient;
         private IDictionary<GameId, ClientMovePathView> _entityPaths = new Dictionary<GameId, ClientMovePathView>();
 
-        public MovePathLogic(IGameClient _client)
+        public MovePathLogic(IClientSDK _client)
         {
             _gameClient = _client;
         }

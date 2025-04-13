@@ -23,7 +23,6 @@ namespace LisergyGodotClient.Src.Systems.Animation
 
         public void UpdateAnimation(Direction d, bool moving)
         {
-            bool flip = false;
             var name = (moving ? "walk" : "iddle") + "_";
             if (d == Direction.NORTH)
             {

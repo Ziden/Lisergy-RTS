@@ -18,9 +18,9 @@ namespace Assets.Code.Assets.Code.Audio
         private AudioSource _audioSource;
 
         private IAssetService _assets;
-        private IGameClient _client;
+        private IClientSDK _client;
 
-        public AudioService(IGameClient client)
+        public AudioService(IClientSDK client)
         {
             _client = client;
         }

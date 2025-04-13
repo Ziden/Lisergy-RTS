@@ -10,7 +10,7 @@ namespace Assets.Code.World
 {
     public class DungeonView : UnityEntityView
     {
-        public DungeonView(IGameClient client, IEntity e) : base(e, client) { }
+        public DungeonView(IClientSDK client, IEntity e) : base(e, client) { }
 
         protected override async Task CreateView()
         {

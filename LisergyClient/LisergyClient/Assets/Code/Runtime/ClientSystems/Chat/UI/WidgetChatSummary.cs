@@ -25,13 +25,13 @@ namespace Chat.UI
             _container = this.Q("MessageContainer").Required();
         }
 
-        public override void OnAddedDuringGame(IGameClient client)
+        public override void OnAddedDuringGame(IClientSDK client)
         {
             client.ClientEvents.On<ChatUpdateEvent>(this, OnChatUpdate);
             _thumbnail.RegisterCallback<PointerDownEvent>(e => client.UnityServices().UI.Open<ChatScreen>(), TrickleDown.TrickleDown);
         }
 
-        public override void OnRemovedDuringGame(IGameClient client)
+        public override void OnRemovedDuringGame(IClientSDK client)
         {
             client.ClientEvents.RemoveListener(this);
         }

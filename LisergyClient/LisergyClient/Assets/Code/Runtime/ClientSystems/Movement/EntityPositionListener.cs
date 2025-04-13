@@ -14,9 +14,9 @@ using Game.World;
 public class EntityPositionListener : BaseComponentListener<MapPlacementComponent>
 {
     private new MovePathLogic _movementPath;
-    private IGameClient _client;
+    private IClientSDK _client;
 
-    public EntityPositionListener(IGameClient client) : base(client)
+    public EntityPositionListener(IClientSDK client) : base(client)
     {
         _client = client;
         _movementPath = new MovePathLogic(client);

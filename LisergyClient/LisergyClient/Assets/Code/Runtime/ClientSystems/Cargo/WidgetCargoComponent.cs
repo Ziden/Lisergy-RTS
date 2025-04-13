@@ -9,7 +9,7 @@ public class WidgetCargoComponent : VisualStruct
     private List<WidgetResourceDisplay> _resources = new List<WidgetResourceDisplay>();
     private Label _wt;
 
-    public WidgetCargoComponent(VisualElement root, IGameClient client) : base(root, client)
+    public WidgetCargoComponent(VisualElement root, IClientSDK client) : base(root, client)
     {
         var list = root.Q("ResourceList").Required();
         _wt = root.Q<Label>("Weight").Required();

@@ -11,7 +11,7 @@ namespace Assets.Code.World
 {
     public class PlayerBuildingView : UnityEntityView
     {
-        public PlayerBuildingView(IGameClient client, IEntity e) : base(e, client) { }
+        public PlayerBuildingView(IClientSDK client, IEntity e) : base(e, client) { }
         protected override async Task CreateView()
         {
             var spec = Client.Game.Specs.Buildings[Entity.Get<PlayerBuildingComponent>().SpecId];

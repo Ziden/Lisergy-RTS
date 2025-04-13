@@ -1,17 +1,11 @@
 ﻿using Godot;
 using System.Collections.Generic;
-using GameData;
-using LisergyGodotClient.Src.Services;
-using GameDataTest;
-using GodotClient;
-using Game.Engine;
 using System;
-using LisergyGodotClient.Src.Platform;
-using GodotClient.Services;
 using LisergyGodotClient.Src.Systems.TechTree;
 using ClientSDK;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace LisergyGodotClient.Src.Systems.Building
 {
@@ -23,8 +17,6 @@ namespace LisergyGodotClient.Src.Systems.Building
         private const int VerticalSpacing = 220;
 
         public Func<NodeTree<T>, Task<TechTreeItemWidget>> CreateWidget;
-        private IGameObject _root;
-        private Theme _theme;
         private Control _techTreeContainer;
         public ScrollContainer ScrollContainer;
         private Dictionary<T, Vector2> _nodePositions = new Dictionary<T, Vector2>();
@@ -33,8 +25,6 @@ namespace LisergyGodotClient.Src.Systems.Building
         public async Task Draw(IGameObject rootObject, NodeTree<T> rootNode)
         {
             ScrollContainer = new ScrollContainer();
-            _root = rootObject;
-            ScrollContainer.Theme = _theme;
             ScrollContainer.CustomMinimumSize = new Vector2(1000, 600);
             ScrollContainer.AnchorRight = 1.0f;
             ScrollContainer.AnchorBottom = 1.0f;
@@ -43,7 +33,6 @@ namespace LisergyGodotClient.Src.Systems.Building
             rootObject.GetNode().AddChild(ScrollContainer);
 
             _techTreeContainer = new Control();
-            _techTreeContainer.Theme = _theme;
             _techTreeContainer.CustomMinimumSize = new Vector2(3000, 2000);
             ScrollContainer.AddChild(_techTreeContainer);
 
@@ -216,10 +205,6 @@ namespace LisergyGodotClient.Src.Systems.Building
             container.Position = position;
             container.CustomMinimumSize = new Vector2(NodeSize, NodeSize);
             _techTreeContainer.AddChild(container);
-            if(node.IsRoot)
-            {
-                container.OnClick?.Invoke(container);
-            }
             foreach (var child in node.ChildrenNodes())
             {
                 await CreateBuildingNodes(child);

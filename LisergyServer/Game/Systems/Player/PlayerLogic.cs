@@ -5,6 +5,7 @@ using Game.Systems.Battle.Data;
 using Game.Systems.Battler;
 using Game.Systems.Building;
 using Game.Systems.Party;
+using Game.Systems.Resources;
 using Game.Tile;
 using Game.World;
 using GameData;
@@ -152,8 +153,24 @@ namespace Game.Systems.Player
                 return new BuildingTechResult { Status = BuildingTechStatus.NotResearched, BlockedBy = node.Parent.Data };
             }
         }
-
         #endregion
 
+        #region Resources
+        public IReadOnlyDictionary<ResourceSpecId, ushort> AllResources()
+        {
+            return CurrentEntity.Get<CargoComponent>().Items ?? new Dictionary<ResourceSpecId, ushort>();
+        }
+
+        public bool SpendResource(ResourceSpecId resource, ushort amt)
+        {
+            if (CurrentEntity.Logic.Cargo.TrySpend(resource, amt))
+            {
+                Game.Log.Debug($"{CurrentEntity} spent {amt} of {resource}");
+                return true;
+            }
+            // TODO: Try spending from units ?
+            return false;
+        }
+        #endregion
     }
 }

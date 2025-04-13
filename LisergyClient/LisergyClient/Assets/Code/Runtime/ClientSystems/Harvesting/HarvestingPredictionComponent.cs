@@ -19,11 +19,11 @@ public class HarvestingPredictionComponent : IComponent, IDisposable
     private TileResourceComponent _initialComponent;
     private ResourceSpec _resourceSpec;
     private ResourceHarvestPointSpec _harvestSpec;
-    private IGameClient _client;
+    private IClientSDK _client;
     private bool _tracking = false;
     private ushort _harvestedTotal;
 
-    public void StartTracking(IGameClient client, IEntity harvester)
+    public void StartTracking(IClientSDK client, IEntity harvester)
     {
         _client = client;
         _entity = harvester;

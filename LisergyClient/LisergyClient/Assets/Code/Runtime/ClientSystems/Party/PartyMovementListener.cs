@@ -10,9 +10,9 @@ using UnityEngine;
 /// </summary>
 public class PartyMovementListener : IEventListener
 {
-    private IGameClient _client;
+    private IClientSDK _client;
 
-    public PartyMovementListener(IGameClient client)
+    public PartyMovementListener(IClientSDK client)
     {
         _client = client;
         _client.ClientEvents.On<MovementInterpolationStartEvent>(this, OnMoveStart);

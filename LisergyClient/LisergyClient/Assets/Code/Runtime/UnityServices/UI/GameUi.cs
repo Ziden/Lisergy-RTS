@@ -25,7 +25,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         internal IUiService _uiService;
         internal VisualElement _root;
         internal event Action OnLoad;
-        internal IGameClient GameClient;
+        internal IClientSDK GameClient;
 
 
         internal bool FinishedLoading

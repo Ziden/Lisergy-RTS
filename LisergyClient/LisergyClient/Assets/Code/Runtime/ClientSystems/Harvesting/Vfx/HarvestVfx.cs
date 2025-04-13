@@ -8,9 +8,9 @@ using UnityEngine;
 
 public class HarvestVfx
 {
-    private IGameClient _client;
+    private IClientSDK _client;
 
-    public HarvestVfx(IGameClient client)
+    public HarvestVfx(IClientSDK client)
     {
         _client = client;
     }

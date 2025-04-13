@@ -12,9 +12,9 @@ namespace Assets.Code.World
         public Unit Unit;
         public UnitBehaviour Animations;
         private IAssetService _assets;
-        private IGameClient _client;
+        private IClientSDK _client;
 
-        public UnitView(IGameClient client, in Unit unit)
+        public UnitView(IClientSDK client, in Unit unit)
         {
             _client = client;
             _assets = UnityServicesContainer.Resolve<IAssetService>();

@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://ngl5goknv3fb"]
+[gd_scene load_steps=8 format=3 uid="uid://ngl5goknv3fb"]
 
 [ext_resource type="Theme" uid="uid://bmf31mho1mjjt" path="res://addons/Theme/content/sprout_lands_theme.tres" id="1_btqlg"]
+[ext_resource type="Script" uid="uid://dcyp2sglhvhgw" path="res://Src/Systems/Building/ConfirmBuildingDialog.cs" id="2_h21o0"]
 [ext_resource type="Script" uid="uid://dg60a5vwugte1" path="res://Src/Systems/Tiles/UI/TileDataComponentWidget.cs" id="2_vbr07"]
 [ext_resource type="PackedScene" uid="uid://md0d40kqp8ei" path="res://Content/UI/Widgets/ItemStackWidget.tscn" id="3_k50x2"]
 [ext_resource type="Texture2D" uid="uid://xcm8eg2r587d" path="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_PictoIcons_(Original)/btn_icon_arrow_go.png" id="4_sy312"]
@@ -21,6 +22,13 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
 theme = ExtResource("1_btqlg")
+script = ExtResource("2_h21o0")
+ConfirmButton = NodePath("Panel/MarginContainer/Building/DataTab/HBoxContainer/ConfirmButton")
+CancelButton = NodePath("Panel/MarginContainer/Building/DataTab/HBoxContainer/CancelButton")
+BuildingItem = NodePath("Panel/MarginContainer/Building/DataTab/ConfirmBuild/BuildingIcon")
+TileItem = NodePath("Panel/MarginContainer/Building/DataTab/ConfirmBuild/TileIcon")
+TileName = NodePath("Panel/MarginContainer/Building/DataTab/ConfirmBuild/TileName")
+BuildingName = NodePath("Panel/MarginContainer/Building/DataTab/ConfirmBuild/BuildingName")
 
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(400, 350)

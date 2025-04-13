@@ -13,7 +13,7 @@ using GameAssets;
 /// </summary> 
 public class BattleGroupListener : BaseComponentListener<BattleGroupComponent>
 {
-    public BattleGroupListener(IGameClient client) : base(client)
+    public BattleGroupListener(IClientSDK client) : base(client)
     {
         ClientSdk.ClientEvents.On<OwnBattleFinishedEvent>(this, OnLocalPlayerBattleFinished);
     }

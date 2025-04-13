@@ -11,10 +11,10 @@ using UnityEngine;
 /// </summary>
 public class IndicatorSelectedPartyListener : IEventListener
 {
-    private IGameClient _client;
+    private IClientSDK _client;
     private EntitySelectionMonoBehaviour _selector;
 
-    public IndicatorSelectedPartyListener(IGameClient client)
+    public IndicatorSelectedPartyListener(IClientSDK client)
     {
         _client = client;
         ClientViewState.OnSelectEntity += OnEntitySelected;

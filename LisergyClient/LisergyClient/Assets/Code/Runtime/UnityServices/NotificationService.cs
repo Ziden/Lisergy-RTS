@@ -22,11 +22,11 @@ namespace Assets.Code.Assets.Code.Runtime
 
     public class NotificationService : INotificationService
     {
-        private IGameClient _client;
+        private IClientSDK _client;
         private Queue<Action> _notifications = new Queue<Action>();
         private Notification _open;
 
-        public NotificationService(IGameClient client)
+        public NotificationService(IClientSDK client)
         {
             _client = client;
         }

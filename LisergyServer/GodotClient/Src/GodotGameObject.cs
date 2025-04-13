@@ -103,14 +103,21 @@ namespace GodotClient
 
 		public T Get<T>() where T : class
 		{
-			// Check if the script attached to the node is of type T
 			if (Node is T scriptInstance)
 			{
 				return scriptInstance;
 			}
-
-			// Otherwise, try to get a child node of type T
 			return Node.FindFirstOfType<T>();
+		}
+
+		public void Destroy()
+		{
+			var parent = Node.GetParent();
+			if(parent != null)
+			{
+				parent.RemoveChild(Node);
+			}
+			Node.QueueFree();
 		}
 	}
 }

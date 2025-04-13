@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class TileDecorationListener : IEventListener
 {
-    public IGameClient _client;
+    public IClientSDK _client;
     private static DeterministicRandom _rng = new DeterministicRandom();
 
     public TileDecorationListener(GameClient client)

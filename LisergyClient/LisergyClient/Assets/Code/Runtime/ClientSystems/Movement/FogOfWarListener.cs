@@ -11,7 +11,7 @@ using Game.World;
 /// </summary>
 public class FogOfWarListener : IEventListener
 {
-    public IGameClient _client;
+    public IClientSDK _client;
 
     public FogOfWarListener(GameClient client)
     {

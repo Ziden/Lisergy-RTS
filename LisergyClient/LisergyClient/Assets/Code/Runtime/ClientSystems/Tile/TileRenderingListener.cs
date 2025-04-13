@@ -11,7 +11,7 @@ using System.Collections.Generic;
 /// </summary>
 public class TileRenderingListener : IEventListener
 {
-    public IGameClient _client;
+    public IClientSDK _client;
 
     private HashSet<TileRenderedEvent> _queued = new HashSet<TileRenderedEvent>();
     private DateTime _bufferExpireTime = DateTime.MinValue;

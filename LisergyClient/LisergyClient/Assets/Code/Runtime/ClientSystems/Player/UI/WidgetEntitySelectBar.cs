@@ -50,7 +50,7 @@ namespace Player.UI
             _buildButton.clicked += BuildButtonClick;
         }
 
-        public override void OnAddedDuringGame(IGameClient client)
+        public override void OnAddedDuringGame(IClientSDK client)
         {
             _playerModule = client.Modules.Player;
             if (_playerModule.LocalPlayer == null) return;
@@ -85,7 +85,7 @@ namespace Player.UI
             }
         }
 
-        public override void OnRemovedDuringGame(IGameClient client)
+        public override void OnRemovedDuringGame(IClientSDK client)
         {
             client.ClientEvents.RemoveListener(this);
         }

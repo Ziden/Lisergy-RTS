@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class AssetPreloader
 {
-    public static async UniTask StartPreload(IGameClient client, GameSpec spec)
+    public static async UniTask StartPreload(IClientSDK client, GameSpec spec)
     {
         Debug.Log("Loading Tiles");
         foreach (var t in spec.Tiles.Values)
