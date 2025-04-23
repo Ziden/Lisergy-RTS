@@ -1,4 +1,5 @@
-﻿using ClientSDK.SDKEvents;
+﻿using System;
+using System.Linq;
 using Game.Engine.Events.Bus;
 using Game.Systems.Resources;
 using GameData;
@@ -7,77 +8,76 @@ using Godot;
 using Godot.Collections;
 using GodotClient.Services;
 using LisergyGodotClient.Src.Systems.Tiles.UI;
-using System;
-using System.Linq;
 
-namespace LisergyGodotClient.Src.Systems.GameHud
+namespace LisergyGodotClient.Src.Systems.GameHud;
+
+public partial class ResourcesDisplayWidget : GameUiWidget, IEventListener
 {
-    public partial class ResourcesDisplayWidget : GameUiWidget, IEventListener
-    {
-        [Export] public NodePath ResourceIcon;
+	private Control _container;
 
-        private ItemStackWidget _widget;
-        private Control _widgetParent;
-        private Control _container;
+	private Dictionary<byte, ItemStackWidget> _resourceWidgets = new();
 
-        private Dictionary<byte, ItemStackWidget> _resourceWidgets = new Dictionary<byte, ItemStackWidget>();
+	private ItemStackWidget _widget;
+	private Control _widgetParent;
+	[Export] public NodePath ResourceIcon;
 
-        public override void OnBuild()
-        {
-            _widget = GetNode<ItemStackWidget>(ResourceIcon);
-            _widgetParent = _widget.GetParent().GetParent<Control>().Duplicate() as Control;
+	public override void OnBuild()
+	{
+		_widget = GetNode<ItemStackWidget>(ResourceIcon);
+		_widgetParent = _widget.GetParent().GetParent<Control>().Duplicate() as Control;
 
 
-            _container = this.FindFirstOfType<HBoxContainer>();
-            _widgetParent.Visible = false;
-            _widget.GetParent().GetParent<Control>().QueueFree();
+		_container = this.FindFirstOfType<HBoxContainer>();
+		_widgetParent.Visible = false;
+		_widget.GetParent().GetParent<Control>().QueueFree();
 
-            Update();
-        }
+		Update();
+	}
 
 
+	public void Update()
+	{
+		try
+		{
+			var resources = ClientServices.LocalPlayer.Components.Get<CargoComponent>();
+			var stacks = resources.Items
+				.Where(kp => ShouldDisplay(kp.Key))
+				.Select(kp => new ResourceStackData(kp.Key, kp.Value))
+				.ToArray();
+			Display(stacks);
+		}
+		catch (Exception e)
+		{
+			ClientServices.Analytics.TrackError(e);
+		}
+	}
 
-        public void Update()
-        {
-            try
-            {
-                var resources = ClientServices.LocalPlayer.Components.Get<CargoComponent>();
-                var stacks = resources.Items
-                    .Where(kp => ShouldDisplay(kp.Key))
-                    .Select(kp => new ResourceStackData(kp.Key, kp.Value))
-                    .ToArray();
-                Display(stacks);
-            }
-            catch (Exception e)
-            {
-                ClientServices.Analytics.TrackError(e);
-            }
-        }
+	private bool ShouldDisplay(ResourceSpecId id)
+	{
+		return ClientServices.GameSpecs.Resources[id].ShowInUi;
+	}
 
-        private bool ShouldDisplay(ResourceSpecId id)
-        {
-            return ClientServices.GameSpecs.Resources[id].ShowInUi;
-        }
+	public void Display(params ResourceStackData[] resources)
+	{
+		foreach (var c in _container.GetChildren().ToArray())
+		{
+			_container.RemoveChild(c);
+			c.QueueFree();
+		}
 
-        public void Display(params ResourceStackData[] resources)
-        {
-            foreach(var c in _container.GetChildren().ToArray())
-            {
-                _container.RemoveChild(c);
-                c.QueueFree();
-               
-            }
-            foreach (var res in resources)
-            {
-                var newWidget = _widgetParent.Duplicate() as Control;
-                var resWidget = newWidget.FindFirstOfType<ItemStackWidget>();
-                resWidget.SetData(res);
-                newWidget.Visible = true;
-                _container.AddChild(newWidget);
-                _resourceWidgets[res.ResourceId] = resWidget;
-            }
-        }
+		foreach (var res in resources)
+		{
+			var newWidget = _widgetParent.Duplicate() as Control;
+			var resWidget = newWidget.FindFirstOfType<ItemStackWidget>();
+			resWidget.SetData(res);
+			newWidget.Visible = true;
+			_container.AddChild(newWidget);
+			_resourceWidgets[res.ResourceId] = resWidget;
+		}
+	}
 
-        public override ArtSpec GetArt() => AssetConfigs.WIDGET_RESOURCES_AMOUNT;
-    }
+	public override ArtSpec GetArt()
+	{
+		return AssetConfigs.WIDGET_RESOURCES_AMOUNT;
+	}
 }

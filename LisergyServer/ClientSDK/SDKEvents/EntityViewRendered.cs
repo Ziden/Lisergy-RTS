@@ -1,17 +1,16 @@
 ﻿using ClientSDK.Data;
 using Game.Engine.ECLS;
 
-namespace ClientSDK.SDKEvents
+namespace ClientSDK.SDKEvents;
+
+/// <summary>
+///     Triggered when the client gets aware of a new entity.
+///     This is only called when the entity is created for the first time
+///     So if player sees an entity, this entity goes to the fog and comes back this is not called twice
+///     This is not applied to tiles or players
+/// </summary>
+public class EntityViewRendered : IClientEvent
 {
-    /// <summary>
-    /// Triggered when the client gets aware of a new entity.
-    /// This is only called when the entity is created for the first time
-    /// So if player sees an entity, this entity goes to the fog and comes back this is not called twice
-    /// This is not applied to tiles or players
-    /// </summary>
-    public class EntityViewRendered() : IClientEvent
-    {
-        public required IEntity Entity;
-        public required IEntityView View;
-    }
+	public required IEntity Entity;
+	public required IEntityView View;
 }

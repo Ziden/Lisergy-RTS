@@ -2,8 +2,8 @@
 
 namespace Game.Systems.Battle.BattleActions
 {
-    [Serializable]
-    public class BattleEvent
-    {
-    }
+	[Serializable]
+	public class BattleEvent
+	{
+	}
 }

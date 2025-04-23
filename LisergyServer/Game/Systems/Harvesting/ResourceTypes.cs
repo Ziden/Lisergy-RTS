@@ -2,8 +2,11 @@ namespace Game.Systems.Resources
 {
 	public enum ResourceTypes : byte
 	{
-		NONE, WATER, 
-		
-		LOGS, STONE, FOOD
+		NONE,
+		WATER,
+
+		LOGS,
+		STONE,
+		FOOD
 	}
 }

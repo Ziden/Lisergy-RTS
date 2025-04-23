@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://c1cq86thixlkk"]
 
-[ext_resource type="Material" uid="uid://cn1ue3gvkriw8" path="res://Content/Art/Models/wood.tres" id="1_b8pvd"]
+[ext_resource type="Material" uid="uid://cn1ue3gvkriw8" path="res://Content/Art/wood.tres" id="1_b8pvd"]
 [ext_resource type="Material" uid="uid://pko07ce8e5de" path="res://Content/Art/Models/grass.tres" id="1_t0rr5"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_p6ljc"]

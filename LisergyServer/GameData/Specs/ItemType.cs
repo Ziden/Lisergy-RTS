@@ -1,8 +1,7 @@
-﻿namespace GameData.Specs
+﻿namespace GameData.Specs;
+
+public enum ItemType
 {
-    public enum ItemType
-    {
-        RESOURCE = 1,
-        CHEST = 2,
-    }
+	RESOURCE = 1,
+	CHEST = 2
 }

@@ -1,24 +1,24 @@
-using Game.Engine.ECLS;
 using System;
 using System.Runtime.InteropServices;
+using Game.Engine.ECLS;
 
 namespace Game.Systems.Resources
 {
     /// <summary>
-    /// Represents a resource harvest point that can be harvested
-    /// This component is added to tiles
+    ///     Represents a resource harvest point that can be harvested
+    ///     This component is added to tiles
     /// </summary>
     [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    [SyncedComponent]
-    [NonPersisted]
-    public class TileResourceComponent : IComponent
-    {
-        public ResourceStackData Resource;
+	[StructLayout(LayoutKind.Sequential)]
+	[SyncedComponent]
+	[NonPersisted]
+	public class TileResourceComponent : IComponent
+	{
+		public ResourceStackData Resource;
 
         /// <summary>
-        /// If this tile is currently being harvested or not
+        ///     If this tile is currently being harvested or not
         /// </summary>
         public bool BeingHarvested;
-    }
+	}
 }

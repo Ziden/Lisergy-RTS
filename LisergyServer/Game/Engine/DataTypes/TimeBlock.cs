@@ -3,79 +3,86 @@
 namespace Game.Engine.DataTypes
 {
     /// <summary>
-    /// Represents the time a task is due executing
+    ///     Represents the time a task is due executing
     /// </summary>
     [Serializable]
-    public class TimeBlock
-    {
+	public class TimeBlock
+	{
         /// <summary>
-        /// Time the task has started
-        /// </summary>
-        public DateTime StartTime;
-
-        /// <summary>
-        /// Time the task is suposed to end
+        ///     Time the task is suposed to end
         /// </summary>
         public DateTime EndTime;
 
         /// <summary>
-        /// Gets the total time required for this task
+        ///     Time the task has started
+        /// </summary>
+        public DateTime StartTime;
+
+        /// <summary>
+        ///     Gets the total time required for this task
         /// </summary>
         public TimeSpan TotalBlockTime => EndTime - StartTime;
-    }
+	}
 
     /// <summary>
-    /// Snapshot of the current situation of a given time block, given time interpolations.
-    /// This is to help with harvesting predictions.
+    ///     Snapshot of the current situation of a given time block, given time interpolations.
+    ///     This is to help with harvesting predictions.
     /// </summary>
     public class TimeBlockSnapshot
-    {
+	{
         /// <summary>
-        /// Time the task is to be executed
+        ///     From 1.0 to 0.0 how much of this time block has elapsed ?
+        /// </summary>
+        public double Percentagage;
+
+        /// <summary>
+        ///     Time the task is to be executed
         /// </summary>
         public TimeBlock TimeBlock;
 
         /// <summary>
-        /// The total time the entity already spent on the task
+        ///     The total time the entity already spent on the task
         /// </summary>
         public TimeSpan TimeInBlock;
 
         /// <summary>
-        /// Amount of time remaining to finish the task
+        ///     Amount of time remaining to finish the task
         /// </summary>
         public TimeSpan TimeUntilEndOfblock;
-
-        /// <summary>
-        /// From 1.0 to 0.0 how much of this time block has elapsed ?
-        /// </summary>
-        public double Percentagage;
-    }
+	}
 
     /// <summary>
-    /// Helpers to manipulate and interpolate time blocks
+    ///     Helpers to manipulate and interpolate time blocks
     /// </summary>
     public static class TimeBlockUtils
-    {
+	{
         /// <summary>
-        /// Gets the timeblock from the current date up to the duration
+        ///     Gets the timeblock from the current date up to the duration
         /// </summary>
         public static TimeBlock GetTimeBlock(this DateTime start, TimeSpan duration)
-        {
-            return new TimeBlock() { StartTime = start, EndTime = start + duration };
-        }
+		{
+			return new TimeBlock {StartTime = start, EndTime = start + duration};
+		}
 
         /// <summary>
-        /// Gets a predicted current snapshot of the timeblock
+        /// From current utc time, gets how much time remaining to complete the time block
+        /// </summary>
+		public static TimeSpan TimeTillCompletion(this TimeBlock timeBlock, IGame game)
+		{
+			return game.GameTime - timeBlock.EndTime;
+		}
+
+        /// <summary>
+        ///     Gets a predicted current snapshot of the timeblock
         /// </summary>
         public static TimeBlockSnapshot GetCurrentSnapshot(this TimeBlock block, DateTime now)
-        {
-            var snap = new TimeBlockSnapshot();
-            snap.TimeInBlock = now - block.StartTime;
-            snap.TimeUntilEndOfblock = block.EndTime - now;
-            snap.TimeBlock = block;
-            snap.Percentagage = Math.Min(1, snap.TimeInBlock / block.TotalBlockTime);
-            return snap;
-        }
-
-    }
+		{
+			var snap = new TimeBlockSnapshot();
+			snap.TimeInBlock = now - block.StartTime;
+			snap.TimeUntilEndOfblock = block.EndTime - now;
+			snap.TimeBlock = block;
+			snap.Percentagage = Math.Min(1, snap.TimeInBlock / block.TotalBlockTime);
+			return snap;
+		}
+	}
 }

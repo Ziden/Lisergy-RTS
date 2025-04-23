@@ -1,6 +1,5 @@
-﻿namespace GameUnitTests
+﻿namespace GameUnitTests;
+
+public class TestPerformance
 {
-    public class TestPerformance
-    {
-    }
 }

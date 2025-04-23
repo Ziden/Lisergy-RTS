@@ -21,7 +21,7 @@ size_flags_vertical = 0
 mouse_filter = 2
 theme = ExtResource("1_ror2h")
 script = ExtResource("2_ror2h")
-ResourceIcon = NodePath("PanelContainer/HBoxContainer/ResourceIcon/Panel/ItemStackPanel")
+ResourceIcon = null
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 0

@@ -23,12 +23,12 @@ mouse_filter = 2
 mouse_force_pass_scroll_events = false
 theme = ExtResource("1_34jwj")
 script = ExtResource("2_ytvvl")
-Center = NodePath("Center")
-MoveButton = NodePath("HBoxContainer/MoveButton")
-AttackButton = NodePath("HBoxContainer/AttackButton")
-CheckButton = NodePath("HBoxContainer/CheckButton")
-HarvestButton = NodePath("HBoxContainer/HarvestButton")
-BuildButton = NodePath("HBoxContainer/BuildButton")
+AttackButton = null
+BuildButton = null
+Center = null
+CheckButton = null
+HarvestButton = null
+MoveButton = null
 
 [node name="Center2" type="TextureRect" parent="."]
 modulate = Color(0.407292, 0.979554, 0, 1)

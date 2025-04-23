@@ -10,67 +10,62 @@ using Game.Network.ClientPackets;
 using Game.Systems.Map;
 using Game.Systems.Player;
 
+namespace ClientSDK.Services;
 
-namespace ClientSDK.Services
+/// <summary>
+///     Service responsible for handling authentication and specific account and profile information.
+///     Will perform the initial login flow until world is joined.
+/// </summary>
+public interface IAccountModule : IClientModule
 {
     /// <summary>
-    /// Service responsible for handling authentication and specific account and profile information.
-    /// Will perform the initial login flow until world is joined.
+    ///     Sends a request to authenticate to server
     /// </summary>
-    public interface IAccountModule : IClientModule
-    {
-        /// <summary>
-        /// Sends a request to authenticate to server
-        /// </summary>
-        void SendAuthenticationPacket(string username, string password);
-    }
+    void SendAuthenticationPacket(string username, string password);
+}
 
-    public class AccountModule(LisergySDK client) : IAccountModule
-    {
-        private PlayerProfileComponent? _profile;
+public class AccountModule(LisergySDK client) : IAccountModule
+{
+	private PlayerProfileComponent? _profile;
 
-        public void Register()
-        {
-            client.Network.OnInput<LoginResultPacket>(OnAuthResult);
-            client.Network.OnInput<GameSpecPacket>(OnReceiveGameSpec);
-        }
+	public void Register()
+	{
+		client.Network.OnInput<LoginResultPacket>(OnAuthResult);
+		client.Network.OnInput<GameSpecPacket>(OnReceiveGameSpec);
+	}
 
-        public void SendAuthenticationPacket(string username, string password)
-        {
-            client.Network.SendToServer(new LoginPacket()
-            {
-                Login = username,
-                Password = password
-            }, ServerType.ACCOUNT);
-        }
+	public void SendAuthenticationPacket(string username, string password)
+	{
+		client.Network.SendToServer(new LoginPacket
+		{
+			Login = username,
+			Password = password
+		}, ServerType.ACCOUNT);
+	}
 
-        private void OnAuthResult(LoginResultPacket packet)
-        {
-            if (packet.Success)
-            {
-                _profile = packet.Profile;
-                ((ClientNetwork)client.Network).SetCredentials(packet);
-            }
-        }
+	private void OnAuthResult(LoginResultPacket packet)
+	{
+		if (packet.Success)
+		{
+			_profile = packet.Profile;
+			((ClientNetwork) client.Network).SetCredentials(packet);
+		}
+	}
 
-        private void OnReceiveGameSpec(GameSpecPacket ev)
-        {
-            if (_profile == null) throw new Exception("Requires logged in");
-            ev.OnAfterDeserialize();
-            client.SDKLog.Debug("Initialized Specs");
-            var game = new LisergyGame(ev.Spec, new GameLog("[Client Game]"), client.Network, isClientGame: true);
-            var world = new ClientWorld(game, (ushort)ev.MapSizeX, (ushort)ev.MapSizeY);
-            game.SetupWorld(world);
-            client.InitializeGame(game);
-            var e = client.Game.Entities[_profile.PlayerId];
-            if (e == null)
-            {
-                e = client.Game.Entities.CreateEntity(EntityType.Player, GameId.ZERO, _profile.PlayerId);
-            }
-            var player = new PlayerModel(game, e);
-            e.Save(_profile);
-            client.ClientEvents.Call(new GameStartedEvent(game, player));
-            client.Network.SendToServer(new JoinWorldMapCommand());
-        }
-    }
+	private void OnReceiveGameSpec(GameSpecPacket ev)
+	{
+		if (_profile == null) throw new Exception("Requires logged in");
+		ev.OnAfterDeserialize();
+		client.SDKLog.Debug("Initialized Specs");
+		var game = new LisergyGame(ev.Spec, new GameLog("[Client Game]"), client.Network, true);
+		var world = new ClientWorld(game, (ushort) ev.MapSizeX, (ushort) ev.MapSizeY);
+		game.SetupWorld(world);
+		client.InitializeGame(game);
+		var e = client.Game.Entities[_profile.PlayerId];
+		if (e == null) e = client.Game.Entities.CreateEntity(EntityType.Player, GameId.ZERO, _profile.PlayerId);
+		var player = new PlayerModel(game, e);
+		e.Save(_profile);
+		client.ClientEvents.Call(new GameStartedEvent(game, player));
+		client.Network.SendToServer(new JoinWorldMapCommand());
+	}
 }

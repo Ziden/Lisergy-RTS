@@ -1,27 +1,26 @@
-﻿using Game.Systems.Resources;
-using GameData.Specs;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Game.Systems.Resources;
+using GameData.Specs;
 
-namespace GameData
+namespace GameData;
+
+[Serializable]
+public class ConstructionTreeSpec
 {
-    [Serializable]
-    public class ConstructionTreeSpec
-    {
-        public NodeTree<BuildingSpecId> Root;
-    }
+	public NodeTree<BuildingSpecId> Root;
+}
 
-    [Serializable]
-    public class BuildingConstructionSpec
-    {
-        public BuildingSpecId SpecId;
-        public List<ResourceStackData> Costs;
-        public ArtSpec Icon;
-        public ushort TimeToBuildSeconds;
+[Serializable]
+public class BuildingConstructionSpec
+{
+	public List<ResourceStackData> Costs;
+	public ArtSpec Icon;
+	public BuildingSpecId SpecId;
+	public ushort TimeToBuildSeconds;
 
-        public BuildingConstructionSpec(byte id)
-        {
-            this.SpecId = id;
-        }
-    }
+	public BuildingConstructionSpec(byte id)
+	{
+		SpecId = id;
+	}
 }

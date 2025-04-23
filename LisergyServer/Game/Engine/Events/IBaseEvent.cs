@@ -1,7 +1,6 @@
 ﻿namespace Game.Engine.Events
 {
-    public interface IBaseEvent
-    {
-
-    }
+	public interface IBaseEvent
+	{
+	}
 }

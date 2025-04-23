@@ -1,55 +1,61 @@
-﻿using GameData.Specs;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
+using GameData.Specs;
 
-namespace GameData
+namespace GameData;
+
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+public struct TileSpecId
 {
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct TileSpecId
-    {
-        public byte Id;
+	public byte Id;
 
-        public static implicit operator byte(TileSpecId d) => d.Id;
-        public static implicit operator TileSpecId(byte b) => new TileSpecId() { Id = b };
+	public static implicit operator byte(TileSpecId d)
+	{
+		return d.Id;
+	}
 
-        public TileSpecId(byte id)
-        {
-            Id = id;
-        }
+	public static implicit operator TileSpecId(byte b)
+	{
+		return new TileSpecId() {Id = b};
+	}
 
-        public override string ToString()
-        {
-            return Id.ToString();
-        }
-    }
+	public TileSpecId(byte id)
+	{
+		Id = id;
+	}
 
-    [Serializable]
-    public class TileSpec
-    {
-        public string Name;
-        public TileSpecId ID;
-        public ArtSpec Model;
-        public ArtSpec Icon;
+	public override string ToString()
+	{
+		return Id.ToString();
+	}
+}
 
-        /// <summary>
-        /// Any resources that are always present on this tile id
-        /// </summary>
-        public HarvestPointSpecId? ResourceSpotSpecId;
+[Serializable]
+public class TileSpec
+{
+    /// <summary>
+    ///     Change to tile id when resource is depleted
+    /// </summary>
+    public TileSpecId ChangeToTileIdWhenDepleted;
 
-        /// <summary>
-        /// Change to tile id when resource is depleted
-        /// </summary>
-        public TileSpecId ChangeToTileIdWhenDepleted;
+	public ArtSpec Icon;
+	public TileSpecId ID;
+	public ArtSpec Model;
 
-        // 1=passable, 0=impassable, 0.5% slower
-        public float MovementFactor;
+	// 1=passable, 0=impassable, 0.5% slower
+	public float MovementFactor;
+	public string Name;
 
-        public TileSpec(in byte i)
-        {
-            this.ID = new TileSpecId() { Id = i };
-            this.Model = default;
-            this.MovementFactor = 1.0f;
-        }
-    }
+    /// <summary>
+    ///     Any resources that are always present on this tile id
+    /// </summary>
+    public HarvestPointSpecId? ResourceSpotSpecId;
+
+	public TileSpec(in byte i)
+	{
+		ID = new TileSpecId {Id = i};
+		Model = default;
+		MovementFactor = 1.0f;
+	}
 }

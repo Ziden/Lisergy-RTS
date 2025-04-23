@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace GameData.Specs
+namespace GameData.Specs;
+
+[Serializable]
+public class EntitySpec
 {
-    [Serializable]
-    public class EntitySpec
-    {
-        public string Name;
-        public int Type;
-        public ArtSpec Icon;
-        public byte[] Components;
-    }
+	public byte[] Components;
+	public ArtSpec Icon;
+	public string Name;
+	public int Type;
 }

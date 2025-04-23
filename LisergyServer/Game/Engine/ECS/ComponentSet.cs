@@ -1,315 +1,319 @@
-﻿using Game.Engine.DataTypes;
-using Game.Engine.Events;
-using Game.Systems.DeltaTracker;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Game.Engine.DataTypes;
+using Game.Engine.Events;
+using Game.Systems.DeltaTracker;
 
 [assembly: InternalsVisibleTo("Tests")]
+
 namespace Game.Engine.ECLS
 {
-    public class ComponentSet
-    {
-        private static Dictionary<Type, SyncedComponent> _shouldSync = new Dictionary<Type, SyncedComponent>();
-        private static List<object> _returnBuffer = new List<object>(); // TODO: Multi-thread
-        internal Dictionary<Type, object> _components;
-        internal HashSet<Type> _saved;
-        internal Dictionary<Type, object> _read;
-        internal HashSet<Type> _removed;
-        internal IEntity _entity;
+	public class ComponentSet
+	{
+		private static readonly Dictionary<Type, SyncedComponent> _shouldSync = new Dictionary<Type, SyncedComponent>();
+		private static readonly List<object> _returnBuffer = new List<object>(); // TODO: Multi-thread
+		internal Dictionary<Type, object> _components;
+		internal IEntity _entity;
+		internal Dictionary<Type, object> _read;
+		internal HashSet<Type> _removed;
+		internal HashSet<Type> _saved;
 
-        public ComponentSet(IEntity e)
-        {
-            _entity = e;
-        }
+		public ComponentSet(IEntity e)
+		{
+			_entity = e;
+		}
 
-        public ComponentSet()
-        {
-        }
+		public ComponentSet()
+		{
+		}
 
-        public void SetOwner(IEntity e)
-        {
-            _entity = e;
-        }
+		public void SetOwner(IEntity e)
+		{
+			_entity = e;
+		}
 
-        private ICollection<Type> GetComponentsToSync(bool onlyDeltas)
-        {
-            if (onlyDeltas) return GetModified();
-            return _components.Keys;
-        }
+		private ICollection<Type> GetComponentsToSync(bool onlyDeltas)
+		{
+			if (onlyDeltas) return GetModified();
+			return _components.Keys;
+		}
 
         /// <summary>
-        /// TODO: Use proper buffers for performance
+        ///     TODO: Use proper buffers for performance
         /// </summary>
-        public (List<object> updated, HashSet<Type> removed) GetComponentDeltas(GameId receiver = default, bool deltaCompression = true)
-        {
-            _returnBuffer.Clear();
-            var toSync = GetComponentsToSync(deltaCompression);
-            foreach (var kp in toSync)
-            {
-                if (ShouldSync(kp, receiver)) _returnBuffer.Add(GetByType(kp));
-            }
-            return (_returnBuffer, GetRemoved());
-        }
+        public (List<object> updated, HashSet<Type> removed) GetComponentDeltas(GameId receiver = default,
+			bool deltaCompression = true)
+		{
+			_returnBuffer.Clear();
+			var toSync = GetComponentsToSync(deltaCompression);
+			foreach (var kp in toSync)
+				if (ShouldSync(kp, receiver))
+					_returnBuffer.Add(GetByType(kp));
+			return (_returnBuffer, GetRemoved());
+		}
 
-        public HashSet<Type> GetModified()
-        {
-            _saved = _saved ?? new HashSet<Type>();
-            return _saved;
-        }
+		public HashSet<Type> GetModified()
+		{
+			_saved = _saved ?? new HashSet<Type>();
+			return _saved;
+		}
 
-        public HashSet<Type> GetRemoved()
-        {
-            _removed = _removed ?? new HashSet<Type>();
-            return _removed;
-        }
-        public Dictionary<Type, object> GetComponents()
-        {
-            _components = _components ?? new Dictionary<Type, object>();
-            return _components;
-        }
+		public HashSet<Type> GetRemoved()
+		{
+			_removed = _removed ?? new HashSet<Type>();
+			return _removed;
+		}
 
-        public Dictionary<Type, object> GetReadCopies()
-        {
-            _read = _read ?? new Dictionary<Type, object>();
-            return _read;
-        }
+		public Dictionary<Type, object> GetComponents()
+		{
+			_components = _components ?? new Dictionary<Type, object>();
+			return _components;
+		}
 
-        public void ClearDeltas()
-        {
-            GetModified().Clear();
-            GetRemoved().Clear();
-            GetReadCopies().Clear();
-        }
+		public Dictionary<Type, object> GetReadCopies()
+		{
+			_read = _read ?? new Dictionary<Type, object>();
+			return _read;
+		}
 
-        public IReadOnlyCollection<Type> AllTypes()
-        {
-            return GetComponents().Keys;
-        }
+		public void ClearDeltas()
+		{
+			GetModified().Clear();
+			GetRemoved().Clear();
+			GetReadCopies().Clear();
+		}
 
-        public IReadOnlyCollection<object> AllComponents()
-        {
-            return GetComponents().Values;
-        }
+		public IReadOnlyCollection<Type> AllTypes()
+		{
+			return GetComponents().Keys;
+		}
 
-        public bool HasDeltas() => GetModified().Count > 0 || GetRemoved().Count > 0;
+		public IReadOnlyCollection<object> AllComponents()
+		{
+			return GetComponents().Values;
+		}
 
-        public bool Has<T>()
-        {
-            var t = typeof(T);
-            return GetComponents().ContainsKey(t);
-        }
+		public bool HasDeltas()
+		{
+			return GetModified().Count > 0 || GetRemoved().Count > 0;
+		}
 
-        public void Add<T>(T obj = default) where T : new()
-        {
-            var t = typeof(T);
-            GetComponents()[t] = t.IsValueType ? default : obj == null ? FastNew<T>.Instance() : obj;
-            var ev = ClassPool<ComponentUpdateEvent<T>>.Get();
-            ev.Entity = _entity;
-            ev.Old = default;
-            ev.New = (T)GetComponents()[t];
-            CallEvent(ev);
-            ClassPool<ComponentUpdateEvent<T>>.Return(ev);
-            OnAfterAdded(t);
-        }
+		public bool Has<T>()
+		{
+			var t = typeof(T);
+			return GetComponents().ContainsKey(t);
+		}
 
-        public void OnAfterAdded(Type t)
-        {
-            TrackSync(t);
-            FlagCompnentHasDelta(t);
-        }
+		public void Add<T>(T obj = default) where T : new()
+		{
+			var t = typeof(T);
+			GetComponents()[t] = t.IsValueType ? default : obj == null ? FastNew<T>.Instance() : obj;
+			var ev = ClassPool<ComponentUpdateEvent<T>>.Get();
+			ev.Entity = _entity;
+			ev.Old = default;
+			ev.New = (T) GetComponents()[t];
+			CallEvent(ev);
+			ClassPool<ComponentUpdateEvent<T>>.Return(ev);
+			OnAfterAdded(t);
+		}
 
-        public bool IsSyncableComponent(Type t)
-        {
-            if (!_entity.Game.Network.DeltaCompression.Enabled) return false;
-            if (!_shouldSync.TryGetValue(t, out var sync)) return false;
-            if (sync == null) return false;
-            return true;
-        }
+		public void OnAfterAdded(Type t)
+		{
+			TrackSync(t);
+			FlagCompnentHasDelta(t);
+		}
 
-        public bool ShouldSync(Type t, GameId to)
-        {
-            var sync = _shouldSync[t];
-            if (sync == null) return false;
-            if (sync.OnlyMine && to != _entity.OwnerID) return false;
-            return true;
-        }
+		public bool IsSyncableComponent(Type t)
+		{
+			if (!_entity.Game.Network.DeltaCompression.Enabled) return false;
+			if (!_shouldSync.TryGetValue(t, out var sync)) return false;
+			if (sync == null) return false;
+			return true;
+		}
 
-        private void FlagCompnentHasDelta(Type t)
-        {
-            if (!IsSyncableComponent(t)) return;
-            if (GetModified().Add(t))
-            {
-                _entity.Logic.DeltaCompression.SetFlag(DeltaFlag.COMPONENTS);
-            }
-        }
+		public bool ShouldSync(Type t, GameId to)
+		{
+			var sync = _shouldSync[t];
+			if (sync == null) return false;
+			if (sync.OnlyMine && to != _entity.OwnerID) return false;
+			return true;
+		}
 
-        public bool Remove<T>()
-        {
-            var t = typeof(T);
-            if (GetComponents().TryGetValue(t, out var c))
-            {
-                if (c is IDisposable d) d.Dispose();
-                if (GetComponents().Remove(t))
-                {
-                    GetRemoved().Add(t);
-                    _entity.Logic.DeltaCompression.SetFlag(DeltaFlag.COMPONENTS);
+		private void FlagCompnentHasDelta(Type t)
+		{
+			if (!IsSyncableComponent(t)) return;
+			if (GetModified().Add(t)) _entity.Logic.DeltaCompression.SetFlag(DeltaFlag.COMPONENTS);
+		}
 
-                    GetModified().Remove(t);
-                    _entity.Game.Log.Debug($"Removed {t.Name} from {_entity}");
+		public bool Remove<T>()
+		{
+			var t = typeof(T);
+			if (GetComponents().TryGetValue(t, out var c))
+			{
+				if (c is IDisposable d) d.Dispose();
+				if (GetComponents().Remove(t))
+				{
+					GetRemoved().Add(t);
+					_entity.Logic.DeltaCompression.SetFlag(DeltaFlag.COMPONENTS);
 
-                    var ev = ClassPool<ComponentUpdateEvent<T>>.Get();
-                    ev.Entity = _entity;
-                    ev.Old = (T)c;
-                    ev.New = default;
-                    CallEvent(ev);
-                    ClassPool<ComponentUpdateEvent<T>>.Return(ev);
+					GetModified().Remove(t);
+					_entity.Game.Log.Debug($"Removed {t.Name} from {_entity}");
 
-                    return true;
-                }
-            }
-            return false;
-        }
+					var ev = ClassPool<ComponentUpdateEvent<T>>.Get();
+					ev.Entity = _entity;
+					ev.Old = (T) c;
+					ev.New = default;
+					CallEvent(ev);
+					ClassPool<ComponentUpdateEvent<T>>.Return(ev);
 
-        private void TrackSync(Type type)
-        {
-            if (!_entity.Game.Network.DeltaCompression.Enabled) return;
-            if (!_shouldSync.TryGetValue(type, out var sync))
-            {
-                sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
-                _shouldSync[type] = sync;
-            }
-        }
+					return true;
+				}
+			}
 
-        public bool TryGet<T>(out T comp)
-        {
-            var t = typeof(T);
-            var readCopies = GetReadCopies();
-            var has = GetComponents().TryGetValue(t, out var currentComponent);
-            if (has)
-            {
-                if (IsSyncableComponent(t))
-                {
-                    if (!readCopies.ContainsKey(t))
-                    {
-                        readCopies[t] = currentComponent.FastShallowClone();
-                    }
-                    comp = (T)readCopies[t];
-                    return true;
-                }
-                comp = (T)currentComponent;
-            }
-            else
-            {
-                comp = default;
-            }
-            return has;
-        }
+			return false;
+		}
 
-        public void CallEvent(IBaseEvent ev) => _entity.Game.Logic.Systems.CallEvent(_entity, ev);
+		private void TrackSync(Type type)
+		{
+			if (!_entity.Game.Network.DeltaCompression.Enabled) return;
+			if (!_shouldSync.TryGetValue(type, out var sync))
+			{
+				sync = type.GetCustomAttribute(typeof(SyncedComponent)) as SyncedComponent;
+				_shouldSync[type] = sync;
+			}
+		}
 
-        public bool CompareWith<T>(IEntity otherEntity)
-        {
-            var other = otherEntity.Get<T>();
-            var mine = Get<T>();
-            var myBytes = Serialization.FromAnyType(mine);
-            var hisBytes = Serialization.FromAnyType(other); // TODO: implement fast comparison in components
-            return myBytes.ToArray().SequenceEqual(hisBytes.ToArray());
-        }
+		public bool TryGet<T>(out T comp)
+		{
+			var t = typeof(T);
+			var readCopies = GetReadCopies();
+			var has = GetComponents().TryGetValue(t, out var currentComponent);
+			if (has)
+			{
+				if (IsSyncableComponent(t))
+				{
+					if (!readCopies.ContainsKey(t)) readCopies[t] = currentComponent.FastShallowClone();
+					comp = (T) readCopies[t];
+					return true;
+				}
 
-        public bool IsUpToDateWith(IEntity otherEntity)
-        {
-            foreach (var c in _components)
-            {
-                if (!IsSyncableComponent(c.Key)) continue;
+				comp = (T) currentComponent;
+			}
+			else
+			{
+				comp = default;
+			}
 
-                var other = otherEntity.Components.GetByType(c.Value.GetType());
-                var mine = c.Value;
-                var myBytes = Serialization.FromAnyType(mine);
-                var hisBytes = Serialization.FromAnyType(other); // TODO: implement fast comparison in components
-                var equal = myBytes.ToArray().SequenceEqual(hisBytes.ToArray());
-                if (!equal)
-                {
-                    _entity.Game.Log.Error($"{_entity} desync component: {c.Value}");
-                    return false;
-                }
-            }
-            return true;
+			return has;
+		}
 
-        }
+		public void CallEvent(IBaseEvent ev)
+		{
+			_entity.Game.Logic.Systems.CallEvent(_entity, ev);
+		}
 
-        public void Save<T>(in T c)
-        {
-            var t = c.GetType();
-            GetComponents().TryGetValue(t, out var oldValue);
+		public bool CompareWith<T>(IEntity otherEntity)
+		{
+			var other = otherEntity.Get<T>();
+			var mine = Get<T>();
+			var myBytes = Serialization.FromAnyType(mine);
+			var hisBytes = Serialization.FromAnyType(other); // TODO: implement fast comparison in components
+			return myBytes.ToArray().SequenceEqual(hisBytes.ToArray());
+		}
 
-            var ev = ClassPool<ComponentUpdateEvent<T>>.Get();
-            ev.Entity = _entity;
-            ev.Old = (T)oldValue;
-            ev.New = c;
-            CallEvent(ev);
-            ClassPool<ComponentUpdateEvent<T>>.Return(ev);
+		public bool IsUpToDateWith(IEntity otherEntity)
+		{
+			foreach (var c in _components)
+			{
+				if (!IsSyncableComponent(c.Key)) continue;
 
-            GetComponents()[t] = c;
-            if (t.IsValueType)
-            {
-                GetReadCopies()[t] = c;
-            }
-            else
-            {
-                GetReadCopies().Remove(t);
-            }
-            TrackSync(t);
-            FlagCompnentHasDelta(t);
-        }
+				var other = otherEntity.Components.GetByType(c.Value.GetType());
+				var mine = c.Value;
+				var myBytes = Serialization.FromAnyType(mine);
+				var hisBytes = Serialization.FromAnyType(other); // TODO: implement fast comparison in components
+				var equal = myBytes.ToArray().SequenceEqual(hisBytes.ToArray());
+				if (!equal)
+				{
+					_entity.Game.Log.Error($"{_entity} desync component: {c.Value}");
+					return false;
+				}
+			}
 
-        public T Get<T>()
-        {
-            var r = GetByType(typeof(T));
-            return r == null ? default : (T)r;
-        }
+			return true;
+		}
 
-        public object GetByType(Type t)
-        {
-            GetComponents().TryGetValue(t, out var c);
-            var readCopy = GetReadCopies();
-            if (IsSyncableComponent(t))
-            {
-                readCopy[t] = c?.FastShallowClone(); // TODO: Maybe only tests always returns a copy to ensure .Save is being called ?
-                c = readCopy[t];
-            }
-            return c == null ? default : c;
-        }
+		public void Save<T>(in T c)
+		{
+			var t = c.GetType();
+			GetComponents().TryGetValue(t, out var oldValue);
 
-        public void ValidateComponentSetModifications()
-        {
-            /*
-            foreach (var currentType in GetModified())
-            {
-                GetComponents().TryGetValue(currentType, out var current);
-                if (currentType != null)
-                {
-                    var currentBytes = Serialization.FromAnyType(current);
-                    var previousBytes = _read[currentType];
-                    var previous = Serialization.ToAnyType<object>(previousBytes);
-                    if (!currentBytes.SequenceEqual(previousBytes))
-                    {
-                        throw new Exception($"Entity {_entity} had modified component {previous} that was not properly saved");
-                    }
-                    else
-                    {
-                        Console.WriteLine("OK");
-                    }
-                }
-            }
-            */
-        }
+			var ev = ClassPool<ComponentUpdateEvent<T>>.Get();
+			ev.Entity = _entity;
+			ev.Old = (T) oldValue;
+			ev.New = c;
+			CallEvent(ev);
+			ClassPool<ComponentUpdateEvent<T>>.Return(ev);
 
-        public override string ToString()
-        {
-            return $"<Components Size={GetComponents().Count} [{string.Join(',', GetComponents().Keys.Select(k => k.Name))}]>";
-        }
-    }
+			GetComponents()[t] = c;
+			if (t.IsValueType)
+				GetReadCopies()[t] = c;
+			else
+				GetReadCopies().Remove(t);
+			TrackSync(t);
+			FlagCompnentHasDelta(t);
+		}
+
+		public T Get<T>()
+		{
+			var r = GetByType(typeof(T));
+			return r == null ? default : (T) r;
+		}
+
+		public object GetByType(Type t)
+		{
+			GetComponents().TryGetValue(t, out var c);
+			var readCopy = GetReadCopies();
+			if (IsSyncableComponent(t))
+			{
+				readCopy[t] =
+					c?.FastShallowClone(); // TODO: Maybe only tests always returns a copy to ensure .Save is being called ?
+				c = readCopy[t];
+			}
+
+			return c == null ? default : c;
+		}
+
+		public void ValidateComponentSetModifications()
+		{
+			/*
+			foreach (var currentType in GetModified())
+			{
+			    GetComponents().TryGetValue(currentType, out var current);
+			    if (currentType != null)
+			    {
+			        var currentBytes = Serialization.FromAnyType(current);
+			        var previousBytes = _read[currentType];
+			        var previous = Serialization.ToAnyType<object>(previousBytes);
+			        if (!currentBytes.SequenceEqual(previousBytes))
+			        {
+			            throw new Exception($"Entity {_entity} had modified component {previous} that was not properly saved");
+			        }
+			        else
+			        {
+			            Console.WriteLine("OK");
+			        }
+			    }
+			}
+			*/
+		}
+
+		public override string ToString()
+		{
+			return
+				$"<Components Size={GetComponents().Count} [{string.Join(',', GetComponents().Keys.Select(k => k.Name))}]>";
+		}
+	}
 }

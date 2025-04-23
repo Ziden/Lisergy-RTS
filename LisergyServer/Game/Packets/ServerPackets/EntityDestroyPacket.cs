@@ -1,22 +1,25 @@
-﻿using Game.Engine.DataTypes;
+﻿using System;
+using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
 using Game.Engine.Network;
-using System;
 
 namespace Game.Network.ServerPackets
 {
-    [Serializable]
-    public class EntityDestroyPacket : BasePacket, IServerPacket
-    {
+	[Serializable]
+	public class EntityDestroyPacket : BasePacket, IServerPacket
+	{
+		public GameId EntityID;
 
-        public EntityDestroyPacket() { }
-        public EntityDestroyPacket(IEntity entity)
-        {
-            OwnerID = entity.OwnerID;
-            EntityID = entity.EntityId;
-        }
+		public GameId OwnerID;
 
-        public GameId OwnerID;
-        public GameId EntityID;
-    }
+		public EntityDestroyPacket()
+		{
+		}
+
+		public EntityDestroyPacket(IEntity entity)
+		{
+			OwnerID = entity.OwnerID;
+			EntityID = entity.EntityId;
+		}
+	}
 }

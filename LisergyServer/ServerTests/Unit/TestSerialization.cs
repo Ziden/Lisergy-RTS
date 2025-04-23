@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Game.Engine;
 using Game.Engine.DataTypes;
 using Game.Events.ServerEvents;
@@ -10,131 +12,128 @@ using Game.Systems.Tile;
 using Game.World;
 using NUnit.Framework;
 using ServerTests;
-using System;
-using System.Linq;
 using Tests.Unit.Stubs;
 
-namespace GameUnitTests
+namespace GameUnitTests;
+
+[Serializable]
+public class MapPlacement2Component
 {
-    [Serializable]
-    public partial class MapPlacement2Component
-    {
-        public Location Location;
-    }
+	public Location Location;
+}
 
-    public class TestSerialization
-    {
+public class TestSerialization
+{
+	private TestGame _game;
 
-        private TestGame _game;
+	[SetUp]
+	public void Setup()
+	{
+		_game = new TestGame();
+	}
 
-        [SetUp]
-        public void Setup()
-        {
-            _game = new TestGame();
-        }
-     
-        [Test]
-        public void TestSimpleSerialization()
-        {
-            Serialization.LoadSerializers();
-            var authEvent = new LoginPacket()
-            {
-                Login = "wololo",
-                Password = "walala"
-            };
-            var bytes = Serialization.FromAnyType<LoginPacket>(authEvent);
-            var event2 = Serialization.ToAnyType<LoginPacket>(bytes);
+	[Test]
+	public void TestSimpleSerialization()
+	{
+		Serialization.LoadSerializers();
+		var authEvent = new LoginPacket
+		{
+			Login = "wololo",
+			Password = "walala"
+		};
+		var bytes = Serialization.FromAnyType(authEvent);
+		var event2 = Serialization.ToAnyType<LoginPacket>(bytes);
 
-            Assert.AreEqual(authEvent.Login, event2.Login);
-            Assert.AreEqual(authEvent.Password, event2.Password);
-        }
+		Assert.AreEqual(authEvent.Login, event2.Login);
+		Assert.AreEqual(authEvent.Password, event2.Password);
+	}
 
-        [Test]
-        public void TestTileSerialization()
-        {
+	[Test]
+	public void TestTileSerialization()
+	{
+		var player = _game.GetTestPlayer();
+		var tile = _game.World.GetTile(1, 1);
 
-            var player = _game.GetTestPlayer();
-            var tile = _game.World.GetTile(1, 1);
+		Serialization.LoadSerializers(typeof(EntityUpdatePacket));
 
-            Serialization.LoadSerializers(typeof(EntityUpdatePacket));
+		var serialized =
+			Serialization.FromAnyType(tile.Logic.DeltaCompression.GetUpdatePacket(default) as EntityUpdatePacket);
+		var unserialized = Serialization.ToAnyType<EntityUpdatePacket>(serialized);
 
-            var serialized = Serialization.FromAnyType<EntityUpdatePacket>(tile.Logic.DeltaCompression.GetUpdatePacket(default) as EntityUpdatePacket);
-            var unserialized = Serialization.ToAnyType<EntityUpdatePacket>(serialized);
+		var data = unserialized.GetComponent<TileDataComponent>();
+		Assert.AreEqual(tile.SpecId, data.TileId);
+		Assert.AreEqual(tile.X, data.Position.X);
+		Assert.AreEqual(tile.Y, data.Position.Y);
+	}
 
-            var data = unserialized.GetComponent<TileDataComponent>();
-            Assert.AreEqual((byte)tile.SpecId, data.TileId);
-            Assert.AreEqual(tile.X, data.Position.X);
-            Assert.AreEqual(tile.Y, data.Position.Y);
-        }
+	[Test]
+	public void TestUnitViewEventSerialization()
+	{
+		var game = new TestGame();
 
-        [Test]
-        public void TestUnitViewEventSerialization()
-        {
-            var game = new TestGame();
+		var player = game.GetTestPlayer();
+		var unit = player.Parties[0].Get<BattleGroupComponent>().Units.Group.First();
+		var building = player.Buildings.First();
+		var tile = player.Parties[0].GetTile();
 
-            var player = game.GetTestPlayer();
-            var unit = player.Parties[0].Get<BattleGroupComponent>().Units.Group.First();
-            var building = player.Buildings.First();
-            var tile = player.Parties[0].GetTile();
+		var visibleEvent =
+			game.SentServerPackets.Where(e => e is EntityUpdatePacket).FirstOrDefault() as EntityUpdatePacket;
 
-            var visibleEvent = game.SentServerPackets.Where(e => e is EntityUpdatePacket).FirstOrDefault() as EntityUpdatePacket;
+		var serialized = Serialization.FromAnyType(visibleEvent);
+		var unserialized = Serialization.ToAnyType<EntityUpdatePacket>(serialized);
 
-            var serialized = Serialization.FromAnyType<EntityUpdatePacket>(visibleEvent);
-            var unserialized = Serialization.ToAnyType<EntityUpdatePacket>(serialized);
+		Assert.AreEqual(visibleEvent.EntityId, unserialized.EntityId);
+	}
 
-            Assert.AreEqual(visibleEvent.EntityId, unserialized.EntityId);
-        }
+	[Test]
+	public void TestEntityUpdatePacket()
+	{
+		var game = new TestGame();
 
-        [Test]
-        public void TestEntityUpdatePacket()
-        {
-            var game = new TestGame();
+		var player = game.GetTestPlayer();
+		var party = player.Parties[0];
 
-            var player = game.GetTestPlayer();
-            var party = player.Parties[0];
+		var entityUpdate = new EntityUpdatePacket(party);
 
-            var entityUpdate = new EntityUpdatePacket(party);
+		var serialized = Serialization.FromAnyType(entityUpdate);
+		var unserialized = Serialization.ToAnyType<EntityUpdatePacket>(serialized);
 
-            var serialized = Serialization.FromAnyType<EntityUpdatePacket>(entityUpdate);
-            var unserialized = Serialization.ToAnyType<EntityUpdatePacket>(serialized);
+		Assert.AreEqual(unserialized.EntityId, party.EntityId);
+	}
 
-            Assert.AreEqual(unserialized.EntityId, party.EntityId);
-        }
+	[Test]
+	public void TestRawSerialization()
+	{
+		Serialization.LoadSerializers();
+		var authEvent = new LoginPacket
+		{
+			Login = "wololo",
+			Password = "walala"
+		};
+		var bytes = Serialization.FromAnyType((object) authEvent);
+		var event2 = Serialization.ToAnyType<LoginPacket>(bytes);
 
-        [Test]
-        public void TestRawSerialization()
-        {
-            Serialization.LoadSerializers();
-            var authEvent = new LoginPacket()
-            {
-                Login = "wololo",
-                Password = "walala"
-            };
-            var bytes = Serialization.FromAnyType((object)authEvent);
-            var event2 = Serialization.ToAnyType<LoginPacket>(bytes);
+		Assert.AreEqual(authEvent.Login, event2.Login);
+		Assert.AreEqual(authEvent.Password, event2.Password);
+	}
 
-            Assert.AreEqual(authEvent.Login, event2.Login);
-            Assert.AreEqual(authEvent.Password, event2.Password);
-        }
+	[Test]
+	public void TestBattleLogSerialization()
+	{
+		Serialization.LoadSerializers();
+		var enemyTeam = new BattleGroupData(new Unit(_game.Specs.Units[0]), new Unit(_game.Specs.Units[0]));
+		var myTeam = new BattleGroupData(new Unit(_game.Specs.Units[2]), new Unit(_game.Specs.Units[0]));
+		var battle = new TurnBattle(GameId.Generate(), myTeam, enemyTeam);
+		var log = new BattleLogPacket(battle);
+		var autoRun = new AutoRun(battle);
+		var result = autoRun.RunAllRounds();
+		log.SetTurns(result);
 
-        [Test]
-        public void TestBattleLogSerialization()
-        {
-            Serialization.LoadSerializers();
-            var enemyTeam = new BattleGroupData(new Unit(_game.Specs.Units[0]), new Unit(_game.Specs.Units[0]));
-            var myTeam = new BattleGroupData(new Unit(_game.Specs.Units[2]), new Unit(_game.Specs.Units[0]));
-            var battle = new TurnBattle(GameId.Generate(), myTeam, enemyTeam);
-            var log = new BattleLogPacket(battle);
-            var autoRun = new AutoRun(battle);
-            var result = autoRun.RunAllRounds();
-            log.SetTurns(result);
+		var deserializedHeader = log.DeserializeStartingState();
 
-            var deserializedHeader = log.DeserializeStartingState();
+		var header = log.BattleStartHeaderData;
 
-            var header = log.BattleStartHeaderData;
-
-            Assert.AreEqual(deserializedHeader.Attacker.Units[0].Id, myTeam.Units.Group.First().Id);
-            Assert.AreEqual(deserializedHeader.Defender.Units[0].Id, enemyTeam.Units.Group.First().Id);
-        }
-    }
+		Assert.AreEqual(deserializedHeader.Attacker.Units[0].Id, myTeam.Units.Group.First().Id);
+		Assert.AreEqual(deserializedHeader.Defender.Units[0].Id, enemyTeam.Units.Group.First().Id);
+	}
 }

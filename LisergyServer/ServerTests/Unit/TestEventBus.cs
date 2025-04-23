@@ -1,40 +1,35 @@
 using Game.Engine.Events.Bus;
 using NUnit.Framework;
 
-namespace GameUnitTests
+namespace GameUnitTests;
+
+public class TestEventBus : IEventListener
 {
-    public class TestEventBus : IEventListener
-    {
+	[Test]
+	public void TestCallingEvent()
+	{
+		var bus = new EventBus<EventTest>();
+		var called = false;
+		bus.On<EventTest>(this, e => called = true);
 
-        public class EventTest
-        {
+		bus.Call(new EventTest());
 
-        }
+		Assert.IsTrue(called);
+	}
 
+	[Test]
+	public void TestRemovingListener()
+	{
+		var bus = new EventBus<EventTest>();
+		var called = false;
+		bus.On<EventTest>(this, e => called = true);
+		bus.RemoveListener(this);
+		bus.Call(new EventTest());
 
-        [Test]
-        public void TestCallingEvent()
-        {
-            var bus = new EventBus<EventTest>();
-            var called = false;
-            bus.On<EventTest>(this, e => called = true);
+		Assert.IsFalse(called);
+	}
 
-            bus.Call(new EventTest());
-
-            Assert.IsTrue(called);
-        }
-
-        [Test]
-        public void TestRemovingListener()
-        {
-            var bus = new EventBus<EventTest>();
-            var called = false;
-            bus.On<EventTest>(this, e => called = true);
-            bus.RemoveListener(this);
-            bus.Call(new EventTest());
-
-            Assert.IsFalse(called);
-        }
-
-    }
+	public class EventTest
+	{
+	}
 }

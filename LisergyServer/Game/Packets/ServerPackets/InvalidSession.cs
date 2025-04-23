@@ -1,10 +1,10 @@
-﻿using Game.Engine.Network;
-using System;
+﻿using System;
+using Game.Engine.Network;
 
 namespace Game.Network.ServerPackets
 {
-    [Serializable]
-    public class InvalidSessionPacket : BasePacket, IServerPacket
-    {
-    }
+	[Serializable]
+	public class InvalidSessionPacket : BasePacket, IServerPacket
+	{
+	}
 }

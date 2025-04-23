@@ -3,15 +3,15 @@
 namespace Game.Systems.Player
 {
     /// <summary>
-    /// Called when a player joins (connects) to the world
+    ///     Called when a player joins (connects) to the world
     /// </summary>
     public class PlayerJoinedEvent : IGameEvent
-    {
-        public PlayerModel Player;
+	{
+		public PlayerModel Player;
 
-        public PlayerJoinedEvent(PlayerModel p)
-        {
-            Player = p;
-        }
-    }
+		public PlayerJoinedEvent(PlayerModel p)
+		{
+			Player = p;
+		}
+	}
 }

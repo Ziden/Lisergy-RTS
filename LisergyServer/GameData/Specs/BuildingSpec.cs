@@ -1,42 +1,47 @@
-﻿using GameData.Specs;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
+using GameData.Specs;
 
+namespace GameData;
 
-namespace GameData
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+public struct BuildingSpecId
 {
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct BuildingSpecId
-    {
-        public byte Id;
-        public static implicit operator byte(BuildingSpecId d) => d.Id;
-        public static implicit operator BuildingSpecId(byte b) => new BuildingSpecId() { Id = b };
+	public byte Id;
 
-        public override string ToString()
-        {
-            return Id.ToString();
-        }
+	public static implicit operator byte(BuildingSpecId d)
+	{
+		return d.Id;
+	}
 
-        public BuildingSpecId(byte id)
-        {
-            Id = id;
-        }
-    }
+	public static implicit operator BuildingSpecId(byte b)
+	{
+		return new BuildingSpecId() {Id = b};
+	}
 
+	public override string ToString()
+	{
+		return Id.ToString();
+	}
 
-    [Serializable]
-    public class BuildingSpec
-    {
-        public string Name;
-        public BuildingSpecId SpecId;
-        public ArtSpec Art;
-        public byte LOS;
-        public string Description;
+	public BuildingSpecId(byte id)
+	{
+		Id = id;
+	}
+}
 
-        public BuildingSpec(byte id)
-        {
-            this.SpecId = new BuildingSpecId() { Id = id };
-        }
-    }
+[Serializable]
+public class BuildingSpec
+{
+	public ArtSpec Art;
+	public string Description;
+	public byte LOS;
+	public string Name;
+	public BuildingSpecId SpecId;
+
+	public BuildingSpec(byte id)
+	{
+		SpecId = new BuildingSpecId {Id = id};
+	}
 }

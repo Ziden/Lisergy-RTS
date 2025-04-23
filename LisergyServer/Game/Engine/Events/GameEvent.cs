@@ -1,10 +1,9 @@
 ﻿namespace Game.Engine.Events
 {
     /// <summary>
-    /// Game Logic Events
+    ///     Game Logic Events
     /// </summary>
     public interface IGameEvent : IBaseEvent
-    {
-
-    }
+	{
+	}
 }

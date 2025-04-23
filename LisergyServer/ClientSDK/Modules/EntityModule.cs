@@ -1,4 +1,5 @@
-﻿using ClientSDK.Data;
+﻿using System;
+using ClientSDK.Data;
 using ClientSDK.SDKEvents;
 using ClientSDK.Sync;
 using Game.Engine.ECLS;
@@ -6,137 +7,131 @@ using Game.Entities;
 using Game.Events.ServerEvents;
 using Game.Systems.Tile;
 using Game.World;
-using System;
 
-namespace ClientSDK.Services
+namespace ClientSDK.Services;
+
+/// <summary>
+///     Service that controls entities that the game client is aware of.
+///     Expose basic entity control functionality like moving or taking entity actions.
+/// </summary>
+public interface IEntityModule : IClientModule
 {
     /// <summary>
-    /// Service that controls entities that the game client is aware of.
-    /// Expose basic entity control functionality like moving or taking entity actions.
+    ///     Will be called when any update of the given component (add, remove, change) is done
     /// </summary>
-    public interface IEntityModule : IClientModule
-    {
-        /// <summary>
-        /// Will be called when any update of the given component (add, remove, change) is done
-        /// </summary>
-        void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync);
+    void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync);
 
-        /// <summary>
-        /// Registers a component sync. 
-        /// Whenever the given entity type has the given component type updated, instead of the values simply being copied
-        /// the sync code will be called.
-        /// The callback has the Entity, OLD VALUE and NEW VALUE parameters.
-        /// </summary>
-        void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync);
+    /// <summary>
+    ///     Registers a component sync.
+    ///     Whenever the given entity type has the given component type updated, instead of the values simply being copied
+    ///     the sync code will be called.
+    ///     The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+    /// </summary>
+    void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync);
 
-        /// <summary>
-        /// Registers a component removed callback. 
-        /// Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
-        /// The callback has the Entity, OLD VALUE and NEW VALUE parameters.
-        /// </summary>
-        void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnRemoved);
+    /// <summary>
+    ///     Registers a component removed callback.
+    ///     Whenever the given entity type has the given component type removed, the callback will be called after the
+    ///     operation has been done..
+    ///     The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+    /// </summary>
+    void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnRemoved);
 
 
-        /// <summary>
-        /// Registers a component removed callback. 
-        /// Whenever the given entity type has the given component type removed, the callback will be called after the operation has been done..
-        /// The callback has the Entity, OLD VALUE and NEW VALUE parameters.
-        /// </summary>
-        void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnAdded);
+    /// <summary>
+    ///     Registers a component removed callback.
+    ///     Whenever the given entity type has the given component type removed, the callback will be called after the
+    ///     operation has been done..
+    ///     The callback has the Entity, OLD VALUE and NEW VALUE parameters.
+    /// </summary>
+    void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnAdded);
 
-        /// <summary>
-        /// Removes all event callbacks from the given object
-        /// </summary>
-        void RemoveListener(object listener);
-    }
+    /// <summary>
+    ///     Removes all event callbacks from the given object
+    /// </summary>
+    void RemoveListener(object listener);
+}
 
-    public class EntityModule : IEntityModule
-    {
-        private LisergySDK _client;
-        public ComponentSynchronizer ComponentSync { get; private set; }
-        public SystemSynchronizer SystemSync { get; private set; }
+public class EntityModule : IEntityModule
+{
+	private readonly LisergySDK _client;
 
-        public EntityModule(LisergySDK client)
-        {
-            _client = client;
-            ComponentSync = new ComponentSynchronizer(_client);
-            SystemSync = new SystemSynchronizer(_client);
-        }
+	public EntityModule(LisergySDK client)
+	{
+		_client = client;
+		ComponentSync = new ComponentSynchronizer(_client);
+		SystemSync = new SystemSynchronizer(_client);
+	}
 
-        public void Register()
-        {
-            _client.Network.OnInput<EntityUpdatePacket>(OnEntityUpdate);
-            SystemSync.ListenForRequiredSyncs();
-        }
+	public ComponentSynchronizer ComponentSync { get; }
+	public SystemSynchronizer SystemSync { get; }
 
-        private void OnEntityUpdate(EntityUpdatePacket packet)
-        {
-            var created = false;
-            var existingEntity = _client.Game.Entities[packet.EntityId];
-            if (existingEntity == null)
-            {
-                if (packet.Type == EntityType.Tile)
-                {
-                    var tileData = packet.GetComponent<TileDataComponent>();
-                    var chunk = _client.Game.World.GetTileChunk(tileData.Position);
-                    var internalTileX = tileData.Position.X % GameWorld.CHUNK_SIZE;
-                    var internalTileY = tileData.Position.Y % GameWorld.CHUNK_SIZE;
-                    var existing = chunk.Tiles[internalTileX, internalTileY];
-                    if (existing == null)
-                    {
-                        existing = chunk.CreateTile(internalTileX, internalTileY, packet.EntityId);
-                    }
-                    existingEntity = existing.Entity;
-                    created = true;
-                }
-                else
-                {
-                    created = true;
-                    existingEntity = _client.Game.Entities.CreateEntity(packet.Type, packet.OwnerId, packet.EntityId);
-                }
-            }
-            _client.SDKLog.Debug($"Received entity update for {existingEntity}");
-            var view = _client.Server.Views.GetOrCreateView(existingEntity);
-            ComponentSync.ProccessUpdate(existingEntity, packet.SyncedComponents, packet.RemovedComponentIds);
-            if (view.State == EntityViewState.NOT_RENDERED)
-            {
-                view.RenderView();
-            }
-            if (created)
-            {
-                view.RunWhenRendered(() =>
-                {
-                    if (packet.Type != EntityType.Tile)
-                        _client.ClientEvents.Call(new EntitySeenEvent(existingEntity));
-                    else
-                        _client.ClientEvents.Call(new TileSeenEvent(existingEntity));
-                });
-            }
-        }
+	public void Register()
+	{
+		_client.Network.OnInput<EntityUpdatePacket>(OnEntityUpdate);
+		SystemSync.ListenForRequiredSyncs();
+	}
 
-        public void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync)
-        {
-            ComponentSync.OnComponentModified(OnSync);
-        }
+	public void OnComponentModified<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnSync)
+	{
+		ComponentSync.OnComponentModified(OnSync);
+	}
 
-        public void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnRemoved)
-        {
-            ComponentSync.OnComponentRemoved(OnRemoved);
-        }
+	public void OnComponentRemoved<ComponentType>(Action<IEntity, ComponentType> OnRemoved)
+	{
+		ComponentSync.OnComponentRemoved(OnRemoved);
+	}
 
-        public void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnUpdated)
-        {
-            ComponentSync.OnUpdate(OnUpdated);
-        }
+	public void OnUpdate<ComponentType>(Action<IEntity, ComponentType, ComponentType> OnUpdated)
+	{
+		ComponentSync.OnUpdate(OnUpdated);
+	}
 
-        public void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnAdded)
-        {
-            ComponentSync.OnComponentAdded(OnAdded);
-        }
+	public void OnComponentAdded<ComponentType>(Action<IEntity, ComponentType> OnAdded)
+	{
+		ComponentSync.OnComponentAdded(OnAdded);
+	}
 
-        public void RemoveListener(object listener)
-        {
-            ComponentSync.RemoveListener(listener);
-        }
-    }
+	public void RemoveListener(object listener)
+	{
+		ComponentSync.RemoveListener(listener);
+	}
+
+	private void OnEntityUpdate(EntityUpdatePacket packet)
+	{
+		var created = false;
+		var existingEntity = _client.Game.Entities[packet.EntityId];
+		if (existingEntity == null)
+		{
+			if (packet.Type == EntityType.Tile)
+			{
+				var tileData = packet.GetComponent<TileDataComponent>();
+				var chunk = _client.Game.World.GetTileChunk(tileData.Position);
+				var internalTileX = tileData.Position.X % GameWorld.CHUNK_SIZE;
+				var internalTileY = tileData.Position.Y % GameWorld.CHUNK_SIZE;
+				var existing = chunk.Tiles[internalTileX, internalTileY];
+				if (existing == null) existing = chunk.CreateTile(internalTileX, internalTileY, packet.EntityId);
+				existingEntity = existing.Entity;
+				created = true;
+			}
+			else
+			{
+				created = true;
+				existingEntity = _client.Game.Entities.CreateEntity(packet.Type, packet.OwnerId, packet.EntityId);
+			}
+		}
+
+		_client.SDKLog.Debug($"Received entity update for {existingEntity}");
+		var view = _client.Server.Views.GetOrCreateView(existingEntity);
+		ComponentSync.ProccessUpdate(existingEntity, packet.SyncedComponents, packet.RemovedComponentIds);
+		if (view.State == EntityViewState.NOT_RENDERED) view.RenderView();
+		if (created)
+			view.RunWhenRendered(() =>
+			{
+				if (packet.Type != EntityType.Tile)
+					_client.ClientEvents.Call(new EntitySeenEvent(existingEntity));
+				else
+					_client.ClientEvents.Call(new TileSeenEvent(existingEntity));
+			});
+	}
 }

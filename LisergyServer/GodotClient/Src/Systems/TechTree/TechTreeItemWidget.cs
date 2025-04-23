@@ -1,72 +1,73 @@
+using System;
 using GameData.Specs;
 using Godot;
 using GodotClient.Services;
 using LisergyGodotClient.Src.Systems.Tiles.UI;
-using System;
 
+namespace LisergyGodotClient.Src.Systems.TechTree;
 
-namespace LisergyGodotClient.Src.Systems.TechTree
+public partial class TechTreeItemWidget : GameUiWidget
 {
-	public partial class TechTreeItemWidget : GameUiWidget
+	private TextureRect _border;
+	private TextureButton _btn;
+
+	private bool _inactive;
+	private TextureRect _inactiveOverlay;
+	[Export] public NodePath BorderPath;
+	[Export] public NodePath ButtonPath;
+	[Export] public NodePath InactivePath;
+	[Export] public NodePath ItemWidgetPath;
+	public Action<TechTreeItemWidget> OnClick;
+
+	public ItemStackWidget ItemWidget { get; private set; }
+
+	public object Item { get; private set; }
+
+	private void Load()
 	{
-		[Export] public NodePath ItemWidgetPath;
-		[Export] public NodePath ButtonPath;
-		[Export] public NodePath InactivePath;
-		[Export] public NodePath BorderPath;
+		_inactiveOverlay ??= GetNode<TextureRect>(InactivePath);
+		_border ??= GetNode<TextureRect>(BorderPath);
 
-		public ItemStackWidget ItemWidget { get; private set; }
-		private TextureButton _btn;
-		private TextureRect _inactiveOverlay;
-		private TextureRect _border;
-
-		public object Item { get; private set; }
-
-		private bool _inactive;
-		public Action<TechTreeItemWidget> OnClick;
-
-		private void Load()
+		if (ItemWidget == null)
 		{
-			_inactiveOverlay ??= GetNode<TextureRect>(InactivePath);
-			_border ??= GetNode<TextureRect>(BorderPath);
-
-			if (ItemWidget == null)
-			{
-				ItemWidget ??= GetNode<ItemStackWidget>(ItemWidgetPath);
-				ItemWidget.OnClick = Clicked;
-			}
-
-			if (_btn == null)
-			{
-				_btn ??= GetNode<TextureButton>(ButtonPath);
-				_btn.ButtonDown += Clicked;
-			}
+			ItemWidget ??= GetNode<ItemStackWidget>(ItemWidgetPath);
+			ItemWidget.OnClick = Clicked;
 		}
 
-		public void SetBorder(Color color)
+		if (_btn == null)
 		{
-			Load();
-			_border.Modulate = color;
+			_btn ??= GetNode<TextureButton>(ButtonPath);
+			_btn.ButtonDown += Clicked;
 		}
+	}
 
-		private void Clicked()
-		{
-			OnClick?.Invoke(this);
-		}
+	public void SetBorder(Color color)
+	{
+		Load();
+		_border.Modulate = color;
+	}
 
-		public void SetActive(bool active)
-		{
-			Load();
-			_inactive = !active;
-			_inactiveOverlay.Visible = _inactive;
-		}
+	private void Clicked()
+	{
+		OnClick?.Invoke(this);
+	}
 
-		public void SetData(object item, ArtSpec icon, string name)
-		{
-			Load();
-			Item = item;
-			ItemWidget.SetData(icon, name, -1);
-		}
+	public void SetActive(bool active)
+	{
+		Load();
+		_inactive = !active;
+		_inactiveOverlay.Visible = _inactive;
+	}
 
-		public override ArtSpec GetArt() => AssetConfigs.WIDGET_TECH_TREE_ITEM;
+	public void SetData(object item, ArtSpec icon, string name)
+	{
+		Load();
+		Item = item;
+		ItemWidget.SetData(icon, name, -1);
+	}
+
+	public override ArtSpec GetArt()
+	{
+		return AssetConfigs.WIDGET_TECH_TREE_ITEM;
 	}
 }

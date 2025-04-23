@@ -1,74 +1,71 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace WebGameLogic.Playfab
+namespace WebGameLogic.Playfab;
+
+[Serializable]
+public class FunctionArgument
 {
-    [Serializable]
-    public class FunctionArgument
-    {
-        // Empty implementation
-    }
+	// Empty implementation
+}
 
-    [Serializable]
-    public class CloudscriptRequest<T> where T : FunctionArgument, new()
-    {
-        [Required(ErrorMessage = "Caller entity profile is required")]
-        public PlayfabEntityProfile? CallerEntityProfile { get; set; }
+[Serializable]
+public class CloudscriptRequest<T> where T : FunctionArgument, new()
+{
+	public CloudscriptRequest()
+	{
+	}
 
-        [DisallowNull]
-        public T FunctionArgument { get; set; } = new T();
+	public CloudscriptRequest(string userId)
+	{
+		if (string.IsNullOrEmpty(userId))
+			throw new ArgumentException("User ID cannot be null or empty", nameof(userId));
 
-        public string PlayfabId => CallerEntityProfile?.Lineage?.MasterPlayerAccountId ?? string.Empty;
+		CallerEntityProfile = new PlayfabEntityProfile
+		{
+			Lineage = new PlayfabLineage
+			{
+				MasterPlayerAccountId = userId,
+				TitlePlayerAccountId = userId
+			},
+			Entity = new PlayfabEntity
+			{
+				Id = userId
+			}
+		};
+	}
 
-        public CloudscriptRequest() { }
+	[Required(ErrorMessage = "Caller entity profile is required")]
+	public PlayfabEntityProfile? CallerEntityProfile { get; set; }
 
-        public CloudscriptRequest(string userId)
-        {
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentException("User ID cannot be null or empty", nameof(userId));
-            }
-            
-            CallerEntityProfile = new PlayfabEntityProfile()
-            {
-                Lineage = new PlayfabLineage()
-                {
-                    MasterPlayerAccountId = userId,
-                    TitlePlayerAccountId = userId
-                },
-                Entity = new PlayfabEntity()
-                {
-                    Id = userId
-                }
-            };
-        }
-    }
+	[DisallowNull] public T FunctionArgument { get; set; } = new();
 
-    [Serializable]
-    public class PlayfabEntityProfile
-    {
-        [Required(ErrorMessage = "Entity is Required")]
-        public PlayfabEntity? Entity { get; set; }
+	public string PlayfabId => CallerEntityProfile?.Lineage?.MasterPlayerAccountId ?? string.Empty;
+}
 
-        [Required(ErrorMessage = "Lineage is Required")]
-        public PlayfabLineage? Lineage { get; set; }
-    }
+[Serializable]
+public class PlayfabEntityProfile
+{
+	[Required(ErrorMessage = "Entity is Required")]
+	public PlayfabEntity? Entity { get; set; }
 
-    [Serializable]
-    public class PlayfabEntity
-    {
-        [Required(ErrorMessage = "Entity ID is required")]
-        public string? Id { get; set; }
-    }
+	[Required(ErrorMessage = "Lineage is Required")]
+	public PlayfabLineage? Lineage { get; set; }
+}
 
-    [Serializable]
-    public class PlayfabLineage
-    {
-        [Required(ErrorMessage = "MasterPlayerAccountId is required")]
-        public string? MasterPlayerAccountId { get; set; }
+[Serializable]
+public class PlayfabEntity
+{
+	[Required(ErrorMessage = "Entity ID is required")]
+	public string? Id { get; set; }
+}
 
-        [Required(ErrorMessage = "TitlePlayerAccountId is required")]
-        public string? TitlePlayerAccountId { get; set; }
-    }
+[Serializable]
+public class PlayfabLineage
+{
+	[Required(ErrorMessage = "MasterPlayerAccountId is required")]
+	public string? MasterPlayerAccountId { get; set; }
+
+	[Required(ErrorMessage = "TitlePlayerAccountId is required")]
+	public string? TitlePlayerAccountId { get; set; }
 }

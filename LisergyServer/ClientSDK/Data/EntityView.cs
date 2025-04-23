@@ -1,103 +1,113 @@
-﻿using ClientSDK.SDKEvents;
-using Game.Engine.ECLS;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using ClientSDK.SDKEvents;
+using Game.Engine.ECLS;
 
-namespace ClientSDK.Data
+namespace ClientSDK.Data;
+
+/// <summary>
+///     Represents the current state of a view rendering
+/// </summary>
+public enum EntityViewState
 {
     /// <summary>
-    /// Represents the current state of a view rendering 
+    ///     When an view is created but not yet rendered
     /// </summary>
-    public enum EntityViewState
-    {
-        /// <summary>
-        /// When an view is created but not yet rendered
-        /// </summary>
-        NOT_RENDERED,
-
-        /// <summary>
-        /// When a view is rendering at this moment
-        /// </summary>
-        RENDERING,
-
-        /// <summary>
-        /// When a view is completely rendered
-        /// </summary>
-        RENDERED
-    }
+    NOT_RENDERED,
 
     /// <summary>
-    /// Represents a graphical representation of game entity that the client is aware of
+    ///     When a view is rendering at this moment
     /// </summary>
-    public interface IEntityView
-    {
-        /// <summary>
-        /// The view object that represents the client game engine object
-        /// </summary>
-        public IGameObject? GameObject { get; }
-        
-        /// <summary>
-        /// Gets the base entity of this view
-        /// </summary>
-        IEntity Entity { get; }
+    RENDERING,
 
-        /// <summary>
-        /// Gets the reference of the game client
-        /// </summary>
-        IClientSdk Client { get; }
+    /// <summary>
+    ///     When a view is completely rendered
+    /// </summary>
+    RENDERED
+}
 
-        /// <summary>
-        /// Current client state of this view
-        /// </summary>
-        EntityViewState State { get; }
+/// <summary>
+///     Represents a graphical representation of game entity that the client is aware of
+/// </summary>
+public interface IEntityView
+{
+    /// <summary>
+    ///     The view object that represents the client game engine object
+    /// </summary>
+    public IGameObject? GameObject { get; }
 
-        /// <summary>
-        /// Create the new graphical part of this view
-        /// </summary>
-        internal Task RenderView();
+    /// <summary>
+    ///     Gets the base entity of this view
+    /// </summary>
+    IEntity Entity { get; }
 
-        /// <summary>
-        /// Schedules an action to run now or later, depending if the entity is already rendered or not
-        /// If not it will run after it's rendered
-        /// </summary>
-        void RunWhenRendered(Action callback);
-    }
+    /// <summary>
+    ///     Gets the reference of the game client
+    /// </summary>
+    IClientSdk Client { get; }
 
-    public class EntityView(IEntity entity, IClientSdk client) : IEntityView
-    {
-        private event Action<EntityView>? OnRendered;
+    /// <summary>
+    ///     Current client state of this view
+    /// </summary>
+    EntityViewState State { get; }
 
-        public IGameObject? GameObject { get; protected set; }
-        public IEntity Entity { get; private set; } = entity;
-        public IClientSdk Client { get; set; } = client;
-        public EntityViewState State { get; protected set; } = EntityViewState.NOT_RENDERED;
+    /// <summary>
+    ///     Create the new graphical part of this view
+    /// </summary>
+    internal Task RenderView();
 
-        IEntity IEntityView.Entity => Entity;
+    /// <summary>
+    ///     Schedules an action to run now or later, depending if the entity is already rendered or not
+    ///     If not it will run after it's rendered
+    /// </summary>
+    void RunWhenRendered(Action callback);
+}
 
-        public void RunWhenRendered(Action callback)
-        {
-            if (State == EntityViewState.RENDERED)
-            {
-                callback();
-                return;
-            }
-            OnRendered += (view) => callback();
-        }
+public class EntityView(IEntity entity, IClientSdk client) : IEntityView
+{
+	public IEntity Entity { get; } = entity;
 
-        protected virtual Task CreateView() { return Task.FromResult(0); }
+	public IGameObject? GameObject { get; protected set; }
+	public IClientSdk Client { get; set; } = client;
+	public EntityViewState State { get; protected set; } = EntityViewState.NOT_RENDERED;
 
-        async Task IEntityView.RenderView()
-        {
-            if (State != EntityViewState.NOT_RENDERED) return;
-            State = EntityViewState.RENDERING;
-            await CreateView();
-            State = EntityViewState.RENDERED;
-            OnRendered?.Invoke(this);
-            Client.ClientEvents.Call(new EntityViewRendered()
-            {
-                Entity = Entity,
-                View = this
-            });
-        }
-    }
+	IEntity IEntityView.Entity => Entity;
+
+	public void RunWhenRendered(Action callback)
+	{
+		if (State == EntityViewState.RENDERED)
+		{
+			callback();
+			return;
+		}
+
+		OnRendered += view => callback();
+	}
+
+	public async Task ReRender()
+	{
+		GameObject?.Destroy();
+		await CreateView();
+	}
+
+	async Task IEntityView.RenderView()
+	{
+		if (State != EntityViewState.NOT_RENDERED) return;
+		State = EntityViewState.RENDERING;
+		await CreateView();
+		State = EntityViewState.RENDERED;
+		OnRendered?.Invoke(this);
+		Client.ClientEvents.Call(new EntityViewRendered
+		{
+			Entity = Entity,
+			View = this
+		});
+	}
+
+	private event Action<EntityView>? OnRendered;
+
+	protected virtual Task CreateView()
+	{
+		return Task.FromResult(0);
+	}
 }

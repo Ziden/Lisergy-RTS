@@ -1,6 +1,6 @@
 ﻿/*
  * Copyright 2015 Tomi Valkeinen
- * 
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -11,192 +11,179 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.Serialization;
 
-namespace NetSerializer
+namespace NetSerializer;
+
+internal sealed class GenericSerializer : IDynamicTypeSerializer
 {
-    sealed class GenericSerializer : IDynamicTypeSerializer
-    {
-        public bool Handles(Type type)
-        {
-            if (!type.IsSerializable)
-                throw new NotSupportedException(String.Format("Type {0} is not marked as Serializable", type.FullName));
+	public bool Handles(Type type)
+	{
+		if (!type.IsSerializable)
+			throw new NotSupportedException(string.Format("Type {0} is not marked as Serializable", type.FullName));
 
-            if (typeof(System.Runtime.Serialization.ISerializable).IsAssignableFrom(type))
-                throw new NotSupportedException(String.Format("Cannot serialize {0}: ISerializable not supported", type.FullName));
+		if (typeof(ISerializable).IsAssignableFrom(type))
+			throw new NotSupportedException(string.Format("Cannot serialize {0}: ISerializable not supported",
+				type.FullName));
 
-            return true;
-        }
+		return true;
+	}
 
-        public IEnumerable<Type> GetSubtypes(Type type)
-        {
-            var fields = Helpers.GetFieldInfos(type);
+	public IEnumerable<Type> GetSubtypes(Type type)
+	{
+		var fields = Helpers.GetFieldInfos(type);
 
-            foreach (var field in fields)
-                yield return field.FieldType;
-        }
+		foreach (var field in fields)
+			yield return field.FieldType;
+	}
 
-        static IEnumerable<MethodInfo> GetMethodsWithAttributes(Type type, Type attrType)
-        {
-            var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+	public void GenerateWriterMethod(Serializer serializer, Type type, ILGenerator il)
+	{
+		// arg0: Serializer, arg1: Stream, arg2: value
 
-            var methods = type.GetMethods(flags)
-                .Where(m => m.GetCustomAttributes(attrType, false).Any());
+		if (serializer.Settings.SupportSerializationCallbacks)
+			foreach (var m in GetMethodsWithAttributes(type, typeof(OnSerializingAttribute)))
+				EmitCallToSerializingCallback(type, il, m);
 
-            if (type.BaseType == null)
-            {
-                return methods;
-            }
-            else
-            {
-                var baseMethods = GetMethodsWithAttributes(type.BaseType, attrType);
-                return baseMethods.Concat(methods);
-            }
-        }
+		var fields = Helpers.GetFieldInfos(type);
 
-        static void EmitCallToSerializingCallback(Type type, ILGenerator il, MethodInfo method)
-        {
-            if (type.IsValueType)
-                throw new NotImplementedException("Serialization callbacks not supported for Value types");
+		foreach (var field in fields)
+		{
+			// Note: the user defined value type is not passed as reference. could cause perf problems with big structs
 
-            if (type.IsValueType)
-                il.Emit(OpCodes.Ldarga_S, 2);
-            else
-                il.Emit(OpCodes.Ldarg_2);
+			var fieldType = field.FieldType;
 
-            var ctxLocal = il.DeclareLocal(typeof(System.Runtime.Serialization.StreamingContext));
-            il.Emit(OpCodes.Ldloca_S, ctxLocal);
-            il.Emit(OpCodes.Initobj, typeof(System.Runtime.Serialization.StreamingContext));
-            il.Emit(OpCodes.Ldloc_S, ctxLocal);
+			var data = serializer.GetIndirectData(fieldType);
 
-            il.Emit(OpCodes.Call, method);
-        }
+			if (data.WriterNeedsInstance)
+				il.Emit(OpCodes.Ldarg_0);
 
-        static void EmitCallToDeserializingCallback(Type type, ILGenerator il, MethodInfo method)
-        {
-            if (type.IsValueType)
-                throw new NotImplementedException("Serialization callbacks not supported for Value types");
+			il.Emit(OpCodes.Ldarg_1);
+			if (type.IsValueType)
+				il.Emit(OpCodes.Ldarga_S, 2);
+			else
+				il.Emit(OpCodes.Ldarg_2);
+			il.Emit(OpCodes.Ldfld, field);
 
-            il.Emit(OpCodes.Ldarg_2);
-            if (type.IsClass)
-                il.Emit(OpCodes.Ldind_Ref);
+			il.Emit(OpCodes.Call, data.WriterMethodInfo);
+		}
 
-            var ctxLocal = il.DeclareLocal(typeof(System.Runtime.Serialization.StreamingContext));
-            il.Emit(OpCodes.Ldloca_S, ctxLocal);
-            il.Emit(OpCodes.Initobj, typeof(System.Runtime.Serialization.StreamingContext));
-            il.Emit(OpCodes.Ldloc_S, ctxLocal);
+		if (serializer.Settings.SupportSerializationCallbacks)
+			foreach (var m in GetMethodsWithAttributes(type, typeof(OnSerializedAttribute)))
+				EmitCallToSerializingCallback(type, il, m);
 
-            il.Emit(OpCodes.Call, method);
-        }
+		il.Emit(OpCodes.Ret);
+	}
 
-        public void GenerateWriterMethod(Serializer serializer, Type type, ILGenerator il)
-        {
-            // arg0: Serializer, arg1: Stream, arg2: value
+	public void GenerateReaderMethod(Serializer serializer, Type type, ILGenerator il)
+	{
+		// arg0: Serializer, arg1: stream, arg2: out value
 
-            if (serializer.Settings.SupportSerializationCallbacks)
-            {
-                foreach (var m in GetMethodsWithAttributes(type, typeof(System.Runtime.Serialization.OnSerializingAttribute)))
-                    EmitCallToSerializingCallback(type, il, m);
-            }
+		if (type.IsClass)
+		{
+			// instantiate empty class
+			il.Emit(OpCodes.Ldarg_2);
 
-            var fields = Helpers.GetFieldInfos(type);
+			var gtfh = typeof(Type).GetMethod("GetTypeFromHandle", BindingFlags.Public | BindingFlags.Static);
+			var guo = typeof(FormatterServices).GetMethod("GetUninitializedObject",
+				BindingFlags.Public | BindingFlags.Static);
+			il.Emit(OpCodes.Ldtoken, type);
+			il.Emit(OpCodes.Call, gtfh);
+			il.Emit(OpCodes.Call, guo);
+			il.Emit(OpCodes.Castclass, type);
 
-            foreach (var field in fields)
-            {
-                // Note: the user defined value type is not passed as reference. could cause perf problems with big structs
+			il.Emit(OpCodes.Stind_Ref);
+		}
 
-                var fieldType = field.FieldType;
+		if (serializer.Settings.SupportSerializationCallbacks)
+			foreach (var m in GetMethodsWithAttributes(type, typeof(OnDeserializingAttribute)))
+				EmitCallToDeserializingCallback(type, il, m);
 
-                var data = serializer.GetIndirectData(fieldType);
+		var fields = Helpers.GetFieldInfos(type);
 
-                if (data.WriterNeedsInstance)
-                    il.Emit(OpCodes.Ldarg_0);
+		foreach (var field in fields)
+		{
+			var fieldType = field.FieldType;
 
-                il.Emit(OpCodes.Ldarg_1);
-                if (type.IsValueType)
-                    il.Emit(OpCodes.Ldarga_S, 2);
-                else
-                    il.Emit(OpCodes.Ldarg_2);
-                il.Emit(OpCodes.Ldfld, field);
+			var data = serializer.GetIndirectData(fieldType);
 
-                il.Emit(OpCodes.Call, data.WriterMethodInfo);
-            }
+			if (data.ReaderNeedsInstance)
+				il.Emit(OpCodes.Ldarg_0);
 
-            if (serializer.Settings.SupportSerializationCallbacks)
-            {
-                foreach (var m in GetMethodsWithAttributes(type, typeof(System.Runtime.Serialization.OnSerializedAttribute)))
-                    EmitCallToSerializingCallback(type, il, m);
-            }
+			il.Emit(OpCodes.Ldarg_1);
+			il.Emit(OpCodes.Ldarg_2);
+			if (type.IsClass)
+				il.Emit(OpCodes.Ldind_Ref);
+			il.Emit(OpCodes.Ldflda, field);
 
-            il.Emit(OpCodes.Ret);
-        }
+			il.Emit(OpCodes.Call, data.ReaderMethodInfo);
+		}
 
-        public void GenerateReaderMethod(Serializer serializer, Type type, ILGenerator il)
-        {
-            // arg0: Serializer, arg1: stream, arg2: out value
+		if (serializer.Settings.SupportSerializationCallbacks)
+			foreach (var m in GetMethodsWithAttributes(type, typeof(OnDeserializedAttribute)))
+				EmitCallToDeserializingCallback(type, il, m);
 
-            if (type.IsClass)
-            {
-                // instantiate empty class
-                il.Emit(OpCodes.Ldarg_2);
+		if (serializer.Settings.SupportIDeserializationCallback)
+			if (typeof(IDeserializationCallback).IsAssignableFrom(type))
+			{
+				var miOnDeserialization = typeof(IDeserializationCallback).GetMethod("OnDeserialization",
+					BindingFlags.Instance | BindingFlags.Public,
+					null, new[] {typeof(object)}, null);
 
-                var gtfh = typeof(Type).GetMethod("GetTypeFromHandle", BindingFlags.Public | BindingFlags.Static);
-                var guo = typeof(System.Runtime.Serialization.FormatterServices).GetMethod("GetUninitializedObject", BindingFlags.Public | BindingFlags.Static);
-                il.Emit(OpCodes.Ldtoken, type);
-                il.Emit(OpCodes.Call, gtfh);
-                il.Emit(OpCodes.Call, guo);
-                il.Emit(OpCodes.Castclass, type);
+				il.Emit(OpCodes.Ldarg_2);
+				il.Emit(OpCodes.Ldnull);
+				il.Emit(OpCodes.Constrained, type);
+				il.Emit(OpCodes.Callvirt, miOnDeserialization);
+			}
 
-                il.Emit(OpCodes.Stind_Ref);
-            }
+		il.Emit(OpCodes.Ret);
+	}
 
-            if (serializer.Settings.SupportSerializationCallbacks)
-            {
-                foreach (var m in GetMethodsWithAttributes(type, typeof(System.Runtime.Serialization.OnDeserializingAttribute)))
-                    EmitCallToDeserializingCallback(type, il, m);
-            }
+	private static IEnumerable<MethodInfo> GetMethodsWithAttributes(Type type, Type attrType)
+	{
+		var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
-            var fields = Helpers.GetFieldInfos(type);
+		var methods = type.GetMethods(flags)
+			.Where(m => m.GetCustomAttributes(attrType, false).Any());
 
-            foreach (var field in fields)
-            {
-                var fieldType = field.FieldType;
+		if (type.BaseType == null) return methods;
 
-                var data = serializer.GetIndirectData(fieldType);
+		var baseMethods = GetMethodsWithAttributes(type.BaseType, attrType);
+		return baseMethods.Concat(methods);
+	}
 
-                if (data.ReaderNeedsInstance)
-                    il.Emit(OpCodes.Ldarg_0);
+	private static void EmitCallToSerializingCallback(Type type, ILGenerator il, MethodInfo method)
+	{
+		if (type.IsValueType)
+			throw new NotImplementedException("Serialization callbacks not supported for Value types");
 
-                il.Emit(OpCodes.Ldarg_1);
-                il.Emit(OpCodes.Ldarg_2);
-                if (type.IsClass)
-                    il.Emit(OpCodes.Ldind_Ref);
-                il.Emit(OpCodes.Ldflda, field);
+		if (type.IsValueType)
+			il.Emit(OpCodes.Ldarga_S, 2);
+		else
+			il.Emit(OpCodes.Ldarg_2);
 
-                il.Emit(OpCodes.Call, data.ReaderMethodInfo);
-            }
+		var ctxLocal = il.DeclareLocal(typeof(StreamingContext));
+		il.Emit(OpCodes.Ldloca_S, ctxLocal);
+		il.Emit(OpCodes.Initobj, typeof(StreamingContext));
+		il.Emit(OpCodes.Ldloc_S, ctxLocal);
 
-            if (serializer.Settings.SupportSerializationCallbacks)
-            {
-                foreach (var m in GetMethodsWithAttributes(type, typeof(System.Runtime.Serialization.OnDeserializedAttribute)))
-                    EmitCallToDeserializingCallback(type, il, m);
-            }
+		il.Emit(OpCodes.Call, method);
+	}
 
-            if (serializer.Settings.SupportIDeserializationCallback)
-            {
-                if (typeof(System.Runtime.Serialization.IDeserializationCallback).IsAssignableFrom(type))
-                {
-                    var miOnDeserialization = typeof(System.Runtime.Serialization.IDeserializationCallback).GetMethod("OnDeserialization",
-                                            BindingFlags.Instance | BindingFlags.Public,
-                                            null, new[] { typeof(Object) }, null);
+	private static void EmitCallToDeserializingCallback(Type type, ILGenerator il, MethodInfo method)
+	{
+		if (type.IsValueType)
+			throw new NotImplementedException("Serialization callbacks not supported for Value types");
 
-                    il.Emit(OpCodes.Ldarg_2);
-                    il.Emit(OpCodes.Ldnull);
-                    il.Emit(OpCodes.Constrained, type);
-                    il.Emit(OpCodes.Callvirt, miOnDeserialization);
-                }
-            }
+		il.Emit(OpCodes.Ldarg_2);
+		if (type.IsClass)
+			il.Emit(OpCodes.Ldind_Ref);
 
-            il.Emit(OpCodes.Ret);
-        }
-    }
+		var ctxLocal = il.DeclareLocal(typeof(StreamingContext));
+		il.Emit(OpCodes.Ldloca_S, ctxLocal);
+		il.Emit(OpCodes.Initobj, typeof(StreamingContext));
+		il.Emit(OpCodes.Ldloc_S, ctxLocal);
+
+		il.Emit(OpCodes.Call, method);
+	}
 }

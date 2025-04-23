@@ -1,10 +1,12 @@
 ﻿# Lisergy Game Engine
 
-An innovative entity-component-system-ish (ECS) game engine built with C# 8.0 targeting .NET Standard 2.1, designed for an exploration-oriented MMO RTS.
+An innovative entity-component-system-ish (ECS) game engine built with C# 8.0 targeting .NET Standard 2.1, designed for
+an exploration-oriented MMO RTS.
 
 ## Architecture Overview
 
-Lisergy implements a unique variation of the ECS pattern called ECSL (Entity-Component-System-Logic) with a clear separation of concerns:
+Lisergy implements a unique variation of the ECS pattern called ECSL (Entity-Component-System-Logic) with a clear
+separation of concerns:
 
 - **Entities**: Game objects that act as containers for components and have a unique identity
 - **Components**: Pure data structures defining entity properties (e.g., `BuildingComponent`, `CargoComponent`)
@@ -24,67 +26,80 @@ The engine organizes game elements through:
 
 The engine features numerous specialized systems supporting a rich MMO RTS experience:
 
-### Building System 
+### Building System
+
 - Handles creation and management of in-game structures
 - Supports instant building and multi-stage construction processes
 - Manages building specifications and placement on the tile-based world
 
-### Battle Group System 
+### Battle Group System
+
 - Manages groups of units for combat
 - Handles unit recruitment, battle initialization, and combat resolution
 - Processes group-related events and battle outcomes
 
 ### Dungeon System
+
 - Manages procedural dungeon entities and their behavior
-- Populates dungeons from specifications 
+- Populates dungeons from specifications
 - Responds to group death events to clean up defeated dungeons
 
 ### Delta Compression System
+
 - Optimizes network traffic by tracking entity state changes
 - Sends only modified components to reduce bandwidth usage
 - Core to the game's networking architecture
 
-### Entity Vision System 
+### Entity Vision System
+
 - Implements Fog of War mechanics
 - Manages visibility calculations based on entity line of sight
 - Updates discovery state as entities explore the world
 
-### Movement System 
+### Movement System
+
 - Handles entity movement through the infinite chunk-based world
 - Manages movement paths, courses, and waypoints
 - Interacts with the map system for position updates
 
 ### Party System
+
 - Manages groups of entities that act as a cohesive unit
 - Facilitates unit management within parties
 - Responds to group-related events
 
-### Tile System 
+### Tile System
+
 - Manages the infinite chunk-based map loaded from Tiled
 - Tracks entity and building placement
 - Provides spatial queries for the game world
 
-### Map System 
+### Map System
+
 - Coordinates positioning of entities on the game map
 - Handles chunk loading and unloading
 - Synchronizes position data between server and client
 
-### Player System 
+### Player System
+
 - Manages player entities and their state
 - Tracks discovered areas through fog of war
 - Handles player-specific actions and recruiting
 
 ### Harvesting System
+
 - Implements resource gathering mechanics
 - Tracks harvesting progress and resource collection
 - Handles harvesting interruptions
 
 ### Resource System
+
 - Manages resources throughout the game world
 - Sets up resource points on tiles based on specifications
 - Critical for the game's economy
 
-### Cargo System 
+### Cargo System
+
 - Implements inventory management for entities
 - Processes harvested resources
 - Manages cargo capacity and contents
@@ -107,7 +122,6 @@ The engine supports a robust networked multiplayer implementation:
 - Client prediction and server reconciliation
 
 ## Usage Example
-
 
 ```csharp
 // Creating a new game instance
@@ -132,4 +146,5 @@ if (party.Logic.Harvesting.GetPossibleHarvest(resourceTile) != null)
 
 ```
 
-The Lisergy engine combines performance optimization techniques like unsafe code and memory management with a flexible architecture designed for an ambitious MMO RTS experience.
+The Lisergy engine combines performance optimization techniques like unsafe code and memory management with a flexible
+architecture designed for an ambitious MMO RTS experience.

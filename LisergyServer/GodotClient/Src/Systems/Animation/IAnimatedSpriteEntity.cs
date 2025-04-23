@@ -1,9 +1,8 @@
 ﻿using Game.World;
 
-namespace LisergyGodotClient.Src.Systems.Animation
+namespace LisergyGodotClient.Src.Systems.Animation;
+
+public interface IAnimatedSpriteEntity
 {
-    public interface IAnimatedSpriteEntity
-    {
-        void UpdateAnimation(Direction d, bool moving);
-    }
+	void UpdateAnimation(Direction d, bool moving);
 }

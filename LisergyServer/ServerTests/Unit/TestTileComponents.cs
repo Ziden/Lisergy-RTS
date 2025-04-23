@@ -8,51 +8,50 @@ using Game.Tile;
 using NUnit.Framework;
 using ServerTests;
 
-namespace GameUnitTests
+namespace GameUnitTests;
+
+public class TestTileComponents
 {
-    public unsafe class TestTileComponents
-    {
-        private IGame _game;
-        private TileModel tile1;
-        private TileModel tile2;
+	private IGame _game;
+	private TileModel tile1;
+	private TileModel tile2;
 
-        [SetUp]
-        public void Setup()
-        {
-            _game = new TestGame();
-            tile1 = _game.World.GetTile(0, 0);
-            tile2 = _game.World.GetTile(1, 1);
-        }
+	[SetUp]
+	public void Setup()
+	{
+		_game = new TestGame();
+		tile1 = _game.World.GetTile(0, 0);
+		tile2 = _game.World.GetTile(1, 1);
+	}
 
-        [Test]
-        public void TestTileCallbacks()
-        {
-            tile1.Components.Add<TileHabitantsComponent>();
-            tile2.Components.Add<TileHabitantsComponent>();
+	[Test]
+	public void TestTileCallbacks()
+	{
+		tile1.Components.Add<TileHabitantsComponent>();
+		tile2.Components.Add<TileHabitantsComponent>();
 
-            var dg = _game.Entities.CreateEntity(EntityType.Dungeon);
+		var dg = _game.Entities.CreateEntity(EntityType.Dungeon);
 
-            dg.Components.CallEvent(new ComponentUpdateEvent<MapPlacementComponent>()
-            {
-                Entity = dg,
-                New = new MapPlacementComponent()
-                {
-                    Position = tile1.Position
-                },
-            });
+		dg.Components.CallEvent(new ComponentUpdateEvent<MapPlacementComponent>
+		{
+			Entity = dg,
+			New = new MapPlacementComponent
+			{
+				Position = tile1.Position
+			}
+		});
 
-            Assert.IsTrue(tile1.Components.Get<TileHabitantsComponent>().Building == dg);
-            Assert.IsTrue(tile2.Components.Get<TileHabitantsComponent>().Building == null);
-        }
+		Assert.IsTrue(tile1.Components.Get<TileHabitantsComponent>().Building == dg);
+		Assert.IsTrue(tile2.Components.Get<TileHabitantsComponent>().Building == null);
+	}
 
-        public class TestView : IComponent
-        {
-            public static ComponentUpdateEvent<MapPlacementComponent> called = default;
+	public class TestView : IComponent
+	{
+		public static ComponentUpdateEvent<MapPlacementComponent> called;
 
-            public static void Callback(TestView view, ComponentUpdateEvent<MapPlacementComponent> ev)
-            {
-                TestView.called = ev;
-            }
-        }
-    }
+		public static void Callback(TestView view, ComponentUpdateEvent<MapPlacementComponent> ev)
+		{
+			called = ev;
+		}
+	}
 }

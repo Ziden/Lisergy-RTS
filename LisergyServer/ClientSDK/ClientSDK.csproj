@@ -1,51 +1,51 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net8.0</TargetFrameworks>
-    <Nullable>enable</Nullable>
-    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
-    <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
-    <EnableNETAnalyzers>False</EnableNETAnalyzers>
-    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>net8.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+        <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
+        <EnableNETAnalyzers>False</EnableNETAnalyzers>
+        <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
-    <WarningLevel>5</WarningLevel>
-    <NoWarn>1701;1702;8618</NoWarn>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
+        <WarningLevel>5</WarningLevel>
+        <NoWarn>1701;1702;8618</NoWarn>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
-    <WarningLevel>5</WarningLevel>
-    <NoWarn>1701;1702;8618</NoWarn>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
+        <WarningLevel>5</WarningLevel>
+        <NoWarn>1701;1702;8618</NoWarn>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
-    <WarningLevel>4</WarningLevel>
-    <NoWarn>1701;1702;8618</NoWarn>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
+        <WarningLevel>4</WarningLevel>
+        <NoWarn>1701;1702;8618</NoWarn>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
-    <WarningLevel>4</WarningLevel>
-    <NoWarn>1701;1702;8618</NoWarn>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+        <WarningLevel>4</WarningLevel>
+        <NoWarn>1701;1702;8618</NoWarn>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <NoWarn>1701;1702;CS1591</NoWarn>
-  </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <NoWarn>1701;1702;CS1591</NoWarn>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Stateless" Version="5.17.0" />
-    <PackageReference Include="Telepathy" Version="1.0.341" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Stateless" Version="5.17.0"/>
+        <PackageReference Include="Telepathy" Version="1.0.341"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Game\GameLogic.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Game\GameLogic.csproj"/>
+    </ItemGroup>
 
 </Project>

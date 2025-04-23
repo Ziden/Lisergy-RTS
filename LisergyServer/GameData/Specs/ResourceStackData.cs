@@ -1,48 +1,52 @@
-﻿using GameData;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
+using GameData;
 
-namespace Game.Systems.Resources
+namespace Game.Systems.Resources;
+
+/// <summary>
+///     Represents a resource stack, that's a resource type and an amount
+/// </summary>
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+public struct ResourceStackData
 {
-    /// <summary>
-    /// Represents a resource stack, that's a resource type and an amount
-    /// </summary>
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ResourceStackData
-    {
-        private ResourceSpecId _specId;
-        private ushort _amount;
+	private ushort _amount;
 
-        public ushort Amount { get => _amount; set => _amount = value; }
-        public ResourceSpecId ResourceId => _specId;
+	public ushort Amount
+	{
+		get => _amount;
+		set => _amount = value;
+	}
 
-        public ResourceStackData(in ResourceSpecId id, in ushort amount)
-        {
-            _specId = id;
-            _amount = amount;
-        }
+	public ResourceSpecId ResourceId { get; private set; }
 
-        public bool CanAdd(in ResourceStackData data)
-        {
-            return Empty || ResourceId == data.ResourceId;
-        }
+	public ResourceStackData(in ResourceSpecId id, in ushort amount)
+	{
+		ResourceId = id;
+		_amount = amount;
+	}
 
-        public void Add(in ResourceStackData stack)
-        {
-            if (_specId != stack._specId)
-            {
-                if (_amount > 0) throw new Exception("Cannot add stack to resource stack of different type when not empty");
-                _specId = stack._specId;
-            }
-            _amount += stack._amount;
-        }
+	public bool CanAdd(in ResourceStackData data)
+	{
+		return Empty || ResourceId == data.ResourceId;
+	}
 
-        public bool Empty => _amount == 0;
+	public void Add(in ResourceStackData stack)
+	{
+		if (ResourceId != stack.ResourceId)
+		{
+			if (_amount > 0) throw new Exception("Cannot add stack to resource stack of different type when not empty");
+			ResourceId = stack.ResourceId;
+		}
 
-        public override string ToString()
-        {
-            return $"<Resource Id={_specId} Amt={_amount}>";
-        }
-    }
+		_amount += stack._amount;
+	}
+
+	public bool Empty => _amount == 0;
+
+	public override string ToString()
+	{
+		return $"<Resource Id={ResourceId} Amt={_amount}>";
+	}
 }

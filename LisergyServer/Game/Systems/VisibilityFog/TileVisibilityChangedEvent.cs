@@ -5,15 +5,15 @@ using Game.Tile;
 
 namespace Game.Systems.FogOfWar
 {
-    public class TileVisibilityChangedEvent : IGameEvent
-    {
-        public TileModel Tile;
-        public IEntity Explorer;
-        public bool Visible;
+	public class TileVisibilityChangedEvent : IGameEvent
+	{
+		public IEntity Explorer;
+		public TileModel Tile;
+		public bool Visible;
 
-        public override string ToString()
-        {
-            return $"<VisChangeEv {Tile.Get<TileDataComponent>().Position} Visible: {Visible} to {Explorer}";
-        }
-    }
+		public override string ToString()
+		{
+			return $"<VisChangeEv {Tile.Get<TileDataComponent>().Position} Visible: {Visible} to {Explorer}";
+		}
+	}
 }

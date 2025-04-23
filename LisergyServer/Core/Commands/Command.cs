@@ -1,26 +1,24 @@
 ﻿using Game;
 
-namespace BaseServer.Commands
+namespace BaseServer.Commands;
+
+public abstract class Command
 {
-    public abstract class Command
-    {
-        protected LisergyGame Game;
+	protected LisergyGame Game;
 
-        public abstract string GetCommand();
+	public Command(LisergyGame game)
+	{
+		Game = game;
+	}
 
-        public abstract string Description();
+	public abstract string GetCommand();
 
-        public abstract void Execute(CommandSender sender, CommandArgs args);
+	public abstract string Description();
 
-        public Command(LisergyGame game)
-        {
-            Game = game;
-        }
+	public abstract void Execute(CommandSender sender, CommandArgs args);
 
-        public int GetPermissionLevel()
-        {
-            return 0;
-        }
-
-    }
+	public int GetPermissionLevel()
+	{
+		return 0;
+	}
 }

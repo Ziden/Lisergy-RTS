@@ -3,51 +3,49 @@
 namespace Game.Engine.ECLS
 {
     /// <summary>
-    /// Sends component to client whenever it sends the attached entity to client.
-    /// Will serialize the whole component data.
+    ///     Sends component to client whenever it sends the attached entity to client.
+    ///     Will serialize the whole component data.
     /// </summary>
     [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
-    public class SyncedComponent : Attribute
-    {
+	public class SyncedComponent : Attribute
+	{
         /// <summary>
-        /// Only syncs for the player who is the owner of the component
+        ///     Only syncs for the player who is the owner of the component
         /// </summary>
-        public bool OnlyMine = false;
+        public bool OnlyMine;
 
-        public SyncedComponent(bool onlyMine = false)
-        {
-            OnlyMine = onlyMine;
-        }
-    }
+		public SyncedComponent(bool onlyMine = false)
+		{
+			OnlyMine = onlyMine;
+		}
+	}
 
     /// <summary>
-    /// Used on systems to determine that the given system will handle events on the client side too
+    ///     Used on systems to determine that the given system will handle events on the client side too
     /// </summary>
     public class SyncedSystem : Attribute
-    {
-
-    }
+	{
+	}
 
     /// <summary>
-    /// Validates the entity must have both components
-    /// TODO: not implemented yet
+    ///     Validates the entity must have both components
+    ///     TODO: not implemented yet
     /// </summary>
     public class RequiresComponent : Attribute
-    {
+	{
+		public Type ComponentType;
 
-        public Type ComponentType;
-
-        public RequiresComponent(Type componentType)
-        {
-            ComponentType = componentType;
-        }
-    }
+		public RequiresComponent(Type componentType)
+		{
+			ComponentType = componentType;
+		}
+	}
 
     /// <summary>
-    /// This component won't be saved during worldsave
-    /// Means in case of a server restart it will be wiped
+    ///     This component won't be saved during worldsave
+    ///     Means in case of a server restart it will be wiped
     /// </summary>
     public class NonPersisted : Attribute
-    {
-    }
+	{
+	}
 }

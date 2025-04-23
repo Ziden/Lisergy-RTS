@@ -1,24 +1,24 @@
-﻿using Game.Engine.Network;
+﻿using System;
+using Game.Engine.Network;
 using Game.Systems.Battle.BattleActions;
-using System;
 
 namespace Game.Systems.Battle
 {
-    [Serializable]
-    public class BattleActionCommand : BasePacket, IGameCommand
-    {
-        public BattleActionCommand(string BattleID, BattleAction action)
-        {
-            Action = action;
-            this.BattleID = BattleID;
-        }
+	[Serializable]
+	public class BattleActionCommand : BasePacket, IGameCommand
+	{
+		public BattleAction Action;
+		public string BattleID;
 
-        public BattleAction Action;
-        public string BattleID;
+		public BattleActionCommand(string BattleID, BattleAction action)
+		{
+			Action = action;
+			this.BattleID = BattleID;
+		}
 
-        public void Execute(IGame game)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public void Execute(IGame game)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

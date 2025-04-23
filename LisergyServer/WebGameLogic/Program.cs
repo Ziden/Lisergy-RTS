@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,7 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { Title = "Game Spec Editor API", Version = "v1" });
+	c.SwaggerDoc("v1", new OpenApiInfo {Title = "Game Spec Editor API", Version = "v1"});
 });
 
 var app = builder.Build();
@@ -17,8 +18,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+	app.UseExceptionHandler("/Error");
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();

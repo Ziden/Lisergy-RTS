@@ -1,124 +1,130 @@
-﻿using Game.Specs;
+﻿using System.Collections.Generic;
+using Game.Specs;
 using GameData;
 using GameData.buffs;
 using GameData.Specs;
-using System.Collections.Generic;
 
 namespace GameDataTest
 {
-    public static class TestUnitData
-    {
-        public static string Addr(string name) => $"res://Content/Units/{name}.tscn";
+	public static class TestUnitData
+	{
+		public static readonly UnitSpecId THIEF = 0;
+		public static readonly UnitSpecId KNIGHT = 1;
+		public static readonly UnitSpecId MAGE = 2;
 
-        public static string AddrFace(string name) => $"";
+		private static readonly UnitStats BaseStats = new UnitStats().SetStats(new Dictionary<Stat, byte>
+		{
+			{Stat.SPEED, 50},
+			{Stat.ACCURACY, 50},
+			{Stat.DEF, 50},
+			{Stat.MDEF, 50},
+			{Stat.ATK, 50},
+			{Stat.MATK, 50},
+			{Stat.MHP, 100},
+			{Stat.MMP, 30}
+		});
 
-        private static void AddUnit(ref GameSpec spec, UnitSpec unitSpec)
-        {
-            var id = (byte)spec.Units.Count;
-            unitSpec.SpecId = id;
-            spec.Units[id] = unitSpec;
-        }
+		public static string Addr(string name)
+		{
+			return $"res://Content/Units/{name}.tscn";
+		}
 
-        public static readonly UnitSpecId THIEF = 0;
-        public static readonly UnitSpecId KNIGHT = 1;
-        public static readonly UnitSpecId MAGE = 2;
+		public static string AddrFace(string name)
+		{
+			return "";
+		}
 
-        private static UnitStats BaseStats = new UnitStats().SetStats(new Dictionary<Stat, byte>()
-            {
-                    { Stat.SPEED, 50 },
-                    { Stat.ACCURACY, 50 },
-                    { Stat.DEF, 50 },
-                    { Stat.MDEF, 50 },
-                    { Stat.ATK, 50 },
-                    { Stat.MATK, 50 },
-                    { Stat.MHP, 100 },
-                    { Stat.MMP, 30 },
-        });
+		private static void AddUnit(ref GameSpec spec, UnitSpec unitSpec)
+		{
+			var id = (byte) spec.Units.Count;
+			unitSpec.SpecId = id;
+			spec.Units[id] = unitSpec;
+		}
 
-        public static UnitStats SetStats(this UnitStats u, Dictionary<Stat, byte> stats)
-        {
-            foreach (var kp in stats)
-                u[kp.Key] = kp.Value;
-            return u;
-        }
+		public static UnitStats SetStats(this UnitStats u, Dictionary<Stat, byte> stats)
+		{
+			foreach (var kp in stats)
+				u[kp.Key] = kp.Value;
+			return u;
+		}
 
 
-        private static UnitStats AddToBase(params (Stat, short)[] stats)
-        {
-            var st = new UnitStats();
-            st.SetStats(BaseStats);
-            foreach (var item in stats)
-            {
-                short value = st.GetStat(item.Item1);
-                value += item.Item2;
-                st[item.Item1] = (byte)value;
-            }
+		private static UnitStats AddToBase(params (Stat, short)[] stats)
+		{
+			var st = new UnitStats();
+			st.SetStats(BaseStats);
+			foreach (var item in stats)
+			{
+				short value = st.GetStat(item.Item1);
+				value += item.Item2;
+				st[item.Item1] = (byte) value;
+			}
 
-            return st;
-        }
+			return st;
+		}
 
-        public static void Generate(ref GameSpec spec)
-        {
-            AddUnit(ref spec, new UnitSpec()
-            {
-                Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Rogue") },
-                Name = "Rogue",
-                IconArt = new ArtSpec()
-                {
-                    Type = ArtType.SPECIFIC_SPRITE,
-                    Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.pngpng",
-                },
-                LOS = 2,
-                Stats = AddToBase(
-                    (Stat.ACCURACY, 20),
-                    (Stat.SPEED, 30),
-                    (Stat.DEF, -30),
-                    (Stat.MDEF, -20),
-                    (Stat.ATK, 30),
-                    (Stat.MATK, -30)
-                )
-            });
-            AddUnit(ref spec, new UnitSpec()
-            {
-                Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Knight") },
-                Name = "Knight",
-                LOS = 1,
-                IconArt = new ArtSpec()
-                {
-                    Type = ArtType.SPECIFIC_SPRITE,
-                    Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.png",
-                },
-                Stats = AddToBase(
-                    (Stat.ATK, 10),
-                    (Stat.MDEF, -30),
-                    (Stat.SPEED, -40),
-                    (Stat.DEF, 30),
-                    (Stat.ACCURACY, -10),
-                    (Stat.MATK, -10),
-                    (Stat.MHP, 30)
-                )
-            });
-            AddUnit(ref spec, new UnitSpec()
-            {
-                Art = new ArtSpec() { Type = ArtType.PREFAB, Address = Addr("Mage") },
-                Name = "Mage",
-                IconArt = new ArtSpec()
-                {
-                    Type = ArtType.SPECIFIC_SPRITE,
-                    Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.png",
-                },
-                LOS = 3,
-                Stats = AddToBase(
-                    (Stat.ATK, -30),
-                    (Stat.MATK, 30),
-                    (Stat.MDEF, 10),
-                    (Stat.SPEED, -10),
-                    (Stat.DEF, -30),
-                    (Stat.ACCURACY, 20),
-                    (Stat.MHP, -20),
-                    (Stat.MMP, 50)
-                )
-            });
-        }
-    }
+		public static void Generate(ref GameSpec spec)
+		{
+			AddUnit(ref spec, new UnitSpec
+			{
+				Art = new ArtSpec {Type = ArtType.PREFAB, Address = Addr("Rogue")},
+				Name = "Rogue",
+				IconArt = new ArtSpec
+				{
+					Type = ArtType.SPECIFIC_SPRITE,
+					Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.pngpng"
+				},
+				LOS = 2,
+				Stats = AddToBase(
+					(Stat.ACCURACY, 20),
+					(Stat.SPEED, 30),
+					(Stat.DEF, -30),
+					(Stat.MDEF, -20),
+					(Stat.ATK, 30),
+					(Stat.MATK, -30)
+				)
+			});
+			AddUnit(ref spec, new UnitSpec
+			{
+				Art = new ArtSpec {Type = ArtType.PREFAB, Address = Addr("Knight")},
+				Name = "Knight",
+				LOS = 1,
+				IconArt = new ArtSpec
+				{
+					Type = ArtType.SPECIFIC_SPRITE,
+					Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.png"
+				},
+				Stats = AddToBase(
+					(Stat.ATK, 10),
+					(Stat.MDEF, -30),
+					(Stat.SPEED, -40),
+					(Stat.DEF, 30),
+					(Stat.ACCURACY, -10),
+					(Stat.MATK, -10),
+					(Stat.MHP, 30)
+				)
+			});
+			AddUnit(ref spec, new UnitSpec
+			{
+				Art = new ArtSpec {Type = ArtType.PREFAB, Address = Addr("Mage")},
+				Name = "Mage",
+				IconArt = new ArtSpec
+				{
+					Type = ArtType.SPECIFIC_SPRITE,
+					Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.png"
+				},
+				LOS = 3,
+				Stats = AddToBase(
+					(Stat.ATK, -30),
+					(Stat.MATK, 30),
+					(Stat.MDEF, 10),
+					(Stat.SPEED, -10),
+					(Stat.DEF, -30),
+					(Stat.ACCURACY, 20),
+					(Stat.MHP, -20),
+					(Stat.MMP, 50)
+				)
+			});
+		}
+	}
 }

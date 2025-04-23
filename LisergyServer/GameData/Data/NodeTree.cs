@@ -1,208 +1,193 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 
 [Serializable]
 public class NodeTree<T>
 {
-    // Core data
-    public T Data;
+	// Children are serialized
+	private List<NodeTree<T>> _children;
 
-    // Non-serialized parent reference
-    [NonSerialized]
-    private NodeTree<T> _parent;
+	// Non-serialized parent reference
+	[NonSerialized] private NodeTree<T> _parent;
 
-    private int _level;
+	// This will store parent-child relationships during serialization
+	private Dictionary<int, ParentReference> _parentRelations;
 
-    // Children are serialized
-    private List<NodeTree<T>> _children;
+	// Core data
+	public T Data;
 
-    // For tracking parent during serialization
-    [Serializable]
-    private struct ParentReference
-    {
-        public int ChildIndex;
-    }
+	public NodeTree(T data)
+	{
+		Data = data;
+		_children = new List<NodeTree<T>>();
+		Level = 0;
+	}
 
-    // This will store parent-child relationships during serialization
-    private Dictionary<int, ParentReference> _parentRelations;
+	public NodeTree(T data, NodeTree<T> parent) : this(data)
+	{
+		_parent = parent;
+		Level = _parent != null ? _parent.Level + 1 : 0;
+	}
 
-    public NodeTree(T data)
-    {
-        Data = data;
-        _children = new List<NodeTree<T>>();
-        _level = 0;
-    }
+	// Properties and indexers
+	public int Level { get; private set; }
 
-    public NodeTree(T data, NodeTree<T> parent) : this(data)
-    {
-        _parent = parent;
-        _level = _parent != null ? _parent.Level + 1 : 0;
-    }
+	public int Count => _children.Count;
+	public bool IsRoot => _parent == null;
+	public bool IsLeaf => _children.Count == 0;
+	public NodeTree<T> Parent => _parent;
 
-    private void SetParent(NodeTree<T> parent)
-    {
-        _parent = parent;
-        _level = _parent != null ? _parent.Level + 1 : 0;
-    }
+	public NodeTree<T> this[int key] => _children[key];
 
-    // Properties and indexers
-    public int Level => _level;
-    public int Count => _children.Count;
-    public bool IsRoot => _parent == null;
-    public bool IsLeaf => _children.Count == 0;
-    public NodeTree<T> Parent => _parent;
+	private void SetParent(NodeTree<T> parent)
+	{
+		_parent = parent;
+		Level = _parent != null ? _parent.Level + 1 : 0;
+	}
 
-    public NodeTree<T> this[int key] => _children[key];
+	// Methods
+	public void Clear()
+	{
+		_children.Clear();
+	}
 
-    // Methods
-    public void Clear()
-    {
-        _children.Clear();
-    }
+	public NodeTree<T> AddChild(NodeTree<T> node)
+	{
+		_children.Add(node);
+		node.SetParent(this);
+		return node;
+	}
 
-    public NodeTree<T> AddChild(NodeTree<T> node)
-    {
-        _children.Add(node);
-        node.SetParent(this);
-        return node;
-    }
+	public NodeTree<T> AddChild(T data)
+	{
+		var node = new NodeTree<T>(data);
+		return AddChild(node);
+	}
 
-    public NodeTree<T> AddChild(T data)
-    {
-        var node = new NodeTree<T>(data);
-        return AddChild(node);
-    }
+	public bool HasChild(T data)
+	{
+		return FindInChildren(data) != null;
+	}
 
-    public bool HasChild(T data)
-    {
-        return FindInChildren(data) != null;
-    }
+	public bool HasChild(Predicate<T> predicate)
+	{
+		return FindInChildren(predicate) != null;
+	}
 
-    public bool HasChild(Predicate<T> predicate)
-    {
-        return FindInChildren(predicate) != null;
-    }
+	public NodeTree<T> FindInChildren(T data)
+	{
+		return FindInChildren(x => EqualityComparer<T>.Default.Equals(x, data));
+	}
 
-    public NodeTree<T> FindInChildren(T data)
-    {
-        return FindInChildren(x => EqualityComparer<T>.Default.Equals(x, data));
-    }
+	public IReadOnlyCollection<T> Children()
+	{
+		return _children.Select(c => c.Data).ToArray();
+	}
 
-    public IReadOnlyCollection<T> Children()
-    {
-        return _children.Select(c => c.Data).ToArray();
-    }
+	public IReadOnlyCollection<NodeTree<T>> ChildrenNodes()
+	{
+		return _children.ToArray();
+	}
 
-    public IReadOnlyCollection<NodeTree<T>> ChildrenNodes()
-    {
-        return _children.ToArray();
-    }
+	public override string ToString()
+	{
+		return Data?.ToString() ?? "null";
+	}
 
-    public override string ToString()
-    {
-        return Data?.ToString() ?? "null";
-    }
+	public NodeTree<T> FindInChildren(Predicate<T> predicate)
+	{
+		for (var i = 0; i < _children.Count; i++)
+		{
+			var child = _children[i];
+			if (predicate(child.Data)) return child;
+		}
 
-    public NodeTree<T> FindInChildren(Predicate<T> predicate)
-    {
-        for (int i = 0; i < _children.Count; i++)
-        {
-            NodeTree<T> child = _children[i];
-            if (predicate(child.Data)) return child;
-        }
-        return null;
-    }
+		return null;
+	}
 
-    public bool RemoveChild(NodeTree<T> node)
-    {
-        return _children.Remove(node);
-    }
+	public bool RemoveChild(NodeTree<T> node)
+	{
+		return _children.Remove(node);
+	}
 
-    public void Traverse(Func<T, bool> handler)
-    {
-        if (handler(Data))
-        {
-            for (int i = 0; i < _children.Count; i++)
-                _children[i].Traverse(handler);
-        }
-    }
+	public void Traverse(Func<T, bool> handler)
+	{
+		if (handler(Data))
+			for (var i = 0; i < _children.Count; i++)
+				_children[i].Traverse(handler);
+	}
 
-    public NodeTree<T> FindElement(Func<T, bool> condition)
-    {
-        NodeTree<T> el = default;
-        this.TraverseNodes(e =>
-        {
-            if (condition(e.Data))
-            {
-                el = e;
-                return false;
-            }
-            return true;
-        });
-        return el;
-    }
+	public NodeTree<T> FindElement(Func<T, bool> condition)
+	{
+		NodeTree<T> el = default;
+		TraverseNodes(e =>
+		{
+			if (condition(e.Data))
+			{
+				el = e;
+				return false;
+			}
 
-    public void TraverseNodes(Func<NodeTree<T>, bool> handler)
-    {
-        if (handler(this))
-        {
-            for (int i = 0; i < _children.Count; i++)
-                _children[i].TraverseNodes(handler);
-        }
-    }
+			return true;
+		});
+		return el;
+	}
 
-    public string ToFormattedString()
-    {
-        return ToString(0);
-    }
+	public void TraverseNodes(Func<NodeTree<T>, bool> handler)
+	{
+		if (handler(this))
+			for (var i = 0; i < _children.Count; i++)
+				_children[i].TraverseNodes(handler);
+	}
 
-    private string ToString(int indentLevel)
-    {
-        var indent = new string(' ', indentLevel * 2);
-        var result = $"{indent}{Data}\n";
-        foreach (var child in _children)
-        {
-            result += child.ToString(indentLevel + 1);
-        }
-        return result;
-    }
+	public string ToFormattedString()
+	{
+		return ToString(0);
+	}
 
-    public void OnSerializing()
-    {
-        // Store parent-child relationships before serializing
-        _parentRelations = new Dictionary<int, ParentReference>();
+	private string ToString(int indentLevel)
+	{
+		var indent = new string(' ', indentLevel * 2);
+		var result = $"{indent}{Data}\n";
+		foreach (var child in _children) result += child.ToString(indentLevel + 1);
+		return result;
+	}
 
-        for (int i = 0; i < _children.Count; i++)
-        {
-            _parentRelations[i] = new ParentReference { ChildIndex = i };
-        }
-    }
+	public void OnSerializing()
+	{
+		// Store parent-child relationships before serializing
+		_parentRelations = new Dictionary<int, ParentReference>();
 
-    public void OnDeserialized()
-    {
-        // Restore parent references after deserialization
-        if (_children != null)
-        {
-            foreach (var child in _children)
-            {
-                child.SetParent(this);
-            }
-        }
+		for (var i = 0; i < _children.Count; i++) _parentRelations[i] = new ParentReference {ChildIndex = i};
+	}
 
-        // Clean up temporary serialization data
-        _parentRelations = null;
-    }
+	public void OnDeserialized()
+	{
+		// Restore parent references after deserialization
+		if (_children != null)
+			foreach (var child in _children)
+				child.SetParent(this);
 
-    public List<T> Flatten()
-    {
-        var result = new List<T>();
-        this.Traverse(t =>
-        {
-            result.Add(t);
-            return true;
-        });
-        return result;
-    }
+		// Clean up temporary serialization data
+		_parentRelations = null;
+	}
+
+	public List<T> Flatten()
+	{
+		var result = new List<T>();
+		Traverse(t =>
+		{
+			result.Add(t);
+			return true;
+		});
+		return result;
+	}
+
+	// For tracking parent during serialization
+	[Serializable]
+	private struct ParentReference
+	{
+		public int ChildIndex;
+	}
 }

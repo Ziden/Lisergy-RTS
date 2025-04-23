@@ -2,8 +2,8 @@
 
 namespace Game.Systems.Base
 {
-    public class EntityCreatedEvent : IBaseEvent
-    {
-        public ushort SpecId;
-    }
+	public class EntityCreatedEvent : IBaseEvent
+	{
+		public ushort SpecId;
+	}
 }

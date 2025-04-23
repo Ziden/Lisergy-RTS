@@ -2,15 +2,20 @@
 
 ## Overview
 
-The ClientSDK is a .NET Standard library designed to facilitate communication between game clients and the server. It is built to be integrated into game engines such as Unity, providing a robust framework for handling game logic, server communication, and event management.
+The ClientSDK is a .NET Standard library designed to facilitate communication between game clients and the server. It is
+built to be integrated into game engines such as Unity, providing a robust framework for handling game logic, server
+communication, and event management.
 
 ## Architecture
 
-The ClientSDK is structured around several key modules, each responsible for a specific aspect of the game logic and server interaction. These modules are exposed through the `IServerModules` interface, which acts as the primary entry point for the SDK.
+The ClientSDK is structured around several key modules, each responsible for a specific aspect of the game logic and
+server interaction. These modules are exposed through the `IServerModules` interface, which acts as the primary entry
+point for the SDK.
 
 ### IServerModules Interface
 
-The `IServerModules` interface defines the core modules available in the SDK. Each module is responsible for a specific domain of the game logic:
+The `IServerModules` interface defines the core modules available in the SDK. Each module is responsible for a specific
+domain of the game logic:
 
 - **IAccountModule**: Manages user accounts, including authentication and account settings.
 - **IPlayerModule**: Handles player-specific data and actions.
@@ -23,21 +28,25 @@ The `IServerModules` interface defines the core modules available in the SDK. Ea
 
 ## Integration with Unity
 
-The ClientSDK is designed to be easily integrated into Unity projects. By importing the SDK as a .NET Standard DLL, developers can leverage the provided modules to handle game logic and server communication seamlessly.
+The ClientSDK is designed to be easily integrated into Unity projects. By importing the SDK as a .NET Standard DLL,
+developers can leverage the provided modules to handle game logic and server communication seamlessly.
 
 ## Client-Side Prediction
 
-The ClientSDK includes mechanisms for client-side prediction to enhance the responsiveness and smoothness of the game experience. This involves predicting certain game states and actions on the client side before receiving confirmation from the server. Two key examples of this are movement prediction and fog of war management.
+The ClientSDK includes mechanisms for client-side prediction to enhance the responsiveness and smoothness of the game
+experience. This involves predicting certain game states and actions on the client side before receiving confirmation
+from the server. Two key examples of this are movement prediction and fog of war management.
 
 ### Movement Prediction
 
-The `PartyMovementListener` class demonstrates how the client predicts and animates the movement of party entities. This involves starting and stopping animations based on movement events.
+The `PartyMovementListener` class demonstrates how the client predicts and animates the movement of party entities. This
+involves starting and stopping animations based on movement events.
 
 #### Key Methods
 
-- **OnMoveStart**: Triggered when a movement interpolation starts. It updates the party view to play the running animation and orient the units towards the destination.
-  
-  
+- **OnMoveStart**: Triggered when a movement interpolation starts. It updates the party view to play the running
+  animation and orient the units towards the destination.
+
 ```csharp
   private void OnMoveStart(MovementInterpolationStartEvent e)
   {
@@ -54,9 +63,9 @@ The `PartyMovementListener` class demonstrates how the client predicts and anima
   
 ```
 
-- **OnMoveEnd**: Triggered when a movement interpolation ends. It updates the party view to play the idle animation if the movement is complete.
-  
-  
+- **OnMoveEnd**: Triggered when a movement interpolation ends. It updates the party view to play the idle animation if
+  the movement is complete.
+
 ```csharp
   private void OnMoveEnd(MovementInterpolationEndEvent e)
   {
@@ -74,13 +83,14 @@ The `PartyMovementListener` class demonstrates how the client predicts and anima
 
 ### Fog of War Management
 
-The `FogOfWarListener` class demonstrates how the client manages the fog of war. This involves batching visibility changes to avoid redundant calculations and updating the fog state of tiles based on visibility events.
+The `FogOfWarListener` class demonstrates how the client manages the fog of war. This involves batching visibility
+changes to avoid redundant calculations and updating the fog state of tiles based on visibility events.
 
 #### Key Methods
 
-- **OnVisibilityChange**: Triggered when the visibility of a tile changes. It updates the fog state of the tile view based on whether the tile is visible or not.
-  
-  
+- **OnVisibilityChange**: Triggered when the visibility of a tile changes. It updates the fog state of the tile view
+  based on whether the tile is visible or not.
+
 ```csharp
   private void OnVisibilityChange(TileVisibilityChangedEvent ev)
   {
@@ -98,8 +108,7 @@ The `FogOfWarListener` class demonstrates how the client manages the fog of war.
 ```
 
 - **OnPostRender**: Triggered after a tile is rendered. It logs the post-render event for debugging purposes.
-  
-  
+
 ```csharp
   private void OnPostRender(TilePostRenderedEvent e)
   {
@@ -111,8 +120,7 @@ The `FogOfWarListener` class demonstrates how the client manages the fog of war.
 ```
 
 - **CheckFogAround**: Checks the fog state of neighboring tiles and updates their fog state if necessary.
-  
-  
+
 ```csharp
   private void CheckFogAround(TileView thisView, Direction d)
   {
@@ -128,11 +136,14 @@ The `FogOfWarListener` class demonstrates how the client manages the fog of war.
 
 ### Summary
 
-By implementing client-side prediction for movement and fog of war, the ClientSDK ensures a smoother and more responsive gameplay experience. These mechanisms allow the client to anticipate and display game states before receiving confirmation from the server, reducing perceived latency and improving overall player experience.
+By implementing client-side prediction for movement and fog of war, the ClientSDK ensures a smoother and more responsive
+gameplay experience. These mechanisms allow the client to anticipate and display game states before receiving
+confirmation from the server, reducing perceived latency and improving overall player experience.
+
 ### Example Usage
 
-The following example demonstrates how to use the ClientSDK within a Unity project. The `Main` class initializes the SDK, sets up necessary services, and handles game events.
-
+The following example demonstrates how to use the ClientSDK within a Unity project. The `Main` class initializes the
+SDK, sets up necessary services, and handles game events.
 
 ```csharp
 using ClientSDK;
@@ -227,25 +238,30 @@ public class Main : MonoBehaviour, IEventListener
 - **Initialization**: The `Main` class initializes the `GameClient` and sets up event listeners, views, and services.
 - **Offline Mode**: If `OFFLINE_MODE` is enabled, a standalone server is started for local testing.
 - **Event Handling**: The `OnGameStarted` method sets up various event listeners to handle game-specific events.
-- **Service Registration**: The `SetupServices` method registers various services required by the game, such as input, UI, audio, and notifications.
-
+- **Service Registration**: The `SetupServices` method registers various services required by the game, such as input,
+  UI, audio, and notifications.
 
 ## Network and Data Synchronization
 
-The ClientSDK includes robust mechanisms for synchronizing data between the client and server. This ensures that the game state remains consistent across all clients and the server. The synchronization process involves delta compression, component synchronization, and efficient network communication.
+The ClientSDK includes robust mechanisms for synchronizing data between the client and server. This ensures that the
+game state remains consistent across all clients and the server. The synchronization process involves delta compression,
+component synchronization, and efficient network communication.
 
 ### Delta Compression
 
-Delta compression is a technique used to minimize the amount of data transmitted over the network by only sending the changes (deltas) rather than the entire state. This is particularly useful in reducing bandwidth usage and improving performance.
+Delta compression is a technique used to minimize the amount of data transmitted over the network by only sending the
+changes (deltas) rather than the entire state. This is particularly useful in reducing bandwidth usage and improving
+performance.
 
 #### DeltaCompressionLogic
 
-The `DeltaCompressionLogic` class is responsible for managing delta compression for game entities. It tracks changes to entity components and generates update packets containing only the modified components.
+The `DeltaCompressionLogic` class is responsible for managing delta compression for game entities. It tracks changes to
+entity components and generates update packets containing only the modified components.
 
 #### Key Methods
 
-- **SendAllVisibleTiles**: Flags all tiles visible to the current entity (usually a player) and sets the exploration flag for these tiles.
-  
+- **SendAllVisibleTiles**: Flags all tiles visible to the current entity (usually a player) and sets the exploration
+  flag for these tiles.
 
 ```csharp
 public void SendAllVisibleTiles()
@@ -262,7 +278,6 @@ public void SendAllVisibleTiles()
 ```
 
 - **GetUpdatePacket**: Generates an update packet containing the modified components for a given receiver.
-  
 
 ```csharp
 public BasePacket GetUpdatePacket(GameId receiver, bool onlyDeltas = true)
@@ -285,7 +300,6 @@ public BasePacket GetUpdatePacket(GameId receiver, bool onlyDeltas = true)
 ```
 
 - **SetTileExplorationFlag**: Sets the exploration flag for a tile and its associated entities.
-  
 
 ```csharp
 public void SetTileExplorationFlag(DeltaFlag flag)
@@ -303,7 +317,6 @@ public void SetTileExplorationFlag(DeltaFlag flag)
 ```
 
 - **SetFlag**: Sets a delta flag for the current entity and marks it as modified.
-  
 
 ```csharp
 public bool SetFlag(DeltaFlag flag)
@@ -327,12 +340,12 @@ public bool SetFlag(DeltaFlag flag)
 
 ### Component Synchronization
 
-Component synchronization ensures that the state of entity components is consistent between the client and server. The `ComponentSet` class manages the components of an entity and tracks changes to these components.
+Component synchronization ensures that the state of entity components is consistent between the client and server. The
+`ComponentSet` class manages the components of an entity and tracks changes to these components.
 
 #### Key Methods
 
 - **GetComponentDeltas**: Retrieves the modified components and removed components for synchronization.
-  
 
 ```csharp
 public (List<IComponent> updated, HashSet<Type> removed) GetComponentDeltas(GameId receiver = default, bool deltaCompression = true)
@@ -349,7 +362,6 @@ public (List<IComponent> updated, HashSet<Type> removed) GetComponentDeltas(Game
 ```
 
 - **Save**: Saves a component and marks it as modified for synchronization.
-  
 
 ```csharp
 public void Save<T>(in T c) where T : IComponent
@@ -372,7 +384,6 @@ public void Save<T>(in T c) where T : IComponent
 ```
 
 - **Remove**: Removes a component and marks it as removed for synchronization.
-  
 
 ```csharp
 public bool Remove<T>() where T : IComponent
@@ -406,12 +417,12 @@ public bool Remove<T>() where T : IComponent
 
 ### Network Communication
 
-The `IGameNetwork` interface defines the methods for sending and receiving packets over the network. The `DeltaCompression` property indicates whether delta compression is enabled.
+The `IGameNetwork` interface defines the methods for sending and receiving packets over the network. The
+`DeltaCompression` property indicates whether delta compression is enabled.
 
 #### Key Methods
 
 - **SendToPlayer**: Sends a packet to a specific player.
-  
 
 ```csharp
 public void SendToPlayer<PacketType>(PacketType p, params GameId[] players) where PacketType : BasePacket;
@@ -419,7 +430,6 @@ public void SendToPlayer<PacketType>(PacketType p, params GameId[] players) wher
 ```
 
 - **SendToServer**: Sends a packet to the server.
-  
 
 ```csharp
 public void SendToServer(BasePacket p, ServerType server = ServerType.WORLD);
@@ -427,7 +437,6 @@ public void SendToServer(BasePacket p, ServerType server = ServerType.WORLD);
 ```
 
 - **ReceiveInput**: Processes an input packet received from a player.
-  
 
 ```csharp
 public void ReceiveInput(GameId sender, BasePacket input);
@@ -436,7 +445,12 @@ public void ReceiveInput(GameId sender, BasePacket input);
 
 ### Summary
 
-The ClientSDK's network and data synchronization mechanisms ensure that the game state remains consistent across all clients and the server. By leveraging delta compression, component synchronization, and efficient network communication, the SDK minimizes bandwidth usage and improves performance, providing a smooth and responsive gameplay experience.
+The ClientSDK's network and data synchronization mechanisms ensure that the game state remains consistent across all
+clients and the server. By leveraging delta compression, component synchronization, and efficient network communication,
+the SDK minimizes bandwidth usage and improves performance, providing a smooth and responsive gameplay experience.
+
 ## Conclusion
 
-The ClientSDK provides a comprehensive framework for managing game logic and server communication in Unity projects. By leveraging the modular architecture, developers can easily integrate and extend the SDK to meet the specific needs of their game.
+The ClientSDK provides a comprehensive framework for managing game logic and server communication in Unity projects. By
+leveraging the modular architecture, developers can easily integrate and extend the SDK to meet the specific needs of
+their game.

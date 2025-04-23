@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace GameData.Specs
+namespace GameData.Specs;
+
+[Serializable]
+public class BattleSpec
 {
-    [Serializable]
-    public class BattleSpec
-    {
-        public UnitSpecId[] UnitSpecIDS;
-    }
+	public UnitSpecId[] UnitSpecIDS;
 }

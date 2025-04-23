@@ -1,126 +1,120 @@
-﻿using Game.Engine.DataTypes;
-using Game.World;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Game.Engine.DataTypes;
+using Game.World;
 
 namespace Game.Engine.Pathfinder
 {
+	public interface IPathfinder
+	{
+		Location[] Find(in Location start, in Location goal);
+	}
 
-    public interface IPathfinder
-    {
-        Location[] Find(in Location start, in Location goal);
-    }
+	public class AStarSearch : IPathfinder
+	{
+		private readonly IPathfinderGridProvider _grid;
+		private readonly FastPriorityQueue<Cell> _open;
+		private readonly double _sqrt2 = Math.Sqrt(2);
 
-    public class AStarSearch : IPathfinder
-    {
-        private readonly IPathfinderGridProvider _grid;
-        private readonly FastPriorityQueue<Cell> _open;
-        private double _sqrt2 = Math.Sqrt(2);
+		public AStarSearch(IPathfinderGridProvider grid)
+		{
+			_grid = grid;
+			_open = new FastPriorityQueue<Cell>(_grid.Size.X * _grid.Size.Y);
+		}
 
-        public AStarSearch(IPathfinderGridProvider grid)
-        {
-            _grid = grid;
-            _open = new FastPriorityQueue<Cell>(_grid.Size.X * _grid.Size.Y);
-        }
+		public Location[] Find(in Location start, in Location goal)
+		{
+			Reset();
+			var startCell = _grid[start];
+			var goalCell = _grid[goal];
 
-        private double Heuristic(Cell cell, Cell goal)
-        {
-            var dX = Math.Abs(cell.Location.X - goal.Location.X);
-            var dY = Math.Abs(cell.Location.Y - goal.Location.Y);
-            return 1 * (dX + dY)
-                   + (_sqrt2 - 2 * 1)
-                   * Math.Min(dX, dY);
-        }
+			_open.Enqueue(startCell, 0);
 
-        public void Reset()
-        {
+			var bounds = _grid.Size;
 
-            _grid.Reset();
-            _open.Clear();
-        }
+			Cell node = null;
 
-        public Location[] Find(in Location start, in Location goal)
-        {
-            Reset();
-            Cell startCell = _grid[start];
-            Cell goalCell = _grid[goal];
+			while (_open.Count > 0)
+			{
+				node = _open.Dequeue();
 
-            _open.Enqueue(startCell, 0);
+				node.Closed = true;
 
-            var bounds = _grid.Size;
+				var cBlock = false;
 
-            Cell node = null;
+				var g = node.G + 1;
 
-            while (_open.Count > 0)
-            {
+				if (goalCell.Location == node.Location) break;
 
-                node = _open.Dequeue();
+				var proposed = new Location(0, 0);
 
-                node.Closed = true;
+				for (var i = 0; i < PathingConstants.Directions.Length; i++)
+				{
+					var direction = PathingConstants.Directions[i];
 
-                var cBlock = false;
+					proposed.X = (ushort) (node.Location.X + direction.X);
+					proposed.Y = (ushort) (node.Location.Y + direction.Y);
 
-                var g = node.G + 1;
+					// Bounds checking
+					if (proposed.X < 0 || proposed.X >= bounds.X ||
+					    proposed.Y < 0 || proposed.Y >= bounds.Y)
+						continue;
 
-                if (goalCell.Location == node.Location) break;
+					var neighbour = _grid[proposed];
 
-                Location proposed = new Location(0, 0);
+					if (neighbour.Blocked)
+					{
+						if (i < 4) cBlock = true;
 
-                for (var i = 0; i < PathingConstants.Directions.Length; i++)
-                {
+						continue;
+					}
 
-                    var direction = PathingConstants.Directions[i];
+					// Prevent slipping between blocked cardinals by an open diagonal
+					if (i >= 4 && cBlock) continue;
 
-                    proposed.X = (ushort)(node.Location.X + direction.X);
-                    proposed.Y = (ushort)(node.Location.Y + direction.Y);
+					if (_grid[neighbour.Location].Closed) continue;
 
-                    // Bounds checking
-                    if (proposed.X < 0 || proposed.X >= bounds.X ||
-                        proposed.Y < 0 || proposed.Y >= bounds.Y)
-                        continue;
+					if (!_open.Contains(neighbour))
+					{
+						neighbour.G = g;
+						neighbour.H = (float) Heuristic(neighbour, node);
+						neighbour.Parent = node;
 
-                    Cell neighbour = _grid[proposed];
+						// F will be set by the queue
+						_open.Enqueue(neighbour, neighbour.G + neighbour.H);
+					}
+					else if (g + neighbour.H < neighbour.F)
+					{
+						neighbour.G = g;
+						neighbour.F = neighbour.G + neighbour.H;
+						neighbour.Parent = node;
+					}
+				}
+			}
 
-                    if (neighbour.Blocked)
-                    {
+			var path = new Stack<Location>();
+			while (node != null)
+			{
+				path.Push(node.Location);
+				node = node.Parent;
+			}
 
-                        if (i < 4) cBlock = true;
+			return path.ToArray();
+		}
 
-                        continue;
-                    }
+		private double Heuristic(Cell cell, Cell goal)
+		{
+			var dX = Math.Abs(cell.Location.X - goal.Location.X);
+			var dY = Math.Abs(cell.Location.Y - goal.Location.Y);
+			return 1 * (dX + dY)
+			       + (_sqrt2 - 2 * 1)
+			       * Math.Min(dX, dY);
+		}
 
-                    // Prevent slipping between blocked cardinals by an open diagonal
-                    if (i >= 4 && cBlock) continue;
-
-                    if (_grid[neighbour.Location].Closed) continue;
-
-                    if (!_open.Contains(neighbour))
-                    {
-                        neighbour.G = g;
-                        neighbour.H = (float)Heuristic(neighbour, node);
-                        neighbour.Parent = node;
-
-                        // F will be set by the queue
-                        _open.Enqueue(neighbour, (float)(neighbour.G + neighbour.H));
-
-                    }
-                    else if (g + neighbour.H < neighbour.F)
-                    {
-                        neighbour.G = g;
-                        neighbour.F = neighbour.G + neighbour.H;
-                        neighbour.Parent = node;
-                    }
-                }
-            }
-
-            var path = new Stack<Location>();
-            while (node != null)
-            {
-                path.Push(node.Location);
-                node = node.Parent;
-            }
-            return path.ToArray();
-        }
-    }
-
+		public void Reset()
+		{
+			_grid.Reset();
+			_open.Clear();
+		}
+	}
 }

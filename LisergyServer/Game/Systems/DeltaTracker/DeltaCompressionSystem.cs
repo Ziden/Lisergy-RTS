@@ -4,29 +4,24 @@ using Game.Systems.FogOfWar;
 
 namespace Game.Systems.Dungeon
 {
-    public class DeltaCompressionSystem : LogicSystem<DeltaFlagsComponent, DeltaCompressionLogic>
-    {
-        public DeltaCompressionSystem(LisergyGame game) : base(game)
-        {
-        }
+	public class DeltaCompressionSystem : LogicSystem<DeltaFlagsComponent, DeltaCompressionLogic>
+	{
+		public DeltaCompressionSystem(LisergyGame game) : base(game)
+		{
+		}
 
-        public override void RegisterListeners()
-        {
-            OnAnyEvent<TileVisibilityChangedEvent>(OnTileVisibilityChanged);
-        }
+		public override void RegisterListeners()
+		{
+			OnAnyEvent<TileVisibilityChangedEvent>(OnTileVisibilityChanged);
+		}
 
 
-        private void OnTileVisibilityChanged(TileVisibilityChangedEvent ev)
-        {
-            if (ev.Visible)
-            {
-                GetLogic(ev.Tile.Entity).SetTileExplorationFlag(DeltaFlag.SELF_REVEALED);
-            }
-            else
-            {
-                GetLogic(ev.Tile.Entity).SetTileExplorationFlag(DeltaFlag.SELF_CONCEALED);
-            }
-        }
-
-    }
+		private void OnTileVisibilityChanged(TileVisibilityChangedEvent ev)
+		{
+			if (ev.Visible)
+				GetLogic(ev.Tile.Entity).SetTileExplorationFlag(DeltaFlag.SELF_REVEALED);
+			else
+				GetLogic(ev.Tile.Entity).SetTileExplorationFlag(DeltaFlag.SELF_CONCEALED);
+		}
+	}
 }

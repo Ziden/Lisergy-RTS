@@ -1,25 +1,24 @@
+using System.Linq;
 using Game.Entities;
 using Game.Events.ServerEvents;
 using NUnit.Framework;
 using ServerTests;
-using System.Linq;
 
-namespace GameUnitTests
+namespace GameUnitTests;
+
+public class TestWorldEvents
 {
-    public class TestWorldEvents
-    {
-        private TestGame game;
+	private TestGame game;
 
-        [Test]
-        public void TestSendingTestPlayerEvents()
-        {
-            game = new TestGame();
-            var player = game.GetTestPlayer();
+	[Test]
+	public void TestSendingTestPlayerEvents()
+	{
+		game = new TestGame();
+		var player = game.GetTestPlayer();
 
-            var events = game.SentServerPackets
-                .Where(e => e is EntityUpdatePacket p && p.Type == EntityType.Tile)
-                .Select(e => (EntityUpdatePacket)e)
-                .ToList();
-        }
-    }
+		var events = game.SentServerPackets
+			.Where(e => e is EntityUpdatePacket p && p.Type == EntityType.Tile)
+			.Select(e => (EntityUpdatePacket) e)
+			.ToList();
+	}
 }

@@ -8,60 +8,56 @@ using GameData;
 using Godot;
 using LisergyGodotClient.Src.Data;
 
+namespace LisergyGodotClient.Src.Services;
 
-namespace LisergyGodotClient.Src.Services
+public interface IClientStateService
 {
-    public interface IClientStateService
-    {
-        ObservableProperty<BuildingSpecId> PlacingBuilding { get; }
-        ObservableProperty<IEntity> SelectedParty { get; }
-        ObservableProperty<TileModel> SelectedTile { get; }
-        ObservableProperty<Vector3> CameraPosition { get; }
-        void ReceiveTapInput(Vector2 pos);
-    }
+	ObservableProperty<BuildingSpecId> PlacingBuilding { get; }
+	ObservableProperty<IEntity> SelectedParty { get; }
+	ObservableProperty<TileModel> SelectedTile { get; }
+	ObservableProperty<Vector3> CameraPosition { get; }
+	void ReceiveTapInput(Vector2 pos);
+}
 
-    public class ClientStateService : IClientStateService, IEventListener
-    {
-        private IClientSdk _sdk;
+public class ClientStateService : IClientStateService, IEventListener
+{
+	private readonly IClientSdk _sdk;
 
-        public ObservableProperty<BuildingSpecId> PlacingBuilding { get; } = new();
-        public ObservableProperty<IEntity> SelectedParty { get; } = new();
-        public ObservableProperty<TileModel> SelectedTile { get; } = new();
-        public ObservableProperty<Vector3> CameraPosition { get; } = new();
+	public ClientStateService(IClientSdk sdk)
+	{
+		_sdk = sdk;
+		_sdk.ClientEvents.On<EntitySeenEvent>(this, OnSeeEntity);
+		_sdk.ClientEvents.On<GameStartedEvent>(this, OnGameStart);
+	}
 
-        public ClientStateService(IClientSdk sdk)
-        {
-            _sdk = sdk;
-            _sdk.ClientEvents.On<EntitySeenEvent>(this, OnSeeEntity);
-            _sdk.ClientEvents.On<GameStartedEvent>(this, OnGameStart);
-        }
+	public ObservableProperty<BuildingSpecId> PlacingBuilding { get; } = new();
+	public ObservableProperty<IEntity> SelectedParty { get; } = new();
+	public ObservableProperty<TileModel> SelectedTile { get; } = new();
+	public ObservableProperty<Vector3> CameraPosition { get; } = new();
 
-        private void OnGameStart(GameStartedEvent ev)
-        {
-            if (SelectedParty.Value == null)
-            {
-                var parties = ev.LocalPlayer.EntityLogic.GetParties();
-                if (parties.Count == 0) return;
-                SelectedParty.Value = parties[0];
-            }
-        }
+	public void ReceiveTapInput(Vector2 pos)
+	{
+		var tile = _sdk.Game.World.GetTile(pos.ToLocation());
+		if (tile == null) return;
+		SelectedTile.Value = tile;
+	}
 
-        private void OnSeeEntity(EntitySeenEvent ev)
-        {
-            var e = ev.Entity;
-            if(e.IsMine() 
-                && e.EntityType == EntityType.Party 
-                && SelectedParty.Value == null)
-            {
-                SelectedParty.Value = e;
-            }
-        }
+	private void OnGameStart(GameStartedEvent ev)
+	{
+		if (SelectedParty.Value == null)
+		{
+			var parties = ev.LocalPlayer.EntityLogic.GetParties();
+			if (parties.Count == 0) return;
+			SelectedParty.Value = parties[0];
+		}
+	}
 
-        public void ReceiveTapInput(Vector2 pos)
-        {
-            var tile = _sdk.Game.World.GetTile(pos.ToLocation());
-            if (tile == null) return;
-            SelectedTile.Value = tile;
-        }
-    }
+	private void OnSeeEntity(EntitySeenEvent ev)
+	{
+		var e = ev.Entity;
+		if (e.IsMine()
+		    && e.EntityType == EntityType.Party
+		    && SelectedParty.Value == null)
+			SelectedParty.Value = e;
+	}
 }

@@ -1,0 +1,82 @@
+[gd_scene load_steps=9 format=3 uid="uid://bps7s06sko4i8"]
+
+[ext_resource type="PackedScene" uid="uid://cs4sqiya8ay5c" path="res://Content/Art/Models/Models/Crate.gltf" id="1_xa3ur"]
+[ext_resource type="PackedScene" uid="uid://c0v4omwaeoknh" path="res://Content/Art/Models/Models/Barrel.gltf" id="2_cekl1"]
+[ext_resource type="PackedScene" uid="uid://bnqb32tdee1xj" path="res://Content/Art/Models/Models/Crate_Big_Stack2.gltf" id="4_qop02"]
+[ext_resource type="Material" uid="uid://pko07ce8e5de" path="res://Content/Art/Models/grass.tres" id="4_wndyh"]
+[ext_resource type="PackedScene" uid="uid://itxjrq4ydact" path="res://Content/Art/Models/Models/Crate_Stack2.gltf" id="5_gy7ot"]
+[ext_resource type="Material" uid="uid://cn1ue3gvkriw8" path="res://Content/Art/wood.tres" id="6_psaud"]
+[ext_resource type="BoxMesh" uid="uid://cggxklif51hvq" path="res://Content/Art/Models/box.tres" id="7_635jl"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_per1n"]
+
+[node name="ConstructionSite" type="Node3D"]
+
+[node name="Crate2" parent="." instance=ExtResource("1_xa3ur")]
+transform = Transform3D(2.09622, 0, 0, 0, 2.09622, 0, 0, 0, 2.09622, -0.336383, 0.00754344, 0.332146)
+
+[node name="Barrel3" parent="." instance=ExtResource("2_cekl1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.229463, -3.57628e-07, -0.352933)
+
+[node name="Barrel2" parent="." instance=ExtResource("2_cekl1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.384861, -1.19209e-07, -0.344228)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+visible = false
+material_override = ExtResource("4_wndyh")
+mesh = SubResource("QuadMesh_per1n")
+
+[node name="Crate_Big_Stack22" parent="." instance=ExtResource("4_qop02")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.295429, 0, 0.30575)
+
+[node name="Crate_Stack22" parent="." instance=ExtResource("5_gy7ot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.223172, 0, -0.274955)
+
+[node name="Box2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0826463, 0, 0, 0, 0.0947065, 0, 0, 0, 0.452663, 0.509033, 0.0676948, 0.307558)
+material_override = ExtResource("6_psaud")
+mesh = ExtResource("7_635jl")
+skeleton = NodePath("")
+
+[node name="Box3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0826463, 0, 0, 0, 0.0947065, 0, 0, 0, 0.40832, -0.507686, 0.0676948, 0.306888)
+material_override = ExtResource("6_psaud")
+mesh = ExtResource("7_635jl")
+skeleton = NodePath("")
+
+[node name="Box4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-3.61259e-09, 0, 0.41335, 0, 0.0947065, 0, -0.0768795, 0, -1.68074e-08, 0.347797, 0.0676945, 0.478461)
+material_override = ExtResource("6_psaud")
+mesh = ExtResource("7_635jl")
+skeleton = NodePath("")
+
+[node name="Box5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-3.6319e-09, 0, 0.384579, 0, 0.0952129, 0, -0.0772906, 0, -1.56375e-08, 0.310716, 0.0676944, -0.446447)
+material_override = ExtResource("6_psaud")
+mesh = ExtResource("7_635jl")
+skeleton = NodePath("")
+
+[node name="Box6" type="MeshInstance3D" parent="."]
+transform = Transform3D(-3.6319e-09, 0, 0.384579, 0, 0.0952129, 0, -0.0772906, 0, -1.56375e-08, -0.335882, 0.0676943, -0.446447)
+material_override = ExtResource("6_psaud")
+mesh = ExtResource("7_635jl")
+skeleton = NodePath("")
+
+[node name="Box7" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0826463, 0, 0, 0, 0.0947065, 0, 0, 0, 0.452663, 0.509033, 0.0676948, -0.261115)
+material_override = ExtResource("6_psaud")
+mesh = ExtResource("7_635jl")
+skeleton = NodePath("")
+
+[node name="Box8" type="MeshInstance3D" parent="."]
+transform = Transform3D(-3.61259e-09, 0, 0.41335, 0, 0.0947065, 0, -0.0768795, 0, -1.68074e-08, -0.340475, 0.0676944, 0.478461)
+material_override = ExtResource("6_psaud")
+mesh = ExtResource("7_635jl")
+skeleton = NodePath("")
+
+[node name="Box9" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0826463, 0, 0, 0, 0.0947065, 0, 0, 0, 0.40832, -0.507686, 0.0676947, -0.269754)
+material_override = ExtResource("6_psaud")
+mesh = ExtResource("7_635jl")
+skeleton = NodePath("")

@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace GameData.Specs
+namespace GameData.Specs;
+
+[Serializable]
+public class ItemSpec
 {
-    [Serializable]
-    public class ItemSpec
-    {
-        public ushort Id;
-        public ArtSpec Art;
-        public ItemType Type;
-        public string Name;
-    }
+	public ArtSpec Art;
+	public ushort Id;
+	public string Name;
+	public ItemType Type;
 }

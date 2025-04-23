@@ -1,6 +1,6 @@
 ﻿namespace Game.Engine.Events.Bus
 {
-    public interface IEventListener
-    {
-    }
+	public interface IEventListener
+	{
+	}
 }

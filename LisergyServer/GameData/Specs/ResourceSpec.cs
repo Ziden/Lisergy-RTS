@@ -1,32 +1,43 @@
-﻿using GameData.Specs;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
+using GameData.Specs;
 
-namespace GameData
+namespace GameData;
+
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+public struct ResourceSpecId
 {
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ResourceSpecId
-    {
-        public byte Id;
-        public static implicit operator byte(ResourceSpecId d) => d.Id;
-        public static implicit operator ResourceSpecId(byte b) => new ResourceSpecId() { Id = b };
-        public override string ToString() => Id.ToString();
-    }
+	public byte Id;
 
-    [Serializable]
-    public class ResourceSpec
-    {
-        public bool ShowInUi = false;
-        public ResourceSpecId SpecId;
-        public ArtSpec Art;
-        public string Name;
-        public byte WeightPerUnit;
+	public static implicit operator byte(ResourceSpecId d)
+	{
+		return d.Id;
+	}
 
-        public ResourceSpec(byte i)
-        {
-            this.SpecId = new ResourceSpecId() { Id = i };
-            this.Art = default;
-        }
-    }
+	public static implicit operator ResourceSpecId(byte b)
+	{
+		return new ResourceSpecId() {Id = b};
+	}
+
+	public override string ToString()
+	{
+		return Id.ToString();
+	}
+}
+
+[Serializable]
+public class ResourceSpec
+{
+	public ArtSpec Art;
+	public string Name;
+	public bool ShowInUi = false;
+	public ResourceSpecId SpecId;
+	public byte WeightPerUnit;
+
+	public ResourceSpec(byte i)
+	{
+		SpecId = new ResourceSpecId {Id = i};
+		Art = default;
+	}
 }

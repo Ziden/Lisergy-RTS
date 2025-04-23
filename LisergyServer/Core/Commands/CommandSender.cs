@@ -1,7 +1,6 @@
-﻿namespace BaseServer.Commands
+﻿namespace BaseServer.Commands;
+
+public abstract class CommandSender
 {
-    public abstract class CommandSender
-    {
-        public abstract void SendMessage(string message);
-    }
+	public abstract void SendMessage(string message);
 }

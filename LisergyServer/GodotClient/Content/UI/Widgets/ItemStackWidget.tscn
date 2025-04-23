@@ -37,10 +37,10 @@ size_flags_vertical = 0
 theme = ExtResource("1_7c8ti")
 theme_override_styles/panel = SubResource("StyleBoxFlat_ljm1k")
 script = ExtResource("1_4plhn")
-NamePath = NodePath("ItemTitle")
-Amount = NodePath("ItemAmount")
-Icon = NodePath("MarginContainer/Panel/ItemIcon")
-InvisibleButton = NodePath("InvisibleButton")
+Amount = null
+Icon = null
+InvisibleButton = null
+NamePath = null
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1

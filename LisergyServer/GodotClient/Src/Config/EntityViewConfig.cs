@@ -1,17 +1,10 @@
 using Game.Entities;
 using Godot;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Godot.Collections;
 
-namespace LisergyGodotClient.Config
+namespace LisergyGodotClient.Config;
+
+public partial class EntityViewConfig : Resource
 {
-
-	public partial class EntityViewConfig : Resource
-	{
-		[Export]
-		public Godot.Collections.Dictionary<EntityType, NodePath> ViewConfigs;
-	}
+	[Export] public Dictionary<EntityType, NodePath> ViewConfigs;
 }

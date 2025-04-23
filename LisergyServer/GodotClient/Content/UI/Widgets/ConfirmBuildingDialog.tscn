@@ -23,12 +23,6 @@ size_flags_vertical = 3
 mouse_filter = 2
 theme = ExtResource("1_btqlg")
 script = ExtResource("2_h21o0")
-ConfirmButton = NodePath("Panel/MarginContainer/Building/DataTab/HBoxContainer/ConfirmButton")
-CancelButton = NodePath("Panel/MarginContainer/Building/DataTab/HBoxContainer/CancelButton")
-BuildingItem = NodePath("Panel/MarginContainer/Building/DataTab/ConfirmBuild/BuildingIcon")
-TileItem = NodePath("Panel/MarginContainer/Building/DataTab/ConfirmBuild/TileIcon")
-TileName = NodePath("Panel/MarginContainer/Building/DataTab/ConfirmBuild/TileName")
-BuildingName = NodePath("Panel/MarginContainer/Building/DataTab/ConfirmBuild/BuildingName")
 
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(400, 350)
@@ -58,8 +52,8 @@ theme_override_constants/margin_bottom = 3
 [node name="Building" type="Control" parent="Panel/MarginContainer"]
 layout_mode = 2
 script = ExtResource("2_vbr07")
-NamePath = NodePath("")
-ItemPath = NodePath("DataTab/ConfirmBuild/BuildingIcon")
+ItemPath = null
+NamePath = null
 
 [node name="DataTab" type="VBoxContainer" parent="Panel/MarginContainer/Building"]
 custom_minimum_size = Vector2(240, 0)

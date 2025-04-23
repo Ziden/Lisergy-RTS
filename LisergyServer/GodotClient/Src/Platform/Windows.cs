@@ -1,17 +1,9 @@
-﻿using Godot;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace LisergyGodotClient.Src.Platform;
 
-namespace LisergyGodotClient.Src.Platform
+public interface IGamePlatform
 {
-    public interface IGamePlatform
-    {
-        void Initialize();
-    }
+	void Initialize();
+}
 
 #if GODOT_WINDOWS
     public class Windows : IGamePlatform
@@ -26,4 +18,3 @@ namespace LisergyGodotClient.Src.Platform
         }
     }
 #endif
-}

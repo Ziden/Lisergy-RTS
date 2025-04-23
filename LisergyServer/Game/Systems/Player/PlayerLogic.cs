@@ -1,4 +1,6 @@
-﻿using Game.Engine.DataTypes;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
 using Game.Entities;
 using Game.Systems.Battle.Data;
@@ -10,167 +12,160 @@ using Game.Tile;
 using Game.World;
 using GameData;
 using GameData.Specs;
-using System.Collections.Generic;
-using System.Linq;
-
 
 namespace Game.Systems.Player
 {
     /// <summary>
-    /// Interacts with player specific data
+    ///     Interacts with player specific data
     /// </summary>
     public class PlayerLogic : BaseEntityLogic<PlayerDataComponent>
-    {
-        private PlayerDataComponent Data => CurrentEntity.Components.Get<PlayerDataComponent>();
+	{
+		private PlayerDataComponent Data => CurrentEntity.Components.Get<PlayerDataComponent>();
 
-        public Unit RecruitUnit(UnitSpecId unitSpecId)
-        {
-            var unit = new Unit(Game.Specs.Units[unitSpecId]);
-            Data.StoredUnits.Add(unit.Id, unit);
-            Game.Log.Debug($"{CurrentEntity} recruited {unit}");
-            return unit;
-        }
+		public Unit RecruitUnit(UnitSpecId unitSpecId)
+		{
+			var unit = new Unit(Game.Specs.Units[unitSpecId]);
+			Data.StoredUnits.Add(unit.Id, unit);
+			Game.Log.Debug($"{CurrentEntity} recruited {unit}");
+			return unit;
+		}
 
-        public IReadOnlyCollection<Location> GetVisibleTiles()
-        {
-            CurrentEntity.Components.TryGet<PlayerVisibilityComponent>(out var visibilityData);
-            return visibilityData?.VisibleTiles;
-        }
+		public IReadOnlyCollection<Location> GetVisibleTiles()
+		{
+			CurrentEntity.Components.TryGet<PlayerVisibilityComponent>(out var visibilityData);
+			return visibilityData?.VisibleTiles;
+		}
 
-        public IReadOnlyList<IEntity> GetBuildings()
-        {
-            return Game.Entities.GetChildren(CurrentEntity.EntityId, EntityType.Building);
-        }
+		public IReadOnlyList<IEntity> GetBuildings()
+		{
+			return Game.Entities.GetChildren(CurrentEntity.EntityId, EntityType.Building);
+		}
 
-        public IReadOnlyList<IEntity> GetParties()
-        {
-            return Game.Entities.GetChildren(CurrentEntity.EntityId, EntityType.Party);
-        }
+		public IReadOnlyList<IEntity> GetParties()
+		{
+			return Game.Entities.GetChildren(CurrentEntity.EntityId, EntityType.Party);
+		}
 
-        public IEntity GetCenter()
-        {
-            return GetBuildings().Where(b => b.Get<PlayerBuildingComponent>().SpecId == Game.Specs.InitialBuildingSpecId).First();
-        }
+		public IEntity GetCenter()
+		{
+			return GetBuildings()
+				.Where(b => b.Get<PlayerBuildingComponent>().SpecId == Game.Specs.InitialBuildingSpecId).First();
+		}
 
         /// <summary>
-        /// Creates a new party for the player on the given party index
+        ///     Creates a new party for the player on the given party index
         /// </summary>
         public IEntity CreateNewParty()
-        {
-            var entity = Game.Entities.CreateEntity(EntityType.Party, CurrentEntity.EntityId);
-            var party = entity.Get<PartyComponent>();
-            entity.Save(party);
-            return entity;
-        }
+		{
+			var entity = Game.Entities.CreateEntity(EntityType.Party, CurrentEntity.EntityId);
+			var party = entity.Get<PartyComponent>();
+			entity.Save(party);
+			return entity;
+		}
 
         /// <summary>
-        /// Gets what the owner of the given entity can build at this moment
+        ///     Gets what the owner of the given entity can build at this moment
         /// </summary>
         public List<BuildingConstructionSpec> GetBuildingOptions()
-        {
-            var list = new List<BuildingConstructionSpec>();
-            foreach (var kp in Game.Specs.BuildingConstructions)
-            {
-                var canBuild = CheckTechTree(kp.Key);
-                if(canBuild.Status == BuildingTechStatus.Available)
-                    list.Add(kp.Value);
-            }
-            return list;
-        }
+		{
+			var list = new List<BuildingConstructionSpec>();
+			foreach (var kp in Game.Specs.BuildingConstructions)
+			{
+				var canBuild = CheckTechTree(kp.Key);
+				if (canBuild.Status == BuildingTechStatus.Available)
+					list.Add(kp.Value);
+			}
+
+			return list;
+		}
 
         /// <summary>
-        /// Adds a new player to the given tile with the initial things a new player should have
+        ///     Adds a new player to the given tile with the initial things a new player should have
         /// </summary>
         public void PlaceNewPlayer(TileModel t)
-        {
-            Game.Log.Debug($"Placing new player {CurrentEntity.EntityId} on tile {t}");
-            if (Game.Specs.InitialBuildingSpecId.HasValue)
-            {
-                t.Entity.Logic.Building.ForceBuild(Game.Specs.InitialBuildingSpecId.Value, CurrentEntity.EntityId);
-            }
-            var initialUnit = Game.Specs.InitialUnit.SpecId;
-            var unit = RecruitUnit(initialUnit);
-            var party = CreateNewParty();
-            PlaceUnitInParty(unit.Id, party);
-            var partyTile = t.GetNeighbor(Direction.EAST);
-            if (!partyTile.Logic.Tile.IsPassable()) partyTile = t.GetNeighbor(Direction.WEST);
-            if (!partyTile.Logic.Tile.IsPassable()) partyTile = t.GetNeighbor(Direction.SOUTH);
-            if (!partyTile.Logic.Tile.IsPassable()) partyTile = t.GetNeighbor(Direction.NORTH);
-            party.Logic.Map.SetPosition(partyTile);
-            Game.Log.Debug($"Placed new player {CurrentEntity} in {t}");
-            return;
-        }
+		{
+			Game.Log.Debug($"Placing new player {CurrentEntity.EntityId} on tile {t}");
+			if (Game.Specs.InitialBuildingSpecId.HasValue)
+				t.Entity.Logic.Building.ForceBuild(Game.Specs.InitialBuildingSpecId.Value, CurrentEntity.EntityId);
+			var initialUnit = Game.Specs.InitialUnit.SpecId;
+			var unit = RecruitUnit(initialUnit);
+			var party = CreateNewParty();
+			PlaceUnitInParty(unit.Id, party);
+			var partyTile = t.GetNeighbor(Direction.EAST);
+			if (!partyTile.Logic.Tile.IsPassable()) partyTile = t.GetNeighbor(Direction.WEST);
+			if (!partyTile.Logic.Tile.IsPassable()) partyTile = t.GetNeighbor(Direction.SOUTH);
+			if (!partyTile.Logic.Tile.IsPassable()) partyTile = t.GetNeighbor(Direction.NORTH);
+			party.Logic.Map.SetPosition(partyTile);
+			Game.Log.Debug($"Placed new player {CurrentEntity} in {t}");
+		}
 
         /// <summary>
-        /// Record a battle header of a battle that happened for this player
+        ///     Record a battle header of a battle that happened for this player
         /// </summary>
         public void RecordBattleHeader(BattleHeader header)
-        {
-            Data.BattleHeaders.Add(header);
-        }
+		{
+			Data.BattleHeaders.Add(header);
+		}
 
         /// <summary>
-        /// Moves a unit to a given party
+        ///     Moves a unit to a given party
         /// </summary>
         public void PlaceUnitInParty(GameId unitId, IEntity newParty)
-        {
-            if (!Data.StoredUnits.TryGetValue(unitId, out var storedUnit))
-            {
-                Game.Log.Error($"Tried to add unity {unitId} to party but unit was not free");
-                return;
-            }
-            Data.StoredUnits.Remove(unitId);
-            Game.Logic.GetEntityLogic(newParty).BattleGroup.AddUnit(storedUnit);
-            Game.Log.Debug($"{CurrentEntity} moved unit {storedUnit} to party {newParty}");
-        }
+		{
+			if (!Data.StoredUnits.TryGetValue(unitId, out var storedUnit))
+			{
+				Game.Log.Error($"Tried to add unity {unitId} to party but unit was not free");
+				return;
+			}
 
-        #region TechTree
+			Data.StoredUnits.Remove(unitId);
+			Game.Logic.GetEntityLogic(newParty).BattleGroup.AddUnit(storedUnit);
+			Game.Log.Debug($"{CurrentEntity} moved unit {storedUnit} to party {newParty}");
+		}
+
+		#region TechTree
+
         /// <summary>
-        /// Checks if a building can be constructed based on tech tree prerequisites
+        ///     Checks if a building can be constructed based on tech tree prerequisites
         /// </summary>
         public BuildingTechResult CheckTechTree(BuildingSpecId buildingToCheck)
-        {
-            var finishedBuildings = GetBuildings()
-                .Where(b => !b.Components.Has<ConstructionSiteComponent>())
-                .Select(b => b.Get<PlayerBuildingComponent>().SpecId)
-                .ToHashSet();
+		{
+			var finishedBuildings = GetBuildings()
+				.Where(b => !b.Components.Has<ConstructionSiteComponent>())
+				.Select(b => b.Get<PlayerBuildingComponent>().SpecId)
+				.ToHashSet();
 
-            var techTree = Game.Specs.ConstructionTechTree;
-            var node = techTree.Root.FindElement(e => e.Id == buildingToCheck);
-            if(node == null)
-            {
-                return new BuildingTechResult { Status = BuildingTechStatus.NotInTechTree };
-            }
-            if(node.Parent == null)
-            {
-                return new BuildingTechResult { Status = BuildingTechStatus.Available };
-            } else if(finishedBuildings.Contains(node.Parent.Data))
-            {
-                return new BuildingTechResult { Status = BuildingTechStatus.Available };
-            }
-            else
-            {
-                return new BuildingTechResult { Status = BuildingTechStatus.NotResearched, BlockedBy = node.Parent.Data };
-            }
-        }
-        #endregion
+			var techTree = Game.Specs.ConstructionTechTree;
+			var node = techTree.Root.FindElement(e => e.Id == buildingToCheck);
+			if (node == null) return new BuildingTechResult {Status = BuildingTechStatus.NotInTechTree};
+			if (node.Parent == null)
+				return new BuildingTechResult {Status = BuildingTechStatus.Available};
+			if (finishedBuildings.Contains(node.Parent.Data))
+				return new BuildingTechResult {Status = BuildingTechStatus.Available};
+			return new BuildingTechResult {Status = BuildingTechStatus.NotResearched, BlockedBy = node.Parent.Data};
+		}
 
-        #region Resources
-        public IReadOnlyDictionary<ResourceSpecId, ushort> AllResources()
-        {
-            return CurrentEntity.Get<CargoComponent>().Items ?? new Dictionary<ResourceSpecId, ushort>();
-        }
+		#endregion
 
-        public bool SpendResource(ResourceSpecId resource, ushort amt)
-        {
-            if (CurrentEntity.Logic.Cargo.TrySpend(resource, amt))
-            {
-                Game.Log.Debug($"{CurrentEntity} spent {amt} of {resource}");
-                return true;
-            }
-            // TODO: Try spending from units ?
-            return false;
-        }
-        #endregion
-    }
+		#region Resources
+
+		public IReadOnlyDictionary<ResourceSpecId, ushort> AllResources()
+		{
+			return CurrentEntity.Get<CargoComponent>().Items ?? new Dictionary<ResourceSpecId, ushort>();
+		}
+
+		public bool SpendResource(ResourceSpecId resource, ushort amt)
+		{
+			if (CurrentEntity.Logic.Cargo.TrySpend(resource, amt))
+			{
+				Game.Log.Debug($"{CurrentEntity} spent {amt} of {resource}");
+				return true;
+			}
+
+			// TODO: Try spending from units ?
+			return false;
+		}
+
+		#endregion
+	}
 }

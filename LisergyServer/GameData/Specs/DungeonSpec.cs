@@ -2,29 +2,40 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace GameData.Specs
+namespace GameData.Specs;
+
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+public struct DungeonSpecId
 {
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct DungeonSpecId
-    {
-        public byte Id;
-        public static implicit operator byte(DungeonSpecId d) => d.Id;
-        public static implicit operator DungeonSpecId(byte b) => new DungeonSpecId() { Id = b };
-        public override string ToString() => Id.ToString();
+	public byte Id;
 
-        public DungeonSpecId(byte id)
-        {
-            Id = id;
-        }
-    }
+	public static implicit operator byte(DungeonSpecId d)
+	{
+		return d.Id;
+	}
 
-    [Serializable]
-    public class DungeonSpec
-    {
-        public DungeonSpecId SpecId;
-        public ArtSpec Art;
-        public List<BattleSpec> BattleSpecs;
-        public ushort LootSpecID;
-    }
+	public static implicit operator DungeonSpecId(byte b)
+	{
+		return new DungeonSpecId() {Id = b};
+	}
+
+	public override string ToString()
+	{
+		return Id.ToString();
+	}
+
+	public DungeonSpecId(byte id)
+	{
+		Id = id;
+	}
+}
+
+[Serializable]
+public class DungeonSpec
+{
+	public ArtSpec Art;
+	public List<BattleSpec> BattleSpecs;
+	public ushort LootSpecID;
+	public DungeonSpecId SpecId;
 }

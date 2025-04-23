@@ -1,29 +1,25 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace GameData.Specs
+namespace GameData.Specs;
+
+[Serializable]
+public class LootTableItemSpec
 {
+	public double Chance;
+	public byte Group;
+	public ushort ItemSpecID;
+}
 
-    [Serializable]
-    public class LootTableItemSpec
-    {
-        public ushort ItemSpecID;
-        public double Chance;
-        public byte Group;
-    }
+[Serializable]
+public class LootSpec
+{
+	public List<LootTableItemSpec> LootTables;
+	public ushort SpecID;
 
-    [Serializable]
-    public class LootSpec
-    {
-        public ushort SpecID;
-        public List<LootTableItemSpec> LootTables;
-
-        public LootSpec(ushort id)
-        {
-            this.SpecID = id;
-            this.LootTables = new List<LootTableItemSpec>();
-        }
-    }
-
+	public LootSpec(ushort id)
+	{
+		SpecID = id;
+		LootTables = new List<LootTableItemSpec>();
+	}
 }

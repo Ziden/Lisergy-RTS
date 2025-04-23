@@ -1,20 +1,20 @@
-﻿using Game.Engine.ECLS;
-using System;
+﻿using System;
+using Game.Engine.ECLS;
 
 namespace Game.Systems.Movement
 {
     /// <summary>
-    /// Defines the entity movement speed
+    ///     Defines the entity movement speed
     /// </summary>
     [Serializable]
-    [SyncedComponent]
-    public class MovespeedComponent : IComponent
-    {
-        public TimeSpan MoveDelay;
+	[SyncedComponent]
+	public class MovespeedComponent : IComponent
+	{
+		public TimeSpan MoveDelay;
 
-        public override string ToString()
-        {
-            return $"<EntityMovementComponent MoveDelay={MoveDelay.TotalSeconds}>";
-        }
-    }
+		public override string ToString()
+		{
+			return $"<EntityMovementComponent MoveDelay={MoveDelay.TotalSeconds}>";
+		}
+	}
 }

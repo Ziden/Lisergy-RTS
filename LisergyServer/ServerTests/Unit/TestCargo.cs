@@ -3,31 +3,30 @@ using Game.Systems.Resources;
 using NUnit.Framework;
 using ServerTests;
 
-namespace GameUnitTests
+namespace GameUnitTests;
+
+public class TestCargo
 {
-    public class TestCargo
-    {
-        private TestGame _game;
-        private TestServerPlayer _player;
-        private IEntity _party;
+	private TestGame _game;
+	private IEntity _party;
+	private TestServerPlayer _player;
 
-        [SetUp]
-        public void Setup()
-        {
-            _game = new TestGame();
-            _player = _game.GetTestPlayer();
-            _party = _player.GetParty(0);
-        }
+	[SetUp]
+	public void Setup()
+	{
+		_game = new TestGame();
+		_player = _game.GetTestPlayer();
+		_party = _player.GetParty(0);
+	}
 
-        [Test]
-        public void TestAddToCargo()
-        {
-            _party.Logic.Cargo.AddTocargo(new ResourceStackData(0, 10));
+	[Test]
+	public void TestAddToCargo()
+	{
+		_party.Logic.Cargo.AddTocargo(new ResourceStackData(0, 10));
 
-            var cargo = _party.Get<CargoComponent>();
+		var cargo = _party.Get<CargoComponent>();
 
-            Assert.AreEqual(10, cargo.GetAmount(0));
-            Assert.IsTrue(cargo.CurrentWeight > 0);
-        }
-    }
+		Assert.AreEqual(10, cargo.GetAmount(0));
+		Assert.IsTrue(cargo.CurrentWeight > 0);
+	}
 }

@@ -1,15 +1,15 @@
-﻿using Game.Engine.Network;
+﻿using System;
+using Game.Engine.Network;
 using Game.Systems.Player;
-using System;
 
 namespace Game.Events.ServerEvents
 {
-    [Serializable]
-    public class LoginResultPacket : BasePacket, IServerPacket
-    {
-        public string Token;
-        public bool Success;
-        public PlayerProfileComponent Profile;
-        public TimeSpan TokenDuration;
-    }
+	[Serializable]
+	public class LoginResultPacket : BasePacket, IServerPacket
+	{
+		public PlayerProfileComponent Profile;
+		public bool Success;
+		public string Token;
+		public TimeSpan TokenDuration;
+	}
 }

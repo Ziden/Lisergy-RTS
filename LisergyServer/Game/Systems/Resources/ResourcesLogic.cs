@@ -4,29 +4,29 @@ using Game.Systems.Tile;
 namespace Game.Systems.Resources
 {
     /// <summary>
-    /// Logic for any entity that has a cargo component meaning he can harvest resources
+    ///     Logic for any entity that has a cargo component meaning he can harvest resources
     /// </summary>
-    public unsafe class ResourcesLogic : BaseEntityLogic<TileDataComponent>
-    {
+    public class ResourcesLogic : BaseEntityLogic<TileDataComponent>
+	{
         /// <summary>
-        /// Reads the tile specs and sets up its resource components
+        ///     Reads the tile specs and sets up its resource components
         /// </summary>
         public void SetTileResourcesFromHarvestSpec()
-        {
-            var tile = CurrentEntity.Logic.Map.GetTile();
-            var harvestPoint = tile.HarvestPointSpec;
-            if (harvestPoint == null)
-            {
-                if (tile.Components.Has<TileResourceComponent>()) tile.Components.Remove<TileResourceComponent>();
-                return;
-            }
-            if (tile.Components.Has<TileResourceComponent>()) return;
+		{
+			var tile = CurrentEntity.Logic.Map.GetTile();
+			var harvestPoint = tile.HarvestPointSpec;
+			if (harvestPoint == null)
+			{
+				if (tile.Components.Has<TileResourceComponent>()) tile.Components.Remove<TileResourceComponent>();
+				return;
+			}
 
-            tile.Components.Add(new TileResourceComponent());
-            var res = tile.Components.Get<TileResourceComponent>();
-            res.Resource = new ResourceStackData(harvestPoint.ResourceId, harvestPoint.ResourceAmount);
-            tile.Save(res);
-        }
+			if (tile.Components.Has<TileResourceComponent>()) return;
 
-    }
+			tile.Components.Add(new TileResourceComponent());
+			var res = tile.Components.Get<TileResourceComponent>();
+			res.Resource = new ResourceStackData(harvestPoint.ResourceId, harvestPoint.ResourceAmount);
+			tile.Save(res);
+		}
+	}
 }

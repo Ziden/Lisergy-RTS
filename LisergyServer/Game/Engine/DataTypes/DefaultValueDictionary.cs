@@ -3,91 +3,93 @@ using System.Collections.Generic;
 
 namespace Game.Engine.DataTypes
 {
-    public class DefaultValueDictionary<TKey, TValue> : IDictionary<TKey, TValue> where TValue : new()
-    {
-        private readonly IDictionary<TKey, TValue> _dict = new Dictionary<TKey, TValue>();
+	public class DefaultValueDictionary<TKey, TValue> : IDictionary<TKey, TValue> where TValue : new()
+	{
+		private readonly IDictionary<TKey, TValue> _dict = new Dictionary<TKey, TValue>();
 
-        public TValue this[TKey key]
-        {
-            get
-            {
-                if (!TryGetValue(key, out TValue val))
-                {
-                    this[key] = FastNew<TValue>.Instance();
-                    return this[key];
-                }
-                return val;
-            }
-            set => _dict[key] = value;
-        }
+		public TValue this[TKey key]
+		{
+			get
+			{
+				if (!TryGetValue(key, out var val))
+				{
+					this[key] = FastNew<TValue>.Instance();
+					return this[key];
+				}
 
-        public ICollection<TKey> Keys => _dict.Keys;
+				return val;
+			}
+			set => _dict[key] = value;
+		}
 
-        public ICollection<TValue> Values => _dict.Values;
+		public ICollection<TKey> Keys => _dict.Keys;
 
-        public int Count => _dict.Count;
+		public ICollection<TValue> Values => _dict.Values;
 
-        public bool IsReadOnly => _dict.IsReadOnly;
+		public int Count => _dict.Count;
 
-        public void Add(TKey key, TValue value)
-        {
-            _dict.Add(key, value);
-        }
+		public bool IsReadOnly => _dict.IsReadOnly;
 
-        public void Add(KeyValuePair<TKey, TValue> item)
-        {
-            _dict.Add(item);
-        }
+		public void Add(TKey key, TValue value)
+		{
+			_dict.Add(key, value);
+		}
 
-        public void Clear()
-        {
-            _dict.Clear();
-        }
+		public void Add(KeyValuePair<TKey, TValue> item)
+		{
+			_dict.Add(item);
+		}
 
-        public bool Contains(KeyValuePair<TKey, TValue> item)
-        {
-            return _dict.Contains(item);
-        }
+		public void Clear()
+		{
+			_dict.Clear();
+		}
 
-        public bool ContainsKey(TKey key)
-        {
-            return _dict.ContainsKey(key);
-        }
+		public bool Contains(KeyValuePair<TKey, TValue> item)
+		{
+			return _dict.Contains(item);
+		}
 
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
-        {
-            _dict.CopyTo(array, arrayIndex);
-        }
+		public bool ContainsKey(TKey key)
+		{
+			return _dict.ContainsKey(key);
+		}
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-        {
-            return _dict.GetEnumerator();
-        }
+		public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+		{
+			_dict.CopyTo(array, arrayIndex);
+		}
 
-        public bool Remove(TKey key)
-        {
-            return _dict.Remove(key);
-        }
+		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+		{
+			return _dict.GetEnumerator();
+		}
 
-        public bool Remove(KeyValuePair<TKey, TValue> item)
-        {
-            return _dict.Remove(item);
-        }
+		public bool Remove(TKey key)
+		{
+			return _dict.Remove(key);
+		}
 
-        public bool TryGetValue(TKey key, out TValue value)
-        {
-            if (!_dict.TryGetValue(key, out value))
-            {
-                this[key] = (TValue)InstanceFactory.CreateInstance(typeof(TValue));
-                value = this[key];
-                return true;
-            }
-            return true;
-        }
+		public bool Remove(KeyValuePair<TKey, TValue> item)
+		{
+			return _dict.Remove(item);
+		}
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _dict.GetEnumerator();
-        }
-    }
+		public bool TryGetValue(TKey key, out TValue value)
+		{
+			if (!_dict.TryGetValue(key, out value))
+			{
+				this[key] = (TValue) InstanceFactory.CreateInstance(typeof(TValue));
+				value = this[key];
+				return true;
+			}
+
+			return true;
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return _dict.GetEnumerator();
+		}
+	}
 }

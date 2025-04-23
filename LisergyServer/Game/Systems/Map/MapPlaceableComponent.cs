@@ -1,14 +1,17 @@
-﻿using Game.Engine.ECLS;
-using System;
+﻿using System;
+using Game.Engine.ECLS;
 
 namespace Game.Systems.Map
 {
     /// <summary>
-    /// Indicates an entity can be placed
+    ///     Indicates an entity can be placed
     /// </summary>
     [Serializable]
-    public class MapPlaceableComponent : IComponent
-    {
-        public override string ToString() => $"<MapPlaceable>";
-    }
+	public class MapPlaceableComponent : IComponent
+	{
+		public override string ToString()
+		{
+			return "<MapPlaceable>";
+		}
+	}
 }

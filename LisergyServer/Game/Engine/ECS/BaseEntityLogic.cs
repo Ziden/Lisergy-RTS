@@ -1,11 +1,14 @@
 ﻿namespace Game.Engine.ECLS
 {
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public class BaseEntityLogic<ComponentType>
-    {
-        protected IGame Game => CurrentEntity.Game;
-        public IEntity CurrentEntity { get; set; } // TODO: Think about this.
-        public ComponentType GetComponent() => CurrentEntity.Get<ComponentType>();
-    }
+	{
+		protected IGame Game => CurrentEntity.Game;
+		public IEntity CurrentEntity { get; set; } // TODO: Think about this.
+
+		public ComponentType GetComponent()
+		{
+			return CurrentEntity.Get<ComponentType>();
+		}
+	}
 }

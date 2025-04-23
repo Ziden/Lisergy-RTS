@@ -1,32 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFrameworks>net8.0</TargetFrameworks>
-    <ImplicitUsings>false</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net8.0</TargetFrameworks>
+        <ImplicitUsings>false</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <Optimize>true</Optimize>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <Optimize>true</Optimize>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MemoryPack" Version="1.21.4" />
-    <PackageReference Include="Terminal.Gui" Version="1.14.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="MemoryPack" Version="1.21.4"/>
+        <PackageReference Include="Terminal.Gui" Version="1.14.0"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Core\BaseServer.csproj" />
-    <ProjectReference Include="..\GameDataTest\GameDataTest.csproj" />
-    <ProjectReference Include="..\GameData\GameData.csproj" />
-    <ProjectReference Include="..\GameServices\GameServices.csproj" />
-    <ProjectReference Include="..\Game\GameLogic.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Core\BaseServer.csproj"/>
+        <ProjectReference Include="..\GameDataTest\GameDataTest.csproj"/>
+        <ProjectReference Include="..\GameData\GameData.csproj"/>
+        <ProjectReference Include="..\GameServices\GameServices.csproj"/>
+        <ProjectReference Include="..\Game\GameLogic.csproj"/>
+    </ItemGroup>
 
 </Project>

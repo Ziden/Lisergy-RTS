@@ -6,26 +6,31 @@ using Game.Tile;
 namespace Game.Systems.Course
 {
     /// <summary>
-    /// Whenever a course finishes its last tile movement
+    ///     Whenever a course finishes its last tile movement
     /// </summary>
     public class CourseFinishEvent : IGameEvent
-    {
-        public IEntity Entity;
-        public CourseIntent Intent;
-        public TileModel ToTile;
+	{
+		public IEntity Entity;
+		public CourseIntent Intent;
+		public TileModel ToTile;
 
-        public override string ToString() => $"<CourseFinish Entity={Entity} Intent={Intent} Tile={ToTile}/>";
-    }
+		public override string ToString()
+		{
+			return $"<CourseFinish Entity={Entity} Intent={Intent} Tile={ToTile}/>";
+		}
+	}
 
     /// <summary>
-    /// Triggered when a course started
+    ///     Triggered when a course started
     /// </summary>
     public class CourseStartEvent : IGameEvent
-    {
-        public IEntity Entity;
-        public CourseIntent Intent;
+	{
+		public IEntity Entity;
+		public CourseIntent Intent;
 
-        public override string ToString() => $"<CourseStart Entity={Entity} Intent={Intent}/>";
-    }
-
+		public override string ToString()
+		{
+			return $"<CourseStart Entity={Entity} Intent={Intent}/>";
+		}
+	}
 }

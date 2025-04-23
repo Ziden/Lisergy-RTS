@@ -1,14 +1,12 @@
-﻿
-using ClientSDK;
+﻿using ClientSDK;
 using ClientSDK.Data;
 using Game.Engine.ECLS;
 
-namespace Tests.Integration.Stubs
+namespace Tests.Integration.Stubs;
+
+public class StubEntityView : EntityView
 {
-    public class StubEntityView : EntityView
-    {
-        public StubEntityView(IEntity entity, IClientSdk client) : base(entity, client)
-        {
-        }
-    }
+	public StubEntityView(IEntity entity, IClientSdk client) : base(entity, client)
+	{
+	}
 }

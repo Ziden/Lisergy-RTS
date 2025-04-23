@@ -1,16 +1,14 @@
-﻿
-namespace ClientSDK
-{
-    using Game.World;
+﻿using Game.World;
 
-    public interface IGameObject
-    {
-        public string Name { get; set; }
-        public Location Location { get; set; }
-        public bool Visible { get; set; }
-        void AddChild(IGameObject child);
-        void DestroyChild(IGameObject child);
-        void Destroy();
-        T Get<T>() where T : class;
-    }
+namespace ClientSDK;
+
+public interface IGameObject
+{
+	public string Name { get; set; }
+	public Location Location { get; set; }
+	public bool Visible { get; set; }
+	void AddChild(IGameObject child);
+	void DestroyChild(IGameObject child);
+	void Destroy();
+	T Get<T>() where T : class;
 }
