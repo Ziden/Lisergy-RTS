@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cecmusuei202s"
 path.s3tc="res://.godot/imported/mud_bricks.png-a94f3d1693c0c138e9497dbeacd82fdb.s3tc.ctex"
+path.etc2="res://.godot/imported/mud_bricks.png-a94f3d1693c0c138e9497dbeacd82fdb.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Sprites/Pack/textures/block/mud_bricks.png"
-dest_files=["res://.godot/imported/mud_bricks.png-a94f3d1693c0c138e9497dbeacd82fdb.s3tc.ctex"]
+dest_files=["res://.godot/imported/mud_bricks.png-a94f3d1693c0c138e9497dbeacd82fdb.s3tc.ctex", "res://.godot/imported/mud_bricks.png-a94f3d1693c0c138e9497dbeacd82fdb.etc2.ctex"]
 
 [params]
 

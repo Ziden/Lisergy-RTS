@@ -31,7 +31,7 @@ public class TestBattleListener
 		_path = new List<Location>();
 		_party = _player.Parties[0];
 		_dungeon = _game.Entities.CreateEntity(EntityType.Dungeon);
-		_dungeon.Logic.Dungeon.SetUnitsFromSpec(_game.Specs.Dungeons[0]);
+		_dungeon.Logic.Dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
 		_dungeon.Logic.Map.SetPosition(_game.World.GetTile(8, 8));
 	}
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bpetys1s05ooa"
 path.s3tc="res://.godot/imported/acacia_leaves.png-0aaf4a6c33f9388a5bae14df5d4ac315.s3tc.ctex"
+path.etc2="res://.godot/imported/acacia_leaves.png-0aaf4a6c33f9388a5bae14df5d4ac315.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Sprites/Pack/textures/block/acacia_leaves.png"
-dest_files=["res://.godot/imported/acacia_leaves.png-0aaf4a6c33f9388a5bae14df5d4ac315.s3tc.ctex"]
+dest_files=["res://.godot/imported/acacia_leaves.png-0aaf4a6c33f9388a5bae14df5d4ac315.s3tc.ctex", "res://.godot/imported/acacia_leaves.png-0aaf4a6c33f9388a5bae14df5d4ac315.etc2.ctex"]
 
 [params]
 

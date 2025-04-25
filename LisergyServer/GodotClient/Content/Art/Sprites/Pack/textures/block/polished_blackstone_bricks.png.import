@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c32nl2btc1lb2"
 path.s3tc="res://.godot/imported/polished_blackstone_bricks.png-cffcb8fcb44589d33fca289501fb5f5e.s3tc.ctex"
+path.etc2="res://.godot/imported/polished_blackstone_bricks.png-cffcb8fcb44589d33fca289501fb5f5e.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Sprites/Pack/textures/block/polished_blackstone_bricks.png"
-dest_files=["res://.godot/imported/polished_blackstone_bricks.png-cffcb8fcb44589d33fca289501fb5f5e.s3tc.ctex"]
+dest_files=["res://.godot/imported/polished_blackstone_bricks.png-cffcb8fcb44589d33fca289501fb5f5e.s3tc.ctex", "res://.godot/imported/polished_blackstone_bricks.png-cffcb8fcb44589d33fca289501fb5f5e.etc2.ctex"]
 
 [params]
 

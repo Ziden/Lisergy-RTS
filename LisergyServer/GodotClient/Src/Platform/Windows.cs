@@ -1,20 +1,19 @@
-﻿namespace LisergyGodotClient.Src.Platform;
+namespace LisergyGodotClient.Src.Platform;
 
 public interface IGamePlatform
 {
 	void Initialize();
 }
 
-#if GODOT_WINDOWS
-    public class Windows : IGamePlatform
-    {
+#if GODOT_WINDOWS_OFF
+	public class Windows : IGamePlatform
+	{
+		[DllImport("kernel32.dll")]
+		static extern bool AllocConsole();
 
-        [DllImport("kernel32.dll")]
-        static extern bool AllocConsole();
-
-        public void Initialize()
-        {
-            AllocConsole();
-        }
-    }
+		public void Initialize()
+		{
+			AllocConsole();
+		}
+	}
 #endif

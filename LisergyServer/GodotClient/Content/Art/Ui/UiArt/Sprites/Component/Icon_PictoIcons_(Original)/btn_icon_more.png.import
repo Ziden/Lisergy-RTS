@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://3h3x2ytyv64i"
 path.s3tc="res://.godot/imported/btn_icon_more.png-185919843ffcac7bb109c3f9067c83c1.s3tc.ctex"
+path.etc2="res://.godot/imported/btn_icon_more.png-185919843ffcac7bb109c3f9067c83c1.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_PictoIcons_(Original)/btn_icon_more.png"
-dest_files=["res://.godot/imported/btn_icon_more.png-185919843ffcac7bb109c3f9067c83c1.s3tc.ctex"]
+dest_files=["res://.godot/imported/btn_icon_more.png-185919843ffcac7bb109c3f9067c83c1.s3tc.ctex", "res://.godot/imported/btn_icon_more.png-185919843ffcac7bb109c3f9067c83c1.etc2.ctex"]
 
 [params]
 

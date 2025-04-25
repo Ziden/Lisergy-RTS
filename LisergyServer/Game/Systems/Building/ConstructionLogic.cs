@@ -79,7 +79,11 @@ namespace Game.Systems.Building
 			    constructionSpec.TimeToBuildSeconds > 0)
 			{
 				var c = new ConstructionSiteComponent();
-				building.Components.Add(c);
+				c.BuildingSpec = buildingSpecId;
+                building.Components.Add(c);
+				var playerBuilding = building.Get<PlayerBuildingComponent>();
+                playerBuilding.SpecId = constructionSpec.ConstructionSiteSpec;
+				building.Save(playerBuilding);
 				building.Save(c);
 			}
 
@@ -134,15 +138,24 @@ namespace Game.Systems.Building
 			UpdateBuildingConstructionState(c);
 			if (c.Percentage >= 100)
 			{
-				CurrentEntity.Components.Remove<ConstructionSiteComponent>();
-				Game.Log.Debug($"{builder} finished building {c}");
-			}
+				FinishBuilding();
+                Game.Log.Debug($"{builder} finished building {c}");
+            }
 			else
 			{
 				Game.Log.Debug($"{builder} stopped building building {c}");
 				CurrentEntity.Save(c);
 			}
 		}
+
+		private void FinishBuilding()
+		{
+            var site = CurrentEntity.Components.Get<ConstructionSiteComponent>();
+            var building = CurrentEntity.Get<PlayerBuildingComponent>();
+			building.SpecId = site.BuildingSpec;
+            CurrentEntity.Components.Remove<ConstructionSiteComponent>();
+            CurrentEntity.Components.Save(building);      
+        }
 
 		public bool IsBeingBuilt => CurrentEntity.Get<ConstructionSiteComponent>()?.BuildingWorkPrediction != null;
 		
@@ -156,11 +169,11 @@ namespace Game.Systems.Building
 					c.Percentage = 100;
 				else c.Percentage = (byte) (snapShot.Percentagage * 100);
 			}
-
+			
 			var b = CurrentEntity.Components.Get<PlayerBuildingComponent>();
 			if (c.EntitiesBuilding.Count > 0)
 			{
-				var constructionSpec = Game.Specs.BuildingConstructions[b.SpecId];
+				var constructionSpec = Game.Specs.BuildingConstructions[c.BuildingSpec];
 				var startTime = Game.Scheduler.LogicalTime;
 				var endTime = startTime + TimeSpan.FromSeconds(constructionSpec.TimeToBuildSeconds);
 				c.BuildingWorkPrediction = new TimeBlock

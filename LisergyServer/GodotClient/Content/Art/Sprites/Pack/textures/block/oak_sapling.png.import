@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cgl32uxoipm7h"
 path.s3tc="res://.godot/imported/oak_sapling.png-90a7e302d8af39816dda679014c9b8af.s3tc.ctex"
+path.etc2="res://.godot/imported/oak_sapling.png-90a7e302d8af39816dda679014c9b8af.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Sprites/Pack/textures/block/oak_sapling.png"
-dest_files=["res://.godot/imported/oak_sapling.png-90a7e302d8af39816dda679014c9b8af.s3tc.ctex"]
+dest_files=["res://.godot/imported/oak_sapling.png-90a7e302d8af39816dda679014c9b8af.s3tc.ctex", "res://.godot/imported/oak_sapling.png-90a7e302d8af39816dda679014c9b8af.etc2.ctex"]
 
 [params]
 

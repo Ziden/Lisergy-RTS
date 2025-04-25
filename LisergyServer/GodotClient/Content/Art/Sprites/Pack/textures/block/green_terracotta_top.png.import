@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cms1lem8ufd1l"
 path.s3tc="res://.godot/imported/green_terracotta_top.png-b5ec56e3dd752fcdf7e908e6cc1ed201.s3tc.ctex"
+path.etc2="res://.godot/imported/green_terracotta_top.png-b5ec56e3dd752fcdf7e908e6cc1ed201.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Sprites/Pack/textures/block/green_terracotta_top.png"
-dest_files=["res://.godot/imported/green_terracotta_top.png-b5ec56e3dd752fcdf7e908e6cc1ed201.s3tc.ctex"]
+dest_files=["res://.godot/imported/green_terracotta_top.png-b5ec56e3dd752fcdf7e908e6cc1ed201.s3tc.ctex", "res://.godot/imported/green_terracotta_top.png-b5ec56e3dd752fcdf7e908e6cc1ed201.etc2.ctex"]
 
 [params]
 

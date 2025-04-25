@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://bmf31mho1mjjt" path="res://addons/Theme/content/sprout_lands_theme.tres" id="1_ebinm"]
 [ext_resource type="Script" uid="uid://4647300eeixs" path="res://Src/Systems/GameHud/GameHudScreen.cs" id="2_vee5o"]
 [ext_resource type="Texture2D" uid="uid://cvjcj7k4gtaed" path="res://Content/Art/Ui/UiArt/Sprites/Demo/Demo_Icon/set_icon_role_wizard.png" id="3_62g7y"]
-[ext_resource type="PackedScene" uid="uid://df221dxl1n1r7" path="res://Content/UI/Widgets/ResourceAmountUI.tscn" id="3_vee5o"]
+[ext_resource type="PackedScene" uid="uid://df221dxl1n1r7" path="res://Content/UI/Widgets/ResourceDisplayWidget.tscn" id="3_vee5o"]
 [ext_resource type="PackedScene" uid="uid://c7redcv7amjwl" path="res://Content/UI/Structure/IconButton.tscn" id="4_ebinm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6gf8w"]

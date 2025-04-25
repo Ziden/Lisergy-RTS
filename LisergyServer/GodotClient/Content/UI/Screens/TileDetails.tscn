@@ -19,8 +19,8 @@ size_flags_vertical = 3
 mouse_filter = 2
 theme = ExtResource("1_ljm1k")
 script = ExtResource("2_ljm1k")
-TabsContainer = NodePath("TabContainer")
 CloseButton = NodePath("Button")
+TabsContainer = NodePath("TabContainer")
 
 [node name="TabContainer" type="TabContainer" parent="."]
 custom_minimum_size = Vector2(250, 0)
@@ -41,8 +41,8 @@ current_tab = 1
 visible = false
 layout_mode = 2
 script = ExtResource("3_2qbwg")
-NamePath = NodePath("")
 ItemPath = NodePath("DataTab/TileIcon")
+NamePath = NodePath("DataTab/Panel/TileTitle")
 metadata/_tab_index = 0
 
 [node name="DataTab" type="VBoxContainer" parent="TabContainer/Data"]
@@ -116,8 +116,8 @@ horizontal_alignment = 1
 layout_mode = 2
 script = ExtResource("5_fi14t")
 HarvestButton = NodePath("VBoxContainer2/Button")
-ResourcePath = NodePath("VBoxContainer2/TileIcon2")
 RatePath = NodePath("VBoxContainer2/Rate")
+ResourcePath = NodePath("VBoxContainer2/TileIcon2")
 TotalPath = NodePath("VBoxContainer2/Time")
 metadata/_tab_index = 1
 

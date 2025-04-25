@@ -17,6 +17,7 @@ public class BuildingConstructionSpec
 	public List<ResourceStackData> Costs;
 	public ArtSpec Icon;
 	public BuildingSpecId SpecId;
+	public BuildingSpecId ConstructionSiteSpec;
 	public ushort TimeToBuildSeconds;
 
 	public BuildingConstructionSpec(byte id)

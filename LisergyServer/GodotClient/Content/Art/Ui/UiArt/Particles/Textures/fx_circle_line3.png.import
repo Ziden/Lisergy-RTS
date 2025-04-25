@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dt0u1gntcvix2"
 path.s3tc="res://.godot/imported/fx_circle_line3.png-9e6eac82653fa6de8cd22efac5336ebc.s3tc.ctex"
+path.etc2="res://.godot/imported/fx_circle_line3.png-9e6eac82653fa6de8cd22efac5336ebc.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Ui/UiArt/Particles/Textures/fx_circle_line3.png"
-dest_files=["res://.godot/imported/fx_circle_line3.png-9e6eac82653fa6de8cd22efac5336ebc.s3tc.ctex"]
+dest_files=["res://.godot/imported/fx_circle_line3.png-9e6eac82653fa6de8cd22efac5336ebc.s3tc.ctex", "res://.godot/imported/fx_circle_line3.png-9e6eac82653fa6de8cd22efac5336ebc.etc2.ctex"]
 
 [params]
 

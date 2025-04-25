@@ -33,7 +33,7 @@ public class TestDungeon
 		_path = new List<Location>();
 		_party = _player.GetParty(0);
 		_dungeon = _game.Entities.CreateEntity(EntityType.Dungeon);
-		_dungeon.Logic.Dungeon.SetUnitsFromSpec(_game.Specs.Dungeons[0]);
+		_dungeon.Logic.Dungeon.BuildFromSpec(_game.Specs.Dungeons[0]);
 
 		Assert.That(_dungeon.Get<BattleGroupComponent>().Units.Valids == 1);
 		_dungeon.Logic.Map.SetPosition(_game.World.GetTile(8, 8));

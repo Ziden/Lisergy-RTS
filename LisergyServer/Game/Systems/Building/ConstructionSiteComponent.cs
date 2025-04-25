@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
+using GameData;
 
 namespace Game.Systems.Building
 {
@@ -15,6 +16,7 @@ namespace Game.Systems.Building
 	public class ConstructionSiteComponent : IComponent
 	{
 		public TimeBlock BuildingWorkPrediction;
+		public BuildingSpecId BuildingSpec;
 
         /// <summary>
         ///     0 to 100

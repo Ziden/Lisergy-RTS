@@ -7,7 +7,7 @@ namespace Game.Systems.Dungeon
 {
 	public class DungeonLogic : BaseEntityLogic<DungeonComponent>
 	{
-		public void SetUnitsFromSpec(DungeonSpec spec)
+		public void BuildFromSpec(DungeonSpec spec)
 		{
 			var group = CurrentEntity.Components.Get<BattleGroupComponent>();
 			for (var s = 0; s < spec.BattleSpecs.Count; s++)

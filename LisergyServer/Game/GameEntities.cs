@@ -71,7 +71,7 @@ namespace Game.Entities
 			if (entityId == GameId.ZERO) entityId = GameId.Generate();
 			if (parent == entityId) parent = GameId.ZERO;
 
-			IEntity e = new BaseEntity(entityId, _game, type);
+			var e = new BaseEntity(entityId, _game, type);
 			SetupArchetype(e, type);
 			var entityNode = new NodeTree<IEntity>(e);
 			_entities[e.EntityId] = entityNode;

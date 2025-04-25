@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bixa6evvirkts"
 path.s3tc="res://.godot/imported/frogspawn0.png-f6754793495c59ec0b9925635a0f2111.s3tc.ctex"
+path.etc2="res://.godot/imported/frogspawn0.png-f6754793495c59ec0b9925635a0f2111.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Sprites/Pack/textures/block/frogspawn0.png"
-dest_files=["res://.godot/imported/frogspawn0.png-f6754793495c59ec0b9925635a0f2111.s3tc.ctex"]
+dest_files=["res://.godot/imported/frogspawn0.png-f6754793495c59ec0b9925635a0f2111.s3tc.ctex", "res://.godot/imported/frogspawn0.png-f6754793495c59ec0b9925635a0f2111.etc2.ctex"]
 
 [params]
 

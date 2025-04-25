@@ -140,4 +140,26 @@ public class TestConstruction
 		Assert.False(_party.Components.Has<ConstructionWorkerComponent>());
 		Assert.Null(component);
 	}
+
+    [Test]
+    public void TestConstructionUpdatingSpecId()
+    {
+        var tile = _party.GetTile().GetNeighbor(Direction.NORTH);
+        var construction = tile.Logic.Building.PlaceConstruction(TestBuildings.CAMP, _player.EntityId);
+        Assert.IsTrue(construction.Logic.Building.AddBuilder(_party));
+
+        var component = construction.Get<ConstructionSiteComponent>();
+		Assert.AreEqual(TestBuildings.CAMP, component.BuildingSpec);
+		Assert.AreEqual(TestBuildings.CONSTRUCTION_CAMP, construction.Get<PlayerBuildingComponent>().SpecId);
+
+        _scheduler.SetLogicalTime(_scheduler.LogicalTime.Add(component.BuildingWorkPrediction.TotalBlockTime));
+
+        _party.Logic.Map.SetPosition(tile); // moving the party should stop building
+
+        component = construction.Get<ConstructionSiteComponent>();
+
+		Assert.AreEqual(TestBuildings.CAMP, construction.Get<PlayerBuildingComponent>().SpecId);
+        Assert.False(_party.Components.Has<ConstructionWorkerComponent>());
+        Assert.Null(component);
+    }
 }

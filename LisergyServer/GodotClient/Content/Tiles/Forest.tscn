@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bgo57v1ro4eww"]
 
 [ext_resource type="Material" uid="uid://pko07ce8e5de" path="res://Content/Art/Models/grass.tres" id="1_gq6y8"]
-[ext_resource type="PackedScene" uid="uid://cp6b2ph25q30o" path="res://Content/Art/Models/3D/Resource_PineTree_Group.gltf" id="1_sxae1"]
+[ext_resource type="PackedScene" uid="uid://cp6b2ph25q30o" path="res://Content/Art/Models/Models/Resource_PineTree_Group.gltf" id="1_sxae1"]
 [ext_resource type="QuadMesh" uid="uid://yesrrh1sqxe7" path="res://Content/Art/Models/quad.tres" id="2_322g6"]
 
 [node name="Tree" type="Node3D"]

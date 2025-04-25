@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bvooaeq3u10mx"
 path.s3tc="res://.godot/imported/acacia_sapling.png-68d575c94ecbf7a885127c776d1efc0d.s3tc.ctex"
+path.etc2="res://.godot/imported/acacia_sapling.png-68d575c94ecbf7a885127c776d1efc0d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Sprites/Pack/textures/block/acacia_sapling.png"
-dest_files=["res://.godot/imported/acacia_sapling.png-68d575c94ecbf7a885127c776d1efc0d.s3tc.ctex"]
+dest_files=["res://.godot/imported/acacia_sapling.png-68d575c94ecbf7a885127c776d1efc0d.s3tc.ctex", "res://.godot/imported/acacia_sapling.png-68d575c94ecbf7a885127c776d1efc0d.etc2.ctex"]
 
 [params]
 

@@ -17,11 +17,12 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=1200
-window/size/viewport_height=800
-window/size/mode=2
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/borderless=true
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep_width"
+window/handheld/orientation=1
 
 [dotnet]
 
@@ -37,6 +38,7 @@ common/physics_ticks_per_second=1
 
 textures/canvas_textures/default_texture_repeat=1
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
 lights_and_shadows/positional_shadow/soft_shadow_filter_quality=1
 textures/default_filters/anisotropic_filtering_level=1
 camera/depth_of_field/depth_of_field_bokeh_shape=0

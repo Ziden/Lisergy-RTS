@@ -13,7 +13,7 @@ namespace Game.Generator
 			{
 				var dungeon = w.Game.Entities.CreateEntity(EntityType.Dungeon);
 				var spec = w.Game.Specs.Dungeons[TestDungeons.EASY.SpecId];
-				dungeon.Logic.Dungeon.SetUnitsFromSpec(spec);
+				dungeon.Logic.Dungeon.BuildFromSpec(spec);
 				dungeon.Logic.Map.SetPosition(place);
 			}
 		}

@@ -82,13 +82,13 @@ size_flags_horizontal = 3
 size_flags_vertical = 6
 theme = ExtResource("1_x1xv3")
 script = ExtResource("2_ciiwy")
-BuildButton = null
-BuildTimeLabel = null
-CloseButton = null
-CostsGrid = null
-DescLabel = null
-MissingRequirement = null
-NameLabel = null
+CloseButton = NodePath("CloseButton")
+CostsGrid = NodePath("MarginContainer/VBoxContainer/CostsContainer/VBoxContainer/MarginContainer/CostGrid")
+NameLabel = NodePath("MarginContainer/VBoxContainer/Desc/VBoxContainer/InfoGrid/PanelContainer/NameLabel")
+DescLabel = NodePath("MarginContainer/VBoxContainer/Desc/VBoxContainer/InfoGrid/PanelContainer2/DescLabel")
+BuildTimeLabel = NodePath("MarginContainer/VBoxContainer/Info/VBoxContainer/GridContainer/PanelContainer2/BuildTime")
+BuildButton = NodePath("MarginContainer/VBoxContainer/Info2/VBoxContainer/BuildButton")
+MissingRequirement = NodePath("MarginContainer/VBoxContainer/Info2/VBoxContainer/RequirementsGrid/PanelContainer/MissingRequirement")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1

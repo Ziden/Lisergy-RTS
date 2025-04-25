@@ -14,10 +14,10 @@ public interface IEntityComponentTab
 
 public partial class TileDataComponentWidget : Control, IEntityComponentTab
 {
-	private ItemStackWidget _resourceWidget;
 	[Export] public NodePath ItemPath;
-
 	[Export] public NodePath NamePath;
+	
+	private ItemStackWidget _resourceWidget;
 	public Type ComponentType => typeof(TileDataComponent);
 	public Control Root => this;
 

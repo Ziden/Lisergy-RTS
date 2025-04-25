@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d31w4nqngudx4"
 path.s3tc="res://.godot/imported/frame_listframe_00_s.png-9f61d8fbe993c6c64867667ee94c73db.s3tc.ctex"
+path.etc2="res://.godot/imported/frame_listframe_00_s.png-9f61d8fbe993c6c64867667ee94c73db.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Ui/UiArt/Sprites/Component/Frame/frame_listframe_00_s.png"
-dest_files=["res://.godot/imported/frame_listframe_00_s.png-9f61d8fbe993c6c64867667ee94c73db.s3tc.ctex"]
+dest_files=["res://.godot/imported/frame_listframe_00_s.png-9f61d8fbe993c6c64867667ee94c73db.s3tc.ctex", "res://.godot/imported/frame_listframe_00_s.png-9f61d8fbe993c6c64867667ee94c73db.etc2.ctex"]
 
 [params]
 

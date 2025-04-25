@@ -21,7 +21,10 @@ public class TileFog
 
 	private void HandleMaterial(MeshInstance3D mesh, BaseMaterial3D mat, bool visible, int surface)
 	{
-		if (_shaded.TryGetValue(mat, out var original) && visible)
+		if(mat == null)
+            return;
+
+        if (_shaded.TryGetValue(mat, out var original) && visible)
 		{
 			mesh.MaterialOverride = original;
 			return;

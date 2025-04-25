@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bmxc7o0v0i51t"
 path.s3tc="res://.godot/imported/cobblestone.png-1434920daee8ff1786315df5074e0f3e.s3tc.ctex"
+path.etc2="res://.godot/imported/cobblestone.png-1434920daee8ff1786315df5074e0f3e.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Sprites/Pack/textures/block/cobblestone.png"
-dest_files=["res://.godot/imported/cobblestone.png-1434920daee8ff1786315df5074e0f3e.s3tc.ctex"]
+dest_files=["res://.godot/imported/cobblestone.png-1434920daee8ff1786315df5074e0f3e.s3tc.ctex", "res://.godot/imported/cobblestone.png-1434920daee8ff1786315df5074e0f3e.etc2.ctex"]
 
 [params]
 

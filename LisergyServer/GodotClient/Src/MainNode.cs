@@ -38,11 +38,11 @@ public partial class MainNode : Node, IEventListener
 	{
 		GameId.INCREMENTAL_MODE = 1;
 #if WINDOWS
-            _platform = new Windows();
+			_platform = new Windows();
 #elif OSX
 		_platform = new Osx();
 #endif
-		_platform.Initialize();
+		_platform?.Initialize();
 		_rootObject = new GodotGameObject(this);
 		
 		_services = new ClientServices(_rootObject);

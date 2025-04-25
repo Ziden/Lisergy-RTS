@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://drd83y2yhs3w0"
 path.s3tc="res://.godot/imported/mangrove_sapling1.png-c2da145355dd74f7cf7cd7f250d6df81.s3tc.ctex"
+path.etc2="res://.godot/imported/mangrove_sapling1.png-c2da145355dd74f7cf7cd7f250d6df81.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Sprites/Pack/textures/block/mangrove_sapling1.png"
-dest_files=["res://.godot/imported/mangrove_sapling1.png-c2da145355dd74f7cf7cd7f250d6df81.s3tc.ctex"]
+dest_files=["res://.godot/imported/mangrove_sapling1.png-c2da145355dd74f7cf7cd7f250d6df81.s3tc.ctex", "res://.godot/imported/mangrove_sapling1.png-c2da145355dd74f7cf7cd7f250d6df81.etc2.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://di415cavw48bm"
 path.s3tc="res://.godot/imported/equip_leaf.png-24c8739f32688d27160d0baf35893ac5.s3tc.ctex"
+path.etc2="res://.godot/imported/equip_leaf.png-24c8739f32688d27160d0baf35893ac5.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Ui/UiArt/Sprites/Component/Icon_EquipmentIcons_(Original)/equip_leaf.png"
-dest_files=["res://.godot/imported/equip_leaf.png-24c8739f32688d27160d0baf35893ac5.s3tc.ctex"]
+dest_files=["res://.godot/imported/equip_leaf.png-24c8739f32688d27160d0baf35893ac5.s3tc.ctex", "res://.godot/imported/equip_leaf.png-24c8739f32688d27160d0baf35893ac5.etc2.ctex"]
 
 [params]
 

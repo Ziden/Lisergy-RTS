@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ca8ux5t0fn4kx"
 path.s3tc="res://.godot/imported/slider_handletype_handle.png-fe9e5e659b04975290e7b260629b845d.s3tc.ctex"
+path.etc2="res://.godot/imported/slider_handletype_handle.png-fe9e5e659b04975290e7b260629b845d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Ui/UiArt/Sprites/Component/Slider/slider_handletype_handle.png"
-dest_files=["res://.godot/imported/slider_handletype_handle.png-fe9e5e659b04975290e7b260629b845d.s3tc.ctex"]
+dest_files=["res://.godot/imported/slider_handletype_handle.png-fe9e5e659b04975290e7b260629b845d.s3tc.ctex", "res://.godot/imported/slider_handletype_handle.png-fe9e5e659b04975290e7b260629b845d.etc2.ctex"]
 
 [params]
 

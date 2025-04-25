@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Game.Engine.Events.Bus;
 using Game.Systems.Resources;

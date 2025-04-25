@@ -17,10 +17,10 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = -5
 theme_override_constants/margin_bottom = -5
 script = ExtResource("2_yo66k")
-ItemWidgetPath = NodePath("Panel/VBoxContainer/ItemPanel")
+BorderPath = NodePath("Panel/TextureRect")
 ButtonPath = NodePath("TextureButton")
 InactivePath = NodePath("Panel/InactiveImage")
-BorderPath = NodePath("Panel/TextureRect")
+ItemWidgetPath = NodePath("Panel/VBoxContainer/ItemPanel")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 2

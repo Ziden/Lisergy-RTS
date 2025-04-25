@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cdc2wta5t47ir"
 path.s3tc="res://.godot/imported/spruce_sapling.png-579dc3b03ca85a1000fc25bb106cf626.s3tc.ctex"
+path.etc2="res://.godot/imported/spruce_sapling.png-579dc3b03ca85a1000fc25bb106cf626.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Sprites/Pack/textures/item/spruce_sapling.png"
-dest_files=["res://.godot/imported/spruce_sapling.png-579dc3b03ca85a1000fc25bb106cf626.s3tc.ctex"]
+dest_files=["res://.godot/imported/spruce_sapling.png-579dc3b03ca85a1000fc25bb106cf626.s3tc.ctex", "res://.godot/imported/spruce_sapling.png-579dc3b03ca85a1000fc25bb106cf626.etc2.ctex"]
 
 [params]
 

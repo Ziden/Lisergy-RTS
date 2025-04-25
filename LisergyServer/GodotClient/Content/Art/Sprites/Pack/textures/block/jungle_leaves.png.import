@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://5eyhurp8f7cp"
 path.s3tc="res://.godot/imported/jungle_leaves.png-02b648d4ec8d95b2dac6314bc1939ac7.s3tc.ctex"
+path.etc2="res://.godot/imported/jungle_leaves.png-02b648d4ec8d95b2dac6314bc1939ac7.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Content/Art/Sprites/Pack/textures/block/jungle_leaves.png"
-dest_files=["res://.godot/imported/jungle_leaves.png-02b648d4ec8d95b2dac6314bc1939ac7.s3tc.ctex"]
+dest_files=["res://.godot/imported/jungle_leaves.png-02b648d4ec8d95b2dac6314bc1939ac7.s3tc.ctex", "res://.godot/imported/jungle_leaves.png-02b648d4ec8d95b2dac6314bc1939ac7.etc2.ctex"]
 
 [params]
 
