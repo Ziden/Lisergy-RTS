@@ -1,9 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://pxb3ondisrej"]
-
-[resource]
-shading_mode = 2
-diffuse_mode = 1
-specular_mode = 2
-disable_ambient_light = true
-disable_fog = true
-albedo_color = Color(0.20972, 0.421525, 9.62615e-08, 1)

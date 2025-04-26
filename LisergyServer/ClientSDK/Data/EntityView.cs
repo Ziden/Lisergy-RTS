@@ -80,7 +80,6 @@ public class EntityView(IEntity entity, IClientSdk client) : IEntityView
 			callback();
 			return;
 		}
-
 		OnRendered += view => callback();
 	}
 

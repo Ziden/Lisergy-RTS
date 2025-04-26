@@ -1,4 +1,4 @@
-﻿<Project Sdk="Godot.NET.Sdk/4.4.0">
+﻿<Project Sdk="Godot.NET.Sdk/4.4.1">
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -13,13 +13,5 @@
         <ProjectReference Include="..\GameDataTest\GameDataTest.csproj" />
         <ProjectReference Include="..\GameData\GameData.csproj" />
         <ProjectReference Include="..\Game\GameLogic.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-        <Folder Include="addons\Theme\" />
-        <Folder Include="Content\" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Src\Shaders\fow.gdshader" />
-        <None Include="Src\Shaders\fow.gdshader.uid" />
     </ItemGroup>
 </Project>

@@ -1,7 +1,0 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dhkelyepufmrf"]
-
-[ext_resource type="Texture2D" uid="uid://dm4owokrghc45" path="res://Content/Art/Sprites/Pack/textures/block/light_blue_stained_glass_pane_top.png" id="1_20vke"]
-
-[resource]
-albedo_color = Color(0.175435, 0.612258, 0.952042, 1)
-albedo_texture = ExtResource("1_20vke")
