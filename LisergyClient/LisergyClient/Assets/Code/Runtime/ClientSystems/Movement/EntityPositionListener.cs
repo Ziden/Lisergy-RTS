@@ -1,9 +1,11 @@
+using System.Linq;
 using Assets.Code.Assets.Code.Runtime.Movement;
 using ClientSDK;
 using ClientSDK.SDKEvents;
 using Cysharp.Threading.Tasks;
 using Game.Engine.ECLS;
 using Game.Systems.Map;
+using Game.Systems.Movement;
 using Game.World;
 
 namespace Assets.Code.Code.Runtime.ClientSystems.Movement
@@ -15,15 +17,35 @@ namespace Assets.Code.Code.Runtime.ClientSystems.Movement
     /// </summary> 
     public class EntityPositionListener : BaseComponentListener<MapPlacementComponent>
     {
-        private readonly MovePathLogic _movementPath;
+        private readonly PathVisualizer _pathVisualizer;
+       // private readonly MovePathLogic _movementPath;
         private readonly IClientSdk _client;
 
         public EntityPositionListener(IClientSdk client) : base(client)
         {
             _client = client;
-            _movementPath = new MovePathLogic(client);
-            _client.ClientEvents.On<MovementInterpolationEndEvent>(this, e => _movementPath.OnFinishedMove(e.Entity, e.To.Entity));
-            _client.ClientEvents.On<EntityMovementRequestStarted>(this, e => _movementPath.StartMovement(e).Forget());
+            //_movementPath = new MovePathLogic(client);
+            _pathVisualizer = new PathVisualizer();
+            _client.ClientEvents.On<MovementInterpolationStartEvent>(this, InterpolationStart);
+            _client.ClientEvents.On<MovementInterpolationEndEvent>(this, InterpolationEnd);
+            _client.ClientEvents.On<EntityMovementRequestStarted>(this, OnMoveRequestStarted);
+        }
+
+        private void InterpolationEnd(MovementInterpolationEndEvent obj)
+        {
+            //_movementPath.OnFinishedMove(e.Entity, e.To.Entity)
+        }
+
+        private void InterpolationStart(MovementInterpolationStartEvent obj)
+        {
+            _pathVisualizer.StartMovement();
+        }
+
+        private void OnMoveRequestStarted(EntityMovementRequestStarted e)
+        {
+            var path = e.Path.Select(p => p.ToUnityVector2()).ToHashSet().ToArray();
+            _pathVisualizer.DrawPath(path, e.Party.Get<MovespeedComponent>().MoveDelay);
+           // _movementPath.StartMovement(e).Forget();
         }
 
         public override void OnComponentRemoved(IEntity entity, MapPlacementComponent oldComponent)
@@ -47,13 +69,13 @@ namespace Assets.Code.Code.Runtime.ClientSystems.Movement
             var fromTile = oldC == null ? null : _client.Game.World.GetTile(oldC.Position);
             if (toTile == null) return;
             _client.Game.Log.Debug($"Entity {e} moved from {fromTile} to {toTile}");
-            _movementPath.OnFinishedMove(e, toTile.Entity);
             var view = e.GetView();
             if (view == null)
             {
                 _client.Game.Log.Error($"Entity {e} have view");
                 return;
             }
+            
             if (view is IEntityMovementInterpolated i && fromTile != null && toTile.Distance(fromTile) <= 1)
             {
                 i.MovementInterpolator.InterpolateMovement(fromTile, toTile);
@@ -62,7 +84,6 @@ namespace Assets.Code.Code.Runtime.ClientSystems.Movement
             {
                 if (view.GameObject != null) view.GameObject.Location = toTile.Position;
             }
-
         }
     }
 }

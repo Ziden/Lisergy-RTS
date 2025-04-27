@@ -111,7 +111,7 @@ namespace Assets.Code.World
             var assets = UnityServicesContainer.Resolve<IAssetService>();
             var modules = UnityServicesContainer.Resolve<IServerModules>();
             var view = (IUnityEntityView)modules.Views.GetOrCreateView(t);
-            var o = await assets.CreateVfx(effect, view.GameObject.Location.ToVector(), Quaternion.identity);
+            var o = await assets.CreateVfx(effect, view.GameObject.Location.ToUnityVector3(), Quaternion.identity);
             o.transform.parent = view.GameObject.Get<Transform>();
             _registry.Effects[t.EntityId].Add(o.gameObject);
             _registry.Indexes[o.GetInstanceID()] = t.EntityId;

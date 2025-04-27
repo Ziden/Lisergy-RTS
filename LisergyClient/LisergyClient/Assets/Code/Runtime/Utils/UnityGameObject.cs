@@ -25,7 +25,7 @@ public struct UnityGameObject : IGameObject
 	public Location Location
 	{
 		get => Node.transform.position.ToPosition();
-		set => Node.transform.position = value.ToVector();
+		set => Node.transform.position = value.ToUnityVector3();
 	
 	}
 

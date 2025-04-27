@@ -94,7 +94,7 @@ namespace Assets.Code.UI
         private void MoveTo(TileModel tile)
         {
             var view = GameClient.Modules.Views.GetEntityView(tile.Entity);
-            var newPosition = RuntimePanelUtils.CameraTransformWorldToPanel(Root.panel, view.GameObject.Location.ToVector(), Camera.main);
+            var newPosition = RuntimePanelUtils.CameraTransformWorldToPanel(Root.panel, view.GameObject.Location.ToUnityVector3(), Camera.main);
             Root.transform.position = newPosition;
         }
 

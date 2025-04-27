@@ -72,7 +72,9 @@ public static class ClientExtensions
     }
 
     public static Location ToPosition(this Vector3 location) => new Location((int)location.x, (int)location.z);
-    public static Vector3 ToVector(this Location loc) => new Vector3(loc.X, 0, loc.Y);
+    public static Vector3 ToUnityVector3(this Location loc) => new Vector3(loc.X, 0, loc.Y);
+    public static Vector3 ToVector(this Location loc) => ToUnityVector3(loc);
+    public static Vector2 ToUnityVector2(this Location loc) => new Vector2(loc.X, loc.Y);
     /// <summary>
     /// Accesses game specific services
     /// </summary>

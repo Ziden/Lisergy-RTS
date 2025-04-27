@@ -52,15 +52,17 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
                 _client.Log.Error($"{_entity} tried to move more than 1 tile distance using interpolation");
                 return;
             }
+            
+            var view = _entity.GetView();
             if (IsInterpolating())
             {
                 _queue.Enqueue((from, to));
                 return;
             }
-            var view = _entity.GetView();
+          
             var gameObject = view.GameObject;
             var moveComponent = _entity.Components.Get<MovespeedComponent>();
-            var duration = moveComponent.MoveDelay.TotalSeconds;
+            var duration = moveComponent.MoveDelay.TotalSeconds; // TODO: -ping
             var tilePos = to.UnityPosition();
             var finalPos = new Vector3(tilePos.x, 0, tilePos.z);
             _currentSequence = gameObject?.Get<Transform>().DOMove(finalPos, (float)duration).SetEase(Ease.Linear)
@@ -77,7 +79,6 @@ namespace Assets.Code.Assets.Code.Runtime.Movement
 
         private void OnStart(TileModel from, TileModel to)
         {
-            _client.Log.Debug($"[MovementInterpolator] Interpolation Started {_entity} from {from} to {to}");
             _client.ClientEvents.Call(new MovementInterpolationStartEvent()
             {
                 Entity = _entity,
