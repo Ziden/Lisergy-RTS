@@ -3,7 +3,9 @@
     "rootNamespace": "",
     "references": [
         "GameAssembly",
-        "Unity.Addressables.Editor"
+        "Unity.Addressables.Editor",
+        "UnityEditor.UI",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [
         "Editor"

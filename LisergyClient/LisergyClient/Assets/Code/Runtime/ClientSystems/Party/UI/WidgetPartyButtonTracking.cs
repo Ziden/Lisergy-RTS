@@ -8,6 +8,7 @@ using Game.Systems.Movement;
 using Game.Systems.Resources;
 using GameAssets;
 using System;
+using Assets.Code.Assets.Code.Assets;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,26 +17,27 @@ namespace Party.UI
 {
     public enum TaskIcon
     {
-        IDDLE, MOVING, HARVESTING
+        Iddle, Moving, Harvesting
     }
 
     /// <summary>
     /// Tracks current party state and displays in the party state widget
     /// This is to show your own party states
     /// </summary>
-    public class WidgetPartyButtonTracking : WidgetElement, IEventListener
+    [UxmlElement]
+    public partial class WidgetPartyButtonTracking : WidgetElement, IEventListener
     {
         private IEntity _trackedEntity;
         private TaskIcon _task;
-        private VisualElement _greenHpBar;
-        private VisualElement _hpBarContainer;
-        private VisualElement _taskOverlay;
-        private Label _taskNumber;
-        private VisualElement _taskIcon;
-        private VisualElement _taskSymbol;
+        private readonly VisualElement _greenHpBar;
+        private readonly VisualElement _hpBarContainer;
+        private readonly VisualElement _taskOverlay;
+        private readonly Label _taskNumber;
+        private readonly VisualElement _taskIcon;
+        private readonly VisualElement _taskSymbol;
         private IVisualElementScheduledItem _progressBar;
 
-        private IClientSDK? _client;
+        private IClientSdk _client;
 
         public WidgetPartyButtonTracking()
         {
@@ -79,7 +81,7 @@ namespace Party.UI
             _hpBarContainer.style.display = DisplayStyle.Flex;
         }
 
-        public override void OnAddedDuringGame(IClientSDK client)
+        public override void OnAddedDuringGame(IClientSdk client)
         {
             var partyWidget = this.parent as WidgetPartyButton;
             if (partyWidget == null) return;
@@ -95,7 +97,7 @@ namespace Party.UI
             }
         }
 
-        public override void OnRemovedDuringGame(IClientSDK client)
+        public override void OnRemovedDuringGame(IClientSdk client)
         {
             client.ClientEvents.RemoveListener(this);
             client.Modules.Entities.RemoveListener(this);
@@ -119,12 +121,12 @@ namespace Party.UI
             _client.Log.Debug("[PartyTracking] Updating own party UI state " + _trackedEntity);
             if (_trackedEntity.Components.TryGet<MovementComponent>(out var c) && !c.CourseId.IsZero())
             {
-                SetTaskIcon(TaskIcon.MOVING).Forget();
+                SetTaskIcon(TaskIcon.Moving).Forget();
             }
             else if (_trackedEntity.Components.Has<HarvestingComponent>())
-                SetTaskIcon(TaskIcon.HARVESTING).Forget();
+                SetTaskIcon(TaskIcon.Harvesting).Forget();
             else
-                SetTaskIcon(TaskIcon.IDDLE).Forget();
+                SetTaskIcon(TaskIcon.Iddle).Forget();
         }
 
         public async UniTaskVoid SetTaskIcon(TaskIcon task)
@@ -133,20 +135,20 @@ namespace Party.UI
             _task = task;
             Debug.Log("[PartyTracking] Setting view task display: " + task);
             SpritePrefab sprite;
-            if (task == TaskIcon.MOVING)
+            if (task == TaskIcon.Moving)
             {
-                sprite = SpritePrefab.Icon_itemicon_shoeswing;
+                sprite = SpritePrefab.Icon_ItemIcons_icon_itemicon_shoeswing;
             }
-            else if (task == TaskIcon.HARVESTING)
+            else if (task == TaskIcon.Harvesting)
             {
-                sprite = SpritePrefab.Icon_itemicon_pickax;
+                sprite = SpritePrefab.Icon_ItemIcons_icon_itemicon_pickax;
             }
             else
             {
                 ClearTask();
                 return;
             }
-            var s = await _client.UnityServices().Assets.GetSprite(sprite);
+            var s = await _client.UnityServices().Assets.GetTexture(sprite.GetAddress());
             if (IsDestroyed()) return;
 
             _taskSymbol.style.backgroundImage = new StyleBackground(s);
@@ -196,8 +198,5 @@ namespace Party.UI
             _progressBar = null;
             HideBar();
         }
-
-        public new class UxmlFactory : UxmlFactory<WidgetPartyButtonTracking, UxmlTraits> { }
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
     }
 }

@@ -11,12 +11,12 @@ namespace Assets.Code
         public TextField Login;
         public TextField Password;
         public Button Submit;
-
+        
         public override UIScreen UiAsset => UIScreen.LoginScreen;
 
         public override void OnBeforeOpen()
         {
-            SceneManager.LoadSceneAsync("Login", LoadSceneMode.Additive);
+           
         }
 
         public override void OnClose()

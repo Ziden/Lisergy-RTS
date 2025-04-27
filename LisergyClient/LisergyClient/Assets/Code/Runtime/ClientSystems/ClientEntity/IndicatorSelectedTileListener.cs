@@ -1,6 +1,7 @@
 using Assets.Code.Assets.Code.Runtime;
 using ClientSDK;
 using ClientSDK.SDKEvents;
+using Cysharp.Threading.Tasks;
 using Game.Engine.Events.Bus;
 using Game.Tile;
 using GameAssets;
@@ -13,19 +14,19 @@ public class IndicatorSelectedTileListener : IEventListener
 {
     private TileModel _selectedTile;
     private GameObject _tileCursor;
-    private IClientSDK _client;
+    private IClientSdk _client;
 
-    public IndicatorSelectedTileListener(IClientSDK client)
+    public IndicatorSelectedTileListener(IClientSdk client)
     {
         _client = client;
         ClientViewState.OnSelectTile += ClickTile;
         ClientViewState.OnCameraMove += OnCameraMove;
         _client.ClientEvents.On<EntityMovementRequestStarted>(this, OnStartMovement);
-        _client.UnityServices().Assets.CreateMapObject(MapObjectPrefab.TileCursor, Vector3.zero, Quaternion.identity, o =>
+        _client.UnityServices().Assets.CreateMapObject(MapObjectPrefab.TileCursor, Vector3.zero, Quaternion.identity).ContinueWith(o =>
         {
             o.SetActive(false);
             _tileCursor = o;
-        });
+        }).Forget();
     }
 
     public void OnStartMovement(EntityMovementRequestStarted ev)

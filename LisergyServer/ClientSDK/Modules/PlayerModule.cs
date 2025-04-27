@@ -26,16 +26,23 @@ public interface IPlayerModule : IClientModule, IEventListener
     public PlayerModel LocalPlayer { get; }
 }
 
-public class PlayerModule(LisergySDK client) : IPlayerModule
+public class PlayerModule : IPlayerModule
 {
+	private readonly LisergySDK _client;
+
+	public PlayerModule(LisergySDK client)
+	{
+		_client = client;
+	}
+
 	public PlayerModel LocalPlayer { get; private set; } = null!;
 	public GameId PlayerId => LocalPlayer.EntityId;
 
 	public void Register()
 	{
-		client.ClientEvents.On<GameStartedEvent>(this, OnGameStart);
-		client.ClientEvents.On<EntityViewRendered>(this, OnAwareOfEntity);
-		client.Network.OnInput<BattleHeaderPacket>(OnBattleSummary);
+		_client.ClientEvents.On<GameStartedEvent>(this, OnGameStart);
+		_client.ClientEvents.On<EntityViewRendered>(this, OnAwareOfEntity);
+		_client.Network.OnInput<BattleHeaderPacket>(OnBattleSummary);
 	}
 
 	private void OnBattleSummary(BattleHeaderPacket result)
@@ -46,13 +53,13 @@ public class PlayerModule(LisergySDK client) : IPlayerModule
 	private void OnAwareOfEntity(EntityViewRendered ev)
 	{
 		if (ev.Entity.OwnerID != PlayerId) return;
-		client.Game.Entities.SetParent(LocalPlayer.EntityId, ev.Entity.EntityId);
-		client.ClientEvents.Call(new OwnEntityInfoReceived(ev.Entity));
+		_client.Game.Entities.SetParent(LocalPlayer.EntityId, ev.Entity.EntityId);
+		_client.ClientEvents.Call(new OwnEntityInfoReceived(ev.Entity));
 	}
 
 	private void OnGameStart(GameStartedEvent gameStartedEvent)
 	{
 		LocalPlayer = gameStartedEvent.LocalPlayer;
-		client.Game.Players.Add(LocalPlayer);
+		_client.Game.Players.Add(LocalPlayer);
 	}
 }

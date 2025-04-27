@@ -15,7 +15,7 @@ namespace Assets.Code.UI
 {
     public enum EntityAction
     {
-        NONE, MOVE, GUARD, ATTACK, CHECK, HARVEST
+        None, Move, Guard, Attack, Check, Harvest, Build
     }
 
     public class ActionBarParams : IGameUiParam
@@ -30,15 +30,16 @@ namespace Assets.Code.UI
         public override UIScreen UiAsset => UIScreen.ScreenPartyActions;
 
         private Dictionary<EntityAction, Button> _buttons = new Dictionary<UI.EntityAction, Button>();
-        public List<EntityAction> NoPartyActions = new EntityAction[] { EntityAction.CHECK }.ToList();
+        public List<EntityAction> NoPartyActions = new EntityAction[] { EntityAction.Check }.ToList();
 
         public override void OnOpen()
         {
-            _buttons[EntityAction.MOVE] = Root.Q<Button>("MoveAction");
-            _buttons[EntityAction.GUARD] = Root.Q<Button>("GuardAction");
-            _buttons[EntityAction.ATTACK] = Root.Q<Button>("AttackAction");
-            _buttons[EntityAction.CHECK] = Root.Q<Button>("CheckAction");
-            _buttons[EntityAction.HARVEST] = Root.Q<Button>("HarvestAction");
+            _buttons[EntityAction.Move] = Root.Q<Button>("MoveAction");
+            _buttons[EntityAction.Guard] = Root.Q<Button>("GuardAction");
+            _buttons[EntityAction.Attack] = Root.Q<Button>("AttackAction");
+            _buttons[EntityAction.Check] = Root.Q<Button>("CheckAction");
+            _buttons[EntityAction.Harvest] = Root.Q<Button>("HarvestAction");
+            _buttons[EntityAction.Build] = Root.Q<Button>("BuildAction");
             foreach (var kp in _buttons)
             {
                 _buttons[kp.Key].clicked += () => ClickAction(kp.Key);
@@ -61,20 +62,26 @@ namespace Assets.Code.UI
             var tileView = GameClient.Modules.Views.GetEntityView(tile.Entity);
             var actions = new List<EntityAction>();
             var buildingOnTile = tileView.Entity.Logic.Tile.GetBuildingOnTile();
+            var resourcesOnTile = party.Logic.Harvesting.GetAvailableResourcesToHarvest(tile).Amount;
             if (buildingOnTile != null)
             {
-                actions.Add(EntityAction.CHECK);
+                actions.Add(EntityAction.Check);
                 if (!buildingOnTile.OwnerID.IsMine())
                 {
-                    actions.Add(EntityAction.ATTACK);
+                    actions.Add(EntityAction.Attack);
+                    actions.Add(EntityAction.Guard);
                 }
                 return actions;
             }
-
-            actions.Add(EntityAction.MOVE);
-            if (party.Logic.Harvesting.GetAvailableResourcesToHarvest(tile).Amount > 0)
+            actions.Add(EntityAction.Move);
+            if (resourcesOnTile == 0)
             {
-                actions.Add(EntityAction.HARVEST);
+                actions.Add(EntityAction.Build);
+            } else 
+            {
+                actions.Add(EntityAction.Harvest);
+                actions.Add(EntityAction.Check);
+                actions.Add(EntityAction.Guard);
             }
             return actions;
         }
@@ -86,8 +93,8 @@ namespace Assets.Code.UI
 
         private void MoveTo(TileModel tile)
         {
-            var view = GameClient.Modules.Views.GetEntityView(tile.Entity) as IGameObject;
-            var newPosition = RuntimePanelUtils.CameraTransformWorldToPanel(Root.panel, view.GameObject.transform.position, Camera.main);
+            var view = GameClient.Modules.Views.GetEntityView(tile.Entity);
+            var newPosition = RuntimePanelUtils.CameraTransformWorldToPanel(Root.panel, view.GameObject.Location.ToVector(), Camera.main);
             Root.transform.position = newPosition;
         }
 

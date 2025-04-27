@@ -16,7 +16,7 @@ public struct HarvestPointSpecId
 
 	public static implicit operator HarvestPointSpecId(byte b)
 	{
-		return new HarvestPointSpecId() {Id = b};
+		return new HarvestPointSpecId {Id = b};
 	}
 
 	public override string ToString()
@@ -31,30 +31,30 @@ public struct HarvestPointSpecId
 [Serializable]
 public class ResourceHarvestPointSpec
 {
-    /// <summary>
-    ///     Harvest time per 1 unit of the resource
-    /// </summary>
-    public TimeSpan HarvestTimePerUnit;
+	/// <summary>
+	///     Max amount of resource to spawn
+	/// </summary>
+	public ushort ResourceAmount;
 
-    /// <summary>
-    ///     Max amount of resource to spawn
-    /// </summary>
-    public ushort ResourceAmount;
+	/// <summary>
+	///     What resource to spawn
+	/// </summary>
+	public ResourceSpecId ResourceId;
 
-    /// <summary>
-    ///     What resource to spawn
-    /// </summary>
-    public ResourceSpecId ResourceId;
+	/// <summary>
+	///     Spec id
+	/// </summary>
+	public HarvestPointSpecId SpecId;
 
-    /// <summary>
-    ///     Time to respawn every unit of the given resource after its stopped being harvested
-    /// </summary>
-    public TimeSpan RespawnTime;
+	/// <summary>
+	///     Harvest time per 1 unit of the resource
+	/// </summary>
+	public TimeSpan HarvestTimePerUnit;
 
-    /// <summary>
-    ///     Spec id
-    /// </summary>
-    public HarvestPointSpecId SpecId;
+	/// <summary>
+	///     Time to respawn every unit of the given resource after its stopped being harvested
+	/// </summary>
+	public TimeSpan RespawnTime;
 
 	public ResourceHarvestPointSpec(in byte i)
 	{

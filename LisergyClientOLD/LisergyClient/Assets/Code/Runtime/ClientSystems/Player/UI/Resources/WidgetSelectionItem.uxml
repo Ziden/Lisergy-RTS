@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/base.uss?fileID=7433441132597879392&amp;guid=f09695809089cfe4d9eac34818d302c8&amp;type=3#base" />
+    <ui:Button name="SelectionCard" class="icon-button" style="height: 398px; max-height: none; width: 318px;">
+        <ui:Label tabindex="-1" text="Castle" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Name" class="icon-buton__name" style="-unity-font: resource(&apos;font/BreatheFireIii-PKLOB&apos;);" />
+        <ui:VisualElement name="Icon" class="icon-button__icon" style="background-image: url(&quot;project://database/Assets/Addressables/Sprites/Icons/Places/castle_place.jpg?fileID=21300000&amp;guid=2aebd1af261c4b24cb4923b82aa28c2a&amp;type=3#castle_place&quot;); height: 336px; width: 289px; -unity-background-scale-mode: scale-and-crop; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px;" />
+    </ui:Button>
+</ui:UXML>

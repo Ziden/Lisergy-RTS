@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Assets.Code
 {
-    public interface IClientSDKServices
+    public interface IClientSdkServices
     {
         public IInputService Input { get; }
         public IUiService UI { get; }
@@ -21,7 +21,7 @@ namespace Assets.Code
         public IVfxService Vfx { get; }
     }
 
-    public class UnityServicesAcessor : IClientSDKServices
+    public class UnityServicesAcessor : IClientSdkServices
     {
         public IInputService Input => UnityServicesContainer.Resolve<IInputService>();
         public IUiService UI => UnityServicesContainer.Resolve<IUiService>();
@@ -38,9 +38,9 @@ namespace Assets.Code
     internal static class UnityServicesContainer
     {
         private static Dictionary<Type, object> _services = new();
-        internal static IClientSDK Client;
+        internal static IClientSdk Client;
 
-        public static IClientSDKServices Interface { get; private set; } = new UnityServicesAcessor();
+        public static IClientSdkServices Interface { get; private set; } = new UnityServicesAcessor();
         public static bool TryResolve<T>(out T t)
         {
             if (_services.TryGetValue(typeof(T), out var dependency))
@@ -83,7 +83,7 @@ namespace Assets.Code
             _services[typeof(T)] = value;
         }
 
-        public static void OnSceneLoaded()
+        public static void OnMainLoaded()
         {
             foreach (var s in _services.Values)
             {

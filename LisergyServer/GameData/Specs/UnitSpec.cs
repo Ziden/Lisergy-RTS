@@ -17,7 +17,7 @@ public struct UnitSpecId
 
 	public static implicit operator UnitSpecId(byte b)
 	{
-		return new UnitSpecId() {Id = b};
+		return new UnitSpecId {Id = b};
 	}
 
 	public override string ToString()

@@ -20,10 +20,7 @@ namespace GameDataTest
 			}
 		};
 
-		private static string Addr(string name)
-		{
-			return $"res://Content/Buildings/{name}.tscn";
-		}
+		private static string Addr(string name) => $"Assets/Addressables/Prefabs/Buildings/{name}.prefab";
 
 		public static void Generate(ref GameSpec spec)
 		{

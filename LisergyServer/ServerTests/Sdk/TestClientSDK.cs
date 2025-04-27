@@ -38,7 +38,7 @@ public class TestGameClientSDKSetup
 	public void Setup()
 	{
 		_client = new TestGameClient(null);
-		_client.Server.Views.RegisterView(EntityType.Tile, OnCreateView);
+		_client.Modules.Views.RegisterView(EntityType.Tile, OnCreateView);
 		_playerId = GameId.Generate();
 		var specs = TestSpecs.Generate();
 		var serverLog = new GameLog("[Server]");
@@ -95,7 +95,7 @@ public class TestGameClientSDKSetup
 			var serverTile = _serverLogic.World.GetTile(loc);
 			var clientTile = _client.Game.World.GetTile(loc);
 
-			Assert.IsTrue(_client.Server.Views.GetEntityView(clientTile.Entity) is StubEntityView);
+			Assert.IsTrue(_client.Modules.Views.GetEntityView(clientTile.Entity) is StubEntityView);
 			Assert.IsTrue(clientTile.Entity.Components.IsUpToDateWith(serverTile.Entity));
 			Assert.IsTrue(serverTile.Components.CompareWith<TileDataComponent>(clientTile.Entity));
 			Assert.AreEqual(serverTile.EntityId, clientTile.EntityId);

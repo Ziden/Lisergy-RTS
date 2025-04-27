@@ -19,7 +19,6 @@
         <ProjectReference Include="..\GameDataTest\GameDataTest.csproj"/>
         <ProjectReference Include="..\GameData\GameData.csproj"/>
         <ProjectReference Include="..\GameServices\GameServices.csproj"/>
-        <ProjectReference Include="..\Game\GameLogic.csproj"/>
     </ItemGroup>
 
 </Project>

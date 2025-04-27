@@ -9,66 +9,66 @@ namespace Game.Specs;
 [Serializable]
 public unsafe struct UnitStats
 {
-    /// <summary>
-    ///     Units physical attack
-    /// </summary>
-    public byte Atk;
+	/// <summary>
+	///     Units physical attack
+	/// </summary>
+	public byte Atk;
 
-    /// <summary>
-    ///     Units physical defense
-    /// </summary>
-    public byte Def;
+	/// <summary>
+	///     Units physical defense
+	/// </summary>
+	public byte Def;
 
-    /// <summary>
-    ///     Units magical attack
-    /// </summary>
-    public byte Matk;
+	/// <summary>
+	///     Units magical attack
+	/// </summary>
+	public byte Matk;
 
-    /// <summary>
-    ///     Unit's magical defence
-    /// </summary>
-    public byte Mdef;
+	/// <summary>
+	///     Unit's magical defence
+	/// </summary>
+	public byte Mdef;
 
-    /// <summary>
-    ///     Unit speed in battle
-    /// </summary>
-    public byte Speed;
+	/// <summary>
+	///     Unit speed in battle
+	/// </summary>
+	public byte Speed;
 
-    /// <summary>
-    ///     Unit chance to hit attacks & spells
-    /// </summary>
-    public byte Accuracy;
+	/// <summary>
+	///     Unit chance to hit attacks & spells
+	/// </summary>
+	public byte Accuracy;
 
-    /// <summary>
-    ///     Current unit weight
-    /// </summary>
-    public byte Weight;
+	/// <summary>
+	///     Current unit weight
+	/// </summary>
+	public byte Weight;
 
-    /// <summary>
-    ///     Unit bonus to how much weight can a party hold in cargo
-    ///     10 = 10%
-    /// </summary>
-    public byte CargoWeightBonusPct;
+	/// <summary>
+	///     Unit bonus to how much weight can a party hold in cargo
+	///     10 = 10%
+	/// </summary>
+	public byte CargoWeightBonusPct;
 
-    /// <summary>
-    ///     Unit current hit points
-    /// </summary>
-    public byte HP;
+	/// <summary>
+	///     Unit current hit points
+	/// </summary>
+	public byte HP;
 
-    /// <summary>
-    ///     Unit max hit points
-    /// </summary>
-    public byte MaxHP;
+	/// <summary>
+	///     Unit max hit points
+	/// </summary>
+	public byte MaxHP;
 
-    /// <summary>
-    ///     Units current magic points
-    /// </summary>
-    public byte MP;
+	/// <summary>
+	///     Units current magic points
+	/// </summary>
+	public byte MP;
 
-    /// <summary>
-    ///     Units max magic points
-    /// </summary>
-    public byte MaxMP;
+	/// <summary>
+	///     Units max magic points
+	/// </summary>
+	public byte MaxMP;
 
 	public UnitStats SetStats(Dictionary<Stat, byte> stats)
 	{

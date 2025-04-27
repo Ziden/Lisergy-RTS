@@ -4,6 +4,7 @@ using Game.Engine.ECLS;
 using Game.Systems.Movement;
 using Game.Tile;
 using Game.World;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace ClientSDK.SDKEvents;
 
@@ -14,8 +15,8 @@ namespace ClientSDK.SDKEvents;
 /// </summary>
 public class EntityMovementRequestStarted : IClientEvent
 {
-	public required TileModel Destination;
+	public TileModel Destination;
 	public CourseIntent Intent;
-	public required IEntity Party;
-	public required IEnumerable<Location> Path;
+	public IEntity Party;
+	public IEnumerable<Location> Path;
 }

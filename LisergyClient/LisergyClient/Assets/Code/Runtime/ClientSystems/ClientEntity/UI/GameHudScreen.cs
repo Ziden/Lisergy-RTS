@@ -10,6 +10,7 @@ using GameAssets;
 using GameData;
 using Player.UI;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,7 +32,6 @@ namespace Assets.Code
             _selectBar = Root.Q<WidgetEntitySelectBar>("WidgetEntitySelectBar").Required();
             _chatSummary = Root.Q<WidgetChatSummary>("WidgetChatSummary").Required();
             _selectBar.OnTownClicked += OnTownButtonClick;
-            _selectBar.OnBuildClicked += () => OpenBuildSelect().Forget();
             ClientViewState.OnCameraMove += OnCameraMove;
             ClientViewState.OnSelectTile += OnClickTile;
             ClientViewState.OnSelectEntity += OnSelectEntity;
@@ -43,7 +43,7 @@ namespace Assets.Code
             ClientViewState.SelectedEntityView = center.GetView();
         }
 
-        private async UniTaskVoid OpenBuildSelect()
+        private void OpenBuildSelect()
         {
             GameClient.UnityServices().UI.Open<SelectScreen<BuildingSpec>>(new SelectScreenParam<BuildingSpec>()
             {
@@ -53,7 +53,7 @@ namespace Assets.Code
                     var constructionSpec = GameClient.Game.Specs.BuildingConstructions[item.SpecId];
                     element.Description.text = item.Description;
                     element.Time.text = $"{constructionSpec.TimeToBuildSeconds} seconds";
-                    element.CostFromResource(constructionSpec.BuildingCost);
+                    element.CostFromResource(constructionSpec.Costs);
                 },
                 CreateSelection = b =>
                 {
@@ -120,7 +120,7 @@ namespace Assets.Code
             if (ClientViewState.SelectedEntityView.Entity?.EntityType == EntityType.Party)
             {
                 var tile = ClientViewState.SelectedTile;
-                if (action == EntityAction.CHECK)
+                if (action == EntityAction.Check)
                 {
                     var selectedTile = ClientViewState.SelectedTile;
                     if (selectedTile.Logic.Tile.GetBuildingOnTile() != null)
@@ -134,7 +134,7 @@ namespace Assets.Code
                     return;
                 }
                 var intent = CourseIntent.Defensive;
-                if (action == EntityAction.ATTACK)
+                if (action == EntityAction.Attack)
                 {
                     if (GameClient.Modules.Player.LocalPlayer.EntityLogic.GetBuildings().Count == 0)
                     {
@@ -143,7 +143,7 @@ namespace Assets.Code
                     }
                     intent = CourseIntent.OffensiveTarget;
                 }
-                else if (action == EntityAction.HARVEST)
+                else if (action == EntityAction.Harvest)
                 {
                     if (!tile.Entity.CanPlayerHarvest()) return;
                     intent = CourseIntent.Harvest;

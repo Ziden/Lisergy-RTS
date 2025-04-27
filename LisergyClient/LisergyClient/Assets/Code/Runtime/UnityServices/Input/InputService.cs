@@ -2,6 +2,7 @@ using Assets.Code.Assets.Code.Runtime;
 using ClientSDK.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Code
 {
@@ -22,7 +23,12 @@ namespace Assets.Code
             _actions.Enable();
             _actions.UI.Enable();
             _cam = Camera.main;
-            _gameCamera = _cam.GetComponent<CameraBehaviour>();
+            _gameCamera = _cam?.GetComponent<CameraBehaviour>();
+            SceneManager.sceneLoaded += (arg0, mode) =>
+            {
+                _cam = Camera.main;
+                _gameCamera = _cam?.GetComponent<CameraBehaviour>();
+            };
         }
 
         private void Update()

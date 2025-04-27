@@ -2,8 +2,9 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFrameworks>net8.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.1</TargetFrameworks>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' "/>
@@ -31,8 +32,13 @@
     <ItemGroup>
         <ProjectReference Include="..\GameDataTest\GameDataTest.csproj"/>
         <ProjectReference Include="..\GameData\GameData.csproj"/>
+        <ProjectReference Include="..\GameLogic\GameLogic.csproj" />
         <ProjectReference Include="..\GameServices\GameServices.csproj"/>
-        <ProjectReference Include="..\Game\GameLogic.csproj"/>
     </ItemGroup>
-
+    
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Condition="$([MSBuild]::IsOSPlatform('OSX'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/BaseServer.dll" />
+        <Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/BaseServer.dll" />
+        <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="xcopy /y /s /f $(TargetPath) $(SolutionDir)\..\LisergyClient\LisergyClient\Assets\Plugins\BaseServer.dll*" />
+    </Target>
 </Project>

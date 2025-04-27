@@ -16,13 +16,17 @@ using Game.Engine.Scheduler;
 using Game.Entities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Assets.Code.Code.Runtime.ClientSystems.Movement;
+using Cysharp.Threading.Tasks;
+using GameAssets;
 using UnityEngine;
 
 public class Main : MonoBehaviour, IEventListener
 {
     public static readonly bool OFFLINE_MODE = true;
 
-    private IClientSDK _client;
+    private IClientSdk _client;
     private ClientNetwork _network;
     private GameStateMachine _stateMachine;
     private List<IEventListener> _listeners = new List<IEventListener>();
@@ -35,6 +39,7 @@ public class Main : MonoBehaviour, IEventListener
         Debug.Log("Main Awake");
         _client = new LisergySDK();
         _client.ClientEvents.On<GameStartedEvent>(this, OnGameStarted);
+        AssetService.OnSceneLoad += OnSceneLoad;
         _network = _client.Network as ClientNetwork;
         SetupViews();
         ConfigureUnity();
@@ -49,20 +54,40 @@ public class Main : MonoBehaviour, IEventListener
         }
     }
 
+    private void OnSceneLoad(SceneAsset scene)
+    {
+        foreach (var l in _listeners)
+        {
+            _client.ClientEvents.RemoveListener(l);
+            _client.Game.Events.RemoveListener(l);
+        }
+        if (scene == SceneAsset.Map)
+        {
+            _listeners.Add(new TileDecorationListener(_client));
+            _listeners.Add(new TileRenderingListener(_client));
+            _listeners.Add(new FogOfWarListener(_client));
+            _listeners.Add(new EntityPositionListener(_client));
+            _listeners.Add(new IndicatorSelectedTileListener(_client));
+            _listeners.Add(new IndicatorSelectedPartyListener(_client));
+            _listeners.Add(new PartyMovementListener(_client));
+            _listeners.Add(new BattleGroupListener(_client));
+            _listeners.Add(new HarvestingComponentListener(_client));
+            _listeners.Add(new HarvestingViewListener(_client));
+            _listeners.Add(new BattleGroupUnitListener(_client));
+        }
+    }
+
     void Start()
     {
         DontDestroyOnLoad(gameObject);
-        UnityServicesContainer.OnSceneLoaded();
+        UnityServicesContainer.OnMainLoaded();
         _stateMachine = new GameStateMachine(_client);
     }
 
     void Update()
     {
         _network?.Tick();
-        if (!_server.Multithreaded)
-        {
-            _server?.SingleThreadTick();
-        }
+        if (!_server.Multithreaded) _server?.SingleThreadTick();
         _scheduler?.Tick(DateTime.UtcNow);
     }
 
@@ -86,39 +111,20 @@ public class Main : MonoBehaviour, IEventListener
     private void OnGameStarted(GameStartedEvent ev)
     {
         SetupLog(ev.Game.Log);
-        SetupLog(_client.Log); // SDK LOGS
-        _listeners.Add(new TileDecorationListener(_client));
-        _listeners.Add(new TileRenderingListener(_client));
-        _listeners.Add(new FogOfWarListener(_client));
-        _listeners.Add(new EntityPositionListener(_client));
-        _listeners.Add(new IndicatorSelectedTileListener(_client));
-        _listeners.Add(new IndicatorSelectedPartyListener(_client));
-        _listeners.Add(new PartyMovementListener(_client));
-        _listeners.Add(new BattleGroupListener(_client));
-        _listeners.Add(new HarvestingComponentListener(_client));
-        _listeners.Add(new HarvestingViewListener(_client));
-        _listeners.Add(new BattleGroupUnitListener(_client));
+        SetupLog(_client.Log); 
         _scheduler = _client.Game.Scheduler as GameScheduler;
     }
 
     public void SetupViews()
     {
-        _client.Modules.Views.CreatorFunction = e =>
-        {
-            switch (e.EntityType)
-            {
-                case EntityType.Party:
-                    return new PartyView(_client, e);
-                case EntityType.Tile:
-                    return new TileView(_client, e);
-                case EntityType.Dungeon:
-                    return new DungeonView(_client, e);
-                case EntityType.Building:
-                    return new PlayerBuildingView(_client, e);
-                default:
-                    return new UnityEntityView(e, _client);
-            }
-        };
+        _client.Modules.Views.RegisterView(
+			EntityType.Tile, e => new TileView(_client, e));
+        _client.Modules.Views.RegisterView(
+			EntityType.Dungeon, e => new DungeonView(_client, e));
+        _client.Modules.Views.RegisterView(
+			EntityType.Party, e => new PartyView(_client, e));
+        _client.Modules.Views.RegisterView(
+            EntityType.Building, e => new PlayerBuildingView(_client, e));
     }
 
     public void SetupServices()
@@ -135,10 +141,18 @@ public class Main : MonoBehaviour, IEventListener
 
     public static void ConfigureUnity()
     {
+        UniTaskScheduler.UnobservedTaskException += HandleError;
+        TaskScheduler.UnobservedTaskException += (s, e) => HandleError(e.Exception);
         Application.targetFrameRate = 60;
         Application.runInBackground = true;
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
+    }
+    
+    [HideInCallstack]
+    public static void HandleError(Exception e)
+    {
+        Debug.LogException(e);
     }
 }

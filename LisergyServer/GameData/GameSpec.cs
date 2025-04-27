@@ -7,16 +7,17 @@ namespace GameData;
 [Serializable]
 public class GameSpec
 {
+	public ConstructionTreeSpec ConstructionTechTree;
+	public HarvestingSpec Harvesting;
+	public UnitSpecId InitialUnitSpecId;
+	public int Version;
 	public Dictionary<byte, BuildingConstructionSpec> BuildingConstructions;
 	public Dictionary<byte, BuildingSpec> Buildings;
-	public ConstructionTreeSpec ConstructionTechTree;
 	public Dictionary<byte, DungeonSpec> Dungeons;
 	public Dictionary<int, EntitySpec> Entities;
-	public HarvestingSpec Harvesting;
 	public Dictionary<byte, ResourceHarvestPointSpec> HarvestPoints;
 
 	public BuildingSpecId? InitialBuildingSpecId;
-	public UnitSpecId InitialUnitSpecId;
 	public Dictionary<ushort, ItemSpec> Items;
 	public Dictionary<ushort, LootSpec> Loots;
 	public Dictionary<byte, ResourceSpec> Resources;
@@ -24,7 +25,6 @@ public class GameSpec
 	public Dictionary<ResourceSpecId, ushort> StartingResources;
 	public Dictionary<byte, TileSpec> Tiles;
 	public Dictionary<byte, UnitSpec> Units;
-	public int Version;
 
 	public GameSpec(int version)
 	{

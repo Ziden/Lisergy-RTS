@@ -1,5 +1,6 @@
 ﻿using Game.Tile;
 using System;
+using GameData;
 using UnityEngine;
 
 namespace Assets.Code.Assets.Code.Runtime
@@ -11,6 +12,7 @@ namespace Assets.Code.Assets.Code.Runtime
     {
         public TileModel SelectedTile;
         public IUnityEntityView SelectedEntity;
+        public BuildingSpecId ConstructionSpecId;
         public Vector3 CameraPosition;
     }
 
@@ -20,6 +22,7 @@ namespace Assets.Code.Assets.Code.Runtime
     /// </summary>
     public static class ClientViewState
     {
+        public static event Action<BuildingSpecId> OnConstructionPlanUpdated;
         public static event Action<Vector3> OnCameraMove;
         public static event Action<TileModel> OnSelectTile;
         public static event Action<IUnityEntityView> OnSelectEntity;
@@ -59,7 +62,7 @@ namespace Assets.Code.Assets.Code.Runtime
         }
 
         /// <summary>
-        /// Camera velocity
+        /// Camera position of the current game camera
         /// </summary>
         public static Vector3 CameraPosition
         {
@@ -71,6 +74,22 @@ namespace Assets.Code.Assets.Code.Runtime
             {
                 OnCameraMove?.Invoke(value);
                 State.CameraPosition = value;
+            }
+        }
+
+        /// <summary>
+        /// The construction the player is trying to build now
+        /// </summary>
+        public static BuildingSpecId ConstructionPlanId
+        {
+            get
+            {
+                return State.ConstructionSpecId;
+            }
+            set
+            {
+                OnConstructionPlanUpdated?.Invoke(value);
+                State.ConstructionSpecId = value;
             }
         }
     }

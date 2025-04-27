@@ -17,7 +17,7 @@ public struct BuildingSpecId
 
 	public static implicit operator BuildingSpecId(byte b)
 	{
-		return new BuildingSpecId() {Id = b};
+		return new BuildingSpecId {Id = b};
 	}
 
 	public override string ToString()

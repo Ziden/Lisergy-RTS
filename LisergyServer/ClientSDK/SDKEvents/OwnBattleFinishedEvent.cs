@@ -1,6 +1,7 @@
 ﻿using ClientSDK.Data;
 using Game.Engine.DataTypes;
 using Game.Systems.Battle.Data;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace ClientSDK.SDKEvents;
 
@@ -10,8 +11,8 @@ namespace ClientSDK.SDKEvents;
 public class OwnBattleFinishedEvent : IClientEvent
 {
 	public GameId BattleId;
-	public required BattleGroupData EnemyTeam;
+	public BattleGroupData EnemyTeam;
 	public bool ImAttacker;
-	public required BattleGroupData MyTeam;
+	public BattleGroupData MyTeam;
 	public bool Victory;
 }

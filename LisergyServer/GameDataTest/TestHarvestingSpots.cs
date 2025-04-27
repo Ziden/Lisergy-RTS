@@ -36,12 +36,7 @@ namespace GameDataTest
 			ResourceId = TestResources.STONE.SpecId,
 			ResourceAmount = 500
 		};
-
-		private static string Addr(string name)
-		{
-			return $"res://Content/Art/Prefabs/Resources/{name}.prefab";
-		}
-
+		
 		public static void Generate(ref GameSpec spec)
 		{
 			spec.HarvestPoints[0] = LOGS;

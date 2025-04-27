@@ -19,7 +19,7 @@ public interface IClientSdk
     /// <summary>
     ///     Client SDK modules that can perform server specific interactions
     /// </summary>
-    public IServerModules Server { get; }
+    public IServerModules Modules { get; }
 
     /// <summary>
     ///     Exposed network to be used. References to Game.Network
@@ -45,14 +45,14 @@ public class LisergySDK : IClientSdk
 		SDKLog = new GameLog("[Client SDK]");
 		Network = new ClientNetwork(SDKLog, ServerType.WORLD, ServerType.ACCOUNT, ServerType.CHAT);
 		var s = new ServerModules(this);
-		Server = s;
+		Modules = s;
 		s.Register();
 	}
 
 	public IGameLog SDKLog { get; }
 	public IGameNetwork Network { get; }
 	public IGame Game { get; private set; } = null!;
-	public IServerModules Server { get; }
+	public IServerModules Modules { get; }
 	public EventBus<IClientEvent> ClientEvents { get; } = new();
 	public IGameLog Log => Game.Log;
 

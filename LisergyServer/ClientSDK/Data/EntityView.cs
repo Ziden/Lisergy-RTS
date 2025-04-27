@@ -63,12 +63,18 @@ public interface IEntityView
     void RunWhenRendered(Action callback);
 }
 
-public class EntityView(IEntity entity, IClientSdk client) : IEntityView
+public class EntityView : IEntityView
 {
-	public IEntity Entity { get; } = entity;
+	public EntityView(IEntity entity, IClientSdk client)
+	{
+		Entity = entity;
+		Client = client;
+	}
+
+	public IEntity Entity { get; }
 
 	public IGameObject? GameObject { get; protected set; }
-	public IClientSdk Client { get; set; } = client;
+	public IClientSdk Client { get; set; }
 	public EntityViewState State { get; protected set; } = EntityViewState.NOT_RENDERED;
 
 	IEntity IEntityView.Entity => Entity;

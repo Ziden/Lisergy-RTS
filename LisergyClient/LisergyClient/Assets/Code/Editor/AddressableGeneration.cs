@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -21,6 +22,7 @@ namespace Code.Editor
 			{"Units", "UnitPrefab"},
 			{"Effects", "VfxPrefab"},
             {"Vfx", "VfxPrefab"},
+            {"Scenes", "SceneAsset"},
             {"Sprites", "SpritePrefab"},
 			{"MapObjects", "MapObjectPrefab"},
 			{"Screens", "UIScreen"},
@@ -96,7 +98,7 @@ namespace Code.Editor
 				stringBuilder.AppendLine("\t{");
 				foreach (var a in kp.Value)
 				{
-					stringBuilder.AppendLine($"\t\t{Format(a.MainAsset.name)} = {id},");
+					stringBuilder.AppendLine($"\t\t{Format(a, kp.Key.Contains("Sprite"))} = {id},");
 					_idMap[id] = a.address;
 					id++;
 				}
@@ -115,8 +117,24 @@ namespace Code.Editor
         File.WriteAllText("Assets/Code/Runtime/UnityServices/Assets/Addresses.cs", stringBuilder.ToString());
 		}
 
-		private static string Format(string s)
+		private static string Format(AddressableAssetEntry o, bool useParent = true)
 		{
+					
+			var s = o.MainAsset.name;
+			if (useParent)
+			{
+				var split = o.AssetPath.Split(Path.DirectorySeparatorChar);
+				var parentName = "";
+				if (split.Length > 1)
+				{
+					parentName = split[^2];
+				}
+				s = parentName + "_" + s;
+			}
+			if (Char.IsNumber(s[0]))
+			{
+				s = "n" + s;
+			}
 			var x = s.Replace(" ", "");
 			x = x.Replace("-", "_");
 			x = x.Replace(".", "_");

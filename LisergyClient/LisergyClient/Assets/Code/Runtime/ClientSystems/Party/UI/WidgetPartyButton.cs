@@ -7,7 +7,8 @@ using UnityEngine.UIElements;
 
 namespace Party.UI
 {
-    public class WidgetPartyButton : WidgetElement
+    [UxmlElement]
+    public partial class WidgetPartyButton : WidgetElement
     {
         private VisualElement _greenHpBar;
         private VisualElement _hpBarContainer;
@@ -54,7 +55,7 @@ namespace Party.UI
             if (leader.Valid)
             {
                 var spec = GameClient.Game.Specs.Units[leader.SpecId];
-                var sprite = await GameClient.UnityServices().Assets.GetSprite(spec.IconArt);
+                var sprite = await GameClient.UnityServices().Assets.GetTexture(spec.IconArt);
                 if (IsDestroyed()) return;
                 _classIcon.style.backgroundImage = new StyleBackground(sprite);
             }
@@ -69,8 +70,5 @@ namespace Party.UI
                 _hpBarContainer.style.display = DisplayStyle.None;
             }
         }
-
-        public new class UxmlFactory : UxmlFactory<WidgetPartyButton, UxmlTraits> { }
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
     }
 }

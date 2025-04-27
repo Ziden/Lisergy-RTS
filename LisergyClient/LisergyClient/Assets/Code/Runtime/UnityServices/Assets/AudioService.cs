@@ -18,17 +18,17 @@ namespace Assets.Code.Assets.Code.Audio
         private AudioSource _audioSource;
 
         private IAssetService _assets;
-        private IClientSDK _client;
+        private IClientSdk _client;
 
-        public AudioService(IClientSDK client)
+        public AudioService(IClientSdk client)
         {
             _client = client;
         }
-
-
+        
         public void OnSceneLoaded()
         {
-            var audio = new GameObject("Sfx");
+            var audio = new GameObject("Audio");
+            UnityEngine.Object.DontDestroyOnLoad(audio);
             _audioSource = audio.AddComponent<AudioSource>();
             _assets = UnityServicesContainer.Resolve<IAssetService>();
         }

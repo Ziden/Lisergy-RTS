@@ -1,0 +1,25 @@
+{
+    "name": "GameAssembly",
+    "rootNamespace": "Assets.Code",
+    "references": [
+        "Unity.InputSystem",
+        "Unity.Mathematics",
+        "Unity.Burst",
+        "Unity.Addressables",
+        "Unity.ResourceManager",
+        "Unity.TextMeshPro",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "Game.dll",
+        "GameData.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

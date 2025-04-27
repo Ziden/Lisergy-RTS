@@ -1,0 +1,4 @@
+﻿{
+    "name": "Plugins",
+    "precompiledReferences": [ "Game.dll" ]
+}

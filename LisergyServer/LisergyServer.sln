@@ -5,8 +5,6 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseServer", "Core\BaseServer.csproj", "{832E3691-6476-49E5-B6FA-2175A8CEE8D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic", "Game\GameLogic.csproj", "{1C33B0EC-B723-4230-A084-FD876AABD11B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameData", "GameData\GameData.csproj", "{5B793397-7989-4CAE-A572-5AC909B8F91F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "ServerTests\Tests.csproj", "{4584F2EF-E15F-479C-BEC9-3DEDDC525658}"
@@ -25,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameServices", "GameService
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LisergyGodotClient", "GodotClient\LisergyGodotClient.csproj", "{9CABBDC6-E8A6-832A-56EE-3F0E0B4434E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityTest", "UnityTest\UnityTest.csproj", "{5185A79A-5D29-4DBD-B273-D4A364C2B189}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic", "GameLogic\GameLogic.csproj", "{2B5567EE-DBBC-43C1-BA47-07168A19D02A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +37,6 @@ Global
 		{832E3691-6476-49E5-B6FA-2175A8CEE8D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{832E3691-6476-49E5-B6FA-2175A8CEE8D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{832E3691-6476-49E5-B6FA-2175A8CEE8D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C33B0EC-B723-4230-A084-FD876AABD11B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C33B0EC-B723-4230-A084-FD876AABD11B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C33B0EC-B723-4230-A084-FD876AABD11B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C33B0EC-B723-4230-A084-FD876AABD11B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B793397-7989-4CAE-A572-5AC909B8F91F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5B793397-7989-4CAE-A572-5AC909B8F91F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B793397-7989-4CAE-A572-5AC909B8F91F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,6 +73,14 @@ Global
 		{9CABBDC6-E8A6-832A-56EE-3F0E0B4434E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CABBDC6-E8A6-832A-56EE-3F0E0B4434E4}.Release|Any CPU.ActiveCfg = ExportDebug|Any CPU
 		{9CABBDC6-E8A6-832A-56EE-3F0E0B4434E4}.Release|Any CPU.Build.0 = ExportDebug|Any CPU
+		{5185A79A-5D29-4DBD-B273-D4A364C2B189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5185A79A-5D29-4DBD-B273-D4A364C2B189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5185A79A-5D29-4DBD-B273-D4A364C2B189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5185A79A-5D29-4DBD-B273-D4A364C2B189}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B5567EE-DBBC-43C1-BA47-07168A19D02A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B5567EE-DBBC-43C1-BA47-07168A19D02A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B5567EE-DBBC-43C1-BA47-07168A19D02A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B5567EE-DBBC-43C1-BA47-07168A19D02A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

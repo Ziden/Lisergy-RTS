@@ -17,7 +17,7 @@ public struct ResourceSpecId
 
 	public static implicit operator ResourceSpecId(byte b)
 	{
-		return new ResourceSpecId() {Id = b};
+		return new ResourceSpecId {Id = b};
 	}
 
 	public override string ToString()

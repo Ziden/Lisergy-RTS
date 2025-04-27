@@ -10,7 +10,7 @@ namespace GameDataTest
 			Name = "Plains",
 			MovementFactor = 1,
 			Model = new ArtSpec(Addr("Plains")),
-			Icon = new ArtSpec("res://Content/Art/Sprites/Icons/FoodIconPack/grass_01.png")
+			Icon = new ArtSpec($"{TestSpecs.AddrIcons}/Icons/FoodIconPack/grass_01.png")
 			{
 				Type = ArtType.SPECIFIC_SPRITE
 			}
@@ -39,7 +39,7 @@ namespace GameDataTest
 			Model = new ArtSpec {Address = Addr("Water"), Type = ArtType.PREFAB},
 			Icon = new ArtSpec
 			{
-				Address = "res://Content/Art/Sprites/Icons/FoodIconPack/water_01.png",
+				Address = $"{TestSpecs.AddrIcons}/Icons/FoodIconPack/water_01.png",
 				Type = ArtType.SPECIFIC_SPRITE
 			}
 		};
@@ -53,15 +53,12 @@ namespace GameDataTest
 			Model = new ArtSpec {Address = Addr("Forest"), Type = ArtType.PREFAB},
 			Icon = new ArtSpec
 			{
-				Address = "res://Content/Art/Sprites/Pack/textures/item/acacia_sapling.png",
+				Address = $"{TestSpecs.AddrIcons}/Pack/textures/item/acacia_sapling.png",
 				Type = ArtType.SPECIFIC_SPRITE
 			}
 		};
 
-		private static string Addr(string name)
-		{
-			return $"res://Content/Tiles/{name}.tscn";
-		}
+		private static string Addr(string name) => $"Assets/Addressables/Prefabs/Tiles/{name}.prefab";
 
 		public static void Generate(ref GameSpec spec)
 		{

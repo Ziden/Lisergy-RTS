@@ -1,13 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.1</TargetFrameworks>
         <LangVersion>8</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\GameData\GameData.csproj"/>
-        <ProjectReference Include="..\Game\GameLogic.csproj"/>
+        <ProjectReference Include="..\GameLogic\GameLogic.csproj" />
     </ItemGroup>
-
+    
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Condition="$([MSBuild]::IsOSPlatform('OSX'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/GameDataTest.dll" />
+        <Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))" Command="cp -vf $(TargetPath) $(SolutionDir)/../LisergyClient/LisergyClient/Assets/Plugins/GameDataTest.dll" />
+        <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="xcopy /y /s /f $(TargetPath) $(SolutionDir)\..\LisergyClient\LisergyClient\Assets\Plugins\GameDataTest.dll*" />
+    </Target>
 </Project>

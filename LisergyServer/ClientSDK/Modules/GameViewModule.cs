@@ -6,11 +6,18 @@ using Game.Entities;
 
 namespace ClientSDK.Services;
 
-public class GameViewModule(LisergySDK client)
+public class GameViewModule
 {
 	private readonly Dictionary<EntityType, Func<IEntity, EntityView>> _creators = new();
 
 	public ViewContainer _views = new();
+	private readonly LisergySDK _client;
+
+	public GameViewModule(LisergySDK client)
+	{
+		_client = client;
+	}
+
 	public event Action<EntityView>? OnViewCreated;
 
 	public void RegisterView(EntityType t, Func<IEntity, EntityView> creator)
@@ -27,7 +34,7 @@ public class GameViewModule(LisergySDK client)
 			if (_creators.TryGetValue(entity.EntityType, out var creator))
 				v = creator(entity);
 			else
-				v = new EntityView(entity, client);
+				v = new EntityView(entity, _client);
 			_views.AddView(entity, v);
 			OnViewCreated?.Invoke(v);
 			return v;

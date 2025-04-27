@@ -8,7 +8,10 @@
         "Unity.Addressables",
         "Unity.ResourceManager",
         "Unity.TextMeshPro",
-        "UniTask"
+        "UniTask",
+        "UnityEditor.UI",
+        "UnityEngine.UI",
+        ""
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

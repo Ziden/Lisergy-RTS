@@ -32,7 +32,8 @@ namespace GameDataTest
 					new CargoComponent {MaxWeight = 100}
 				}).ToArray(),
 				Icon = new ArtSpec(
-					"res://Content/Art/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png")
+				
+					$"{TestSpecs.AddrIcons}//Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png")
 			};
 
 			spec.Entities[(int) EntityType.Building] = new EntitySpec
@@ -44,7 +45,7 @@ namespace GameDataTest
 					new EntityVisionComponent()
 				}).ToArray(),
 				Icon = new ArtSpec(
-					"res://Content/Art/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png")
+					$"{TestSpecs.AddrIcons}/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png")
 			};
 
 			spec.Entities[(int) EntityType.Dungeon] = new EntitySpec
@@ -58,7 +59,7 @@ namespace GameDataTest
 					new BattleGroupComponent()
 				}).ToArray(),
 				Icon = new ArtSpec(
-					"res://Content/Art/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png")
+					$"{TestSpecs.AddrIcons}/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/transparent/wood/wd_t_03.png")
 			};
 
 			spec.Entities[(int) EntityType.Player] = new EntitySpec

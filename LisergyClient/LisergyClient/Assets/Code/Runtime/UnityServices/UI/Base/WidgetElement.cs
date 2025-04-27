@@ -17,7 +17,7 @@ namespace Assets.Code.ClientSystems.Party.UI
         /// Will be null when not running the game (e.g document editor).
         /// Avoid using on element constructors
         /// </summary>
-        protected IClientSDK? GameClient { get; private set; }
+        protected IClientSdk GameClient { get; private set; }
 
         protected VisualTreeAsset LoadUxmlFromResource(string path)
         {
@@ -26,6 +26,7 @@ namespace Assets.Code.ClientSystems.Party.UI
                 loaded.CloneTree(this);
                 return loaded;
             }
+            Debug.Log("Loading "+path);
             var asset = Resources.Load<VisualTreeAsset>(path);
             _loaded[path] = asset;
             asset.CloneTree(this);
@@ -56,9 +57,9 @@ namespace Assets.Code.ClientSystems.Party.UI
             });
         }
 
-        public virtual void OnAddedDuringGame(IClientSDK client) { }
+        public virtual void OnAddedDuringGame(IClientSdk client) { }
 
-        public virtual void OnRemovedDuringGame(IClientSDK client) { }
+        public virtual void OnRemovedDuringGame(IClientSdk client) { }
 
         public Rect Bounds => worldBound;
     }

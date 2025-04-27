@@ -5,6 +5,9 @@ using System.Linq;
 [Serializable]
 public class NodeTree<T>
 {
+	// Core data
+	public T Data;
+
 	// Children are serialized
 	private List<NodeTree<T>> _children;
 
@@ -13,9 +16,6 @@ public class NodeTree<T>
 
 	// This will store parent-child relationships during serialization
 	private Dictionary<int, ParentReference> _parentRelations;
-
-	// Core data
-	public T Data;
 
 	public NodeTree(T data)
 	{

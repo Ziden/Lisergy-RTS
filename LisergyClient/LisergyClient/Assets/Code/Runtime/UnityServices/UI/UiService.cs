@@ -39,9 +39,9 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         private GameObject _screensContainer;
         private IAssetService _assets;
         private GenericSetup _noSetup;
-        private IClientSDK _client;
+        private IClientSdk _client;
 
-        public UiService(IClientSDK client)
+        public UiService(IClientSdk client)
         {
             _client = client;
         }
@@ -50,6 +50,7 @@ namespace Assets.Code.Assets.Code.UIScreens.Base
         {
             _assets = UnityServicesContainer.Resolve<IAssetService>();
             _screensContainer = new GameObject("Game Screens Container");
+            UnityEngine.Object.DontDestroyOnLoad(_screensContainer);
             _noSetup = new GenericSetup();
         }
 

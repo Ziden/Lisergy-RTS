@@ -17,7 +17,7 @@ public struct DungeonSpecId
 
 	public static implicit operator DungeonSpecId(byte b)
 	{
-		return new DungeonSpecId() {Id = b};
+		return new DungeonSpecId {Id = b};
 	}
 
 	public override string ToString()

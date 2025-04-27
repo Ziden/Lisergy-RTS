@@ -8,7 +8,7 @@ public static class UiExtensions
 {
     public static void SetBackground(this VisualElement element, in ArtSpec spec)
     {
-        _ = UnityServicesContainer.Interface.Assets.GetSprite(spec).ContinueWith(sprite =>
+        _ = UnityServicesContainer.Interface.Assets.GetTexture(spec).ContinueWith(sprite =>
         {
             element.style.backgroundImage = new StyleBackground(sprite);
         });

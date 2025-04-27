@@ -63,7 +63,7 @@ public class SmokeTest
 		await Login();
 
 		Assert.NotNull(_client.Game.Players[_playerId]);
-		Assert.AreEqual(_client.Server.Player.LocalPlayer, _client.Game.Players[_playerId]);
+		Assert.AreEqual(_client.Modules.Player.LocalPlayer, _client.Game.Players[_playerId]);
 
 		Assert.IsFalse(_client.Game.Network.DeltaCompression.Enabled);
 		Assert.IsTrue(_server.Game.Network.DeltaCompression.Enabled);
@@ -72,7 +72,7 @@ public class SmokeTest
 		await ValidateEntities();
 		await ValidateMapResources();
 
-		var party = _client.Server.Player.LocalPlayer.EntityLogic.GetParties()[0];
+		var party = _client.Modules.Player.LocalPlayer.EntityLogic.GetParties()[0];
 		var resourceTile = await ValidateHarvestingLocation();
 
 		await MoveEntityTo(party, resourceTile, CourseIntent.Harvest);
@@ -107,7 +107,7 @@ public class SmokeTest
 	private async Task Disconnect()
 	{
 		// Disconnected before receiving
-		_client.Server.Account.SendAuthenticationPacket("abc", "def");
+		_client.Modules.Account.SendAuthenticationPacket("abc", "def");
 		_server.SingleThreadTick();
 		_client.Network.Disconnect();
 		var result = await _client.WaitUntilReceives<LoginResultPacket>();
@@ -117,13 +117,13 @@ public class SmokeTest
 	private async Task Login()
 	{
 		// LOGIN, will reconnect automatically if disconnected
-		_client.Server.Account.SendAuthenticationPacket("abc", "def");
+		_client.Modules.Account.SendAuthenticationPacket("abc", "def");
 		await _client.WaitUntilSends<LoginPacket>();
 		var result = await _client.WaitUntilReceives<LoginResultPacket>();
 		Assert.AreEqual(true, result.Success);
 		_client.ClearEvents();
 		await _client.WaitUntilSends<JoinWorldMapCommand>();
-		_playerId = _client.Server.Player.LocalPlayer.EntityId;
+		_playerId = _client.Modules.Player.LocalPlayer.EntityId;
 		var serverVisibleTiles = _server.Game.Players[_playerId]?.EntityLogic.GetVisibleTiles().Count ?? 42;
 		await _client.WaitUntilPacketCount<EntityUpdatePacket>(serverVisibleTiles);
 	}
@@ -131,7 +131,7 @@ public class SmokeTest
 	private async Task<TileModel> ValidateHarvestingLocation()
 	{
 		_client.ClearEvents();
-		var party = _client.Game.Entities.GetChildren(_client.Server.Player.LocalPlayer.EntityId, EntityType.Party)
+		var party = _client.Game.Entities.GetChildren(_client.Modules.Player.LocalPlayer.EntityId, EntityType.Party)
 			.First();
 		TileModel resourceTile = null;
 		var distance = 0;
@@ -153,7 +153,7 @@ public class SmokeTest
 
 	private async Task ValidateMapTiles()
 	{
-		var visibleTiles = _client.Server.Player.LocalPlayer.EntityLogic.GetVisibleTiles();
+		var visibleTiles = _client.Modules.Player.LocalPlayer.EntityLogic.GetVisibleTiles();
 		var firstReceived = await _client.WaitUntilReceives<EntityUpdatePacket>(p => p.Type == EntityType.Tile);
 		var firstEntityReceived = await _client.WaitUntilReceives<EntityUpdatePacket>(p => p.Type == EntityType.Party);
 		var tileUpdatesReceived = _client.ReceivedPackets
@@ -206,7 +206,7 @@ public class SmokeTest
 			Assert.AreEqual(clientEntity.EntityId, entityUpdate.EntityId);
 			Assert.AreEqual(clientEntity.EntityId, serverEntity.EntityId);
 			Assert.AreEqual(clientEntity.OwnerID, entityUpdate.OwnerId);
-			Assert.NotNull(_client.Server.Views.GetEntityView(clientEntity));
+			Assert.NotNull(_client.Modules.Views.GetEntityView(clientEntity));
 
 			var clientPlacement = clientEntity.Get<MapPlacementComponent>().Position;
 			var serverPlacement = serverEntity.Get<MapPlacementComponent>().Position;
@@ -271,7 +271,7 @@ public class SmokeTest
 	{
 		_client.ClearEvents();
 		var expectedMovementRange = resourceTile.Distance(party.Logic.Map.GetTile());
-		Assert.IsTrue(_client.Server.Actions.MoveEntity(party, resourceTile, intent));
+		Assert.IsTrue(_client.Modules.Actions.MoveEntity(party, resourceTile, intent));
 
 		// Course id updating correctly
 		await _client.WaitForEntityComponentUpdate<MovementComponent>(party);
@@ -297,7 +297,7 @@ public class SmokeTest
 	private async Task StopHarvesting(IEntity party)
 	{
 		_client.ReceivedPackets.Clear();
-		Assert.IsTrue(_client.Server.Actions.StopEntity(party));
+		Assert.IsTrue(_client.Modules.Actions.StopEntity(party));
 		var update = await _client.WaitUntilReceives<EntityUpdatePacket>(p => p.EntityId == party.EntityId);
 
 		// Server should have remoevd the Harvesting Component

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5649871211521485609}
   - component: {fileID: 146516844898244558}
   m_Layer: 6
-  m_Name: UnitSelector
+  m_Name: SelectorRadial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,6 +49,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -133,6 +136,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -244,7 +250,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8277139277798967036, guid: d484c2c3a4b8e71488afd89e3cf739f7,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b3f5cbd288ec9b9428081a3cabe9da1b, type: 2}
     - target: {fileID: 919132149155446097, guid: d484c2c3a4b8e71488afd89e3cf739f7,
@@ -306,7 +312,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d484c2c3a4b8e71488afd89e3cf739f7,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1576815822224087956}
+      addedObject: {fileID: 6252060506478863811}
   m_SourcePrefab: {fileID: 100100000, guid: d484c2c3a4b8e71488afd89e3cf739f7, type: 3}
 --- !u!4 &6010957630680935740 stripped
 Transform:
@@ -320,7 +326,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6116327425888766679}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1576815822224087956
+--- !u!114 &6252060506478863811
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -329,7 +335,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6350329129893197702}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4e266cfff3bb0041ae524099482ccb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 73282145bba087c4e98c7f27ee65f8a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SelectorCrystal: {fileID: 9149051069895692469}

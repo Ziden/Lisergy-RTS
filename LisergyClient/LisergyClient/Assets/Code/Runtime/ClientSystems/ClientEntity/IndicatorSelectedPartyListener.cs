@@ -1,6 +1,7 @@
 using Assets.Code;
 using Assets.Code.Assets.Code.Runtime;
 using ClientSDK;
+using Cysharp.Threading.Tasks;
 using Game.Engine.Events.Bus;
 using Game.Entities;
 using GameAssets;
@@ -11,22 +12,24 @@ using UnityEngine;
 /// </summary>
 public class IndicatorSelectedPartyListener : IEventListener
 {
-    private IClientSDK _client;
+    private IClientSdk _client;
     private EntitySelectionMonoBehaviour _selector;
-
-    public IndicatorSelectedPartyListener(IClientSDK client)
+    private IGameObject _selectorGameObject; 
+    
+    public IndicatorSelectedPartyListener(IClientSdk client)
     {
         _client = client;
         ClientViewState.OnSelectEntity += OnEntitySelected;
-        _client.UnityServices().Assets.CreateMapObject(MapObjectPrefab.UnitCursor, Vector3.zero, Quaternion.identity, o =>
+        _client.UnityServices().Assets.CreateMapObject(MapObjectPrefab.UnitCursor, Vector3.zero, Quaternion.identity).ContinueWith(o =>
         {
-            o.SetActive(false);
             _selector = o.GetComponent<EntitySelectionMonoBehaviour>();
+            _selectorGameObject = _selector.ToLisergyGameObject();
+            o.SetActive(false);
             if (ClientViewState.SelectedEntityView != null)
             {
                 OnEntitySelected(ClientViewState.SelectedEntityView);
             }
-        });
+        }).Forget();
     }
 
     private void OnEntitySelected(IUnityEntityView e)
@@ -34,9 +37,11 @@ public class IndicatorSelectedPartyListener : IEventListener
         if (_selector != null && e != null)
         {
             if (e.GameObject == null) return;
-            _selector.gameObject.transform.SetParent(e.GameObject.transform, true);
-            _selector.gameObject.transform.position = e.GameObject.transform.position;
-            if (e.EntityType == EntityType.Building)
+
+            e.GameObject.AddChild(_selectorGameObject);
+            _selectorGameObject.Location = e.GameObject.Location;
+            
+            if (e.EntityType == EntityType.Building) // TODO: Move this to other place
             {
                 _selector.BuildingRadial.SetActive(true);
                 _selector.UnitRadial.SetActive(false);

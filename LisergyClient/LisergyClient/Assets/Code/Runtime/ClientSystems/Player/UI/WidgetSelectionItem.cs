@@ -10,7 +10,8 @@ namespace Player.UI
 /// <summary>
 /// Represents a selectable item in the selection screen
 /// </summary>
-public class WidgetSelectionItem : WidgetElement
+[UxmlElement]
+public partial class WidgetSelectionItem : WidgetElement
 {
     public Action OnClicked;
 
@@ -32,7 +33,7 @@ public class WidgetSelectionItem : WidgetElement
 
     public async UniTaskVoid SetData(string name, ArtSpec art, object data)
     {
-        var sprite = await GameClient.UnityServices().Assets.GetSprite(art);
+        var sprite = await GameClient.UnityServices().Assets.GetTexture(art);
         _icon.style.backgroundImage = new StyleBackground(sprite);
         _name.text = name;
         Data = data;
@@ -43,7 +44,4 @@ public class WidgetSelectionItem : WidgetElement
         if (hightlight) _card.AddToClassList(USS_CARD_HIGHLIGHT);
         else _card.RemoveFromClassList(USS_CARD_HIGHLIGHT);
     }
-
-    public new class UxmlFactory : UxmlFactory<WidgetSelectionItem, UxmlTraits> { }
-    public new class UxmlTraits : VisualElement.UxmlTraits { }
 }

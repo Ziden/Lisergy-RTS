@@ -21,15 +21,15 @@ public class SystemSynchronizer
 
 	public void ListenForRequiredSyncs()
 	{
-		_gameClient.Server.Entities.OnComponentModified<MapPlacementComponent>(OnUpdatePlacement);
-		_gameClient.Server.Entities.OnComponentAdded<MapPlacementComponent>(OnAddPlacement);
+		_gameClient.Modules.Entities.OnComponentModified<MapPlacementComponent>(OnUpdatePlacement);
+		_gameClient.Modules.Entities.OnComponentAdded<MapPlacementComponent>(OnAddPlacement);
 	}
 
 	private void OnAddPlacement(IEntity entity, MapPlacementComponent component)
 	{
 		var tile = _gameClient.Game.World.GetTile(component.Position);
 		entity.Logic.Map.SetPosition(tile);
-		if (entity.Components.Has<EntityVisionComponent>() && entity.OwnerID == _gameClient.Server.Player.PlayerId)
+		if (entity.Components.Has<EntityVisionComponent>() && entity.OwnerID == _gameClient.Modules.Player.PlayerId)
 			entity.Logic.Vision.UpdateVisionRange(null, tile);
 	}
 
@@ -40,7 +40,7 @@ public class SystemSynchronizer
     private void OnUpdatePlacement(IEntity entity, MapPlacementComponent oldValue, MapPlacementComponent newValue)
 	{
 		if (!entity.Components.Has<EntityVisionComponent>() ||
-		    entity.OwnerID != _gameClient.Server.Player.PlayerId) return;
+		    entity.OwnerID != _gameClient.Modules.Player.PlayerId) return;
 		if (oldValue.Position != newValue.Position)
 		{
 			var oldTile = _gameClient.Game.World.GetTile(oldValue.Position.X, oldValue.Position.Y);

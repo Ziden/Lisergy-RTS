@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Items
+  m_EditorClassIdentifier: 
+  m_GroupName: Items
+  m_GUID: 06583249ed3b74249a989f224ff49a15
+  m_SerializeEntries:
+  - m_GUID: 1ee8ef3c19495c449bcbe01fb87a0cae
+    m_Address: Assets/Addressables/Sprites/Icons/ResourcesAndCraftIcons
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e72b6e9479953464fa5159a511143b01
+    m_Address: Assets/Addressables/Sprites/Icons/MagicItems
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef5b894c9aa894ed7a40b016d07d0705
+    m_Address: Assets/Addressables/Sprites/Ui/Component/Icon_ItemIcons_(Original)
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: b09defdd2ea25a04a9d7584493f44cd4, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 13c1b84f8be5047278d19d226accf3a9, type: 2}
+    - {fileID: 11400000, guid: cbab217e8c223483eb693de3cce4351e, type: 2}

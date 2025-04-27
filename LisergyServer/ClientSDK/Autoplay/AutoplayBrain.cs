@@ -5,14 +5,15 @@ using Game.Engine.DataTypes;
 using Game.Engine.ECLS;
 using Game.Engine.Events.Bus;
 using Game.Engine.Network;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace ClientSDK.Autoplay;
 
 public class BrainTask
 {
 	internal bool Sent = false;
-	public required BasePacket Command;
-	public required Func<bool> IsComplete;
+	public BasePacket Command;
+	public Func<bool> IsComplete;
 }
 
 public class AutoplayController : IEventListener
@@ -32,7 +33,7 @@ public class AutoplayController : IEventListener
 
 	public AutoplayBrain GetBrain(IEntity e)
 	{
-		if (e.OwnerID != _sdk.Server.Player.PlayerId) return null!;
+		if (e.OwnerID != _sdk.Modules.Player.PlayerId) return null!;
 		if (!_brains.TryGetValue(e.EntityId, out var brain))
 		{
 			_brains[e.EntityId] = new AutoplayBrain(_sdk);
@@ -42,10 +43,15 @@ public class AutoplayController : IEventListener
 	}
 }
 
-public class AutoplayBrain(IClientSdk sdk)
+public class AutoplayBrain
 {
 	private Queue<BrainTask> _commandQueue = new();
-	private IClientSdk _sdk = sdk;
+	private IClientSdk _sdk;
+
+	public AutoplayBrain(IClientSdk sdk)
+	{
+		_sdk = sdk;
+	}
 
 	public void Tick()
 	{

@@ -22,10 +22,7 @@ namespace GameDataTest
             return parent;
         }
 
-        private static string Addr(string name)
-        {
-            return $"res://Content/Buildings/{name}.tscn";
-        }
+        private static string Addr(string name) => $"Assets/Addressables/Prefabs/Buildings/{name}.prefab";
 
         public static void GenerateConstruction(ref GameSpec spec)
         {
@@ -40,7 +37,7 @@ namespace GameDataTest
             spec.BuildingConstructions[CAMP] = new BuildingConstructionSpec(CAMP)
             {
                 ConstructionSiteSpec = CONSTRUCTION_CAMP,
-                Icon = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/bg/bag_09_b.PNG",
+                Icon = $"{TestSpecs.AddrIcons}/Icons/MagicItems/MagicItems_png/bg/bag_09_b.PNG",
                 SpecId = CAMP,
                 TimeToBuildSeconds = 10,
                 Costs = new[] { new ResourceStackData(TestResources.LOGS.SpecId, 10) }.ToList()
@@ -49,7 +46,7 @@ namespace GameDataTest
             spec.BuildingConstructions[FARM] = new BuildingConstructionSpec(FARM)
             {
                 ConstructionSiteSpec = CONSTRUCTION_CAMP,
-                Icon = "res://Content/Art/Sprites/Icons/Herbal_Icons/Herbal_Icons_png/Addons/11_b.PNG",
+                Icon = $"{TestSpecs.AddrIcons}/Icons/Herbal_Icons/Herbal_Icons_png/Addons/11_b.PNG",
                 SpecId = FARM,
                 TimeToBuildSeconds = 10,
                 Costs = new[]
@@ -65,7 +62,7 @@ namespace GameDataTest
             {
                 ConstructionSiteSpec = CONSTRUCTION_CAMP,
                 Icon =
-                    "res://Content/Art/Sprites/Icons/WeaponAndArmorIcons/WeaponAndArmorIcons_png/black/addons/013_b.png",
+                    $"{TestSpecs.AddrIcons}/Icons/WeaponAndArmorIcons/WeaponAndArmorIcons_png/black/addons/013_b.png",
                 SpecId = FORT,
                 TimeToBuildSeconds = 10,
                 Costs = new[]
@@ -81,7 +78,7 @@ namespace GameDataTest
             {
                 ConstructionSiteSpec = CONSTRUCTION_CAMP,
                 Icon =
-                    "res://Content/Art/Sprites/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/black/wood/wd_b_07.png",
+                    $"{TestSpecs.AddrIcons}/Icons/ResourcesAndCraftIcons/ResourcesAndCraftIcons_png/black/wood/wd_b_07.png",
                 SpecId = LUMBER_CAMP,
                 TimeToBuildSeconds = 10,
                 Costs = new[]
@@ -96,7 +93,7 @@ namespace GameDataTest
             spec.BuildingConstructions[TAVERN] = new BuildingConstructionSpec(FARM)
             {
                 ConstructionSiteSpec = CONSTRUCTION_CAMP,
-                Icon = "res://Content/Art/Sprites/Icons/LootIcons/LootIcons_png/black/mug_b_01.png",
+                Icon = $"{TestSpecs.AddrIcons}/Icons/LootIcons/LootIcons_png/black/mug_b_01.png",
                 SpecId = TAVERN,
                 TimeToBuildSeconds = 10,
                 Costs = new[]

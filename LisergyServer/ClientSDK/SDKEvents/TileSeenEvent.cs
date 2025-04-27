@@ -6,7 +6,15 @@ namespace ClientSDK.SDKEvents;
 /// <summary>
 ///     Fired when an entity is seen and not known by client
 /// </summary>
-public class TileSeenEvent(IEntity e) : IClientEvent
+public class TileSeenEvent : IClientEvent
 {
-	public IEntity Entity = e;
+	public IEntity Entity;
+
+	/// <summary>
+	///     Fired when an entity is seen and not known by client
+	/// </summary>
+	public TileSeenEvent(IEntity e)
+	{
+		Entity = e;
+	}
 }

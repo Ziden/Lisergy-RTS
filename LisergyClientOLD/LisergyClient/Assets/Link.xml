@@ -1,0 +1,11 @@
+<linker>
+  <assembly fullname="mscorlib" preserve="all"/>
+  <assembly fullname="netstandard" preserve="all"/>
+  <assembly fullname="System" preserve="all"/>
+  <assembly fullname="System.Linq" preserve="all"/>
+  <assembly fullname="System.Linq.Parallel" preserve="all"/>
+  <assembly fullname="System.Linq.Queryable" preserve="all"/>
+  <assembly fullname="GameAssembly" preserve="all"/>
+  <assembly fullname="BaseServer" preserve="all"/>
+  <assembly fullname="ClientSDK" preserve="all"/>
+</linker>

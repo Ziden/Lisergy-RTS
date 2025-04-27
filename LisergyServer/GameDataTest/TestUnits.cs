@@ -24,10 +24,7 @@ namespace GameDataTest
 			{Stat.MMP, 30}
 		});
 
-		public static string Addr(string name)
-		{
-			return $"res://Content/Units/{name}.tscn";
-		}
+		public static string Addr(string name) => $"Assets/Addressables/Prefabs/Units/{name}.prefab";
 
 		public static string AddrFace(string name)
 		{
@@ -72,7 +69,7 @@ namespace GameDataTest
 				IconArt = new ArtSpec
 				{
 					Type = ArtType.SPECIFIC_SPRITE,
-					Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.pngpng"
+					Address = $"{TestSpecs.AddrIcons}/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.pngpng"
 				},
 				LOS = 2,
 				Stats = AddToBase(
@@ -92,7 +89,7 @@ namespace GameDataTest
 				IconArt = new ArtSpec
 				{
 					Type = ArtType.SPECIFIC_SPRITE,
-					Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.png"
+					Address = $"{TestSpecs.AddrIcons}/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.png"
 				},
 				Stats = AddToBase(
 					(Stat.ATK, 10),
@@ -111,7 +108,7 @@ namespace GameDataTest
 				IconArt = new ArtSpec
 				{
 					Type = ArtType.SPECIFIC_SPRITE,
-					Address = "res://Content/Art/Sprites/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.png"
+					Address = $"{TestSpecs.AddrIcons}/Icons/MagicItems/MagicItems_png/transparent/staff_05_t.png"
 				},
 				LOS = 3,
 				Stats = AddToBase(

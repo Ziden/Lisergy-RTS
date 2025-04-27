@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>net8.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.1</TargetFrameworks>
         <Description>A very fast and minimal serializer</Description>
         <Company>Tomi Valkeinen</Company>
         <Copyright>Copyright © 2012-2022 Tomi Valkeinen</Copyright>
@@ -10,6 +10,7 @@
         <PackageTags>Serializer</PackageTags>
         <RepositoryUrl>https://github.com/tomba/netserializer</RepositoryUrl>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

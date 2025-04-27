@@ -76,7 +76,7 @@ public class ChatModule : IChatModule
 	{
 		_gameClient.Network.SendToServer(new ChatPacket
 		{
-			Name = _gameClient.Server.Player.LocalPlayer.GetFromEntity<PlayerProfileComponent>().Name,
+			Name = _gameClient.Modules.Player.LocalPlayer.GetFromEntity<PlayerProfileComponent>().Name,
 			Message = message
 		}, ServerType.CHAT);
 	}

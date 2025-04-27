@@ -124,7 +124,7 @@ public class ComponentSynchronizer : IComponentSync
 
 	public void ProccessUpdate(IEntity currentEntity, object[] updated, uint[] removed)
 	{
-		var view = _client.Server.Views.GetEntityView(currentEntity);
+		var view = _client.Modules.Views.GetEntityView(currentEntity);
 
 		_toSync.Clear();
 		_added.Clear();

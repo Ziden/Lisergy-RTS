@@ -1,5 +1,6 @@
 ﻿using ClientSDK.Data;
 using Game.Engine.ECLS;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace ClientSDK.SDKEvents;
 
@@ -11,6 +12,6 @@ namespace ClientSDK.SDKEvents;
 /// </summary>
 public class EntityViewRendered : IClientEvent
 {
-	public required IEntity Entity;
-	public required IEntityView View;
+	public IEntity Entity;
+	public IEntityView View;
 }

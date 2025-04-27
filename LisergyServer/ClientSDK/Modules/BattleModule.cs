@@ -24,15 +24,22 @@ public interface IBattleModule : IClientModule
     void RequestBattleLog(in GameId battleId);
 }
 
-public class BattleModule(LisergySDK client) : IBattleModule
+public class BattleModule : IBattleModule
 {
+	private readonly LisergySDK _client;
+
+	public BattleModule(LisergySDK client)
+	{
+		_client = client;
+	}
+
 	public List<BattleHeader> BattleHeaders =>
-		client.Server.Player.LocalPlayer.Components.Get<PlayerDataComponent>().BattleHeaders;
+		_client.Modules.Player.LocalPlayer.Components.Get<PlayerDataComponent>().BattleHeaders;
 
 
 	public void Register()
 	{
-		client.Network.OnInput<BattleHeaderPacket>(OnBattleSummary);
+		_client.Network.OnInput<BattleHeaderPacket>(OnBattleSummary);
 	}
 
 	public void RequestBattleLog(in GameId battleId)
@@ -41,8 +48,8 @@ public class BattleModule(LisergySDK client) : IBattleModule
 
 	private void OnBattleSummary(BattleHeaderPacket result)
 	{
-		if (result.BattleHeader.Attacker.OwnerID == client.Server.Player.PlayerId)
-			client.ClientEvents.Call(new OwnBattleFinishedEvent
+		if (result.BattleHeader.Attacker.OwnerID == _client.Modules.Player.PlayerId)
+			_client.ClientEvents.Call(new OwnBattleFinishedEvent
 			{
 				ImAttacker = true,
 				MyTeam = result.BattleHeader.Attacker,
@@ -50,8 +57,8 @@ public class BattleModule(LisergySDK client) : IBattleModule
 				Victory = result.BattleHeader.AttackerWins,
 				BattleId = result.BattleHeader.BattleID
 			});
-		else if (result.BattleHeader.Defender.OwnerID == client.Server.Player.PlayerId)
-			client.ClientEvents.Call(new OwnBattleFinishedEvent
+		else if (result.BattleHeader.Defender.OwnerID == _client.Modules.Player.PlayerId)
+			_client.ClientEvents.Call(new OwnBattleFinishedEvent
 			{
 				ImAttacker = false,
 				MyTeam = result.BattleHeader.Defender,

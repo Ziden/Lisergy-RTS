@@ -122,7 +122,7 @@ public class EntityModule : IEntityModule
 		}
 
 		_client.SDKLog.Debug($"Received entity update for {existingEntity}");
-		var view = _client.Server.Views.GetOrCreateView(existingEntity);
+		var view = _client.Modules.Views.GetOrCreateView(existingEntity);
 		ComponentSync.ProccessUpdate(existingEntity, packet.SyncedComponents, packet.RemovedComponentIds);
 		if (view.State == EntityViewState.NOT_RENDERED) view.RenderView();
 		if (created)

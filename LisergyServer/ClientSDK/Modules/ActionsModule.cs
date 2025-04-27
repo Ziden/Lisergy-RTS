@@ -70,7 +70,7 @@ public class ActionsModule : IActionModule
 		}
 
 		var entityId = entity.EntityId;
-		if (entity.OwnerID != _client.Server.Player.PlayerId)
+		if (entity.OwnerID != _client.Modules.Player.PlayerId)
 		{
 			_client.SDKLog.Error($"Cannot Move Entity {entityId} is not own entity");
 			return false;
@@ -106,7 +106,7 @@ public class ActionsModule : IActionModule
 				return false;
 			}
 
-			var tileView = _client.Server.Views.GetEntityView(tile.Entity);
+			var tileView = _client.Modules.Views.GetEntityView(tile.Entity);
 
 			if (tileView == null || tileView.State == EntityViewState.NOT_RENDERED)
 			{

@@ -5,6 +5,8 @@ namespace GameDataTest
 {
 	public class TestSpecs
 	{
+		public static string AddrIcons => $"Assets/Addressables/Sprites";
+		
 		public static GameSpec Generate()
 		{
 			Serialization.LoadSerializers();

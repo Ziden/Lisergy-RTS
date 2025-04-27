@@ -24,19 +24,25 @@ public interface IAccountModule : IClientModule
     void SendAuthenticationPacket(string username, string password);
 }
 
-public class AccountModule(LisergySDK client) : IAccountModule
+public class AccountModule : IAccountModule
 {
 	private PlayerProfileComponent? _profile;
+	private readonly LisergySDK _client;
+
+	public AccountModule(LisergySDK client)
+	{
+		_client = client;
+	}
 
 	public void Register()
 	{
-		client.Network.OnInput<LoginResultPacket>(OnAuthResult);
-		client.Network.OnInput<GameSpecPacket>(OnReceiveGameSpec);
+		_client.Network.OnInput<LoginResultPacket>(OnAuthResult);
+		_client.Network.OnInput<GameSpecPacket>(OnReceiveGameSpec);
 	}
 
 	public void SendAuthenticationPacket(string username, string password)
 	{
-		client.Network.SendToServer(new LoginPacket
+		_client.Network.SendToServer(new LoginPacket
 		{
 			Login = username,
 			Password = password
@@ -48,7 +54,7 @@ public class AccountModule(LisergySDK client) : IAccountModule
 		if (packet.Success)
 		{
 			_profile = packet.Profile;
-			((ClientNetwork) client.Network).SetCredentials(packet);
+			((ClientNetwork) _client.Network).SetCredentials(packet);
 		}
 	}
 
@@ -56,16 +62,15 @@ public class AccountModule(LisergySDK client) : IAccountModule
 	{
 		if (_profile == null) throw new Exception("Requires logged in");
 		ev.OnAfterDeserialize();
-		client.SDKLog.Debug("Initialized Specs");
-		var game = new LisergyGame(ev.Spec, new GameLog("[Client Game]"), client.Network, true);
+		_client.SDKLog.Debug("Initialized Specs");
+		var game = new LisergyGame(ev.Spec, new GameLog("[Client Game]"), _client.Network, true);
 		var world = new ClientWorld(game, (ushort) ev.MapSizeX, (ushort) ev.MapSizeY);
 		game.SetupWorld(world);
-		client.InitializeGame(game);
-		var e = client.Game.Entities[_profile.PlayerId];
-		if (e == null) e = client.Game.Entities.CreateEntity(EntityType.Player, GameId.ZERO, _profile.PlayerId);
+		_client.InitializeGame(game);
+		var e = _client.Game.Entities[_profile.PlayerId];
+		if (e == null) e = _client.Game.Entities.CreateEntity(EntityType.Player, GameId.ZERO, _profile.PlayerId);
 		var player = new PlayerModel(game, e);
 		e.Save(_profile);
-		client.ClientEvents.Call(new GameStartedEvent(game, player));
-		client.Network.SendToServer(new JoinWorldMapCommand());
+		_client.ClientEvents.Call(new GameStartedEvent(game, player));
 	}
 }

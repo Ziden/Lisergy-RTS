@@ -16,22 +16,20 @@ namespace Player.UI
     /// <summary>
     /// Bar to select parties and buildings on bottom of the game hud
     /// </summary>
-    public class WidgetEntitySelectBar : WidgetElement, IEventListener
+    [UxmlElement]
+    public partial class WidgetEntitySelectBar : WidgetElement, IEventListener // TODO: Listener VisualElement ?
     {
-        public event Action OnBuildClicked;
         public event Action OnTownClicked;
 
         private IPlayerModule _playerModule;
         private WidgetPartyButton[] _partyButtons = new WidgetPartyButton[4];
         private Button _townButton;
-        private Button _buildButton;
         private VisualElement _buttonCursor;
+        private readonly VisualElement _leftButton;
 
         public WidgetEntitySelectBar()
         {
             LoadUxmlFromResource("WidgetEntitySelectBar");
-
-            // Party Selection
             for (byte i = 0; i < 4; i++)
             {
                 var index = i;
@@ -42,15 +40,12 @@ namespace Player.UI
             }
             _buttonCursor = this.Q<VisualElement>("PartySelector").Required();
             _buttonCursor.style.display = DisplayStyle.None;
-
-            // Town/Build
-            _buildButton = this.Q<Button>("BuildButton");
+            _leftButton = this.Q("LeftButton").Required();
             _townButton = this.Q<Button>("TownButton");
             _townButton.clicked += TownButtonClick;
-            _buildButton.clicked += BuildButtonClick;
         }
 
-        public override void OnAddedDuringGame(IClientSDK client)
+        public override void OnAddedDuringGame(IClientSdk client)
         {
             _playerModule = client.Modules.Player;
             if (_playerModule.LocalPlayer == null) return;
@@ -73,19 +68,18 @@ namespace Player.UI
             {
                 SelectEntity(parties[0]);
             }
-            if (buildings.Count == 0)
+            
+            if (buildings.Count > 0)
             {
-                _townButton.style.display = DisplayStyle.None;
-                _buildButton.style.display = DisplayStyle.Flex;
+               _leftButton.style.display = DisplayStyle.Flex;
             }
             else
             {
-                _townButton.style.display = DisplayStyle.Flex;
-                _buildButton.style.display = DisplayStyle.None;
+                _leftButton.style.display = DisplayStyle.None;
             }
         }
 
-        public override void OnRemovedDuringGame(IClientSDK client)
+        public override void OnRemovedDuringGame(IClientSdk client)
         {
             client.ClientEvents.RemoveListener(this);
         }
@@ -118,13 +112,7 @@ namespace Player.UI
             if (party == null) return;
             SelectEntity(party);
         }
-
-        private void BuildButtonClick()
-        {
-            PositionCursor(_buildButton.parent);
-            OnBuildClicked?.Invoke();
-        }
-
+        
         private void TownButtonClick()
         {
 
@@ -146,8 +134,5 @@ namespace Player.UI
             var partyView = party.GetView();
             ClientViewState.SelectedEntityView = partyView;
         }
-
-        public new class UxmlFactory : UxmlFactory<WidgetEntitySelectBar, UxmlTraits> { }
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
     }
 }
